@@ -1,0 +1,33 @@
+# 秘密情報（APIキーは skills/.env に置く。.env.example だけ管理する）
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# ログ・DB・一時ファイル
+logs/
+*.log
+*.db
+*.sqlite
+*.sqlite3
+backup-*/
+
+# Node / Cloudflare
+node_modules/
+.wrangler/
+
+# OS・エディタ
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+# 鍵・証明書
+*.pem
+id_rsa*

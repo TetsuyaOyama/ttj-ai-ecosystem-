@@ -1,0 +1,112 @@
+/* ==========================================================
+   TTJ デザイントークン（紺 × 金）
+   使い方：<link rel="stylesheet" href="tokens.css"> のあと、
+   色・余白・角丸・フォント・影は var(--ttj-...) で参照する。
+   ========================================================== */
+
+:root {
+  /* ---- 紺（ネイビー）：基調 ---- */
+  --ttj-navy-900: #060F1D;
+  --ttj-navy-800: #0B1F3A; /* 基準の紺 */
+  --ttj-navy-700: #14305A;
+  --ttj-navy-600: #1F4278;
+  --ttj-navy-300: #8CA3C4;
+  --ttj-navy-100: #DDE5F0;
+  --ttj-navy-50:  #F1F4F9;
+
+  /* ---- 金（ゴールド）：アクセント ---- */
+  --ttj-gold-700: #8F7010;
+  --ttj-gold-600: #A98A1A;
+  --ttj-gold-500: #C9A227; /* 基準の金 */
+  --ttj-gold-400: #D9B84A;
+  --ttj-gold-200: #EEDDA0;
+  --ttj-gold-100: #F8F0D0;
+
+  /* ---- 役割別の色（通常はこちらを使う） ---- */
+  --ttj-bg:            #FFFFFF;           /* 背景（ページ） */
+  --ttj-bg-subtle:     var(--ttj-navy-50);/* 背景（面・カード下地） */
+  --ttj-bg-inverse:    var(--ttj-navy-800);/* 背景（紺ヘッダー・フッター） */
+  --ttj-text:          #14213A;           /* 文字（本文） */
+  --ttj-text-muted:    #4B5B76;           /* 文字（補足） */
+  --ttj-text-inverse:  #F5F1E3;           /* 文字（紺背景の上） */
+  --ttj-accent:        var(--ttj-gold-500);/* アクセント（紺背景の上で使う） */
+  --ttj-accent-strong: var(--ttj-gold-700);/* アクセント文字（白背景の上でも読める濃さ） */
+  --ttj-accent-soft:   var(--ttj-gold-100);/* アクセントの薄い面 */
+  --ttj-link:          var(--ttj-navy-600);
+  --ttj-border:        #D3DBE8;           /* 境界線 */
+  --ttj-border-strong: var(--ttj-navy-300);
+  --ttj-success:       #1F7A4D;
+  --ttj-success-bg:    #E3F4EB;
+  --ttj-warning:       #9A5B00;
+  --ttj-warning-bg:    #FFF1D6;
+  --ttj-danger:        #B3261E;
+  --ttj-danger-bg:     #FCE8E6;
+  --ttj-focus:         #2E6FD8;           /* フォーカスリング */
+
+  /* ---- 四次元手記用（事実=生成り / AI創作=琥珀） ---- */
+  --ttj-memoir-fact: #F6F0E0;
+  --ttj-memoir-ai:   #FFBF00;
+
+  /* ---- 余白（4px 基準） ---- */
+  --ttj-space-1: 0.25rem;
+  --ttj-space-2: 0.5rem;
+  --ttj-space-3: 0.75rem;
+  --ttj-space-4: 1rem;
+  --ttj-space-5: 1.5rem;
+  --ttj-space-6: 2rem;
+  --ttj-space-7: 3rem;
+  --ttj-space-8: 4rem;
+
+  /* ---- 角丸 ---- */
+  --ttj-radius-sm:   4px;
+  --ttj-radius-md:   8px;
+  --ttj-radius-lg:   16px;
+  --ttj-radius-pill: 999px;
+
+  /* ---- フォント ---- */
+  --ttj-font-sans:  "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, system-ui, sans-serif;
+  --ttj-font-serif: "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --ttj-font-mono:  ui-monospace, SFMono-Regular, Menlo, Consolas, "Noto Sans Mono CJK JP", monospace;
+
+  --ttj-text-sm:   0.875rem;
+  --ttj-text-base: 1rem;
+  --ttj-text-lg:   1.25rem;
+  --ttj-text-xl:   1.625rem;
+  --ttj-text-2xl:  2.125rem;
+  --ttj-leading-body: 1.8;
+  --ttj-leading-head: 1.35;
+
+  /* ---- 影 ---- */
+  --ttj-shadow-sm: 0 1px 2px rgba(11, 31, 58, 0.10);
+  --ttj-shadow-md: 0 4px 12px rgba(11, 31, 58, 0.14);
+  --ttj-shadow-lg: 0 12px 32px rgba(11, 31, 58, 0.20);
+  --ttj-shadow-gold: 0 0 0 3px rgba(201, 162, 39, 0.35);
+
+  /* ---- レイアウト ---- */
+  --ttj-container: 960px;
+}
+
+/* ---- 最低限のベース（任意。使わないページでは省略可） ---- */
+html { font-size: 100%; }
+
+body {
+  margin: 0;
+  background: var(--ttj-bg);
+  color: var(--ttj-text);
+  font-family: var(--ttj-font-sans);
+  font-size: var(--ttj-text-base);
+  line-height: var(--ttj-leading-body);
+}
+
+h1, h2, h3 {
+  font-family: var(--ttj-font-serif);
+  line-height: var(--ttj-leading-head);
+  color: var(--ttj-navy-800);
+}
+
+a { color: var(--ttj-link); }
+
+:focus-visible {
+  outline: 3px solid var(--ttj-focus);
+  outline-offset: 2px;
+}
