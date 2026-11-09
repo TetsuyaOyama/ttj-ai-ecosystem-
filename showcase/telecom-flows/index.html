@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>モバイル通信フロー可視化 — VoLTE・IMS・SMS・ローミング | てっち / TTJ</title>
+<meta name="description" content="VoLTE、IMS登録、SMS over SGs、SMS over IP、S8HRローミングを、ステップ再生できるシーケンス図で解説します（3GPP準拠）。">
+<style>
+:root {
+  --ttj-navy-900: #060F1D;
+  --ttj-navy-800: #0B1F3A;
+  --ttj-navy-700: #14305A;
+  --ttj-navy-600: #1F4278;
+  --ttj-navy-300: #8CA3C4;
+  --ttj-navy-100: #DDE5F0;
+  --ttj-navy-50:  #F1F4F9;
+  --ttj-gold-700: #8F7010;
+  --ttj-gold-600: #A98A1A;
+  --ttj-gold-500: #C9A227;
+  --ttj-gold-400: #D9B84A;
+  --ttj-gold-200: #EEDDA0;
+  --ttj-gold-100: #F8F0D0;
+  --ttj-bg: #FFFFFF;
+  --ttj-bg-subtle: var(--ttj-navy-50);
+  --ttj-bg-inverse: var(--ttj-navy-800);
+  --ttj-text: #14213A;
+  --ttj-text-muted: #4B5B76;
+  --ttj-text-inverse: #F5F1E3;
+  --ttj-accent: var(--ttj-gold-500);
+  --ttj-accent-strong: var(--ttj-gold-700);
+  --ttj-accent-soft: var(--ttj-gold-100);
+  --ttj-link: var(--ttj-navy-600);
+  --ttj-border: #D3DBE8;
+  --ttj-border-strong: var(--ttj-navy-300);
+  --ttj-focus: #2E6FD8;
+  --ttj-space-1: 0.25rem;
+  --ttj-space-2: 0.5rem;
+  --ttj-space-3: 0.75rem;
+  --ttj-space-4: 1rem;
+  --ttj-space-5: 1.5rem;
+  --ttj-space-6: 2rem;
+  --ttj-space-7: 3rem;
+  --ttj-radius-sm: 4px;
+  --ttj-radius-md: 8px;
+  --ttj-radius-pill: 999px;
+  --ttj-font-sans: "Noto Sans JP", "Hiragino Sans", "Yu Gothic UI", system-ui, sans-serif;
+  --ttj-font-serif: "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --ttj-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Noto Sans Mono CJK JP", monospace;
+  --ttj-shadow-sm: 0 1px 2px rgba(11, 31, 58, 0.10);
+  --ttj-shadow-md: 0 4px 12px rgba(11, 31, 58, 0.14);
+}
+* { box-sizing: border-box; }
+html { font-size: 100%; }
+body { margin: 0; background: var(--ttj-bg); color: var(--ttj-text); font-family: var(--ttj-font-sans); font-size: 1rem; line-height: 1.8; }
+h1, h2, h3 { font-family: var(--ttj-font-serif); line-height: 1.35; color: var(--ttj-navy-800); margin: 0; }
+a { color: var(--ttj-link); }
+:focus-visible { outline: 3px solid var(--ttj-focus); outline-offset: 2px; }
+.wrap { max-width: 1240px; margin: 0 auto; padding: 0 var(--ttj-space-4); }
+
+header.site { background: var(--ttj-bg-inverse); color: var(--ttj-text-inverse); border-bottom: 4px solid var(--ttj-accent); padding: var(--ttj-space-6) 0 var(--ttj-space-5); }
+header.site .eyebrow { color: var(--ttj-accent); font-size: 0.8125rem; letter-spacing: 0.12em; margin: 0 0 var(--ttj-space-2); }
+header.site h1 { color: var(--ttj-text-inverse); font-size: clamp(1.4rem, 4.5vw, 2.125rem); }
+header.site p.lead { margin: var(--ttj-space-3) 0 0; max-width: 46em; color: var(--ttj-navy-100); font-size: 0.9375rem; }
+
+main { background: linear-gradient(var(--ttj-bg), var(--ttj-bg-subtle)); padding: var(--ttj-space-5) 0 var(--ttj-space-6); }
+.layout { display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: var(--ttj-space-5); align-items: start; }
+
+/* scenario list */
+.scenarios h2 { font-size: 1rem; margin-bottom: var(--ttj-space-2); }
+.scenarios ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--ttj-space-2); }
+.scn { width: 100%; text-align: left; font: inherit; line-height: 1.5; cursor: pointer; background: var(--ttj-bg); color: var(--ttj-text); border: 1px solid var(--ttj-border); border-left: 4px solid var(--ttj-border); border-radius: var(--ttj-radius-md); padding: var(--ttj-space-3); box-shadow: var(--ttj-shadow-sm); }
+.scn:hover { border-color: var(--ttj-border-strong); border-left-color: var(--ttj-border-strong); }
+.scn[aria-current="true"] { border-color: var(--ttj-navy-700); border-left-color: var(--ttj-accent); background: var(--ttj-accent-soft); }
+.scn b { display: block; font-size: 0.9375rem; color: var(--ttj-navy-800); }
+.scn small { color: var(--ttj-text-muted); font-size: 0.8125rem; }
+
+/* controls */
+.panel { background: var(--ttj-bg); border: 1px solid var(--ttj-border); border-radius: var(--ttj-radius-md); box-shadow: var(--ttj-shadow-sm); }
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ttj-space-2); padding: var(--ttj-space-3); border-bottom: 1px solid var(--ttj-border); background: var(--ttj-bg-subtle); border-radius: var(--ttj-radius-md) var(--ttj-radius-md) 0 0; }
+.controls h2 { font-size: 1.0625rem; margin-right: auto; min-width: 12em; }
+.btn { font: inherit; font-size: 0.875rem; line-height: 1.2; cursor: pointer; padding: 0.5rem 0.8rem; min-height: 40px; border-radius: var(--ttj-radius-md); border: 1px solid var(--ttj-navy-700); background: var(--ttj-bg); color: var(--ttj-navy-800); }
+.btn:hover { background: var(--ttj-navy-100); }
+.btn.primary { background: var(--ttj-navy-800); color: var(--ttj-text-inverse); border-color: var(--ttj-navy-800); min-width: 6.5em; }
+.btn.primary:hover { background: var(--ttj-navy-700); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.speed { display: inline-flex; align-items: center; gap: var(--ttj-space-2); font-size: 0.875rem; color: var(--ttj-text-muted); }
+.speed select { font: inherit; font-size: 0.875rem; min-height: 40px; padding: 0 0.5rem; border: 1px solid var(--ttj-navy-700); border-radius: var(--ttj-radius-md); background: var(--ttj-bg); color: var(--ttj-text); }
+.counter { font-family: var(--ttj-font-mono); font-size: 0.875rem; color: var(--ttj-text-muted); }
+.progress { height: 3px; background: var(--ttj-navy-100); }
+.progress i { display: block; height: 100%; width: 0; background: var(--ttj-accent); transition: width 0.3s; }
+
+/* diagram */
+.diagram { overflow: auto; max-height: 600px; padding: var(--ttj-space-3); background: var(--ttj-bg); }
+.diagram svg { display: block; margin: 0 auto; width: 100%; height: auto; }
+.lane-box { fill: var(--ttj-navy-800); }
+.lane-name { fill: var(--ttj-text-inverse); font-size: 12px; font-weight: 700; text-anchor: middle; }
+.lane-sub { fill: var(--ttj-gold-400); font-size: 10px; text-anchor: middle; }
+.lifeline { stroke: var(--ttj-navy-300); stroke-width: 1.2; stroke-dasharray: 4 4; }
+.band { fill: var(--ttj-navy-50); }
+.band-h { fill: var(--ttj-gold-100); opacity: 0.6; }
+.band-label { fill: var(--ttj-text-muted); font-size: 11px; text-anchor: middle; }
+.step { opacity: 0; clip-path: inset(0 100% 0 0); transition: opacity 0.35s ease, clip-path 0.55s ease; }
+.step.rtl { clip-path: inset(0 0 0 100%); }
+.step.on { opacity: 1; clip-path: inset(-6px -6px -6px -6px); }
+.arrow { stroke: var(--ttj-navy-600); stroke-width: 1.8; fill: none; }
+.arrow.dash { stroke-dasharray: 6 4; }
+.head { fill: var(--ttj-navy-600); }
+.lbl { fill: var(--ttj-text); font-size: 12px; text-anchor: middle; paint-order: stroke; stroke: #fff; stroke-width: 4px; stroke-linejoin: round; }
+.idx { fill: var(--ttj-text-muted); font-size: 10px; font-family: var(--ttj-font-mono); text-anchor: start; }
+.note-box { fill: var(--ttj-accent-soft); stroke: var(--ttj-gold-600); stroke-width: 1.2; }
+.note-txt { fill: var(--ttj-text); font-size: 11.5px; text-anchor: middle; }
+.step.cur .arrow { stroke: var(--ttj-gold-700); stroke-width: 3; }
+.step.cur .head { fill: var(--ttj-gold-700); }
+.step.cur .lbl { fill: var(--ttj-navy-900); font-weight: 700; }
+.step.cur .note-box { fill: var(--ttj-gold-200); stroke-width: 2.4; }
+
+/* explanation */
+.explain { padding: var(--ttj-space-4); border-top: 1px solid var(--ttj-border); min-height: 9.5em; }
+.explain .kicker { margin: 0; font-size: 0.8125rem; color: var(--ttj-accent-strong); font-weight: 700; letter-spacing: 0.04em; }
+.explain h3 { font-size: 1.125rem; margin: 0.15rem 0 var(--ttj-space-2); }
+.explain p { margin: 0; font-size: 0.9375rem; }
+
+.info { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--ttj-space-4); margin-top: var(--ttj-space-4); }
+.info .panel { padding: var(--ttj-space-4); }
+.info h3 { font-size: 1rem; margin-bottom: var(--ttj-space-2); }
+.info ul { margin: 0; padding-left: 1.2em; font-size: 0.9375rem; }
+.info p { margin: 0 0 var(--ttj-space-2); font-size: 0.9375rem; }
+.info .wide { grid-column: 1 / -1; }
+table.cmp { width: 100%; border-collapse: collapse; font-size: 0.875rem; line-height: 1.6; }
+table.cmp th, table.cmp td { border: 1px solid var(--ttj-border); padding: 0.4rem 0.6rem; text-align: left; vertical-align: top; }
+table.cmp thead th { background: var(--ttj-navy-800); color: var(--ttj-text-inverse); }
+table.cmp tbody th { background: var(--ttj-bg-subtle); width: 22%; font-weight: 700; }
+.tbl-scroll { overflow-x: auto; }
+.callout { margin-top: var(--ttj-space-4); background: var(--ttj-accent-soft); border: 1px solid var(--ttj-gold-200); border-left: 4px solid var(--ttj-accent); border-radius: var(--ttj-radius-md); padding: var(--ttj-space-4); }
+.callout h2 { font-size: 1.125rem; margin-bottom: var(--ttj-space-2); }
+.callout p { margin: 0 0 var(--ttj-space-2); font-size: 0.9375rem; }
+.callout p:last-child { margin-bottom: 0; }
+.disclaimer { margin-top: var(--ttj-space-4); font-size: 0.8125rem; color: var(--ttj-text-muted); }
+
+footer.site { background: var(--ttj-bg-inverse); color: var(--ttj-text-inverse); border-top: 4px solid var(--ttj-accent); padding: var(--ttj-space-5) 0; font-size: 0.875rem; }
+footer.site .wrap { display: flex; flex-wrap: wrap; gap: var(--ttj-space-3); justify-content: space-between; }
+footer.site a { color: var(--ttj-gold-400); }
+footer.site p { margin: 0; }
+
+@media (max-width: 860px) {
+  .layout { grid-template-columns: minmax(0, 1fr); }
+  .info { grid-template-columns: minmax(0, 1fr); }
+  .controls h2 { min-width: 100%; }
+}
+@media (max-width: 480px) {
+  .diagram { max-height: 480px; padding: var(--ttj-space-2); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .step, .progress i { transition: none; }
+  .step { clip-path: none !important; }
+}
+</style>
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <p class="eyebrow">TTJ SHOWCASE / TELECOM FLOWS</p>
+    <h1>モバイル通信フロー可視化</h1>
+    <p class="lead">VoLTE の発信から SMS、ローミングまで。3GPP 規格のノード名どおりのシーケンス図を、1 本ずつ矢印が現れるステップ再生で追えます。</p>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="layout">
+      <nav class="scenarios" aria-label="シナリオ一覧">
+        <h2>シナリオ</h2>
+        <ul id="scnList"></ul>
+      </nav>
+
+      <section aria-labelledby="scnTitle">
+        <div class="panel">
+          <div class="controls">
+            <h2 id="scnTitle">シナリオ</h2>
+            <button type="button" class="btn" id="btnPrev" aria-label="前のステップ">&#9664; 前へ</button>
+            <button type="button" class="btn primary" id="btnPlay">&#9654; 再生</button>
+            <button type="button" class="btn" id="btnNext" aria-label="次のステップ">次へ &#9654;</button>
+            <button type="button" class="btn" id="btnReset" aria-label="最初に戻る">&#8634; 最初から</button>
+            <label class="speed">速度
+              <select id="speed">
+                <option value="0.5">0.5x</option>
+                <option value="1" selected>1x</option>
+                <option value="2">2x</option>
+                <option value="4">4x</option>
+              </select>
+            </label>
+            <span class="counter" id="counter" aria-hidden="true">0 / 0</span>
+          </div>
+          <div class="progress" aria-hidden="true"><i id="bar"></i></div>
+          <div class="diagram" id="diagram" tabindex="0" aria-label="シーケンス図（横にスクロールできます）"></div>
+          <div class="explain" id="explain" role="status" aria-live="polite">
+            <p class="kicker" id="exKicker"></p>
+            <h3 id="exTitle"></h3>
+            <p id="exBody"></p>
+          </div>
+        </div>
+
+        <div class="info">
+          <div class="panel">
+            <h3>このシナリオのポイント</h3>
+            <ul id="points"></ul>
+          </div>
+          <div class="panel">
+            <h3>参照規格</h3>
+            <ul id="refs"></ul>
+          </div>
+          <div class="panel wide" id="cmpPanel" hidden>
+            <h3>S8HR と LBO の違い（一般的な整理）</h3>
+            <div class="tbl-scroll">
+              <table class="cmp">
+                <thead><tr><th scope="col">観点</th><th scope="col">S8HR（S8 Home Routed）</th><th scope="col">LBO（Local Breakout）</th></tr></thead>
+                <tbody>
+                  <tr><th scope="row">PGW の位置</th><td>ホーム網（HPLMN）</td><td>訪問網（VPLMN）</td></tr>
+                  <tr><th scope="row">P-CSCF / IMS</th><td>ホーム網の P-CSCF・IMS を利用。訪問網はパケットを運ぶだけ</td><td>訪問網側の P-CSCF などが関与し、ホーム網 IMS と連携する</td></tr>
+                  <tr><th scope="row">訪問網に必要な機能</th><td>S8 での GTP 転送と QCI 1 専用ベアラの対応が中心</td><td>IMS 関連機能・ポリシー制御の連携が追加で必要</td></tr>
+                  <tr><th scope="row">音声の経路</th><td>いったんホーム網へ戻る（経路が長くなりうる）</td><td>訪問網内で折り返せる構成を取りやすい</td></tr>
+                  <tr><th scope="row">緊急呼</th><td colspan="2">どちらの方式でも訪問網で処理する（国・地域の緊急通報機関へ接続するため）</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <aside class="callout" aria-labelledby="sunsetTitle">
+          <h2 id="sunsetTitle">3G 停波との関係</h2>
+          <p><b>音声：</b>CSFB（CS Fallback）は、LTE 端末の音声発着信を 2G/3G の回路交換（CS）へ切り替えて処理する方式です。切り替え先の 3G が停波すると CSFB は使えなくなり、音声は LTE 上の <b>VoLTE</b>（IMS）が必須になります。</p>
+          <p><b>SMS：</b>SMS over SGs は MSC/VLR など回路交換側の設備に依存します。回路交換網に頼れない環境では、IMS 経由の <b>SMS over IP</b> が必要になります。</p>
+          <p>つまり、3G 停波後も音声と SMS を保つには、端末・ネットワークの双方で VoLTE と SMS over IP の対応が前提になります。</p>
+        </aside>
+        <p class="disclaimer">本ツールは学習用の簡略図です。公開されている 3GPP / GSMA 規格と一般知識に基づき、実際の網では構成・メッセージの詳細が異なります。I-CSCF/HSS による S-CSCF 解決、eNodeB、SGW 等の中継は適宜省略しています。</p>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <p>&copy; TTJ &mdash; TED TRADING JAPAN G.K. / 作者：てっち / TTJ</p>
+    <p><a href="../index.html">ポートフォリオへ戻る</a></p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+
+  /* ---------- helpers to define steps ---------- */
+  function m(from, to, label, desc, o) { o = o || {}; return { t: "m", from: from, to: to, label: label, desc: desc, dash: !!o.dash, bi: !!o.bi }; }
+  function n(lane, text, desc) { return { t: "n", lane: lane, text: text, desc: desc }; }
+  function L(name, sub) { return { name: name, sub: sub || "" }; }
+
+  /* ---------- scenario data ---------- */
+  var SCN = [
+    {
+      title: "VoLTE 発信〜応答",
+      sub: "INVITE から ACK、QCI 1 専用ベアラまで",
+      lanes: [L("UE-A", "発信"), L("P-CSCF", "発信側"), L("PCRF"), L("PGW"), L("S-CSCF", "発信側"), L("TAS", "MMTel AS"), L("S-CSCF", "着信側"), L("P-CSCF", "着信側"), L("UE-B", "着信")],
+      steps: [
+        m(0, 1, "INVITE (SDP offer)", "発信側 UE（UE-A）が、IMS 用の PDN 接続上で P-CSCF へ INVITE を送ります。SDP offer には音声コーデックの候補と、リソース予約を前提条件（precondition）とする情報が入ります。"),
+        m(1, 0, "100 Trying", "P-CSCF が INVITE を受け付けたことを返す暫定応答です。ホップごとの応答であり、呼が成立したという意味ではありません。", { dash: true }),
+        m(1, 4, "INVITE", "P-CSCF は、IMS 登録時に得た経路情報（Service-Route）に従って S-CSCF へ INVITE を転送します。"),
+        m(4, 5, "INVITE", "S-CSCF が iFC（initial Filter Criteria）を評価し、条件に合えば TAS（MMTel AS）へ INVITE を経由させます。TAS は MMTel の補足サービス（転送、発信規制など）を担当します。"),
+        m(5, 6, "INVITE（着信側へ）", "TAS を通った INVITE が着信側ドメインへ向かいます。宛先の S-CSCF を特定する I-CSCF / HSS への問い合わせ（Cx）は、この図では省略しています。"),
+        m(6, 7, "INVITE", "着信側の S-CSCF が、UE-B の登録情報にもとづいて着信側 P-CSCF へ INVITE を送ります。"),
+        m(7, 8, "INVITE", "着信側 P-CSCF が UE-B へ INVITE を届けます。UE-B は SDP offer を見て、使用するコーデックを選びます。"),
+        m(8, 0, "183 Session Progress (SDP answer)", "UE-B が SDP answer を含む 183 を返します。応答は各ノードを逆順に中継されますが、図では 1 本にまとめています。", { dash: true }),
+        m(0, 8, "PRACK", "183 のような暫定応答の到達を確認する PRACK（Provisional Response ACKnowledgement）です。同様に各ノードを中継されます。"),
+        m(8, 0, "200 OK (PRACK)", "PRACK への 200 OK です。ここまでで SDP のやり取りが済み、メディアのリソース確保に進めます。", { dash: true }),
+        m(1, 2, "Rx: AAR", "P-CSCF は AF（Application Function）として、メディア情報を Rx 参照点の AAR（AA-Request）で PCRF に伝え、音声用の帯域確保を要求します。"),
+        m(2, 3, "Gx: RAR（PCC ルール）", "PCRF が PCC ルールを決定し、Gx 参照点の RAR（Re-Auth-Request）で PGW に通知します。音声は QCI 1 のルールになります。"),
+        m(3, 0, "専用ベアラ確立 (QCI 1)", "PGW が SGW・MME・eNodeB を介して、UE-A との間に専用ベアラ（dedicated EPS bearer）を確立します。QCI 1 は会話音声向けの GBR（Guaranteed Bit Rate）ベアラです。図では中継ノードを省略しています。", { dash: true }),
+        m(0, 8, "UPDATE (SDP)", "UE-A がリソースを確保できたことを UPDATE で相手に伝えます。着信側でのリソース確保は図では省略しています。"),
+        m(8, 0, "200 OK (UPDATE)", "UPDATE への応答です。", { dash: true }),
+        m(8, 0, "180 Ringing", "UE-B が呼出中であることを知らせます。UE-A では呼出音（リングバックトーン）が鳴ります。", { dash: true }),
+        m(8, 0, "200 OK (INVITE)", "UE-B のユーザーが応答すると、INVITE に対する 200 OK が返ります。", { dash: true }),
+        m(0, 8, "ACK", "UE-A が ACK を返し、SIP のセッション確立が完了します。"),
+        m(0, 8, "音声 RTP / RTCP", "確立済みの QCI 1 ベアラ上で、音声パケットが双方向に流れます。", { dash: true, bi: true })
+      ],
+      points: [
+        "SIP シグナリングは IMS 用 APN のデフォルトベアラ、音声は QCI 1 の専用ベアラと使い分ける",
+        "precondition により、リソース確保が済むまで着信側を鳴らさない（183 → PRACK → UPDATE の流れ）",
+        "P-CSCF が Rx で PCRF に要求し、PCRF が Gx で PGW に伝えることでベアラが作られる",
+        "TAS（MMTel AS）は iFC に従って呼に介在し、補足サービスを提供する"
+      ],
+      refs: ["3GPP TS 24.229（IMS の SIP/SDP プロトコル）", "3GPP TS 23.228（IMS ステージ 2）", "3GPP TS 29.214（Rx 参照点）", "3GPP TS 29.212（Gx 参照点）", "3GPP TS 23.203（QoS・QCI）"]
+    },
+    {
+      title: "IMS 登録",
+      sub: "REGISTER・AKA チャレンジ・Cx",
+      lanes: [L("UE"), L("P-CSCF"), L("I-CSCF"), L("S-CSCF"), L("HSS")],
+      steps: [
+        m(0, 1, "REGISTER", "UE が IMS 用 PDN 接続上で P-CSCF に REGISTER を送ります。ここでは認証情報なしの最初の REGISTER で、端末の識別子（IMPI/IMPU）を含みます。"),
+        m(1, 2, "REGISTER", "P-CSCF は UE のホームドメインの I-CSCF へ REGISTER を転送します。"),
+        m(2, 4, "Cx: UAR", "I-CSCF が HSS に UAR（User-Authorization-Request）を送り、このユーザーを担当する S-CSCF を問い合わせます。"),
+        m(4, 2, "Cx: UAA", "HSS が UAA（User-Authorization-Answer）で、S-CSCF の割当情報（または候補を選ぶための条件）を返します。", { dash: true }),
+        m(2, 3, "REGISTER", "I-CSCF が選択した S-CSCF へ REGISTER を転送します。"),
+        m(3, 4, "Cx: MAR", "S-CSCF が MAR（Multimedia-Auth-Request）で HSS に認証データを要求します。"),
+        m(4, 3, "Cx: MAA（認証ベクタ）", "HSS が MAA（Multimedia-Auth-Answer）で認証ベクタ（RAND, AUTN, XRES, CK, IK など）を返します。", { dash: true }),
+        m(3, 0, "401 Unauthorized (AKA)", "S-CSCF が 401 を返し、WWW-Authenticate に AKA の RAND と AUTN を載せてチャレンジします。応答は I-CSCF・P-CSCF を経由します。規格上は、P-CSCF と UE の間にセキュリティアソシエーション（IPsec）を設定する手順が続きます。", { dash: true }),
+        n(0, "ISIM/USIM で\nAUTN を検証し RES を算出", "UE は SIM 上の鍵を使って AUTN を検証し、ネットワークが正当であることを確認したうえで応答値 RES を計算します。"),
+        m(0, 3, "REGISTER (RES)", "UE が RES を含む 2 回目の REGISTER を送ります。P-CSCF・I-CSCF を経由して S-CSCF に届きます。"),
+        n(3, "RES と XRES を照合", "S-CSCF が UE の RES と、HSS から受け取った期待値 XRES を比較して、端末を認証します。"),
+        m(3, 4, "Cx: SAR", "認証に成功すると、S-CSCF は SAR（Server-Assignment-Request）で、自分がこのユーザーの S-CSCF になったことを HSS に登録します。"),
+        m(4, 3, "Cx: SAA（プロファイル）", "HSS が SAA（Server-Assignment-Answer）で、ユーザープロファイル（iFC などのサービス情報）を返します。", { dash: true }),
+        m(3, 0, "200 OK", "S-CSCF が 200 OK を返し、IMS 登録が完了します。これで VoLTE の発着信や SMS over IP が使える状態になります。", { dash: true })
+      ],
+      points: [
+        "IMS-AKA では、端末がネットワークを、ネットワークが端末を相互に認証する",
+        "REGISTER は 2 往復：最初は 401 でチャレンジを受け、2 回目で応答値を返す",
+        "Cx（UAR/MAR/SAR）は S-CSCF の選択・認証データ取得・割当登録の 3 役",
+        "登録で得たプロファイル（iFC）が、以降の呼で TAS などを経由させる条件になる"
+      ],
+      refs: ["3GPP TS 24.229（REGISTER の手順）", "3GPP TS 33.203（IMS のアクセスセキュリティ）", "3GPP TS 29.228 / TS 29.229（Cx 参照点）", "3GPP TS 23.228（IMS ステージ 2）"]
+    },
+    {
+      title: "SMS over SGs",
+      sub: "LTE 端末が SMS を受信（着信）",
+      lanes: [L("SMS-SC"), L("MSC/VLR"), L("MME"), L("UE")],
+      steps: [
+        m(0, 1, "MT-ForwardSM", "SMS-SC が宛先端末向けの SMS を、SMS-GMSC を経由して端末の在圏 MSC/VLR へ MAP の MT-ForwardSM で送ります（SMS-GMSC は図では省略）。"),
+        m(1, 2, "SGsAP-PAGING-REQUEST", "MSC/VLR が、SGs インタフェースで MME にページングを要求します。端末が LTE に在圏して SGs で位置登録されているため、MME 経由で呼び出せます。"),
+        m(2, 3, "Paging", "MME が、端末が待受（アイドル）状態であれば LTE 側のページングで端末を呼び出します（eNodeB 経由、図では省略）。"),
+        m(3, 2, "Service Request", "端末が Service Request を送り、NAS シグナリングの接続を確立します。", { dash: true }),
+        m(2, 1, "SGsAP-SERVICE-REQUEST", "MME が、端末から応答があったことを MSC/VLR に知らせます。", { dash: true }),
+        m(1, 2, "SGsAP-DOWNLINK-UNITDATA", "MSC/VLR が、SMS 本体（RP-DATA を含む NAS メッセージ）を SGsAP-DOWNLINK-UNITDATA に載せて MME へ送ります。"),
+        m(2, 3, "Downlink NAS Transport", "MME が SMS を NAS の Downlink NAS Transport で端末へ透過的に運びます。"),
+        m(3, 2, "Uplink NAS Transport（応答）", "端末が SMS の受信確認（CP/RP レイヤの応答）を Uplink NAS Transport で返します。", { dash: true }),
+        m(2, 1, "SGsAP-UPLINK-UNITDATA", "MME が端末からの応答を SGsAP-UPLINK-UNITDATA で MSC/VLR に引き渡します。", { dash: true }),
+        m(1, 0, "配信結果（MT-ForwardSM 応答）", "MSC/VLR が、配信結果を SMS-SC 側へ返します。", { dash: true })
+      ],
+      points: [
+        "SGs は MME と MSC/VLR を結ぶ参照点。LTE のまま回路交換側の SMS を扱う",
+        "端末が待受なら、まず SGsAP-PAGING-REQUEST から始まる",
+        "SMS 本体は MME では解釈せず、NAS メッセージとして透過的に運ぶ",
+        "音声のように CS へ切り替える必要はなく、LTE に在圏したまま SMS を受けられる"
+      ],
+      refs: ["3GPP TS 29.118（SGs インタフェース）", "3GPP TS 23.272（CS フォールバックと SMS over SGs）", "3GPP TS 24.011（SMS の点間プロトコル）", "3GPP TS 24.301（EPS の NAS）"]
+    },
+    {
+      title: "SMS over IP",
+      sub: "SIP MESSAGE で運ぶ SMS（発信）",
+      lanes: [L("UE"), L("P-CSCF"), L("S-CSCF"), L("IP-SM-GW"), L("SMS-SC")],
+      steps: [
+        m(0, 1, "SIP MESSAGE", "端末が SMS（SMS-SUBMIT を含む RP-DATA）を SIP MESSAGE の本文に入れて P-CSCF へ送ります。IMS 登録が済んでいることが前提です。"),
+        m(1, 2, "SIP MESSAGE", "P-CSCF が S-CSCF へ MESSAGE を転送します。"),
+        m(2, 3, "SIP MESSAGE", "S-CSCF が iFC に従い、IP-SM-GW（IP Short Message Gateway）へ MESSAGE を回します。"),
+        m(3, 0, "202 Accepted", "IP-SM-GW が受け付けたことを 202 Accepted で返します。SIP としては受付の応答で、SMS の送達結果とは別です。", { dash: true }),
+        m(3, 4, "SMS-SUBMIT を中継", "IP-SM-GW が、SMS を SMS-SC へ中継します。"),
+        m(4, 3, "受理結果", "SMS-SC が SMS を受理した結果を IP-SM-GW に返します。", { dash: true }),
+        m(3, 0, "SIP MESSAGE (RP-ACK)", "IP-SM-GW が、受理結果を新しい SIP MESSAGE として端末へ送ります。端末では「送信完了」になります。"),
+        m(0, 3, "202 Accepted", "端末が受付の 202 Accepted を返します。", { dash: true }),
+        m(4, 3, "配信レポート", "SMS-SC が宛先への配信後に、配信レポート（SMS-STATUS-REPORT）を IP-SM-GW に渡します。"),
+        m(3, 0, "SIP MESSAGE (STATUS-REPORT)", "IP-SM-GW が配信レポートを SIP MESSAGE にして端末へ届けます。端末では「配信済み」と表示できます。"),
+        m(0, 3, "202 Accepted", "端末が 202 Accepted を返して完了です。", { dash: true })
+      ],
+      points: [
+        "SMS を SIP MESSAGE の本文に載せて、IMS の中で運ぶ（回路交換網を使わない）",
+        "IP-SM-GW が、IMS と既存の SMS 設備（SMS-SC）との橋渡しをする",
+        "202 Accepted は SIP 上の受付確認。送達結果は後続の MESSAGE（RP-ACK / 配信レポート）で届く",
+        "SGs と違い、LTE/IMS だけで完結するため回路交換網に依存しない"
+      ],
+      refs: ["3GPP TS 24.341（IMS 上の SMS）", "3GPP TS 23.204（IP アクセス上の SMS）", "3GPP TS 24.011（SMS の点間プロトコル）", "3GPP TS 24.229（SIP の手順）"]
+    },
+    {
+      title: "S8HR ローミングの VoLTE",
+      sub: "訪問網の SGW とホーム網の PGW・IMS",
+      lanes: [L("UE"), L("MME", "訪問網"), L("SGW", "訪問網"), L("PGW", "ホーム網"), L("P-CSCF", "ホーム網"), L("IMS", "S-CSCF/TAS")],
+      groups: [{ from: 0, to: 2, label: "訪問網（VPLMN）", home: false }, { from: 3, to: 5, label: "ホーム網（HPLMN）", home: true }],
+      steps: [
+        m(0, 1, "Attach / PDN 接続要求 (IMS APN)", "海外などの訪問網で端末が接続し、IMS 用 APN の PDN 接続を要求します（eNodeB は省略）。S8HR では、この PDN 接続の PGW はホーム網に置かれます。"),
+        m(1, 2, "Create Session Request (S11)", "MME が訪問網の SGW へセッション作成を要求します。"),
+        m(2, 3, "Create Session Request (S8)", "SGW が、訪問網とホーム網を結ぶ S8 インタフェースでホーム網の PGW にセッション作成を要求します。制御には GTP-C を使います。"),
+        m(3, 2, "Create Session Response", "PGW が UE の IP アドレスを割り当て、応答します。P-CSCF のアドレスは、通常 PCO（Protocol Configuration Options）で端末に通知されます。", { dash: true }),
+        m(2, 1, "Create Session Response (S11)", "SGW が MME へ結果を返します。", { dash: true }),
+        m(1, 0, "Attach Accept / デフォルトベアラ", "MME が端末に受付を通知し、IMS 用のデフォルトベアラが使えるようになります。", { dash: true }),
+        m(0, 4, "SIP REGISTER（S8 GTP-U 経由）", "端末の SIP シグナリングは、訪問網の SGW から S8 のユーザープレーン（GTP-U）でホーム網の PGW を通り、ホーム網の P-CSCF に届きます。"),
+        m(4, 5, "REGISTER → 200 OK", "ホーム網の IMS で登録処理が行われます（手順は「IMS 登録」のシナリオと同じ）。訪問網は IMS の内容に関与しません。"),
+        m(0, 5, "INVITE（発信）", "登録済みの端末が発信します。INVITE は P-CSCF を経由して、ホーム網の IMS（S-CSCF/TAS）で処理されます。"),
+        m(4, 3, "Rx / Gx（PCRF 経由）", "P-CSCF の要求が、PCRF 経由で PGW に伝わり、QCI 1 のベアラが要求されます（PCRF は図では省略）。"),
+        m(3, 2, "Create Bearer Request (S8)", "PGW が S8 インタフェースで、訪問網の SGW に QCI 1 専用ベアラの作成を要求します。"),
+        m(2, 1, "Create Bearer Request (S11)", "SGW が MME へ要求を中継します。"),
+        m(1, 0, "専用ベアラ有効化 (QCI 1)", "MME が端末に専用ベアラの有効化を指示します。これで音声パケットの通り道ができます。", { dash: true }),
+        m(0, 3, "音声 RTP（S8 経由でホーム網へ）", "音声は訪問網の SGW から S8 を通ってホーム網の PGW に入り、ホーム網の IMS から相手側へ向かいます。", { dash: true, bi: true }),
+        n(1, "緊急呼は訪問網で処理\n（ホーム網へは送らない）", "緊急呼（emergency call）は、ローミング中でも訪問網で処理されます。現地の緊急通報機関へつなぐ必要があるためで、上記のホーム網経由の流れとは別の手順です。")
+      ],
+      points: [
+        "S8HR ではホーム網の PGW・P-CSCF・IMS を使い、訪問網は SGW で中継する",
+        "S8（SGW と PGW の間）は、制御が GTP-C、ユーザデータが GTP-U",
+        "P-CSCF のアドレスは PDN 接続の確立時に端末へ通知される",
+        "緊急呼は訪問網で処理する点に注意（下の比較表は LBO との違い）"
+      ],
+      refs: ["GSMA IR.65（IMS ローミングとインターワーキング）", "GSMA IR.88（LTE ローミング）", "3GPP TS 23.228（IMS ステージ 2）", "3GPP TS 29.274（GTPv2-C）", "3GPP TS 23.167（IMS 緊急通信）"]
+    }
+  ];
+
+  /* ---------- state ---------- */
+  var cur = -1;          // index of the last visible step; -1 = none
+  var sIdx = 0;
+  var playing = false;
+  var timer = null;
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var $ = function (id) { return document.getElementById(id); };
+  var listEl = $("scnList"), diagram = $("diagram"), btnPlay = $("btnPlay"), btnPrev = $("btnPrev"), btnNext = $("btnNext"), btnReset = $("btnReset");
+  var speedEl = $("speed"), counter = $("counter"), bar = $("bar");
+  var exKicker = $("exKicker"), exTitle = $("exTitle"), exBody = $("exBody");
+
+  function el(name, attrs, parent) {
+    var e = document.createElementNS(NS, name);
+    for (var k in attrs) { if (Object.prototype.hasOwnProperty.call(attrs, k)) e.setAttribute(k, attrs[k]); }
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+
+  /* ---------- build scenario list ---------- */
+  var scnButtons = [];
+  SCN.forEach(function (s, i) {
+    var li = document.createElement("li");
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "scn";
+    b.innerHTML = "<b></b><small></small>";
+    b.firstChild.textContent = (i + 1) + ". " + s.title;
+    b.lastChild.textContent = s.sub;
+    b.addEventListener("click", function () { selectScenario(i); });
+    li.appendChild(b); listEl.appendChild(li); scnButtons.push(b);
+  });
+
+  /* ---------- draw diagram ---------- */
+  var stepGroups = [];
+  var geom = null;
+
+  function draw() {
+    var s = SCN[sIdx];
+    diagram.textContent = "";
+    stepGroups = [];
+    var N = s.lanes.length;
+    var gap = Math.max(108, Math.min(170, Math.floor(960 / N)));
+    var padX = 24 + gap / 2 - 12;
+    var topY = 62, rowH = 54, y0 = topY + 56;
+    var W = padX * 2 + gap * (N - 1) + 0;
+    var H = y0 + rowH * s.steps.length + 20;
+    var X = function (i) { return padX + gap * i; };
+    geom = { X: X, y0: y0, rowH: rowH };
+
+    var svg = el("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": s.title + " のシーケンス図" }, null);
+    svg.style.minWidth = Math.round(W * 0.82) + "px";
+    svg.style.maxWidth = W + "px";
+
+    var defs = el("defs", {}, svg);
+    [["ah", "#1F4278"], ["ahc", "#8F7010"]].forEach(function (d) {
+      var mk = el("marker", { id: d[0], viewBox: "0 0 10 10", refX: "9", refY: "5", markerWidth: "9", markerHeight: "9", orient: "auto-start-reverse", markerUnits: "userSpaceOnUse" }, defs);
+      el("path", { d: "M0,0 L10,5 L0,10 z", fill: d[1] }, mk);
+    });
+
+    // groups (visited / home bands)
+    if (s.groups) {
+      s.groups.forEach(function (g) {
+        var x1 = X(g.from) - gap / 2 + 4, x2 = X(g.to) + gap / 2 - 4;
+        el("rect", { x: x1, y: 4, width: x2 - x1, height: H - 8, rx: 8, "class": g.home ? "band-h" : "band" }, svg);
+        var t = el("text", { x: (x1 + x2) / 2, y: 20, "class": "band-label" }, svg);
+        t.textContent = g.label;
+      });
+    }
+
+    // lifelines + headers
+    s.lanes.forEach(function (ln, i) {
+      el("line", { x1: X(i), y1: topY + 40, x2: X(i), y2: H - 10, "class": "lifeline" }, svg);
+      el("rect", { x: X(i) - 46, y: topY - 4, width: 92, height: 44, rx: 6, "class": "lane-box" }, svg);
+      var t1 = el("text", { x: X(i), y: ln.sub ? topY + 15 : topY + 23, "class": "lane-name" }, svg);
+      t1.textContent = ln.name;
+      if (ln.sub) { var t2 = el("text", { x: X(i), y: topY + 31, "class": "lane-sub" }, svg); t2.textContent = ln.sub; }
+    });
+
+    // steps
+    s.steps.forEach(function (st, k) {
+      var y = y0 + rowH * k + 22;
+      var g = el("g", { "class": "step" }, svg);
+      if (st.t === "m") {
+        var x1 = X(st.from), x2 = X(st.to);
+        var dir = x2 > x1 ? 1 : -1;
+        if (dir < 0) g.setAttribute("class", "step rtl");
+        var a = el("line", { x1: x1 + dir * (st.bi ? 8 : 0), y1: y, x2: x2 - dir * 1, y2: y, "class": "arrow" + (st.dash ? " dash" : ""), "marker-end": "url(#ah)" }, g);
+        if (st.bi) a.setAttribute("marker-start", "url(#ah)");
+        var lb = el("text", { x: (x1 + x2) / 2, y: y - 7, "class": "lbl" }, g);
+        lb.textContent = st.label;
+        var ix = el("text", { x: Math.min(x1, x2) + 6, y: y + 14, "class": "idx" }, g);
+        ix.textContent = String(k + 1);
+      } else {
+        var lines = st.text.split("\n");
+        var w = 210, h = 12 + lines.length * 15;
+        var cx = Math.min(Math.max(X(st.lane), w / 2 + 6), W - w / 2 - 6);
+        el("rect", { x: cx - w / 2, y: y - h / 2 - 2, width: w, height: h, rx: 6, "class": "note-box" }, g);
+        lines.forEach(function (ln, j) {
+          var t = el("text", { x: cx, y: y - h / 2 + 15 + j * 15 - 2, "class": "note-txt" }, g);
+          t.textContent = ln;
+        });
+      }
+      stepGroups.push(g);
+    });
+    diagram.appendChild(svg);
+  }
+
+  /* ---------- render state ---------- */
+  function render(scroll) {
+    var s = SCN[sIdx], total = s.steps.length;
+    stepGroups.forEach(function (g, k) {
+      var base = g.getAttribute("class").replace(/\s*\b(on|cur)\b/g, "");
+      var c = base + (k <= cur ? " on" : "") + (k === cur ? " cur" : "");
+      g.setAttribute("class", c);
+      var ln = g.querySelector(".arrow");
+      if (ln) {
+        var mid = k === cur ? "url(#ahc)" : "url(#ah)";
+        ln.setAttribute("marker-end", mid);
+        if (ln.hasAttribute("marker-start")) ln.setAttribute("marker-start", mid);
+      }
+    });
+    counter.textContent = (cur + 1) + " / " + total;
+    bar.style.width = ((cur + 1) / total * 100) + "%";
+    btnPrev.disabled = cur < 0;
+    btnNext.disabled = cur >= total - 1;
+    btnPlay.innerHTML = playing ? "&#10074;&#10074; 一時停止" : (cur >= total - 1 ? "&#8634; もう一度" : "&#9654; 再生");
+
+    if (cur < 0) {
+      exKicker.textContent = "準備完了";
+      exTitle.textContent = s.title;
+      exBody.textContent = "「再生」または「次へ」を押すと、矢印が 1 本ずつ現れます。いま何をしているかをここに表示します。";
+    } else {
+      var st = s.steps[cur];
+      exKicker.textContent = "ステップ " + (cur + 1) + " / " + total;
+      var nm = function (ln) { return ln.name + (ln.sub ? "（" + ln.sub + "）" : ""); };
+      exTitle.textContent = st.t === "m" ? nm(s.lanes[st.from]) + " → " + nm(s.lanes[st.to]) + "：" + st.label : st.text.replace(/\n/g, " ");
+      exBody.textContent = st.desc;
+    }
+    if (scroll && cur >= 0 && geom) {
+      var top = geom.y0 + geom.rowH * cur - 40;
+      var scale = diagram.querySelector("svg").getBoundingClientRect().height / parseFloat(diagram.querySelector("svg").viewBox.baseVal.height);
+      diagram.scrollTo({ top: Math.max(0, top * scale - diagram.clientHeight / 3), behavior: reduce ? "auto" : "smooth" });
+    }
+  }
+
+  function fillInfo() {
+    var s = SCN[sIdx];
+    $("scnTitle").textContent = s.title;
+    ["points", "refs"].forEach(function (id) {
+      var ul = $(id); ul.textContent = "";
+      s[id].forEach(function (t) { var li = document.createElement("li"); li.textContent = t; ul.appendChild(li); });
+    });
+    $("cmpPanel").hidden = sIdx !== 4;
+    scnButtons.forEach(function (b, i) { b.setAttribute("aria-current", i === sIdx ? "true" : "false"); });
+  }
+
+  /* ---------- playback ---------- */
+  function stopTimer() { if (timer) { clearTimeout(timer); timer = null; } }
+  function delay() { return 2600 / parseFloat(speedEl.value); }
+  function schedule() {
+    stopTimer();
+    if (!playing) return;
+    timer = setTimeout(function () {
+      if (cur < SCN[sIdx].steps.length - 1) { cur++; render(true); schedule(); }
+      else { playing = false; render(false); }
+    }, cur < 0 ? 400 : delay());
+  }
+  function pause() { playing = false; stopTimer(); render(false); }
+  function play() {
+    if (cur >= SCN[sIdx].steps.length - 1) cur = -1;
+    playing = true; render(false); schedule();
+  }
+  function next() { pause(); if (cur < SCN[sIdx].steps.length - 1) { cur++; render(true); } }
+  function prev() { pause(); if (cur >= 0) { cur--; render(true); } }
+  function reset() { pause(); cur = -1; render(false); diagram.scrollTo(0, 0); }
+  function selectScenario(i) { pause(); sIdx = i; cur = -1; draw(); fillInfo(); render(false); }
+
+  btnPlay.addEventListener("click", function () { playing ? pause() : play(); });
+  btnNext.addEventListener("click", next);
+  btnPrev.addEventListener("click", prev);
+  btnReset.addEventListener("click", reset);
+  speedEl.addEventListener("change", function () { if (playing) schedule(); });
+  document.addEventListener("keydown", function (e) {
+    var tag = e.target && e.target.tagName;
+    if (tag === "SELECT" || tag === "INPUT" || tag === "TEXTAREA") return;
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    if (e.key === "ArrowRight") { e.preventDefault(); next(); }
+    else if (e.key === "ArrowLeft") { e.preventDefault(); prev(); }
+  });
+
+  selectScenario(0);
+})();
+</script>
+</body>
+</html>

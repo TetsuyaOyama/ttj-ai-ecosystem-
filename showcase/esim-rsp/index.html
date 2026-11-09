@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>eSIM リモートSIMプロビジョニング（RSP）インタラクティブ解説 | TTJ</title>
+<meta name="description" content="eSIM のリモートSIMプロビジョニング（RSP）を、消費者向け・M2M向け・IoT向けの3方式でインタラクティブに解説します。">
+<style>
+:root {
+  --ttj-navy-900: #060F1D;
+  --ttj-navy-800: #0B1F3A;
+  --ttj-navy-700: #14305A;
+  --ttj-navy-600: #1F4278;
+  --ttj-navy-300: #8CA3C4;
+  --ttj-navy-100: #DDE5F0;
+  --ttj-navy-50:  #F1F4F9;
+  --ttj-gold-700: #8F7010;
+  --ttj-gold-600: #A98A1A;
+  --ttj-gold-500: #C9A227;
+  --ttj-gold-400: #D9B84A;
+  --ttj-gold-200: #EEDDA0;
+  --ttj-gold-100: #F8F0D0;
+  --ttj-bg: #FFFFFF;
+  --ttj-bg-subtle: var(--ttj-navy-50);
+  --ttj-bg-inverse: var(--ttj-navy-800);
+  --ttj-text: #14213A;
+  --ttj-text-muted: #4B5B76;
+  --ttj-text-inverse: #F5F1E3;
+  --ttj-accent: var(--ttj-gold-500);
+  --ttj-accent-strong: var(--ttj-gold-700);
+  --ttj-accent-soft: var(--ttj-gold-100);
+  --ttj-link: var(--ttj-navy-600);
+  --ttj-border: #D3DBE8;
+  --ttj-border-strong: var(--ttj-navy-300);
+  --ttj-focus: #2E6FD8;
+  --ttj-space-1: 0.25rem;
+  --ttj-space-2: 0.5rem;
+  --ttj-space-3: 0.75rem;
+  --ttj-space-4: 1rem;
+  --ttj-space-5: 1.5rem;
+  --ttj-space-6: 2rem;
+  --ttj-space-7: 3rem;
+  --ttj-radius-sm: 4px;
+  --ttj-radius-md: 8px;
+  --ttj-radius-lg: 16px;
+  --ttj-radius-pill: 999px;
+  --ttj-font-sans: "Noto Sans JP", "Hiragino Sans", "Yu Gothic UI", system-ui, sans-serif;
+  --ttj-font-serif: "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --ttj-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Noto Sans Mono CJK JP", monospace;
+  --ttj-text-sm: 0.875rem;
+  --ttj-text-base: 1rem;
+  --ttj-text-lg: 1.25rem;
+  --ttj-text-xl: 1.625rem;
+  --ttj-text-2xl: 2.125rem;
+  --ttj-leading-body: 1.8;
+  --ttj-leading-head: 1.35;
+  --ttj-shadow-sm: 0 1px 2px rgba(11, 31, 58, 0.10);
+  --ttj-shadow-md: 0 4px 12px rgba(11, 31, 58, 0.14);
+  --ttj-shadow-gold: 0 0 0 3px rgba(201, 162, 39, 0.35);
+  --ttj-container: 960px;
+}
+
+* { box-sizing: border-box; }
+html { font-size: 100%; }
+body {
+  margin: 0;
+  background: var(--ttj-bg);
+  color: var(--ttj-text);
+  font-family: var(--ttj-font-sans);
+  font-size: var(--ttj-text-base);
+  line-height: var(--ttj-leading-body);
+  overflow-wrap: anywhere;
+}
+h1, h2, h3 {
+  font-family: var(--ttj-font-serif);
+  line-height: var(--ttj-leading-head);
+  color: var(--ttj-navy-800);
+  margin: 0;
+}
+a { color: var(--ttj-link); }
+:focus-visible { outline: 3px solid var(--ttj-focus); outline-offset: 2px; }
+button { font-family: inherit; font-size: inherit; }
+
+.wrap { max-width: var(--ttj-container); margin: 0 auto; padding: 0 var(--ttj-space-4); }
+
+/* ---- header ---- */
+.site-header {
+  background: var(--ttj-bg-inverse);
+  color: var(--ttj-text-inverse);
+  border-bottom: 4px solid var(--ttj-accent);
+  padding: var(--ttj-space-6) 0 var(--ttj-space-5);
+}
+.eyebrow {
+  margin: 0 0 var(--ttj-space-2);
+  color: var(--ttj-accent);
+  font-size: var(--ttj-text-sm);
+  letter-spacing: 0.12em;
+  font-weight: 700;
+}
+.site-header h1 {
+  color: var(--ttj-text-inverse);
+  font-size: clamp(1.4rem, 5vw, var(--ttj-text-2xl));
+}
+.site-header .lead { margin: var(--ttj-space-3) 0 0; color: var(--ttj-navy-100); font-size: var(--ttj-text-sm); max-width: 44rem; }
+
+/* ---- tabs ---- */
+.tabs-bar { background: var(--ttj-bg-subtle); border-bottom: 1px solid var(--ttj-border); padding: var(--ttj-space-4) 0 0; }
+.tablist { display: flex; flex-wrap: wrap; gap: var(--ttj-space-2); }
+.tab {
+  flex: 1 1 150px;
+  text-align: left;
+  background: var(--ttj-bg);
+  color: var(--ttj-text);
+  border: 1px solid var(--ttj-border);
+  border-bottom: 3px solid transparent;
+  border-radius: var(--ttj-radius-md) var(--ttj-radius-md) 0 0;
+  padding: var(--ttj-space-2) var(--ttj-space-3);
+  cursor: pointer;
+  line-height: 1.4;
+}
+.tab small { display: block; color: var(--ttj-text-muted); font-size: 0.75rem; }
+.tab:hover { border-color: var(--ttj-border-strong); }
+.tab[aria-selected="true"] {
+  background: var(--ttj-navy-800);
+  color: var(--ttj-text-inverse);
+  border-color: var(--ttj-navy-800);
+  border-bottom-color: var(--ttj-accent);
+}
+.tab[aria-selected="true"] small { color: var(--ttj-gold-200); }
+.summary { padding: var(--ttj-space-4) 0 var(--ttj-space-5); }
+.summary h2 { font-size: var(--ttj-text-lg); }
+.summary p { margin: var(--ttj-space-2) 0 0; color: var(--ttj-text-muted); }
+.chips { display: flex; flex-wrap: wrap; gap: var(--ttj-space-2); margin: var(--ttj-space-3) 0 0; padding: 0; list-style: none; }
+.chips li {
+  background: var(--ttj-accent-soft);
+  color: var(--ttj-navy-800);
+  border: 1px solid var(--ttj-gold-200);
+  border-radius: var(--ttj-radius-pill);
+  padding: 0 var(--ttj-space-3);
+  font-size: var(--ttj-text-sm);
+}
+
+/* ---- sections ---- */
+section.block { padding: var(--ttj-space-6) 0 var(--ttj-space-2); }
+section.block > .wrap > h2 {
+  font-size: var(--ttj-text-xl);
+  border-left: 5px solid var(--ttj-accent);
+  padding-left: var(--ttj-space-3);
+}
+.note { color: var(--ttj-text-muted); font-size: var(--ttj-text-sm); margin: var(--ttj-space-3) 0; }
+.two { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: var(--ttj-space-4); align-items: start; }
+@media (max-width: 860px) { .two { grid-template-columns: minmax(0, 1fr); } }
+
+.card {
+  background: var(--ttj-bg);
+  border: 1px solid var(--ttj-border);
+  border-radius: var(--ttj-radius-md);
+  box-shadow: var(--ttj-shadow-sm);
+}
+.diagram { padding: var(--ttj-space-2); overflow-x: auto; background: var(--ttj-bg-subtle); }
+.diagram svg { display: block; width: 100%; min-width: 520px; height: auto; }
+
+/* ---- architecture svg ---- */
+svg text { font-family: var(--ttj-font-sans); }
+.frame { fill: #fff; stroke: var(--ttj-border-strong); stroke-dasharray: 5 4; }
+.frame-label { fill: var(--ttj-text-muted); font-size: 12px; }
+.node { cursor: pointer; }
+.node rect { stroke-width: 1.5; transition: stroke 0.15s, stroke-width 0.15s; }
+.k-server rect { fill: var(--ttj-navy-800); stroke: var(--ttj-navy-800); }
+.k-server .t-name { fill: var(--ttj-text-inverse); }
+.k-server .t-sub { fill: var(--ttj-navy-100); }
+.k-dev rect { fill: var(--ttj-gold-100); stroke: var(--ttj-gold-600); }
+.k-ext rect { fill: #fff; stroke: var(--ttj-navy-700); }
+.k-inner rect { fill: #fff; stroke: var(--ttj-navy-700); stroke-dasharray: 4 3; }
+.t-name { font-size: 15px; font-weight: 700; fill: var(--ttj-navy-800); }
+.t-sub { font-size: 10.5px; fill: var(--ttj-text-muted); }
+.node:hover rect { stroke: var(--ttj-gold-500); }
+.node.sel rect { stroke: var(--ttj-gold-500); stroke-width: 4; }
+.link { cursor: pointer; }
+.link .vis { stroke: var(--ttj-navy-600); stroke-width: 2; fill: none; }
+.link.dashed .vis { stroke-dasharray: 6 4; }
+.link .hit { stroke: transparent; stroke-width: 16; fill: none; }
+.link .lbl {
+  font-size: 12.5px; font-weight: 700; fill: var(--ttj-navy-700);
+  paint-order: stroke; stroke: var(--ttj-bg-subtle); stroke-width: 5px; stroke-linejoin: round;
+}
+.link:hover .vis { stroke: var(--ttj-gold-600); }
+.link.sel .vis { stroke: var(--ttj-gold-500); stroke-width: 4; }
+.link.sel .lbl { fill: var(--ttj-gold-700); }
+.node:focus-visible, .link:focus-visible { outline: none; }
+.node:focus-visible rect { stroke: var(--ttj-focus); stroke-width: 4; }
+.link:focus-visible .vis { stroke: var(--ttj-focus); stroke-width: 4; }
+
+/* ---- info panel ---- */
+.panel { padding: var(--ttj-space-4); }
+.panel h3 { font-size: var(--ttj-text-lg); }
+.panel .kind { color: var(--ttj-accent-strong); font-size: var(--ttj-text-sm); font-weight: 700; margin: 0; }
+.panel h4 {
+  margin: var(--ttj-space-4) 0 var(--ttj-space-1);
+  font-size: var(--ttj-text-sm);
+  color: var(--ttj-navy-700);
+  border-bottom: 1px solid var(--ttj-gold-200);
+}
+.panel p { margin: 0; font-size: var(--ttj-text-sm); }
+.panel ul { margin: 0; padding-left: 1.2em; font-size: var(--ttj-text-sm); }
+.panel li { margin: var(--ttj-space-1) 0; line-height: 1.6; }
+
+/* ---- player ---- */
+.controls { display: flex; flex-wrap: wrap; gap: var(--ttj-space-2); margin: var(--ttj-space-4) 0 var(--ttj-space-3); }
+.btn {
+  background: var(--ttj-bg);
+  color: var(--ttj-navy-800);
+  border: 1px solid var(--ttj-navy-700);
+  border-radius: var(--ttj-radius-md);
+  padding: var(--ttj-space-2) var(--ttj-space-4);
+  cursor: pointer;
+  min-height: 44px;
+}
+.btn:hover:not(:disabled) { background: var(--ttj-navy-50); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn.primary { background: var(--ttj-navy-800); color: var(--ttj-text-inverse); border-color: var(--ttj-navy-800); }
+.btn.primary:hover:not(:disabled) { background: var(--ttj-navy-700); }
+.progress { margin-left: auto; align-self: center; color: var(--ttj-text-muted); font-size: var(--ttj-text-sm); }
+.phases { display: flex; flex-wrap: wrap; gap: var(--ttj-space-2); margin: 0 0 var(--ttj-space-3); padding: 0; list-style: none; }
+.phase-btn {
+  background: var(--ttj-bg-subtle);
+  border: 1px solid var(--ttj-border);
+  border-radius: var(--ttj-radius-pill);
+  color: var(--ttj-text);
+  padding: 0 var(--ttj-space-3);
+  font-size: var(--ttj-text-sm);
+  cursor: pointer;
+  min-height: 32px;
+}
+.phase-btn[aria-current="step"] { background: var(--ttj-accent-soft); border-color: var(--ttj-gold-600); font-weight: 700; }
+.seq { padding: var(--ttj-space-2); background: var(--ttj-bg-subtle); }
+.seq svg { display: block; width: 100%; height: auto; max-width: 460px; margin: 0 auto; }
+.lane-line { stroke: var(--ttj-navy-300); stroke-dasharray: 3 4; }
+.lane-box { fill: var(--ttj-navy-800); }
+.lane-name { fill: var(--ttj-text-inverse); font-size: 12px; font-weight: 700; }
+.arrow { fill: none; stroke-width: 2; }
+.arrow.future { stroke: var(--ttj-navy-300); opacity: 0.35; }
+.arrow.done { stroke: var(--ttj-navy-600); }
+.arrow.cur { stroke: var(--ttj-gold-600); stroke-width: 3.5; stroke-dasharray: 400; animation: draw 0.7s ease-out; }
+@keyframes draw { from { stroke-dashoffset: 400; } to { stroke-dashoffset: 0; } }
+.num-bg { fill: #fff; stroke: var(--ttj-navy-600); }
+.num-bg.cur { fill: var(--ttj-gold-500); stroke: var(--ttj-gold-700); }
+.num-bg.future { opacity: 0.4; }
+.num { font-size: 10.5px; font-weight: 700; fill: var(--ttj-navy-800); text-anchor: middle; }
+.num.future { opacity: 0.4; }
+.stepcard { padding: var(--ttj-space-4); }
+.stepcard .badge {
+  display: inline-block;
+  background: var(--ttj-navy-800); color: var(--ttj-gold-200);
+  border-radius: var(--ttj-radius-pill);
+  padding: 0 var(--ttj-space-3);
+  font-size: var(--ttj-text-sm);
+}
+.stepcard h3 { font-size: var(--ttj-text-lg); margin: var(--ttj-space-2) 0; }
+.stepcard p { margin: 0; font-size: var(--ttj-text-sm); }
+.api {
+  margin: var(--ttj-space-3) 0 0;
+  background: var(--ttj-navy-50);
+  border-left: 4px solid var(--ttj-accent);
+  padding: var(--ttj-space-2) var(--ttj-space-3);
+  font-family: var(--ttj-font-mono);
+  font-size: 0.8rem;
+  border-radius: 0 var(--ttj-radius-sm) var(--ttj-radius-sm) 0;
+  overflow-wrap: anywhere;
+}
+
+/* ---- table ---- */
+.table-wrap { overflow-x: auto; margin-top: var(--ttj-space-4); border: 1px solid var(--ttj-border); border-radius: var(--ttj-radius-md); }
+table.cmp { border-collapse: collapse; width: 100%; min-width: 640px; font-size: var(--ttj-text-sm); }
+.cmp th, .cmp td { border-bottom: 1px solid var(--ttj-border); padding: var(--ttj-space-3); text-align: left; vertical-align: top; line-height: 1.6; }
+.cmp thead th { background: var(--ttj-navy-800); color: var(--ttj-text-inverse); border-bottom: 3px solid var(--ttj-accent); }
+.cmp tbody th { background: var(--ttj-bg-subtle); color: var(--ttj-navy-800); width: 20%; }
+.cmp tbody tr:last-child th, .cmp tbody tr:last-child td { border-bottom: 0; }
+table.cmp[data-active="sgp22"] td[data-col="sgp22"],
+table.cmp[data-active="sgp02"] td[data-col="sgp02"],
+table.cmp[data-active="sgp32"] td[data-col="sgp32"] { background: var(--ttj-accent-soft); }
+
+/* ---- glossary ---- */
+.search { display: flex; flex-wrap: wrap; gap: var(--ttj-space-3); align-items: center; margin: var(--ttj-space-4) 0; }
+.search input {
+  flex: 1 1 240px;
+  min-height: 44px;
+  padding: 0 var(--ttj-space-3);
+  border: 1px solid var(--ttj-border-strong);
+  border-radius: var(--ttj-radius-md);
+  font: inherit;
+  color: var(--ttj-text);
+  background: #fff;
+}
+.search .count { color: var(--ttj-text-muted); font-size: var(--ttj-text-sm); }
+.gloss { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--ttj-space-3); margin: 0; padding: 0; list-style: none; }
+.gloss li { padding: var(--ttj-space-3) var(--ttj-space-4); }
+.gloss .term { font-weight: 700; color: var(--ttj-navy-800); }
+.gloss .en { display: block; font-size: 0.75rem; color: var(--ttj-accent-strong); }
+.gloss p { margin: var(--ttj-space-1) 0 0; font-size: var(--ttj-text-sm); }
+.empty { color: var(--ttj-text-muted); }
+[hidden] { display: none !important; }
+
+/* ---- footer ---- */
+.site-footer {
+  margin-top: var(--ttj-space-7);
+  background: var(--ttj-bg-inverse);
+  color: var(--ttj-text-inverse);
+  border-top: 4px solid var(--ttj-accent);
+  padding: var(--ttj-space-5) 0;
+  font-size: var(--ttj-text-sm);
+}
+.site-footer a { color: var(--ttj-gold-200); }
+.site-footer p { margin: var(--ttj-space-1) 0; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <p class="eyebrow">TTJ SHOWCASE</p>
+    <h1>eSIM リモートSIMプロビジョニング（RSP）<br>インタラクティブ解説</h1>
+    <p class="lead">eSIM に通信プロファイルを遠隔で書き込む仕組み（Remote SIM Provisioning）を、3つの方式で見比べます。図の要素をクリックし、ダウンロード手順を再生して確かめてください。</p>
+  </div>
+</header>
+
+<div class="tabs-bar">
+  <div class="wrap">
+    <div class="tablist" role="tablist" aria-label="RSP の方式">
+      <button class="tab" role="tab" id="tab-sgp22" data-id="sgp22" aria-selected="true" aria-controls="main-area">消費者向け<small>GSMA SGP.21 / SGP.22</small></button>
+      <button class="tab" role="tab" id="tab-sgp02" data-id="sgp02" aria-selected="false" aria-controls="main-area" tabindex="-1">M2M向け<small>GSMA SGP.01 / SGP.02</small></button>
+      <button class="tab" role="tab" id="tab-sgp32" data-id="sgp32" aria-selected="false" aria-controls="main-area" tabindex="-1">IoT向け<small>GSMA SGP.31 / SGP.32</small></button>
+    </div>
+    <div class="summary" id="summary" aria-live="polite"></div>
+  </div>
+</div>
+
+<main id="main-area" role="tabpanel" tabindex="-1">
+
+  <section class="block" aria-labelledby="h-arch">
+    <div class="wrap">
+      <h2 id="h-arch">1. アーキテクチャ図</h2>
+      <p class="note">図の箱（コンポーネント）や線（インタフェース）をクリック、またはキーボードで Tab キーから選び Enter キーを押すと、右のパネルに説明が表示されます。</p>
+      <div class="two">
+        <div class="card diagram"><svg id="arch" role="group" aria-label="アーキテクチャ図"></svg></div>
+        <aside class="card panel" id="panel" aria-live="polite"></aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="h-flow">
+    <div class="wrap">
+      <h2 id="h-flow">2. プロファイルダウンロードの手順</h2>
+      <p class="note" id="flow-note"></p>
+      <div class="controls" role="group" aria-label="再生コントロール">
+        <button class="btn" id="b-prev" type="button">1つ戻る</button>
+        <button class="btn primary" id="b-play" type="button">再生</button>
+        <button class="btn" id="b-next" type="button">1つ進む</button>
+        <button class="btn" id="b-reset" type="button">最初に戻す</button>
+        <span class="progress" id="progress" aria-live="polite"></span>
+      </div>
+      <ol class="phases" id="phases" aria-label="フェーズ"></ol>
+      <div class="two">
+        <div class="card seq"><svg id="seq" role="img" aria-label="シーケンス図"></svg></div>
+        <div class="card stepcard" id="stepcard" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="h-cmp">
+    <div class="wrap">
+      <h2 id="h-cmp">3. 3方式の比較</h2>
+      <p class="note">選択中の方式の列を強調しています。バージョンは目安です。最新の版は GSMA の公開文書で確認してください。</p>
+      <div class="table-wrap">
+        <table class="cmp" id="cmp" data-active="sgp22">
+          <caption class="sr-only">消費者向け・M2M向け・IoT向けの RSP 方式の比較</caption>
+          <thead>
+            <tr><th scope="col">観点</th><th scope="col">消費者向け<br>SGP.21 / SGP.22</th><th scope="col">M2M向け<br>SGP.01 / SGP.02</th><th scope="col">IoT向け<br>SGP.31 / SGP.32</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">主導するのは誰か</th>
+              <td data-col="sgp22">エンドユーザー。デバイス上の LPA がダウンロードを開始する（端末主導）</td>
+              <td data-col="sgp02">MNO。SM-SR を通じてサーバー側から eUICC を操作する（プッシュ型）</td>
+              <td data-col="sgp32">eIM（eSIM IoT Remote Manager）。デバイス側の IPA を介して eUICC を遠隔管理する</td></tr>
+            <tr><th scope="row">UI の有無</th>
+              <td data-col="sgp22">あり。LPA のユーザーインタフェース（LUI）で、読み取り・確認・管理を行う</td>
+              <td data-col="sgp02">なし。ユーザー操作を前提としない</td>
+              <td data-col="sgp32">なし。ユーザー確認を前提としない</td></tr>
+            <tr><th scope="row">向いている機器</th>
+              <td data-col="sgp22">スマートフォン、タブレット、ウェアラブルなど、画面を持つ個人向け機器</td>
+              <td data-col="sgp02">車載機器、スマートメーターなど、サーバー側で一括管理するM2M機器</td>
+              <td data-col="sgp32">画面や操作手段を持たない、または限られたIoT機器（センサー、トラッカーなど）</td></tr>
+            <tr><th scope="row">主な構成要素</th>
+              <td data-col="sgp22">SM-DP+、SM-DS、LPA、eUICC</td>
+              <td data-col="sgp02">SM-DP、SM-SR、eUICC</td>
+              <td data-col="sgp32">eIM、IPA（IPAd / IPAe）、SM-DP+、eUICC</td></tr>
+            <tr><th scope="row">対応規格のバージョン目安</th>
+              <td data-col="sgp22">SGP.22 v2.x（v2.2 以降が広く普及）</td>
+              <td data-col="sgp02">SGP.02 v4.x（v4.2 など）</td>
+              <td data-col="sgp32">SGP.32 v1.x（2023年に v1.0 を公開）</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="h-gloss">
+    <div class="wrap">
+      <h2 id="h-gloss">4. 用語集</h2>
+      <div class="search">
+        <label for="q" class="sr-only">用語を検索</label>
+        <input id="q" type="search" placeholder="用語を検索（例：eIM、プロファイル、ES10）" autocomplete="off">
+        <span class="count" id="gcount" aria-live="polite"></span>
+      </div>
+      <ul class="gloss" id="gloss"></ul>
+      <p class="empty" id="gempty" hidden>該当する用語がありません。</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>この解説は公開されている GSMA の規格（SGP シリーズ）と一般的な知識に基づく概説です。実装や詳細は規格原典を参照してください。</p>
+    <p>作者：てっち / TTJ</p>
+    <p>&copy; TTJ — TED TRADING JAPAN G.K.</p>
+    <p><a href="../index.html">ポートフォリオへ戻る</a></p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  var NS = 'http://www.w3.org/2000/svg';
+  function $(s) { return document.querySelector(s); }
+  function el(tag, attrs, text) {
+    var n = document.createElementNS(NS, tag);
+    if (attrs) { for (var k in attrs) { n.setAttribute(k, attrs[k]); } }
+    if (text != null) { n.textContent = text; }
+    return n;
+  }
+  function html(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) { n.className = cls; }
+    if (text != null) { n.textContent = text; }
+    return n;
+  }
+
+  /* ================= データ ================= */
+  var DATA = {
+    sgp22: {
+      name: '消費者向け（SGP.21 / SGP.22）',
+      lead: 'スマートフォンなど、ユーザーが操作する機器向けの方式です。デバイス上の LPA（Local Profile Assistant）がサーバー（SM-DP+）と eUICC の間を取り持ち、ユーザーがダウンロードを開始します。',
+      chips: ['SM-DP+', 'SM-DS', 'LPA', 'eUICC', 'ES9+', 'ES10a/b/c', 'ES8+', 'ES11', 'ES12'],
+      flowNote: 'アクティベーションコードの読み取りから通知までの流れです。LPA が eUICC とサーバーの間を中継します。',
+      h: 360,
+      frame: { x: 10, y: 170, w: 540, h: 170, label: 'デバイス（スマートフォン等）', lx: 22, ly: 190 },
+      nodes: [
+        { id: 'mno', x: 10, y: 20, w: 130, h: 56, name: 'MNO', sub: '移動体通信事業者', kind: 'ext',
+          role: '加入者との契約を管理し、プロファイルの準備を SM-DP+ に依頼する事業者です。',
+          ifs: ['ES2+：SM-DP+ へのプロファイル準備の依頼（DownloadOrder / ConfirmOrder など）'],
+          points: ['ユーザーは事業者から、ダウンロードに必要なアクティベーションコード（QR コード等）を受け取る。', 'プロファイルのダウンロード結果は SM-DP+ 経由で事業者に伝わる。'] },
+        { id: 'smdp', x: 215, y: 20, w: 130, h: 56, name: 'SM-DP+', sub: 'プロファイル準備サーバー', kind: 'server',
+          role: 'Subscription Manager Data Preparation+。プロファイルを準備し、特定の eUICC 向けに暗号化した BPP（Bound Profile Package）を作って配信するサーバーです。',
+          ifs: ['ES2+：MNO からの依頼を受ける', 'ES9+：LPA とのやり取り（認証・BPP の取得・通知）', 'ES8+：eUICC との保護チャネル', 'ES12：SM-DS へのイベント登録'],
+          points: ['eUICC と相互に証明書を検証してから、プロファイルを渡す。', 'BPP は対象 eUICC に紐づくため、他の eUICC では使えない。'] },
+        { id: 'smds', x: 420, y: 20, w: 130, h: 56, name: 'SM-DS', sub: 'ディスカバリサーバー', kind: 'server',
+          role: 'Subscription Manager Discovery Server。ダウンロード可能なプロファイルの「イベント」を登録しておき、LPA が問い合わせて見つけられるようにするサーバーです。',
+          ifs: ['ES12：SM-DP+ がイベントを登録・削除する', 'ES11：LPA（LDS）がイベントを取得する'],
+          points: ['アクティベーションコードを使わずにダウンロード先を見つける経路になる。', 'SM-DS が案内するのは接続先であり、プロファイル自体は SM-DP+ が持つ。'] },
+        { id: 'lpa', x: 215, y: 230, w: 130, h: 70, name: 'LPA', sub: 'Local Profile Assistant', kind: 'dev',
+          role: 'デバイス側でユーザー操作、サーバー通信、eUICC の操作を仲介する機能です。LUI（ユーザーインタフェース）、LPD（プロファイルダウンロード）、LDS（ディスカバリ）の3機能で構成されます。',
+          ifs: ['ES9+：SM-DP+ との通信（HTTPS）', 'ES11：SM-DS との通信', 'ES10a/b/c：eUICC の操作'],
+          points: ['プロファイルは暗号化されたまま eUICC に渡るため、LPA は中身を読めない。', '一般的にはデバイス側（LPAd）に実装される。'] },
+        { id: 'euicc', x: 20, y: 230, w: 120, h: 70, name: 'eUICC', sub: 'ISD-R / ECASD', kind: 'dev',
+          role: '組込み型の汎用 SIM（embedded UICC）。複数のプロファイルを安全に保持し、遠隔で書き換えられます。',
+          ifs: ['ES10a/b/c：LPA からの操作を受ける', 'ES8+：SM-DP+ との保護チャネル'],
+          points: ['EID（eUICC 識別子）で一意に識別される。', '内部の ISD-R がプロファイル管理を、ECASD が認証用の証明書・鍵の保持を担う。'] }
+      ],
+      links: [
+        { id: 'es2p', x1: 140, y1: 48, x2: 215, y2: 48, lbl: 'ES2+', lx: 177, ly: 40, a: 'middle', name: 'ES2+', between: 'MNO と SM-DP+ の間',
+          role: '事業者が SM-DP+ にプロファイルのダウンロード準備を依頼するインタフェースです。',
+          ifs: ['DownloadOrder：プロファイルの確保', 'ConfirmOrder：発注の確定（アクティベーションコードの元になる情報を得る）'],
+          points: ['ユーザー端末ではなく、事業者のシステムが使う。'] },
+        { id: 'es12', x1: 345, y1: 48, x2: 420, y2: 48, lbl: 'ES12', lx: 382, ly: 40, a: 'middle', name: 'ES12', between: 'SM-DP+ と SM-DS の間',
+          role: 'SM-DP+ が SM-DS にダウンロードイベントを登録・削除するインタフェースです。',
+          ifs: ['RegisterEvent：イベントの登録', 'DeleteEvent：イベントの削除'],
+          points: ['イベントは EID に関連づけられ、該当する eUICC の LPA だけが見つけられる。'] },
+        { id: 'es9p', x1: 280, y1: 76, x2: 280, y2: 230, lbl: 'ES9+', lx: 288, ly: 158, a: 'start', name: 'ES9+', between: 'SM-DP+ と LPA の間',
+          role: 'LPA（LPD）が SM-DP+ と通信し、認証・BPP の取得・通知を行うインタフェースです。HTTPS（TLS）上で動作します。',
+          ifs: ['InitiateAuthentication / AuthenticateClient：相互認証', 'GetBoundProfilePackage：BPP の取得', 'HandleNotification：結果通知', 'CancelSession：セッションの中止'],
+          points: ['ダウンロードの主な通信路。'] },
+        { id: 'es8p', x1: 235, y1: 76, x2: 80, y2: 230, lbl: 'ES8+', lx: 150, ly: 140, a: 'end', dashed: true, name: 'ES8+', between: 'SM-DP+ と eUICC の間（論理的な接続）',
+          role: 'SM-DP+ と eUICC の間で確立する、エンドツーエンドの保護チャネルです。実際の通信は LPA を経由しますが、LPA には中身が見えません。',
+          ifs: ['BPP の暗号化・完全性保護に使う鍵合意の枠組み'],
+          points: ['点線は「論理的な接続」を表す。物理的な通信は ES9+ と ES10b を通る。'] },
+        { id: 'es11', x1: 485, y1: 76, x2: 345, y2: 265, lbl: 'ES11', lx: 428, ly: 160, a: 'start', name: 'ES11', between: 'LPA と SM-DS の間',
+          role: 'LPA（LDS）が SM-DS に問い合わせ、自分の eUICC 宛のイベントを取得するインタフェースです。',
+          ifs: ['SM-DS との認証', 'イベントの取得'],
+          points: ['イベントが見つかると、LPA はそこに記された SM-DP+ へ接続してダウンロードを始める。'] },
+        { id: 'es10', x1: 140, y1: 265, x2: 215, y2: 265, lbl: 'ES10a/b/c', lx: 177, ly: 257, a: 'middle', name: 'ES10a / ES10b / ES10c', between: 'LPA と eUICC の間',
+          role: 'LPA が eUICC の ISD-R に対して使う、機能別の3つのインタフェースです。',
+          ifs: ['ES10a：eUICC に設定済みの SM-DP+ / SM-DS アドレスの取得', 'ES10b：ダウンロード関連（チャレンジ取得、AuthenticateServer、PrepareDownload、LoadBoundProfilePackage、通知の取得）', 'ES10c：ローカルのプロファイル管理（一覧、有効化、無効化、削除など）'],
+          points: ['ダウンロードで主に使うのは ES10b。'] }
+      ],
+      lanes: [{ id: 'user', n: 'ユーザー' }, { id: 'lpa', n: 'LPA' }, { id: 'euicc', n: 'eUICC' }, { id: 'smdp', n: 'SM-DP+' }],
+      steps: [
+        { ph: 'コード読み取り', f: 'user', t: 'lpa', title: 'アクティベーションコードを読み取る', api: 'Activation Code：1$<SM-DP+アドレス>$<マッチングID>',
+          d: 'ユーザーが QR コードを読み取る（または手入力する）。LPA はコードから接続先の SM-DP+ とマッチングID を取り出す。SM-DS 経由でイベントを見つける方法もある。' },
+        { ph: '相互認証', f: 'lpa', t: 'euicc', title: 'eUICC のチャレンジと情報を取得', api: 'ES10b：GetEUICCChallenge / GetEUICCInfo',
+          d: 'LPA は eUICC から乱数（euiccChallenge）と対応情報（euiccInfo1）を取得する。' },
+        { ph: '相互認証', f: 'lpa', t: 'smdp', title: 'InitiateAuthentication', api: 'ES9+：InitiateAuthentication',
+          d: 'LPA が eUICC のチャレンジと情報を SM-DP+ へ送る。SM-DP+ は、チャレンジへの署名と自身の証明書を返す。' },
+        { ph: '相互認証', f: 'lpa', t: 'euicc', title: 'サーバーを検証（AuthenticateServer）', api: 'ES10b：AuthenticateServer',
+          d: 'eUICC が SM-DP+ の証明書と署名を検証し、自身の署名付き応答を作る。これでサーバーの正当性が確認できる。' },
+        { ph: '相互認証', f: 'lpa', t: 'smdp', title: 'AuthenticateClient', api: 'ES9+：AuthenticateClient',
+          d: 'SM-DP+ が eUICC の証明書と署名を検証する。成功すると、プロファイルのメタデータ等が LPA に返される。' },
+        { ph: 'ダウンロード準備', f: 'lpa', t: 'user', title: 'プロファイルの内容をユーザーが確認', api: 'Profile Metadata / Confirmation Code',
+          d: 'LPA がプロファイルの概要（事業者名など）を表示し、ユーザーが同意する。確認コード（Confirmation Code）が必要な場合は、ここで入力する。' },
+        { ph: 'ダウンロード準備', f: 'lpa', t: 'euicc', title: 'PrepareDownload', api: 'ES10b：PrepareDownload',
+          d: 'eUICC が鍵合意に使う一時鍵を生成し、署名付きの準備データを返す。' },
+        { ph: 'BPPの取得とインストール', f: 'lpa', t: 'smdp', title: 'BPP を取得', api: 'ES9+：GetBoundProfilePackage',
+          d: 'LPA が eUICC の準備データを SM-DP+ に渡す。SM-DP+ は、その eUICC 専用に暗号化・紐づけた BPP（Bound Profile Package）を返す。' },
+        { ph: 'BPPの取得とインストール', f: 'lpa', t: 'euicc', title: 'BPP をインストール', api: 'ES10b：LoadBoundProfilePackage',
+          d: 'LPA は BPP を分割して eUICC に渡す。eUICC が内部で復号・検証し、プロファイルをインストールする。LPA には中身が読めない。' },
+        { ph: '通知', f: 'lpa', t: 'smdp', title: 'インストール結果の通知', api: 'ES9+：HandleNotification',
+          d: 'eUICC が作った結果通知を LPA が SM-DP+ へ送る。SM-DP+ は結果を事業者へ伝える（ES2+）。' }
+      ]
+    },
+
+    sgp02: {
+      name: 'M2M向け（SGP.01 / SGP.02）',
+      lead: '機器を遠隔で一括管理する用途の方式です。ユーザー操作を前提とせず、サーバー側（SM-SR）が eUICC に指示を送り込む「プッシュ型」で動作します。',
+      chips: ['SM-DP', 'SM-SR', 'eUICC', 'ES2', 'ES3', 'ES4', 'ES5', 'プッシュ型'],
+      flowNote: '事業者の発注から、SM-SR が eUICC にプロファイルを送り込み有効化するまでの流れです。',
+      h: 360,
+      frame: { x: 150, y: 250, w: 260, h: 100, label: 'デバイス', lx: 162, ly: 268 },
+      nodes: [
+        { id: 'mno', x: 215, y: 20, w: 130, h: 56, name: 'MNO', sub: '移動体通信事業者', kind: 'ext',
+          role: '加入契約を管理し、プロファイルの発注や有効化などの操作を SM-DP と SM-SR に依頼する事業者です。',
+          ifs: ['ES2：SM-DP へのプロファイル発注', 'ES4：SM-SR へのプロファイル管理の依頼'],
+          points: ['この方式では、事業者側のシステムが操作を主導する。'] },
+        { id: 'smdp', x: 10, y: 150, w: 130, h: 56, name: 'SM-DP', sub: 'データ準備', kind: 'server',
+          role: 'Subscription Manager Data Preparation。プロファイルを準備し、eUICC 向けに保護して SM-SR 経由で届けるサーバーです。',
+          ifs: ['ES2：MNO からの発注', 'ES3：SM-SR への配信依頼', 'ES8：eUICC との保護された接続（SM-SR 経由）'],
+          points: ['SGP.22 の SM-DP+ とは別の仕様で、構成と手順が異なる。'] },
+        { id: 'smsr', x: 420, y: 150, w: 130, h: 56, name: 'SM-SR', sub: 'セキュアルーティング', kind: 'server',
+          role: 'Subscription Manager Secure Routing。eUICC までの通信経路を担い、eUICC 上のプロファイルとプラットフォームを管理するサーバーです。',
+          ifs: ['ES3：SM-DP からの配信依頼', 'ES4：MNO からのプロファイル管理の依頼', 'ES5：eUICC への指示'],
+          points: ['SMS や HTTPS を使った OTA（Over The Air）で eUICC に指示を送る。これがプッシュ型の中心。', 'プロファイルの有効化・無効化・削除はここを通る。'] },
+        { id: 'euicc', x: 215, y: 280, w: 130, h: 56, name: 'eUICC', sub: 'ISD-R / ISD-P', kind: 'dev',
+          role: '機器に組み込まれた SIM。サーバーからの指示を受けてプロファイルを保持・切り替えます。',
+          ifs: ['ES5：SM-SR からの指示', 'ES8：SM-DP とのプロファイル受け渡し'],
+          points: ['この方式ではデバイス上に LPA のような仲介機能を置かず、ユーザー操作も想定しない。', 'プロファイルごとの領域として ISD-P を作る。'] }
+      ],
+      links: [
+        { id: 'es2', x1: 240, y1: 76, x2: 75, y2: 150, lbl: 'ES2', lx: 150, ly: 105, a: 'end', name: 'ES2', between: 'MNO と SM-DP の間',
+          role: '事業者が SM-DP にプロファイルを発注するインタフェースです。',
+          ifs: ['DownloadProfile：プロファイルの準備・配信の依頼'],
+          points: ['発注時に対象の eUICC を識別する情報（EID）を指定する。'] },
+        { id: 'es3', x1: 140, y1: 178, x2: 420, y2: 178, lbl: 'ES3', lx: 280, ly: 170, a: 'middle', name: 'ES3', between: 'SM-DP と SM-SR の間',
+          role: 'SM-DP が、対象 eUICC を管理する SM-SR にプロファイルの配信を依頼するインタフェースです。',
+          ifs: ['DownloadProfile：プロファイルの引き渡し'],
+          points: ['プロファイルは保護されたまま SM-SR に渡る。'] },
+        { id: 'es4', x1: 320, y1: 76, x2: 485, y2: 150, lbl: 'ES4', lx: 410, ly: 105, a: 'start', name: 'ES4', between: 'MNO と SM-SR の間',
+          role: '事業者が SM-SR を通じて、eUICC 上のプロファイルを管理するインタフェースです。',
+          ifs: ['EnableProfile：有効化', '無効化・削除などの管理操作'],
+          points: ['ダウンロード後の運用（切り替え・削除）はこのインタフェースで行う。'] },
+        { id: 'es5', x1: 485, y1: 206, x2: 345, y2: 300, lbl: 'ES5', lx: 430, ly: 262, a: 'start', name: 'ES5', between: 'SM-SR と eUICC の間',
+          role: 'SM-SR が eUICC を直接管理するインタフェースです。SMS や HTTPS による OTA で実現されます。',
+          ifs: ['CreateISDP：プロファイル用領域（ISD-P）の作成', 'プロファイルの有効化・無効化・削除の実行'],
+          points: ['サーバー側から送り込む「プッシュ型」の通信。'] },
+        { id: 'es8', x1: 75, y1: 206, x2: 215, y2: 308, lbl: 'ES8', lx: 130, ly: 262, a: 'end', dashed: true, name: 'ES8', between: 'SM-DP と eUICC の間（論理的な接続）',
+          role: 'SM-DP と eUICC（ISD-P）の間で確立する保護チャネルです。実際の通信は SM-SR が中継します。',
+          ifs: ['プロファイルを保護して受け渡すための枠組み'],
+          points: ['点線は論理的な接続を表す。'] }
+      ],
+      lanes: [{ id: 'mno', n: 'MNO' }, { id: 'smdp', n: 'SM-DP' }, { id: 'smsr', n: 'SM-SR' }, { id: 'euicc', n: 'eUICC' }],
+      steps: [
+        { ph: '発注', f: 'mno', t: 'smdp', title: 'プロファイルを発注', api: 'ES2：DownloadProfile',
+          d: 'MNO が SM-DP に、対象 eUICC（EID）向けのプロファイルの準備と配信を依頼する。' },
+        { ph: '準備', f: 'smdp', t: 'smsr', title: 'SM-SR に配信を依頼', api: 'ES3：CreateISDP など',
+          d: 'SM-DP が、その eUICC を管理する SM-SR にプロファイルの配信を依頼する。' },
+        { ph: '配信', f: 'smsr', t: 'euicc', title: 'ISD-P を作成', api: 'ES5：CreateISDP',
+          d: 'SM-SR が OTA（SMS または HTTPS）で eUICC に指示を送り、プロファイル用の領域（ISD-P）を作らせる。サーバー側から送り込む、プッシュ型の動作。' },
+        { ph: '配信', f: 'smdp', t: 'euicc', title: 'プロファイルを送り込む', api: 'ES8（SM-SR が中継）',
+          d: 'SM-DP が保護したプロファイルを、SM-SR を中継して ISD-P へ送る。eUICC がインストールする。' },
+        { ph: '結果', f: 'euicc', t: 'smsr', title: 'インストール結果を報告', api: 'ES5',
+          d: 'eUICC がインストール結果を SM-SR に返す。' },
+        { ph: '結果', f: 'smsr', t: 'mno', title: '事業者へ結果を通知', api: 'ES4',
+          d: 'SM-SR が結果を MNO に伝える。' },
+        { ph: '有効化', f: 'mno', t: 'smsr', title: '有効化を指示', api: 'ES4：EnableProfile',
+          d: 'MNO が SM-SR にプロファイルの有効化を依頼する。' },
+        { ph: '有効化', f: 'smsr', t: 'euicc', title: '有効化を OTA で実行', api: 'ES5',
+          d: 'SM-SR が OTA で eUICC に指示を送り、プロファイルを有効にする。ユーザーの操作は不要。' }
+      ]
+    },
+
+    sgp32: {
+      name: 'IoT向け（SGP.31 / SGP.32）',
+      lead: '画面や操作手段を持たない IoT 機器向けの方式です。遠隔管理サーバー eIM が、デバイス側の IPA（IoT Profile Assistant）を介して eUICC を管理します。ユーザー確認は前提としません。',
+      chips: ['eIM', 'IPA（IPAd / IPAe）', 'SM-DP+', 'eUICC', 'ESipa', 'ES9+', 'ES10b'],
+      flowNote: 'eIM の指示で IPA がプロファイルをダウンロードし、結果を eIM に報告します。最後に eIM が遠隔でプロファイルを管理する例も示します。',
+      h: 380,
+      frame: { x: 10, y: 175, w: 540, h: 195, label: 'IoT デバイス', lx: 22, ly: 195 },
+      nodes: [
+        { id: 'smdp', x: 10, y: 20, w: 130, h: 56, name: 'SM-DP+', sub: 'プロファイル準備サーバー', kind: 'server',
+          role: 'プロファイルを準備し、eUICC 向けの BPP を配信するサーバーです。SGP.22 と同系統の SM-DP+ が使われます。',
+          ifs: ['ES9+：IPA とのやり取り（認証・BPP の取得・通知）'],
+          points: ['認証とダウンロードの考え方は SGP.22 と共通。', '違いは、操作を始めるのがユーザーではなく eIM の指示である点。'] },
+        { id: 'eim', x: 420, y: 20, w: 130, h: 56, name: 'eIM', sub: '遠隔管理サーバー', kind: 'server',
+          role: 'eSIM IoT Remote Manager。IoT 機器の eUICC を遠隔で管理するサーバーです。',
+          ifs: ['ESipa：IPA との通信'],
+          points: ['プロファイルのダウンロード指示と、プロファイルの有効化・無効化・削除などの管理を担う。', '管理操作は eUICC Package として IPA 経由で eUICC に渡る。プロファイル状態の管理は PSMO、eIM 設定の変更は eCO と呼ばれる。', 'ユーザー確認は求めない。'] },
+        { id: 'ipad', x: 215, y: 205, w: 130, h: 56, name: 'IPAd', sub: 'デバイス側の IPA', kind: 'dev',
+          role: 'IoT Profile Assistant（デバイス側実装）。eIM、SM-DP+、eUICC の間を仲介する、IoT 向けの LPA に相当する機能です。',
+          ifs: ['ESipa：eIM との通信', 'ES9+：SM-DP+ との通信', 'ES10b：eUICC の操作'],
+          points: ['ユーザーインタフェースを持たない。', 'eIM から受けた指示を、eUICC に伝えて実行させる。'] },
+        { id: 'euicc', x: 150, y: 290, w: 260, h: 68, name: 'eUICC', sub: '', kind: 'dev', tl: true,
+          role: 'IoT 機器に組み込まれた SIM。プロファイルを保持し、eIM が出した管理操作に従います。',
+          ifs: ['ES10b：IPA からの操作を受ける'],
+          points: ['eIM の情報があらかじめ eUICC に設定されている。', 'eIM からの管理操作は、eIM が作成した eUICC Package として届く。'] },
+        { id: 'ipae', x: 285, y: 312, w: 115, h: 34, name: 'IPAe', sub: '', kind: 'inner', small: true,
+          role: 'IoT Profile Assistant（eUICC 側実装）。IPA の機能を eUICC の内部に実装する形態です。',
+          ifs: ['ESipa：eIM との通信', 'ES9+：SM-DP+ との通信'],
+          points: ['デバイス側に IPA を実装しなくてもよくなる。', 'IPAd と IPAe のどちらを使うかは、機器と eUICC の構成による。'] }
+      ],
+      links: [
+        { id: 'es9p', x1: 75, y1: 76, x2: 215, y2: 233, lbl: 'ES9+', lx: 135, ly: 150, a: 'end', name: 'ES9+', between: 'SM-DP+ と IPA の間',
+          role: 'IPA が SM-DP+ と通信し、認証・BPP の取得・通知を行うインタフェースです。SGP.22 の ES9+ と同系統です。',
+          ifs: ['相互認証', 'BPP の取得', '結果通知'],
+          points: ['SGP.22 と同様に、BPP は対象 eUICC 専用に暗号化されている。'] },
+        { id: 'esipa', x1: 485, y1: 76, x2: 345, y2: 233, lbl: 'ESipa', lx: 430, ly: 150, a: 'start', name: 'ESipa', between: 'eIM と IPA の間',
+          role: 'eIM と IPA を結ぶ、IoT 向けに加わったインタフェースです。',
+          ifs: ['eIM からの指示（ダウンロード、eUICC Package など）の受け渡し', 'IPA から eIM への結果報告'],
+          points: ['遠隔管理の入口となる。'] },
+        { id: 'es10b', x1: 280, y1: 261, x2: 280, y2: 290, lbl: 'ES10b', lx: 288, ly: 280, a: 'start', name: 'ES10b', between: 'IPA と eUICC の間',
+          role: 'IPA が eUICC に対して使う、プロファイルのダウンロード関連のインタフェースです。',
+          ifs: ['eUICC のチャレンジ・情報の取得', 'AuthenticateServer / PrepareDownload / LoadBoundProfilePackage'],
+          points: ['SGP.22 の ES10b と同じ役割のものを、IoT 向けに使う。'] }
+      ],
+      lanes: [{ id: 'eim', n: 'eIM' }, { id: 'ipa', n: 'IPA' }, { id: 'euicc', n: 'eUICC' }, { id: 'smdp', n: 'SM-DP+' }],
+      steps: [
+        { ph: '指示', f: 'eim', t: 'ipa', title: 'eIM がダウンロードを指示', api: 'ESipa',
+          d: 'eIM が、ダウンロード元の SM-DP+ に関する情報を IPA に伝える。ユーザー操作は要らない。' },
+        { ph: '相互認証', f: 'ipa', t: 'euicc', title: 'eUICC のチャレンジと情報を取得', api: 'ES10b',
+          d: 'IPA が eUICC からチャレンジと情報を取得する。' },
+        { ph: '相互認証', f: 'ipa', t: 'smdp', title: 'SM-DP+ と相互認証', api: 'ES9+ / ES10b',
+          d: 'SGP.22 と同様の手順で、eUICC と SM-DP+ が互いの証明書と署名を検証する。IPA がその橋渡しをする。' },
+        { ph: 'BPPの取得', f: 'ipa', t: 'smdp', title: 'BPP を取得', api: 'ES9+',
+          d: 'eUICC の準備データを SM-DP+ に渡し、その eUICC 専用に暗号化された BPP を受け取る。' },
+        { ph: 'インストール', f: 'ipa', t: 'euicc', title: 'BPP をインストール', api: 'ES10b：LoadBoundProfilePackage',
+          d: 'IPA が BPP を eUICC に渡す。eUICC が復号・検証してインストールする。ユーザー確認の手順はない。' },
+        { ph: '報告', f: 'ipa', t: 'eim', title: '結果を eIM に報告', api: 'ESipa',
+          d: 'IPA がダウンロードの結果を eIM に返す。' },
+        { ph: '遠隔管理', f: 'eim', t: 'ipa', title: '有効化などを指示', api: 'ESipa：eUICC Package（PSMO）',
+          d: 'eIM が、プロファイルの有効化・無効化・削除などの操作を eUICC Package にまとめ、IPA に渡す。' },
+        { ph: '遠隔管理', f: 'ipa', t: 'euicc', title: 'eUICC が操作を実行', api: 'ES10b',
+          d: 'IPA が eUICC Package を eUICC に渡し、eUICC が操作を実行する。' }
+      ]
+    }
+  };
+
+  var GLOSS = [
+    ['eSIM', 'embedded SIM', '物理カードの差し替えなしに、通信プロファイルを遠隔で書き込める SIM の仕組みの総称。実体は eUICC。'],
+    ['組込み型汎用 SIM（eUICC）', 'embedded Universal Integrated Circuit Card', '複数のプロファイルを保持でき、遠隔で書き換えられる SIM。EID で識別される。'],
+    ['リモートSIMプロビジョニング（RSP）', 'Remote SIM Provisioning', 'eUICC にプロファイルを遠隔で配信・管理する仕組みの総称。GSMA が規格化している。'],
+    ['プロファイル', 'Profile', '加入者情報（ICCID など）や認証鍵、設定を束ねた、eUICC 上の通信契約のデータ一式。'],
+    ['SM-DP+', 'Subscription Manager Data Preparation+', 'SGP.22 のプロファイル準備サーバー。eUICC 専用の BPP を作って配信する。SGP.32 でも使われる。'],
+    ['SM-DS', 'Subscription Manager Discovery Server', 'ダウンロード可能なイベントを登録しておき、LPA が見つけられるようにするサーバー。'],
+    ['SM-DP', 'Subscription Manager Data Preparation', 'SGP.02（M2M向け）のプロファイル準備サーバー。'],
+    ['SM-SR', 'Subscription Manager Secure Routing', 'SGP.02 で eUICC までの通信経路を担い、eUICC 上のプロファイルとプラットフォームを管理するサーバー。'],
+    ['LPA', 'Local Profile Assistant', 'SGP.22 のデバイス側機能。LUI、LPD、LDS の3機能で、ユーザー、サーバー、eUICC を仲介する。'],
+    ['LUI', 'Local User Interface', 'LPA のユーザーインタフェース。コードの読み取りやプロファイルの確認・管理に使う。'],
+    ['IPA（IPAd / IPAe）', 'IoT Profile Assistant', 'SGP.32 の仲介機能。デバイス側に実装すれば IPAd、eUICC 内に実装すれば IPAe。'],
+    ['eIM', 'eSIM IoT Remote Manager', 'SGP.32 で IoT 機器の eUICC を遠隔管理するサーバー。ESipa で IPA とつながる。'],
+    ['ISD-R', 'Issuer Security Domain Root', 'eUICC 内でプロファイルの管理を受け持つセキュリティドメイン。ES10 の操作はここに届く。'],
+    ['ISD-P', 'Issuer Security Domain Profile', 'eUICC 内でプロファイル1つを収める領域。'],
+    ['ECASD', 'eUICC Controlling Authority Security Domain', 'eUICC の認証に使う証明書や鍵を保持するセキュリティドメイン。'],
+    ['EID', 'eUICC Identifier', 'eUICC を一意に識別する32桁の識別子。'],
+    ['ICCID', 'Integrated Circuit Card Identifier', 'SIM やプロファイルを識別する番号。'],
+    ['BPP', 'Bound Profile Package', '特定の eUICC に紐づけて暗号化したプロファイルの配信用パッケージ。eUICC だけが復号できる。'],
+    ['アクティベーションコード', 'Activation Code', 'SGP.22 のダウンロード開始に使う文字列（QR コードで配布されることが多い）。「1$<SM-DP+アドレス>$<マッチングID>」の形式。'],
+    ['マッチングID', 'Matching ID', 'SM-DP+ が、ダウンロードの対象となるプロファイルを特定するための識別子。'],
+    ['確認コード', 'Confirmation Code', '事業者が設定すると、ダウンロード時にユーザーが入力する追加のコード。'],
+    ['PSMO', 'Profile State Management Operation', 'SGP.32 で eIM が eUICC Package として指示する、プロファイルの有効化・無効化・削除などの操作。'],
+    ['EUM', 'eUICC Manufacturer', 'eUICC の製造者。'],
+    ['GSMA CI', 'Certificate Issuer', 'RSP の証明書チェーンにおける信頼の起点となる認証局。相互認証での証明書検証に使われる。'],
+    ['ES9+ / ES10 / ES8+', 'RSP interfaces', 'SGP.22 の主なインタフェース名。ES9+ は LPA と SM-DP+、ES10 は LPA と eUICC、ES8+ は SM-DP+ と eUICC を結ぶ。']
+  ];
+
+  /* ================= 状態 ================= */
+  var cur = 'sgp22';
+  var selId = null;
+  var step = 0;
+  var timer = null;
+
+  /* ================= 概要 ================= */
+  function renderSummary(m) {
+    var box = $('#summary');
+    box.innerHTML = '';
+    box.appendChild(html('h2', null, m.name));
+    box.appendChild(html('p', null, m.lead));
+    var ul = html('ul', 'chips');
+    m.chips.forEach(function (c) { ul.appendChild(html('li', null, c)); });
+    box.appendChild(ul);
+  }
+
+  /* ================= アーキテクチャ図 ================= */
+  function activate(node, fn) {
+    node.addEventListener('click', fn);
+    node.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fn(); }
+    });
+  }
+
+  function renderArch(m) {
+    var svg = $('#arch');
+    svg.innerHTML = '';
+    svg.setAttribute('viewBox', '0 0 560 ' + m.h);
+    var f = m.frame;
+    svg.appendChild(el('rect', { x: f.x, y: f.y, width: f.w, height: f.h, rx: 10, 'class': 'frame' }));
+    svg.appendChild(el('text', { x: f.lx, y: f.ly, 'class': 'frame-label' }, f.label));
+
+    m.links.forEach(function (l) {
+      var g = el('g', { 'class': 'link' + (l.dashed ? ' dashed' : ''), tabindex: 0, role: 'button', 'data-id': l.id, 'aria-label': l.name + '（' + l.between + '）' });
+      g.appendChild(el('line', { 'class': 'hit', x1: l.x1, y1: l.y1, x2: l.x2, y2: l.y2 }));
+      g.appendChild(el('line', { 'class': 'vis', x1: l.x1, y1: l.y1, x2: l.x2, y2: l.y2 }));
+      g.appendChild(el('text', { 'class': 'lbl', x: l.lx, y: l.ly, 'text-anchor': l.a }, l.lbl));
+      activate(g, function () { select(l.id, 'link'); });
+      svg.appendChild(g);
+    });
+
+    m.nodes.forEach(function (n) {
+      var g = el('g', { 'class': 'node k-' + n.kind, tabindex: 0, role: 'button', 'data-id': n.id, 'aria-label': n.name + (n.sub ? '（' + n.sub + '）' : '') });
+      g.appendChild(el('rect', { x: n.x, y: n.y, width: n.w, height: n.h, rx: 8 }));
+      if (n.tl) {
+        g.appendChild(el('text', { 'class': 't-name', x: n.x + 12, y: n.y + 24 }, n.name));
+      } else if (n.small) {
+        g.appendChild(el('text', { 'class': 't-name', x: n.x + n.w / 2, y: n.y + n.h / 2 + 5, 'text-anchor': 'middle' }, n.name));
+      } else {
+        g.appendChild(el('text', { 'class': 't-name', x: n.x + n.w / 2, y: n.y + n.h / 2 - 2, 'text-anchor': 'middle' }, n.name));
+        g.appendChild(el('text', { 'class': 't-sub', x: n.x + n.w / 2, y: n.y + n.h / 2 + 15, 'text-anchor': 'middle' }, n.sub));
+      }
+      activate(g, function () { select(n.id, 'node'); });
+      svg.appendChild(g);
+    });
+  }
+
+  function findItem(m, id) {
+    var i;
+    for (i = 0; i < m.nodes.length; i++) { if (m.nodes[i].id === id) { return { item: m.nodes[i], type: 'node' }; } }
+    for (i = 0; i < m.links.length; i++) { if (m.links[i].id === id) { return { item: m.links[i], type: 'link' }; } }
+    return null;
+  }
+
+  function panelSection(parent, title, items) {
+    parent.appendChild(html('h4', null, title));
+    if (typeof items === 'string') {
+      parent.appendChild(html('p', null, items));
+    } else {
+      var ul = html('ul');
+      items.forEach(function (t) { ul.appendChild(html('li', null, t)); });
+      parent.appendChild(ul);
+    }
+  }
+
+  function select(id) {
+    var m = DATA[cur];
+    var r = findItem(m, id);
+    if (!r) { return; }
+    selId = id;
+    var all = document.querySelectorAll('#arch .node, #arch .link');
+    for (var i = 0; i < all.length; i++) {
+      var on = all[i].getAttribute('data-id') === id;
+      if (on) { all[i].classList.add('sel'); } else { all[i].classList.remove('sel'); }
+      all[i].setAttribute('aria-pressed', on ? 'true' : 'false');
+    }
+    var p = $('#panel');
+    p.innerHTML = '';
+    var it = r.item;
+    p.appendChild(html('p', 'kind', r.type === 'node' ? 'コンポーネント' : 'インタフェース（' + it.between + '）'));
+    p.appendChild(html('h3', null, it.name));
+    panelSection(p, '役割', it.role);
+    panelSection(p, r.type === 'node' ? 'インタフェース' : '主な機能', it.ifs);
+    panelSection(p, 'ポイント', it.points);
+  }
+
+  /* ================= シーケンス（再生） ================= */
+  var LANE_X = [50, 150, 250, 350];
+  var ROW0 = 66, ROWH = 34;
+
+  function laneIndex(m, id) {
+    for (var i = 0; i < m.lanes.length; i++) { if (m.lanes[i].id === id) { return i; } }
+    return 0;
+  }
+
+  function renderSeq(m) {
+    var svg = $('#seq');
+    svg.innerHTML = '';
+    var H = ROW0 + m.steps.length * ROWH + 8;
+    svg.setAttribute('viewBox', '0 0 400 ' + H);
+    var defs = el('defs');
+    [['future', '#8CA3C4'], ['done', '#1F4278'], ['cur', '#A98A1A']].forEach(function (c) {
+      var mk = el('marker', { id: 'ah-' + c[0], viewBox: '0 0 10 10', refX: 9, refY: 5, markerWidth: 7, markerHeight: 7, orient: 'auto-start-reverse' });
+      mk.appendChild(el('path', { d: 'M0,0 L10,5 L0,10 z', fill: c[1] }));
+      defs.appendChild(mk);
+    });
+    svg.appendChild(defs);
+    m.lanes.forEach(function (ln, i) {
+      var x = LANE_X[i];
+      svg.appendChild(el('line', { 'class': 'lane-line', x1: x, y1: 36, x2: x, y2: H - 4 }));
+      svg.appendChild(el('rect', { 'class': 'lane-box', x: x - 40, y: 6, width: 80, height: 28, rx: 6 }));
+      svg.appendChild(el('text', { 'class': 'lane-name', x: x, y: 24, 'text-anchor': 'middle' }, ln.n));
+    });
+    m.steps.forEach(function (s, i) {
+      var a = LANE_X[laneIndex(m, s.f)], b = LANE_X[laneIndex(m, s.t)];
+      var dir = b > a ? 1 : -1;
+      var y = ROW0 + i * ROWH;
+      var g = el('g', { 'data-i': i });
+      g.appendChild(el('line', { 'class': 'arrow', x1: a + dir * 3, y1: y, x2: b - dir * 3, y2: y }));
+      var cx = (a + b) / 2;
+      g.appendChild(el('circle', { 'class': 'num-bg', cx: cx, cy: y, r: 10 }));
+      g.appendChild(el('text', { 'class': 'num', x: cx, y: y + 4 }, String(i + 1)));
+      svg.appendChild(g);
+    });
+    svg.setAttribute('aria-label', 'シーケンス図（' + m.steps.length + 'ステップ）');
+  }
+
+  function paintSeq() {
+    var m = DATA[cur];
+    var gs = document.querySelectorAll('#seq g[data-i]');
+    for (var i = 0; i < gs.length; i++) {
+      var state = i < step ? 'done' : (i === step ? 'cur' : 'future');
+      var line = gs[i].querySelector('line');
+      line.setAttribute('class', 'arrow ' + state);
+      line.setAttribute('marker-end', 'url(#ah-' + state + ')');
+      gs[i].querySelector('circle').setAttribute('class', 'num-bg ' + state);
+      gs[i].querySelector('text').setAttribute('class', 'num ' + (state === 'future' ? 'future' : ''));
+    }
+    var s = m.steps[step];
+    var card = $('#stepcard');
+    card.innerHTML = '';
+    card.appendChild(html('span', 'badge', 'フェーズ：' + s.ph));
+    card.appendChild(html('h3', null, (step + 1) + '. ' + s.title));
+    card.appendChild(html('p', null, s.d));
+    card.appendChild(html('div', 'api', s.api));
+    $('#progress').textContent = 'ステップ ' + (step + 1) + ' / ' + m.steps.length;
+    $('#b-prev').disabled = step === 0;
+    $('#b-next').disabled = step === m.steps.length - 1;
+    var pb = document.querySelectorAll('#phases .phase-btn');
+    for (var j = 0; j < pb.length; j++) {
+      if (pb[j].getAttribute('data-ph') === s.ph) { pb[j].setAttribute('aria-current', 'step'); }
+      else { pb[j].removeAttribute('aria-current'); }
+    }
+  }
+
+  function renderPhases(m) {
+    var ol = $('#phases');
+    ol.innerHTML = '';
+    var seen = {};
+    m.steps.forEach(function (s, i) {
+      if (seen[s.ph]) { return; }
+      seen[s.ph] = true;
+      var li = html('li');
+      var b = html('button', 'phase-btn', s.ph);
+      b.type = 'button';
+      b.setAttribute('data-ph', s.ph);
+      b.addEventListener('click', function () { stop(); goto(i); });
+      li.appendChild(b);
+      ol.appendChild(li);
+    });
+  }
+
+  function goto(i) {
+    var n = DATA[cur].steps.length;
+    step = Math.max(0, Math.min(n - 1, i));
+    paintSeq();
+  }
+
+  function stop() {
+    if (timer) { clearInterval(timer); timer = null; }
+    $('#b-play').textContent = '再生';
+  }
+
+  function play() {
+    var n = DATA[cur].steps.length;
+    if (step >= n - 1) { goto(0); }
+    $('#b-play').textContent = '一時停止';
+    timer = setInterval(function () {
+      if (step >= n - 1) { stop(); return; }
+      goto(step + 1);
+      if (step >= n - 1) { stop(); }
+    }, 2800);
+  }
+
+  /* ================= 方式の切り替え ================= */
+  function setMethod(id, focusTab) {
+    stop();
+    cur = id;
+    var m = DATA[id];
+    var tabs = document.querySelectorAll('.tab');
+    for (var i = 0; i < tabs.length; i++) {
+      var on = tabs[i].getAttribute('data-id') === id;
+      tabs[i].setAttribute('aria-selected', on ? 'true' : 'false');
+      tabs[i].tabIndex = on ? 0 : -1;
+      if (on && focusTab) { tabs[i].focus(); }
+    }
+    renderSummary(m);
+    renderArch(m);
+    select(m.nodes[0].id);
+    $('#flow-note').textContent = m.flowNote;
+    renderPhases(m);
+    renderSeq(m);
+    step = 0;
+    paintSeq();
+    $('#cmp').setAttribute('data-active', id);
+  }
+
+  function initTabs() {
+    var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+    tabs.forEach(function (t, i) {
+      t.addEventListener('click', function () { setMethod(t.getAttribute('data-id'), false); });
+      t.addEventListener('keydown', function (e) {
+        var j = -1;
+        if (e.key === 'ArrowRight') { j = (i + 1) % tabs.length; }
+        else if (e.key === 'ArrowLeft') { j = (i + tabs.length - 1) % tabs.length; }
+        else if (e.key === 'Home') { j = 0; }
+        else if (e.key === 'End') { j = tabs.length - 1; }
+        if (j >= 0) { e.preventDefault(); setMethod(tabs[j].getAttribute('data-id'), true); }
+      });
+    });
+  }
+
+  /* ================= 用語集 ================= */
+  function renderGloss() {
+    var ul = $('#gloss');
+    GLOSS.forEach(function (g) {
+      var li = html('li', 'card');
+      li.appendChild(html('span', 'term', g[0]));
+      li.appendChild(html('span', 'en', g[1]));
+      li.appendChild(html('p', null, g[2]));
+      li._text = (g[0] + ' ' + g[1] + ' ' + g[2]).toLowerCase();
+      ul.appendChild(li);
+    });
+    filterGloss();
+  }
+
+  function filterGloss() {
+    var q = $('#q').value.trim().toLowerCase();
+    var items = $('#gloss').children;
+    var shown = 0;
+    for (var i = 0; i < items.length; i++) {
+      var ok = !q || items[i]._text.indexOf(q) !== -1;
+      items[i].hidden = !ok;
+      if (ok) { shown++; }
+    }
+    $('#gcount').textContent = shown + ' / ' + items.length + ' 語';
+    $('#gempty').hidden = shown !== 0;
+  }
+
+  /* ================= 初期化 ================= */
+  $('#b-prev').addEventListener('click', function () { stop(); goto(step - 1); });
+  $('#b-next').addEventListener('click', function () { stop(); goto(step + 1); });
+  $('#b-reset').addEventListener('click', function () { stop(); goto(0); });
+  $('#b-play').addEventListener('click', function () { if (timer) { stop(); } else { play(); } });
+  $('#q').addEventListener('input', filterGloss);
+
+  initTabs();
+  renderGloss();
+  setMethod('sgp22', false);
+})();
+</script>
+</body>
+</html>

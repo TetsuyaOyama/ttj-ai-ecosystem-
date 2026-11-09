@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TTJ AIエコシステム図 — Claude Code の構成を左から右へたどる</title>
+<meta name="description" content="TTJ の Claude Code 環境（入口・司令塔・ハーネス・スキル・サブエージェント・公開）をクリックで読めるインタラクティブな構成図。">
+<style>
+:root {
+  --ttj-navy-900: #060F1D;
+  --ttj-navy-800: #0B1F3A;
+  --ttj-navy-700: #14305A;
+  --ttj-navy-600: #1F4278;
+  --ttj-navy-300: #8CA3C4;
+  --ttj-navy-100: #DDE5F0;
+  --ttj-navy-50:  #F1F4F9;
+  --ttj-gold-700: #8F7010;
+  --ttj-gold-600: #A98A1A;
+  --ttj-gold-500: #C9A227;
+  --ttj-gold-400: #D9B84A;
+  --ttj-gold-200: #EEDDA0;
+  --ttj-gold-100: #F8F0D0;
+  --ttj-bg: #FFFFFF;
+  --ttj-bg-subtle: var(--ttj-navy-50);
+  --ttj-bg-inverse: var(--ttj-navy-800);
+  --ttj-text: #14213A;
+  --ttj-text-muted: #4B5B76;
+  --ttj-text-inverse: #F5F1E3;
+  --ttj-accent: var(--ttj-gold-500);
+  --ttj-accent-strong: var(--ttj-gold-700);
+  --ttj-accent-soft: var(--ttj-gold-100);
+  --ttj-link: var(--ttj-navy-600);
+  --ttj-border: #D3DBE8;
+  --ttj-border-strong: var(--ttj-navy-300);
+  --ttj-danger: #B3261E;
+  --ttj-danger-bg: #FCE8E6;
+  --ttj-success: #1F7A4D;
+  --ttj-success-bg: #E3F4EB;
+  --ttj-focus: #2E6FD8;
+  --ttj-space-1: 0.25rem;
+  --ttj-space-2: 0.5rem;
+  --ttj-space-3: 0.75rem;
+  --ttj-space-4: 1rem;
+  --ttj-space-5: 1.5rem;
+  --ttj-space-6: 2rem;
+  --ttj-space-7: 3rem;
+  --ttj-radius-sm: 4px;
+  --ttj-radius-md: 8px;
+  --ttj-radius-lg: 16px;
+  --ttj-radius-pill: 999px;
+  --ttj-font-sans: "Noto Sans JP", "Hiragino Sans", "Yu Gothic UI", system-ui, sans-serif;
+  --ttj-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Noto Sans Mono CJK JP", monospace;
+  --ttj-shadow-sm: 0 1px 2px rgba(11, 31, 58, 0.10);
+  --ttj-shadow-md: 0 4px 12px rgba(11, 31, 58, 0.14);
+  /* モデル振り分けの色（白文字で 4.5:1 以上。Fable のみ紺文字） */
+  --m-haiku: #1F7A66;
+  --m-sonnet: #2F5FB0;
+  --m-opus: #6D43A8;
+  --m-fable: #C9A227;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: var(--ttj-font-sans);
+  color: var(--ttj-text);
+  background: linear-gradient(var(--ttj-bg) 0, var(--ttj-bg-subtle) 520px);
+  line-height: 1.8;
+  font-size: 16px;
+}
+a { color: var(--ttj-link); }
+:focus-visible { outline: 3px solid var(--ttj-focus); outline-offset: 2px; }
+code { font-family: var(--ttj-font-mono); font-size: 0.88em; background: var(--ttj-navy-50); padding: 0 .3em; border-radius: var(--ttj-radius-sm); word-break: break-all; }
+
+header.top {
+  background: var(--ttj-bg-inverse);
+  color: var(--ttj-text-inverse);
+  border-bottom: 4px solid var(--ttj-accent);
+  padding: var(--ttj-space-6) var(--ttj-space-4) var(--ttj-space-5);
+}
+.wrap { max-width: 1240px; margin: 0 auto; }
+header.top .kicker { color: var(--ttj-accent); font-size: .85rem; letter-spacing: .12em; margin: 0; }
+header.top h1 { margin: .2rem 0 .4rem; font-size: clamp(1.4rem, 4.6vw, 2.1rem); line-height: 1.35; }
+header.top p.lead { margin: 0; max-width: 62em; color: var(--ttj-navy-100); font-size: .95rem; }
+
+main { padding: var(--ttj-space-5) var(--ttj-space-4) var(--ttj-space-6); }
+h2 { font-size: 1.05rem; margin: 0 0 var(--ttj-space-2); color: var(--ttj-navy-800); }
+
+.panel-card { background: var(--ttj-bg); border: 1px solid var(--ttj-border); border-radius: var(--ttj-radius-md); box-shadow: var(--ttj-shadow-sm); padding: var(--ttj-space-4); }
+.toolbar { display: grid; gap: var(--ttj-space-4); grid-template-columns: 1fr; margin-bottom: var(--ttj-space-4); }
+@media (min-width: 860px) { .toolbar { grid-template-columns: 1fr 1fr; } }
+
+.legend-list { display: flex; flex-wrap: wrap; gap: var(--ttj-space-2); margin: 0; padding: 0; list-style: none; }
+.chip { font: inherit; font-size: .85rem; line-height: 1.4; border: 2px solid transparent; border-radius: var(--ttj-radius-pill); padding: .3rem .8rem; cursor: pointer; color: #fff; text-align: left; }
+.chip small { display: block; font-size: .72rem; opacity: .95; }
+.chip[aria-pressed="true"] { border-color: var(--ttj-navy-900); box-shadow: 0 0 0 3px var(--ttj-gold-400); }
+.chip.haiku { background: var(--m-haiku); }
+.chip.sonnet { background: var(--m-sonnet); }
+.chip.opus { background: var(--m-opus); }
+.chip.fable { background: var(--m-fable); color: var(--ttj-navy-900); }
+.hint { margin: var(--ttj-space-2) 0 0; font-size: .8rem; color: var(--ttj-text-muted); }
+
+.controls { display: flex; flex-wrap: wrap; gap: var(--ttj-space-2); margin-bottom: var(--ttj-space-2); }
+.btn { font: inherit; font-size: .9rem; border-radius: var(--ttj-radius-md); border: 1px solid var(--ttj-navy-700); background: var(--ttj-bg); color: var(--ttj-navy-800); padding: .4rem .9rem; cursor: pointer; min-height: 40px; }
+.btn:hover { background: var(--ttj-navy-50); }
+.btn.primary { background: var(--ttj-navy-800); color: var(--ttj-gold-200); border-color: var(--ttj-navy-800); }
+.btn.primary:hover { background: var(--ttj-navy-700); }
+.stepper { display: flex; flex-wrap: wrap; gap: .35rem; margin: 0 0 var(--ttj-space-2); padding: 0; list-style: none; }
+.stepper button { font: inherit; font-size: .78rem; border: 1px solid var(--ttj-border-strong); background: var(--ttj-bg); border-radius: var(--ttj-radius-pill); padding: .15rem .65rem; cursor: pointer; color: var(--ttj-text); }
+.stepper button[aria-current="step"] { background: var(--ttj-gold-500); border-color: var(--ttj-gold-700); color: var(--ttj-navy-900); font-weight: 700; }
+.stepper button.past { background: var(--ttj-accent-soft); border-color: var(--ttj-gold-600); }
+#cap { margin: 0; min-height: 3.6em; font-size: .9rem; }
+
+.diagram-frame { border: 1px solid var(--ttj-border); border-radius: var(--ttj-radius-md); background: var(--ttj-bg); box-shadow: var(--ttj-shadow-sm); }
+.scroller { overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; }
+.scroller svg { display: block; width: 100%; min-width: 1500px; height: auto; }
+.scroll-note { display: none; margin: 0; padding: .35rem var(--ttj-space-3); font-size: .78rem; background: var(--ttj-accent-soft); color: var(--ttj-navy-800); border-bottom: 1px solid var(--ttj-gold-200); }
+@media (max-width: 1540px) { .scroll-note { display: block; } }
+
+/* --- SVG --- */
+svg text { font-family: var(--ttj-font-sans); }
+.colhead { font-size: 13px; font-weight: 700; fill: var(--ttj-navy-700); text-anchor: middle; }
+.colrule { stroke: var(--ttj-border); stroke-width: 1; stroke-dasharray: 2 4; }
+.lanetitle { font-size: 14px; font-weight: 700; fill: var(--ttj-navy-800); }
+.lanenote { font-size: 12px; fill: var(--ttj-text-muted); }
+.bandbox { fill: var(--ttj-gold-100); fill-opacity: .55; stroke: var(--ttj-gold-600); stroke-width: 1.5; stroke-dasharray: 6 4; }
+.bandlabel { font-size: 12px; font-weight: 700; fill: var(--ttj-gold-700); }
+
+.edge { fill: none; stroke: var(--ttj-navy-300); stroke-width: 1.6; marker-end: url(#ah); }
+.edge.direct { stroke-dasharray: 6 4; opacity: .75; }
+.edge.ref { stroke-dasharray: 2 4; }
+.edge.rel { stroke: var(--ttj-gold-600); stroke-width: 2.6; opacity: 1; marker-end: url(#ah-rel); }
+.edge.trail { stroke: var(--ttj-gold-400); stroke-width: 2.6; opacity: 1; marker-end: url(#ah-rel); }
+.edge.lit { stroke: var(--ttj-gold-500); stroke-width: 4; stroke-dasharray: 9 6; opacity: 1; marker-end: url(#ah-lit); animation: flow .7s linear infinite; }
+@keyframes flow { to { stroke-dashoffset: -15; } }
+#ah path { fill: var(--ttj-navy-300); }
+#ah-rel path { fill: var(--ttj-gold-600); }
+#ah-lit path { fill: var(--ttj-gold-500); }
+
+.node { cursor: pointer; outline: none; }
+.node .box { fill: var(--ttj-bg); stroke: var(--ttj-navy-300); stroke-width: 1.5; }
+.node .glow { fill: var(--ttj-gold-400); opacity: 0; }
+.node .t1 { font-size: 13.5px; font-weight: 700; fill: var(--ttj-text); text-anchor: middle; }
+.node .t2 { font-size: 12px; fill: var(--ttj-text-muted); text-anchor: middle; }
+.node.person .box, .node.hub .box { fill: var(--ttj-navy-800); stroke: var(--ttj-gold-500); stroke-width: 2.5; }
+.node.person .t1, .node.hub .t1 { fill: var(--ttj-gold-200); font-size: 16px; }
+.node.person .t2, .node.hub .t2 { fill: var(--ttj-navy-100); }
+.node.harness .box { fill: var(--ttj-gold-100); stroke: var(--ttj-gold-600); }
+.node.out .box { fill: var(--ttj-navy-100); stroke: var(--ttj-navy-600); }
+.node.lane .box { fill: var(--ttj-navy-50); }
+.node.agent .box { stroke: var(--ttj-navy-900); }
+.node.agent .t1, .node.agent .t2 { fill: #fff; }
+.node.agent.m-haiku .box { fill: var(--m-haiku); }
+.node.agent.m-sonnet .box { fill: var(--m-sonnet); }
+.node.agent.m-opus .box { fill: var(--m-opus); }
+.node.agent .strip { fill: var(--m-fable); stroke: var(--ttj-navy-900); stroke-width: 1; }
+.node:hover .box { stroke: var(--ttj-gold-600); stroke-width: 2.5; }
+.node.sel .box { stroke: var(--ttj-gold-500); stroke-width: 4; }
+.node:focus-visible .box { stroke: var(--ttj-focus); stroke-width: 4; }
+.node.sel:focus-visible .box { stroke: var(--ttj-focus); }
+.node.trail .glow { opacity: .35; }
+.node.lit .glow { opacity: .75; animation: pulse 1s ease-in-out infinite alternate; }
+.node.lit .box { stroke: var(--ttj-gold-600); stroke-width: 4; }
+@keyframes pulse { from { opacity: .35; } to { opacity: .85; } }
+svg.playing .node:not(.lit):not(.trail), svg.playing .bandgroup:not(.lit):not(.trail) { opacity: .35; }
+svg[data-hl="haiku"] .node.agent:not(.m-haiku),
+svg[data-hl="sonnet"] .node.agent:not(.m-sonnet),
+svg[data-hl="opus"] .node.agent:not(.m-opus),
+svg[data-hl="fable"] .node.agent:not(#n-architect) { opacity: .25; }
+svg[data-hl="haiku"] .node.agent.m-haiku .box,
+svg[data-hl="sonnet"] .node.agent.m-sonnet .box,
+svg[data-hl="opus"] .node.agent.m-opus .box,
+svg[data-hl="fable"] #n-architect .box { stroke: var(--ttj-gold-400); stroke-width: 4; }
+.bandgroup .glow { fill: var(--ttj-gold-400); opacity: 0; }
+.bandgroup.trail .glow { opacity: .25; }
+.bandgroup.lit .glow { opacity: .6; animation: pulse 1s ease-in-out infinite alternate; }
+
+/* --- 詳細パネル --- */
+#detail { margin-top: var(--ttj-space-4); min-height: 14rem; }
+#detail .ph { color: var(--ttj-text-muted); margin: 0; }
+#detail h2 { font-size: 1.25rem; display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
+.tag { font-size: .75rem; font-weight: 400; padding: .05rem .6rem; border-radius: var(--ttj-radius-pill); background: var(--ttj-navy-100); color: var(--ttj-navy-800); }
+.tag.haiku { background: var(--m-haiku); color: #fff; }
+.tag.sonnet { background: var(--m-sonnet); color: #fff; }
+.tag.opus { background: var(--m-opus); color: #fff; }
+.tag.fable { background: var(--m-fable); color: var(--ttj-navy-900); }
+.dgrid { display: grid; gap: var(--ttj-space-4); grid-template-columns: 1fr; }
+@media (min-width: 860px) { .dgrid { grid-template-columns: 1fr 1fr; } }
+.dgrid h3 { font-size: .85rem; margin: 0 0 .25rem; color: var(--ttj-accent-strong); letter-spacing: .06em; }
+.dgrid p, .dgrid ul { margin: 0; font-size: .92rem; }
+.dgrid ul { padding-left: 1.2rem; }
+.dgrid li { margin-bottom: .2rem; }
+.paths { list-style: none; padding-left: 0 !important; }
+.paths li { margin-bottom: .35rem; }
+.dgrid .wide { grid-column: 1 / -1; }
+
+.hooks-box { margin-top: var(--ttj-space-4); border-top: 1px solid var(--ttj-border); padding-top: var(--ttj-space-3); }
+.hooks-box .row { display: flex; flex-wrap: wrap; gap: var(--ttj-space-2); align-items: center; margin-bottom: var(--ttj-space-2); }
+.hooks-box .row h3 { margin: 0; font-size: .95rem; color: var(--ttj-navy-800); letter-spacing: 0; }
+.hk { border: 1px solid var(--ttj-border); border-radius: var(--ttj-radius-md); margin-bottom: .4rem; background: var(--ttj-bg); }
+.hk > button { width: 100%; font: inherit; font-size: .88rem; background: none; border: 0; cursor: pointer; text-align: left; padding: .5rem .75rem; display: grid; grid-template-columns: auto 1fr auto; gap: .2rem .6rem; align-items: center; color: var(--ttj-text); }
+.hk > button:hover { background: var(--ttj-navy-50); }
+.hk .caret { display: inline-block; transition: transform .15s; color: var(--ttj-accent-strong); }
+.hk > button[aria-expanded="true"] .caret { transform: rotate(90deg); }
+.hk .ev { font-weight: 700; }
+.hk .fn { color: var(--ttj-text-muted); font-family: var(--ttj-font-mono); font-size: .8rem; grid-column: 2; }
+.hk .kind { grid-column: 3; grid-row: 1 / span 2; font-size: .75rem; padding: .05rem .6rem; border-radius: var(--ttj-radius-pill); }
+.kind.stop { background: var(--ttj-danger-bg); color: var(--ttj-danger); border: 1px solid var(--ttj-danger); }
+.kind.log { background: var(--ttj-success-bg); color: var(--ttj-success); border: 1px solid var(--ttj-success); }
+.kind.inject { background: var(--ttj-accent-soft); color: var(--ttj-gold-700); border: 1px solid var(--ttj-gold-600); }
+.hk .body { padding: .25rem .75rem .75rem 2.2rem; font-size: .88rem; }
+.hk .body dl { margin: 0; display: grid; grid-template-columns: 7em 1fr; gap: .2rem .6rem; }
+.hk .body dt { color: var(--ttj-text-muted); }
+.hk .body dd { margin: 0; }
+
+footer.site { background: var(--ttj-bg-inverse); color: var(--ttj-text-inverse); border-top: 4px solid var(--ttj-accent); padding: var(--ttj-space-5) var(--ttj-space-4); font-size: .88rem; }
+footer.site .wrap { display: flex; flex-wrap: wrap; gap: var(--ttj-space-2) var(--ttj-space-5); justify-content: space-between; }
+footer.site a { color: var(--ttj-gold-200); }
+footer.site p { margin: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .edge.lit { stroke-dasharray: none; }
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <p class="kicker">TTJ AI ECOSYSTEM MAP</p>
+    <h1>Claude Code 環境の全体図：依頼から公開まで、左から右へ</h1>
+    <p class="lead">人（てっち）の依頼が、入口 → 司令塔（Claude Code）→ ハーネス（harness：安全柵）→ 振り分け → スキル（skill）→ サブエージェント（subagent）→ 道具・API → 公開 と流れます。ボックスを押す（Tab で移動）と、役割・実ファイルのパス・要点が下に出ます。</p>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="toolbar">
+      <section class="panel-card" aria-labelledby="legend-h">
+        <h2 id="legend-h">モデル振り分け（エージェントの色）</h2>
+        <ul class="legend-list" id="legend"></ul>
+        <p class="hint">色のボタンを押すと、そのモデルのエージェントだけが強調されます。上位モデルは最初から使わず、軽い側から試します。</p>
+      </section>
+      <section class="panel-card" aria-labelledby="flow-h">
+        <h2 id="flow-h">依頼1件の流れ</h2>
+        <div class="controls">
+          <button class="btn primary" id="btnPlay" type="button">▶ 依頼1件の流れを見る</button>
+          <button class="btn" id="btnPrev" type="button">◀ 前へ</button>
+          <button class="btn" id="btnNext" type="button">次へ ▶</button>
+          <button class="btn" id="btnReset" type="button">解除</button>
+        </div>
+        <ol class="stepper" id="stepper" aria-label="流れのステップ"></ol>
+        <p id="cap" aria-live="polite">例：「教材ページを1つ作って公開して」という依頼が、どの経路を通るかを順に光らせます。</p>
+      </section>
+    </div>
+
+    <div class="diagram-frame">
+      <p class="scroll-note">← 図は横長です。左右にスクロールしてください →</p>
+      <div class="scroller" id="scroller" tabindex="0" role="region" aria-label="AIエコシステム構成図（横スクロール可）">
+        <svg id="diagram" viewBox="0 0 1710 690" role="group" aria-labelledby="dg-t dg-d" xmlns="http://www.w3.org/2000/svg">
+          <title id="dg-t">TTJ AIエコシステムの構成図</title>
+          <desc id="dg-d">人から入口、司令塔 Claude Code、ハーネス、振り分け、スキル7本、サブエージェント5体、道具・API、公開へと左から右に流れる図。下段に Grok Bot とナレッジ。</desc>
+          <defs>
+            <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z"/></marker>
+            <marker id="ah-rel" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z"/></marker>
+            <marker id="ah-lit" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z"/></marker>
+          </defs>
+          <g id="g-bg"></g>
+          <g id="g-edges"></g>
+          <g id="g-nodes"></g>
+        </svg>
+      </div>
+    </div>
+
+    <section class="panel-card" id="detail" aria-live="polite" aria-label="選択したボックスの詳細">
+      <p class="ph">図のボックスを押すと、ここに詳細（役割・実ファイルのパス・中身の要点）が表示されます。まずは中央の「Claude Code」や、右上のエージェントを試してみてください。</p>
+    </section>
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <p>© TTJ — TED TRADING JAPAN G.K.　／　作：てっち / TTJ</p>
+    <p><a href="../index.html">ポートフォリオへ戻る</a></p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ===== 寸法 ===== */
+  var NS = "http://www.w3.org/2000/svg";
+  var W = 156, H = 50, PITCH = 60, CY = 282, X0 = 14, CP = 192, VW = 1710;
+  function colX(i) { return X0 + i * CP; }
+
+  var COLS = ["① 人", "② 入口", "③ 司令塔", "④ ハーネス", "⑤ 振り分け", "⑥ スキル7本", "⑦ サブエージェント5体", "⑧ 道具・API", "⑨ 公開"];
+
+  var MODEL = {
+    haiku:  { name: "Haiku",  desc: "軽い：確認・検索・チェック" },
+    sonnet: { name: "Sonnet", desc: "方針決定済み：実装・編集" },
+    opus:   { name: "Opus",   desc: "判断がいる：レビュー・練り直し" },
+    fable:  { name: "Fable",  desc: "特に重要：設計・最終確認" }
+  };
+
+  /* ===== ノード定義 ===== */
+  var NODES = [
+    { id: "person", col: 0, t1: "てっち", t2: "依頼・最終判断", cls: "person", h: 96,
+      colName: "① 人",
+      role: "依頼を出し、モデルの切り替え・公開（push / deploy）・削除など「人が決めること」を最終判断する人。",
+      paths: ["（人のため、ファイルはありません）"],
+      points: ["メインモデルの切り替えは人が行う。必要なときは Claude Code が「いつ・どのモデルへ」を伝えて止まる", "git push は ask 権限、公開は publish スキルの手順で人の最終確認を取る", "記憶メモへの書き足しも、確認のうえで1行ずつ"] },
+
+    { id: "in-app", col: 1, t1: "Claudeアプリ", t2: "スマホ / Web", colName: "② 入口",
+      role: "スマホや Web の Claude アプリから依頼・相談を出す入口。出先からの思いつきや相談に向く。",
+      paths: ["（クライアント側の入口。このリポジトリにファイルはありません）"],
+      points: ["実際の制作・公開は WSL 側の Claude Code が担う前提", "ここで決めた方針は、記憶メモや CLAUDE.md の決まりごととして書き足す"] },
+    { id: "in-term", col: 1, t1: "WSLターミナル", t2: "Claude Code 本体", colName: "② 入口",
+      role: "Windows + WSL2（Ubuntu）上のターミナルで Claude Code を直接使う、いちばん基本の入口。",
+      paths: ["install.sh（claude/ 以下を ~/.claude/ にコピー。既存はバックアップ）", "~/.claude/"],
+      points: ["フックは python3 の標準ライブラリだけで動く", "設定・フック・エージェント・スキルはすべて claude/ 以下で管理"] },
+    { id: "in-kuro", col: 1, t1: "Discord クロ", t2: "任意・コードのみ", colName: "② 入口",
+      role: "Discord から Claude に話しかける Bot（任意）。コードだけ用意してあり、Discord 側の Bot を作ってから稼働させる。",
+      paths: ["bots/kuro-discord-bot/"],
+      points: ["スラッシュコマンド：/ask（質問）/summary（直近N件の要約）/memo（保存）/memos（一覧）", "許可チャンネルID・許可ロールを環境変数で制限（権限フィルタ）", "モデルは環境変数 CLAUDE_MODEL（既定 claude-sonnet-5-5）", "Python・discord.py 2.3 以上・anthropic SDK"] },
+    { id: "in-sched", col: 1, t1: "定期タスク", t2: "claude.ai の予約実行", colName: "② 入口",
+      role: "決まった時刻に Claude を動かす入口（claude.ai の定期タスク）。",
+      paths: ["（claude.ai 側で設定。このリポジトリにファイルはありません）"],
+      points: ["Grok Bot の定期実行は別系統（cron / タスクスケジューラ。下段を参照）"] },
+
+    { id: "claude", col: 2, t1: "Claude Code", t2: "司令塔（WSL）", cls: "hub", h: 170, colName: "③ 司令塔",
+      role: "依頼を受け、ハーネスの内側で「誰に・何で」やらせるかを振り分け、結果をまとめる司令塔。",
+      paths: ["~/.claude/", "claude/CLAUDE.md", "claude/settings.json", "claude/hooks/*.py", "claude/agents/*.md", "claude/skills/<name>/SKILL.md", "claude/memory/MEMORY.md"],
+      points: ["基本の流れ：scout で把握 → architect / 人が方針決定 → builder が実装 → checker で機械チェック → reviewer で確認", "最初から重いモデルを使わず、まず軽い側で試す", "公開の前は必ず checker → codex-review → publish の順"] },
+
+    { id: "h-perm", col: 3, t1: "権限ルール", t2: "allow / ask / deny", cls: "harness", colName: "④ ハーネス",
+      role: "Claude Code が勝手にしてよいこと・確認が要ること・禁止することを、permissions（権限ルール）で決める。",
+      paths: ["claude/settings.json（permissions）"],
+      points: ["defaultMode は acceptEdits", "allow：Read・Grep・Glob、git status / diff / log、ls、python3、node、npx wrangler pages deploy、codex exec", "ask：git push、git reset --hard、rm、npx wrangler（deploy 以外）、gh", "deny：sudo、git push --force / -f、.env と *.pem の Read"] },
+    { id: "h-hooks", col: 3, t1: "フック8本", t2: "止める＋記録", cls: "harness", colName: "④ ハーネス",
+      role: "決まったタイミング（イベント）で自動実行される小さなスクリプト。危ない操作を止め、作業の足跡を記録する。",
+      paths: ["claude/hooks/*.py（8本）", "claude/settings.json（hooks）", "~/.claude/logs/（記録の出力先）"],
+      points: ["stdin で JSON（tool_name・tool_input・session_id など）を受け取る", "ブロックは exit code 2 ＋ stderr に日本語の理由", "想定外の入力で落ちない（例外時は exit 0）", "下の一覧を押すと、イベントごとの動作が開きます"] },
+    { id: "h-key", col: 3, t1: "APIキー隔離", t2: "skills/.env の1か所", cls: "harness", colName: "④ ハーネス",
+      role: "APIキーを1つのファイルだけに置き、Claude には読ませない。キーが要る処理はスクリプトが自分で読む。",
+      paths: ["claude/skills/.env.example（雛形）", "~/.claude/skills/.env（実体。git 管理外）"],
+      points: ["置くキー名：ANTHROPIC_API_KEY・OPENAI_API_KEY・XAI_API_KEY・XAI_MODEL・DISCORD_BOT_TOKEN・CLOUDFLARE_API_TOKEN・CLOUDFLARE_ACCOUNT_ID", "permissions の deny、secret_guard.py、bash_guard.py の三重で .env の読み取りを止める", "キーをコード・ログ・コミット・会話に書かない"] },
+    { id: "h-mem", col: 3, t1: "CLAUDE.md＋記憶メモ", t2: "決まりを毎回読む", cls: "harness", colName: "④ ハーネス",
+      role: "全プロジェクト共通の決まり（CLAUDE.md）と、次回も効く決まりごとの記憶（MEMORY.md）。",
+      paths: ["claude/CLAUDE.md（→ ~/.claude/CLAUDE.md）", "claude/memory/MEMORY.md"],
+      points: ["応答・コメント・README・コミットは日本語、結論を先に短く", "モデル振り分け表とエージェントの使い分けを定義", "SessionStart フックが MEMORY.md の先頭40行を文脈へ入れる", "新しい決まりごとは確認のうえ1行ずつ書き足す（秘密情報は書かない）"] },
+
+    { id: "r-codex", col: 4, t1: "Codexに頼む", t2: "別のAIに見てもらう", colName: "⑤ 振り分け",
+      role: "大きな成果物を公開前に別のAI（OpenAI の Codex）へ見せ、第三者レビューを受ける経路。",
+      paths: ["claude/skills/codex-review/SKILL.md"],
+      points: ["codex exec --sandbox read-only で実行（書き換えさせない）", "Codex が無ければ reviewer エージェントで代替"] },
+    { id: "r-skill", col: 4, t1: "スキルで作る", t2: "決まった型で制作", colName: "⑤ 振り分け",
+      role: "デザイン・手記・通信図・教材など、型が決まっている制作はスキル（手順書）を読んでから作る。",
+      paths: ["claude/skills/<name>/SKILL.md"],
+      points: ["該当する作業では、まず対応する SKILL.md を読んでから始める"] },
+    { id: "r-ext", col: 4, t1: "外部サービス", t2: "GitHub・Cloudflare", colName: "⑤ 振り分け",
+      role: "公開・デプロイなど外部サービスを操作する経路。取り消しにくいので人の確認を挟む。",
+      paths: ["claude/skills/publish/SKILL.md", "deploy/"],
+      points: ["git push と gh は ask 権限", "公開前は checker → codex-review の順"] },
+    { id: "r-api", col: 4, t1: "外部API", t2: "xAI・OpenAI・Claude", colName: "⑤ 振り分け",
+      role: "外部の AI の API を使う経路。キーは skills/.env に置き、スクリプトが読む。",
+      paths: ["bots/grok-bot/", "bots/kuro-discord-bot/", "claude/skills/.env.example"],
+      points: ["Grok Bot は xAI API、クロは Claude API を使う", "Claude 自身は .env を読まない"] },
+
+    { id: "s-codex", col: 5, t1: "codex-review", t2: "公開前レビュー", colName: "⑥ スキル",
+      role: "LP・サイト改修・長文などを公開前に Codex へ見せ、指摘を一覧化 → 判断 → 修正 → 再確認する。",
+      paths: ["claude/skills/codex-review/SKILL.md"],
+      points: ["順序は checker → codex-review → 公開", "指摘は番号・場所・内容・重大度の表にし、「直す／直さない（理由）／要相談」に分類", "渡す内容に秘密情報・個人情報を含めない"] },
+    { id: "s-publish", col: 5, t1: "publish", t2: "公開の手順", colName: "⑥ スキル",
+      role: "GitHub Pages（git push）または Cloudflare Pages（wrangler pages deploy）で公開する手順。",
+      paths: ["claude/skills/publish/SKILL.md"],
+      points: ["checker → codex-review → 人の最終確認 → 公開 → 公開後の確認", "--force は使わない（ブロックされる）", "当面は GitHub Pages と Cloudflare Pages を併用。DNS の切り替えは人が判断"] },
+    { id: "s-grok", col: 5, t1: "grok-x-draft", t2: "X投稿の清書", colName: "⑥ スキル",
+      role: "Grok Bot が出した下書きを、X に出せる投稿文に清書する。投稿は人が行う。",
+      paths: ["claude/skills/grok-x-draft/SKILL.md", "bots/grok-bot/drafts/"],
+      points: ["Grok の出力は裏取りが必要（数字・固有名詞・日付は「要確認」）", "1ポスト全角140字以内を目安、ハッシュタグは0〜2個", "元の下書きは書き換えず、別ファイル（-final.md）か会話に出す"] },
+    { id: "s-memoir", col: 5, t1: "memoir-editing", t2: "手記の編集規則", colName: "⑥ スキル",
+      role: "自伝「四次元手記」を編集・加筆・校正するときの決まり。",
+      paths: ["claude/skills/memoir-editing/SKILL.md"],
+      points: ["琥珀色（#FFBF00 系）＝AI の創作、生成り色＝事実", "実名は必ず伏せる", "章構成（プロローグ＋第1章〜第15章＋エピローグ）を崩さない", "フッターの真正性表記を保つ"] },
+    { id: "s-telecom", col: 5, t1: "telecom-svg", t2: "通信のSVG図", colName: "⑥ スキル",
+      role: "VoLTE 通話フロー・S8HR ローミング・SMS（SGs / NAS / IP）・3G/4G/5G 比較などを SVG の図にする。",
+      paths: ["claude/skills/telecom-svg/SKILL.md"],
+      points: ["ラベルは 3GPP 用語、メッセージ名は原語表記", "凡例は必須。時間は上から下、連番を振る", "色だけに意味を頼らず、線種やラベルでも区別する"] },
+    { id: "s-edu", col: 5, t1: "edu-html", t2: "教材HTML", colName: "⑥ スキル",
+      role: "章ナビ・クイズ・用語集つきの、1ファイル完結の学習用インタラクティブ HTML を作る。",
+      paths: ["claude/skills/edu-html/SKILL.md"],
+      points: ["外部 JS/CSS/画像に依存しない", "キーボード操作・aria-label・印刷用 CSS に対応", "公開されている仕様の範囲で書く"] },
+    { id: "s-design", col: 5, t1: "ttj-design", t2: "紺×金デザイン", colName: "⑥ スキル",
+      role: "TTJ の紺×金デザインで HTML/CSS のページや部品を作る・直す。",
+      paths: ["claude/skills/ttj-design/SKILL.md", "design-system/tokens.css", "design-system/components.html"],
+      points: ["色・余白・角丸・影・フォントはすべて CSS 変数で指定", "金は「見てほしい所」だけに使う", "チェックリスト：lang、見出し階層、コントラスト、フォーカス表示、スマホ幅"] },
+
+    { id: "scout", col: 6, t1: "scout", t2: "haiku・探す", cls: "agent m-haiku", model: "haiku", colName: "⑦ サブエージェント",
+      role: "ファイルの検索・存在確認・一覧化・内容の把握をする偵察役。編集しない。",
+      paths: ["claude/agents/scout.md"],
+      tools: "Read, Grep, Glob, Bash（読み取り系のみ）",
+      points: ["大量ファイルの下調べを最初に任せる", "判断や設計はせず、見つけた事実を短く返す", ".env・*.pem・id_rsa 系は開かない"] },
+    { id: "architect", col: 6, t1: "architect", t2: "opus / fable・設計", cls: "agent m-opus", model: "opus fable", colName: "⑦ サブエージェント",
+      role: "全体設計・方針決め・複雑な変更の進め方を考える。実装はせず、作業の分け方（どのエージェント／モデルに何を任せるか）を示す。",
+      paths: ["claude/agents/architect.md"],
+      tools: "Read, Write, Edit, Grep, Glob, Bash（書き込みは設計文書のみ）",
+      points: ["model は opus。Fable が使える環境なら fable に変更する（フロントマターにコメント）", "選択肢は利点・欠点を示して1つ推奨", "返し方：結論 → 理由 → 作業手順（担当付き）→ リスクと人が決めること"] },
+    { id: "builder", col: 6, t1: "builder", t2: "sonnet・作る", cls: "agent m-sonnet", model: "sonnet", colName: "⑦ サブエージェント",
+      role: "方針が決まっている実装・編集・置換・ライティングを、指示どおり過不足なく実行する。",
+      paths: ["claude/agents/builder.md"],
+      tools: "Read, Write, Edit, MultiEdit, Grep, Glob, Bash",
+      points: ["指示にない設計変更や機能追加をしない。迷ったら止めて質問を返す", "git push・deploy・rm はしない（人の確認が要る）", "作ったあと最低限の構文チェック・実行をする"] },
+    { id: "checker", col: 6, t1: "checker", t2: "haiku・点検", cls: "agent m-haiku", model: "haiku", colName: "⑦ サブエージェント",
+      role: "JSON・YAML・HTML・Python の構文、差分、書式、リンク、必須項目を機械的に点検する。編集しない。公開前の最初のチェック。",
+      paths: ["claude/agents/checker.md"],
+      tools: "Read, Grep, Glob, Bash（読み取りと検証のみ）",
+      points: ["python3 -m json.tool / py_compile、git diff / git status など", "実名や API キーらしき文字列は「有無」だけ報告し、値は書かない", "好みや文章の良し悪しは見ない（reviewer の仕事）"] },
+    { id: "reviewer", col: 6, t1: "reviewer", t2: "opus・査読", cls: "agent m-opus", model: "opus", colName: "⑦ サブエージェント",
+      role: "完成した成果物を、作業していない第三者の目でレビューする。指摘のみで編集しない。",
+      paths: ["claude/agents/reviewer.md"],
+      tools: "Read, Grep, Glob, Bash（読み取り・検証のみ）",
+      points: ["重大 / 中 / 軽 の順で、場所・問題・直し方を示す", "問題がなければ「重大な指摘なし」と書く", "Codex が使えないときの codex-review の代替"] },
+
+    { id: "t-codex", col: 7, t1: "Codex CLI", t2: "codex exec", colName: "⑧ 道具・API",
+      role: "OpenAI の Codex をコマンドラインから呼ぶ道具。公開前レビューに使う。",
+      paths: ["（外部 CLI）codex exec --sandbox read-only \"<依頼>\"", "claude/skills/codex-review/SKILL.md"],
+      points: ["必ず read-only で実行し、Codex にファイルを書き換えさせない", "OPENAI_API_KEY などは skills/.env を Codex 側が読む", "指摘は鵜呑みにせず、事実確認が要るものは根拠を確かめる"] },
+    { id: "t-claude", col: 7, t1: "Claude API", t2: "anthropic SDK", colName: "⑧ 道具・API",
+      role: "Claude を自分のプログラムから呼ぶ API。クロ（Discord Bot）が使う。",
+      paths: ["bots/kuro-discord-bot/", "claude/skills/.env.example（ANTHROPIC_API_KEY）"],
+      points: ["モデル名は環境変数 CLAUDE_MODEL で指定（既定 claude-sonnet-5-5）", "キーは skills/.env に置く"] },
+    { id: "t-wrangler", col: 7, t1: "wrangler", t2: "pages deploy", colName: "⑧ 道具・API",
+      role: "Cloudflare Pages へデプロイするコマンドラインツール。",
+      paths: ["（外部 CLI）npx wrangler pages deploy <dir> --project-name <name>", "deploy/cloudflare/README.md"],
+      points: ["CLOUDFLARE_API_TOKEN（権限は Cloudflare Pages: Edit）と CLOUDFLARE_ACCOUNT_ID は skills/.env", "npx wrangler pages deploy は allow、それ以外の wrangler は ask"] },
+    { id: "t-xai", col: 7, t1: "xAI API", t2: "Grok Bot 用", colName: "⑧ 道具・API",
+      role: "xAI の Grok を呼ぶ API。OpenAI 互換の形式で、Grok Bot が使う。",
+      paths: ["bots/grok-bot/run.py", "claude/skills/.env.example（XAI_API_KEY / XAI_MODEL）"],
+      points: ["POST https://api.x.ai/v1/chat/completions、Authorization: Bearer", "モデル名は環境変数 XAI_MODEL（xAI のドキュメントで最新を確認して設定）"] },
+
+    { id: "p-cf", col: 8, t1: "Cloudflare Pages", t2: "wrangler / Actions", cls: "out", colName: "⑨ 公開",
+      role: "追加した公開先。wrangler の手動デプロイか、GitHub Actions による push 時の自動デプロイ。",
+      paths: ["deploy/github-actions/deploy-cloudflare-pages.yml", "deploy/cloudflare/README.md"],
+      points: ["push（main）で cloudflare/wrangler-action@v3 が pages deploy を実行", "secrets：CLOUDFLARE_API_TOKEN・CLOUDFLARE_ACCOUNT_ID", "独自ドメインの追加手順は README に記載"] },
+    { id: "p-gh", col: 8, t1: "GitHub Pages", t2: "ttj.tokyo（現行）", cls: "out", colName: "⑨ 公開",
+      role: "現行の公開先。git push で更新される（作品は /showcase/ で表示）。",
+      paths: ["各サイトのリポジトリ（git push origin main）", "docs/showcase-brief.md"],
+      points: ["git push は ask 権限。--force は禁止", "公開後は URL を開いて表示・リンク・スマホ幅を確認", "当面は Cloudflare Pages と併用"] },
+
+    /* 下段 */
+    { id: "b-grok", bottom: true, col: 7, t1: "Grok Bot", t2: "Bot｜下書き専用", cls: "lane", colName: "下段",
+      role: "xAI API でニュース要点と X 投稿の下書きを作る、定期実行の Bot。投稿はしない（下書きまで）。",
+      paths: ["bots/grok-bot/", "bots/grok-bot/drafts/YYYY-MM-DD-<task>.md"],
+      points: ["run.py --task news|xpost（news＝要点、xpost＝投稿下書き3案）", "Python 3.10+、標準ライブラリ（urllib）のみ", "定期実行：WSL の cron か Windows タスクスケジューラ", "出力は grok-x-draft スキルが清書する"] },
+    { id: "k-mem", bottom: true, col: 3, t1: "記憶メモ", t2: "ナレッジ｜MEMORY.md", cls: "lane", colName: "下段（ナレッジ）",
+      role: "次回も効く決まり・好み・ハマりどころを1行ずつ溜めるメモ。作業開始時に読まれる。",
+      paths: ["claude/memory/MEMORY.md"],
+      points: ["古くなった項目は消す", "秘密情報・APIキー・個人情報は書かない"] },
+    { id: "k-design", bottom: true, col: 5, t1: "デザインシステム", t2: "ナレッジ｜tokens.css", cls: "lane", colName: "下段（ナレッジ）",
+      role: "紺×金の TTJ デザイントークンと見本。ページ制作の共通の下地。",
+      paths: ["design-system/tokens.css", "design-system/components.html", "design-system/README.md"],
+      points: ["色・余白・角丸・影・フォントを CSS 変数で定義", "components.html にボタン・カード・見出し・表・コードの見本"] },
+    { id: "k-gh", bottom: true, col: 8, t1: "GitHub", t2: "ナレッジ｜履歴と雛形", cls: "lane", colName: "下段（ナレッジ）",
+      role: "成果物とその履歴の置き場。各リポジトリに置く CLAUDE.md の雛形もここから配る。",
+      paths: ["templates/project-CLAUDE.md", "このリポジトリ（ttj-ai-ecosystem）"],
+      points: ["公開は GitHub Pages に流れる", "設計書は docs/spec.md、対応表は docs/ecosystem-map.md"] }
+  ];
+
+  /* ===== エッジ定義 [from, to, kind, vertical] ===== */
+  var EDGES = [
+    ["person", "in-app"], ["person", "in-term"], ["person", "in-kuro", "direct"], ["person", "in-sched", "direct"],
+    ["in-app", "claude"], ["in-term", "claude"], ["in-kuro", "claude", "direct"], ["in-sched", "claude", "direct"],
+    ["claude", "band"],
+    ["band", "r-codex"], ["band", "r-skill"], ["band", "r-ext"], ["band", "r-api"],
+    ["r-codex", "s-codex"], ["r-ext", "s-publish"], ["r-api", "s-grok"],
+    ["r-skill", "s-memoir"], ["r-skill", "s-telecom"], ["r-skill", "s-edu"], ["r-skill", "s-design"],
+    ["s-codex", "reviewer"], ["s-publish", "checker"], ["s-grok", "scout"],
+    ["s-memoir", "builder"], ["s-telecom", "builder"], ["s-edu", "builder"], ["s-design", "builder"],
+    ["r-codex", "t-codex", "direct"], ["r-api", "t-claude", "direct"], ["r-api", "t-xai", "direct"],
+    ["r-ext", "t-wrangler", "direct"], ["r-ext", "p-gh", "direct"],
+    ["reviewer", "t-codex", "direct"], ["checker", "t-wrangler"],
+    ["t-wrangler", "p-cf"],
+    ["b-grok", "t-xai", "ref", true], ["k-mem", "h-mem", "ref", true], ["k-design", "s-design", "ref", true], ["k-gh", "p-gh", "ref", true]
+  ];
+
+  /* ===== 依頼1件の流れ ===== */
+  var STEPS = [
+    { name: "依頼", nodes: ["person", "in-app"], edges: ["person>in-app"],
+      text: "① 依頼：てっちがスマホのアプリ（またはターミナル）から「教材ページを1つ作って公開して」と依頼する。" },
+    { name: "受付", nodes: ["claude"], edges: ["in-app>claude"],
+      text: "② 受付：司令塔の Claude Code が依頼を受ける。CLAUDE.md と記憶メモ（先頭40行）が文脈に入っている。" },
+    { name: "フック", nodes: ["band", "h-hooks", "h-perm"], edges: ["claude>band"],
+      text: "③ フック：UserPromptSubmit が「モデル振り分けに従う」を注入。以降、Bash は bash_guard、Read は secret_guard が見張り、Write/Edit は change_log が記録する。" },
+    { name: "振り分け", nodes: ["r-skill"], edges: ["band>r-skill"],
+      text: "④ 振り分け：「ページを作る」依頼なので、「スキルで作る」を選ぶ。" },
+    { name: "スキル", nodes: ["s-design", "s-edu"], edges: ["r-skill>s-design", "r-skill>s-edu"],
+      text: "⑤ スキル：ttj-design（紺×金）と edu-html（教材の型）の SKILL.md を先に読み、決まりを確認する。" },
+    { name: "エージェント", nodes: ["builder"], edges: ["s-design>builder", "s-edu>builder"],
+      text: "⑥ エージェント：方針が決まっているので、builder（sonnet）が実装する。設計が要るときだけ architect、探すだけなら scout（haiku）。" },
+    { name: "チェック", nodes: ["checker", "reviewer", "t-codex"], edges: ["reviewer>t-codex"],
+      text: "⑦ チェック：まず checker（haiku）が構文・リンク・秘密情報の混入を機械チェック。次に codex-review（Codex。無ければ reviewer・opus）で第三者レビュー。" },
+    { name: "公開", nodes: ["s-publish", "t-wrangler", "p-cf", "p-gh"], edges: ["checker>t-wrangler", "t-wrangler>p-cf", "r-ext>p-gh"],
+      text: "⑧ 公開：publish スキルの手順で人の最終確認を取り、GitHub Pages は git push（ask 権限で確認）、Cloudflare Pages は wrangler pages deploy で公開する。" }
+  ];
+
+  /* ===== フック8本 ===== */
+  var HOOKS = [
+    { ev: "UserPromptSubmit", m: "なし（毎回）", f: "prompt_reminder.py", kind: "inject", kindLabel: "注入",
+      what: "依頼を送るたびに、stdout へ「モデル振り分け表に従う。軽作業は scout / checker へ」と1〜2行を出し、文脈に入れる。", stop: "止めない（リマインドのみ）" },
+    { ev: "PreToolUse", m: "Bash", f: "bash_guard.py", kind: "stop", kindLabel: "止める",
+      what: "次のコマンドを検知したら止める：rm -rf /・rm -rf ~、git push --force / -f / --force-with-lease、sudo、.env を cat / less / head / tail / grep などで読む操作（.env.example は可）、curl … | sh。", stop: "exit code 2 ＋ stderr に日本語の理由" },
+    { ev: "PreToolUse", m: "Read", f: "secret_guard.py", kind: "stop", kindLabel: "止める",
+      what: ".env（.env.example は可）、*.pem、id_rsa 系の読み取りをブロックする。", stop: "exit code 2 ＋ stderr に日本語の理由" },
+    { ev: "PostToolUse", m: "Write | Edit | MultiEdit", f: "change_log.py", kind: "log", kindLabel: "記録",
+      what: "変更したファイルのパスを、時刻つきで ~/.claude/logs/changes-YYYY-MM-DD.md に追記する。", stop: "止めない（記録のみ）" },
+    { ev: "SessionStart", m: "なし", f: "session_start.py", kind: "inject", kindLabel: "注入",
+      what: "~/.claude/memory/MEMORY.md の先頭40行を stdout へ出し、文脈に入れる（記憶メモの自動読み込み）。", stop: "止めない" },
+    { ev: "PreCompact", m: "なし", f: "pre_compact.py", kind: "log", kindLabel: "記録",
+      what: "会話の圧縮の直前に、時刻と session_id を logs/compact.log に追記する。", stop: "止めない" },
+    { ev: "Stop", m: "なし", f: "stop_notify.py", kind: "log", kindLabel: "通知",
+      what: "応答が終わったら、WSL なら powershell.exe でビープ音とトースト風の通知を出す。", stop: "失敗しても exit 0（作業は止めない）" },
+    { ev: "SessionEnd", m: "なし", f: "session_end.py", kind: "log", kindLabel: "記録",
+      what: "セッションの開始・終了時刻を logs/sessions.log に追記する。", stop: "止めない" }
+  ];
+
+  /* ===== 配置の計算 ===== */
+  var byId = {};
+  var colCount = {}, colIdx = {};
+  NODES.forEach(function (n) { if (!n.bottom) colCount[n.col] = (colCount[n.col] || 0) + 1; });
+  NODES.forEach(function (n) {
+    byId[n.id] = n;
+    n.w = W; n.h = n.h || H;
+    n.x = colX(n.col);
+    if (n.bottom) { n.y = 588; }
+    else {
+      var cnt = colCount[n.col];
+      var i = colIdx[n.col] || 0; colIdx[n.col] = i + 1;
+      n.cy = CY - (cnt - 1) * PITCH / 2 + i * PITCH;
+      n.y = n.cy - n.h / 2;
+    }
+  });
+  /* ハーネスの枠（疑似ノード） */
+  var hs = NODES.filter(function (n) { return n.col === 3 && !n.bottom; });
+  var bandTop = hs[0].y - 32, bandBottom = hs[hs.length - 1].y + H + 14;
+  byId["band"] = { id: "band", x: colX(3) - 12, y: bandTop, w: W + 24, h: bandBottom - bandTop };
+
+  /* ===== 描画 ===== */
+  function el(tag, attrs, parent, text) {
+    var e = document.createElementNS(NS, tag);
+    if (attrs) for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  var gBg = document.getElementById("g-bg"), gEdges = document.getElementById("g-edges"), gNodes = document.getElementById("g-nodes");
+  var svg = document.getElementById("diagram");
+
+  COLS.forEach(function (c, i) {
+    el("text", { "class": "colhead", x: colX(i) + W / 2, y: 30 }, gBg, c);
+    if (i > 0) el("line", { "class": "colrule", x1: colX(i) - (CP - W) / 2, y1: 44, x2: colX(i) - (CP - W) / 2, y2: 530 }, gBg);
+  });
+  el("line", { "class": "colrule", x1: 14, y1: 548, x2: VW - 14, y2: 548 }, gBg);
+  el("text", { "class": "lanetitle", x: 14, y: 578 }, gBg, "下段：参照される物と、定期で動く Bot");
+  el("text", { "class": "lanenote", x: 14, y: 604 }, gBg, "実線＝主な流れ");
+  el("text", { "class": "lanenote", x: 14, y: 624 }, gBg, "破線＝直接呼び出し・代替");
+  el("text", { "class": "lanenote", x: 14, y: 644 }, gBg, "点線＝参照（ナレッジ・Bot の出力）");
+
+  var band = byId["band"];
+  var bg = el("g", { "class": "bandgroup", id: "n-band" }, gBg);
+  el("rect", { "class": "glow", x: band.x - 6, y: band.y - 6, width: band.w + 12, height: band.h + 12, rx: 16 }, bg);
+  el("rect", { "class": "bandbox", x: band.x, y: band.y, width: band.w, height: band.h, rx: 12 }, bg);
+  el("text", { "class": "bandlabel", x: band.x + band.w / 2, y: band.y + 19, "text-anchor": "middle" }, bg, "ハーネス（安全柵）");
+
+  var edgeEls = {};
+  EDGES.forEach(function (e) {
+    var a = byId[e[0]], b = byId[e[1]], kind = e[2] || "main", vert = !!e[3];
+    var d;
+    if (vert) {
+      var x = a.x + a.w / 2, y1 = a.y, y2 = b.y + b.h + (b.id === "h-mem" ? 14 : 2);
+      d = "M" + x + " " + y1 + " L" + x + " " + (y2 + 3);
+    } else {
+      var x1 = a.x + a.w, y1v = a.y + a.h / 2, x2 = b.x, y2v = b.y + b.h / 2, dx = Math.max(16, (x2 - x1) * 0.5);
+      d = "M" + x1 + " " + y1v + " C" + (x1 + dx) + " " + y1v + "," + (x2 - dx) + " " + y2v + "," + (x2 - 2) + " " + y2v;
+    }
+    var p = el("path", { "class": "edge " + (kind === "main" ? "" : kind), d: d, "data-from": e[0], "data-to": e[1] }, gEdges);
+    edgeEls[e[0] + ">" + e[1]] = p;
+  });
+
+  var nodeEls = { band: bg };
+  NODES.forEach(function (n) {
+    var cls = "node " + (n.cls || "");
+    var g = el("g", { "class": cls, id: "n-" + n.id, tabindex: "0", role: "button", "aria-label": n.t1 + "（" + n.t2 + "）の詳細を表示" }, gNodes);
+    if (n.model) g.setAttribute("data-model", n.model);
+    el("rect", { "class": "glow", x: n.x - 6, y: n.y - 6, width: n.w + 12, height: n.h + 12, rx: 14 }, g);
+    el("rect", { "class": "box", x: n.x, y: n.y, width: n.w, height: n.h, rx: n.cls && /person|hub/.test(n.cls) ? 14 : 8 }, g);
+    if (n.id === "architect") el("rect", { "class": "strip", x: n.x + 6, y: n.y + n.h - 7, width: n.w - 12, height: 4, rx: 2 }, g);
+    var mid = n.y + n.h / 2;
+    if (n.id === "claude") {
+      el("text", { "class": "t1", x: n.x + n.w / 2, y: mid - 8 }, g, n.t1);
+      el("text", { "class": "t2", x: n.x + n.w / 2, y: mid + 14 }, g, n.t2);
+    } else {
+      el("text", { "class": "t1", x: n.x + n.w / 2, y: mid - 4 }, g, n.t1);
+      el("text", { "class": "t2", x: n.x + n.w / 2, y: mid + 15 }, g, n.t2);
+    }
+    nodeEls[n.id] = g;
+    g.addEventListener("click", function () { select(n.id, true); });
+    g.addEventListener("focus", function () { select(n.id, false); });
+    g.addEventListener("keydown", function (ev) {
+      if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); select(n.id, true); }
+    });
+  });
+
+  /* ===== 凡例（モデル振り分け） ===== */
+  var legend = document.getElementById("legend");
+  var activeHl = null;
+  Object.keys(MODEL).forEach(function (k) {
+    var li = document.createElement("li");
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "chip " + k; b.setAttribute("aria-pressed", "false");
+    b.appendChild(document.createTextNode(MODEL[k].name));
+    var s = document.createElement("small"); s.textContent = MODEL[k].desc; b.appendChild(s);
+    b.addEventListener("click", function () {
+      activeHl = activeHl === k ? null : k;
+      if (activeHl) svg.setAttribute("data-hl", activeHl); else svg.removeAttribute("data-hl");
+      Array.prototype.forEach.call(legend.querySelectorAll(".chip"), function (c) {
+        c.setAttribute("aria-pressed", c.classList.contains(activeHl) ? "true" : "false");
+      });
+    });
+    li.appendChild(b); legend.appendChild(li);
+  });
+
+  /* ===== 詳細パネル ===== */
+  var detail = document.getElementById("detail");
+  var selId = null;
+  function mk(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function section(title, child, wide) {
+    var d = mk("div", wide ? "wide" : ""); d.appendChild(mk("h3", "", title)); d.appendChild(child); return d;
+  }
+
+  function select(id, scroll) {
+    var n = byId[id]; if (!n) return;
+    if (selId && nodeEls[selId]) nodeEls[selId].classList.remove("sel");
+    Object.keys(edgeEls).forEach(function (k) { edgeEls[k].classList.remove("rel"); });
+    selId = id; nodeEls[id].classList.add("sel");
+    Object.keys(edgeEls).forEach(function (k) {
+      var p = edgeEls[k];
+      if (p.getAttribute("data-from") === id || p.getAttribute("data-to") === id) p.classList.add("rel");
+    });
+
+    detail.textContent = "";
+    var h = mk("h2", "", n.t1);
+    h.appendChild(mk("span", "tag", n.colName));
+    if (n.model) n.model.split(" ").forEach(function (m) { h.appendChild(mk("span", "tag " + m, MODEL[m].name)); });
+    detail.appendChild(h);
+
+    var grid = mk("div", "dgrid");
+    grid.appendChild(section("役割", mk("p", "", n.role)));
+    var pl = mk("ul", "paths");
+    n.paths.forEach(function (p) { var li = document.createElement("li"); li.appendChild(mk("code", "", p)); pl.appendChild(li); });
+    grid.appendChild(section("実ファイルのパス", pl));
+    if (n.tools) grid.appendChild(section("使える道具（tools）", mk("p", "", n.tools)));
+    var ul = mk("ul", "");
+    n.points.forEach(function (t) { ul.appendChild(mk("li", "", t)); });
+    grid.appendChild(section("中身の要点", ul, !n.tools));
+    detail.appendChild(grid);
+
+    if (id === "h-hooks") detail.appendChild(buildHooks());
+    if (scroll) detail.scrollIntoView({ block: "nearest", behavior: "auto" });
+  }
+
+  function buildHooks() {
+    var box = mk("div", "hooks-box");
+    var row = mk("div", "row");
+    row.appendChild(mk("h3", "", "8本のフック：どのイベントで何を止める／記録するか"));
+    var all = mk("button", "btn", "すべて開く"); all.type = "button";
+    row.appendChild(all); box.appendChild(row);
+    var btns = [];
+    HOOKS.forEach(function (hk, i) {
+      var wrap = mk("div", "hk");
+      var b = mk("button", ""); b.type = "button"; b.setAttribute("aria-expanded", "false");
+      var bodyId = "hkbody-" + i; b.setAttribute("aria-controls", bodyId);
+      b.appendChild(mk("span", "caret", "▶"));
+      var ev = mk("span", "ev", (i + 1) + ". " + hk.ev + (hk.m !== "なし" && hk.m !== "なし（毎回）" ? "（" + hk.m + "）" : ""));
+      b.appendChild(ev);
+      b.appendChild(mk("span", "kind " + hk.kind, hk.kindLabel));
+      b.appendChild(mk("span", "fn", hk.f));
+      var body = mk("div", "body"); body.id = bodyId; body.hidden = true;
+      var dl = mk("dl", "");
+      [["イベント", hk.ev], ["対象（matcher）", hk.m], ["スクリプト", hk.f], ["動作", hk.what], ["止め方", hk.stop]].forEach(function (r) {
+        dl.appendChild(mk("dt", "", r[0])); dl.appendChild(mk("dd", "", r[1]));
+      });
+      body.appendChild(dl);
+      b.addEventListener("click", function () {
+        var open = b.getAttribute("aria-expanded") === "true";
+        b.setAttribute("aria-expanded", open ? "false" : "true"); body.hidden = open;
+      });
+      wrap.appendChild(b); wrap.appendChild(body); box.appendChild(wrap);
+      btns.push({ b: b, body: body });
+    });
+    var allOpen = false;
+    all.addEventListener("click", function () {
+      allOpen = !allOpen;
+      btns.forEach(function (x) { x.b.setAttribute("aria-expanded", allOpen ? "true" : "false"); x.body.hidden = !allOpen; });
+      all.textContent = allOpen ? "すべて閉じる" : "すべて開く";
+    });
+    return box;
+  }
+
+  /* ===== 依頼1件の流れ ===== */
+  var RM = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : { matches: false };
+  var cap = document.getElementById("cap"), stepper = document.getElementById("stepper"), scroller = document.getElementById("scroller");
+  var btnPlay = document.getElementById("btnPlay"), btnPrev = document.getElementById("btnPrev"), btnNext = document.getElementById("btnNext"), btnReset = document.getElementById("btnReset");
+  var cur = -1, timer = null;
+  var stepBtns = [];
+  STEPS.forEach(function (s, i) {
+    var li = document.createElement("li");
+    var b = mk("button", "", (i + 1) + " " + s.name); b.type = "button";
+    b.addEventListener("click", function () { stop(); show(i); });
+    li.appendChild(b); stepper.appendChild(li); stepBtns.push(b);
+  });
+
+  function clearFlow() {
+    Object.keys(nodeEls).forEach(function (k) { nodeEls[k].classList.remove("lit", "trail"); });
+    Object.keys(edgeEls).forEach(function (k) { edgeEls[k].classList.remove("lit", "trail"); });
+  }
+  function show(k) {
+    clearFlow(); cur = k;
+    svg.classList.add("playing");
+    for (var s = 0; s <= k; s++) {
+      var cls = s === k ? "lit" : "trail";
+      STEPS[s].nodes.forEach(function (id) { if (nodeEls[id]) { nodeEls[id].classList.remove("lit", "trail"); nodeEls[id].classList.add(cls); } });
+      STEPS[s].edges.forEach(function (id) { if (edgeEls[id]) { edgeEls[id].classList.remove("lit", "trail"); edgeEls[id].classList.add(cls); } });
+    }
+    cap.textContent = STEPS[k].text;
+    stepBtns.forEach(function (b, i) {
+      if (i === k) b.setAttribute("aria-current", "step"); else b.removeAttribute("aria-current");
+      b.classList.toggle("past", i < k);
+    });
+    var first = byId[STEPS[k].nodes[0]];
+    if (first && scroller.scrollWidth > scroller.clientWidth) {
+      var scale = svg.clientWidth / VW;
+      var left = (first.x + first.w / 2) * scale - scroller.clientWidth / 2;
+      if (scroller.scrollTo) scroller.scrollTo({ left: Math.max(0, left), behavior: RM.matches ? "auto" : "smooth" });
+      else scroller.scrollLeft = Math.max(0, left);
+    }
+  }
+  function stop() { if (timer) { clearInterval(timer); timer = null; } btnPlay.textContent = "▶ 依頼1件の流れを見る"; }
+  function reset() {
+    stop(); clearFlow(); cur = -1; svg.classList.remove("playing");
+    cap.textContent = "例：「教材ページを1つ作って公開して」という依頼が、どの経路を通るかを順に光らせます。";
+    stepBtns.forEach(function (b) { b.removeAttribute("aria-current"); b.classList.remove("past"); });
+  }
+  btnPlay.addEventListener("click", function () {
+    if (timer) { stop(); return; }
+    show(0);
+    if (RM.matches) return; /* 動きを減らす設定：自動再生せず「次へ」で進める */
+    btnPlay.textContent = "⏸ 一時停止";
+    timer = setInterval(function () {
+      if (cur >= STEPS.length - 1) { stop(); return; }
+      show(cur + 1);
+    }, 2600);
+  });
+  btnNext.addEventListener("click", function () { stop(); show(Math.min(STEPS.length - 1, cur + 1)); });
+  btnPrev.addEventListener("click", function () { stop(); show(Math.max(0, cur - 1)); });
+  btnReset.addEventListener("click", reset);
+})();
+</script>
+</body>
+</html>

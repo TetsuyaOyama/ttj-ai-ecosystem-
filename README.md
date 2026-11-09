@@ -82,3 +82,14 @@ Codex CLI は OpenAI の公式手順に従って導入してください。入�
 - **上書きされた設定を戻したい**：`~/.claude/backup-<日時>/` から戻す。
 - **Claude が .env を読めない**：仕様です。キーは自分で編集し、必要な処理はスクリプトが自分で読みます。
 - **cron が動かない（Grok Bot）**：WSL では `sudo service cron start` が必要なことがあります。確実に回すなら Windows タスクスケジューラを使う（bots/grok-bot/README.md）。
+
+## ショーケース
+
+公開規格（3GPP・GSMA）と一般知識だけで作ったインタラクティブ作品です。GitHub Pages を有効にすると `/showcase/` で見られます。
+
+| 作品 | 内容 |
+|---|---|
+| [ポートフォリオ](showcase/index.html) | 作品一覧とプロフィール |
+| [eSIM / RSP 解説ツール](showcase/esim-rsp/index.html) | SGP.22・SGP.02・SGP.32 の構成比較とダウンロード手順アニメ |
+| [通信フロー可視化](showcase/telecom-flows/index.html) | VoLTE・IMS登録・SMS over SGs/IP・S8HR のシーケンス再生 |
+| [AI エコシステム図](showcase/ai-ecosystem/index.html) | このリポジトリの Claude Code 構成をインタラクティブに図解 |

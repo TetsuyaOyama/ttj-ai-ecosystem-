@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TTJ Showcase — コネクテッドカー通信 × AI エージェント</title>
+<meta name="description" content="てっち / TTJ のポートフォリオ。コネクテッドカー通信と AI エージェント開発環境の作品集。">
+<style>
+:root {
+  --ttj-navy-900: #060F1D;
+  --ttj-navy-800: #0B1F3A;
+  --ttj-navy-700: #14305A;
+  --ttj-navy-600: #1F4278;
+  --ttj-navy-300: #8CA3C4;
+  --ttj-navy-100: #DDE5F0;
+  --ttj-navy-50:  #F1F4F9;
+  --ttj-gold-700: #8F7010;
+  --ttj-gold-600: #A98A1A;
+  --ttj-gold-500: #C9A227;
+  --ttj-gold-400: #D9B84A;
+  --ttj-gold-200: #EEDDA0;
+  --ttj-gold-100: #F8F0D0;
+  --ttj-bg: #FFFFFF;
+  --ttj-bg-subtle: var(--ttj-navy-50);
+  --ttj-bg-inverse: var(--ttj-navy-800);
+  --ttj-text: #14213A;
+  --ttj-text-muted: #4B5B76;
+  --ttj-text-inverse: #F5F1E3;
+  --ttj-accent: var(--ttj-gold-500);
+  --ttj-accent-strong: var(--ttj-gold-700);
+  --ttj-accent-soft: var(--ttj-gold-100);
+  --ttj-link: var(--ttj-navy-600);
+  --ttj-border: #D3DBE8;
+  --ttj-focus: #2E6FD8;
+  --ttj-space-1: 0.25rem;
+  --ttj-space-2: 0.5rem;
+  --ttj-space-3: 0.75rem;
+  --ttj-space-4: 1rem;
+  --ttj-space-5: 1.5rem;
+  --ttj-space-6: 2rem;
+  --ttj-space-7: 3rem;
+  --ttj-space-8: 4rem;
+  --ttj-radius-sm: 4px;
+  --ttj-radius-md: 8px;
+  --ttj-radius-lg: 16px;
+  --ttj-radius-pill: 999px;
+  --ttj-font-sans: "Noto Sans JP", "Hiragino Sans", "Yu Gothic UI", system-ui, sans-serif;
+  --ttj-font-serif: "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --ttj-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Noto Sans Mono CJK JP", monospace;
+  --ttj-text-sm: 0.875rem;
+  --ttj-text-base: 1rem;
+  --ttj-text-lg: 1.25rem;
+  --ttj-text-xl: 1.625rem;
+  --ttj-text-2xl: 2.125rem;
+  --ttj-leading-body: 1.8;
+  --ttj-leading-head: 1.35;
+  --ttj-shadow-sm: 0 1px 2px rgba(11, 31, 58, 0.10);
+  --ttj-shadow-md: 0 4px 12px rgba(11, 31, 58, 0.14);
+  --ttj-shadow-gold: 0 0 0 3px rgba(201, 162, 39, 0.35);
+  --ttj-container: 960px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { font-size: 100%; }
+body {
+  margin: 0;
+  background: var(--ttj-bg);
+  color: var(--ttj-text);
+  font-family: var(--ttj-font-sans);
+  font-size: var(--ttj-text-base);
+  line-height: var(--ttj-leading-body);
+  overflow-wrap: anywhere;
+}
+h1, h2, h3 { font-family: var(--ttj-font-serif); line-height: var(--ttj-leading-head); color: var(--ttj-navy-800); margin: 0; }
+a { color: var(--ttj-link); }
+:focus-visible { outline: 3px solid var(--ttj-focus); outline-offset: 2px; }
+
+.wrap { max-width: var(--ttj-container); margin: 0 auto; padding: 0 var(--ttj-space-5); }
+
+.skip {
+  position: absolute; left: var(--ttj-space-3); top: -4rem;
+  background: var(--ttj-gold-500); color: var(--ttj-navy-900);
+  padding: var(--ttj-space-2) var(--ttj-space-4); border-radius: var(--ttj-radius-sm);
+  text-decoration: none; font-weight: 700; z-index: 10;
+}
+.skip:focus { top: var(--ttj-space-3); }
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative; overflow: hidden;
+  background: linear-gradient(160deg, var(--ttj-navy-900) 0%, var(--ttj-navy-800) 55%, var(--ttj-navy-700) 100%);
+  color: var(--ttj-text-inverse);
+  padding: var(--ttj-space-8) 0 calc(var(--ttj-space-8) + var(--ttj-space-4));
+  border-bottom: 1px solid var(--ttj-gold-500);
+}
+.hero-art { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.hero .wrap { position: relative; }
+.eyebrow {
+  margin: 0 0 var(--ttj-space-4);
+  font-size: var(--ttj-text-sm); letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--ttj-gold-400); font-family: var(--ttj-font-mono);
+}
+.hero h1 {
+  color: var(--ttj-text-inverse);
+  font-size: clamp(2.2rem, 8vw, 3.6rem); font-weight: 600; letter-spacing: 0.04em;
+}
+.rule { display: block; width: 96px; height: 1px; background: var(--ttj-gold-500); margin: var(--ttj-space-5) 0; position: relative; }
+.rule::after { content: ""; position: absolute; left: 0; top: -2px; width: 5px; height: 5px; background: var(--ttj-gold-500); transform: rotate(45deg); }
+.hero .sub { margin: 0; font-size: clamp(1.05rem, 3.6vw, 1.5rem); color: var(--ttj-gold-200); letter-spacing: 0.08em; }
+.hero .lead { margin: var(--ttj-space-5) 0 0; max-width: 34rem; color: var(--ttj-navy-100); font-size: var(--ttj-text-sm); }
+
+/* ---------- Sections ---------- */
+section { padding: var(--ttj-space-7) 0 0; }
+.sec-head { margin-bottom: var(--ttj-space-5); }
+.sec-head .en { display: block; font-family: var(--ttj-font-mono); font-size: 0.75rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ttj-accent-strong); }
+.sec-head h2 { font-size: var(--ttj-text-xl); font-weight: 600; margin-top: var(--ttj-space-1); padding-bottom: var(--ttj-space-3); border-bottom: 1px solid var(--ttj-gold-500); display: inline-block; }
+
+/* Profile */
+.profile { display: grid; gap: var(--ttj-space-5); grid-template-columns: 1fr; }
+.profile-main { background: var(--ttj-bg-subtle); border: 1px solid var(--ttj-border); border-left: 3px solid var(--ttj-gold-500); border-radius: var(--ttj-radius-md); padding: var(--ttj-space-5); }
+.profile-main h3 { font-size: var(--ttj-text-lg); }
+.profile-main .org { margin: var(--ttj-space-1) 0 var(--ttj-space-3); color: var(--ttj-text-muted); font-size: var(--ttj-text-sm); }
+.profile-main p { margin: 0; }
+.fields { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--ttj-space-3); }
+.fields li { background: var(--ttj-bg); border: 1px solid var(--ttj-border); border-radius: var(--ttj-radius-md); padding: var(--ttj-space-4); box-shadow: var(--ttj-shadow-sm); }
+.fields strong { display: block; color: var(--ttj-navy-800); font-family: var(--ttj-font-serif); }
+.fields span { font-size: var(--ttj-text-sm); color: var(--ttj-text-muted); }
+
+/* Cards */
+.cards { display: grid; gap: var(--ttj-space-5); grid-template-columns: 1fr; }
+.card {
+  display: flex; flex-direction: column;
+  background: var(--ttj-bg); border: 1px solid var(--ttj-border); border-radius: var(--ttj-radius-md);
+  box-shadow: var(--ttj-shadow-sm); overflow: hidden;
+  transition: box-shadow .2s ease, transform .2s ease, border-color .2s ease;
+}
+.card:hover, .card:focus-within { box-shadow: var(--ttj-shadow-md); transform: translateY(-2px); border-color: var(--ttj-gold-500); }
+.thumb { background: var(--ttj-navy-800); border-bottom: 2px solid var(--ttj-gold-500); }
+.thumb svg { display: block; width: 100%; height: auto; }
+.card-body { display: flex; flex-direction: column; flex: 1; padding: var(--ttj-space-5); }
+.card h3 { font-size: var(--ttj-text-lg); }
+.card .desc { margin: var(--ttj-space-2) 0 var(--ttj-space-3); font-size: var(--ttj-text-sm); color: var(--ttj-text-muted); flex: 1; }
+.tags { list-style: none; margin: 0 0 var(--ttj-space-4); padding: 0; display: flex; flex-wrap: wrap; gap: var(--ttj-space-2); }
+.tags li {
+  font-family: var(--ttj-font-mono); font-size: 0.75rem; line-height: 1.4;
+  padding: 2px var(--ttj-space-3); border-radius: var(--ttj-radius-pill);
+  background: var(--ttj-accent-soft); color: var(--ttj-gold-700); border: 1px solid var(--ttj-gold-200);
+}
+.btn {
+  align-self: flex-start; display: inline-flex; align-items: center; gap: var(--ttj-space-2);
+  min-height: 44px; padding: 0 var(--ttj-space-5);
+  background: var(--ttj-navy-800); color: var(--ttj-text-inverse); text-decoration: none; font-weight: 700;
+  border-radius: var(--ttj-radius-sm); border: 1px solid var(--ttj-navy-800);
+  transition: background .2s ease, color .2s ease;
+}
+.btn:hover { background: var(--ttj-gold-500); color: var(--ttj-navy-900); border-color: var(--ttj-gold-500); }
+.btn svg { width: 16px; height: 16px; }
+
+/* About */
+.about { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--ttj-space-4); grid-template-columns: 1fr; counter-reset: item; }
+.about li { counter-increment: item; position: relative; padding: var(--ttj-space-4) var(--ttj-space-4) var(--ttj-space-4) 3.4rem; background: var(--ttj-bg-subtle); border-radius: var(--ttj-radius-md); border: 1px solid var(--ttj-border); }
+.about li::before { content: counter(item, decimal-leading-zero); position: absolute; left: var(--ttj-space-4); top: var(--ttj-space-4); font-family: var(--ttj-font-mono); color: var(--ttj-accent-strong); font-weight: 700; }
+.about strong { display: block; color: var(--ttj-navy-800); font-family: var(--ttj-font-serif); }
+.about span { font-size: var(--ttj-text-sm); color: var(--ttj-text-muted); }
+.repo-link { margin: var(--ttj-space-5) 0 0; }
+.repo-link a { font-weight: 700; }
+
+/* Skills */
+.skill-group + .skill-group { margin-top: var(--ttj-space-5); }
+.skill-group h3 { font-size: var(--ttj-text-base); margin-bottom: var(--ttj-space-3); color: var(--ttj-text-muted); font-family: var(--ttj-font-sans); font-weight: 700; }
+.chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--ttj-space-2); }
+.chips li { padding: var(--ttj-space-1) var(--ttj-space-4); font-size: var(--ttj-text-sm); border-radius: var(--ttj-radius-pill); border: 1px solid var(--ttj-navy-300); background: var(--ttj-bg); color: var(--ttj-navy-700); }
+.chips.gold li { background: var(--ttj-navy-800); border-color: var(--ttj-navy-800); color: var(--ttj-gold-200); }
+
+/* Footer */
+footer { margin-top: var(--ttj-space-8); background: var(--ttj-bg-inverse); color: var(--ttj-text-inverse); border-top: 1px solid var(--ttj-gold-500); padding: var(--ttj-space-6) 0; }
+footer .wrap { display: flex; flex-wrap: wrap; gap: var(--ttj-space-3) var(--ttj-space-5); justify-content: space-between; align-items: center; }
+footer p { margin: 0; font-size: var(--ttj-text-sm); }
+footer a { color: var(--ttj-gold-400); font-weight: 700; display: inline-flex; align-items: center; min-height: 44px; }
+footer a:hover { color: var(--ttj-gold-200); }
+
+@media (min-width: 640px) {
+  .fields { grid-template-columns: 1fr 1fr; }
+  .about { grid-template-columns: 1fr 1fr; }
+}
+@media (min-width: 820px) {
+  .profile { grid-template-columns: 1.2fr 1fr; align-items: start; }
+  .cards { grid-template-columns: repeat(3, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+  .card:hover, .card:focus-within { transform: none; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#works">作品へスキップ</a>
+
+<header class="hero">
+  <svg class="hero-art" viewBox="0 0 960 420" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+    <g fill="none" stroke="#C9A227" stroke-width="1">
+      <path d="M-20 340 L300 340 L360 280 L980 280" opacity="0.55"/>
+      <path d="M-20 360 L280 360 L340 300 L980 300" opacity="0.3"/>
+      <path d="M620 -10 L620 60 L700 140 L980 140" opacity="0.45"/>
+      <path d="M660 -10 L660 50 L720 110 L980 110" opacity="0.25"/>
+      <circle cx="360" cy="280" r="3" fill="#C9A227" stroke="none"/>
+      <circle cx="700" cy="140" r="3" fill="#C9A227" stroke="none"/>
+      <circle cx="820" cy="210" r="60" opacity="0.25"/>
+      <circle cx="820" cy="210" r="90" opacity="0.15"/>
+      <circle cx="820" cy="210" r="124" opacity="0.08"/>
+    </g>
+    <rect x="24" y="24" width="912" height="372" fill="none" stroke="#C9A227" stroke-width="0.6" opacity="0.28"/>
+  </svg>
+  <div class="wrap">
+    <p class="eyebrow">Portfolio</p>
+    <h1>TTJ Showcase</h1>
+    <span class="rule" aria-hidden="true"></span>
+    <p class="sub">コネクテッドカー通信 × AI エージェント</p>
+    <p class="lead">公開規格（3GPP・GSMA）と一般知識だけで組み立てた、通信の仕組みと AI 開発環境の作品集です。</p>
+  </div>
+</header>
+
+<main>
+  <section aria-labelledby="h-profile">
+    <div class="wrap">
+      <div class="sec-head"><span class="en">Profile</span><h2 id="h-profile">プロフィール</h2></div>
+      <div class="profile">
+        <div class="profile-main">
+          <h3>てっち / TTJ</h3>
+          <p class="org">TED TRADING JAPAN G.K.</p>
+          <p>コネクテッドカーの通信まわりを専門にしています。仕組みを図とアニメーションで分かりやすく見せること、そして AI エージェントを使って、迷わず使える開発環境をつくることに取り組んでいます。</p>
+        </div>
+        <ul class="fields" aria-label="専門分野">
+          <li><strong>eSIM / eUICC</strong><span>リモート SIM プロビジョニング</span></li>
+          <li><strong>VoLTE / IMS</strong><span>音声サービスと登録フロー</span></li>
+          <li><strong>SMS ルーティング</strong><span>SMS over SGs / IP</span></li>
+          <li><strong>国際ローミング</strong><span>Roaming（S8HR など）</span></li>
+          <li><strong>AI エージェント開発環境</strong><span>Claude Code を軸にした環境づくり</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="works" aria-labelledby="h-works">
+    <div class="wrap">
+      <div class="sec-head"><span class="en">Works</span><h2 id="h-works">作品</h2></div>
+      <div class="cards">
+
+        <article class="card">
+          <div class="thumb">
+            <svg viewBox="0 0 320 160" role="img" aria-label="スマートフォンと SIM カードを矢印で結んだ図">
+              <rect width="320" height="160" fill="#0B1F3A"/>
+              <g fill="none" stroke="#C9A227" stroke-width="1.5">
+                <rect x="28" y="30" width="64" height="100" rx="8"/>
+                <path d="M44 48 h32 M44 60 h20" stroke="#8CA3C4"/>
+                <path d="M228 40 h40 l12 12 v66 h-52 z"/>
+                <rect x="240" y="76" width="28" height="22" rx="3" fill="#C9A227" fill-opacity="0.25"/>
+                <path d="M100 80 H220" stroke-dasharray="4 5"/>
+                <path d="M212 74 l8 6 l-8 6"/>
+                <path d="M108 100 H200" stroke="#8CA3C4" stroke-dasharray="2 5"/>
+              </g>
+              <text x="160" y="68" fill="#EEDDA0" font-size="11" text-anchor="middle" font-family="monospace">profile</text>
+              <text x="160" y="146" fill="#8CA3C4" font-size="10" text-anchor="middle" font-family="monospace">SGP.22 / .02 / .32</text>
+            </svg>
+          </div>
+          <div class="card-body">
+            <h3>eSIM / RSP 解説ツール</h3>
+            <p class="desc">リモート SIM プロビジョニング（RSP）の規格 SGP.22・SGP.02・SGP.32 を比較し、プロファイルのダウンロード手順をアニメーションで追えます。</p>
+            <ul class="tags" aria-label="技術タグ"><li>SGP.22</li><li>SGP.02</li><li>SGP.32</li><li>eUICC</li><li>RSP</li></ul>
+            <a class="btn" href="esim-rsp/index.html" aria-label="eSIM / RSP 解説ツールを開く">開く
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="thumb">
+            <svg viewBox="0 0 320 160" role="img" aria-label="三つのノードの間をメッセージ矢印が往復するシーケンス図">
+              <rect width="320" height="160" fill="#0B1F3A"/>
+              <g stroke="#8CA3C4" stroke-width="1" stroke-dasharray="3 4">
+                <path d="M60 40 V140"/><path d="M160 40 V140"/><path d="M260 40 V140"/>
+              </g>
+              <g fill="#14305A" stroke="#C9A227" stroke-width="1.5">
+                <rect x="36" y="16" width="48" height="22" rx="4"/>
+                <rect x="136" y="16" width="48" height="22" rx="4"/>
+                <rect x="236" y="16" width="48" height="22" rx="4"/>
+              </g>
+              <g fill="none" stroke="#C9A227" stroke-width="1.5">
+                <path d="M60 62 H154"/><path d="M148 57 l7 5 l-7 5"/>
+                <path d="M160 88 H254"/><path d="M248 83 l7 5 l-7 5"/>
+                <path d="M258 114 H166" stroke="#EEDDA0"/><path d="M172 109 l-7 5 l7 5" stroke="#EEDDA0"/>
+                <path d="M158 136 H66" stroke="#EEDDA0"/><path d="M72 131 l-7 5 l7 5" stroke="#EEDDA0"/>
+              </g>
+            </svg>
+          </div>
+          <div class="card-body">
+            <h3>通信フロー可視化</h3>
+            <p class="desc">VoLTE、IMS 登録、SMS over SGs / IP、S8HR ローミングのシーケンスを、ステップ再生で確かめられます。</p>
+            <ul class="tags" aria-label="技術タグ"><li>VoLTE</li><li>IMS</li><li>SMS over SGs/IP</li><li>S8HR</li><li>3GPP TS</li></ul>
+            <a class="btn" href="telecom-flows/index.html" aria-label="通信フロー可視化を開く">開く
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="thumb">
+            <svg viewBox="0 0 320 160" role="img" aria-label="中央の司令塔から四つのモデルへ枝分かれする構成図">
+              <rect width="320" height="160" fill="#0B1F3A"/>
+              <g fill="none" stroke="#C9A227" stroke-width="1.2">
+                <path d="M160 62 V84 M160 84 H50 V104 M160 84 H123 V104 M160 84 H197 V104 M160 84 H270 V104"/>
+              </g>
+              <rect x="110" y="26" width="100" height="36" rx="6" fill="#14305A" stroke="#C9A227" stroke-width="1.5"/>
+              <text x="160" y="48" fill="#F5F1E3" font-size="11" text-anchor="middle" font-family="monospace">Claude Code</text>
+              <g fill="#0B1F3A" stroke="#C9A227" stroke-width="1.2">
+                <rect x="24" y="104" width="52" height="28" rx="4"/>
+                <rect x="97" y="104" width="52" height="28" rx="4"/>
+                <rect x="171" y="104" width="52" height="28" rx="4"/>
+                <rect x="244" y="104" width="52" height="28" rx="4"/>
+              </g>
+              <g fill="#EEDDA0" font-size="9" text-anchor="middle" font-family="monospace">
+                <text x="50" y="122">haiku</text><text x="123" y="122">sonnet</text><text x="197" y="122">opus</text><text x="270" y="122">fable</text>
+              </g>
+              <circle cx="28" cy="30" r="2.5" fill="#C9A227"/><circle cx="292" cy="30" r="2.5" fill="#C9A227"/>
+            </svg>
+          </div>
+          <div class="card-body">
+            <h3>AI エコシステム図</h3>
+            <p class="desc">Claude Code を司令塔に、フック・スキル・サブエージェント、そして 4 つのモデルへの振り分けまでの構成を一枚で見渡せます。</p>
+            <ul class="tags" aria-label="技術タグ"><li>Claude Code</li><li>Hooks</li><li>Skills</li><li>Subagents</li><li>Model routing</li></ul>
+            <a class="btn" href="ai-ecosystem/index.html" aria-label="AI エコシステム図を開く">開く
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-about">
+    <div class="wrap">
+      <div class="sec-head"><span class="en">Repository</span><h2 id="h-about">このリポジトリについて</h2></div>
+      <p>ttj-ai-ecosystem は、Claude Code の環境を一括で整えるための公開リポジトリです。全ファイル日本語で、WSL2（Ubuntu）上での利用を前提にしています。</p>
+      <ol class="about">
+        <li><strong>Claude Code 設定</strong><span>CLAUDE.md・権限ルール（settings.json）・記憶メモを <code>~/.claude/</code> に導入します。</span></li>
+        <li><strong>フック（Hooks）</strong><span>危険な操作をブロックし、確認が必要な操作を知らせる安全装置です。</span></li>
+        <li><strong>スキルとサブエージェント</strong><span>用途別のスキルと、軽い作業から判断の要る作業まで担当を分けたエージェントです。</span></li>
+        <li><strong>デザインシステム</strong><span>紺×金のデザイントークン（tokens.css）と見本ページです。</span></li>
+        <li><strong>Bot</strong><span>X 下書き・ニュース要約を行う Bot と、Discord Bot（任意）を収録しています。</span></li>
+        <li><strong>Cloudflare 公開</strong><span>Cloudflare Pages への導入手順と GitHub Actions のワークフローです。</span></li>
+      </ol>
+      <p class="repo-link"><a href="https://github.com/TetsuyaOyama/ttj-ai-ecosystem-" rel="noopener">GitHub でリポジトリを見る</a></p>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-skills">
+    <div class="wrap">
+      <div class="sec-head"><span class="en">Skills &amp; Stack</span><h2 id="h-skills">スキル・技術スタック</h2></div>
+      <div class="skill-group">
+        <h3>通信</h3>
+        <ul class="chips gold">
+          <li>eSIM / eUICC</li><li>GSMA SGP.22 / SGP.02 / SGP.32</li><li>VoLTE</li><li>IMS</li><li>SMS ルーティング</li><li>国際ローミング（Roaming）</li><li>S8HR</li><li>3GPP TS</li>
+        </ul>
+      </div>
+      <div class="skill-group">
+        <h3>AI・開発環境</h3>
+        <ul class="chips">
+          <li>Claude Code</li><li>Hooks</li><li>Skills</li><li>サブエージェント</li><li>モデル振り分け</li><li>Codex 連携</li><li>WSL2 / Ubuntu</li><li>Python</li><li>Bash</li>
+        </ul>
+      </div>
+      <div class="skill-group">
+        <h3>フロントエンド・公開</h3>
+        <ul class="chips">
+          <li>HTML</li><li>CSS</li><li>JavaScript</li><li>SVG</li><li>デザインシステム</li><li>GitHub Actions</li><li>GitHub Pages</li><li>Cloudflare Pages</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>© TTJ — TED TRADING JAPAN G.K.　作者：てっち / TTJ</p>
+    <a href="https://github.com/TetsuyaOyama/ttj-ai-ecosystem-" rel="noopener">GitHub: ttj-ai-ecosystem</a>
+  </div>
+</footer>
+</body>
+</html>
