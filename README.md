@@ -10,6 +10,14 @@
 
 公開規格（3GPP・GSMA）と一般知識だけで作った、ブラウザで動くインタラクティブ作品です。
 
+### 通信の講義室 ― eSIM・IoT 実務大全
+
+全55章・14部の独習教材です。eSIM/RSP、VoLTE・SMS、IoT/車載の実務、セキュリティ、IMEI までを、ラボ・ログ演習・理解度チェック付きで学べます。
+
+[デモを開く](https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/showcase/sdv-dojo/)
+
+![通信の講義室の画面](docs/images/sdv-dojo.png)
+
 ### eSIM / RSP 解説ツール
 
 SGP.22・SGP.02・SGP.32 の構成を比べ、プロファイルのダウンロード手順をアニメーションで追えます。
