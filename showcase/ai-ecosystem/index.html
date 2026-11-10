@@ -150,6 +150,7 @@ svg text { font-family: var(--ttj-font-sans); }
 .node .t2 { font-size: 12px; fill: var(--ttj-text-muted); text-anchor: middle; }
 .node.person .box, .node.hub .box { fill: var(--ttj-navy-800); stroke: var(--ttj-gold-500); stroke-width: 2.5; }
 .node.person .t1, .node.hub .t1 { fill: var(--ttj-gold-200); font-size: 16px; }
+.node.person .t1 { font-size: 11.5px; letter-spacing: -0.03em; }
 .node.person .t2, .node.hub .t2 { fill: var(--ttj-navy-100); }
 .node.harness .box { fill: var(--ttj-gold-100); stroke: var(--ttj-gold-600); }
 .node.out .box { fill: var(--ttj-navy-100); stroke: var(--ttj-navy-600); }
@@ -236,7 +237,7 @@ footer.site p { margin: 0; }
   <div class="wrap">
     <p class="kicker">TTJ AI ECOSYSTEM MAP</p>
     <h1>Claude Code 環境の全体図：依頼から公開まで、左から右へ</h1>
-    <p class="lead">人（てっち）の依頼が、入口 → 司令塔（Claude Code）→ ハーネス（harness：安全柵）→ 振り分け → スキル（skill）→ サブエージェント（subagent）→ 道具・API → 公開 と流れます。ボックスを押す（Tab で移動）と、役割・実ファイルのパス・要点が下に出ます。</p>
+    <p class="lead">人（ビッグマウンテンテツヤ）の依頼が、入口 → 司令塔（Claude Code）→ ハーネス（harness：安全柵）→ 振り分け → スキル（skill）→ サブエージェント（subagent）→ 道具・API → 公開 と流れます。ボックスを押す（Tab で移動）と、役割・実ファイルのパス・要点が下に出ます。</p>
   </div>
 </header>
 
@@ -292,7 +293,7 @@ footer.site p { margin: 0; }
 
 <footer class="site">
   <div class="wrap">
-    <p>© TTJ — TED TRADING JAPAN G.K.　／　作：てっち / TTJ</p>
+    <p>© TTJ — TED TRADING JAPAN G.K.　／　作：ビッグマウンテンテツヤ / TTJ</p>
     <p><a href="../index.html">ポートフォリオへ戻る</a></p>
   </div>
 </footer>
@@ -317,7 +318,7 @@ footer.site p { margin: 0; }
 
   /* ===== ノード定義 ===== */
   var NODES = [
-    { id: "person", col: 0, t1: "てっち", t2: "依頼・最終判断", cls: "person", h: 96,
+    { id: "person", col: 0, t1: "ビッグマウンテンテツヤ", t2: "依頼・最終判断", cls: "person", h: 96,
       colName: "① 人",
       role: "依頼を出し、モデルの切り替え・公開（push / deploy）・削除など「人が決めること」を最終判断する人。",
       paths: ["（人のため、ファイルはありません）"],
@@ -499,7 +500,7 @@ footer.site p { margin: 0; }
   /* ===== 依頼1件の流れ ===== */
   var STEPS = [
     { name: "依頼", nodes: ["person", "in-app"], edges: ["person>in-app"],
-      text: "① 依頼：てっちがスマホのアプリ（またはターミナル）から「教材ページを1つ作って公開して」と依頼する。" },
+      text: "① 依頼：ビッグマウンテンテツヤがスマホのアプリ（またはターミナル）から「教材ページを1つ作って公開して」と依頼する。" },
     { name: "受付", nodes: ["claude"], edges: ["in-app>claude"],
       text: "② 受付：司令塔の Claude Code が依頼を受ける。CLAUDE.md と記憶メモ（先頭40行）が文脈に入っている。" },
     { name: "フック", nodes: ["band", "h-hooks", "h-perm"], edges: ["claude>band"],

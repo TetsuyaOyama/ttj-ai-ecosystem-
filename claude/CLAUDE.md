@@ -1,6 +1,6 @@
 # TTJ 共通ルール（全プロジェクト共通 / ~/.claude/CLAUDE.md）
 
-ユーザーは てっち（TTJ / GitHub: ttj-tokyo）。Windows + WSL2(Ubuntu) 上の Claude Code で作業する。
+ユーザーは ビッグマウンテンテツヤ（TTJ / GitHub: ttj-tokyo）。Windows + WSL2(Ubuntu) 上の Claude Code で作業する。
 
 ## 0. 応答言語
 

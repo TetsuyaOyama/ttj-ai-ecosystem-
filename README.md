@@ -1,15 +1,68 @@
-# TTJ AIエコシステム
+# TTJ AI Ecosystem
+
+コネクテッドカー通信 × AI エージェント
+
+**[▶ デモを見る（ショーケース）](https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/showcase/)**
+
+![TTJ ポートフォリオのトップページ](docs/images/portfolio.png)
+
+## 作品
+
+公開規格（3GPP・GSMA）と一般知識だけで作った、ブラウザで動くインタラクティブ作品です。
+
+### eSIM / RSP 解説ツール
+
+SGP.22・SGP.02・SGP.32 の構成を比べ、プロファイルのダウンロード手順をアニメーションで追えます。
+
+[デモを開く](https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/showcase/esim-rsp/)
+
+![eSIM / RSP 解説ツールの画面](docs/images/esim-rsp.png)
+
+### 通信フロー可視化
+
+VoLTE・IMS登録・SMS over SGs/IP・S8HR のシーケンスを、ステップ再生で確認できます。
+
+[デモを開く](https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/showcase/telecom-flows/)
+
+![通信フロー可視化の画面](docs/images/telecom-flows.png)
+
+### AI エコシステム図
+
+このリポジトリの Claude Code 構成（入口・ハーネス・振り分け・公開）をインタラクティブに図解します。
+
+[デモを開く](https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/showcase/ai-ecosystem/)
+
+![AI エコシステム図の画面](docs/images/ai-ecosystem.png)
+
+## このリポジトリの見どころ
+
+- [claude/settings.json](claude/settings.json) — `sudo`・force push・`.env` 読み取りを拒否し、`git push` や `rm` は確認に回す権限ルール。
+- [claude/hooks/bash_guard.py](claude/hooks/bash_guard.py) — `rm -rf /` や `curl ... | sh` など、権限ルールで防ぎきれない危険なコマンドを止めるフック。
+- [claude/agents/](claude/agents/) — haiku / sonnet / opus / fable の4モデルに作業を振り分けるサブエージェント定義。
+- [claude/skills/](claude/skills/) — 公開前レビュー、通信SVG作成、X下書きなど、用途別のスキル7本。
+- [design-system/tokens.css](design-system/tokens.css) — 紺×金の TTJ デザイントークン。見本ページ付き。
+- [deploy/github-actions/](deploy/github-actions/) — Cloudflare Pages へ自動公開する GitHub Actions ワークフロー。
+
+## 作者
+
+ビッグマウンテンテツヤ / TTJ（TED TRADING JAPAN G.K.）
+
+専門はコネクテッドカー通信（eSIM/eUICC・VoLTE/IMS・SMS・国際ローミング）と AI エージェント開発環境です。
+
+## セットアップ
+
+ここから下は、この環境を自分の WSL に入れて使うための手順です。
 
 元画像の AI エコシステムを TTJ 向けに置き換えた Claude Code 環境です。
 モデル振り分け・フック・権限ルール・スキル・サブエージェントを `~/.claude/` に一括導入します。
 全ファイル日本語、WSL2(Ubuntu) 上の Claude Code で使う前提です。
 
-## 1. 全体図
+### 1. 全体図
 
 元画像の11列との対応は [docs/ecosystem-map.md](docs/ecosystem-map.md)、設計の詳細は [docs/spec.md](docs/spec.md) を参照してください。
 
 ```
-てっち
+ビッグマウンテンテツヤ
   ↓ 入口：ターミナル(WSL) / Claudeアプリ / クロ(Discord・任意) / 定期タスク
 Claude Code（司令塔 = ~/.claude/）
   ↓ ハーネス：CLAUDE.md・権限ルール・フック8本・記憶メモ・APIキー1か所
@@ -20,7 +73,7 @@ Claude Code（司令塔 = ~/.claude/）
 公開：GitHub Pages(ttj.tokyo) ＋ Cloudflare Pages
 ```
 
-## 2. 導入手順（Windows）
+### 2. 導入手順（Windows）
 
 1. **WSL2 + Ubuntu を入れる**。管理者権限の PowerShell で `wsl --install -d Ubuntu` を実行し、再起動後に Ubuntu のユーザー名とパスワードを設定する。以降の作業はすべて Ubuntu のターミナル内で行う。
 2. **Node.js と Claude Code CLI を入れる**。Node.js は公式手順（nvm など）で導入し、Claude Code は Anthropic の公式手順に従って入れる。`claude --version` で確認する。
@@ -39,7 +92,7 @@ Claude Code（司令塔 = ~/.claude/）
 
 Codex CLI は OpenAI の公式手順に従って導入してください。入れなくても `codex-review` スキルは reviewer エージェントで代替できます。
 
-## 3. 中身の一覧
+### 3. 中身の一覧
 
 - `claude/` — `~/.claude/` に置くもの（CLAUDE.md、settings.json、hooks、agents、skills、memory）
 - `design-system/` — 紺×金の TTJ デザイントークン（tokens.css）と見本ページ
@@ -47,7 +100,7 @@ Codex CLI は OpenAI の公式手順に従って導入してください。入�
 - `bots/` — Grok Bot（X下書き・ニュース要約、定期実行）とクロ（Discord Bot、任意）
 - `deploy/` — Cloudflare Pages の導入手順と GitHub Actions ワークフロー
 
-## 4. モデルの使い分け
+### 4. モデルの使い分け
 
 | 区分 | モデル | 担当 | エージェント |
 |---|---|---|---|
@@ -58,7 +111,7 @@ Codex CLI は OpenAI の公式手順に従って導入してください。入�
 
 最初から重いモデルを使わず、軽い側で試して必要なら上げます。メインモデルの切り替えは人が行います。
 
-## 5. 安全の仕組み
+### 5. 安全の仕組み
 
 権限ルール（`settings.json`）とフック（`hooks/*.py`）で、次のものが止まるか確認になります。
 
@@ -68,13 +121,13 @@ Codex CLI は OpenAI の公式手順に従って導入してください。入�
 
 止められたときは Claude に回避させず、**人が自分のターミナルで実行**してください。
 
-## 6. 各リポジトリへの適用
+### 6. 各リポジトリへの適用
 
 - **CLAUDE.md**：`templates/project-CLAUDE.md` を ttj.tokyo などのリポジトリ直下に `CLAUDE.md` としてコピーし、内容をそのサイト用に書き換える。
 - **Cloudflare**：`deploy/github-actions/deploy-cloudflare-pages.yml` をサイトのリポジトリの `.github/workflows/` にコピーし、Secrets（`CLOUDFLARE_API_TOKEN`、`CLOUDFLARE_ACCOUNT_ID`）と Variables（`CF_PAGES_PROJECT`）を登録する。詳細は [deploy/cloudflare/README.md](deploy/cloudflare/README.md)。
 - **Bot**：[bots/grok-bot/README.md](bots/grok-bot/README.md)、[bots/kuro-discord-bot/README.md](bots/kuro-discord-bot/README.md) を参照。
 
-## 7. よくある質問
+### 7. よくある質問
 
 - **フックが動かない**：フックは `python3` が必要です。`python3 --version` で確認し、無ければ `sudo apt install python3`。インストール後に Claude Code を再起動する。
 - **Windows ネイティブで動かしていい？**：いけません。PowerShell ではなく、WSL の Ubuntu 内で `claude` を起動してください（フックとパスが WSL 前提）。
@@ -82,14 +135,3 @@ Codex CLI は OpenAI の公式手順に従って導入してください。入�
 - **上書きされた設定を戻したい**：`~/.claude/backup-<日時>/` から戻す。
 - **Claude が .env を読めない**：仕様です。キーは自分で編集し、必要な処理はスクリプトが自分で読みます。
 - **cron が動かない（Grok Bot）**：WSL では `sudo service cron start` が必要なことがあります。確実に回すなら Windows タスクスケジューラを使う（bots/grok-bot/README.md）。
-
-## ショーケース
-
-公開規格（3GPP・GSMA）と一般知識だけで作ったインタラクティブ作品です。GitHub Pages を有効にすると `/showcase/` で見られます。
-
-| 作品 | 内容 |
-|---|---|
-| [ポートフォリオ](showcase/index.html) | 作品一覧とプロフィール |
-| [eSIM / RSP 解説ツール](showcase/esim-rsp/index.html) | SGP.22・SGP.02・SGP.32 の構成比較とダウンロード手順アニメ |
-| [通信フロー可視化](showcase/telecom-flows/index.html) | VoLTE・IMS登録・SMS over SGs/IP・S8HR のシーケンス再生 |
-| [AI エコシステム図](showcase/ai-ecosystem/index.html) | このリポジトリの Claude Code 構成をインタラクティブに図解 |
