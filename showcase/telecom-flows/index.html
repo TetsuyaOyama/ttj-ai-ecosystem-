@@ -101,6 +101,7 @@ main { background: linear-gradient(var(--ttj-bg), var(--ttj-bg-subtle)); padding
 .band-label { fill: var(--ttj-text-muted); font-size: 11px; text-anchor: middle; }
 .step { opacity: 0; clip-path: inset(0 100% 0 0); transition: opacity 0.35s ease, clip-path 0.55s ease; }
 .step.rtl { clip-path: inset(0 0 0 100%); }
+.ghost { opacity: 0.18; pointer-events: none; }
 .step.on { opacity: 1; clip-path: inset(-6px -6px -6px -6px); }
 .arrow { stroke: var(--ttj-navy-600); stroke-width: 1.8; fill: none; }
 .arrow.dash { stroke-dasharray: 6 4; }
@@ -501,6 +502,10 @@ footer.site p { margin: 0; }
           t.textContent = ln;
         });
       }
+      var ghost = g.cloneNode(true);
+      ghost.setAttribute("class", "ghost");
+      ghost.setAttribute("aria-hidden", "true");
+      svg.insertBefore(ghost, g);
       stepGroups.push(g);
     });
     diagram.appendChild(svg);

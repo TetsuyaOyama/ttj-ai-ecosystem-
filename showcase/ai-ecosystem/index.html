@@ -116,6 +116,12 @@ h2 { font-size: 1.05rem; margin: 0 0 var(--ttj-space-2); color: var(--ttj-navy-8
 .scroller svg { display: block; width: 100%; min-width: 1500px; height: auto; }
 .scroll-note { display: none; margin: 0; padding: .35rem var(--ttj-space-3); font-size: .78rem; background: var(--ttj-accent-soft); color: var(--ttj-navy-800); border-bottom: 1px solid var(--ttj-gold-200); }
 @media (max-width: 1540px) { .scroll-note { display: block; } }
+.viewbar { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ttj-space-2); padding: var(--ttj-space-2) var(--ttj-space-3); border-bottom: 1px solid var(--ttj-border); }
+.viewbar .vlabel { font-size: .85rem; color: var(--ttj-text-muted); margin-right: .25rem; }
+.viewbar .btn[aria-pressed="true"] { background: var(--ttj-navy-800); color: var(--ttj-gold-200); border-color: var(--ttj-navy-800); }
+.diagram-frame.fit .scroller { overflow-x: hidden; }
+.diagram-frame.fit .scroller svg { min-width: 0; }
+.diagram-frame.fit .scroll-note { display: none; }
 
 /* --- SVG --- */
 svg text { font-family: var(--ttj-font-sans); }
@@ -255,7 +261,12 @@ footer.site p { margin: 0; }
       </section>
     </div>
 
-    <div class="diagram-frame">
+    <div class="diagram-frame" id="frame">
+      <div class="viewbar" role="group" aria-label="図の表示方法">
+        <span class="vlabel">表示：</span>
+        <button class="btn" type="button" id="viewFit" aria-pressed="false">全体を表示</button>
+        <button class="btn" type="button" id="viewZoom" aria-pressed="false">拡大表示</button>
+      </div>
       <p class="scroll-note">← 図は横長です。左右にスクロールしてください →</p>
       <div class="scroller" id="scroller" tabindex="0" role="region" aria-label="AIエコシステム構成図（横スクロール可）">
         <svg id="diagram" viewBox="0 0 1710 690" role="group" aria-labelledby="dg-t dg-d" xmlns="http://www.w3.org/2000/svg">
@@ -765,6 +776,17 @@ footer.site p { margin: 0; }
   btnNext.addEventListener("click", function () { stop(); show(Math.min(STEPS.length - 1, cur + 1)); });
   btnPrev.addEventListener("click", function () { stop(); show(Math.max(0, cur - 1)); });
   btnReset.addEventListener("click", reset);
+
+  var frame = document.getElementById("frame"), viewFit = document.getElementById("viewFit"), viewZoom = document.getElementById("viewZoom");
+  function setView(fit) {
+    frame.classList.toggle("fit", fit);
+    viewFit.setAttribute("aria-pressed", fit ? "true" : "false");
+    viewZoom.setAttribute("aria-pressed", fit ? "false" : "true");
+    if (fit) scroller.scrollLeft = 0;
+  }
+  viewFit.addEventListener("click", function () { setView(true); });
+  viewZoom.addEventListener("click", function () { setView(false); });
+  setView(window.innerWidth >= 1024);
 })();
 </script>
 </body>
