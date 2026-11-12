@@ -20,6 +20,14 @@ TTJ 公式サイト：https://ttj.tokyo/
 
 ![通信の講義室の画面](docs/images/sdv-dojo.png)
 
+### コアネットワーク講義 ― 4G EPC / 5G 5GC
+
+全34章の独習教材です。4G EPC と 5G 5GC のノード・インタフェース・識別子・手順を対にして学びます。構成図、シーケンス再生、識別子の解剖、鍵階層、状態遷移、切り分け演習、確認問題付きです。
+
+[デモを開く](https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/showcase/core-network/)
+
+![コアネットワーク講義の画面](docs/images/core-network.png)
+
 ### eSIM / RSP 解説ツール
 
 SGP.22・SGP.02・SGP.32 の構成を比べ、プロファイルのダウンロード手順をアニメーションで追えます。
