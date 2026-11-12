@@ -4,6 +4,8 @@
 
 **[▶ デモを見る（ショーケース）](https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/showcase/)**
 
+TTJ 公式サイト：https://ttj.tokyo/
+
 ![TTJ ポートフォリオのトップページ](docs/images/portfolio.png)
 
 ## 作品
@@ -41,6 +43,12 @@ VoLTE・IMS登録・SMS over SGs/IP・S8HR のシーケンスを、ステップ�
 [デモを開く](https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/showcase/ai-ecosystem/)
 
 ![AI エコシステム図の画面](docs/images/ai-ecosystem.png)
+
+### TTJ 公式サイト
+
+AI の未来レポート、触れる展示、備蓄ガイドなどを収めた TTJ のサイトです。冒頭には恒星のまわりを粒子が回る演出があります。
+
+[サイトを開く](https://ttj.tokyo/)
 
 ## このリポジトリの見どころ
 
