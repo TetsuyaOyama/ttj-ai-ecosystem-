@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -74,7 +74,7 @@ body {
 h1, h2, h3 {
   font-family: var(--ttj-font-serif);
   line-height: var(--ttj-leading-head);
-  color: var(--ttj-navy-800);
+  color: var(--ttj-heading, var(--ttj-navy-800));
   margin: 0;
 }
 a { color: var(--ttj-link); }
@@ -316,6 +316,83 @@ table.cmp[data-active="sgp32"] td[data-col="sgp32"] { background: var(--ttj-acce
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+
+/* ---- ダークテーマ（任意）：<html data-theme="dark"> のとき、役割別の色だけを暗い面に差し替える。
+        紺の面＋生成りの文字＋金のアクセント。印刷では適用しない（白地のまま）。 ---- */
+@media not print {
+  html[data-theme="dark"] {
+    color-scheme: dark;
+    --ttj-heading:       #F5F1E3;           /* 見出し */
+    --ttj-bg:            #071225;           /* 背景（ページ） */
+    --ttj-bg-subtle:     #0B1A33;           /* 背景（帯・下地） */
+    --ttj-bg-raised:     #0F2142;           /* 背景（カード・パネル：一段明るい面） */
+    --ttj-bg-raised-2:   #153058;           /* 背景（面の中の入力欄・ボタン） */
+    --ttj-text:          #F5F1E3;
+    --ttj-text-muted:    #A9B9D2;
+    --ttj-accent-strong: #D9B84A;           /* 暗い面の上の金文字 */
+    --ttj-accent-soft:   rgba(201, 162, 39, 0.14);
+    --ttj-link:          #9DBBF2;
+    --ttj-border:        #26416F;
+    --ttj-border-strong: #4F6FA3;
+    --ttj-success:       #62D59C;
+    --ttj-success-bg:    rgba(98, 213, 156, 0.12);
+    --ttj-warning:       #FFC266;
+    --ttj-warning-bg:    rgba(255, 194, 102, 0.10);
+    --ttj-danger:        #FF8F86;
+    --ttj-danger-bg:     rgba(255, 143, 134, 0.12);
+    --ttj-focus:         #8FB6FF;
+    --ttj-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.45);
+    --ttj-shadow-md: 0 6px 18px rgba(0, 0, 0, 0.5);
+    --ttj-shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.55);
+  }
+}
+
+@media not print {
+  html[data-theme="dark"] .tabs-bar { background: var(--ttj-bg-subtle); border-bottom-color: var(--ttj-border); }
+  html[data-theme="dark"] .tab { background: var(--ttj-bg-raised); border-color: var(--ttj-border); color: var(--ttj-text); }
+  html[data-theme="dark"] .tab:hover { border-color: var(--ttj-border-strong); background: var(--ttj-bg-raised-2); }
+  html[data-theme="dark"] .tab[aria-selected="true"] { background: var(--ttj-navy-700); border-color: var(--ttj-gold-600); border-bottom-color: var(--ttj-gold-500); }
+  html[data-theme="dark"] .chips li { color: var(--ttj-gold-200); background: rgba(201,162,39,.12); border-color: rgba(201,162,39,.45); }
+  html[data-theme="dark"] .card { background: var(--ttj-bg-raised); }
+  html[data-theme="dark"] .diagram, html[data-theme="dark"] .seq { background: var(--ttj-bg-raised); }
+  html[data-theme="dark"] .frame { fill: var(--ttj-bg-subtle); stroke: var(--ttj-border-strong); }
+  html[data-theme="dark"] .k-server rect { fill: var(--ttj-navy-600); stroke: var(--ttj-navy-300); }
+  html[data-theme="dark"] .k-dev rect { fill: #3A3622; stroke: var(--ttj-gold-500); }
+  html[data-theme="dark"] .k-ext rect, html[data-theme="dark"] .k-inner rect { fill: var(--ttj-bg-raised-2); stroke: var(--ttj-navy-300); }
+  html[data-theme="dark"] .t-name { fill: var(--ttj-text); }
+  html[data-theme="dark"] .k-server .t-name { fill: var(--ttj-text-inverse); }
+  html[data-theme="dark"] .t-sub { fill: #BFCCE0; }
+  html[data-theme="dark"] .link .vis { stroke: var(--ttj-navy-300); }
+  html[data-theme="dark"] .link .lbl { fill: #D5DFEE; stroke: var(--ttj-bg-raised); }
+  html[data-theme="dark"] .link:hover .vis { stroke: var(--ttj-gold-400); }
+  html[data-theme="dark"] .link.sel .lbl { fill: var(--ttj-gold-400); }
+  html[data-theme="dark"] .panel h4 { color: #D5DFEE; border-bottom-color: rgba(201,162,39,.45); }
+  html[data-theme="dark"] .btn { background: var(--ttj-bg-raised-2); color: var(--ttj-text); border-color: var(--ttj-border-strong); }
+  html[data-theme="dark"] .btn:hover:not(:disabled) { background: #1E4073; }
+  html[data-theme="dark"] .btn.primary { background: var(--ttj-gold-500); color: var(--ttj-navy-900); border-color: var(--ttj-gold-500); font-weight: 700; }
+  html[data-theme="dark"] .btn.primary:hover:not(:disabled) { background: var(--ttj-gold-400); }
+  html[data-theme="dark"] .phase-btn { background: var(--ttj-bg-raised-2); border-color: var(--ttj-border-strong); color: var(--ttj-text); }
+  html[data-theme="dark"] .phase-btn[aria-current="step"] { background: rgba(201,162,39,.2); border-color: var(--ttj-gold-500); color: var(--ttj-gold-200); }
+  html[data-theme="dark"] .lane-box { fill: var(--ttj-navy-600); }
+  html[data-theme="dark"] .lane-line { stroke: var(--ttj-navy-300); }
+  html[data-theme="dark"] .arrow.done { stroke: #C9D6EA; }
+  html[data-theme="dark"] #ah-done path { fill: #C9D6EA; }
+  html[data-theme="dark"] #ah-cur path { fill: var(--ttj-gold-400); }
+  html[data-theme="dark"] #ah-future path { fill: var(--ttj-navy-300); }
+  html[data-theme="dark"] .arrow.cur { stroke: var(--ttj-gold-400); }
+  html[data-theme="dark"] .num-bg { fill: var(--ttj-bg-raised-2); stroke: var(--ttj-navy-300); }
+  html[data-theme="dark"] .num-bg.cur { fill: var(--ttj-gold-500); stroke: var(--ttj-gold-200); }
+  html[data-theme="dark"] .num { fill: var(--ttj-text); }
+  html[data-theme="dark"] .num-bg.cur + .num { fill: var(--ttj-navy-900); }
+  html[data-theme="dark"] .stepcard .badge { background: var(--ttj-navy-600); color: var(--ttj-gold-200); }
+  html[data-theme="dark"] .api { background: var(--ttj-bg-subtle); color: var(--ttj-text); }
+  html[data-theme="dark"] .table-wrap { background: var(--ttj-bg-raised); }
+  html[data-theme="dark"] .cmp thead th { background: var(--ttj-navy-700); }
+  html[data-theme="dark"] .cmp tbody th { background: var(--ttj-bg-subtle); color: var(--ttj-heading); }
+  html[data-theme="dark"] .search input { background: var(--ttj-bg-subtle); color: var(--ttj-text); }
+  html[data-theme="dark"] .gloss .term { color: var(--ttj-heading); }
+  html[data-theme="dark"] .site-footer { background: var(--ttj-navy-900); }
 }
 </style>
 </head>

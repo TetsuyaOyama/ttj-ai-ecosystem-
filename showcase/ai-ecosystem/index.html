@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -229,6 +229,82 @@ footer.site p { margin: 0; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .edge.lit { stroke-dasharray: none; }
+}
+
+/* ---- ダークテーマ（任意）：<html data-theme="dark"> のとき、役割別の色だけを暗い面に差し替える。
+        紺の面＋生成りの文字＋金のアクセント。印刷では適用しない（白地のまま）。 ---- */
+@media not print {
+  html[data-theme="dark"] {
+    color-scheme: dark;
+    --ttj-heading:       #F5F1E3;           /* 見出し */
+    --ttj-bg:            #071225;           /* 背景（ページ） */
+    --ttj-bg-subtle:     #0B1A33;           /* 背景（帯・下地） */
+    --ttj-bg-raised:     #0F2142;           /* 背景（カード・パネル：一段明るい面） */
+    --ttj-bg-raised-2:   #153058;           /* 背景（面の中の入力欄・ボタン） */
+    --ttj-text:          #F5F1E3;
+    --ttj-text-muted:    #A9B9D2;
+    --ttj-accent-strong: #D9B84A;           /* 暗い面の上の金文字 */
+    --ttj-accent-soft:   rgba(201, 162, 39, 0.14);
+    --ttj-link:          #9DBBF2;
+    --ttj-border:        #26416F;
+    --ttj-border-strong: #4F6FA3;
+    --ttj-success:       #62D59C;
+    --ttj-success-bg:    rgba(98, 213, 156, 0.12);
+    --ttj-warning:       #FFC266;
+    --ttj-warning-bg:    rgba(255, 194, 102, 0.10);
+    --ttj-danger:        #FF8F86;
+    --ttj-danger-bg:     rgba(255, 143, 134, 0.12);
+    --ttj-focus:         #8FB6FF;
+    --ttj-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.45);
+    --ttj-shadow-md: 0 6px 18px rgba(0, 0, 0, 0.5);
+    --ttj-shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.55);
+  }
+}
+
+@media not print {
+  html[data-theme="dark"] code { background: var(--ttj-bg-subtle); color: var(--ttj-gold-200); }
+  html[data-theme="dark"] h2 { color: var(--ttj-heading); }
+  html[data-theme="dark"] .panel-card, html[data-theme="dark"] .diagram-frame, html[data-theme="dark"] .hk { background: var(--ttj-bg-raised); }
+  html[data-theme="dark"] .chip[aria-pressed="true"] { border-color: var(--ttj-text-inverse); }
+  html[data-theme="dark"] .btn { background: var(--ttj-bg-raised-2); color: var(--ttj-text); border-color: var(--ttj-border-strong); }
+  html[data-theme="dark"] .btn:hover { background: #1E4073; }
+  html[data-theme="dark"] .btn.primary { background: var(--ttj-gold-500); color: var(--ttj-navy-900); border-color: var(--ttj-gold-500); font-weight: 700; }
+  html[data-theme="dark"] .btn.primary:hover { background: var(--ttj-gold-400); }
+  html[data-theme="dark"] .stepper button:not([aria-current="step"]):not(.past) { background: var(--ttj-bg-raised-2); }
+  html[data-theme="dark"] .bandgroup.lit .glow { opacity: .22; animation-name: pulse-dk; }
+  @keyframes pulse-dk { from { opacity: .12; } to { opacity: .28; } }
+  html[data-theme="dark"] .bandgroup.trail .glow { opacity: .14; }
+  html[data-theme="dark"] .stepper button.past { background: rgba(201,162,39,.18); border-color: var(--ttj-gold-600); }
+  html[data-theme="dark"] .scroll-note { color: var(--ttj-text); border-bottom-color: rgba(201,162,39,.4); }
+  html[data-theme="dark"] .viewbar .btn[aria-pressed="true"] { background: var(--ttj-gold-500); color: var(--ttj-navy-900); border-color: var(--ttj-gold-500); }
+  html[data-theme="dark"] .colhead { fill: #D5DFEE; }
+  html[data-theme="dark"] .lanetitle { fill: var(--ttj-text); }
+  html[data-theme="dark"] .bandbox { fill: var(--ttj-gold-500); fill-opacity: .1; stroke: var(--ttj-gold-500); }
+  html[data-theme="dark"] .bandlabel { fill: var(--ttj-gold-400); }
+  html[data-theme="dark"] .edge.rel { stroke: var(--ttj-gold-500); }
+  html[data-theme="dark"] #ah-rel path { fill: var(--ttj-gold-500); }
+  html[data-theme="dark"] .node .box { fill: var(--ttj-bg-raised-2); }
+  html[data-theme="dark"] .node.person .box, html[data-theme="dark"] .node.hub .box { fill: var(--ttj-navy-700); }
+  html[data-theme="dark"] .node.harness .box { fill: #3A3622; stroke: var(--ttj-gold-500); }
+  html[data-theme="dark"] .node.out .box { fill: #1B3A6B; stroke: var(--ttj-navy-300); }
+  html[data-theme="dark"] .node.lane .box { fill: var(--ttj-bg-subtle); }
+  html[data-theme="dark"] .node.agent .box { stroke: rgba(245,241,227,.55); }
+  html[data-theme="dark"] .node.agent.m-haiku .box { fill: var(--m-haiku); }
+  html[data-theme="dark"] .node.agent.m-sonnet .box { fill: var(--m-sonnet); }
+  html[data-theme="dark"] .node.agent.m-opus .box { fill: var(--m-opus); }
+  html[data-theme="dark"] .node:hover .box { stroke: var(--ttj-gold-400); }
+  html[data-theme="dark"] .node.sel .box { stroke: var(--ttj-gold-400); }
+  html[data-theme="dark"] .node:focus-visible .box { stroke: var(--ttj-focus); }
+  html[data-theme="dark"] .node.lit .box { stroke: var(--ttj-gold-400); }
+  html[data-theme="dark"] .tag { background: var(--ttj-border); color: var(--ttj-text); }
+  html[data-theme="dark"] .tag.haiku { background: var(--m-haiku); color: #fff; }
+  html[data-theme="dark"] .tag.sonnet { background: var(--m-sonnet); color: #fff; }
+  html[data-theme="dark"] .tag.opus { background: var(--m-opus); color: #fff; }
+  html[data-theme="dark"] .tag.fable { background: var(--m-fable); color: var(--ttj-navy-900); }
+  html[data-theme="dark"] .hooks-box .row h3 { color: var(--ttj-heading); }
+  html[data-theme="dark"] .hk > button:hover { background: var(--ttj-bg-raised-2); }
+  html[data-theme="dark"] .kind.inject { color: var(--ttj-gold-200); border-color: var(--ttj-gold-500); }
+  html[data-theme="dark"] footer.site { background: var(--ttj-navy-900); }
 }
 </style>
 </head>

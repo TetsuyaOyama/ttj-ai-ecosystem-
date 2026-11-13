@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -81,7 +81,7 @@ body {
   line-height: var(--ttj-leading-body);
   overflow-wrap: anywhere;
 }
-h1, h2, h3 { font-family: var(--ttj-font-serif); line-height: var(--ttj-leading-head); color: var(--ttj-navy-800); margin: 0; }
+h1, h2, h3 { font-family: var(--ttj-font-serif); line-height: var(--ttj-leading-head); color: var(--ttj-heading, var(--ttj-navy-800)); margin: 0; }
 a { color: var(--ttj-link); }
 :focus-visible { outline: 3px solid var(--ttj-focus); outline-offset: 2px; }
 
@@ -232,6 +232,60 @@ footer a:hover { color: var(--ttj-gold-200); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; }
   .card:hover, .card:focus-within { transform: none; }
+}
+
+/* ---- ダークテーマ（任意）：<html data-theme="dark"> のとき、役割別の色だけを暗い面に差し替える。
+        紺の面＋生成りの文字＋金のアクセント。印刷では適用しない（白地のまま）。 ---- */
+@media not print {
+  html[data-theme="dark"] {
+    color-scheme: dark;
+    --ttj-heading:       #F5F1E3;           /* 見出し */
+    --ttj-bg:            #071225;           /* 背景（ページ） */
+    --ttj-bg-subtle:     #0B1A33;           /* 背景（帯・下地） */
+    --ttj-bg-raised:     #0F2142;           /* 背景（カード・パネル：一段明るい面） */
+    --ttj-bg-raised-2:   #153058;           /* 背景（面の中の入力欄・ボタン） */
+    --ttj-text:          #F5F1E3;
+    --ttj-text-muted:    #A9B9D2;
+    --ttj-accent-strong: #D9B84A;           /* 暗い面の上の金文字 */
+    --ttj-accent-soft:   rgba(201, 162, 39, 0.14);
+    --ttj-link:          #9DBBF2;
+    --ttj-border:        #26416F;
+    --ttj-border-strong: #4F6FA3;
+    --ttj-success:       #62D59C;
+    --ttj-success-bg:    rgba(98, 213, 156, 0.12);
+    --ttj-warning:       #FFC266;
+    --ttj-warning-bg:    rgba(255, 194, 102, 0.10);
+    --ttj-danger:        #FF8F86;
+    --ttj-danger-bg:     rgba(255, 143, 134, 0.12);
+    --ttj-focus:         #8FB6FF;
+    --ttj-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.45);
+    --ttj-shadow-md: 0 6px 18px rgba(0, 0, 0, 0.5);
+    --ttj-shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.55);
+  }
+}
+
+@media not print {
+  html[data-theme="dark"] body { background: var(--ttj-bg); }
+  html[data-theme="dark"] .profile-main,
+  html[data-theme="dark"] .fields li,
+  html[data-theme="dark"] .about li { background: var(--ttj-bg-raised); border-color: var(--ttj-border); box-shadow: none; }
+  html[data-theme="dark"] .profile-main { border-left-color: var(--ttj-gold-500); }
+  html[data-theme="dark"] .fields strong,
+  html[data-theme="dark"] .about strong { color: var(--ttj-heading); }
+  html[data-theme="dark"] .about li::before { color: var(--ttj-gold-400); }
+  html[data-theme="dark"] .card { background: var(--ttj-bg-raised); border-color: var(--ttj-border); box-shadow: var(--ttj-shadow-sm); }
+  html[data-theme="dark"] .card:hover, html[data-theme="dark"] .card:focus-within { border-color: var(--ttj-gold-500); box-shadow: 0 0 0 1px var(--ttj-gold-500), 0 10px 26px rgba(0,0,0,.55); }
+  html[data-theme="dark"] .thumb { background: #14305A; box-shadow: inset 0 0 0 1px rgba(201,162,39,.35); }
+  html[data-theme="dark"] .thumb svg > rect:first-child { fill: #112A4F; }
+  html[data-theme="dark"] .tags li { background: rgba(201,162,39,.12); color: var(--ttj-gold-200); border-color: rgba(201,162,39,.45); }
+  html[data-theme="dark"] .btn { background: rgba(201,162,39,.12); color: var(--ttj-gold-200); border-color: var(--ttj-gold-500); }
+  html[data-theme="dark"] .btn:hover, html[data-theme="dark"] .btn:focus-visible { background: var(--ttj-gold-500); color: var(--ttj-navy-900); border-color: var(--ttj-gold-500); }
+  html[data-theme="dark"] .btn:focus-visible { outline-color: var(--ttj-gold-200); }
+  html[data-theme="dark"] .chips li { background: var(--ttj-bg-raised); border-color: var(--ttj-border-strong); color: #D5DFEE; }
+  html[data-theme="dark"] .chips.gold li { background: rgba(201,162,39,.12); border-color: rgba(201,162,39,.55); color: var(--ttj-gold-200); }
+  html[data-theme="dark"] .about code { background: var(--ttj-bg-subtle); color: var(--ttj-gold-200); padding: 0 .3em; border-radius: var(--ttj-radius-sm); }
+  html[data-theme="dark"] .repo-link a { color: var(--ttj-link); }
+  html[data-theme="dark"] footer { background: var(--ttj-navy-900); }
 }
 </style>
 </head>

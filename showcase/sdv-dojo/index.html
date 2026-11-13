@@ -7,7 +7,7 @@
 <meta name="description" content="3GPP・GSMA の公開規格と一般知識だけで書いた、eSIM・IoT 通信の実務大全（全55章）。インタラクティブな図・計算・演習で学ぶ。">
 <meta name="author" content="ビッグマウンテンテツヤ / TTJ">
 <meta name="theme-color" content="#0B1F3A">
-<script>try{if(localStorage.getItem('sdv.theme')==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}</script>
+<script>try{if(localStorage.getItem('sdv.theme')!=='light')document.documentElement.setAttribute('data-theme','dark');}catch(e){}</script>
 <style>
 /* ---- TTJ デザイントークン（design-system/tokens.css より :root をコピー） ---- */
 :root {
@@ -2925,7 +2925,7 @@ document.getElementById('quizReset').onclick=()=>{
 /* ===== UI：テーマ・目次ドロワー・章末ナビ・現在地・進捗 ===== */
 (function(){
  const root=document.documentElement,body=document.body;
- /* テーマ（既定ライト／ダーク切替・記憶） */
+ /* テーマ（既定ダーク／切替・記憶。保存値 light のときだけライト） */
  const tb=document.getElementById('themeBtn');
  const isDark=()=>root.getAttribute('data-theme')==='dark';
  tb.setAttribute('aria-pressed',isDark()?'true':'false');
