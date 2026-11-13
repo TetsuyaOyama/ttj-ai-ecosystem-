@@ -789,6 +789,11 @@ nav#side a.ns-nav{margin-top:14px;border-left-color:var(--ttj-gold-500);color:va
 .lm-skip{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;}
 .lm-skip:focus{position:static;display:inline-block;width:auto;height:auto;overflow:visible;margin-bottom:8px;padding:6px 12px;background:var(--m-panel);color:var(--m-text);border:1px solid var(--m-gold);border-radius:4px;font-size:14px;}
 .lm-stage{position:relative;line-height:0;}
+.lm-legend{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:center;box-sizing:border-box;padding:2px 18px 10px;line-height:1.4;}
+.lm-lg{display:flex;align-items:center;gap:8px;}
+.lm-lg svg{flex:none;display:block;}
+.lm-lg span{font-size:14px;line-height:1.4;color:var(--m-text2);white-space:nowrap;}
+@media(max-width:700px){.lm-legend{padding-left:12px;padding-right:12px;gap:4px 16px;}}
 .lm-svg{display:block;width:100%;height:auto;}
 .lm-svg a.mn{outline:none;cursor:pointer;text-decoration:none;}
 .lm-svg .mb{transform-box:fill-box;transform-origin:center;transition:transform .15s var(--df-ease);}
@@ -3992,8 +3997,6 @@ var MAPDATA={"cols":[{"k":"T","name":"車両・端末","x":80,"w":190,"icon":"tc
  function geoV(){
   if(GV)return GV;
   var P={},recs=[],blocks=[],y=24,lineX=44,icons=[];
-  recs.push({t:'legend',y:y});
-  y+=3*54+14;
   var X0=96,WV=750-X0-16;
   function place(key,yStart){
    var f=flowCell(key,WV,MV);
@@ -4058,14 +4061,14 @@ var MAPDATA={"cols":[{"k":"T","name":"車両・端末","x":80,"w":190,"icon":"tc
   });
   return out;
  }
- function legendV(C,y0){
-  var out='',i,col,row;
-  for(i=0;i<LEG.length;i++){
-   col=i%2;row=Math.floor(i/2);
-   var x=24+col*366,y=y0+26+row*54,ic=legIcon(LEG[i][0],x,y,1.5,C);
-   out+=ic.s+'<text x="'+fmt(x+ic.w+10)+'" y="'+(y+10)+'" font-size="28" fill="'+C('text2')+'">'+LEG[i][1].replace('（破線）','')+'</text>';
-  }
-  return out;
+ /* 画面表示の凡例は HTML（本文と同じ文字サイズ）。SVG 内の凡例は保存用（横長・1920px）だけ */
+ function legendHtml(C){
+  var h='<div class="lm-legend" role="group" aria-label="凡例">';
+  LEG.forEach(function(it){
+   var ic=legIcon(it[0],1,12,1,C);
+   h+='<div class="lm-lg"><svg width="'+Math.ceil(ic.w+3)+'" height="24" viewBox="0 0 '+Math.ceil(ic.w+3)+' 24" aria-hidden="true" focusable="false">'+ic.s+'</svg><span>'+it[1].replace('（破線）','')+'</span></div>';
+  });
+  return h+'</div>';
  }
 
  /* ---------- 背景（一度だけ描く部分） ---------- */
@@ -4085,7 +4088,7 @@ var MAPDATA={"cols":[{"k":"T","name":"車両・端末","x":80,"w":190,"icon":"tc
   ZONES.forEach(function(z){vl+='M'+z.x+' '+G.crossTop+'V'+G.crossBot;});
   a.push('<path d="'+hl+vl+'" stroke="'+L+'" stroke-width="1" fill="none"/>');
   a.push('<text x="40" y="40" font-size="28" font-weight="700" fill="'+C('text')+'">全体マップ ― 通信の講義室とコア講義の89章</text>');
-  a.push(legendH(C));
+  if(o.exp)a.push(legendH(C));
   [['in','入門'],['pr','実務'],['ad','一人前']].forEach(function(t){var m=(B[t[0]][0]+B[t[0]][1])/2;a.push('<text x="40" y="'+fmt(m+7)+'" font-size="22" text-anchor="middle" fill="'+C('text2')+'">'+t[1]+'</text>');});
   a.push('<text x="40" y="'+fmt((G.crossTop+G.crossBot)/2+7)+'" font-size="22" text-anchor="middle" fill="'+C('text2')+'">横断</text>');
   /* 列見出し（幅が足りない列は2行） */
@@ -4115,7 +4118,6 @@ var MAPDATA={"cols":[{"k":"T","name":"車両・端末","x":80,"w":190,"icon":"tc
  function bgV(C,o){
   var G=geoV(),a=[],r;
   a.push('<rect width="750" height="'+G.H+'" fill="'+C('bg')+'"/>');
-  a.push(legendV(C,G.recs[0].y));
   a.push('<path d="M'+G.lineX+' '+G.y1+'V'+G.y2+'" stroke="'+C('pipe')+'" stroke-width="2" fill="none" aria-hidden="true"/>');
   G.recs.forEach(function(r){
    if(r.t==='line')a.push('<path d="M'+r.x1+' '+r.y1+'H'+r.x2+'" stroke="'+C(r.c)+'" stroke-width="1" fill="none"/>');
@@ -4208,7 +4210,7 @@ var MAPDATA={"cols":[{"k":"T","name":"車両・端末","x":80,"w":190,"icon":"tc
   if(!rov||!userMoved)rov=st.cur||'S01';
   var C=liveC;
   memo.dyn=null;
-  stageEl.innerHTML=svgOpen(kind,{})+'<g>'+(kind==='h'?bgH(C,{}):bgV(C,{}))+'</g><g id="lhMapDyn"></g></svg>';
+  stageEl.innerHTML=legendHtml(C)+svgOpen(kind,{})+'<g>'+(kind==='h'?bgH(C,{}):bgV(C,{}))+'</g><g id="lhMapDyn"></g></svg>';
   dynEl=stageEl.querySelector('#lhMapDyn');
   stageEl.setAttribute('data-layout',kind);
   paintDyn(st,false);
