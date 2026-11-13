@@ -852,6 +852,51 @@ nav#side a.ns-nav{margin-top:14px;border-left-color:var(--ttj-gold-500);color:va
 .lh-map th{position:sticky;top:0;background:var(--m-panel);color:var(--m-goldink);}
 .lh-map td a{color:var(--m-blue);}
 </style>
+<script>
+/* 章内リンク（#…）の移動：ブラウザ任せのフラグメント移動ではなく、ここで移動先を指定して動かす。
+   背景：実機（Chromium）の計測で、最初の同一文書内リンクのクリック直後に、スクロール位置がいったん先頭（0）へ
+   置き直され、そこから目的の章まで滑る、という動きが再現した（長い一枚ページ＋スムーズスクロール）。
+   移動先を JS で指定すれば、現在位置からそのまま動く。<head> に置くので、DOM の用意を待たない。 */
+(function(){
+ 'use strict';
+ var root=document.documentElement;
+ function decode(h){try{return decodeURIComponent(h);}catch(e){return null;}}
+ /* 移動先に Tab の起点を移す。見た目の枠は出さない（操作できる部品ではないため） */
+ var st=document.createElement('style');
+ st.textContent='[data-sdv-jump]:focus{outline:none;}';
+ document.head.appendChild(st);
+ function jump(id){
+  var t=id?document.getElementById(id):null;if(!t)return false;
+  if(location.hash!=='#'+id){
+   try{history.pushState(null,'','#'+id);}catch(e){location.hash=id;return true;}   /* 「戻る」で元の位置へ戻れる */
+  }
+  /* 既存の revealHash が、絞り込みと折りたたみを解く（hashchange を購読している） */
+  try{window.dispatchEvent(new HashChangeEvent('hashchange'));}catch(e){}
+  t.scrollIntoView({block:'start'});                    /* CSS の scroll-behavior と scroll-margin-top に従う */
+  if(!/^(A|BUTTON|INPUT|SELECT|TEXTAREA|SUMMARY)$/.test(t.tagName)&&!t.hasAttribute('tabindex')){t.setAttribute('tabindex','-1');t.setAttribute('data-sdv-jump','');}
+  try{t.focus({preventScroll:true});}catch(e){}
+  return true;
+ }
+ window.sdvJump=jump;
+ document.addEventListener('click',function(e){
+  if(e.defaultPrevented||e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;
+  var a=e.target.closest&&e.target.closest('a[href^="#"]');if(!a)return;
+  var tg=a.getAttribute('target');if(tg&&tg!=='_self')return;
+  var h=a.getAttribute('href');if(h.length<2)return;
+  var id=decode(h.slice(1));if(!id||!document.getElementById(id))return;
+  e.preventDefault();jump(id);
+ });
+ /* URL に #章 を付けて開いたときは、先頭から滑らせず、その章を直接表示する */
+ if(location.hash.length>1){
+  root.style.scrollBehavior='auto';
+  var back=function(){root.style.scrollBehavior='';};
+  window.addEventListener('load',function(){setTimeout(back,600);});
+  window.addEventListener('wheel',back,{once:true,passive:true});
+  window.addEventListener('touchstart',back,{once:true,passive:true});
+  window.addEventListener('keydown',back,{once:true});
+ }
+})();
+</script>
 </head>
 <body>
 <a class="sdv-skip" href="#sdv-overview">学習メニュー（検索）へ移動</a>
@@ -3741,7 +3786,7 @@ function revealHash(){
 }
 window.addEventListener('hashchange',revealHash);
 document.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]');if(a&&a.hash&&a.hash===location.hash)setTimeout(revealHash,0);});
-$('sdv-chapter-select').onchange=e=>{const v=e.target.value;if(!v)return;if(location.hash==='#'+v)revealHash();else location.hash=v;e.target.value='';};
+$('sdv-chapter-select').onchange=e=>{const v=e.target.value;if(!v)return;if(window.sdvJump)window.sdvJump(v);else if(location.hash==='#'+v)revealHash();else location.hash=v;e.target.value='';};
 $('sdv-motion').onclick=()=>{const off=document.body.classList.toggle('sdv-motion-off');$('sdv-motion').setAttribute('aria-pressed',off?'true':'false');$('sdv-motion').textContent=off?'動きを再開':'動きを止める';};
 let printDetails=[];window.addEventListener('beforeprint',()=>{printDetails=[...document.querySelectorAll('main details')].map(d=>[d,d.open]);printDetails.forEach(x=>{x[0].open=true;});});window.addEventListener('afterprint',()=>printDetails.forEach(x=>{x[0].open=x[1];}));
 const toTop=document.querySelector('.sdv-to-top');
@@ -4154,10 +4199,15 @@ var MAPDATA={"cols":[{"k":"T","name":"車両・端末","x":80,"w":190,"icon":"tc
 
  /* ---------- 描画 ---------- */
  var dynEl=null;
+ /* 同じ内容のときは差し替えない（高さ・フォーカス・ホバーを動かさない） */
+ var memo={};
+ function setHtml(key,el,html){if(memo[key]===html&&el.firstChild)return false;memo[key]=html;el.innerHTML=html;return true;}
+ function setText(el,t){if(el.textContent!==t)el.textContent=t;}
  function renderAll(){
   var st=getState();
   if(!rov||!userMoved)rov=st.cur||'S01';
   var C=liveC;
+  memo.dyn=null;
   stageEl.innerHTML=svgOpen(kind,{})+'<g>'+(kind==='h'?bgH(C,{}):bgV(C,{}))+'</g><g id="lhMapDyn"></g></svg>';
   dynEl=stageEl.querySelector('#lhMapDyn');
   stageEl.setAttribute('data-layout',kind);
@@ -4165,7 +4215,9 @@ var MAPDATA={"cols":[{"k":"T","name":"車両・端末","x":80,"w":190,"icon":"tc
  }
  function paintDyn(st,anim){
   var act=document.activeElement,keep=(act&&act.classList&&act.classList.contains('mn')&&stageEl.contains(act))?act.getAttribute('data-id'):null;
-  dynEl.innerHTML=dynMarkup(kind,st,liveC,{anim:anim&&!reduce.matches});
+  var html=dynMarkup(kind,st,liveC,{anim:anim&&!reduce.matches});
+  if(!anim&&memo.dyn===html)return;
+  memo.dyn=html;dynEl.innerHTML=html;
   if(anim&&!reduce.matches){
    var p=dynEl.querySelector('path.rt0');
    if(p){requestAnimationFrame(function(){requestAnimationFrame(function(){p.classList.remove('rt0');});});}
@@ -4176,7 +4228,7 @@ var MAPDATA={"cols":[{"k":"T","name":"車両・端末","x":80,"w":190,"icon":"tc
   var st=getState();
   if(!userMoved)rov=st.cur||'S01';
   paintDyn(st,anim);
-  cntEl.textContent='読了 '+st.n+' / '+CH.length+(st.cur?'':'　このルートは読了');
+  setText(cntEl,'読了 '+st.n+' / '+CH.length+(st.cur?'':'　このルートは読了'));
   buildTable(st);buildOrder(st);
   if(selId)showDetail(selId,st);
   hideTip();
@@ -4186,13 +4238,13 @@ var MAPDATA={"cols":[{"k":"T","name":"車両・端末","x":80,"w":190,"icon":"tc
  var ordEl=$('lhMapOrder'),ordH=$('lhMapOrderH');
  function buildOrder(st){
   if(!ordEl)return;
-  ordH.textContent='順路の一覧 ― '+st.route.name+'ルート（'+st.route.ids.length+'章）';
+  setText(ordH,'順路の一覧 ― '+st.route.name+'ルート（'+st.route.ids.length+'章）');
   var h=[];
   st.route.ids.forEach(function(id){
    var it=byId[id],rd=st.isRead(it),cu=st.cur===id,no=(it.course==='sdv'?'':'C')+it.num;
    h.push('<li'+(rd?' class="rd"':'')+(cu?' class="cu"':'')+'><a href="'+esc(it.href)+'"><span class="no">'+no+'</span><span class="tt">'+esc(it.title)+'</span>'+(cu?'<span class="st cur">現在地</span>':(rd?'<span class="st">読了</span>':''))+'</a></li>');
   });
-  ordEl.innerHTML=h.join('');
+  setHtml('ord',ordEl,h.join(''));
  }
 
  /* ---------- 表（代替表示） ---------- */
@@ -4202,7 +4254,7 @@ var MAPDATA={"cols":[{"k":"T","name":"車両・端末","x":80,"w":190,"icon":"tc
    var d=describe(it,st);
    h.push('<tr><td>'+d.k+'</td><td><a href="'+esc(it.href)+'">'+esc(it.title)+'</a></td><td>'+esc(d.area)+'</td><td>'+esc(d.stage)+'</td><td>'+(d.read?'読了':'未読')+'</td></tr>');
   });
-  tblBody.innerHTML=h.join('');
+  setHtml('tbl',tblBody,h.join(''));
  }
 
  /* ---------- ツールチップ・詳細欄 ---------- */
@@ -4381,9 +4433,11 @@ var MAPDATA={"cols":[{"k":"T","name":"車両・端末","x":80,"w":190,"icon":"tc
  /* ---------- 幅に合わせる（実幅で 横長／縦長 を切り替える） ---------- */
  function fit(){
   var parent=sec.parentNode,vw=document.documentElement.clientWidth;
-  sec.style.width='';sec.style.marginLeft='';
+  /* 親の左端は、この枠の幅や余白に左右されない。測るために width を空にして戻す、という往復をしない */
   var W=vw<700?vw:Math.min(1880,vw-32),pl=parent.getBoundingClientRect().left;
-  sec.style.width=W+'px';sec.style.marginLeft=Math.round((vw-W)/2-pl)+'px';
+  var nw=W+'px',nm=Math.round((vw-W)/2-pl)+'px';
+  if(sec.style.width!==nw)sec.style.width=nw;
+  if(sec.style.marginLeft!==nm)sec.style.marginLeft=nm;
   var nk=sec.clientWidth>=HMIN?'h':'v';
   if(nk!==kind||!dynEl){kind=nk;hideDetail();renderAll();updateAll(false);}
  }
