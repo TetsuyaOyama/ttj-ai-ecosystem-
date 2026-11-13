@@ -2,6 +2,14 @@
 
 コネクテッドカー通信 × AI エージェント
 
+[![学習全体マップ：通信の講義室とコア講義の89章を1枚で俯瞰](docs/images/learning-map.png)](https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/showcase/learning-map/)
+
+**学習全体マップ** は、通信の講義室（55章）とコアネットワーク講義（34章）を、通信の流れ（横）と習熟の段（縦）で1枚に並べた地図です。点を押すと該当の章へ移動し、読了の状況も反映されます。
+
+- **[▶ 学習全体マップを開く](https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/showcase/learning-map/)**
+- [通信の講義室（全55章）](https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/showcase/sdv-dojo/)
+- [コアネットワーク講義（全34章）](https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/showcase/core-network/)
+
 **[▶ デモを見る（ショーケース）](https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/showcase/)**
 
 TTJ 公式サイト：https://ttj.tokyo/

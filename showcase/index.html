@@ -4,7 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TTJ Showcase — コネクテッドカー通信 × AI エージェント</title>
-<meta name="description" content="ビッグマウンテンテツヤ / TTJ のポートフォリオ。コネクテッドカー通信と AI エージェント開発環境の作品集。">
+<meta name="description" content="ビッグマウンテンテツヤ / TTJ のポートフォリオ。通信の講義室とコアネットワーク講義の89章を1枚で俯瞰する学習全体マップ、コネクテッドカー通信と AI エージェント開発環境の作品集。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="TTJ Showcase">
+<meta property="og:title" content="TTJ Showcase ― 学習全体マップ：通信の講義室とコア講義の89章を1枚で俯瞰">
+<meta property="og:description" content="通信の講義室（55章）とコアネットワーク講義（34章）を、通信の流れと習熟の段で1枚に。コネクテッドカー通信 × AI エージェントの作品集。">
+<meta property="og:url" content="https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/showcase/">
+<meta property="og:image" content="https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/docs/images/learning-map.png">
+<meta property="og:image:width" content="1600">
+<meta property="og:image:height" content="900">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/docs/images/learning-map.png">
 <style>
 :root {
   --ttj-navy-900: #060F1D;
@@ -127,6 +137,20 @@ section { padding: var(--ttj-space-7) 0 0; }
 .fields strong { display: block; color: var(--ttj-navy-800); font-family: var(--ttj-font-serif); }
 .fields span { font-size: var(--ttj-text-sm); color: var(--ttj-text-muted); }
 
+/* Feature（学習全体マップ） */
+.feature { padding-top: var(--ttj-space-6); }
+.feature-box { background: linear-gradient(160deg, var(--ttj-navy-900) 0%, var(--ttj-navy-800) 60%, var(--ttj-navy-700) 100%); color: var(--ttj-text-inverse); border: 1px solid var(--ttj-gold-500); border-radius: var(--ttj-radius-lg); box-shadow: var(--ttj-shadow-md); padding: var(--ttj-space-5); }
+.feature .en { display: block; font-family: var(--ttj-font-mono); font-size: 0.75rem; letter-spacing: 0.22em; color: var(--ttj-gold-400); }
+.feature h2 { color: #fff; font-size: clamp(1.3rem, 4.6vw, var(--ttj-text-xl)); font-weight: 600; margin-top: var(--ttj-space-1); }
+.feature .f-lead { margin: var(--ttj-space-3) 0 var(--ttj-space-4); max-width: 44rem; color: var(--ttj-navy-100); font-size: var(--ttj-text-sm); }
+.feature .f-shot { display: block; border: 1px solid rgba(201,162,39,0.55); border-radius: var(--ttj-radius-md); overflow: hidden; background: #060a14; }
+.feature .f-shot img { display: block; width: 100%; height: auto; }
+.f-actions { display: flex; flex-wrap: wrap; gap: var(--ttj-space-3); margin-top: var(--ttj-space-4); }
+.f-actions a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--ttj-space-5); border-radius: var(--ttj-radius-sm); border: 1px solid var(--ttj-gold-500); color: var(--ttj-gold-200); background: rgba(201,162,39,0.1); font-weight: 700; text-decoration: none; transition: background .2s ease, color .2s ease; }
+.f-actions a.main { background: var(--ttj-gold-500); color: var(--ttj-navy-900); }
+.f-actions a:hover, .f-actions a:focus-visible { background: var(--ttj-gold-200); color: var(--ttj-navy-900); border-color: var(--ttj-gold-200); }
+@media (min-width: 820px) { .feature-box { padding: var(--ttj-space-6); } }
+
 /* Cards */
 .cards { display: grid; gap: var(--ttj-space-5); grid-template-columns: 1fr; }
 .card {
@@ -240,6 +264,24 @@ footer a:hover { color: var(--ttj-gold-200); }
 </header>
 
 <main>
+  <section class="feature" aria-labelledby="h-map">
+    <div class="wrap">
+      <div class="feature-box">
+        <span class="en">Learning Map</span>
+        <h2 id="h-map">学習全体マップ — 通信の講義室とコア講義、89章を1枚で俯瞰</h2>
+        <p class="f-lead">通信の講義室（55章）とコアネットワーク講義（34章）を、通信の流れ（横）と習熟の段（縦）で1枚に並べました。入門から実務、一人前までの道筋を選び、いまの読了状況を地図の上で確かめられます。</p>
+        <a class="f-shot" href="learning-map/" aria-label="学習全体マップを開く">
+          <img src="../docs/images/learning-map.png" width="1600" height="900" alt="通信の講義室とコアネットワーク講義の89章を、横に通信の流れ、縦に習熟の段で並べた地図。各章が点で表され、章番号が書かれている。" loading="eager">
+        </a>
+        <div class="f-actions">
+          <a class="main" href="learning-map/">地図を開く</a>
+          <a href="sdv-dojo/">通信の講義室へ</a>
+          <a href="core-network/">コアネットワーク講義へ</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section aria-labelledby="h-profile">
     <div class="wrap">
       <div class="sec-head"><span class="en">Profile</span><h2 id="h-profile">プロフィール</h2></div>

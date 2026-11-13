@@ -730,6 +730,127 @@ table.imei-luhn tr.imei-r-contrib td{color:var(--new-ink);font-weight:700;}
 @media print{
   .imei-d[aria-pressed="true"]{box-shadow:none;}
 }
+
+/* ===== 全体マップ（学習ロードマップ）と NEXT STAGE ===== */
+.gh-band{margin:0;background:linear-gradient(160deg,#060F1D 0%,#0B1F3A 60%,#14305A 100%);color:var(--ttj-text-inverse);border-bottom:1px solid var(--ttj-gold-500);padding:26px 0 30px;position:relative;z-index:1;}
+.gh-band .lh-map{margin-bottom:0;}
+.gh-band-in{max-width:1100px;margin:0 auto 18px;padding:0 16px;}
+.gh-eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--ttj-gold-400);margin:0 0 6px;}
+.gh-band-lead{font-size:15px;line-height:1.8;color:var(--ttj-navy-100);max-width:46em;margin:0 0 14px;}
+.gh-actions{display:flex;flex-wrap:wrap;gap:10px;}
+.gh-btn{display:inline-flex;align-items:center;min-height:44px;padding:8px 18px;border-radius:var(--ttj-radius-sm);border:1px solid var(--ttj-gold-500);color:var(--ttj-gold-200);background:rgba(201,162,39,.1);font-weight:700;font-size:14px;letter-spacing:.04em;text-decoration:none;}
+.gh-btn:hover,.gh-btn:focus-visible{background:var(--ttj-gold-500);color:var(--ttj-navy-900);}
+html[data-theme="dark"] .gh-band a.gh-btn{color:var(--ttj-gold-200);}
+html[data-theme="dark"] .gh-band a.gh-btn:hover{color:var(--ttj-navy-900);}
+.gh-btn.sub{border-color:rgba(245,241,227,.4);background:transparent;color:var(--ttj-text-inverse);}
+.ns-end{margin:40px 0 0;}
+.ns-card{display:block;text-decoration:none;color:var(--ttj-text-inverse);background:linear-gradient(160deg,#060F1D,#14305A);border:1px solid var(--ttj-gold-500);border-radius:var(--ttj-radius-md);padding:20px 22px;}
+.ns-card:hover,.ns-card:focus-visible{box-shadow:0 0 0 3px rgba(201,162,39,.35);}
+.ns-card .ns-tag{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--ttj-gold-400);}
+.ns-card b{display:block;font-family:var(--serif);font-size:18px;margin:6px 0 4px;color:#fff;}
+.ns-card .d{display:block;font-size:14px;line-height:1.8;color:var(--ttj-navy-100);}
+html[data-theme="dark"] a.ns-card{color:var(--ttj-text-inverse);}
+nav#side a.ns-nav{margin-top:14px;border-left-color:var(--ttj-gold-500);color:var(--text);font-weight:700;}
+
+/* ======================================================================
+   全体マップ（ROADMAP）：講義室ヒーローの NEXT STAGE と TRACKS の間
+   色はすべて --m-* の変数。読書モード（html[data-theme="light"]）で差し替える
+   ====================================================================== */
+.lh-map{
+  --font:"Noto Sans JP","Hiragino Sans","Yu Gothic UI",system-ui,sans-serif; --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --df-radius-sm:6px; --df-ease:cubic-bezier(.2,.7,.2,1);
+  --m-bg:#060a14; --m-panel:#0e182e; --m-line:rgba(212,177,90,.18); --m-line2:rgba(212,177,90,.40);
+  --m-text:#f4f0e6; --m-text2:#cfcabb; --m-dim:#9aa2b4;
+  --m-gold:#d4b15a; --m-goldink:#d4b15a; --m-chipink:#060a14;
+  --m-red:#e5566d; --m-redline:#b5173a;
+  --m-blue:#8fb0ea; --m-bluefill:#3f64a8; --m-pipe:#4f74b8; --m-ktint:rgba(19,36,74,.35); --m-readtext:#f4f0e6;
+  position:relative;z-index:3;box-sizing:border-box;margin:0 0 40px;padding:18px 0 14px;
+  border:1px solid var(--m-line2);border-radius:var(--df-radius-sm);background:var(--m-bg);color:var(--m-text);
+}
+
+.lh-map > :not(.lm-stage):not(.lm-tip){margin-left:18px;margin-right:18px;}
+.lm-head{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;margin-bottom:8px;}
+.lh-map h2.lm-h,.lh-map .lm-head h2{font-family:var(--mono);font-weight:400;font-size:18px;letter-spacing:.14em;color:var(--m-goldink);margin:0;border:0;padding:0;}
+.lm-count{font-size:14px;color:var(--m-text2);letter-spacing:.04em;}
+.lm-save{display:flex;gap:10px;margin-left:auto;}
+.lm-btn{font-family:var(--font);font-size:14px;letter-spacing:.06em;color:var(--m-text);background:transparent;border:1px solid var(--m-redline);border-radius:6px;padding:8px 16px;min-height:44px;cursor:pointer;transition:background .3s var(--df-ease),border-color .3s var(--df-ease);}
+.lm-btn:hover{background:rgba(181,23,58,.16);}
+.lm-btn:focus-visible,.lm-route:focus-visible,.lm-skip:focus,.lm-table summary:focus-visible{outline:2px solid var(--m-gold);outline-offset:3px;}
+.lm-desc{font-size:15px;line-height:1.8;color:var(--m-text2);margin-top:0;margin-bottom:6px;max-width:60em;}
+.lm-msg{font-size:13px;color:var(--m-text2);min-height:0;margin-top:0;margin-bottom:4px;}
+.lm-msg:empty{display:none;}
+.lm-routes{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px;margin-bottom:12px;}
+.lm-route{flex:1 1 220px;max-width:420px;display:block;text-align:left;font-family:var(--font);color:var(--m-text);background:var(--m-panel);border:1px solid var(--m-line);border-radius:6px;padding:10px 14px 9px;min-height:44px;cursor:pointer;transition:border-color .3s var(--df-ease),background .3s var(--df-ease);}
+.lm-route .n{display:block;font-size:15px;font-weight:700;letter-spacing:.02em;}
+.lm-route .d{display:block;font-size:13.5px;line-height:1.6;color:var(--m-text2);margin-top:2px;}
+.lm-route:hover{border-color:var(--m-line2);}
+.lm-route[aria-checked="true"]{border-color:var(--m-gold);border-width:2px;padding:9px 13px 8px;background:var(--m-ktint);}
+.lm-route[aria-checked="true"] .n{color:var(--m-goldink);}
+.lm-skip{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;}
+.lm-skip:focus{position:static;display:inline-block;width:auto;height:auto;overflow:visible;margin-bottom:8px;padding:6px 12px;background:var(--m-panel);color:var(--m-text);border:1px solid var(--m-gold);border-radius:4px;font-size:14px;}
+.lm-stage{position:relative;line-height:0;}
+.lm-svg{display:block;width:100%;height:auto;}
+.lm-svg a.mn{outline:none;cursor:pointer;text-decoration:none;}
+.lm-svg .mb{transform-box:fill-box;transform-origin:center;transition:transform .15s var(--df-ease);}
+.lm-svg a.mn:hover .mb,.lm-svg a.mn:focus-visible .mb{transform:scale(1.12);}
+.lm-svg .fr{display:none;}
+.lm-svg a.mn:focus-visible .fr,.lm-svg a.mn.sel .fr{display:inline;}
+.lm-svg path.rt{stroke-dasharray:1;stroke-dashoffset:0;transition:stroke-dashoffset .6s var(--df-ease);}
+.lm-svg path.rt.rt0{stroke-dashoffset:1;}
+.lm-svg text{-webkit-user-select:none;user-select:none;}
+.lm-tip{position:absolute;z-index:6;max-width:320px;min-width:160px;padding:10px 12px;background:var(--m-panel);border:1px solid var(--m-line2);border-radius:6px;pointer-events:none;line-height:1.55;box-sizing:border-box;}
+.lm-tip[hidden],.lm-detail[hidden]{display:none;}
+.lm-tip .k,.lm-card .k{font-size:14px;color:var(--m-dim);}
+.lm-tip .t,.lm-card .t{font-size:16px;color:var(--m-text);font-weight:500;margin:1px 0 3px;}
+.lm-tip .m,.lm-card .m{font-size:14px;color:var(--m-text2);}
+.lm-detail{margin-top:12px;padding:12px 14px;border:1px solid var(--m-line2);border-radius:6px;background:var(--m-panel);}
+.lm-detail .lm-open{margin-top:10px;min-height:48px;}
+.lm-table{margin-top:14px;}
+.lm-table summary{cursor:pointer;font-size:14px;color:var(--m-text2);padding:6px 0;min-height:44px;display:flex;align-items:center;}
+.lm-note{font-size:13.5px;color:var(--m-text2);margin:4px 0 8px;}
+.lm-table .tbl-wrap{max-height:420px;overflow:auto;}
+@media(max-width:700px){
+  .lh-map{margin-bottom:28px;padding-top:14px;border-left:0;border-right:0;border-radius:0;}
+  .lh-map > :not(.lm-stage):not(.lm-tip){margin-left:12px;margin-right:12px;}
+  .lm-save{margin-left:0;width:100%;}
+  .lm-save .lm-btn{flex:1 1 0;}
+  .lm-route{flex:1 1 100%;max-width:none;}
+}
+@media(prefers-reduced-motion:reduce){
+  .lm-svg .mb{transition:none;}
+  .lm-svg a.mn:hover .mb,.lm-svg a.mn:focus-visible .mb{transform:none;}
+  .lm-svg a.mn:hover .sh,.lm-svg a.mn:focus-visible .sh{stroke:var(--m-gold);stroke-width:3.5;}
+  .lm-svg path.rt{transition:none;}
+}
+.lh-map .lm-detail{position:sticky;bottom:10px;z-index:7;}
+
+.lm-stage[data-layout="v"]{max-width:760px;margin-left:auto;margin-right:auto;}
+.lm-order-box{margin-top:18px;}
+.lh-map .lm-order-h{font-size:16px;font-weight:700;letter-spacing:.04em;color:var(--m-goldink);margin:0 0 8px;border:0;padding:0;}
+.lm-order{list-style:decimal;margin:0;padding:0 0 0 2.2em;columns:1;column-gap:32px;}
+@media(min-width:900px){.lm-order{columns:2;}}
+.lm-order li{break-inside:avoid;margin:0;padding:0;font-size:15px;line-height:1.5;color:var(--m-text2);}
+.lm-order li::marker{color:var(--m-goldink);font-weight:700;}
+.lm-order li a{display:flex;align-items:baseline;gap:8px;padding:7px 8px;min-height:44px;box-sizing:border-box;color:var(--m-text);text-decoration:none;border-radius:4px;}
+.lm-order li a:hover{background:var(--m-ktint);}
+.lm-order li a:focus-visible{outline:2px solid var(--m-gold);outline-offset:1px;}
+.lm-order .no{flex:none;min-width:2.6em;font-family:var(--mono);font-weight:700;color:var(--m-blue);}
+.lm-order .tt{flex:0 1 auto;}
+.lm-order .st{flex:none;font-size:13px;color:var(--m-text2);border:1px solid var(--m-line2);border-radius:999px;padding:0 8px;}
+.lm-order .st.cur{color:var(--m-red);border-color:var(--m-red);font-weight:700;}
+.lm-order li.rd .tt{color:var(--m-text2);}
+
+.lh-map .lm-open{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:10px 22px;border:1px solid var(--m-gold);border-radius:6px;background:rgba(212,177,90,.12);color:var(--m-goldink);font-family:var(--font);font-size:15px;font-weight:700;letter-spacing:.06em;text-decoration:none;}
+.lh-map .lm-open:hover{background:rgba(212,177,90,.24);}
+.lh-map .lm-open:focus-visible{outline:2px solid var(--m-gold);outline-offset:3px;}
+.lh-map h2,.lh-map h3,.lh-map p,.lh-map ol,.lh-map li{font-family:var(--font);}
+.lh-map .lm-head h2{font-family:var(--mono);}
+.lh-map a{color:inherit;}
+.lh-map .tbl-wrap{overflow:auto;border:1px solid var(--m-line);border-radius:6px;}
+.lh-map table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.5;color:var(--m-text);}
+.lh-map th,.lh-map td{padding:8px 12px;border-bottom:1px solid var(--m-line);text-align:left;white-space:nowrap;}
+.lh-map th{position:sticky;top:0;background:var(--m-panel);color:var(--m-goldink);}
+.lh-map td a{color:var(--m-blue);}
 </style>
 </head>
 <body>
@@ -742,6 +863,46 @@ table.imei-luhn tr.imei-r-contrib td{color:var(--new-ink);font-weight:700;}
   <div id="prog" role="progressbar" aria-label="読了の進捗" aria-valuemin="0" aria-valuemax="55" aria-valuenow="0"><i></i></div>
 </header>
 <div id="scrim"></div>
+<section class="gh-band" aria-label="学習全体マップ">
+  <div class="gh-band-in">
+    <p class="gh-eyebrow">LEARNING MAP ・ 89 CHAPTERS</p>
+    <p class="gh-band-lead">通信の講義室（55章）とコアネットワーク講義（34章）を、通信の流れと習熟の段で1枚に並べた地図です。点を押すと、その章へ移動します。</p>
+    <div class="gh-actions">
+      <a class="gh-btn" href="#hero">講義を始める（第0章へ）</a>
+      <a class="gh-btn sub" href="../learning-map/">地図を単体で開く</a>
+      <a class="gh-btn sub" id="nsHero" href="../core-network/">NEXT STAGE：コアネットワーク講義（全34章）へ</a>
+    </div>
+  </div>
+    <section class="lh-map" id="lhMap" aria-labelledby="lhMapTitle">
+      <div class="lm-head">
+        <h2 id="lhMapTitle">ROADMAP ― 89章の地図</h2>
+        <span class="lm-count" id="lhMapCount"></span>
+        <div class="lm-save">
+          <button type="button" class="lm-btn" id="lhMapSaveSvg">SVG で保存</button>
+          <button type="button" class="lm-btn" id="lhMapSavePng">PNG で保存</button>
+        </div>
+      </div>
+      <p class="lm-desc">車の通信機から基地局、コア網、海外の網、そして契約と規制まで。横が通信の流れ、縦が習熟の段です。点を押すと、その章へ移動します。</p>
+      <p class="lm-msg" id="lhMapSaveMsg" role="status" aria-live="polite"></p>
+      <div class="lm-routes" id="lhMapRoutes" role="radiogroup" aria-label="学習ルート"></div>
+      <a class="lm-skip" href="#lhTracksTitle">地図を飛ばす</a>
+      <div class="lm-stage" id="lhMapStage"></div>
+      <div class="lm-tip" id="lhMapTip" aria-hidden="true" hidden></div>
+      <section class="lm-order-box" aria-labelledby="lhMapOrderH">
+        <h3 class="lm-order-h" id="lhMapOrderH"></h3>
+        <ol class="lm-order" id="lhMapOrder"></ol>
+      </section>
+      <div class="lm-detail" id="lhMapDetail" aria-live="polite" hidden></div>
+      <details class="lm-table">
+        <summary>地図を表で見る</summary>
+        <p class="lm-note">今後追加予定の領域：V2X、衛星 NTN、型式認証、データ保護、折衝・RFP。</p>
+        <div class="tbl-wrap tall" tabindex="0" role="region" aria-label="全89章の表：横にスクロールできます">
+          <table><thead><tr><th scope="col">章</th><th scope="col">タイトル</th><th scope="col">領域</th><th scope="col">段</th><th scope="col">読了</th></tr></thead><tbody id="lhMapRows"></tbody></table>
+        </div>
+      </details>
+    </section>
+</section>
+<h2 id="lhTracksTitle" class="sr-only" tabindex="-1">講義室の本文</h2>
 <div class="wrap">
 
 <nav id="side" aria-label="目次">
@@ -815,6 +976,7 @@ table.imei-luhn tr.imei-r-contrib td{color:var(--new-ink);font-weight:700;}
   <a href="#pro-imei-anatomy"><b>53</b>端末識別子の解剖学</a>
   <a href="#pro-imei-ledger"><b>54</b>TACと機器台帳</a>
   <a href="#pro-imei-network"><b>55</b>IMEIとネットワーク</a>
+  <a class="ns-nav" href="../core-network/"><b>NEXT</b>コアネットワーク講義へ</a>
 </nav>
 
 <main>
@@ -1540,10 +1702,16 @@ AT+CGSN=3      （新しい版：SVN）</code></pre>
 <div class="sdv-refs"><span>原典・関連資料</span><a class="sdv-spec" data-spec="TS 24.301" href="https://www.3gpp.org/dynareport/24301.htm">TS 24.301</a><a class="sdv-spec" data-spec="TS 24.501" href="https://www.3gpp.org/dynareport/24501.htm">TS 24.501</a><a class="sdv-spec" data-spec="TS 29.272" href="https://www.3gpp.org/dynareport/29272.htm">TS 29.272</a><a class="sdv-spec" data-spec="TS 29.511" href="https://www.3gpp.org/dynareport/29511.htm">TS 29.511</a><a class="sdv-spec" data-spec="TS 22.016" href="https://www.3gpp.org/dynareport/22016.htm">TS 22.016</a><a class="sdv-spec" data-spec="TS 23.003" href="https://www.3gpp.org/dynareport/23003.htm">TS 23.003</a></div>
 </div></details></section>
 
+<div class="ns-end"><a class="ns-card" id="nsEnd" href="../core-network/">
+  <span class="ns-tag">NEXT STAGE</span>
+  <b>コアネットワーク講義 4G EPC / 5G 5GC（全34章）へ</b>
+  <span class="d">端末と SIM の次は、網の中身へ。EPC と 5GC の構成、手順、鍵、ローミングを34章で学びます。</span>
+</a></div>
+
 <footer>
   <p>© TTJ — TED TRADING JAPAN G.K.　／　作：ビッグマウンテンテツヤ / TTJ</p>
   <p>「通信の講義室 ― eSIM・IoT 実務大全（全55章）」公開版 v2.1 ― 基礎20章に実務編35章を加えた構成です。本教材は 3GPP／GSMA／ITU-T／CEN 等の公開規格および一般公開情報のみに基づき構成した教育用資料であり、特定事業者の非公開情報を含みません。規格の最新版は必ず各標準化団体の原典を確認のこと。図中の番号・構成はすべて教材用の簡略例です。一般的な仕組み、製品固有の条件、教材用の例を区別して書いています。規格・商品・法規の確認基準日：2026年9月6日。具体的な設定は、機種・FW・加入商品・市場の合意版に従ってください。</p>
-  <p><a href="../index.html">ポートフォリオへ戻る</a><button type="button" class="fbtn" id="resetProg">学習記録をリセット</button></p>
+  <p><a href="../index.html">ポートフォリオへ戻る</a>　<a href="../learning-map/">学習全体マップ</a>　<a href="../core-network/">コアネットワーク講義</a><button type="button" class="fbtn" id="resetProg">学習記録をリセット</button></p>
 </footer>
 
 </main>
@@ -2777,7 +2945,7 @@ document.getElementById('quizReset').onclick=()=>{
  }
  function markRead(id){
   if(read.has(id)||!TRACK.includes(id))return;
-  read.add(id);store.set('sdv.read',JSON.stringify([...read]));renderProg();
+  read.add(id);store.set('sdv.read',JSON.stringify([...read]));renderProg();document.dispatchEvent(new CustomEvent('sdv:read'));
  }
  renderProg();
  const timers={};let moved=false;
@@ -3620,6 +3788,613 @@ function annotate(node){
 annotate(document.querySelector('main'));
 const observer=new MutationObserver(records=>{for(const rec of records)for(const node of rec.addedNodes)annotate(node);});observer.observe(document.querySelector('main'),{childList:true,subtree:true});
 })();
+</script>
+<script>
+/* 全体マップのデータ（gen_map_data.py が MAP-SPEC.md 第4・5節と chapters.md から生成）。章の配置・ルートはここだけ */
+var MAPDATA={"cols":[{"k":"T","name":"車両・端末","x":80,"w":190,"icon":"tcu","label":"TCU"},{"k":"S","name":"SIM・eSIM","x":270,"w":240,"icon":"sim","label":"SIM / eUICC"},{"k":"W","name":"無線","x":510,"w":230,"icon":"ran","label":"基地局"},{"k":"K","name":"コア網・データ","x":740,"w":520,"icon":"core","label":"コア網"},{"k":"V","name":"音声・SMS・緊急","x":1260,"w":230,"icon":"voice","label":"IMS / SMSC / PSAP"},{"k":"R","name":"事業者間・ローミング","x":1490,"w":160,"icon":"world","label":"海外の網"},{"k":"B","name":"契約・規制・案件運営","x":1650,"w":270,"icon":"doc","label":"契約・規制"}],"zones":[{"k":"X1","name":"セキュリティ","x":80,"w":680},{"k":"X2","name":"規格の読解","x":760,"w":500},{"k":"X3","name":"演習・用語・参照","x":1260,"w":660}],"stages":{"in":"入門","pr":"実務","ad":"一人前","x1":"横断","x2":"横断","x3":"横断"},"chapters":[{"id":"S01","course":"sdv","num":"01","title":"移動通信の世代史 ― 1Gから5Gまで","col":"W","stage":"in","href":"#gen","readKey":"gen"},{"id":"S02","course":"sdv","num":"02","title":"ネットワークの骨格","col":"K","stage":"in","href":"#arch","readKey":"arch"},{"id":"S03","course":"sdv","num":"03","title":"SIMの解剖学 ― 三つの番号を触って覚える","col":"S","stage":"in","href":"#sim","readKey":"sim"},{"id":"S04","course":"sdv","num":"04","title":"eSIM／RSP三規格 ― SGP.02・SGP.22・SGP.32","col":"S","stage":"in","href":"#esim","readKey":"esim"},{"id":"S05","course":"sdv","num":"05","title":"音声の移行 ― CSからVoLTE、そしてVoNRへ","col":"V","stage":"in","href":"#voice","readKey":"voice"},{"id":"S06","course":"sdv","num":"06","title":"SMSの移行 ― 四つの運ばれ方","col":"V","stage":"in","href":"#sms","readKey":"sms"},{"id":"S07","course":"sdv","num":"07","title":"国際ローミング ― S8HRとLBO","col":"R","stage":"in","href":"#roam","readKey":"roam"},{"id":"S08","course":"sdv","num":"08","title":"IoT通信実務 ― 機器と網の間に立つ","col":"S","stage":"in","href":"#car","readKey":"car"},{"id":"S09","course":"sdv","num":"09","title":"プロファイルの解剖学 ― SIMの「中身」はこう作られる","col":"S","stage":"pr","href":"#profile","readKey":"profile"},{"id":"S10","course":"sdv","num":"10","title":"受け渡しの実務 ― Input File / Output File とチップメーカー","col":"S","stage":"pr","href":"#iofile","readKey":"iofile"},{"id":"S11","course":"sdv","num":"11","title":"番号情報の旅 ― SIMごとのMSISDNをサービスサーバーへ","col":"S","stage":"pr","href":"#numjour","readKey":"numjour"},{"id":"S12","course":"sdv","num":"12","title":"回線管理プラットフォーム（CMP） ― コアネットワークとの位置付け","col":"B","stage":"in","href":"#cmp","readKey":"cmp"},{"id":"S13","course":"sdv","num":"13","title":"IPプール・IPv6・DNSフィルタ ― データ土管の「住所」と「関所」","col":"K","stage":"pr","href":"#ipdns","readKey":"ipdns"},{"id":"S14","course":"sdv","num":"14","title":"eCall / PSAP 深掘り ― 失敗が許されない通話","col":"V","stage":"pr","href":"#ecall","readKey":"ecall"},{"id":"S15","course":"sdv","num":"15","title":"ATコマンド実践 ― 黒画面の素振り","col":"T","stage":"in","href":"#atcmd","readKey":"atcmd"},{"id":"S16","course":"sdv","num":"16","title":"3GPP読解入門 ― 仕様書という言語","col":"X2","stage":"x2","href":"#spec3gpp","readKey":"spec3gpp"},{"id":"S17","course":"sdv","num":"17","title":"位置・通信観測の基礎 ― LTE/5Gとローミング","col":"K","stage":"pr","href":"#observe","readKey":"observe"},{"id":"S18","course":"sdv","num":"18","title":"用語集","col":"X3","stage":"x3","href":"#glossary","readKey":"glossary"},{"id":"S19","course":"sdv","num":"19","title":"実戦演習 ― ログ・トリアージ道場","col":"X3","stage":"x3","href":"#drill","readKey":"drill"},{"id":"S20","course":"sdv","num":"20","title":"理解度チェック ― 24問（基礎20問＋端末識別子4問）","col":"X3","stage":"x3","href":"#quiz","readKey":"quiz"},{"id":"S21","course":"sdv","num":"21","title":"企業と装置の責任分担を、一枚でつかむ","col":"B","stage":"in","href":"#pro-roles","readKey":"pro-roles"},{"id":"S22","course":"sdv","num":"22","title":"IMSI・MSISDN・ICCID・EID――採番と台帳の基礎","col":"S","stage":"pr","href":"#pro-numbers","readKey":"pro-numbers"},{"id":"S23","course":"sdv","num":"23","title":"誰がプロファイルを「焼く」のか","col":"S","stage":"pr","href":"#pro-personalize","readKey":"pro-personalize"},{"id":"S24","course":"sdv","num":"24","title":"Input／Output File――企業間のデータ往復を設計する","col":"S","stage":"ad","href":"#pro-files","readKey":"pro-files"},{"id":"S25","course":"sdv","num":"25","title":"SGP.02・SGP.22・SGP.32――同じeSIMでも経路が違う","col":"S","stage":"ad","href":"#pro-rsp","readKey":"pro-rsp"},{"id":"S26","course":"sdv","num":"26","title":"五つの状態をそろえて、初めて「開通」と呼ぶ","col":"S","stage":"ad","href":"#pro-states","readKey":"pro-states"},{"id":"S27","course":"sdv","num":"27","title":"無線区間・コア・認証を、制御とデータに分ける","col":"K","stage":"in","href":"#pro-core","readKey":"pro-core"},{"id":"S28","course":"sdv","num":"28","title":"IP・DNS・TCP・TLS――インターネットの基礎を現場の言葉へ","col":"K","stage":"in","href":"#pro-internet","readKey":"pro-internet"},{"id":"S29","course":"sdv","num":"29","title":"APN／DNN――端末・加入者・出口の設定をそろえる","col":"K","stage":"pr","href":"#pro-apn","readKey":"pro-apn"},{"id":"S30","course":"sdv","num":"30","title":"IP Pool・NAT・IPv6――キャリアの割当設計","col":"K","stage":"ad","href":"#pro-pool","readKey":"pro-pool"},{"id":"S31","course":"sdv","num":"31","title":"一台の車両がOEMサーバーへ届くまで","col":"K","stage":"pr","href":"#pro-data-path","readKey":"pro-data-path"},{"id":"S32","course":"sdv","num":"32","title":"SMSの経路大全――APIからTCUアプリまで","col":"V","stage":"pr","href":"#pro-sms-path","readKey":"pro-sms-path"},{"id":"S33","course":"sdv","num":"33","title":"SMS障害を、受付から車両アプリまで追う","col":"V","stage":"ad","href":"#pro-sms-trouble","readKey":"pro-sms-trouble"},{"id":"S34","course":"sdv","num":"34","title":"データ通信障害の実戦手順","col":"K","stage":"ad","href":"#pro-data-trouble","readKey":"pro-data-trouble"},{"id":"S35","course":"sdv","num":"35","title":"接続元・接続先のフィルタリングを設計する","col":"K","stage":"ad","href":"#pro-filtering","readKey":"pro-filtering"},{"id":"S36","course":"sdv","num":"36","title":"メーカーが準備する大全","col":"T","stage":"pr","href":"#pro-oem-ready","readKey":"pro-oem-ready"},{"id":"S37","course":"sdv","num":"37","title":"TCUの設定・統合・量産準備","col":"T","stage":"pr","href":"#pro-tcu-ready","readKey":"pro-tcu-ready"},{"id":"S38","course":"sdv","num":"38","title":"eCallを独立したサービスとして成立させる","col":"V","stage":"ad","href":"#pro-ng-ecall","readKey":"pro-ng-ecall"},{"id":"S39","course":"sdv","num":"39","title":"3G停波を、国・網・サービス単位で乗り越える","col":"W","stage":"pr","href":"#pro-sunset","readKey":"pro-sunset"},{"id":"S40","course":"sdv","num":"40","title":"5G化で変わるもの、引き継ぐもの","col":"W","stage":"ad","href":"#pro-fiveg","readKey":"pro-fiveg"},{"id":"S41","course":"sdv","num":"41","title":"プロジェクト初期に取り決めること","col":"B","stage":"pr","href":"#pro-kickoff","readKey":"pro-kickoff"},{"id":"S42","course":"sdv","num":"42","title":"TCUセキュリティの基礎をつかむ","col":"X1","stage":"x1","href":"#pro-tcu-security","readKey":"pro-tcu-security"},{"id":"S43","course":"sdv","num":"43","title":"作る・起動する・更新する・手放すまで守る","col":"X1","stage":"x1","href":"#pro-tcu-lifecycle","readKey":"pro-tcu-lifecycle"},{"id":"S44","course":"sdv","num":"44","title":"OEMサービスサーバーのセキュリティ設計","col":"X1","stage":"x1","href":"#pro-backend-security","readKey":"pro-backend-security"},{"id":"S45","course":"sdv","num":"45","title":"サーバーの鍵・監視・障害対応を回す","col":"X1","stage":"x1","href":"#pro-backend-operations","readKey":"pro-backend-operations"},{"id":"S46","course":"sdv","num":"46","title":"MNO担当者のセキュリティ大全","col":"X1","stage":"x1","href":"#pro-mno-security","readKey":"pro-mno-security"},{"id":"S47","course":"sdv","num":"47","title":"資格学習につながる基礎と、SOCの実務","col":"X1","stage":"x1","href":"#pro-security-study","readKey":"pro-security-study"},{"id":"S48","course":"sdv","num":"48","title":"回線管理PFのできること・できないこと","col":"B","stage":"pr","href":"#pro-platforms","readKey":"pro-platforms"},{"id":"S49","course":"sdv","num":"49","title":"パケットから請求書までを追う","col":"B","stage":"pr","href":"#pro-billing","readKey":"pro-billing"},{"id":"S50","course":"sdv","num":"50","title":"量産開始・変更・復旧のチェックリスト","col":"B","stage":"ad","href":"#pro-acceptance","readKey":"pro-acceptance"},{"id":"S51","course":"sdv","num":"51","title":"規格と企業の関係を地図で読む","col":"X2","stage":"x2","href":"#pro-standards","readKey":"pro-standards"},{"id":"S52","course":"sdv","num":"52","title":"実務演習：証拠から次の一手を決める","col":"B","stage":"ad","href":"#pro-capstone","readKey":"pro-capstone"},{"id":"S53","course":"sdv","num":"53","title":"端末識別子の解剖学 ― IMEI・IMEISV・PEI","col":"T","stage":"in","href":"#pro-imei-anatomy","readKey":"pro-imei-anatomy"},{"id":"S54","course":"sdv","num":"54","title":"TACと機器台帳 ― 型番・認証・IoT/車載の実務","col":"T","stage":"pr","href":"#pro-imei-ledger","readKey":"pro-imei-ledger"},{"id":"S55","course":"sdv","num":"55","title":"IMEIとネットワーク ― 照会・EIR・保護","col":"T","stage":"ad","href":"#pro-imei-network","readKey":"pro-imei-network"},{"id":"C01","course":"cn","num":"01","title":"コアネットワークとは何か","col":"K","stage":"in","href":"../core-network/#ch01","readKey":"01"},{"id":"C02","course":"cn","num":"02","title":"世代の移り変わり","col":"K","stage":"in","href":"../core-network/#ch02","readKey":"02"},{"id":"C03","course":"cn","num":"03","title":"5G の導入形態","col":"W","stage":"pr","href":"../core-network/#ch03","readKey":"03"},{"id":"C04","course":"cn","num":"04","title":"EPC のノードと役割","col":"K","stage":"in","href":"../core-network/#ch04","readKey":"04"},{"id":"C05","course":"cn","num":"05","title":"インタフェースとプロトコル","col":"K","stage":"pr","href":"../core-network/#ch05","readKey":"05"},{"id":"C06","course":"cn","num":"06","title":"識別子","col":"K","stage":"pr","href":"../core-network/#ch06","readKey":"06"},{"id":"C07","course":"cn","num":"07","title":"状態とモビリティ管理","col":"K","stage":"pr","href":"../core-network/#ch07","readKey":"07"},{"id":"C08","course":"cn","num":"08","title":"Attach を一手ずつ","col":"K","stage":"pr","href":"../core-network/#ch08","readKey":"08"},{"id":"C09","course":"cn","num":"09","title":"ベアラと QoS","col":"K","stage":"pr","href":"../core-network/#ch09","readKey":"09"},{"id":"C10","course":"cn","num":"10","title":"接続の出入り","col":"K","stage":"pr","href":"../core-network/#ch10","readKey":"10"},{"id":"C11","course":"cn","num":"11","title":"ハンドオーバー","col":"W","stage":"ad","href":"../core-network/#ch11","readKey":"11"},{"id":"C12","course":"cn","num":"12","title":"認証とセキュリティ","col":"K","stage":"pr","href":"../core-network/#ch12","readKey":"12"},{"id":"C13","course":"cn","num":"13","title":"音声との関係","col":"V","stage":"pr","href":"../core-network/#ch13","readKey":"13"},{"id":"C14","course":"cn","num":"14","title":"5GC の考え方","col":"K","stage":"pr","href":"../core-network/#ch14","readKey":"14"},{"id":"C15","course":"cn","num":"15","title":"NF と役割","col":"K","stage":"pr","href":"../core-network/#ch15","readKey":"15"},{"id":"C16","course":"cn","num":"16","title":"参照点とプロトコル","col":"K","stage":"ad","href":"../core-network/#ch16","readKey":"16"},{"id":"C17","course":"cn","num":"17","title":"識別子","col":"K","stage":"pr","href":"../core-network/#ch17","readKey":"17"},{"id":"C18","course":"cn","num":"18","title":"登録（Registration）を一手ずつ","col":"K","stage":"pr","href":"../core-network/#ch18","readKey":"18"},{"id":"C19","course":"cn","num":"19","title":"PDU セッション確立","col":"K","stage":"pr","href":"../core-network/#ch19","readKey":"19"},{"id":"C20","course":"cn","num":"20","title":"QoS モデル","col":"K","stage":"ad","href":"../core-network/#ch20","readKey":"20"},{"id":"C21","course":"cn","num":"21","title":"状態とモビリティ","col":"K","stage":"ad","href":"../core-network/#ch21","readKey":"21"},{"id":"C22","course":"cn","num":"22","title":"認証とセキュリティ","col":"K","stage":"ad","href":"../core-network/#ch22","readKey":"22"},{"id":"C23","course":"cn","num":"23","title":"ネットワークスライシング","col":"K","stage":"ad","href":"../core-network/#ch23","readKey":"23"},{"id":"C24","course":"cn","num":"24","title":"エッジとユーザープレーンの柔軟性","col":"K","stage":"ad","href":"../core-network/#ch24","readKey":"24"},{"id":"C25","course":"cn","num":"25","title":"音声（VoNR と EPS フォールバック）","col":"V","stage":"ad","href":"../core-network/#ch25","readKey":"25"},{"id":"C26","course":"cn","num":"26","title":"4G と 5G のインターワーキング","col":"K","stage":"ad","href":"../core-network/#ch26","readKey":"26"},{"id":"C27","course":"cn","num":"27","title":"ローミング","col":"R","stage":"pr","href":"../core-network/#ch27","readKey":"27"},{"id":"C28","course":"cn","num":"28","title":"課金とポリシー","col":"B","stage":"ad","href":"../core-network/#ch28","readKey":"28"},{"id":"C29","course":"cn","num":"29","title":"ノードの選び方と名前解決","col":"K","stage":"ad","href":"../core-network/#ch29","readKey":"29"},{"id":"C30","course":"cn","num":"30","title":"冗長化と容量","col":"K","stage":"ad","href":"../core-network/#ch30","readKey":"30"},{"id":"C31","course":"cn","num":"31","title":"IoT 向けの機能","col":"W","stage":"pr","href":"../core-network/#ch31","readKey":"31"},{"id":"C32","course":"cn","num":"32","title":"障害の見方","col":"K","stage":"ad","href":"../core-network/#ch32","readKey":"32"},{"id":"C33","course":"cn","num":"33","title":"規格の歩き方","col":"X2","stage":"x2","href":"../core-network/#ch33","readKey":"33"},{"id":"C34","course":"cn","num":"34","title":"4G⇔5G 対応表・用語集・総合テスト","col":"X3","stage":"x3","href":"../core-network/#ch34","readKey":"34"}],"planned":[{"id":"G-V2X","planned":true,"label":"V2X","col":"W","stage":"ad"},{"id":"G-NTN","planned":true,"label":"衛星 NTN","col":"W","stage":"ad"},{"id":"G-TYPE","planned":true,"label":"型式認証","col":"B","stage":"pr"},{"id":"G-DATA","planned":true,"label":"データ保護","col":"B","stage":"pr"},{"id":"G-RFP","planned":true,"label":"折衝・RFP","col":"B","stage":"ad"}],"routes":[{"k":"A","name":"最短","desc":"案件の全体像を、まず一周する","ids":["S03","S22","S27","S29","S31","S04","S25","S26","S06","S32","S05","S07","S41","S52"]},{"k":"B","name":"標準","desc":"案件で一人で動ける土台を作る","ids":["S01","S02","S03","S04","S05","S06","S07","S08","S13","S14","S15","S21","S22","S25","S26","S29","S31","S33","S34","S36","S38","S41","S49","S50","S52"]},{"k":"C","name":"コア網を深める","desc":"網の中を、手順とメッセージで説明できるようにする","ids":["S27","C01","C04","C05","C06","C08","C09","C12","C14","C15","C17","C18","C19","C20","C22","C26","C27","C28","C32","C33"]}],"groups":{"T|in":[["AT コマンド",["S15"]],["IMEI",["S53"]]],"T|pr":[["TCU 準備",["S36","S37"]],["機器台帳",["S54"]]],"T|ad":[["IMEI 照会",["S55"]]],"S|in":[["SIM",["S03"]],["eSIM",["S04"]],["IoT 実務",["S08"]]],"S|pr":[["プロファイル",["S09","S23"]],["番号と採番",["S11","S22"]],["受け渡し",["S10"]]],"S|ad":[["ファイル往復",["S24"]],["RSP 三規格",["S25"]],["開通の状態",["S26"]]],"W|in":[["世代史",["S01"]]],"W|pr":[["3G 停波",["S39"]],["5G 導入",["C03"]],["IoT 機能",["C31"]]],"W|ad":[["5G 化",["S40"]],["ハンドオーバー",["C11"]]],"K|in":[["全体像",["S02","S27","C01","C02"]],["IP・DNS",["S28"]],["EPC 構成",["C04"]]],"K|pr":[["データ経路",["S13","S29","S31"]],["通信観測",["S17"]],["プロトコル",["C05"]],["識別子",["C06","C17"]],["状態・移動",["C07"]],["接続手順",["C08","C10","C18","C19"]],["ベアラ・QoS",["C09"]],["鍵と認証",["C12"]],["5GC 構成",["C14","C15"]]],"K|ad":[["IP・フィルタ",["S30","S35"]],["参照点",["C16"]],["QoS",["C20"]],["状態・移動",["C21"]],["鍵と認証",["C22"]],["スライス・エッジ",["C23","C24"]],["4G/5G 連携",["C26"]],["運用設計",["C29","C30"]],["障害対応",["S34","C32"]]],"V|in":[["音声移行",["S05"]],["SMS 移行",["S06"]]],"V|pr":[["eCall",["S14"]],["SMS 経路",["S32"]],["音声",["C13"]]],"V|ad":[["SMS 障害",["S33"]],["NG eCall",["S38"]],["VoNR",["C25"]]],"R|in":[["国際ローミング",["S07"]]],"R|pr":[["ローミング",["C27"]]],"B|in":[["CMP",["S12"]],["役割分担",["S21"]]],"B|pr":[["キックオフ",["S41"]],["管理PF",["S48"]],["課金",["S49"]]],"B|ad":[["量産チェック",["S50"]],["実務演習",["S52"]],["課金・ポリシー",["C28"]]],"X1|x1":[["TCU",["S42","S43"]],["サーバー",["S44","S45"]],["MNO",["S46"]],["資格・SOC",["S47"]]],"X2|x2":[["3GPP 読解",["S16"]],["規格の歩き方",["S51","C33"]]],"X3|x3":[["用語集",["S18","C34"]],["実戦演習",["S19"]],["理解度",["S20"]]]}};
+
+/* ===== 全体マップ（学習ロードマップ）：MAP-SPEC.md に従う。データは map-data.js の MAPDATA だけ。
+   読了データは localStorage を読むだけ（書くのは学習ルートの選択 sdv.mapRoute のみ）。 ===== */
+(function(){
+ 'use strict';
+ var D=window.MAPDATA||(typeof MAPDATA!=='undefined'?MAPDATA:null);
+ var sec=document.getElementById('lhMap');
+ if(!sec||!D)return;
+ var $=function(id){return document.getElementById(id);};
+ var stageEl=$('lhMapStage'),tip=$('lhMapTip'),detail=$('lhMapDetail'),cntEl=$('lhMapCount'),tblBody=$('lhMapRows'),rgEl=$('lhMapRoutes');
+ var FONT="'Hiragino Sans','Noto Sans JP','Yu Gothic','Noto Sans CJK JP','Meiryo',sans-serif";
+ var NS='http://www.w3.org/2000/svg';
+ var reduce=window.matchMedia?window.matchMedia('(prefers-reduced-motion: reduce)'):{matches:false};
+ var HMIN=1300;
+
+ /* ---------- 保存先の読み書き（例外を出さない） ---------- */
+ function lsGet(k){
+  try{if(typeof store!=='undefined'&&store&&store.get)return store.get(k);}catch(e){}
+  try{return localStorage.getItem(k);}catch(e){return null;}
+ }
+ function lsSet(k,v){
+  try{if(typeof store!=='undefined'&&store&&store.set){store.set(k,v);return;}}catch(e){}
+  try{localStorage.setItem(k,v);}catch(e){}
+ }
+
+ /* ---------- データの前処理 ---------- */
+ var byId={},CH=D.chapters,COLS=D.cols,ZONES=D.zones,STG=D.stages;
+ CH.forEach(function(c){byId[c.id]=c;});
+ var COLNAME={};COLS.concat(ZONES).forEach(function(c){COLNAME[c.k]=c.name;});
+ var CELL={};
+ function cellKey(c,s){return c+'|'+s;}
+ Object.keys(D.groups).forEach(function(k){CELL[k]=[];D.groups[k].forEach(function(g){g[1].forEach(function(id){CELL[k].push(byId[id]);});});});
+ D.planned.forEach(function(it){CELL[cellKey(it.col,it.stage)].push(it);});
+ var GRID=[];                      /* 文書順のセル：列ごとに 入門・実務・一人前、そのあと横断帯 */
+ COLS.forEach(function(c){['in','pr','ad'].forEach(function(s){GRID.push({col:c.k,stage:s,list:CELL[cellKey(c.k,s)]||[]});});});
+ ZONES.forEach(function(z){GRID.push({col:z.k,stage:z.k.toLowerCase(),list:CELL[cellKey(z.k,z.k.toLowerCase())]||[]});});
+ var ORDER=[];
+ GRID.forEach(function(g){g.list.forEach(function(it){if(!it.planned)ORDER.push(it.id);});});
+ function kicker(it){return (it.course==='sdv'?'講義室 第':'コア講義 第')+it.num+'章';}
+ function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+ function tw(s,size){var w=0,i;for(i=0;i<s.length;i++)w+=s.charCodeAt(i)>255?size:size*.58;return w;}
+ function fmt(n){return Math.round(n*10)/10;}
+
+ /* ---------- 状態 ---------- */
+ var curRoute='A',kind='h',selId=null,rov=null,userMoved=false,lastPtr='mouse';
+ (function(){var r=lsGet('sdv.mapRoute');if(r==='A'||r==='B'||r==='C')curRoute=r;})();
+ function routeObj(k){for(var i=0;i<D.routes.length;i++)if(D.routes[i].k===k)return D.routes[i];return D.routes[0];}
+ function readSets(){
+  var sdv={},cn={};
+  try{var a=JSON.parse(lsGet('sdv.read')||'[]');if(Array.isArray(a))a.forEach(function(k){sdv[k]=1;});}catch(e){}
+  try{var o=JSON.parse(lsGet('cn.read')||'{}');if(o&&typeof o==='object')Object.keys(o).forEach(function(k){if(o[k])cn[k]=1;});}catch(e){}
+  return {sdv:sdv,cn:cn};
+ }
+ function getState(){
+  var rs=readSets(),route=routeObj(curRoute),ro={},n=0,cur=null,i;
+  route.ids.forEach(function(id,i){ro[id]=i+1;});
+  var isRead=function(it){return it.course==='sdv'?!!rs.sdv[it.readKey]:!!rs.cn[it.readKey];};
+  CH.forEach(function(c){if(isRead(c))n++;});
+  for(i=0;i<route.ids.length;i++){if(!isRead(byId[route.ids[i]])){cur=route.ids[i];break;}}
+  return {isRead:isRead,route:route,ro:ro,cur:cur,n:n,hasRoute:true};
+ }
+ function describe(it,st){
+  var area=COLNAME[it.col],stg=STG[it.stage],rd=st.isRead(it);
+  return {k:kicker(it),title:it.title,meta:area+' ／ '+stg+(rd?' ／ 読了済み':''),read:rd,area:area,stage:stg};
+ }
+ function ariaOf(it,st){
+  var d=describe(it,st),s='';
+  if(st.cur===it.id)s+='現在地。';
+  s+=d.k+' '+it.title+'。'+d.area+'、'+d.stage+'。';
+  if(d.read)s+='読了済み。';
+  if(st.ro[it.id])s+=st.route.name+'ルートの'+st.ro[it.id]+'番目。';
+  return s;
+ }
+
+ /* ---------- 色：画面では CSS 変数、保存時は実値 ---------- */
+ var CNAMES=['bg','panel','line','line2','text','text2','dim','gold','goldink','chipink','red','blue','bluefill','pipe','ktint','readtext'];
+ function liveC(n){return 'var(--m-'+n+')';}
+ function fixedC(){
+  var cs=getComputedStyle(stageEl),r={};
+  CNAMES.forEach(function(n){r[n]=cs.getPropertyValue('--m-'+n).trim()||'#888';});
+  return function(n){return r[n];};
+ }
+
+ /* ---------- 経路図のアイコン（48×48、線画） ---------- */
+ var ICON={
+  tcu:function(C){return '<path d="M5 35v-7c0-2 1-3.5 3-4l8-2 5-7c1-1 2-2 4-2h8c2 0 3 1 4 2l4 7 4 1c2 .6 3 2 3 4v7"/><path d="M12 24h25M26 13v10"/><circle cx="14" cy="36" r="4" fill="'+C('bg')+'"/><circle cx="36" cy="36" r="4" fill="'+C('bg')+'"/><path d="M19 36h13"/><path d="M33 13V5"/><circle cx="33" cy="4" r="1.6"/>';},
+  sim:function(){return '<path d="M13 5h18l8 8v30H13z"/><rect x="18" y="21" width="16" height="13" rx="2"/><path d="M18 27.5h16M26 21v13"/>';},
+  ran:function(){return '<circle cx="24" cy="14" r="2.5"/><path d="M24 17l-9 27M24 17l9 27M18.5 33h11M16.5 40h15"/><path d="M17 9c-3 3-3 8 0 11M12.5 5c-5.5 5-5.5 14 0 19M31 9c3 3 3 8 0 11M35.5 5c5.5 5 5.5 14 0 19"/>';},
+  core:function(){return '<rect x="7" y="5" width="34" height="11" rx="3"/><rect x="7" y="18.5" width="34" height="11" rx="3"/><rect x="7" y="32" width="34" height="11" rx="3"/><path d="M13 10.5h4M13 24h4M13 37.5h4"/>';},
+  voice:function(C){return '<path d="M22 6h19c2.5 0 4 1.5 4 4v12c0 2.5-1.5 4-4 4h-5l-6 6v-6h-8c-2.5 0-4-1.5-4-4V10c0-2.500 1.500-4 4-4z"/><path d="M5 27c0-2 1.500-3 3.500-3l3 4-2.500 2.500c2 4 5 7 9 9l2.500-2.500 4 3c0 2-1 3.500-3 3.500C12 43 5 36 5 27z" fill="'+C('bg')+'"/>';},
+  world:function(){return '<circle cx="24" cy="24" r="14"/><ellipse cx="24" cy="24" rx="6" ry="14"/><path d="M10 24h28M24 10v28" opacity=".0"/><path d="M12 17.500h24M12 30.500h24"/><circle cx="24" cy="24" r="21" stroke-dasharray="3.500 3.500"/>';},
+  doc:function(C){return '<path d="M9 5h24v32H9z"/><path d="M14 12h14M14 18h14M14 24h9"/><circle cx="33" cy="35" r="8" fill="'+C('bg')+'"/><path d="M29.500 35l2.500 2.500 4.500-5"/>';}
+ };
+ function icon(key,cx,cy,k,C,pad){
+  var x=cx-24*k,y=cy-24*k,s='';
+  if(pad)s+='<rect x="'+fmt(x-2)+'" y="'+fmt(y-2)+'" width="'+fmt(48*k+4)+'" height="'+fmt(48*k+4)+'" rx="8" fill="'+C('bg')+'"/>';
+  return s+'<g transform="translate('+fmt(x)+' '+fmt(y)+') scale('+k+')" fill="none" stroke="'+C('dim')+'" stroke-width="'+fmt(1.5/(k>1?k*.8:1))+'" stroke-linecap="round" stroke-linejoin="round">'+ICON[key](C)+'</g>';
+ }
+ function cloud(cx,cy,C){
+  return '<path transform="translate('+cx+' '+cy+')" d="M-17 8h30a8 8 0 0 0 1-15.900A10 10 0 0 0-5-7 8 8 0 0 0-17 8z" fill="none" stroke="'+C('dim')+'" stroke-width="1.500" stroke-linejoin="round"/>';
+ }
+
+ /* ---------- 幾何：共通のマス内レイアウト（グループごとに ラベル＋点の並び） ----------
+    グループ＝ラベル（上）＋点の列。幅に収まらなければ次の行へ回す。 */
+ var MH={pitch:48,chipW:42,gap:18,fs:18,rowH:96,dotY:52,lb:16,plRowH:76,pillH:34,pillPad:16,lineStep:48};
+ var MV={pitch:80,chipW:70,gap:30,fs:28,rowH:150,dotY:82,lb:27,plRowH:108,pillH:50,pillPad:22,lineStep:80};
+ function flowCell(key,width,M){
+  var groups=D.groups[key]||[],plan=(CELL[key]||[]).filter(function(x){return x.planned;});
+  var blocks=[],pos={},cx=0,ly=0,lineH=0,cap=Math.max(1,Math.floor((width+M.pitch-M.chipW)/M.pitch));
+  function put(bw,bh,blk){if(cx>0&&cx+bw>width+.5){ly+=lineH;cx=0;lineH=0;}blk.x=cx;blk.y=ly;blk.bw=bw;cx+=bw+M.gap;lineH=Math.max(lineH,bh);blocks.push(blk);}
+  groups.forEach(function(g){
+   var n=g[1].length,lw=tw(g[0],M.fs),per=Math.min(n,cap),dw=per*M.pitch-(M.pitch-M.chipW),bw=Math.max(lw,dw),rows=Math.ceil(n/cap);
+   var blk={label:g[0],ids:g[1]};put(bw,M.rowH+(rows-1)*M.lineStep,blk);
+   g[1].forEach(function(id,i){pos[id]={x:blk.x+M.chipW/2+(i%cap)*M.pitch,y:blk.y+M.dotY+Math.floor(i/cap)*M.lineStep};});
+  });
+  if(plan.length){
+   var lw2=tw('今後追加',M.fs),rowsP=[[]],cw2=0,widest=0;
+   plan.forEach(function(it){var w=tw(it.label,M.fs)+2*M.pillPad;if(cw2>0&&cw2+w>width){rowsP.push([]);cw2=0;}rowsP[rowsP.length-1].push({it:it,w:w,x:cw2});cw2+=w+8;widest=Math.max(widest,cw2-8);});
+   var blk2={label:'今後追加',ids:[],planned:true};
+   put(Math.max(lw2,widest),M.plRowH+(rowsP.length-1)*(M.pillH+8),blk2);
+   rowsP.forEach(function(r,ri){r.forEach(function(q){pos[q.it.id]={x:blk2.x+q.x+q.w/2,y:blk2.y+M.dotY-2+ri*(M.pillH+8),w:q.w,planned:true};});});
+  }
+  return {blocks:blocks,pos:pos,h:ly+lineH};
+ }
+
+ /* ---------- 幾何：横長（1920×1080） ---------- */
+ var GH=null,GV=null,HEAD_TOP=178,STAGE_TOP=232,PAD_T=6,PAD_B=3,BOTTOM=1066;
+ function geoH(){
+  if(GH)return GH;
+  var P={},blocks=[],cells={},i,bands={},sk=['in','pr','ad'];
+  function cellOf(col,stage){var key=col.k+'|'+stage,f=flowCell(key,col.w-24,MH);cells[key]=f;return f;}
+  var bh={},crossH=0;
+  sk.forEach(function(s){var m=0;COLS.forEach(function(c){m=Math.max(m,cellOf(c,s).h);});bh[s]=m+PAD_T+PAD_B;});
+  ZONES.forEach(function(z){crossH=Math.max(crossH,cellOf(z,z.k.toLowerCase()).h);});
+  crossH+=42+PAD_B;
+  var used=bh['in']+bh.pr+bh.ad,avail=BOTTOM-crossH-10-STAGE_TOP,extra=Math.max(0,avail-used)/3;
+  if(avail<used)window.console&&console.warn('map: layout overflow by '+(used-avail));
+  var y=STAGE_TOP;
+  sk.forEach(function(s){var h=bh[s]+extra;bands[s]=[y,y+h];y+=h;});
+  var stageEnd=y,crossTop=stageEnd+10;
+  function abs(col,stage,top){
+   var f=cells[col.k+'|'+stage];
+   Object.keys(f.pos).forEach(function(id){var p=f.pos[id];P[id]={x:col.x+16+p.x,y:top+p.y,w:p.w,planned:p.planned,cell:col.k+'|'+stage};});
+   f.blocks.forEach(function(b){blocks.push({label:b.label,x:col.x+16+b.x,y:top+b.y+MH.lb,planned:b.planned});});
+  }
+  COLS.forEach(function(c){sk.forEach(function(s){abs(c,s,bands[s][0]+PAD_T);});});
+  ZONES.forEach(function(z){abs(z,z.k.toLowerCase(),crossTop+42);});
+  GH={P:P,blocks:blocks,bands:bands,stageEnd:stageEnd,crossTop:crossTop,crossBot:BOTTOM};return GH;
+ }
+ function colCenter(c){return c.x+c.w/2;}
+
+ /* ---------- 幾何：縦長（750×H） ---------- */
+ function geoV(){
+  if(GV)return GV;
+  var P={},recs=[],blocks=[],y=24,lineX=44,icons=[];
+  recs.push({t:'legend',y:y});
+  y+=3*54+14;
+  var X0=96,WV=750-X0-16;
+  function place(key,yStart){
+   var f=flowCell(key,WV,MV);
+   Object.keys(f.pos).forEach(function(id){var p=f.pos[id];P[id]={x:X0+p.x,y:yStart+p.y,w:p.w,planned:p.planned,cell:key};});
+   f.blocks.forEach(function(b){blocks.push({label:b.label,x:X0+b.x,y:yStart+b.y+MV.lb,planned:b.planned});});
+   return yStart+f.h+6;
+  }
+  COLS.forEach(function(c,ci){
+   if(ci>0)recs.push({t:'line',x1:24,y1:y,x2:726,y2:y,c:'line'});
+   y+=36;
+   recs.push({t:'icon',key:c.icon,x:lineX,y:y+26});icons.push(y+26);
+   recs.push({t:'text',x:X0,y:y+37,s:32,c:'goldink',b:1,txt:c.name});
+   y+=66;
+   ['in','pr','ad'].forEach(function(s){
+    var key=c.k+'|'+s;if(!(D.groups[key]||[]).length)return;
+    recs.push({t:'text',x:X0,y:y+26,s:28,c:'text',b:1,txt:STG[s]});
+    y+=44;
+    y=place(key,y);
+   });
+   y+=8;
+  });
+  recs.push({t:'line',x1:24,y1:y,x2:726,y2:y,c:'line2'});
+  y+=34;
+  recs.push({t:'text',x:24,y:y+8,s:28,c:'text2',txt:'横断 ― 全領域をまたぐ章'});
+  y+=40;
+  ZONES.forEach(function(z,zi){
+   if(zi>0)recs.push({t:'line',x1:24,y1:y,x2:726,y2:y,c:'line'});
+   y+=34;
+   recs.push({t:'text',x:X0,y:y+10,s:32,c:'goldink',b:1,txt:z.name});
+   y+=40;
+   y=place(z.k+'|'+z.k.toLowerCase(),y);
+   y+=8;
+  });
+  GV={P:P,blocks:blocks,H:Math.ceil(y+16),recs:recs,lineX:lineX,y1:icons[0],y2:icons[icons.length-1]};
+  return GV;
+ }
+
+ /* ---------- 凡例 ---------- */
+ var LEG=[['s','講義室の章'],['c','コア講義の章'],['r','読了'],['rt','選択中のルート'],['cur','現在地'],['pl','今後追加（破線）']];
+ function legIcon(t,x,y,k,C){
+  /* (x,y) = 左端の中央。幅を返す */
+  var r=9*k,s='',w;
+  switch(t){
+   case 's':w=2*r;s='<circle cx="'+fmt(x+r)+'" cy="'+y+'" r="'+r+'" fill="'+C('panel')+'" stroke="'+C('blue')+'" stroke-width="1.5"/>';break;
+   case 'c':w=30*k;s='<rect x="'+x+'" y="'+fmt(y-9*k)+'" width="'+fmt(w)+'" height="'+fmt(18*k)+'" rx="'+fmt(4*k)+'" fill="'+C('panel')+'" stroke="'+C('blue')+'" stroke-width="1.5"/>';break;
+   case 'r':w=2*r;s='<circle cx="'+fmt(x+r)+'" cy="'+y+'" r="'+r+'" fill="'+C('bluefill')+'" stroke="'+C('blue')+'" stroke-width="1.5"/><path d="M'+fmt(x+r-4*k)+' '+y+'l'+fmt(3*k)+' '+fmt(3*k)+' '+fmt(5*k)+' '+fmt(-6*k)+'" fill="none" stroke="'+C('readtext')+'" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>';break;
+   case 'rt':w=40*k;s='<path d="M'+x+' '+y+'h'+fmt(w)+'" stroke="'+C('gold')+'" stroke-width="2.5"/><rect x="'+x+'" y="'+fmt(y-11*k)+'" width="'+fmt(13*k)+'" height="'+fmt(12*k)+'" rx="2" fill="'+C('gold')+'"/>';break;
+   case 'cur':w=2*r+2;s='<circle cx="'+fmt(x+r+1)+'" cy="'+y+'" r="'+fmt(r-3*k)+'" fill="'+C('panel')+'" stroke="'+C('gold')+'" stroke-width="2.5"/><circle cx="'+fmt(x+r+1)+'" cy="'+y+'" r="'+fmt(r+1)+'" fill="none" stroke="'+C('gold')+'" stroke-width="1.5"/>';break;
+   default:w=2*r;s='<circle cx="'+fmt(x+r)+'" cy="'+y+'" r="'+r+'" fill="none" stroke="'+C('dim')+'" stroke-width="1.2" stroke-dasharray="4 4" opacity=".7"/>';
+  }
+  return {w:w,s:s};
+ }
+ function legendH(C){
+  var y=40,gap=20,tg=7,i,items=[],tot=0;
+  for(i=0;i<LEG.length;i++){var label=LEG[i][1].replace('（破線）','');var ic=legIcon(LEG[i][0],0,y,1.05,C);items.push({t:LEG[i][0],label:label,w:ic.w});tot+=ic.w+tg+tw(label,18);}
+  tot+=gap*(LEG.length-1);
+  var x=1880-tot,out='';
+  items.forEach(function(it){
+   var ic=legIcon(it.t,x,y,1.05,C);
+   out+=ic.s+'<text x="'+fmt(x+ic.w+tg)+'" y="'+(y+6)+'" font-size="18" fill="'+C('text2')+'">'+it.label+'</text>';
+   x+=ic.w+tg+tw(it.label,18)+gap;
+  });
+  return out;
+ }
+ function legendV(C,y0){
+  var out='',i,col,row;
+  for(i=0;i<LEG.length;i++){
+   col=i%2;row=Math.floor(i/2);
+   var x=24+col*366,y=y0+26+row*54,ic=legIcon(LEG[i][0],x,y,1.5,C);
+   out+=ic.s+'<text x="'+fmt(x+ic.w+10)+'" y="'+(y+10)+'" font-size="28" fill="'+C('text2')+'">'+LEG[i][1].replace('（破線）','')+'</text>';
+  }
+  return out;
+ }
+
+ /* ---------- 背景（一度だけ描く部分） ---------- */
+ function dotMarkup(path,C,o){
+  if(o.exp||reduce.matches)return '';
+  return '<circle r="4" fill="'+C('gold')+'"><animateMotion dur="6s" repeatCount="2" fill="freeze" calcMode="linear" keyPoints="0;1;0" keyTimes="0;.5;1" path="'+path+'"/></circle>';
+ }
+ function bgH(C,o){
+  var G=geoH(),a=[],L=C('line'),sE=G.stageEnd,B=G.bands;
+  a.push('<rect width="1920" height="1080" fill="'+C('bg')+'"/>');
+  a.push('<rect x="'+COLS[3].x+'" y="'+HEAD_TOP+'" width="'+COLS[3].w+'" height="'+(sE-HEAD_TOP)+'" fill="'+C('ktint')+'"/>');
+  var hl='',vl='';
+  [HEAD_TOP,STAGE_TOP,B['in'][1],B.pr[1],sE].forEach(function(y){hl+='M80 '+y+'H1920';});
+  hl+='M0 '+G.crossTop+'H1920M0 '+G.crossBot+'H1920';
+  [STAGE_TOP,B['in'][1],B.pr[1],sE].forEach(function(y){hl+='M0 '+y+'H80';});
+  COLS.forEach(function(c){vl+='M'+c.x+' '+HEAD_TOP+'V'+sE;});
+  ZONES.forEach(function(z){vl+='M'+z.x+' '+G.crossTop+'V'+G.crossBot;});
+  a.push('<path d="'+hl+vl+'" stroke="'+L+'" stroke-width="1" fill="none"/>');
+  a.push('<text x="40" y="40" font-size="28" font-weight="700" fill="'+C('text')+'">全体マップ ― 通信の講義室とコア講義の89章</text>');
+  a.push(legendH(C));
+  [['in','入門'],['pr','実務'],['ad','一人前']].forEach(function(t){var m=(B[t[0]][0]+B[t[0]][1])/2;a.push('<text x="40" y="'+fmt(m+7)+'" font-size="22" text-anchor="middle" fill="'+C('text2')+'">'+t[1]+'</text>');});
+  a.push('<text x="40" y="'+fmt((G.crossTop+G.crossBot)/2+7)+'" font-size="22" text-anchor="middle" fill="'+C('text2')+'">横断</text>');
+  /* 列見出し（幅が足りない列は2行） */
+  COLS.forEach(function(c){
+   var nm=c.name;
+   if(tw(nm,22)>c.w-16){
+    var cut=nm.indexOf('・')+1;
+    a.push('<text x="'+colCenter(c)+'" y="'+(HEAD_TOP+17)+'" font-size="20" font-weight="700" text-anchor="middle" fill="'+C('goldink')+'">'+nm.slice(0,cut)+'</text><text x="'+colCenter(c)+'" y="'+(HEAD_TOP+46)+'" font-size="20" font-weight="700" text-anchor="middle" fill="'+C('goldink')+'">'+nm.slice(cut)+'</text>');
+   }else a.push('<text x="'+colCenter(c)+'" y="'+(HEAD_TOP+33)+'" font-size="22" font-weight="700" text-anchor="middle" fill="'+C('goldink')+'">'+nm+'</text>');
+  });
+  ZONES.forEach(function(z){a.push('<text x="'+(z.x+16)+'" y="'+(G.crossTop+26)+'" font-size="22" font-weight="700" fill="'+C('goldink')+'">'+z.name+'</text>');});
+  /* 内容グループのラベル */
+  G.blocks.forEach(function(b){a.push('<text x="'+fmt(b.x)+'" y="'+fmt(b.y)+'" font-size="18" fill="'+C(b.planned?'dim':'text2')+'">'+esc(b.label)+'</text>');});
+  /* 経路図 */
+  var py=138,pipe='<g aria-hidden="true">';
+  pipe+='<path d="M100 '+py+'H1880" stroke="'+C('pipe')+'" stroke-width="2" fill="none"/>';
+  COLS.forEach(function(c){
+   var cx=colCenter(c);
+   pipe+=icon(c.icon,cx,98,1,C,false)+'<path d="M'+cx+' 124V'+py+'" stroke="'+C('pipe')+'" stroke-width="2"/><text x="'+cx+'" y="165" font-size="18" text-anchor="middle" fill="'+C('text2')+'">'+c.label+'</text>';
+  });
+  pipe+='<path d="M1110 '+py+'V106" stroke="'+C('pipe')+'" stroke-width="1" fill="none"/>'+cloud(1135,92,C)+'<text x="1163" y="98" font-size="18" fill="'+C('text2')+'">OEM サーバー</text>';
+  pipe+=dotMarkup('M'+colCenter(COLS[0])+' '+py+'H'+colCenter(COLS[5]),C,o);
+  pipe+='</g>';
+  a.push(pipe);
+  return a.join('');
+ }
+ function bgV(C,o){
+  var G=geoV(),a=[],r;
+  a.push('<rect width="750" height="'+G.H+'" fill="'+C('bg')+'"/>');
+  a.push(legendV(C,G.recs[0].y));
+  a.push('<path d="M'+G.lineX+' '+G.y1+'V'+G.y2+'" stroke="'+C('pipe')+'" stroke-width="2" fill="none" aria-hidden="true"/>');
+  G.recs.forEach(function(r){
+   if(r.t==='line')a.push('<path d="M'+r.x1+' '+r.y1+'H'+r.x2+'" stroke="'+C(r.c)+'" stroke-width="1" fill="none"/>');
+   else if(r.t==='icon')a.push('<g aria-hidden="true">'+icon(r.key,r.x,r.y,1,C,true)+'</g>');
+   else if(r.t==='text')a.push('<text x="'+r.x+'" y="'+r.y+'" font-size="'+r.s+'"'+(r.b?' font-weight="700"':'')+' fill="'+C(r.c)+'">'+esc(r.txt)+'</text>');
+  });
+  G.blocks.forEach(function(b){a.push('<text x="'+fmt(b.x)+'" y="'+fmt(b.y)+'" font-size="28" fill="'+C(b.planned?'dim':'text2')+'">'+esc(b.label)+'</text>');});
+  a.push(dotMarkup('M'+G.lineX+' '+G.y1+'V'+G.y2,C,o));
+  return a.join('');
+ }
+
+ /* ---------- 点（動く部分） ---------- */
+ function nodeMarkup(it,p,k,st,C,o){
+  var V=k==='v',isS=it.course==='sdv',ro=st.ro[it.id],rd=st.isRead(it),cur=st.cur===it.id,dim=!ro;
+  var R=V?30:19,cw=V?70:42,ch=V?52:32,hw=isS?R:cw/2,hh=isS?R:ch/2;
+  var stroke=ro?C('gold'):C('blue'),sw=ro?2.5:1.5,fill=rd?C('bluefill'):C('panel'),tc=rd?C('readtext'):C('text');
+  var cx=p.x,cy=p.y,body='';
+  if(isS)body='<circle class="sh" cx="'+cx+'" cy="'+cy+'" r="'+R+'" fill="'+fill+'" stroke="'+stroke+'" stroke-width="'+sw+'"/>';
+  else body='<rect class="sh" x="'+(cx-cw/2)+'" y="'+(cy-ch/2)+'" width="'+cw+'" height="'+ch+'" rx="'+(V?9:6)+'" fill="'+fill+'" stroke="'+stroke+'" stroke-width="'+sw+'"/>';
+  var fs=V?28:18;
+  body+='<text x="'+cx+'" y="'+fmt(cy+fs*.35)+'" font-size="'+fs+'" font-weight="700" text-anchor="middle" fill="'+tc+'">'+(isS?'':'C')+it.num+'</text>';
+  if(rd){
+   var kx=cx+(isS?(V?15:11):(V?25:17)),ky=cy-(isS?(V?24:15):(V?17:11)),m=V?1.7:1.2;
+   body+='<path d="M'+fmt(kx-3*m)+' '+fmt(ky)+'l'+fmt(2.2*m)+' '+fmt(2.4*m)+' '+fmt(3.8*m)+' '+fmt(-4.6*m)+'" fill="none" stroke="'+C('readtext')+'" stroke-width="'+(V?2.4:1.8)+'" stroke-linecap="round" stroke-linejoin="round"/>';
+  }
+  var inner='<g class="mb">'+body+'</g>';
+  var off=(cur?5:0)+4;
+  if(isS)inner+='<circle class="fr" cx="'+cx+'" cy="'+cy+'" r="'+(R+off)+'" fill="none" stroke="'+C('gold')+'" stroke-width="2"/>';
+  else inner+='<rect class="fr" x="'+(cx-hw-off)+'" y="'+(cy-hh-off)+'" width="'+(2*hw+2*off)+'" height="'+(2*hh+2*off)+'" rx="'+(V?15:10)+'" fill="none" stroke="'+C('gold')+'" stroke-width="2"/>';
+  if(cur){
+   if(isS)inner+='<circle cx="'+cx+'" cy="'+cy+'" r="'+(R+5)+'" fill="none" stroke="'+C('gold')+'" stroke-width="1.5"/>';
+   else inner+='<rect x="'+(cx-hw-5)+'" y="'+(cy-hh-5)+'" width="'+(2*hw+10)+'" height="'+(2*hh+10)+'" rx="'+(V?14:10)+'" fill="none" stroke="'+C('gold')+'" stroke-width="1.5"/>';
+   var ly=cy+hh+(V?33:21);
+   inner+='<text x="'+cx+'" y="'+ly+'" font-size="'+(V?28:18)+'" font-weight="700" text-anchor="middle" fill="'+C('red')+'" stroke="'+C('bg')+'" stroke-width="'+(V?6:4)+'" paint-order="stroke" stroke-linejoin="round">現在地</text>';
+  }
+  if(ro){
+   var t=String(ro),chw=(V?22:12)+t.length*(V?17:9),chh=V?34:22,fs2=V?28:18;
+   var chx=cx-hw*.95-chw/2,chy=cy-hh*(V?1.0:1.07)-chh/2+(V?2:0);
+   inner+='<g class="chip"><rect x="'+fmt(chx)+'" y="'+fmt(chy)+'" width="'+chw+'" height="'+chh+'" rx="4" fill="'+C('gold')+'"/><text x="'+fmt(chx+chw/2)+'" y="'+fmt(chy+chh/2+fs2*.35)+'" font-size="'+fs2+'" font-weight="700" text-anchor="middle" fill="'+C('chipink')+'">'+t+'</text></g>';
+  }
+  var hit='<circle class="hit" cx="'+cx+'" cy="'+cy+'" r="'+(V?40:23)+'" fill="transparent"/>';
+  var op=(st.hasRoute&&dim)?' opacity=".5"':'';
+  if(o.exp)return '<g'+op+'>'+hit.replace(' class="hit"','').replace('fill="transparent"','fill="none"')+inner+'</g>';
+  return '<a class="mn'+(ro?' on':'')+(rd?' rd':'')+(cur?' cu':'')+(selId===it.id?' sel':'')+'" href="'+esc(it.href)+'" data-id="'+it.id+'" tabindex="'+(rov===it.id?0:-1)+'" aria-label="'+esc(ariaOf(it,st))+'"'+op+'>'+hit+inner+'</a>';
+ }
+ function plannedMarkup(it,p,k,C){
+  var V=k==='v',M=V?MV:MH,fs=V?28:18,h=M.pillH,w=p.w;
+  return '<g class="pl"><title>今後追加予定：'+esc(it.label)+'</title><rect x="'+fmt(p.x-w/2)+'" y="'+fmt(p.y-h/2)+'" width="'+fmt(w)+'" height="'+h+'" rx="'+(h/2)+'" fill="none" stroke="'+C('dim')+'" stroke-width="1.2" stroke-dasharray="4 4" opacity=".8"/><text x="'+fmt(p.x)+'" y="'+fmt(p.y+fs*.35)+'" font-size="'+fs+'" text-anchor="middle" fill="'+C('dim')+'">'+esc(it.label)+'</text></g>';
+ }
+ /* ルートの線：同じ行で隣り合う点の間だけ短く引く（間に別の点が無いとき）。遠い点どうしは線で結ばず、順番の小札で示す */
+ function segs(st,P){
+  var ids=st.route.ids,out=[];
+  function rowMates(a){var r=[];CH.forEach(function(c){var q=P[c.id];if(q.cell===P[a].cell&&Math.abs(q.y-P[a].y)<2)r.push(c.id);});return r;}
+  for(var i=0;i<ids.length-1;i++){
+   var a=ids[i],b=ids[i+1],pa=P[a],pb=P[b];
+   if(pa.cell!==pb.cell||Math.abs(pa.y-pb.y)>=2)continue;
+   var lo=Math.min(pa.x,pb.x),hi=Math.max(pa.x,pb.x),between=rowMates(a).some(function(m){return P[m].x>lo+1&&P[m].x<hi-1;});
+   if(!between)out.push([pa,pb]);
+  }
+  return out;
+ }
+ function dynMarkup(k,st,C,o){
+  var G=k==='h'?geoH():geoV(),a=[],P=G.P;
+  if(k==='h'){
+   a.push('<text x="40" y="68" font-size="18" fill="'+C('text2')+'">横が通信の流れ、縦が習熟の段 ／ ルート：'+esc(st.route.name)+'（'+st.route.ids.length+'章）'+(st.cur?'':'（読了）')+' ／ 読了 '+st.n+' / '+CH.length+'</text>');
+  }
+  var d='';
+  segs(st,P).forEach(function(s){d+='M'+fmt(s[0].x)+' '+fmt(s[0].y)+'L'+fmt(s[1].x)+' '+fmt(s[1].y);});
+  if(d)a.push('<path'+(o.anim&&!o.exp?' class="rt rt0"':' class="rt"')+' d="'+d+'" pathLength="1" fill="none" stroke="'+C('gold')+'" stroke-width="'+(k==='v'?5:3.5)+'" stroke-linecap="round"/>');
+  CH.forEach(function(it){a.push(nodeMarkup(it,P[it.id],k,st,C,o));});
+  D.planned.forEach(function(it){a.push(plannedMarkup(it,P[it.id],k,C));});
+  return a.join('');
+ }
+ var DESC='横方向は通信の流れで、車両・端末、SIM・eSIM、無線、コア網・データ、音声・SMS・緊急、事業者間・ローミング、契約・規制・案件運営の7列。縦方向は入門・実務・一人前の3段。下の帯はセキュリティ、規格の読解、演習と参照。V2X・衛星・型式認証・データ保護・折衝は今後追加予定。';
+ function svgOpen(k,o){
+  var w=k==='h'?1920:750,h=k==='h'?1080:geoV().H;
+  var ttl='通信の講義室とコアネットワーク講義の全89章の地図';
+  if(o.exp)return '<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" font-family="'+FONT+'"><title>'+ttl+'</title><desc>'+DESC+'</desc>';
+  return '<svg id="lhMapSvg" class="lm-svg" role="group" aria-labelledby="lhMapTitle lhMapDesc" viewBox="0 0 '+w+' '+h+'" font-family="'+FONT+'"><title id="lhMapSvgTitle">'+ttl+'</title><desc id="lhMapDesc">'+DESC+'</desc>';
+ }
+
+ /* ---------- 描画 ---------- */
+ var dynEl=null;
+ function renderAll(){
+  var st=getState();
+  if(!rov||!userMoved)rov=st.cur||'S01';
+  var C=liveC;
+  stageEl.innerHTML=svgOpen(kind,{})+'<g>'+(kind==='h'?bgH(C,{}):bgV(C,{}))+'</g><g id="lhMapDyn"></g></svg>';
+  dynEl=stageEl.querySelector('#lhMapDyn');
+  stageEl.setAttribute('data-layout',kind);
+  paintDyn(st,false);
+ }
+ function paintDyn(st,anim){
+  var act=document.activeElement,keep=(act&&act.classList&&act.classList.contains('mn')&&stageEl.contains(act))?act.getAttribute('data-id'):null;
+  dynEl.innerHTML=dynMarkup(kind,st,liveC,{anim:anim&&!reduce.matches});
+  if(anim&&!reduce.matches){
+   var p=dynEl.querySelector('path.rt0');
+   if(p){requestAnimationFrame(function(){requestAnimationFrame(function(){p.classList.remove('rt0');});});}
+  }
+  if(keep){var el=dynEl.querySelector('a.mn[data-id="'+keep+'"]');if(el)el.focus({preventScroll:true});}
+ }
+ function updateAll(anim){
+  var st=getState();
+  if(!userMoved)rov=st.cur||'S01';
+  paintDyn(st,anim);
+  cntEl.textContent='読了 '+st.n+' / '+CH.length+(st.cur?'':'　このルートは読了');
+  buildTable(st);buildOrder(st);
+  if(selId)showDetail(selId,st);
+  hideTip();
+ }
+
+ /* ---------- 順路の一覧（選択中ルート） ---------- */
+ var ordEl=$('lhMapOrder'),ordH=$('lhMapOrderH');
+ function buildOrder(st){
+  if(!ordEl)return;
+  ordH.textContent='順路の一覧 ― '+st.route.name+'ルート（'+st.route.ids.length+'章）';
+  var h=[];
+  st.route.ids.forEach(function(id){
+   var it=byId[id],rd=st.isRead(it),cu=st.cur===id,no=(it.course==='sdv'?'':'C')+it.num;
+   h.push('<li'+(rd?' class="rd"':'')+(cu?' class="cu"':'')+'><a href="'+esc(it.href)+'"><span class="no">'+no+'</span><span class="tt">'+esc(it.title)+'</span>'+(cu?'<span class="st cur">現在地</span>':(rd?'<span class="st">読了</span>':''))+'</a></li>');
+  });
+  ordEl.innerHTML=h.join('');
+ }
+
+ /* ---------- 表（代替表示） ---------- */
+ function buildTable(st){
+  var h=[];
+  CH.forEach(function(it){
+   var d=describe(it,st);
+   h.push('<tr><td>'+d.k+'</td><td><a href="'+esc(it.href)+'">'+esc(it.title)+'</a></td><td>'+esc(d.area)+'</td><td>'+esc(d.stage)+'</td><td>'+(d.read?'読了':'未読')+'</td></tr>');
+  });
+  tblBody.innerHTML=h.join('');
+ }
+
+ /* ---------- ツールチップ・詳細欄 ---------- */
+ function fillCard(box,it,st){
+  var d=describe(it,st);
+  box.textContent='';
+  var a=document.createElement('div');a.className='k';a.textContent=d.k;
+  var b=document.createElement('div');b.className='t';b.textContent=it.title;
+  var c=document.createElement('div');c.className='m';c.textContent=d.meta;
+  box.appendChild(a);box.appendChild(b);box.appendChild(c);
+ }
+ function showTip(a){
+  if(kind!=='h')return;
+  var it=byId[a.getAttribute('data-id')];if(!it)return;
+  fillCard(tip,it,getState());
+  tip.hidden=false;
+  var sr=stageEl.getBoundingClientRect(),hr=a.querySelector('.hit').getBoundingClientRect();
+  var tw_=tip.offsetWidth,th=tip.offsetHeight;
+  var x=hr.left-sr.left+hr.width/2-tw_/2,y=hr.bottom-sr.top+4;
+  x=Math.max(6,Math.min(x,sr.width-tw_-6));
+  if(y+th>sr.height-4)y=hr.top-sr.top-th-4;
+  tip.style.left=Math.round(x)+'px';tip.style.top=Math.round(y)+'px';
+ }
+ function hideTip(){tip.hidden=true;}
+ function showDetail(id,st){
+  var it=byId[id];if(!it)return;
+  st=st||getState();
+  detail.textContent='';
+  var box=document.createElement('div');box.className='lm-card';
+  fillCard(box,it,st);
+  var a=document.createElement('a');a.className='lm-open';a.href=it.href;a.textContent='この章を開く';
+  detail.appendChild(box);detail.appendChild(a);
+  detail.hidden=false;
+ }
+ function hideDetail(){selId=null;detail.hidden=true;detail.textContent='';}
+
+ /* ---------- 操作：キーボード ---------- */
+ var STAGES=['in','pr','ad','x'];
+ function stageGroup(s){return s.charAt(0)==='x'?'x':s;}
+ function nearestX(list,x){var best=null,bd=1e9;list.forEach(function(id){var d=Math.abs(P_()[id].x-x);if(d<bd){bd=d;best=id;}});return best;}
+ function P_(){return (kind==='h'?geoH():geoV()).P;}
+ function nav(id,dir){
+  var it=byId[id],P=P_(),i;
+  if(kind==='v'){
+   var idx=ORDER.indexOf(id);
+   if(dir==='l')return ORDER[Math.max(0,idx-1)];
+   if(dir==='r')return ORDER[Math.min(ORDER.length-1,idx+1)];
+   var y0=P[id].y,x0=P[id].x,best=null,by=null;
+   ORDER.forEach(function(o){var y=P[o].y;if(dir==='u'?y<y0-1:y>y0+1){var dy=Math.abs(y-y0);if(by===null||dy<by-1){by=dy;best=[o];}else if(Math.abs(dy-by)<=1)best.push(o);}});
+   return best?nearestX(best,x0):id;
+  }
+  var cellIds=function(col,stage){return (CELL[cellKey(col,stage)]||[]).filter(function(x){return !x.planned;}).map(function(x){return x.id;});};
+  var list=cellIds(it.col,it.stage),pos=list.indexOf(id);
+  if(dir==='l'||dir==='r'){
+   if(dir==='r'&&pos<list.length-1)return list[pos+1];
+   if(dir==='l'&&pos>0)return list[pos-1];
+   var cols=(it.col.charAt(0)==='X'?ZONES:COLS).map(function(c){return c.k;}),ci=cols.indexOf(it.col),step=dir==='r'?1:-1;
+   for(i=ci+step;i>=0&&i<cols.length;i+=step){
+    var l2=cellIds(cols[i],it.stage.charAt(0)==='x'?cols[i].toLowerCase():it.stage);
+    if(l2.length)return dir==='r'?l2[0]:l2[l2.length-1];
+   }
+   return id;
+  }
+  var g=stageGroup(it.stage),gi=STAGES.indexOf(g),x0b=P[id].x,step2=dir==='d'?1:-1;
+  for(i=gi+step2;i>=0&&i<STAGES.length;i+=step2){
+   var cand=[];
+   if(STAGES[i]==='x'){ZONES.forEach(function(z){cand=cand.concat(cellIds(z.k,z.k.toLowerCase()));});}
+   else if(g==='x'){COLS.forEach(function(c){cand=cand.concat(cellIds(c.k,STAGES[i]));});}
+   else cand=cellIds(it.col,STAGES[i]);
+   if(cand.length)return nearestX(cand,x0b);
+  }
+  return id;
+ }
+ function focusNode(id){
+  var el=dynEl.querySelector('a.mn[data-id="'+id+'"]');if(!el)return;
+  var old=dynEl.querySelector('a.mn[tabindex="0"]');if(old&&old!==el)old.setAttribute('tabindex','-1');
+  el.setAttribute('tabindex','0');rov=id;userMoved=true;el.focus();
+ }
+ function leaveMap(){var t=$('lhTracksTitle');if(t){t.focus();t.scrollIntoView({block:'nearest'});}}
+ stageEl.addEventListener('keydown',function(e){
+  var a=e.target.closest&&e.target.closest('a.mn');if(!a||e.altKey||e.ctrlKey||e.metaKey)return;
+  var id=a.getAttribute('data-id'),to=null;
+  switch(e.key){
+   case 'ArrowRight':to=nav(id,'r');break;
+   case 'ArrowLeft':to=nav(id,'l');break;
+   case 'ArrowDown':to=nav(id,'d');break;
+   case 'ArrowUp':to=nav(id,'u');break;
+   case 'Home':to=ORDER[0];break;
+   case 'End':to=ORDER[ORDER.length-1];break;
+   case 'Escape':e.preventDefault();e.stopPropagation();leaveMap();return;
+   default:return;
+  }
+  e.preventDefault();e.stopPropagation();
+  if(to)focusNode(to);
+ });
+ stageEl.addEventListener('focusin',function(e){
+  var a=e.target.closest&&e.target.closest('a.mn');
+  if(a){
+   var old=dynEl.querySelector('a.mn[tabindex="0"]');if(old&&old!==a)old.setAttribute('tabindex','-1');
+   a.setAttribute('tabindex','0');rov=a.getAttribute('data-id');
+   if(kind==='h')showTip(a);
+  }
+ });
+ stageEl.addEventListener('focusout',function(e){if(e.target.closest&&e.target.closest('a.mn'))hideTip();});
+ stageEl.addEventListener('mouseover',function(e){var a=e.target.closest&&e.target.closest('a.mn');if(a&&kind==='h')showTip(a);});
+ stageEl.addEventListener('mouseout',function(e){var a=e.target.closest&&e.target.closest('a.mn');if(a&&!a.contains(e.relatedTarget)&&a!==document.activeElement)hideTip();else if(a&&a===document.activeElement)showTip(a);});
+ stageEl.addEventListener('pointerdown',function(e){lastPtr=e.pointerType||'mouse';});
+ /* 縦長版：1回目のタップで選び、詳細欄に出す。2回目（または「この章を開く」）で移動 */
+ stageEl.addEventListener('click',function(e){
+  var a=e.target.closest&&e.target.closest('a.mn');if(!a||kind!=='v')return;
+  if(e.detail===0)return;                      /* キーボードの Enter は移動 */
+  var id=a.getAttribute('data-id');
+  if(selId!==id){e.preventDefault();selId=id;userMoved=true;rov=id;updateAll(false);var el=dynEl.querySelector('a.mn[data-id="'+id+'"]');if(el)el.focus({preventScroll:true});}
+ });
+
+ /* ---------- ルート切替 ---------- */
+ var rbtn=[];
+ D.routes.forEach(function(r){
+  var b=document.createElement('button');b.type='button';b.setAttribute('role','radio');b.className='lm-route';b.setAttribute('data-r',r.k);
+  var t=document.createElement('span');t.className='n';t.textContent=r.name+'（'+r.ids.length+'章）';
+  var d=document.createElement('span');d.className='d';d.textContent=r.desc;
+  b.appendChild(t);b.appendChild(d);rgEl.appendChild(b);rbtn.push(b);
+ });
+ function syncRoutes(){rbtn.forEach(function(b){var on=b.getAttribute('data-r')===curRoute;b.setAttribute('aria-checked',on?'true':'false');b.tabIndex=on?0:-1;});}
+ function pickRoute(k,focus){
+  if(k===curRoute&&!focus)return;
+  var changed=k!==curRoute;
+  curRoute=k;lsSet('sdv.mapRoute',k);userMoved=false;
+  syncRoutes();
+  if(changed)updateAll(true);
+  if(focus){rbtn.forEach(function(b){if(b.getAttribute('data-r')===k)b.focus();});}
+ }
+ rgEl.addEventListener('click',function(e){var b=e.target.closest('button.lm-route');if(b)pickRoute(b.getAttribute('data-r'),false);});
+ rgEl.addEventListener('keydown',function(e){
+  var b=e.target.closest('button.lm-route');if(!b)return;
+  var i=rbtn.indexOf(b),n=rbtn.length,j=null;
+  if(e.key==='ArrowRight'||e.key==='ArrowDown')j=(i+1)%n;
+  else if(e.key==='ArrowLeft'||e.key==='ArrowUp')j=(i+n-1)%n;
+  else if(e.key==='Home')j=0;else if(e.key==='End')j=n-1;
+  if(j===null)return;
+  e.preventDefault();pickRoute(rbtn[j].getAttribute('data-r'),true);
+ });
+ syncRoutes();
+
+ /* ---------- 保存（常に横長 1920×1080、画面の状態を含む） ---------- */
+ function exportSvg(){
+  var st=getState(),C=fixedC(),o={exp:true};
+  return svgOpen('h',o)+bgH(C,o)+dynMarkup('h',st,C,o)+'</svg>';
+ }
+ function download(blob,name){
+  var u=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=u;a.download=name;a.style.display='none';document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(u);if(a.parentNode)a.parentNode.removeChild(a);},1500);
+ }
+ var saveMsg=$('lhMapSaveMsg');
+ function say(t){if(saveMsg){saveMsg.textContent=t;}}
+ $('lhMapSaveSvg').addEventListener('click',function(){
+  try{download(new Blob([exportSvg()],{type:'image/svg+xml;charset=utf-8'}),'ttj-lecture-map.svg');say('SVG を保存しました。');}
+  catch(e){say('SVG を保存できませんでした。');}
+ });
+ $('lhMapSavePng').addEventListener('click',function(){
+  try{
+   var svg=exportSvg(),img=new Image();
+   img.onload=function(){
+    try{
+     var cv=document.createElement('canvas');cv.width=1920;cv.height=1080;
+     var cx=cv.getContext('2d');cx.drawImage(img,0,0,1920,1080);
+     cv.toBlob(function(b){if(b){download(b,'ttj-lecture-map.png');say('PNG を保存しました。');}else say('PNG を保存できませんでした。');},'image/png');
+    }catch(e){say('PNG を保存できませんでした。');}
+   };
+   img.onerror=function(){say('PNG を保存できませんでした。');};
+   img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+  }catch(e){say('PNG を保存できませんでした。');}
+ });
+
+ /* ---------- 幅に合わせる（実幅で 横長／縦長 を切り替える） ---------- */
+ function fit(){
+  var parent=sec.parentNode,vw=document.documentElement.clientWidth;
+  sec.style.width='';sec.style.marginLeft='';
+  var W=vw<700?vw:Math.min(1880,vw-32),pl=parent.getBoundingClientRect().left;
+  sec.style.width=W+'px';sec.style.marginLeft=Math.round((vw-W)/2-pl)+'px';
+  var nk=sec.clientWidth>=HMIN?'h':'v';
+  if(nk!==kind||!dynEl){kind=nk;hideDetail();renderAll();updateAll(false);}
+ }
+ if(window.ResizeObserver){new ResizeObserver(function(){fit();}).observe(sec.parentNode);}
+ window.addEventListener('resize',fit);
+ document.addEventListener('sdv:read',function(){updateAll(false);});
+ window.addEventListener('storage',function(e){if(!e.key||e.key==='sdv.read'||e.key==='cn.read')updateAll(false);});
+ if(reduce.addEventListener)reduce.addEventListener('change',function(){renderAll();updateAll(false);});
+ fit();
+})();
+
 </script>
 </body>
 </html>
