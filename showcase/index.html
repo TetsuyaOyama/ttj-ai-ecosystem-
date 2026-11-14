@@ -164,6 +164,9 @@ section { padding: var(--ttj-space-7) 0 0; }
 .thumb svg { display: block; width: 100%; height: auto; }
 .card-body { display: flex; flex-direction: column; flex: 1; padding: var(--ttj-space-5); }
 .card h3 { font-size: var(--ttj-text-lg); }
+.card .field { margin: 0 0 var(--ttj-space-1); font-family: var(--ttj-font-mono); font-size: 0.72rem; letter-spacing: 0.18em; color: var(--ttj-gold-700); }
+.card .progress { margin: var(--ttj-space-2) 0 0; }
+.card .progress span { display: inline-block; font-family: var(--ttj-font-mono); font-size: 0.75rem; line-height: 1.4; padding: 2px var(--ttj-space-3); border-radius: var(--ttj-radius-pill); border: 1px dashed var(--ttj-gold-500); color: var(--ttj-text); }
 .card .desc { margin: var(--ttj-space-2) 0 var(--ttj-space-3); font-size: var(--ttj-text-sm); color: var(--ttj-text-muted); flex: 1; }
 .tags { list-style: none; margin: 0 0 var(--ttj-space-4); padding: 0; display: flex; flex-wrap: wrap; gap: var(--ttj-space-2); }
 .tags li {
@@ -277,6 +280,7 @@ footer a:hover { color: var(--ttj-gold-200); }
   html[data-theme="dark"] .card:hover, html[data-theme="dark"] .card:focus-within { border-color: var(--ttj-gold-500); box-shadow: 0 0 0 1px var(--ttj-gold-500), 0 10px 26px rgba(0,0,0,.55); }
   html[data-theme="dark"] .thumb { background: #14305A; box-shadow: inset 0 0 0 1px rgba(201,162,39,.35); }
   html[data-theme="dark"] .thumb svg > rect:first-child { fill: #112A4F; }
+  html[data-theme="dark"] .card .field { color: var(--ttj-gold-200); }
   html[data-theme="dark"] .tags li { background: rgba(201,162,39,.12); color: var(--ttj-gold-200); border-color: rgba(201,162,39,.45); }
   html[data-theme="dark"] .btn { background: rgba(201,162,39,.12); color: var(--ttj-gold-200); border-color: var(--ttj-gold-500); }
   html[data-theme="dark"] .btn:hover, html[data-theme="dark"] .btn:focus-visible { background: var(--ttj-gold-500); color: var(--ttj-navy-900); border-color: var(--ttj-gold-500); }
@@ -384,6 +388,7 @@ footer a:hover { color: var(--ttj-gold-200); }
             </svg>
           </div>
           <div class="card-body">
+            <p class="field">通信</p>
             <h3>通信の講義室 ― eSIM・IoT 実務大全</h3>
             <p class="desc">全55章・14部の独習教材。eSIM/RSP、VoLTE・SMS、IoT/車載の実務、セキュリティ、IMEI まで。ラボ・ログ演習・理解度チェック付き。</p>
             <ul class="tags" aria-label="技術タグ"><li>eSIM/RSP</li><li>VoLTE</li><li>SMS</li><li>IoT/車載</li><li>セキュリティ</li><li>IMEI</li></ul>
@@ -416,6 +421,7 @@ footer a:hover { color: var(--ttj-gold-200); }
             </svg>
           </div>
           <div class="card-body">
+            <p class="field">通信</p>
             <h3>コアネットワーク講義 ― 4G EPC / 5G 5GC</h3>
             <p class="desc">4G EPC と 5G 5GC のコアネットワークを全34章で学ぶ独習教材。構成図、シーケンス再生、識別子の解剖、鍵階層、状態遷移、切り分け演習、確認問題付き。</p>
             <ul class="tags" aria-label="技術タグ"><li>EPC</li><li>5GC</li><li>SBA</li><li>シーケンス</li><li>鍵階層</li><li>3GPP</li></ul>
@@ -442,6 +448,7 @@ footer a:hover { color: var(--ttj-gold-200); }
             </svg>
           </div>
           <div class="card-body">
+            <p class="field">通信</p>
             <h3>eSIM / RSP 解説ツール</h3>
             <p class="desc">リモート SIM プロビジョニング（RSP）の規格 SGP.22・SGP.02・SGP.32 を比較し、プロファイルのダウンロード手順をアニメーションで追えます。</p>
             <ul class="tags" aria-label="技術タグ"><li>SGP.22</li><li>SGP.02</li><li>SGP.32</li><li>eUICC</li><li>RSP</li></ul>
@@ -471,6 +478,7 @@ footer a:hover { color: var(--ttj-gold-200); }
             </svg>
           </div>
           <div class="card-body">
+            <p class="field">通信</p>
             <h3>通信フロー可視化</h3>
             <p class="desc">VoLTE、IMS 登録、SMS over SGs / IP、S8HR ローミングのシーケンスを、ステップ再生で確かめられます。</p>
             <ul class="tags" aria-label="技術タグ"><li>VoLTE</li><li>IMS</li><li>SMS over SGs/IP</li><li>S8HR</li><li>3GPP TS</li></ul>
@@ -506,10 +514,50 @@ footer a:hover { color: var(--ttj-gold-200); }
             </svg>
           </div>
           <div class="card-body">
+            <p class="field">通信</p>
             <h3>コネクテッドカー通信プラットフォーム資料 ― 主要事業者と業界動向</h3>
             <p class="desc">国内外の通信事業者・専業プラットフォーム・eSIM 供給者、約30社と業界の動きを、公開情報だけを出典に整理した資料。出典156件。実務者向けのチェックポイントと比較表つき。</p>
             <ul class="tags" aria-label="技術タグ"><li>MNO / MVNO</li><li>eSIM</li><li>SGP.32</li><li>NTN</li><li>比較表</li><li>公開情報</li></ul>
             <a class="btn" href="cc-platforms/" aria-label="コネクテッドカー通信プラットフォーム資料を開く">開く
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="thumb">
+            <svg viewBox="0 0 320 160" role="img" aria-label="格子状にチップが並んだ円形のウェーハと、積み重なった層を描いたチップ断面の抽象図">
+              <rect width="320" height="160" fill="#0B1F3A"/>
+              <defs><clipPath id="semi-wafer"><circle cx="96" cy="80" r="58"/></clipPath></defs>
+              <circle cx="96" cy="80" r="62" fill="#14305A" stroke="#C9A227" stroke-width="1.5"/>
+              <g clip-path="url(#semi-wafer)" fill="none" stroke="#8CA3C4" stroke-width="0.8" opacity="0.8">
+                <path d="M30 40 H162 M30 56 H162 M30 72 H162 M30 88 H162 M30 104 H162 M30 120 H162"/>
+                <path d="M48 20 V140 M66 20 V140 M84 20 V140 M102 20 V140 M120 20 V140 M138 20 V140"/>
+              </g>
+              <rect x="84" y="72" width="18" height="16" fill="#C9A227" fill-opacity="0.45" stroke="#EEDDA0" stroke-width="1"/>
+              <path d="M88 142 q8 6 16 0" fill="none" stroke="#C9A227" stroke-width="1.2"/>
+              <g stroke="#C9A227" stroke-width="1.2">
+                <rect x="192" y="102" width="104" height="14" fill="#14305A"/>
+                <rect x="192" y="86" width="104" height="8" fill="#0B1F3A"/>
+                <rect x="192" y="70" width="104" height="8" fill="#0B1F3A"/>
+                <rect x="192" y="54" width="104" height="8" fill="#0B1F3A"/>
+              </g>
+              <g fill="#EEDDA0">
+                <rect x="204" y="96" width="10" height="6"/><rect x="234" y="96" width="10" height="6"/><rect x="264" y="96" width="10" height="6"/>
+              </g>
+              <g stroke="#8CA3C4" stroke-width="1.5" stroke-linecap="round">
+                <path d="M200 74 h24 M236 74 h40 M200 58 h40 M252 58 h36 M209 94 v-14 M239 94 v-14 M269 94 v-14"/>
+              </g>
+              <text x="244" y="40" fill="#8CA3C4" font-size="10" text-anchor="middle" font-family="monospace">chip cross-section</text>
+              <text x="296" y="144" fill="#EEDDA0" font-size="11" text-anchor="end" font-family="monospace">32 ch.</text>
+            </svg>
+          </div>
+          <div class="card-body">
+            <p class="field">半導体</p>
+            <h3>半導体講義 ― 基礎・製造装置・装置輸送</h3>
+            <p class="progress"><span>公開中 5 / 32 章</span></p>
+            <p class="desc">全32章の計画。半導体の物性から製造工程、製造装置、装置の梱包・輸送・据付までを扱います。第1部の5章を公開中で、図とクイズつき。公開情報だけを出典にしています。</p>
+            <ul class="tags" aria-label="技術タグ"><li>半導体</li><li>製造装置</li><li>装置輸送</li><li>図とクイズ</li><li>公開情報</li></ul>
+            <a class="btn" href="semi/" aria-label="半導体講義を開く">開く
               <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
           </div>
         </article>
@@ -536,6 +584,7 @@ footer a:hover { color: var(--ttj-gold-200); }
             </svg>
           </div>
           <div class="card-body">
+            <p class="field">AI・開発環境</p>
             <h3>AI エコシステム図</h3>
             <p class="desc">Claude Code を司令塔に、フック・スキル・サブエージェント、そして 4 つのモデルへの振り分けまでの構成を一枚で見渡せます。</p>
             <ul class="tags" aria-label="技術タグ"><li>Claude Code</li><li>Hooks</li><li>Skills</li><li>Subagents</li><li>Model routing</li></ul>
@@ -565,6 +614,7 @@ footer a:hover { color: var(--ttj-gold-200); }
             </svg>
           </div>
           <div class="card-body">
+            <p class="field">サイト</p>
             <h3>TTJ 公式サイト</h3>
             <p class="desc">AI の未来レポート、触れる展示、備蓄ガイドなどを収めた TTJ のサイト。恒星スウォームの冒頭演出つき</p>
             <ul class="tags" aria-label="技術タグ"><li>WebGL</li><li>Canvas</li><li>単一 HTML</li><li>デザインシステム</li></ul>
