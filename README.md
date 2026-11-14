@@ -1,26 +1,43 @@
 # TTJ AI Ecosystem
 
-コネクテッドカー通信 × AI エージェント
+AI エージェント × 通信 × 半導体 × 計算サーバー × 発電
+
+Claude Code を軸にした AI 開発環境と、通信・半導体・計算サーバー・発電（コンバインドサイクル発電とガスタービン）を、公開情報だけで学べる形にまとめた作品集です。講義は、検証の済んだ分から順に公開しています。一部の資料と講義は、公開資料を出典に企業名を挙げて整理しています。
+
+**[▶ デモを見る（ショーケース）](https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/showcase/)**
+
+![ポートフォリオのトップページ](docs/images/portfolio.png)
+
+## 分野の一覧
+
+1. AI・開発環境（Claude Code）
+2. 通信
+3. 半導体
+4. 計算サーバー（検証中）
+5. 自作PC（準備中）
+6. 発電・ガスタービン（準備中）
+
+## 作品
+
+### 1. AI・開発環境
+
+#### AI エコシステム図
+
+このリポジトリの Claude Code 構成（入口・ハーネス・振り分け・公開）をインタラクティブに図解します。
+
+[デモを開く](https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/showcase/ai-ecosystem/)
+
+![AI エコシステム図の画面](docs/images/ai-ecosystem.png)
+
+### 2. 通信
 
 [![学習全体マップ：通信の講義室とコア講義の89章を1枚で俯瞰](docs/images/learning-map.png)](https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/showcase/learning-map/)
 
 **学習全体マップ** は、通信の講義室（55章）とコアネットワーク講義（34章）を、通信の流れ（横）と習熟の段（縦）で1枚に並べた地図です。点を押すと該当の章へ移動し、読了の状況も反映されます。
 
 - **[▶ 学習全体マップを開く](https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/showcase/learning-map/)**
-- [通信の講義室（全55章）](https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/showcase/sdv-dojo/)
-- [コアネットワーク講義（全34章）](https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/showcase/core-network/)
 
-**[▶ デモを見る（ショーケース）](https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/showcase/)**
-
-TTJ 公式サイト：https://ttj.tokyo/
-
-![TTJ ポートフォリオのトップページ](docs/images/portfolio.png)
-
-## 作品
-
-公開規格（3GPP・GSMA）と一般知識だけで作った、ブラウザで動くインタラクティブ作品です。ただし「コネクテッドカー通信プラットフォーム資料」だけは、公開資料を出典に、事業者名を挙げて整理しています。
-
-### 通信の講義室 ― eSIM・IoT 実務大全
+#### 通信の講義室 ― eSIM・IoT 実務大全
 
 全55章・14部の独習教材です。eSIM/RSP、VoLTE・SMS、IoT/車載の実務、セキュリティ、IMEI までを、ラボ・ログ演習・理解度チェック付きで学べます。
 
@@ -28,7 +45,7 @@ TTJ 公式サイト：https://ttj.tokyo/
 
 ![通信の講義室の画面](docs/images/sdv-dojo.png)
 
-### コアネットワーク講義 ― 4G EPC / 5G 5GC
+#### コアネットワーク講義 ― 4G EPC / 5G 5GC
 
 全34章の独習教材です。4G EPC と 5G 5GC のノード・インタフェース・識別子・手順を対にして学びます。構成図、シーケンス再生、識別子の解剖、鍵階層、状態遷移、切り分け演習、確認問題付きです。
 
@@ -36,7 +53,7 @@ TTJ 公式サイト：https://ttj.tokyo/
 
 ![コアネットワーク講義の画面](docs/images/core-network.png)
 
-### eSIM / RSP 解説ツール
+#### eSIM / RSP 解説ツール
 
 SGP.22・SGP.02・SGP.32 の構成を比べ、プロファイルのダウンロード手順をアニメーションで追えます。
 
@@ -44,7 +61,7 @@ SGP.22・SGP.02・SGP.32 の構成を比べ、プロファイルのダウンロ�
 
 ![eSIM / RSP 解説ツールの画面](docs/images/esim-rsp.png)
 
-### 通信フロー可視化
+#### 通信フロー可視化
 
 VoLTE・IMS登録・SMS over SGs/IP・S8HR のシーケンスを、ステップ再生で確認できます。
 
@@ -52,7 +69,7 @@ VoLTE・IMS登録・SMS over SGs/IP・S8HR のシーケンスを、ステップ�
 
 ![通信フロー可視化の画面](docs/images/telecom-flows.png)
 
-### コネクテッドカー通信プラットフォーム資料 ― 主要事業者と業界動向
+#### コネクテッドカー通信プラットフォーム資料 ― 主要事業者と業界動向
 
 国内外の通信事業者・専業プラットフォーム・eSIM 供給者、約30社と、業界の動き（SGP.32、恒久ローミング、衛星・NTN、NG eCall、2G/3G 停波など）を、公開情報だけを出典に整理した資料です。出典156件、実務者のチェックポイントと比較表つき。個人の整理であり、各社の数字は自己申告で単位と時点がそろっていません。
 
@@ -60,7 +77,9 @@ VoLTE・IMS登録・SMS over SGs/IP・S8HR のシーケンスを、ステップ�
 
 ![コネクテッドカー通信プラットフォーム資料の画面](docs/images/cc-platforms.png)
 
-### 半導体講義 ― 基礎・製造装置・装置輸送
+### 3. 半導体
+
+#### 半導体講義 ― 基礎・製造装置・装置輸送
 
 半導体の物性から、製造工程、製造装置、装置の梱包・輸送・据付までを学ぶ講座です。全32章（5部と付録）をすべて公開しています。図を動かせる部品と確認問題、総合テストつき。公開情報だけを出典にしています。
 
@@ -70,15 +89,15 @@ VoLTE・IMS登録・SMS over SGs/IP・S8HR のシーケンスを、ステップ�
 
 この講座の元データ（章の HTML・図のデータ・検証記録）と、単一 HTML に組み立てる基盤は `courses/` にあります。`courses/_framework/build.py` が `courses/semi/`（course.json、chapters/、data/）から 1 枚の HTML を作り（`--check` で重複・リンク切れなどを検査、`--publish courses/semi-publish.json` で公開範囲と出力先を指定）、`courses/_framework/test.py` が 1366px・375px、ダーク・ライトで動作を検査します。手順は `courses/PUBLISH.md`、基盤の仕様は `courses/_framework/FRAMEWORK.md`、検証の記録は `courses/semi/REVIEW-*.md` に書いてあります（基盤は Python 3 の標準ライブラリだけで動き、検査には Playwright と node を使います。パスは作者の環境のものなので、置き場所を変えるときは読み替えてください）。
 
-### AI エコシステム図
+### 4〜6. 検証中・準備中の分野
 
-このリポジトリの Claude Code 構成（入口・ハーネス・振り分け・公開）をインタラクティブに図解します。
+- **計算サーバー**（検証中）
+- **自作PC**（準備中）
+- **発電・ガスタービン**（準備中）：発電事業の仕組みと、コンバインドサイクル発電用ガスタービンを扱う講義。
 
-[デモを開く](https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/showcase/ai-ecosystem/)
+### その他
 
-![AI エコシステム図の画面](docs/images/ai-ecosystem.png)
-
-### TTJ 公式サイト
+#### TTJ 公式サイト
 
 AI の未来レポート、触れる展示、備蓄ガイドなどを収めた TTJ のサイトです。冒頭には恒星のまわりを粒子が回る演出があります。
 
@@ -97,7 +116,9 @@ AI の未来レポート、触れる展示、備蓄ガイドなどを収めた T
 
 TTJ（TED TRADING JAPAN G.K.）
 
-専門はコネクテッドカー通信（eSIM/eUICC・VoLTE/IMS・SMS・国際ローミング）と AI エージェント開発環境です。
+AI・開発環境、通信、半導体、計算サーバー、発電を、公開情報だけで学べる形にまとめています。
+
+TTJ 公式サイト：https://ttj.tokyo/
 
 ## セットアップ
 

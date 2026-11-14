@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TTJ Showcase — コネクテッドカー通信 × AI エージェント</title>
-<meta name="description" content="TTJ のポートフォリオ。通信の講義室とコアネットワーク講義の89章を1枚で俯瞰する学習全体マップ、コネクテッドカー通信と AI エージェント開発環境の作品集。">
+<title>Showcase — AI エージェント × 通信 × 半導体 × 計算サーバー × 発電</title>
+<meta name="description" content="Claude Code を軸にした AI 開発環境と、通信・半導体・計算サーバー・発電（コンバインドサイクル発電とガスタービン）を、公開情報だけで学べる形にまとめた作品集です。講義は、検証の済んだ分から順に公開しています。一部の資料と講義は、公開資料を出典に企業名を挙げて整理しています。">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="TTJ Showcase">
-<meta property="og:title" content="TTJ Showcase ― 学習全体マップ：通信の講義室とコア講義の89章を1枚で俯瞰">
-<meta property="og:description" content="通信の講義室（55章）とコアネットワーク講義（34章）を、通信の流れと習熟の段で1枚に。コネクテッドカー通信 × AI エージェントの作品集。">
+<meta property="og:site_name" content="Showcase">
+<meta property="og:title" content="Showcase ― 学習全体マップ：通信の講義室とコア講義の89章を1枚で俯瞰">
+<meta property="og:description" content="Claude Code を軸にした AI 開発環境と、通信・半導体・計算サーバー・発電（コンバインドサイクル発電とガスタービン）を、公開情報だけで学べる形にまとめた作品集です。講義は、検証の済んだ分から順に公開しています。一部の資料と講義は、公開資料を出典に企業名を挙げて整理しています。">
 <meta property="og:url" content="https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/showcase/">
 <meta property="og:image" content="https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/docs/images/learning-map.png">
 <meta property="og:image:width" content="1600">
@@ -120,6 +120,30 @@ a { color: var(--ttj-link); }
 .hero .sub { margin: 0; font-size: clamp(1.05rem, 3.6vw, 1.5rem); color: var(--ttj-gold-200); letter-spacing: 0.08em; }
 .hero .lead { margin: var(--ttj-space-5) 0 0; max-width: 34rem; color: var(--ttj-navy-100); font-size: var(--ttj-text-sm); }
 
+
+/* Hero sub: 区切りの × で折り返す */
+.hero .sub span { white-space: nowrap; }
+
+/* 分野の一覧 */
+.toc { padding: var(--ttj-space-6) 0 0; }
+.toc-title { margin: 0 0 var(--ttj-space-3); font-family: var(--ttj-font-mono); font-size: 0.75rem; letter-spacing: 0.22em; color: var(--ttj-accent-strong); }
+.toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--ttj-space-2); grid-template-columns: 1fr; counter-reset: toc; }
+.toc li { counter-increment: toc; }
+.toc a, .toc .off { display: flex; align-items: center; gap: var(--ttj-space-3); min-height: 48px; padding: var(--ttj-space-2) var(--ttj-space-4); border: 1px solid var(--ttj-border); border-radius: var(--ttj-radius-md); background: var(--ttj-bg-subtle); text-decoration: none; color: var(--ttj-text); }
+.toc a::before, .toc .off::before { content: counter(toc); font-family: var(--ttj-font-mono); font-weight: 700; color: var(--ttj-accent-strong); }
+.toc a small { color: var(--ttj-text-muted); font-size: 0.75rem; }
+.toc a:hover, .toc a:focus-visible { border-color: var(--ttj-gold-500); }
+.toc .off { border-style: dashed; color: var(--ttj-text-muted); }
+.status { display: inline-block; margin-left: auto; font-family: var(--ttj-font-mono); font-style: normal; font-size: 0.75rem; line-height: 1.4; padding: 2px var(--ttj-space-3); border-radius: var(--ttj-radius-pill); border: 1px dashed var(--ttj-gold-500); color: var(--ttj-text); white-space: nowrap; }
+@media (min-width: 640px) { .toc ol { grid-template-columns: 1fr 1fr; } }
+
+/* 予告（未公開の分野） */
+.soon { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ttj-space-2) var(--ttj-space-4); padding: var(--ttj-space-4) var(--ttj-space-5); border: 1px dashed var(--ttj-border); border-radius: var(--ttj-radius-md); background: var(--ttj-bg-subtle); }
+.soon h3 { font-size: var(--ttj-text-base); }
+.soon p { margin: 0; flex: 1 1 16rem; font-size: var(--ttj-text-sm); color: var(--ttj-text-muted); }
+.soon .status { margin-left: 0; }
+#field-telecom .feature { margin-bottom: var(--ttj-space-5); }
+
 /* ---------- Sections ---------- */
 section { padding: var(--ttj-space-7) 0 0; }
 .sec-head { margin-bottom: var(--ttj-space-5); }
@@ -136,12 +160,12 @@ section { padding: var(--ttj-space-7) 0 0; }
 .fields li { background: var(--ttj-bg); border: 1px solid var(--ttj-border); border-radius: var(--ttj-radius-md); padding: var(--ttj-space-4); box-shadow: var(--ttj-shadow-sm); }
 .fields strong { display: block; color: var(--ttj-navy-800); font-family: var(--ttj-font-serif); }
 .fields span { font-size: var(--ttj-text-sm); color: var(--ttj-text-muted); }
+.fields .status { margin-left: 0; font-size: 0.75rem; color: var(--ttj-text); }
 
 /* Feature（学習全体マップ） */
-.feature { padding-top: var(--ttj-space-6); }
 .feature-box { background: linear-gradient(160deg, var(--ttj-navy-900) 0%, var(--ttj-navy-800) 60%, var(--ttj-navy-700) 100%); color: var(--ttj-text-inverse); border: 1px solid var(--ttj-gold-500); border-radius: var(--ttj-radius-lg); box-shadow: var(--ttj-shadow-md); padding: var(--ttj-space-5); }
 .feature .en { display: block; font-family: var(--ttj-font-mono); font-size: 0.75rem; letter-spacing: 0.22em; color: var(--ttj-gold-400); }
-.feature h2 { color: #fff; font-size: clamp(1.3rem, 4.6vw, var(--ttj-text-xl)); font-weight: 600; margin-top: var(--ttj-space-1); }
+.feature h3 { color: #fff; font-size: clamp(1.3rem, 4.6vw, var(--ttj-text-xl)); font-weight: 600; margin-top: var(--ttj-space-1); }
 .feature .f-lead { margin: var(--ttj-space-3) 0 var(--ttj-space-4); max-width: 44rem; color: var(--ttj-navy-100); font-size: var(--ttj-text-sm); }
 .feature .f-shot { display: block; border: 1px solid rgba(201,162,39,0.55); border-radius: var(--ttj-radius-md); overflow: hidden; background: #060a14; }
 .feature .f-shot img { display: block; width: 100%; height: auto; }
@@ -184,15 +208,6 @@ section { padding: var(--ttj-space-7) 0 0; }
 .btn:hover { background: var(--ttj-gold-500); color: var(--ttj-navy-900); border-color: var(--ttj-gold-500); }
 .btn svg { width: 16px; height: 16px; }
 
-/* Site link */
-.hero-cta { margin: var(--ttj-space-5) 0 0; }
-.btn-site {
-  display: inline-block; line-height: 1.6; min-height: 44px; box-sizing: border-box; padding: 10px var(--ttj-space-5);
-  color: var(--ttj-gold-200); text-decoration: none; font-weight: 700; letter-spacing: 0.04em;
-  border: 1px solid var(--ttj-gold-500); border-radius: var(--ttj-radius-sm); background: rgba(201,162,39,0.1);
-  transition: background .2s ease, color .2s ease;
-}
-.btn-site:hover, .btn-site:focus-visible { background: var(--ttj-gold-500); color: var(--ttj-navy-900); }
 @media (min-width: 820px) {
   .cards > .card:last-child:nth-child(odd) { grid-column: 1 / -1; flex-direction: row; }
   .cards > .card:last-child:nth-child(odd) .thumb { flex: 0 0 42%; border-bottom: 0; border-right: 2px solid var(--ttj-gold-500); display: flex; }
@@ -294,7 +309,7 @@ footer a:hover { color: var(--ttj-gold-200); }
 </style>
 </head>
 <body>
-<a class="skip" href="#works">作品へスキップ</a>
+<a class="skip" href="#field-ai">作品へスキップ</a>
 
 <header class="hero">
   <svg class="hero-art" viewBox="0 0 960 420" preserveAspectRatio="xMaxYMid slice" aria-hidden="true" focusable="false">
@@ -313,20 +328,74 @@ footer a:hover { color: var(--ttj-gold-200); }
   </svg>
   <div class="wrap">
     <p class="eyebrow">Portfolio</p>
-    <h1>TTJ Showcase</h1>
+    <h1>Showcase</h1>
     <span class="rule" aria-hidden="true"></span>
-    <p class="sub">コネクテッドカー通信 × AI エージェント</p>
-    <p class="lead">公開規格（3GPP・GSMA）と一般知識だけで組み立てた、通信の仕組みと AI 開発環境の作品集です。ただし「コネクテッドカー通信プラットフォーム資料」だけは、公開資料を出典に、事業者名を挙げて整理しています。</p>
-    <p class="hero-cta"><a class="btn-site" href="https://ttj.tokyo/" target="_blank" rel="noopener noreferrer">TTJ 公式サイト（ttj.tokyo）<span style="white-space:nowrap">を見る ↗</span></a></p>
+    <p class="sub"><span>AI エージェント</span> × <span>通信</span> × <span>半導体</span> × <span>計算サーバー</span> × <span>発電</span></p>
+    <p class="lead">Claude Code を軸にした AI 開発環境と、通信・半導体・計算サーバー・発電（コンバインドサイクル発電とガスタービン）を、公開情報だけで学べる形にまとめた作品集です。講義は、検証の済んだ分から順に公開しています。一部の資料と講義は、公開資料を出典に企業名を挙げて整理しています。</p>
   </div>
 </header>
 
+<nav class="toc" aria-label="分野の一覧">
+  <div class="wrap">
+    <p class="toc-title">分野の一覧</p>
+    <ol>
+      <li><a href="#field-ai"><b>AI・開発環境</b><small>Claude Code</small></a></li>
+      <li><a href="#field-telecom"><b>通信</b></a></li>
+      <li><a href="#field-semi"><b>半導体</b></a></li>
+      <li><span class="off"><b>計算サーバー</b><i class="status">検証中</i></span></li>
+      <li><span class="off"><b>自作PC</b><i class="status">準備中</i></span></li>
+      <li><span class="off"><b>発電・ガスタービン</b><i class="status">準備中</i></span></li>
+    </ol>
+  </div>
+</nav>
+
 <main>
-  <section class="feature" aria-labelledby="h-map">
+  <section id="field-ai" aria-labelledby="h-field-ai">
     <div class="wrap">
-      <div class="feature-box">
+      <div class="sec-head"><span class="en">01 · AI &amp; Dev Environment</span><h2 id="h-field-ai">AI・開発環境（Claude Code）</h2></div>
+      <div class="cards">
+
+        <article class="card">
+          <div class="thumb">
+            <svg viewBox="0 0 320 160" role="img" aria-label="中央の司令塔から四つのモデルへ枝分かれする構成図">
+              <rect width="320" height="160" fill="#0B1F3A"/>
+              <g fill="none" stroke="#C9A227" stroke-width="1.2">
+                <path d="M160 62 V84 M160 84 H50 V104 M160 84 H123 V104 M160 84 H197 V104 M160 84 H270 V104"/>
+              </g>
+              <rect x="110" y="26" width="100" height="36" rx="6" fill="#14305A" stroke="#C9A227" stroke-width="1.5"/>
+              <text x="160" y="48" fill="#F5F1E3" font-size="11" text-anchor="middle" font-family="monospace">Claude Code</text>
+              <g fill="#0B1F3A" stroke="#C9A227" stroke-width="1.2">
+                <rect x="24" y="104" width="52" height="28" rx="4"/>
+                <rect x="97" y="104" width="52" height="28" rx="4"/>
+                <rect x="171" y="104" width="52" height="28" rx="4"/>
+                <rect x="244" y="104" width="52" height="28" rx="4"/>
+              </g>
+              <g fill="#EEDDA0" font-size="9" text-anchor="middle" font-family="monospace">
+                <text x="50" y="122">haiku</text><text x="123" y="122">sonnet</text><text x="197" y="122">opus</text><text x="270" y="122">fable</text>
+              </g>
+              <circle cx="28" cy="30" r="2.5" fill="#C9A227"/><circle cx="292" cy="30" r="2.5" fill="#C9A227"/>
+            </svg>
+          </div>
+          <div class="card-body">
+            <p class="field">AI・開発環境</p>
+            <h3>AI エコシステム図</h3>
+            <p class="desc">Claude Code を司令塔に、フック・スキル・サブエージェント、そして 4 つのモデルへの振り分けまでの構成を一枚で見渡せます。</p>
+            <ul class="tags" aria-label="技術タグ"><li>Claude Code</li><li>Hooks</li><li>Skills</li><li>Subagents</li><li>Model routing</li></ul>
+            <a class="btn" href="ai-ecosystem/index.html" aria-label="AI エコシステム図を開く">開く
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="field-telecom" aria-labelledby="h-field-telecom">
+    <div class="wrap">
+      <div class="sec-head"><span class="en">02 · Telecom</span><h2 id="h-field-telecom">通信</h2></div>
+      <div class="feature"><div class="feature-box">
         <span class="en">Learning Map</span>
-        <h2 id="h-map">学習全体マップ — 通信の講義室とコア講義、89章を1枚で俯瞰</h2>
+        <h3 id="h-map">学習全体マップ — 通信の講義室とコア講義、89章を1枚で俯瞰</h3>
         <p class="f-lead">通信の講義室（55章）とコアネットワーク講義（34章）を、通信の流れ（横）と習熟の段（縦）で1枚に並べました。入門から実務、一人前までの道筋を選び、いまの読了状況を地図の上で確かめられます。</p>
         <a class="f-shot" href="learning-map/" aria-label="学習全体マップを開く">
           <img src="../docs/images/learning-map.png" width="1600" height="900" alt="通信の講義室とコアネットワーク講義の89章を、横に通信の流れ、縦に習熟の段で並べた地図。各章が点で表され、章番号が書かれている。" loading="eager">
@@ -337,32 +406,7 @@ footer a:hover { color: var(--ttj-gold-200); }
           <a href="core-network/">コアネットワーク講義へ</a>
         </div>
       </div>
-    </div>
-  </section>
-
-  <section aria-labelledby="h-profile">
-    <div class="wrap">
-      <div class="sec-head"><span class="en">Profile</span><h2 id="h-profile">プロフィール</h2></div>
-      <div class="profile">
-        <div class="profile-main">
-          <h3>TTJ</h3>
-          <p class="org">TED TRADING JAPAN G.K.</p>
-          <p>コネクテッドカーの通信まわりを専門にしています。仕組みを図とアニメーションで分かりやすく見せること、そして AI エージェントを使って、迷わず使える開発環境をつくることに取り組んでいます。</p>
-        </div>
-        <ul class="fields" aria-label="専門分野">
-          <li><strong>eSIM / eUICC</strong><span>リモート SIM プロビジョニング</span></li>
-          <li><strong>VoLTE / IMS</strong><span>音声サービスと登録フロー</span></li>
-          <li><strong>SMS ルーティング</strong><span>SMS over SGs / IP</span></li>
-          <li><strong>国際ローミング</strong><span>Roaming（S8HR など）</span></li>
-          <li><strong>AI エージェント開発環境</strong><span>Claude Code を軸にした環境づくり</span></li>
-        </ul>
       </div>
-    </div>
-  </section>
-
-  <section id="works" aria-labelledby="h-works">
-    <div class="wrap">
-      <div class="sec-head"><span class="en">Works</span><h2 id="h-works">作品</h2></div>
       <div class="cards">
 
         <article class="card">
@@ -523,6 +567,15 @@ footer a:hover { color: var(--ttj-gold-200); }
           </div>
         </article>
 
+      </div>
+    </div>
+  </section>
+
+  <section id="field-semi" aria-labelledby="h-field-semi">
+    <div class="wrap">
+      <div class="sec-head"><span class="en">03 · Semiconductor</span><h2 id="h-field-semi">半導体</h2></div>
+      <div class="cards">
+
         <article class="card">
           <div class="thumb">
             <svg viewBox="0 0 320 160" role="img" aria-label="格子状にチップが並んだ円形のウェーハと、積み重なった層を描いたチップ断面の抽象図">
@@ -562,36 +615,47 @@ footer a:hover { color: var(--ttj-gold-200); }
           </div>
         </article>
 
-        <article class="card">
-          <div class="thumb">
-            <svg viewBox="0 0 320 160" role="img" aria-label="中央の司令塔から四つのモデルへ枝分かれする構成図">
-              <rect width="320" height="160" fill="#0B1F3A"/>
-              <g fill="none" stroke="#C9A227" stroke-width="1.2">
-                <path d="M160 62 V84 M160 84 H50 V104 M160 84 H123 V104 M160 84 H197 V104 M160 84 H270 V104"/>
-              </g>
-              <rect x="110" y="26" width="100" height="36" rx="6" fill="#14305A" stroke="#C9A227" stroke-width="1.5"/>
-              <text x="160" y="48" fill="#F5F1E3" font-size="11" text-anchor="middle" font-family="monospace">Claude Code</text>
-              <g fill="#0B1F3A" stroke="#C9A227" stroke-width="1.2">
-                <rect x="24" y="104" width="52" height="28" rx="4"/>
-                <rect x="97" y="104" width="52" height="28" rx="4"/>
-                <rect x="171" y="104" width="52" height="28" rx="4"/>
-                <rect x="244" y="104" width="52" height="28" rx="4"/>
-              </g>
-              <g fill="#EEDDA0" font-size="9" text-anchor="middle" font-family="monospace">
-                <text x="50" y="122">haiku</text><text x="123" y="122">sonnet</text><text x="197" y="122">opus</text><text x="270" y="122">fable</text>
-              </g>
-              <circle cx="28" cy="30" r="2.5" fill="#C9A227"/><circle cx="292" cy="30" r="2.5" fill="#C9A227"/>
-            </svg>
-          </div>
-          <div class="card-body">
-            <p class="field">AI・開発環境</p>
-            <h3>AI エコシステム図</h3>
-            <p class="desc">Claude Code を司令塔に、フック・スキル・サブエージェント、そして 4 つのモデルへの振り分けまでの構成を一枚で見渡せます。</p>
-            <ul class="tags" aria-label="技術タグ"><li>Claude Code</li><li>Hooks</li><li>Skills</li><li>Subagents</li><li>Model routing</li></ul>
-            <a class="btn" href="ai-ecosystem/index.html" aria-label="AI エコシステム図を開く">開く
-              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
-          </div>
-        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="field-compute" aria-labelledby="h-field-compute">
+    <div class="wrap">
+      <div class="sec-head"><span class="en">04 · Compute Servers</span><h2 id="h-field-compute">計算サーバー</h2></div>
+      <div class="soon">
+        <h3>計算サーバー</h3>
+        <p>計算サーバーの仕組みを扱う講義。</p>
+        <span class="status">検証中</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="field-pc" aria-labelledby="h-field-pc">
+    <div class="wrap">
+      <div class="sec-head"><span class="en">05 · Custom PC</span><h2 id="h-field-pc">自作PC</h2></div>
+      <div class="soon">
+        <h3>自作PC</h3>
+        <p>自作 PC を扱う講義。</p>
+        <span class="status">準備中</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="field-power" aria-labelledby="h-field-power">
+    <div class="wrap">
+      <div class="sec-head"><span class="en">06 · Power Generation</span><h2 id="h-field-power">発電・ガスタービン</h2></div>
+      <div class="soon">
+        <h3>発電・ガスタービン</h3>
+        <p>発電事業の仕組みと、コンバインドサイクル発電用ガスタービンを扱う講義。</p>
+        <span class="status">準備中</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="field-other" aria-labelledby="h-field-other">
+    <div class="wrap">
+      <div class="sec-head"><span class="en">Other</span><h2 id="h-field-other">その他</h2></div>
+      <div class="cards">
 
         <article class="card">
           <div class="thumb">
@@ -622,6 +686,27 @@ footer a:hover { color: var(--ttj-gold-200); }
           </div>
         </article>
 
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-profile">
+    <div class="wrap">
+      <div class="sec-head"><span class="en">Profile</span><h2 id="h-profile">プロフィール</h2></div>
+      <div class="profile">
+        <div class="profile-main">
+          <h3>TTJ</h3>
+          <p class="org">TED TRADING JAPAN G.K.</p>
+          <p>AI・開発環境、通信、半導体、計算サーバー、発電を、公開情報だけで学べる形にまとめています。仕組みを図とアニメーションで分かりやすく見せること、そして AI エージェントを使って、迷わず使える開発環境をつくることに取り組んでいます。</p>
+        </div>
+        <ul class="fields" aria-label="分野">
+          <li><strong>AI・開発環境</strong><span>Claude Code を軸にした環境づくり</span></li>
+          <li><strong>通信</strong><span>eSIM / eUICC・VoLTE / IMS・SMS・国際ローミング</span></li>
+          <li><strong>半導体</strong><span>物性から製造装置・装置輸送まで（全32章）</span></li>
+          <li><strong>計算サーバー</strong><span class="status">検証中</span></li>
+          <li><strong>自作PC</strong><span class="status">準備中</span></li>
+          <li><strong>発電・ガスタービン</strong><span class="status">準備中</span></li>
+        </ul>
       </div>
     </div>
   </section>
