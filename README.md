@@ -18,7 +18,7 @@ TTJ 公式サイト：https://ttj.tokyo/
 
 ## 作品
 
-公開規格（3GPP・GSMA）と一般知識だけで作った、ブラウザで動くインタラクティブ作品です。
+公開規格（3GPP・GSMA）と一般知識だけで作った、ブラウザで動くインタラクティブ作品です。ただし「コネクテッドカー通信プラットフォーム資料」だけは、公開資料を出典に、事業者名を挙げて整理しています。
 
 ### 通信の講義室 ― eSIM・IoT 実務大全
 
@@ -51,6 +51,14 @@ VoLTE・IMS登録・SMS over SGs/IP・S8HR のシーケンスを、ステップ�
 [デモを開く](https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/showcase/telecom-flows/)
 
 ![通信フロー可視化の画面](docs/images/telecom-flows.png)
+
+### コネクテッドカー通信プラットフォーム資料 ― 主要事業者と業界動向
+
+国内外の通信事業者・専業プラットフォーム・eSIM 供給者、約30社と、業界の動き（SGP.32、恒久ローミング、衛星・NTN、NG eCall、2G/3G 停波など）を、公開情報だけを出典に整理した資料です。出典156件、実務者のチェックポイントと比較表つき。個人の整理であり、各社の数字は自己申告で単位と時点がそろっていません。
+
+[資料を開く](https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/showcase/cc-platforms/)
+
+![コネクテッドカー通信プラットフォーム資料の画面](docs/images/cc-platforms.png)
 
 ### AI エコシステム図
 
