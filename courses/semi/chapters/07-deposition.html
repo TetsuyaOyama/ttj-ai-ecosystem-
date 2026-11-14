@@ -1,0 +1,85 @@
+<!--
+num: 07
+part: 2
+title: 酸化と成膜
+track: 前工程
+time: 35
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li><b>熱酸化・化学気相成長（CVD）・原子層堆積（ALD）・物理気相成長（PVD）・エピタキシャル成長</b>の原理の違いと、それぞれが得意な膜を言える。</li>
+    <li>溝や穴の中への付き方（<b>段差被覆性</b>）が、方式によって違う理由を説明できる。</li>
+    <li>用途（ゲート絶縁膜、配線のバリア、層間絶縁膜）から、向く成膜方式を選べる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch06">第06章</a>（工程の全体像と基本ループ）。</p>
+</section>
+
+<h3>膜には 4 つの役目がある</h3>
+<p>チップの中には、薄い膜がたくさん重なっています。膜の役目は、おもに 4 つです。電流を通さない<b>絶縁</b>、電流を通す<b>導電</b>、下の回路を守る<b>保護</b>、そして、彫るときに使う<b>マスク</b>（ハードマスク）です。役目によって、必要な材料と、膜の質が変わります。</p>
+<p>膜をつける方法は、大きく 5 つあります。次の節から、1 つずつ見ます。</p>
+
+<h3>熱酸化：シリコンを酸化膜に変える</h3>
+<p><b>熱酸化</b>（thermal oxidation）は、シリコンのウェーハを高温にして、酸素や水蒸気と反応させる方法です。表面のシリコンが、酸化膜（二酸化ケイ素）に変わります。膜を上に載せるのではなく、基板の表面を変えるので、膜と基板の境目がきれいにつながります。</p>
+<p>酸素を使う方式を<b>ドライ酸化</b>、水蒸気を使う方式を<b>ウェット酸化</b>と呼びます。ドライ酸化は、成長が遅いかわりに、薄くて質のよい膜に向きます。ウェット酸化は、成長が速いので、厚い膜に向きます。</p>
+<p>酸化が進むと、基板のシリコンは酸化膜の厚さの約 0.44 倍だけ消費されます（教科書の値）。つまり、できた酸化膜の約半分は、もとのシリコンの中に食い込んでいます。</p>
+
+<h3>化学気相成長（CVD）：ガスの反応で膜をつくる</h3>
+<p><b>化学気相成長</b>（Chemical Vapor Deposition, CVD）は、原料のガスを基板の表面で反応させ、固体の膜をつくる方法です。基板の上に新しい材料の膜を重ねられるので、酸化膜だけでなく、窒化膜やポリシリコンなど、多くの膜に使います。</p>
+<p>反応のさせ方で、種類が分かれます。熱だけで反応させるのが<b>熱 CVD</b> です。圧力を下げて膜を均一にするのが <b>LPCVD</b>（Low Pressure CVD）です。ガスをプラズマで活性化し、低い温度で反応させるのが <b>PECVD</b>（Plasma Enhanced CVD）です。PECVD は温度を下げられます。ただし、チャンバの中にガス・プラズマ・反応の副産物が混ざるため、原子レベルの制御は難しくなります（出典：Lam Research（米国）、Semiconductor Engineering 掲載記事、2018 年 3 月）。</p>
+
+<h3>原子層堆積（ALD）：1 サイクルに 1 層ずつ</h3>
+<p><b>原子層堆積</b>（Atomic Layer Deposition, ALD）は、CVD の仲間です。2 種類のガスを同時に流さず、順番に流します。まず、膜の材料を含む<b>前駆体</b>（precursor）のガスを流し、表面に吸着させます。吸着できる場所が埋まると、それ以上は付きません。この性質を<b>自己制限</b>と呼びます。次に余分なガスを追い出し（パージ）、反応用のガスを流して膜に変え、もう一度パージします。これが 1 サイクルです。</p>
+<p>サイクルを繰り返すほど、膜が厚くなります。ASM International（オランダ）は、ALD を、表面で起こる反応を使って 1 層ずつ付ける方法と説明しています（出典：ASM International『Atomic Layer Deposition』、2026 年 11 月に確認）。ただし、1 サイクルで付く厚さは、厳密には 1 原子層ちょうどではありません。厚さをよく制御できる、という意味です（出典：Lam Research、2018 年 3 月）。</p>
+<div data-widget="seq" data-src="c07-ald"></div>
+<p>ALD は、細い溝の壁や底まで、同じ厚さで付けられます。そのかわり、1 サイクルで付く厚さが小さいので、厚い膜をつけるには時間がかかります。ALD は、非常に薄い膜が必要な場所に使います。</p>
+
+<h3>物理気相成長（PVD）：金属の原子を叩き出して付ける</h3>
+<p><b>物理気相成長</b>（Physical Vapor Deposition, PVD）は、材料の原子を物理的に飛ばして付ける方法です。半導体では、<b>スパッタリング</b>（sputtering）がよく使われます。真空の中でアルゴンなどのイオンを、膜の材料でできた板に当てます。叩き出された原子が飛んで、ウェーハに付きます。この材料の板を<b>ターゲット</b>（sputtering target）と呼びます。</p>
+<p>PVD の原子は、ほぼ直進して飛んできます。そのため、ウェーハの表面や溝の底には付きますが、深い溝の壁には付きにくくなります。金属の膜を効率よく付けられるので、配線のバリアや電極などに使います。</p>
+
+<h3>エピタキシャル成長：結晶の続きをつくる</h3>
+<p><b>エピタキシャル成長</b>（epitaxial growth）は、基板の結晶の並びを引き継いで、単結晶の膜を成長させる方法です。ウェーハの全面に成長させたものがエピタキシャルウェーハです（<a href="#ch05">第05章</a>）。トランジスタの一部に、狙った場所だけ結晶を成長させる使い方もあります。</p>
+
+<h3>段差への付き方を比べる</h3>
+<p>先端のチップには、細くて深い溝や穴があります。その中に膜をつけるとき、<b>段差被覆性</b>（step coverage）が問題になります。溝の上面・壁・底で、膜の厚さがどれだけそろうかを表す言葉です。厚さがそろう付き方を、<b>コンフォーマル</b>（conformal）と呼びます。</p>
+<p>次の図は、同じ溝に PVD・CVD・ALD で膜をつけた様子です。方式によって、壁への付き方がどう違うかを見てください。厚さは模式で、実際の被覆は条件によって変わります。</p>
+<div data-widget="xsec" data-src="c07-step"></div>
+
+<h3>方式の早見表</h3>
+<p>5 つの方式を、表で比べます（CVD は、熱 CVD・LPCVD と PECVD の 2 行に分けています）。行を押すと、補足が出ます。</p>
+<div data-widget="table" data-src="c07-methods"></div>
+
+<h3>最近の動向：GAA 世代の成膜</h3>
+<p>トランジスタが GAA（Gate-All-Around）構造になると、薄い膜を、狭いすき間の中まで正確に付ける必要が増えます。Applied Materials（米国）は 2026 年 4 月に、GAA トランジスタ向けの 2 つの成膜システムを発表しました。1 つは、STI（Shallow Trench Isolation、浅溝素子分離）に窒化膜を選択的に付ける PECVD システムです。もう 1 つは、ゲートの金属を ALD で付けるシステムです。同社は、どちらも 2 nm 世代（世代の呼称で、物理寸法ではない。<a href="#ch04">第04章</a>）以降の GAA で、先端のロジックメーカーに採用されていると述べています（出典：Applied Materials プレスリリース、2026 年 4 月 8 日）。</p>
+<p>ALD の用途は、ほかにも広がっています。ASM は、High-k メタルゲート、パターニング用のスペーサー、容量素子、高アスペクト比の溝の埋め込みを挙げています（出典：ASM International『Atomic Layer Deposition』、2026 年 11 月に確認）。</p>
+
+<h3>用途から方式を選ぶ</h3>
+<div class="callout tip"><span class="ttl">演習</span>
+  <p>下の表の、右の列を手で隠してください。左の「用途と求める条件」だけを見て、向く方式を考えます。そのあとで、右の列と理由を見て答え合わせをします。</p></div>
+<div data-widget="compare" data-src="c07-pick"></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>ALD は CVD の仲間です。</b>別物と覚えると混乱します。違いは、ガスを同時に流さず、順番に流す点です。</p>
+  <p><b>「いちばん良い方式」はありません。</b>ALD は厚さの制御と被覆に強いのですが、遅いので、厚い膜には向きません。PVD は速く金属を付けられますが、深い溝の壁は苦手です。膜の役目と形に合わせて選びます。</p>
+  <p><b>熱酸化は「付ける」のではなく「変える」方式です。</b>シリコンが消費されるため、基板の表面が下がります。</p></div>
+
+<div class="callout note"><span class="ttl">現場でのつながり</span>
+  <p>成膜装置は、方式ごとに形が違います。ガスを使う CVD や ALD の装置は、ガスの配管と排気の設備が要ります。PVD の装置は、高真空の設備が要ります。装置を据え付けるとき、必要な用役（電力・ガス・排気）が違うのは、このためです。<a href="#ch16">第16章</a>、<a href="#ch17">第17章</a>、<a href="#ch24">第24章</a>につながります。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c07-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（アクセス日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://www.appliedmaterials.com/us/en/newsroom/press-releases/040826-applied-materials-introduces-deposition-systems-angstrom-era.html">Applied Materials Introduces Deposition Systems for Angstrom-Era Logic Chips</a></th><td>Applied Materials</td><td>2026 年 4 月 8 日</td><td>GAA 向けの PECVD・ALD システムの発表内容。</td></tr>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://www.asm.com/ald">Atomic Layer Deposition</a></th><td>ASM International</td><td>2026 年 11 月に確認（日付の記載なし）</td><td>ALD の原理（自己制限、1 層ずつ）と用途。</td></tr>
+      <tr><td>企業の技術解説</td><th scope="row"><a href="https://semiengineering.com/a-look-at-atomic-layer-deposition-2">How Atomic Layer Deposition Works</a></th><td>Lam Research（Semiconductor Engineering 掲載。スポンサー記事）</td><td>2018 年 3 月 15 日</td><td>ALD のサイクル、PECVD との違い、1 サイクルの厚さの注意。</td></tr>
+      <tr><td>教科書的な一般知識</td><th scope="row">半導体プロセスの教科書（例：Plummer, Deal, Griffin『Silicon VLSI Technology』）</th><td>—</td><td>—</td><td>熱酸化（ドライ・ウェット、シリコンの消費）、LPCVD、スパッタリング、エピタキシャル成長の原理。</td></tr>
+    </tbody>
+  </table></div>
+</section>

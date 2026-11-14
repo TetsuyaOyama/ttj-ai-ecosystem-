@@ -1,0 +1,105 @@
+<!--
+num: 04
+part: 1
+title: 微細化と世代の呼び方
+track: 基礎
+time: 30
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>微細化（スケーリング）で、性能・電力・面積・コストの何が良くなるかが分かる。</li>
+    <li>「<b>3 nm 世代</b>」の数字が物理寸法ではなく、世代の名前であることを説明できる。</li>
+    <li>ニュースの見出しを、「世代名」「物理寸法」「製品名」に切り分けて読める。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch02">第02章</a>（トランジスタ）と<a href="#ch03">第03章</a>（集積回路）。</p>
+</section>
+
+<h3>ムーアの法則とスケーリング</h3>
+<p>1965 年に Gordon Moore は、集積回路に載せられる部品の数が毎年倍になると予測しました。その後、2 年ごとに倍という見直しがありました（出典：Computer History Museum『Moore's Law』、2026 年 11 月に確認）。この<b>ムーアの法則</b>（Moore's law）は、物理法則ではなく、産業の歩みを表した<b>観察と予測</b>です。</p>
+<p>寸法を小さくして良くしていく考え方を、<b>スケーリング</b>（scaling）と呼びます。小さくすると、一般に次の 4 つが改善します。</p>
+<ul>
+  <li><b>面積</b>：同じ機能のチップが小さくなり、1 枚のウェーハから取れる数が増えます。</li>
+  <li><b>性能</b>：トランジスタが速く切り替わります。</li>
+  <li><b>電力</b>：切り替えに使う電力が減ります。</li>
+  <li><b>コスト</b>：1 個あたりの製造費が下がる方向に働きます。</li>
+</ul>
+<p>性能・電力・面積の 3 つを合わせて<b>PPA</b>（Power, Performance, Area）と呼びます。世代が進むと、PPA がどれだけ改善するかが企業の発表の中心になります。ただし、世代が進むほど改善幅や費用は一定ではなく、構造と材料の工夫（第02章の FinFET・GAA など）が要ります。</p>
+
+<h3>「3 nm 世代」の数字は寸法ではない</h3>
+<p>かつて世代名の数字は、トランジスタのゲート長や配線のハーフピッチにほぼ一致していました。ところが 1990 年代半ばからゲート長のほうが速く縮み、やがて数字はどの物理寸法も表さなくなりました（出典：IEEE Spectrum、S. K. Moore『A Better Way to Measure Progress in Semiconductors』、2020 年 7 月 21 日）。IRDS（International Roadmap for Devices and Systems）も、ロジックの世代名は「最小ハーフピッチと同じではない」と明記しています（出典：IRDS 2021 年版 Lithography）。</p>
+<p>つまり、世代名は<b>歴史的な名前</b>です。「3 nm 世代」は、物理寸法が 3 nm だという意味ではありません。ここでは、世代の呼称であって物理寸法ではないことを、本講座を通じて守ります。</p>
+
+<h3>では何が小さくなってきたのか</h3>
+<p>物理寸法で見るなら、ゲートの間隔を表す<b>ゲートピッチ</b>（contacted gate pitch）と、配線の間隔を表す<b>メタルピッチ</b>（metal pitch）が使われます。下の図の記号を押して、どの間隔を指すか確かめてください。</p>
+<div data-widget="arch" data-src="c04-pitch"></div>
+<p>IRDS は、世代のラベルと並べて、ゲートピッチ（G）・メタルピッチ（M）・積層の段数（T）を並べる表記も使います。たとえば「G48M36T1」は、ゲートピッチ 48 nm、メタルピッチ 36 nm、1 段、という意味です。下の表は IRDS 2021 年版のロードマップ上の値（予測）で、ラベルの数字と寸法がそろっていないことが分かります。</p>
+<div data-widget="table" data-src="c04-irds"></div>
+
+<h3>各社の呼称は、各社の名前</h3>
+<p>世代の呼称は企業が決めます。TSMC は「N3」「N2」、Intel は「18A」、Samsung は「3 nm 世代」のように、それぞれ違う付け方です。企業間で数字を比べて優劣を決めることはできません。この講座では、<b>社名と組で書き</b>、「◯◯社の N2 は△△社の 18A に相当」のような等号は書きません。次の「読み方」で、名前を部分に分けて確かめてください。</p>
+<div data-widget="ident" data-src="c04-names"></div>
+
+<h3>各社の公表の例</h3>
+<p>下の表は、企業が公表した世代と時期を、言葉どおりに整理したものです。「初期生産」「量産」「量産出荷」「サンプル出荷」は別の意味なので、言い換えずに書いています。</p>
+<div data-widget="table" data-src="c04-nodes"></div>
+
+<h3>DRAM の世代と NAND の層数</h3>
+<p>DRAM では、10 nm 台の世代を細かく区別するため、1x → 1y → 1z → 1α のような記号を使います。ある解説記事は、1x・1y・1z の目安として、それぞれ 17〜19 nm、14〜16 nm、11〜13 nm を示しています（出典：Semiconductor Engineering、2019 年 11 月 21 日。寸法の種類は記事に明記されていません）。α 以降は寸法が公開されていません。Micron は 2021 年 1 月に 1α の量産出荷を発表し、1z の次の世代だと述べています（出典：Micron のプレスリリース、2021 年 1 月 26 日。転載を参照）。</p>
+<p>3D NAND は、世代の目印が「層数」です。SK hynix は 2025 年 8 月に、321 層の QLC NAND（1 つのセルに 4 ビットを記録する方式）の量産開始を発表しました（出典：SK hynix ニュースリリース、2025 年 8 月。Evertiq の転載を参照）。層数は企業の公表値で、数え方は企業ごとに違い得るので、企業間で単純に比べません。</p>
+
+<h3>IRDS のロードマップの読み方</h3>
+<p>IRDS は、IEEE が主導する技術ロードマップです。版は年ごとに更新されます。調べた時点（2026 年 11 月）の最新は 2026 年版でした（出典：IRDS の編集履歴ページ）。ロードマップの値は、<b>将来の目標・予測</b>であり、実際の製品の値ではありません。使うときは、版の年と、値が「予測」であることを必ず書きます。</p>
+
+<h3>微細化を支えた技術の節目</h3>
+<p>寸法を小さくするには、露光（形を写す）、エッチング（形を彫る）、トランジスタ構造のそれぞれに工夫が要ります。主な節目は、次のとおりです。</p>
+<ul>
+  <li><b>液浸露光</b>（ArF 液浸）：レンズとウェーハの間を液体で満たし、解像度を上げる（第08章）。</li>
+  <li><b>マルチパターニング</b>：1 回の露光で出せない細かさを、複数回に分けて作る（第08章）。</li>
+  <li><b>EUV 露光</b>（Extreme Ultraviolet、極端紫外線）：波長の短い光を使い、細かい形を直接写す（第08章）。</li>
+  <li><b>FinFET と GAA</b>：トランジスタの構造を変え、ゲートの制御力を高める（第02章）。</li>
+</ul>
+
+<h3>微細化だけではない進め方</h3>
+<p>寸法を小さくする効果が小さくなり、費用も増えたため、別の方向からも性能を上げています。複数のチップを 1 つのパッケージに並べ、縦に積む方向です。第15章の先端パッケージで扱います。</p>
+
+<div class="callout tip"><span class="ttl">演習：見出しを仕分ける</span>
+  <p>次の 3 つの見出しの語を、「世代名」「物理寸法」「製品名」に分けてください。答えは各項目の矢印の右に書いてあります。</p>
+  <ol>
+    <li>「Intel、18A で作る Panther Lake を発表」→「18A」は<b>世代名</b>、「Panther Lake」は<b>製品名</b>、「Intel」は社名。</li>
+    <li>「ゲートピッチ 48 nm」→「48 nm」は<b>物理寸法</b>（IRDS の G48 の意味）。</li>
+    <li>「SK hynix、321 層 NAND の量産開始」→「321 層」は<b>層数</b>。3D NAND の世代の目印になる製品の仕様で、物理寸法でも、ロジックの「◯ nm 世代」でもない。</li>
+  </ol></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p>「2 nm のほうが 3 nm より必ず小さく速い」と読むのは誤りです。数字は企業ごとの名前で、他社と並べても同じ尺度ではありません。</p>
+  <p>もう一つ。「量産開始」「初期生産」「サンプル出荷」は別の段階です。企業が使った言葉を、そのまま使ってください。</p></div>
+
+<div class="callout note"><span class="ttl">現場でのつながり</span>
+  <p>装置メーカーの商談では、「◯ nm 世代向け」という言い方がよく出ます。そのとき、相手が世代名の話をしているのか、実際の寸法（ピッチ、層数）の話をしているのかを確かめると、仕様の認識違いを防げます。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c04-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（アクセス日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>ロードマップ</td><th scope="row"><a href="https://irds.ieee.org/images/files/pdf/2021/2021IRDS_Litho.pdf">IRDS 2021 Edition, Lithography</a></th><td>IEEE IRDS</td><td>2021 年版</td><td>世代名は最小ハーフピッチと同じでない点、G/M の値（予測）。</td></tr>
+      <tr><td>ロードマップ</td><th scope="row"><a href="https://irds.ieee.org/editions/">IRDS Editions</a></th><td>IEEE IRDS</td><td>2026 年 11 月に確認</td><td>最新版（2026 年版）の確認。</td></tr>
+      <tr><td>解説記事</td><th scope="row"><a href="https://spectrum.ieee.org/a-better-way-to-measure-progress-in-semiconductors">A Better Way to Measure Progress in Semiconductors</a></th><td>IEEE Spectrum（S. K. Moore）</td><td>2020 年 7 月 21 日</td><td>世代名が物理寸法でなくなった経緯、G48M36T1 の紹介。</td></tr>
+      <tr><td>歴史資料</td><th scope="row"><a href="https://www.computerhistory.org/revolution/digital-logic/12/267">Moore's Law</a></th><td>Computer History Museum</td><td>2026 年 11 月に確認</td><td>1965 年の予測と 1975 年の見直し。</td></tr>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://news.samsung.com/global/samsung-begins-chip-production-using-3nm-process-technology-with-gaa-architecture">Samsung Begins Chip Production Using 3nm Process Technology With GAA Architecture</a></th><td>Samsung Electronics</td><td>2022 年 6 月 30 日</td><td>3 nm 世代の初期生産。</td></tr>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://www.tsmc.com/english/dedicatedFoundry/technology/platform_mobile_tech_advancedTech.htm">Optimized for Both Smartphones and HPC Applications（技術ページ）</a></th><td>TSMC</td><td>2026 年 11 月に確認</td><td>N3・N4・N2 の呼称と量産の記載。</td></tr>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://www.tsmc.com/english/dedicatedFoundry/technology/logic/l_2nm">2nm Technology（N2 の技術ページ）</a></th><td>TSMC</td><td>2026 年 11 月に確認</td><td>N2 が 2025 年第 4 四半期に量産を開始したという記載（「started volume production in 4Q25 as planned」）。</td></tr>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-01/51d09df96cd89ac19d65af39032b038dc2896a24/TSMC%204Q25%20Transcript.pdf">TSMC 4Q25 決算説明会の書き起こし</a></th><td>TSMC</td><td>2026 年 1 月 15 日</td><td>N2 が 2025 年第 4 四半期に高量産（high volume manufacturing）に入ったという発言。</td></tr>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://www.intc.com/news-events/press-releases/detail/1752/intel-unveils-panther-lake-architecture-first-ai-pc">Intel Unveils Panther Lake Architecture: First AI PC Platform Built on 18A</a></th><td>Intel（ニュースリリース）</td><td>2025 年 10 月 9 日</td><td>18A の高量産の発表、Panther Lake が 18A で作る製品であること。</td></tr>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://aphnetworks.com/news/23378-micron-delivers-industrys-first-1a-dram-technology">Micron Delivers Industry's First 1α DRAM Technology（転載）</a></th><td>Micron（プレスリリースの転載）</td><td>2021 年 1 月 26 日</td><td>1α の量産出荷、1z の次の世代であること。</td></tr>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://micron.gcs-web.com/node/48831">Micron Ships World's First 1γ-Based LPDDR5X</a></th><td>Micron</td><td>2025 年 6 月 3 日</td><td>1γ の認定用サンプル出荷、EUV 露光の使用。</td></tr>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://evertiq.com/news/2025-08-27-sk-hynix-begins-mass-production-of-321-layer-qlc-nand-flash">SK hynix begins mass production of 321-layer QLC NAND flash（転載）</a></th><td>SK hynix（ニュースリリースを Evertiq が転載）</td><td>2025 年 8 月</td><td>3D NAND の層数の公表例。</td></tr>
+      <tr><td>解説記事</td><th scope="row"><a href="https://semiengineering.com/dram-scaling-challenges-grow">DRAM Scaling Challenges Grow</a></th><td>Semiconductor Engineering</td><td>2019 年 11 月 21 日</td><td>1x・1y・1z の寸法の目安。</td></tr>
+    </tbody>
+  </table></div>
+</section>

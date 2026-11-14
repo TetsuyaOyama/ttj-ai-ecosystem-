@@ -62,11 +62,13 @@ VoLTE・IMS登録・SMS over SGs/IP・S8HR のシーケンスを、ステップ�
 
 ### 半導体講義 ― 基礎・製造装置・装置輸送
 
-半導体の物性から、製造工程、製造装置、装置の梱包・輸送・据付までを学ぶ講座です。全32章の計画のうち、第1部・第2部・第4部（第01〜15章、第21〜28章の計23章）を公開中で、第3部と第5部は検証が済み次第、公開します。図を動かせる部品と確認問題つき。公開情報だけを出典にしています。
+半導体の物性から、製造工程、製造装置、装置の梱包・輸送・据付までを学ぶ講座です。全32章（5部と付録）をすべて公開しています。図を動かせる部品と確認問題、総合テストつき。公開情報だけを出典にしています。
 
 [講座を開く](https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/showcase/semi/)
 
 ![半導体講義の画面](docs/images/semi.png)
+
+この講座の元データ（章の HTML・図のデータ・検証記録）と、単一 HTML に組み立てる基盤は `courses/` にあります。`courses/_framework/build.py` が `courses/semi/`（course.json、chapters/、data/）から 1 枚の HTML を作り（`--check` で重複・リンク切れなどを検査、`--publish courses/semi-publish.json` で公開範囲と出力先を指定）、`courses/_framework/test.py` が 1366px・375px、ダーク・ライトで動作を検査します。手順は `courses/PUBLISH.md`、基盤の仕様は `courses/_framework/FRAMEWORK.md`、検証の記録は `courses/semi/REVIEW-*.md` に書いてあります（基盤は Python 3 の標準ライブラリだけで動き、検査には Playwright と node を使います。パスは作者の環境のものなので、置き場所を変えるときは読み替えてください）。
 
 ### AI エコシステム図
 

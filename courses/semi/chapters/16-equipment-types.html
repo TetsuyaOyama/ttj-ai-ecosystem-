@@ -1,0 +1,133 @@
+<!--
+num: 16
+part: 3
+title: 工程別の装置の仕組み
+track: 装置
+time: 40
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>前工程の多くの装置に共通する形（ロードポート → EFEM → ロードロック → 搬送室 → プロセスチャンバ）を、ウェーハが通る順に説明できる。</li>
+    <li><b>枚葉式</b>と<b>バッチ式</b>の違いと、露光装置・コータ・デベロッパ・炉・注入・CMP・洗浄・計測・後工程の装置が、共通の形からどう外れるかを言える。</li>
+    <li><b>レシピ</b>、<b>スループット</b>、<b>稼働率</b>、<b>フットプリント</b>が何を表すかを説明し、SEMI E10 の 6 つの状態から、稼働率が下がる理由を読める。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch06">第06章</a>（工程の全体像）、<a href="#ch05">第05章</a>（ウェーハと FOUP）。<a href="#ch07">第07章</a>〜<a href="#ch13">第13章</a>の各工程を読んでいると、装置の名前と工程がつながりやすくなります。</p>
+</section>
+
+<h3>工程が違っても、装置は似た形をしている</h3>
+<p>第07章〜第13章で、成膜・露光・エッチングなどの工程を見ました。工程が違っても、300 mm ウェーハを扱う装置には、共通の形があります。ウェーハは FOUP（第05章）に入って装置に届き、装置の中を 1 枚ずつ進み、処理室で加工されます。</p>
+<p>この章では、まず共通の形を覚えます。そのあとで、工程ごとの違いと、装置の性能の見方を学びます。装置の中の部品（ポンプ、電源、ガスの弁など）は<a href="#ch17">第17章</a>、装置を動かす工場の設備は<a href="#ch18">第18章</a>で扱います。</p>
+
+<h3>共通の形：クラスタツール</h3>
+<p>成膜やエッチングの装置の多くは、中央の真空の部屋のまわりに、複数の処理室を並べた形をしています。この形の装置を<b>クラスタツール</b>（cluster tool）と呼びます。クラスタは「房」の意味です。「プラットフォーム」と呼ぶ会社もあります（例：Applied Materials の Endura）。</p>
+<p>ウェーハが通る順に、5 つの部分があります。</p>
+<ol>
+  <li><b>ロードポート</b>（load port）：FOUP を置く台です。SEMI E15.1 は、300 mm ウェーハを扱う処理・検査装置のロードポートの寸法の要件を定めています（出典：SEMI『SEMI E15.1』規格ページ、版 E15.1-0305、2026 年 11 月に確認）。</li>
+  <li><b>EFEM</b>（Equipment Front End Module）：大気中でウェーハを扱う、装置の前面のモジュールです。大気側のロボットが、FOUP からウェーハを取り出します。安川電機（日本）のグループ会社の解説は、EFEM の構成の例として、ファンフィルタユニット（FFU、送風機とフィルタが一体になった部品）、ロードポート、コントローラ、ID の読取り装置、プリアライナ、イオナイザ（静電気を除く装置）を挙げています（出典：Yaskawa Europe Technology 公式ブログ、2022 年 10 月 6 日）。</li>
+  <li><b>ロードロック</b>（load lock）：大気側と真空側の間の小さな部屋です。弁とポンプで、圧力を切り替えます。</li>
+  <li><b>搬送室</b>（transfer chamber）：真空の部屋です。中の真空ロボットが、ロードロックと処理室の間でウェーハを運びます。</li>
+  <li><b>プロセスチャンバ</b>（process chamber）：成膜やエッチングなどを行う処理室です。搬送室とは、ゲートで仕切られます。</li>
+</ol>
+<p>ロードロックがある理由は、真空を保つためです。処理室を大気に開けると、汚れが入り、排気し直す時間もかかります。ロードロックだけを大気と真空の間で往復させれば、搬送室と処理室は、真空のままでいられます。米国特許 US 11,521,869 の背景説明は、ロードロックを、EFEM と真空側のモジュールの間にある中間の部屋で、弁とポンプで真空にして、ウェーハを真空側へ通すものと述べています（付与日は、取得した文面に記載がなく未確認）。Brooks Automation（米国）も、真空系の装置が、大気側と真空側の間のウェーハの動きを調整し、EFEM・ロードポート・処理室をつなぐと説明しています（出典：Brooks Automation 製品ページ、2026 年 11 月閲覧）。</p>
+<p>次の図で、上面図と、処理室の断面を切り替えて見ます。箱を押すと、役割と、詳しく扱う章が出ます。</p>
+<div data-widget="arch" data-src="c16-tool"></div>
+<p>処理室の数は、機種で違います。Applied Materials（米国）の Endura は、最大 9 つの処理室を持てると説明され、そのうち 2 つは、自然酸化膜（第13章）を除く前洗浄用です（出典：Applied Materials 製品ページ、2026 年 11 月閲覧）。東京エレクトロン（日本）の Episode 1 は、最大 8 つのプロセスモジュールを持つ枚葉式の成膜装置です（出典：東京エレクトロンの製品ページ、2026 年 11 月閲覧）。同じ搬送室につながる処理室は、真空を破らずにつなげられます。前洗浄のあとに成膜を続ける使い方が、その例です。</p>
+
+<h3>ウェーハの旅：クラスタツールの中</h3>
+<p>次の図で、ウェーハが FOUP から出て、処理を受けて戻るまでを、一手ずつ追います。大気側と真空側の間で、ロードロックが働く様子に注目してください。</p>
+<div data-widget="seq" data-src="c16-wafer"></div>
+<p>1 枚あたりの時間には、処理の時間だけでなく、ロードロックの排気と大気への復帰、ロボットの搬送の時間も入ります。処理室を増やしても、搬送が追いつかなければ、全体の処理の速さは上がりません（一般的な考え方）。</p>
+
+<h3>枚葉式とバッチ式</h3>
+<p>装置は、ウェーハの扱い方で 2 つに分かれます。1 枚ずつ処理する<b>枚葉式</b>（single-wafer）と、多数枚をまとめて処理する<b>バッチ式</b>（batch）です。KOKUSAI ELECTRIC（日本）の製品ページは、自社の製品を「Large Batch」「Mini Batch」「Single Wafer」と区分して載せています（出典：KOKUSAI ELECTRIC 製品ページ、2026 年 11 月閲覧）。</p>
+<div data-widget="compare" data-src="c16-batch"></div>
+
+<h3>露光装置とコータ・デベロッパ：大きく、つながる装置</h3>
+<p>露光装置は、クラスタツールとは違う形です。光学系とウェーハステージが中心で、ウェーハを 1 枚ずつ、ステージの上で位置を合わせて露光します（<a href="#ch08">第08章</a>）。EUV 露光装置では、光の通る道のすべてを、高真空に保つ必要があります。EUV の光は、空気を含むあらゆる物質に吸収されるからです。ウェーハは、エアロックを通って真空へ出入りします（出典：ASML（オランダ）『EUV lithography systems』、2026 年 11 月閲覧）。エアロックは、ロードロックと同じ考え方の部屋です。</p>
+<p>露光装置のメーカーは、ASML だけではありません。キヤノン（日本）は、KrF スキャナー、i-line ステッパー、ナノインプリント装置を載せています（出典：キヤノンの製品ページ、2026 年 11 月閲覧）。</p>
+<p>コータ・デベロッパは、露光装置のすぐ隣に連結して使います。この連結を、インライン接続と呼びます（<a href="#ch09">第09章</a>）。東京エレクトロンの LITHIUS Pro Z は、EUV に対応するコータ・デベロッパ、LITHIUS Pro DICE は、High-NA を含む EUV に対応するコータ・デベロッパとして載っています（出典：東京エレクトロンの製品ページ、2026 年 11 月閲覧）。2 台を 1 つのラインとして据え付けるので、据付では、両者の位置と受け渡しを一緒に調整します。</p>
+
+<h3>成膜・エッチング装置：処理室の中の違い</h3>
+<p>成膜装置とエッチング装置は、どちらも多くが枚葉式のクラスタツールです。違いは、処理室の中にあります。上の図の「CVD・ALD 処理室の断面」と「エッチング処理室の断面」を、切り替えて見比べてください。</p>
+<p>CVD や ALD の処理室は、ガスを面内に均一に流し、ウェーハを温めて、膜をつけます。エッチングの処理室は、プラズマをつくり、静電チャックでウェーハを保持して温度を調整し、イオンを引き込みます。どちらも、ガス・電力・真空・温調の部品が揃って動きます。部品の役割は、次の<a href="#ch17">第17章</a>で見ます。</p>
+<p>エッチング装置の例として、Lam Research（米国）は、3D NAND 向けの極低温エッチング技術 Lam Cryo 3.0 を、同社の誘電体エッチング装置 Vantex に載せられ、高アスペクト比向けの Flex とも組み合わせられると発表しました。同社は、高アスペクト比の誘電体エッチングの処理室が、NAND の製造で 7,500 を超えると述べています（出典：Lam Research プレスリリース、2024 年 7 月 31 日。数値は同社の説明）。処理室の単位で数えることが、装置の規模の見方になっています。</p>
+
+<h3>炉・注入・CMP・洗浄装置の形</h3>
+<ul>
+  <li><b>縦型炉</b>：バッチ式です。ボートに多数枚のウェーハを縦に並べ、縦長の炉に入れて加熱します（図の「縦型炉の断面」）。KOKUSAI ELECTRIC は、Large Batch の製品を、CVD・酸化・拡散・アニールなどの用途で載せています。東京エレクトロンの TELINDY PLUS は、300 mm ウェーハ用のバッチ式熱処理装置です（出典：各社の製品ページ、2026 年 11 月閲覧）。</li>
+  <li><b>RTP</b>：枚葉式です。1 枚ずつを短時間で加熱します（第11章）。Applied Materials の Vantage Radiance Plus RTP は、300 mm ウェーハ用で、注入後のスパイクアニールを用途に挙げています（出典：Applied Materials 製品ページ、2026 年 11 月閲覧）。</li>
+  <li><b>イオン注入装置</b>：イオン源からビームラインを通して、ウェーハへイオンを注入する装置です（第11章）。Applied Materials の VIISta 900XP は、枚葉式で、並列経路の搬送を使う中電流の装置と説明されています（出典：Applied Materials 製品ページ、2026 年 11 月閲覧）。</li>
+  <li><b>CMP 装置</b>：荏原製作所（日本）は、研磨・洗浄・乾燥を同じ装置の中で行う「ドライイン・ドライアウト」を説明しています。洗浄と乾燥まで装置の中で済ませるので、ウェーハはクリーンルームの条件に合った状態で出てきます（出典：荏原製作所の技術ページ、2026 年 11 月閲覧）。</li>
+  <li><b>洗浄装置</b>：枚葉式とバッチ式があります。SCREEN セミコンダクターソリューションズ（日本）の SU-3100 は、300 mm 用の枚葉式洗浄装置で、処理室を最大 8 つ載せられます（出典：SCREEN 製品ページ、2026 年 11 月閲覧）。東京エレクトロンの EXPEDIUS-i は、バッチ式のウェットステーションです。</li>
+</ul>
+
+<h3>計測・検査・後工程装置の形</h3>
+<p>計測装置も、FOUP を受けて返す点は、他の前工程装置と同じです。日立ハイテク（日本）は、CD-SEM について、ウェーハをカセットや FOUP に入れて置くと、装置が自動で取り出し、決めた位置を測って、元へ戻すと説明しています（出典：日立ハイテクの技術ページ、2026 年 11 月閲覧）。処理室を並べるクラスタツールではなく、単体の装置として、大気側のロボットでウェーハを扱います。</p>
+<p>後工程（<a href="#ch14">第14章</a>、<a href="#ch15">第15章</a>）では、ウェーハを小片のダイに切ったあと、扱う物が、ダイ、基板、パッケージ、トレイと変わります。装置の形も、扱う物に合わせて変わります。アドバンテスト（日本）は、SoC・パワー・メモリ向けのテストシステムと、ハンドラー、プローバーを載せています（出典：アドバンテストの製品ページ、2026 年 11 月閲覧）。先端パッケージでは、東京エレクトロンの Synapse Si が、300 mm ウェーハの融着接合と銅のハイブリッド接合用の装置として載っています（出典：東京エレクトロンの製品ページ、2026 年 11 月閲覧）。</p>
+
+<h3>工程 × 装置 × 公開資料にある例の早見表</h3>
+<p>ここまでの装置を、工程で絞り込める表にまとめます。企業名は、公開資料で確認できた例です。優劣やシェアを示すものではありません。</p>
+<div data-widget="table" data-src="c16-equip"></div>
+
+<h3>装置の性能の見方：レシピ・スループット・稼働率・フットプリント</h3>
+<h4>レシピ</h4>
+<p><b>レシピ</b>（recipe）は、装置に何をどの順で行わせるかを書いた条件表です（<a href="#ch10">第10章</a>）。ガスの種類と流量、圧力、電力、温度、時間などを、ステップごとに決めます。SEMI E30（GEM）は、装置を工場の情報システムと一緒に管理・自動化するための、通信の基本の振る舞いを定めた規格です（出典：SEMI Standards Watch『SECS/GEM Tutorial Seminar Overview』、日付の記載なし）。レシピをホストと装置の間で受け渡す機能も、その中に含まれます（出典：Kontron AIS 解説ページ、2026 年 11 月閲覧）。</p>
+<h4>スループット</h4>
+<p><b>スループット</b>（throughput）は、装置が 1 時間に処理できるウェーハの枚数です。WPH（Wafers Per Hour）とも書きます。メーカーの資料には、上限に近い値が載ります。SCREEN の SU-3100 は、最大で 1 時間に 300 枚と説明されています。Applied Materials は、VIISta 900XP を、機械的に 1 時間 500 枚と説明しています（出典：各社の製品ページ、2026 年 11 月閲覧）。どちらも、メーカーが条件を決めて示した値です。実際の値は、レシピや構成で変わります。</p>
+<h4>稼働率：SEMI E10 の 6 つの状態</h4>
+<p><b>稼働率</b>は、装置がどれだけ使えたか、生産に使われたかを表します。SEMI E10 は、装置の信頼性・可用性・保守性（RAM）と稼働率の測り方を定めた規格で、時間を、重ならない 6 つの状態に分けます（出典：SEMI『SEMI E10』規格ページ、版 E10-0422、2026 年 11 月に確認）。</p>
+<div data-widget="table" data-src="c16-e10"></div>
+<p>稼働率を下げる要因は、状態ごとに違います。消耗部品の交換や清掃は<b>計画停止</b>に入ります。故障や用役の異常は<b>計画外停止</b>です。前後の装置やロットを待つ時間は<b>待機</b>に入り、増えると、生産の割合（利用率）が下がります。評価や条件出しの運転は<b>エンジニアリング</b>です。要因が違えば、対策も違います。保守を短くする、部品を壊れにくくする、搬送の流れを整える、といった具合です。</p>
+<h4>フットプリント</h4>
+<p><b>フットプリント</b>（footprint）は、装置が床に占める面積です。クリーンルームの床は広げにくいので、装置が小さいほど、同じ床に多く置けます。東京エレクトロンの Episode UL は、多チャンバの構成を選べて、設置面積が小さいプラズマエッチング装置と説明されています（出典：東京エレクトロンの製品ページ、2026 年 11 月閲覧）。保守のために周りに空ける空間も、置き場所の計画に入ります（一般的な説明）。</p>
+
+<h3>演習：説明文から装置を当てる</h3>
+<p>装置の写真なしで、説明文だけから、どの工程の、どの形の装置かを当てます。</p>
+<div data-widget="drill" data-src="c16-drill"></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>処理室が多いほど、速いとは限りません。</b>ロードロックの排気や、ロボットの搬送が追いつかないと、全体の処理の速さは、そこで決まります。</p>
+  <p><b>ロードロックは、処理室の入口ではなく、大気と真空の関門です。</b>処理室と搬送室を真空のまま保つために、ここだけが大気と真空を往復します。</p>
+  <p><b>バッチ式と枚葉式は、新旧の違いではありません。</b>工程の時間と、求める条件の厳しさで使い分けます。</p>
+  <p><b>稼働率の数字は、定義を確認してから比べます。</b>どの状態を分母に入れるかで、値が変わります。</p></div>
+
+<div class="callout note"><span class="ttl">現場でのつながり</span>
+  <p>装置の形を知ると、据付で何が要るかが見えます。FOUP を受けるロードポートの位置、真空と排気、ガスと冷却水、搬入経路は、装置の形で決まります（<a href="#ch18">第18章</a>、<a href="#ch24">第24章</a>）。立上げ（<a href="#ch25">第25章</a>）では、搬送の動作確認と、レシピの動作確認が中心になります。保守契約や稼働率の話では、SEMI E10 の状態の言葉が使われます。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c16-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（アクセス日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>規格情報</td><th scope="row"><a href="https://store-us.semi.org/products/e01000-semi-e10-specification-for-definition-and-measurement-of-equipment-reliability-availability-and-maintainability-ram-and-utilization">SEMI E10: Specification for Definition and Measurement of Equipment Reliability, Availability, and Maintainability (RAM) and Utilization</a></th><td>SEMI</td><td>版 E10-0422（Current と表示）</td><td>6 つの状態に分けること。本文は有料のため参照していません。</td></tr>
+      <tr><td>規格情報</td><th scope="row"><a href="https://store-us.semi.org/products/e01501-semi-e15-1-specification-for-300-mm-tool-load-port">SEMI E15.1: Specification for 300 mm Tool Load Port</a></th><td>SEMI</td><td>版 E15.1-0305（Inactive と表示。SEMI は、有効に使えると説明）</td><td>ロードポートの規格の対象。</td></tr>
+      <tr><td>標準化団体の仕様書</td><th scope="row"><a href="https://reference.opcfoundation.org/specs/OPC-40100-1/11.6.1">OPC 40100-1, 11.6.1 Overview</a></th><td>OPC Foundation</td><td>2026 年 11 月閲覧（日付の記載なし）</td><td>E10 の 6 つの状態の区分（稼働できる時間・停止・運転時間の外）。</td></tr>
+      <tr><td>製品ドキュメント</td><th scope="row"><a href="https://help.criticalmanufacturing.com/userguide/administration/state_models/">State Models</a></th><td>Critical Manufacturing（ユーザーガイド）</td><td>2026 年 11 月閲覧（日付の記載なし）</td><td>6 つの状態の意味。</td></tr>
+      <tr><td>企業の解説</td><th scope="row"><a href="https://www.inficon.com/ko/소식/tracking-the-right-equipment-reliability-metrics">Improve Fab Cycle Time by Tracking the Right Equipment Reliability Metrics</a></th><td>INFICON</td><td>2026 年 11 月閲覧（日付の記載なし）</td><td>可用性と利用率の考え方。</td></tr>
+      <tr><td>標準化団体の解説</td><th scope="row"><a href="https://www.semi.org/en/node/128986">SECS/GEM Tutorial Seminar Overview</a></th><td>SEMI Standards Watch（寄稿：Zama Consulting）</td><td>日付の記載なし</td><td>SEMI E30 の目的。</td></tr>
+      <tr><td>企業の解説</td><th scope="row"><a href="https://kontron-ais.com/en/resources/semi-standards/semi-e30-gem">SEMI E30 – GEM (Generic Equipment Model)</a></th><td>Kontron AIS</td><td>2026 年 11 月閲覧（日付の記載なし）</td><td>レシピの転送が E30 に含まれること。</td></tr>
+      <tr><td>企業の解説</td><th scope="row"><a href="https://yaskawa.co.il/en/news/choosing-the-right-wafer-handling-solution">Choosing the right wafer handling solution</a></th><td>Yaskawa Europe Technology（安川電機のグループ会社。ブログ）</td><td>2022 年 10 月 6 日</td><td>EFEM の構成の例。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.brooks.com/solutions/vacuum-automation/">Vacuum Automation</a></th><td>Brooks Automation（米国）</td><td>2026 年 11 月閲覧</td><td>大気側と真空側の間の搬送、EFEM・ロードポート・処理室のつなぎ。</td></tr>
+      <tr><td>特許公報</td><th scope="row"><a href="https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/11521869">US 11,521,869（名称：Reduced footprint platform architecture with linear vacuum transfer module）</a></th><td>米国特許商標庁（USPTO）</td><td>付与日は取得した文面に記載がなく、未確認</td><td>背景説明のうち、EFEM・ロードロック・真空搬送モジュール・処理モジュールの役割。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.appliedmaterials.com/us/en/product-library/endura-pvd.html">Endura PVD</a></th><td>Applied Materials（米国）</td><td>2026 年 11 月閲覧</td><td>最大 9 つの処理室、前洗浄の処理室。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.appliedmaterials.com/us/en/product-library/viista-900xp.html">VIISta 900XP</a></th><td>Applied Materials</td><td>2026 年 11 月閲覧</td><td>イオン注入装置の形、機械的なスループットの値。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.appliedmaterials.com/us/en/product-library/vantage-radiance-plus-rtp.html">Vantage Radiance Plus RTP</a></th><td>Applied Materials</td><td>2026 年 11 月閲覧</td><td>RTP の用途。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row">製品ページ：<a href="https://www.tel.com/product/episode.html">Episode 1</a>、<a href="https://www.tel.com/product/episode_ul.html">Episode UL</a>、<a href="https://www.tel.com/product/telindy.html">TELINDY PLUS</a>、<a href="https://www.tel.com/product/nt333.html">NT333</a>、<a href="https://www.tel.com/product/triase.html">Triase+</a>、<a href="https://www.tel.com/product/lithius.html">LITHIUS Pro Z・Pro DICE</a>、<a href="https://www.tel.com/product/cellesta.html">CELLESTA-i</a>、<a href="https://www.tel.com/product/expedius.html">EXPEDIUS-i</a>、<a href="https://www.tel.com/product/prexa.html">Prexa</a>、<a href="https://www.tel.com/product/synapse-ulucus.html">Synapse Si・V・Z Plus</a></th><td>東京エレクトロン（日本）</td><td>2026 年 11 月閲覧</td><td>バッチ式・枚葉式・セミバッチ式、コータ・デベロッパ、エッチング、洗浄、プローバー、ボンダーの例。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.kokusai-electric.com/en/products">Products &amp; Services</a></th><td>KOKUSAI ELECTRIC（日本）</td><td>2026 年 11 月閲覧</td><td>Large Batch・Mini Batch・Single Wafer の区分。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.asm.com/ald">Atomic Layer Deposition</a></th><td>ASM International（オランダ）</td><td>2026 年 11 月閲覧（日付の記載なし）</td><td>XP8 Synergis の処理室の数。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.screen.co.jp/spe/en/products/su-3100">Single Wafer Cleaner SU-3100</a></th><td>SCREEN セミコンダクターソリューションズ（日本）</td><td>2026 年 11 月閲覧</td><td>枚葉式洗浄装置の処理室の数、最大スループット。</td></tr>
+      <tr><td>企業の技術ページ</td><th scope="row"><a href="https://ebara.com/global-en/technology/information/polishing-technology-ex/">Nano-level polishing technique that supports semiconductor</a></th><td>荏原製作所（日本）</td><td>2026 年 11 月閲覧</td><td>CMP の研磨・洗浄・乾燥が一体であること。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.asml.com/products/euv-lithography-systems">EUV lithography systems</a></th><td>ASML（オランダ）</td><td>2026 年 11 月閲覧（日付の記載なし）</td><td>EUV の光路が高真空であること、エアロックでのウェーハの出入り。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://global.canon/en/product/indtech/semicon/index.html">Semiconductor Lithography Equipment</a></th><td>キヤノン（日本）</td><td>2026 年 11 月閲覧</td><td>露光装置の製品群。</td></tr>
+      <tr><td>企業の技術ページ</td><th scope="row"><a href="https://www.hitachi-hightech.com/global/en/knowledge/semiconductor/room/manufacturing/cd-sem.html">CD-SEM - What is a Critical Dimension SEM?</a></th><td>日立ハイテク（日本）</td><td>2026 年 11 月閲覧</td><td>FOUP から自動で取り出して測り、戻す動作。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row">製品ページ：<a href="https://www.advantest.com/en/products/semiconductor-test-system/soc/v93000/">SoC テスト（V93000）</a>、<a href="https://www.advantest.com/en/products/semiconductor-test-system/memory/">メモリテスト</a>、<a href="https://www.advantest.com/en/products/component-test-system/test-handler/">テストハンドラー</a>、<a href="https://www.advantest.com/en/products/component-test-system/prober/">プローバー</a>、<a href="https://www.advantest.com/en/products/cd-sem/msem/">CD-SEM</a></th><td>アドバンテスト（日本）</td><td>2026 年 11 月閲覧</td><td>テスター・ハンドラー・プローバー・CD-SEM の製品。</td></tr>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://www.nasdaq.com/press-release/lam-research-introduces-lam-cryotm-30-cryogenic-etch-technology-accelerate-scaling-3d">Lam Research Introduces Lam Cryo 3.0 Cryogenic Etch Technology to Accelerate Scaling of 3D NAND for the AI Era</a></th><td>Lam Research（米国。Nasdaq 掲載の転載）</td><td>2024 年 7 月 31 日</td><td>Vantex・Flex への搭載、処理室の数（同社の説明）。</td></tr>
+      <tr><td>教科書的な一般知識</td><th scope="row">半導体製造装置の教科書（クラスタツールの搬送、縦型炉の構成、ロードロックの動作順）</th><td>—</td><td>—</td><td>共通の形の説明。数値は使っていません。</td></tr>
+    </tbody>
+  </table></div>
+</section>

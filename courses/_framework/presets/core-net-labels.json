@@ -1,0 +1,23 @@
+{
+  "_comment": "コアネットワーク講義の元の文言を、共通基盤の labels / kinds で再現する辞書。course.json の labels と kinds にそのまま入れる。",
+  "kinds": { "ue": "端末", "ran": "無線アクセス網", "core": "コア網", "db": "加入者データ", "pol": "ポリシー・課金", "ext": "外部網", "ims": "IMS" },
+  "labels": {
+    "arch.kind": "アーキテクチャ図", "arch.node": "ノード", "arch.link": "インタフェース",
+    "arch.hint": "ノード（箱）やインタフェース（線）を押すと、役割・接続先・運ぶ情報・関連する章が表示されます。",
+    "arch.f.proto": "プロトコル", "arch.f.carries": "運ぶ情報", "arch.linksOf": "接続するインタフェース（押すと切替）", "arch.ends": "端点：",
+    "arch.plane.cp": "制御プレーン", "arch.plane.up": "ユーザープレーン", "arch.plane.lg": "論理的な接続",
+    "seq.kind": "シーケンス再生", "seq.ifLabel": "インタフェース", "seq.ieLabel": "主な情報要素", "seq.self": "装置内の処理",
+    "stack.kind": "プロトコルスタック", "stack.item": "インタフェース", "stack.carries": "運ぶもの", "stack.spec": "規格",
+    "stack.plane.cp": "制御プレーン", "stack.plane.up": "ユーザープレーン",
+    "stack.role.app": "アプリケーション層", "stack.role.payload": "運ばれる上位メッセージ", "stack.role.transport": "トランスポート層", "stack.role.net": "ネットワーク層", "stack.role.link": "L1/L2", "stack.role.sec": "セキュリティ",
+    "stack.legend": "凡例：枠の色が層の種類（アプリ／運ばれるメッセージ＝破線／トランスポート／ネットワーク／下位層）。層を押すと説明が出ます。",
+    "ident.kind": "識別子の解剖", "ident.item": "識別子", "ident.where": "割り当てと使われ方",
+    "table.kind": "早見表",
+    "tree.kind": "鍵階層の図", "tree.f.made": "作られる場所", "tree.f.to": "渡される先・使われ方", "tree.f.from": "導出元", "tree.hint": "鍵（箱）を押すと、どこで作られ、どこへ渡されるかが表示され、導出元が強調されます。",
+    "drill.kind": "切り分け演習", "drill.q1": "手順のどこで止まっていますか。", "drill.q2": "最初に調べる装置（またはインタフェースの相手）はどれですか。",
+    "glossary.kind": "用語集", "mapping.kind": "4G ⇔ 5G 対応表", "mapping.title": "どれがどれに当たるか"
+  },
+  "mapping": { "colA": "4G（EPS）", "colB": "5G（5GS）", "colNote": "備考",
+    "cats": [{ "key": "node", "label": "ノード" }, { "key": "if", "label": "インタフェース" }, { "key": "id", "label": "識別子" }, { "key": "proc", "label": "手順" }, { "key": "qos", "label": "QoS" }] },
+  "tracks": [{ "label": "共通", "tone": 0 }, { "label": "4G", "tone": 1 }, { "label": "5G", "tone": 2 }]
+}

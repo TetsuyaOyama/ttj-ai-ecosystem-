@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="dark" data-course="{{SLUG}}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{DOC_TITLE}}</title>
+{{META}}
+<script>try{if(JSON.parse(localStorage.getItem({{PREFIX_JS}}+'theme'))==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
+<style>
+{{CSS}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">本文へ移動</a>
+<header class="top">
+  <button class="icon-btn" id="navbtn" type="button" aria-label="章ナビ（目次）を開く" aria-expanded="false" aria-controls="side">☰</button>
+  <a class="brand" href="#home"><b>{{BRAND_TITLE}}</b><span>{{BRAND_SUB}}</span></a>
+  <div class="search"><input id="q" type="search" placeholder="全文検索（/ で移動）" aria-label="全文検索" autocomplete="off" aria-controls="results"></div>
+  <button class="icon-btn" id="themebtn" type="button" aria-label="ライトテーマに切り替え">☀</button>
+  <div class="pbar" role="progressbar" aria-label="読了率" aria-valuemin="0" aria-valuemax="100"><i id="pbar-i"></i></div>
+</header>
+<div id="results" class="results" role="listbox" aria-label="検索結果" hidden></div>
+<nav id="side" class="side" aria-label="章ナビ">
+{{NAV}}
+</nav>
+<div id="scrim" class="scrim" hidden></div>
+<main id="main" class="main">
+<div class="page">
+
+{{HOME}}
+
+{{CHAPTERS}}
+
+</div>
+</main>
+<footer class="foot">
+  <div class="in">
+    <p>{{FOOT_LEFT}}</p>
+    <p>{{FOOT_RIGHT}}</p>
+  </div>
+</footer>
+<script>
+window.CN_CFG = {{CFG}};
+window.CN_CHAPTERS = {{CHAPTER_META}};
+window.CN_PARTS = {{PART_META}};
+</script>
+<script>
+{{ENGINE}}
+</script>
+{{DATA}}
+<script>
+{{BOOT}}
+</script>
+</body>
+</html>

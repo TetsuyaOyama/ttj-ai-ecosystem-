@@ -1,0 +1,92 @@
+<!--
+num: 14
+part: 2
+title: 後工程：ダイシングから封止・テストまで
+track: 後工程
+time: 40
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>後工程の流れ（ウェーハテスト、薄化、ダイシング、ボンディング、封止、ファイナルテスト）を、順に言える。</li>
+    <li><b>ワイヤボンディング</b>と<b>フリップチップ</b>の違いを、断面の図で説明できる。</li>
+    <li>ウェーハテストとファイナルテストの役割の違い、そして<b>MSL</b>（Moisture Sensitivity Level、湿気感受性レベル）と梱包の関係を説明できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch06">第06章</a>（前工程と後工程の全体像）。<a href="#ch13">第13章</a>（歩留まりと検査）を読んでおくと、テストの位置づけが分かりやすくなります。</p>
+</section>
+
+<h3>後工程の全体像</h3>
+<p>前工程を終えたウェーハは、まだ使えません。<b>ダイ</b>（個片のチップ）に切り分け、外とつなぎ、守り、試験して、はじめて製品になります。この部分を<b>後工程</b>と呼びます。</p>
+<p>流れは、おおまかに 3 段階です。ウェーハの段階で試験し、薄くします。次に、個片に切って、基板に載せてつなぎます。最後に、樹脂で包み、パッケージの状態で試験します。順序は製品で違います。図で、順に見てください。</p>
+<div data-widget="seq" data-src="c14-flow"></div>
+
+<h3>ウェーハテストと薄化、ダイシング</h3>
+<p><b>ウェーハテスト</b>は、ダイに切る前に、ウェーハの上で全ダイを電気試験する工程です。<b>プローブカード</b>の針をダイの端子に当て、<b>プローバー</b>がウェーハを動かし、<b>テスター</b>が測ります。FormFactor（米国）は、組み立ての前に不良のダイを除くことで、後工程の費用を無駄にしないと説明しています（出典：FormFactor 技術ブログ、2025 年 2 月 14 日）。</p>
+<p>試験の結果は、ダイごとの<b>良否マップ</b>になります。ダイボンディングでは、このマップで選んだ<b>良品だけ</b>を使います。</p>
+<p>次に、ウェーハの裏面を削って薄くします（<b>バックグラインド</b>）。薄い製品や、積層（<a href="#ch15">第15章</a>）のために必要です。ディスコ（日本）は、薄くするグラインダーと、削りの応力を除くポリッシャーを、製品に持っています（出典：ディスコ製品情報、2026 年 11 月閲覧）。</p>
+<p>そのあと、<b>ダイシング</b>で切り分けます。方式は主に 2 つです。回転する薄い刃で切る<b>ブレードダイシング</b>と、レーザーを使う方式です。レーザー方式には、表面を加工する<b>アブレーション</b>と、ウェーハの<b>内部</b>に集めて加工する<b>ステルスダイシング</b>があります。ステルスダイシングは、浜松ホトニクス（日本）の呼称です（出典：浜松ホトニクス製品ページ、2026 年 11 月閲覧）。</p>
+
+<h3>つなぐ：ワイヤボンディング</h3>
+<p>個片のダイは、基板やリードフレームに<b>接着</b>します（ダイボンディング）。そのあと、ダイの端子と基板の端子を、細い金属線で 1 本ずつつなぎます。これが<b>ワイヤボンディング</b>です。長く使われてきた、基本の方式です。</p>
+<p>弱点は、ワイヤが<b>ダイの周辺</b>からしか出せないことです。端子が増えると、並べきれません。1 本ずつつなぐので、端子が増えるほど時間もかかります。図で、5 つの段階を見てください。</p>
+<div data-widget="xsec" data-src="c14-wire"></div>
+
+<h3>つなぐ：フリップチップ</h3>
+<p><b>フリップチップ</b>は、ダイの回路の面に<b>バンプ</b>（小さな金属の突起）を付け、上下を反転して、基板に直接つなぐ方式です。端子を<b>面全体</b>に並べられるので、接続の数を増やせます。配線も短くなります。加熱すると、すべてのバンプが<b>一度に</b>つながります。</p>
+<p>ただし、ダイと基板では、熱による伸び方が違います。接合部に応力がかかるので、すき間を樹脂で埋める<b>アンダーフィル</b>で守ります。</p>
+<div data-widget="xsec" data-src="c14-flip"></div>
+
+<h3>封止とファイナルテスト</h3>
+<p>つないだダイは、樹脂で包んで<b>封止</b>します。湿気・衝撃・汚れから守るためです。装置には、金型に樹脂を押し込む<b>トランスファー式</b>と、樹脂を金型に先に置いて押しつぶす<b>コンプレッション式</b>があります。TOWA（日本）は、両方を製品に持ち、コンプレッション式は樹脂の流れが小さいと説明しています（出典：TOWA 技術ページ、2026 年 11 月閲覧）。</p>
+<p>封止のあとが、<b>ファイナルテスト</b>です。パッケージの状態で、電気試験をします。テスターが測り、<b>ハンドラー</b>がパッケージを運び、温度をかけます。必要なら<b>バーンイン</b>（高温で電圧をかけ、初期の不良を出す試験）も行います。Teradyne（米国）は、実際の使われ方に近い状態で動かす<b>システムレベルテスト</b>を、第 3 のテストとして説明しています（出典：Teradyne 製品ページ、2026 年 11 月閲覧）。</p>
+<p>装置の例を、表にまとめました。会社名は公開資料にある例で、優劣を示すものではありません。</p>
+<div data-widget="table" data-src="c14-equip"></div>
+
+<h3>演習：ウェーハテストで落とせたか</h3>
+<p>架空の不良が 3 つあります。それぞれ、<b>ウェーハテストで見つけられたか</b>を考えます。手がかりは、<b>不良ができた工程が、ウェーハテストの前か後か</b>です。答えを決めてから、行を押してください。</p>
+<div data-widget="table" data-src="c14-judge"></div>
+
+<h3>MSL：湿気と梱包</h3>
+<p>樹脂のパッケージは、空気中の湿気を吸います。吸った状態ではんだ付けの熱を受けると、水分が急に膨らみ、パッケージが<b>ひび割れ</b>ることがあります。そこで、湿気への弱さを<b>MSL</b>（湿気感受性レベル）という等級にします。等級の決め方は <b>J-STD-020</b>、取扱いと梱包は <b>J-STD-033</b> に書かれています。J-STD-033 の最新の版は、2018 年 4 月の改訂 D です（出典：IPC の商品ページ、2026 年 11 月閲覧）。J-STD-020 の現行版は、2022 年 12 月の版 F です（出典：DIN Media の規格販売ページ、2026 年 11 月閲覧）。</p>
+<p>等級が大きいほど弱く、開封後に出しておける時間（<b>フロアライフ</b>）が短くなります。等級が大きい部品は、乾燥剤と湿度表示カードを入れた<b>防湿袋</b>で出荷されます。等級が最も小さい MSL 1 と、最も大きい MSL 6 は、資料によって扱いの書き方が違います（下の表）。時間を超えたら、使う前に<b>ベーク</b>（加熱して水分を抜く）が必要です。</p>
+<div data-widget="table" data-src="c14-msl"></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>ウェーハテストで、すべての不良を落とせるわけではありません。</b>ウェーハテストは、前工程までの不良を除く試験です。組み立ての不良は、ファイナルテストで見つけます。</p>
+  <p><b>フリップチップは「ワイヤの代わり」ではなく、端子の置き方が違う方式です。</b>ワイヤはダイの周辺、フリップチップは面全体に端子を置けます。</p>
+  <p><b>MSL の数字が大きいほど、弱い（時間が短い）です。</b>数字が大きいほど強い、と読み違えないでください。</p></div>
+
+<div class="callout note"><span class="ttl">現場でのつながり</span>
+  <p>後工程の装置も、工場に据え付けて調整してから使います（<a href="#ch25">第25章</a>）。テスターやプローバーは、精密な電気接点と位置合わせが価値の中心で、輸送中の衝撃や湿気から守る梱包が必要です（<a href="#ch22">第22章</a>）。部品の保管と出荷も、MSL の湿度管理の対象になります。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c14-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（アクセス日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>企業の技術ブログ</td><th scope="row"><a href="https://www.formfactor.com/blog/2025/wafer-test-challenges-and-solutions/">Wafer Test Challenges and Solutions</a></th><td>FormFactor（米国）</td><td>2025 年 2 月 14 日</td><td>ウェーハテストの目的。ダイシングとパッケージの前に不良のダイを見つける。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.disco.co.jp/eg/products/polisher_etcher/dgp8761.html">DGP8761（グラインダー兼ポリッシャー）</a></th><td>ディスコ（日本）</td><td>2026 年 11 月閲覧</td><td>グラインダーとポリッシャーの機能。</td></tr>
+      <tr><td>企業の技術ページ</td><th scope="row"><a href="https://www.disco.co.jp/eg/solution/library/polisher/strelief.html">Dry Polishing (Stress Relief)</a></th><td>ディスコ（日本）</td><td>2026 年 11 月閲覧</td><td>研削で残るダメージ層を除くポリッシャーの役割。</td></tr>
+      <tr><td>企業のニュース</td><th scope="row"><a href="https://disco.co.jp/eg/news/corp/20251215_2.html">Development of Three Laser Saws: DFL7162, DFL7363, DFL7563</a></th><td>ディスコ（日本）</td><td>2025 年 12 月（ページの URL の日付）</td><td>レーザーソーの方式（アブレーション、ステルスダイシング）。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.accretech.com/en/product/semicon/semi/probe_semi/altaprov.html">AltaProv（プローバー）</a></th><td>東京精密（日本）</td><td>2026 年 11 月閲覧</td><td>プローバーを製品に持つこと。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.accretech.com/en/product/semicon/semi/polish/pg3000rmx.html">PG3000RMII（ポリッシュグラインダー）</a></th><td>東京精密（日本）</td><td>2026 年 11 月閲覧</td><td>研削とウェットポリッシュを一体にした薄化装置。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.advantest.com/en/products/component-test-system/">Component Test System（ハンドラー、システムレベルテスト）</a></th><td>アドバンテスト（日本）</td><td>2026 年 11 月閲覧</td><td>ハンドラーとシステムレベルテスト装置を製品に持つこと。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.advantest.com/en/products/semiconductor-test-system/soc/v93000/">V93000（SoC テストシステム）</a></th><td>アドバンテスト（日本）</td><td>2026 年 11 月閲覧</td><td>SoC 向けのテスター。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.teradyne.com/system-level-test/">System Level Test</a></th><td>Teradyne（米国）</td><td>2026 年 11 月閲覧</td><td>システムレベルテストの位置づけ。</td></tr>
+      <tr><td>企業の技術ページ</td><th scope="row"><a href="https://www.towajapan.co.jp/en/technology/molding/">Plastic Molding Technologies / Transfer Molding and Compression Molding</a></th><td>TOWA（日本）</td><td>2026 年 11 月閲覧</td><td>トランスファー式・コンプレッション式の違い。コンプレッション式はゲートやランナーが不要で、樹脂の流れがほとんどない。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.besi.com/products-technology/productgroup/die-attach/">Die Attach（Besi）</a></th><td>Besi（オランダ）</td><td>2026 年 11 月閲覧</td><td>ダイボンディング、はんだ（ソフトソルダー）ダイボンディング、フリップチップなどの装置。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.besi.com/products-technology/productgroup/molding/">Molding（Besi の Fico ブランド）</a></th><td>Besi（オランダ）</td><td>2026 年 11 月閲覧</td><td>封止（モールド）装置を製品に持つこと。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.tel.com/product/prexa.html">Test Prexa Series（ウェーハプローバー）</a></th><td>東京エレクトロン（日本）</td><td>2026 年 11 月閲覧</td><td>プローバーを製品に持つこと。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.hamamatsu.com/jp/ja/product/type/L9570/index.html">ステルスダイシング技術</a></th><td>浜松ホトニクス（日本）</td><td>2026 年 11 月閲覧</td><td>ステルスダイシングの呼称と原理。</td></tr>
+      <tr><td>技術資料</td><th scope="row"><a href="https://www.ti.com/lit/an/spraby1/spraby1.pdf">SPRABY1（J-STD-033 の表を引用。2026-11-14 に取得できた）</a></th><td>Texas Instruments（米国）</td><td>2026 年 11 月閲覧</td><td>MSL の等級とフロアライフ。MSL 1 は「ドライパックを要しない」と書かれている。MSL 6 の個別の記載はない。</td></tr>
+      <tr><td>技術ノート</td><th scope="row"><a href="https://media.monolithicpower.cn/mps_cms_document/m/o/moisture_sensitivity_technical_note_apr._2024.pdf">Moisture Sensitivity Technical Note（MPS 公式サイトの PDF。中国向けの配信先）</a></th><td>Monolithic Power Systems（米国）</td><td>2024 年 4 月</td><td>MSL の表の照合。MSL 1・6 のドライパックの扱いは「任意」と書かれている。J-STD-020 は版 E を引いている。</td></tr>
+      <tr><td>規格</td><th scope="row"><a href="https://shop.electronics.org/ipcjedec-j-std-033/ipcjedec-j-std-033-standard-only">IPC/JEDEC J-STD-033（IPC の販売ページ）</a></th><td>IPC / JEDEC</td><td>2018 年 4 月 4 日（改訂 D。現行版と表示）</td><td>取扱い・梱包の規格の版。本文は有料で未確認。</td></tr>
+      <tr><td>規格</td><th scope="row"><a href="https://www.dinmedia.de/en/standard/ipc-jedec-j-std-020f/366816203">IPC/JEDEC J-STD-020F（DIN Media の販売ページ）</a></th><td>IPC / JEDEC（販売：DIN Media）</td><td>2022 年 12 月 1 日（版 F。現行版と表示）</td><td>MSL の等級の決め方の規格の版。本文は未確認。</td></tr>
+      <tr><td>教科書的な一般知識</td><th scope="row">半導体パッケージング・テストの教科書（ワイヤボンディング、フリップチップ、バーンイン）</th><td>—</td><td>—</td><td>方式の違いと流れの説明。数値は使っていません。</td></tr>
+    </tbody>
+  </table></div>
+</section>

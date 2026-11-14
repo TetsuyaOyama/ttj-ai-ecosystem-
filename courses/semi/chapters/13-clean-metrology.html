@@ -1,0 +1,91 @@
+<!--
+num: 13
+part: 2
+title: 洗浄・計測・検査：歩留まりを守る工程
+track: 前工程
+time: 40
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>汚染の種類（粒子・金属・有機物・自然酸化膜）と、洗浄が<b>もっとも回数の多い工程</b>である理由を説明できる。</li>
+    <li><b>計測と検査</b>の違いと、代表的な装置（CD-SEM、光学式、欠陥検査）の役割を言える。</li>
+    <li>欠陥と歩留まりの関係、<b>SPC と APC</b>（測ったら次を直す仕組み）、ロットの<b>保留・再処理・廃棄</b>の流れを説明できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch06">第06章</a>（工程の全体像、基本ループ、歩留まり）。第07〜12章を読んでおくと、事例が分かりやすくなります。</p>
+</section>
+
+<h3>汚染の種類：何を落とすのか</h3>
+<p>前工程は、何百もの工程の繰り返しです。そのたびに、ウェーハに汚れがつく可能性があります。洗浄は、成膜・露光・エッチングの前後に何度も入るので、<b>もっとも回数の多い工程</b>の 1 つです。落とす対象は、4 つに分けられます。</p>
+<ul>
+  <li><b>パーティクル</b>（particle）：微小な粒子です。回路の上に乗ると、断線やショートの原因になります。</li>
+  <li><b>金属</b>：微量でも、トランジスタの特性を変えます。炉に持ち込むと、熱で広がります。</li>
+  <li><b>有機物</b>：膜の密着を悪くします。</li>
+  <li><b>自然酸化膜</b>（native oxide）：シリコンが空気や水に触れてできる、薄い酸化膜です。次の工程の邪魔になる場面では、除きます。</li>
+</ul>
+<p>致命的になる粒子の大きさは、回路が小さくなるほど小さくなります。IRDS（International Roadmap for Devices and Systems、国際的な技術ロードマップ）は、論理素子では、回路の寸法のおよそ半分を目安とし、もっとも厳しい場合は 3.0 nm と書いています。そして、この大きさの粒子は、現在の計測では検出できないと述べています。そのため、見つけるだけでなく、<b>そもそも発生させない</b>ことが重視されます（出典：IRDS『2024 Edition Yield Enhancement』、2024 年）。ウェーハの縁と裏面も、歩留まりの大きな要因です。</p>
+
+<h3>洗浄：RCA 洗浄から枚葉式へ</h3>
+<p>洗浄の基本は、<b>RCA 洗浄</b>（RCA clean）です。RCA 社の研究者が 1965 年ごろに考案し、1970 年に論文で発表しました（出典：半導体産業史料館の展示解説）。アンモニアと過酸化水素を含む液で、粒子と有機物を落とします。そのあと、塩酸と過酸化水素を含む液で、金属を落とします。薬液の組成は、のちに薄くしたり、オゾン水を使ったりと発展しました。</p>
+<p>洗い方には、2 つの形があります。多数枚を薬液の槽に浸す<b>バッチ式</b>と、1 枚ずつ回転させて薬液を吹き付ける<b>枚葉式</b>です。微細化にともない、枚葉式が増えてきました。各社は、枚葉式の利点として、汚れの移りを抑えやすいこと、乾燥のときのパターンの倒れやウォーターマーク（水の跡）を抑える工夫、薬液をその場で混ぜて使えることを挙げています（出典：SCREEN セミコンダクターソリューションズ（日本）製品ページ、2026 年 11 月閲覧）。</p>
+<div data-widget="compare" data-src="c13-wet"></div>
+<p>ウェーハの縁（ベベル）だけを、プラズマで洗う装置もあります。Lam Research（米国）は、縁の不要な材料を除くことで、歩留まりを高めると説明しています（出典：Lam Research 製品ページ、2026 年 11 月閲覧）。東京エレクトロン（日本）は、枚葉式、バッチ式、スクラバー（ブラシで洗う装置）を製品に持っています（出典：東京エレクトロン製品ページ、2026 年 11 月閲覧）。</p>
+
+<h3>計測と検査：測る、探す</h3>
+<p><b>計測</b>は、寸法・膜厚・位置ずれなどの<b>値</b>を測ることです。<b>検査</b>は、欠陥が<b>あるか、どこにあるか、いくつあるか</b>を探すことです。どちらも、主要な工程のあとに置かれ、結果が次の工程の判断に使われます。</p>
+<p>代表は、<b>CD-SEM</b>（Critical Dimension SEM。SEM は Scanning Electron Microscope、走査型電子顕微鏡）です。電子ビームで細かなパターンの像をとり、寸法（CD）を求めます。日立ハイテク（日本）は、現像後のレジストの寸法と、エッチング後の穴や配線の寸法に使うと説明しています（出典：日立ハイテク技術解説、2026 年 11 月閲覧）。光を使う方式もあります。IRDS は、光の散乱を使う計測が、線の形と CD の計測に使われ、SEM などで校正されると述べています（出典：IRDS『2024 Metrology』、2024 年）。</p>
+<p>欠陥検査には、光の方式と電子線の方式があります。光の方式には、反射光を見る<b>明視野</b>と、散乱光だけを見る<b>暗視野</b>があり、見つけやすい欠陥が違います。見つけた欠陥は、<b>レビュー</b>（拡大して分類する）で何かを調べます。KLA（米国）は、パターン付きと無地のウェーハの両方で、欠陥を見つけて分類する装置を持つと説明しています（出典：KLA、Form 10-K、2025 年提出）。</p>
+<div data-widget="table" data-src="c13-metrology"></div>
+<p>フォトマスクも検査します。マスクの欠陥は、ウェーハに転写されると全ダイに影響するからです（<a href="#ch09">第09章</a>）。</p>
+
+<h3>欠陥と歩留まり</h3>
+<p><b>歩留まり</b>は、つくったダイのうち良品の割合です（<a href="#ch06">第06章</a>）。IRDS の歩留まりの章は、ランダムに起きる欠陥を主な対象とし、欠陥の密度と歩留まりの関係を扱っています。</p>
+<p>多くの教科書にある単純なモデルでは、<b>ダイの面積が大きいほど、そして欠陥の密度が高いほど</b>、歩留まりは下がります。ダイが大きいと、致命的な欠陥が入る確率が上がるからです。同じ工場でも、大きなチップのほうが、歩留まりを上げるのは難しくなります。</p>
+
+<h3>SPC と APC：測ったら、次を直す</h3>
+<p><b>SPC</b>（Statistical Process Control、統計的工程管理）は、測定値を管理図で監視して、変動の異常を早く見つける方法です。基準を外れると、警報が出ます。</p>
+<p><b>APC</b>（Advanced Process Control）は、測定結果をもとに、次の処理の条件を自動で補正する制御です。2 つの形があります。<b>フィードバック</b>は、同じ工程の<b>次のロット</b>へ、結果を返して補正します。<b>フィードフォワード</b>は、前の工程の結果を、<b>あとの工程</b>へ送って補正します。図で、順に見てください。</p>
+<div data-widget="seq" data-src="c13-apc"></div>
+
+<h3>ロットの保留・再処理・廃棄</h3>
+<p>測定値が規格を外れたり、管理図に警報が出たりしたら、ロットを<b>ホールド</b>（保留）します。止めて、データと装置の記録を調べ、次の行き先を判断します。問題がなければ解除し、やり直せるなら<b>再処理（リワーク）</b>、やり直せなければ廃棄です。</p>
+<p>やり直せるかどうかは、工程によって違います。リソグラフィは、レジストを剥離して塗り直せます。エッチング、注入、CMP は、削ったり打ち込んだりした結果を戻せません。状態と遷移を押して、条件を確かめてください。</p>
+<div data-widget="state" data-src="c13-lot"></div>
+
+<h3>演習：歩留まり低下の切り分け</h3>
+<p>欠陥の分布と測定値から、疑う工程と、最初に見る装置を選びます。値はすべて架空です。次のように考えてください。<b>（1）いつ増えたか</b>（どの工程の前後か）。<b>（2）どこに出ているか</b>（全面、縁、毎ショットの同じ位置）。<b>（3）どちらを疑うか</b>（工程の装置か、測る側か）。</p>
+<div data-widget="drill" data-src="c13-drill"></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>計測と検査は別のものです。</b>計測は値を測り、検査は欠陥を探します。</p>
+  <p><b>フィードバックとフィードフォワードは、補正を返す先が違います。</b>前者は同じ工程の次のロット、後者はあとの工程です。</p>
+  <p><b>測定値が悪いとき、いつも工程が悪いとは限りません。</b>計測装置のずれが原因のこともあります。演習の最後のケースがその例です。</p></div>
+
+<div class="callout note"><span class="ttl">現場でのつながり</span>
+  <p>洗浄装置は、超純水と薬液、排液の用役が必要な装置です（<a href="#ch18">第18章</a>）。計測・検査装置は、精度が価値の中心で、据付のあとの調整と号機間のそろえが重要です（<a href="#ch25">第25章</a>）。装置を工場へ運ぶときも、精密な光学系や電子光学系を衝撃から守る梱包と記録が求められます（<a href="#ch22">第22章</a>）。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c13-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（アクセス日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>業界のロードマップ</td><th scope="row"><a href="https://irds.ieee.org/images/files/pdf/2024/2024IRDS_YE.pdf">International Roadmap for Devices and Systems: 2024 Edition, Yield Enhancement</a></th><td>IEEE IRDS</td><td>2024 年</td><td>致命的な粒子の大きさ、ウェーハの縁と裏面、欠陥密度と歩留まり。</td></tr>
+      <tr><td>業界のロードマップ</td><th scope="row"><a href="https://irds.ieee.org/images/files/pdf/2024/2024IRDS_MET.pdf">International Roadmap for Devices and Systems: 2024, Metrology</a></th><td>IEEE IRDS</td><td>2024 年</td><td>CD-SEM、光学式の散乱計測、重ね合わせの位置づけ。</td></tr>
+      <tr><td>展示解説</td><th scope="row"><a href="https://www.shmj.or.jp/english/pdf/em/exhibi2432E.pdf">RCA clean（展示解説）</a></th><td>半導体産業史料館</td><td>2026 年 11 月閲覧</td><td>RCA 洗浄の考案と発表の時期、洗浄の目的。</td></tr>
+      <tr><td>企業の技術解説</td><th scope="row"><a href="https://www.hitachi-hightech.com/global/en/knowledge/semiconductor/room/manufacturing/cd-sem.html">CD-SEM - What is a Critical Dimension SEM?</a></th><td>日立ハイテク（日本）</td><td>2026 年 11 月閲覧</td><td>CD-SEM の原理と使われる工程。</td></tr>
+      <tr><td>企業のプレスリリース</td><th scope="row"><a href="https://www.hitachi-hightech.com/us/en/news/nr20231212.html">Hitachi High-Tech Launches the GT2000</a></th><td>日立ハイテク</td><td>2023 年 12 月 12 日</td><td>High-NA EUV の世代向けの電子線計測装置の例。</td></tr>
+      <tr><td>企業の提出書類</td><th scope="row"><a href="https://ir.kla.com/sec-filings/all-sec-filings/content/0000319201-25-000024/0000319201-25-000024.pdf">Form 10-K</a></th><td>KLA（米国）</td><td>2025 年提出</td><td>欠陥の検査・レビュー、計測の対象、レチクル検査。</td></tr>
+      <tr><td>企業の会社概要</td><th scope="row"><a href="https://ontoinnovation.com/about-us/">About Us</a></th><td>Onto Innovation（米国）</td><td>2026 年 11 月閲覧</td><td>計測・検査・リソグラフィの提供範囲。</td></tr>
+      <tr><td>企業のプレスリリース</td><th scope="row"><a href="https://www.lasertec.co.jp/en/news/2025/20251031_3912.html">Lasertec Releases ACTIS A200HiT</a></th><td>レーザーテック（日本）</td><td>2025 年 10 月 31 日</td><td>EUV 用のマスク検査装置の例（アクティニック検査）。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.advantest.com/en/products/">Products and Solutions（製品一覧。上位ページ）</a></th><td>アドバンテスト（日本）</td><td>2026 年 11 月閲覧</td><td>CD-SEM を製品に持つこと。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.screen.co.jp/spe/en/products/su-3100">Single Wafer Cleaner SU-3100</a></th><td>SCREEN セミコンダクターソリューションズ（日本）</td><td>2026 年 11 月閲覧</td><td>枚葉洗浄の特長（同社の主張）。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.lamresearch.com/products/our-processes/strip-clean/">Strip &amp; Clean Products</a></th><td>Lam Research（米国）</td><td>2026 年 11 月閲覧</td><td>ウェット洗浄、ベベル洗浄、レジスト剥離。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.tel.com/product/">Products and Services（製品一覧。上位ページ）</a></th><td>東京エレクトロン（日本）</td><td>2026 年 11 月閲覧</td><td>枚葉式・バッチ式・スクラバーの洗浄装置を製品に持つこと。</td></tr>
+      <tr><td>教科書的な一般知識</td><th scope="row">半導体プロセス・歩留まり管理の教科書（汚染、SPC・APC、歩留まりのモデル）</th><td>—</td><td>—</td><td>SPC・APC の考え方、歩留まりと面積の関係、ホールドとリワーク。数値は使っていません。</td></tr>
+    </tbody>
+  </table></div>
+</section>

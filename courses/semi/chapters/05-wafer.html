@@ -1,0 +1,96 @@
+<!--
+num: 05
+part: 1
+title: ウェーハ：砂から鏡面の円板へ
+track: 基礎
+time: 30
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>砂（ケイ石）から<b>単結晶のインゴット</b>、そして鏡面の<b>ウェーハ</b>ができるまでの流れを説明できる。</li>
+    <li>ウェーハの<b>直径</b>（150・200・300 mm）と、種類（エピタキシャル、SOI など）の違いが分かる。</li>
+    <li>ウェーハの容器 <b>FOUP と FOSB</b> の使い分けを言える。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch01">第01章</a>（半導体とシリコン）。</p>
+</section>
+
+<h3>ウェーハとは</h3>
+<p><b>ウェーハ</b>（wafer）は、チップを作る土台になる、薄くて丸いシリコンの板です。表面は鏡のように磨かれています。1 枚のウェーハの上に、同じチップを多数並べて作ります（第03章のダイ）。この章は、その土台の作り方と、運び方を扱います。</p>
+
+<h3>原料：ケイ石から多結晶シリコンへ</h3>
+<p>原料は、二酸化ケイ素を主成分とするケイ石です。まず、これを還元して金属シリコンにします。次に、塩化水素と反応させて液体の<b>トリクロロシラン</b>にし、蒸留して不純物を取り除きます。それを約 1,000 °C の反応炉に流すと、高純度のシリコンが棒状に析出します。この方法を<b>シーメンス法</b>と呼びます（出典：WACKER『Annual Report 2022』）。</p>
+<p>こうしてできた<b>多結晶シリコン</b>（polycrystalline silicon）は、半導体用では、重要な不純物が <b>ppt</b>（1 兆分の 1）の桁で管理されます（同出典）。「純度が何ナイン」という言い方も使われますが、ここでは出典が不純物の量で示しているので、それに従います。</p>
+
+<h3>単結晶を引き上げる：CZ 法と FZ 法</h3>
+<p>多結晶は、小さな結晶が不ぞろいに集まったものです。IC には、原子が規則正しく並んだ<b>単結晶</b>が必要です。作り方は主に 2 つあります。</p>
+<ul>
+  <li><b>CZ 法</b>（Czochralski method）：石英のるつぼで多結晶を 1,400 °C 以上で溶かし、種結晶を回しながらゆっくり引き上げます。大きな結晶を作りやすく、IC 用の主流です。るつぼから酸素が溶け込む点が特徴です（出典：microchemicals.com『Production of Si single crystals』）。</li>
+  <li><b>FZ 法</b>（Float Zone method）：多結晶の棒の一部をコイルで溶かし、その部分を端から端へ移して結晶にします。るつぼに触れないので酸素や炭素が少なく、抵抗率の高い結晶を作れます。最大の直径は CZ 法より小さく、費用は高くなります。Siltronic は、FZ 法の結晶が IGBT などのパワー半導体に向くと説明しています（出典：同上、Siltronic 製品ページ）。</li>
+</ul>
+<p>引き上げた円柱状の単結晶を<b>インゴット</b>（ingot）と呼びます。</p>
+
+<h3>インゴットからウェーハへ</h3>
+<p>インゴットは、両端を切り、外周を円筒状に研削して直径をそろえます。次に、ワイヤソーで薄い円板に切り出します。縁を丸く加工し、表裏を削って平行度をそろえ、洗浄とエッチングで加工の傷を取り除き、研磨で鏡面にします。Siltronic は、300 mm のウェーハを両面で、200 mm 以下を片面で磨くのが一般的だと説明しています（出典：Siltronic 製品ページ）。最後に検査して、レーザーで識別の刻印を付けます。下の図で、各工程の装置と管理項目を確かめてください。</p>
+<div data-widget="arch" data-src="c05-process"></div>
+<div class="callout tip"><span class="ttl">演習</span>
+  <p>多結晶シリコンから出荷までの工程を、正しい順に並べる問題を、下の確認問題に出しています。図の矢印を頭の中でたどってから答えてください。</p></div>
+
+<h3>直径：150・200・300 mm</h3>
+<p>ウェーハの直径には、150・200・300 mm があります。直径が大きいほど、1 枚から取れるチップの数が増え、1 枚あたりの厚さも増えます。寸法は SEMI 規格で決まります。SEMI M1 は研磨済みの単結晶シリコンウェーハの規格で、目的は、共通の装置が複数の製造ラインで使えるように寸法をそろえることです（出典：SEMI Store の規格ページ。現行版の表示は M1-0924）。</p>
+<div data-widget="table" data-src="c05-diam"></div>
+<p>世界のシリコンウェーハの出荷面積は、2025 年に 12,973 百万平方インチで、前年より 5.8% 増えました。SEMI は、AI 向けのロジックと HBM（High Bandwidth Memory、DRAM を積み重ねた広帯域メモリ。第15章）で 300 mm ウェーハの需要が強いとコメントしています（出典：SEMI プレスリリース、2026 年 2 月 10 日、数値は 2025 年暦年）。</p>
+
+<h3>450 mm は、いまどうなっているのか</h3>
+<p>さらに大きい 450 mm（18 インチ）ウェーハは、2010 年代に導入が検討されました。SEMI は、2008 年に最初の 450 mm の規格を発行し、搬送容器・ロードポート・ウェーハなどの規格をそろえました。2015 年 2 月の SEMI のページは、450 mm への移行の可能性に向けて作業が進んでいると書いています（出典：SEMI『450 mm Standards』、2015 年 2 月のページ）。その後、450 mm の機械取扱い用ウェーハの規格 SEMI M74 は、維持の条件を満たさなかったとして、<b>Inactive</b>（失効ではなく、有効なまま入手できる区分）と表示されています（出典：SEMI Store、2026 年 11 月に確認）。現在の主流は 300 mm です（前の節の、SEMI の 2026 年 2 月 10 日の発表）。本講座の執筆時点で、450 mm の量産導入を確認できる公開資料は見つかっていません。移行が進まなかった理由は、団体や企業の公式資料では確認できなかったので、本章では書きません。</p>
+
+<h3>ノッチ・結晶方位・表と裏</h3>
+<p>300 mm のウェーハの縁には、小さな切り欠きの<b>ノッチ</b>（notch）があります。結晶の向きを示し、装置の中で向きをそろえる基準になります。製品の仕様例では、ノッチは結晶の特定の方向（&lt;110&gt; 方向）に付きます（出典：Silicon Valley Microelectronics の 300 mm ウェーハの仕様書 SV031）。小さな直径では、ノッチの代わりに、直線状の切り欠き（フラット）を使うものがあります。</p>
+<p>チップを作る面は鏡面です。識別の刻印はレーザーで付けるので、ノッチとは別のものです。</p>
+
+<h3>エピタキシャルウェーハ・SOI・SiC ウェーハ</h3>
+<p>研磨しただけのウェーハのほか、用途に合わせた種類があります。</p>
+<ul>
+  <li><b>エピタキシャルウェーハ</b>（epitaxial wafer）：研磨した表面に、結晶の薄い膜を成長させたもの（出典：Siltronic 製品ページ）。膜の成長は第07章で扱います。</li>
+  <li><b>SOI</b>（Silicon on Insulator）：絶縁膜の上に、薄いシリコンの層を載せた構造のウェーハ。</li>
+  <li><b>SiC ウェーハ</b>：第01章の SiC の結晶から作るウェーハ。シリコンとは別の結晶成長法を使います。</li>
+</ul>
+
+<h3>ウェーハの容器：FOUP と FOSB</h3>
+<p>300 mm ウェーハは、容器に入れて運びます。工場の中で搬送・保管する容器が<b>FOUP</b>（Front Opening Unified Pod）、メーカーから顧客へ出荷する容器が<b>FOSB</b>（Front Opening Shipping Box）です。表記を分けて読むと、役割が分かります。</p>
+<div data-widget="ident" data-src="c05-pods"></div>
+<div data-widget="compare" data-src="c05-pods-cmp"></div>
+<p>FOSB を定めた SEMI M31 は、SEMI の表示では「Inactive」（維持の条件を満たしていないが、有効なまま使える）です（出典：SEMI Store の規格ページ、M31-0718）。規格の現行版は、必ず SEMI の規格ページで確かめてください。</p>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>FOUP と FOSB を混ぜない</b>こと。FOSB は出荷用で、IC の製造工程では使いません。顧客の受入で、ウェーハを FOUP などへ移し替えます。</p>
+  <p>もう一つ。「ウェーハの直径＝チップの大きさ」ではありません。直径は土台の大きさで、1 枚から何個のチップが取れるかは、チップの面積で決まります。</p></div>
+
+<div class="callout note"><span class="ttl">現場でのつながり</span>
+  <p>FOUP のサイズと扉の位置は、装置のロードポート（第16章）や工場の搬送設備（第18章：天井搬送の OHT〔Overhead Hoist Transport〕）と合っている必要があります。ウェーハの出荷の梱包は、第22章の梱包と同じ考え方（清浄・衝撃対策）で扱います。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c05-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（アクセス日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://reports.wacker.com/2022/annual-report/sustainable-solutions/purity-is-our-recipe-for-success.html">Purity is our recipe for success（Annual Report 2022）</a></th><td>WACKER</td><td>2022 年</td><td>シーメンス法、トリクロロシラン、不純物（ppt の桁）。</td></tr>
+      <tr><td>解説</td><th scope="row"><a href="https://www.microchemicals.com/products/wafers/silicon_ingot_production.html">Production of Si single crystals</a></th><td>MicroChemicals</td><td>2026 年 11 月に確認</td><td>CZ 法と FZ 法の違い。</td></tr>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://www.siltronic.com/en/products.html">Siltronic：Products</a></th><td>Siltronic</td><td>2026 年 11 月に確認</td><td>インゴットからウェーハまでの工程、エピタキシャルウェーハ、FZ 法の用途。</td></tr>
+      <tr><td>規格</td><th scope="row"><a href="https://store-us.semi.org/products/m00100-semi-m1-specification-for-polished-single-crystal-silicon-wafers">SEMI M1：Specification for Polished Single Crystal Silicon Wafers</a></th><td>SEMI</td><td>M1-0924（現行の表示）</td><td>規格の範囲と目的。規格本文の数値は使っていません。</td></tr>
+      <tr><td>規格</td><th scope="row"><a href="https://store-us.semi.org/products/m03100-semi-m31-specification-for-mechanical-features-of-front-opening-shipping-box-used-to-transport-and-ship-300-mm-wafers">SEMI M31：Front Opening Shipping Box の機械仕様</a></th><td>SEMI</td><td>M31-0718（Inactive の表示）</td><td>FOSB の範囲（出荷用、製造工程では使わない）。</td></tr>
+      <tr><td>規格名</td><th scope="row">SEMI E47.1：Mechanical Specification for FOUPs Used to Transport and Store 300 mm Wafers</th><td>SEMI</td><td>2026 年 11 月に規格名を確認</td><td>FOUP が搬送・保管用であること。規格本文は参照していません。</td></tr>
+      <tr><td>企業の製品資料</td><th scope="row"><a href="https://www.entegris.com/content/dam/product-assets/a300foups/datasheet-a300foups.pdf">A300 FOUPs データシート</a></th><td>Entegris</td><td>2026 年 11 月に確認</td><td>25 スロットと 13 スロットの FOUP。</td></tr>
+      <tr><td>企業の製品資料</td><th scope="row"><a href="https://www.miraial.co.jp/en/product/300mm-fosb/">300mm FOSB</a></th><td>Miraial</td><td>2026 年 11 月に確認</td><td>FOSB の自動扉と関連規格。</td></tr>
+      <tr><td>企業の製品資料</td><th scope="row"><a href="https://svmi.com/wp-content/uploads/2020/09/SV031.pdf">SV031（300 mm ウェーハの仕様書）</a></th><td>Silicon Valley Microelectronics</td><td>2020 年 9 月掲載</td><td>ノッチの向きの例。製品の仕様例で、規格値ではありません。</td></tr>
+      <tr><td>販売会社の資料</td><th scope="row"><a href="https://universitywafer.com/wafer-sizes.html">Compare Silicon Wafer Sizes</a></th><td>University Wafer</td><td>2026 年 11 月に確認</td><td>直径ごとの厚さの目安。</td></tr>
+      <tr><td>統計</td><th scope="row"><a href="https://www.semi.org/en/semi-press-release/semi-reports-2025-annual-worldwide-silicon-wafer-shipments-and-revenue-results">SEMI Reports 2025 Annual Worldwide Silicon Wafer Shipments and Revenue Results</a></th><td>SEMI</td><td>2026 年 2 月 10 日</td><td>2025 年のウェーハ出荷面積。</td></tr>
+      <tr><td>団体の公開ページ</td><th scope="row"><a href="https://www.semi.org/en/products-services/standards/450mm-standards">450 mm Standards at SEMI</a></th><td>SEMI</td><td>2015 年 2 月のページ（2026 年 11 月に確認）</td><td>450 mm の規格の一覧（2008 年に最初の規格）と、移行に向けた作業の状況。</td></tr>
+      <tr><td>規格（SEMI）</td><th scope="row"><a href="https://store-us.semi.org/products/m07400-semi-m74-specification-for-450-mm-diameter-mechanical-handling-polished-wafers">SEMI M74 Specification for 450 mm Diameter Mechanical Handling Polished Wafers</a></th><td>SEMI</td><td>版 M74-1108（Reapproved 1018）、Inactive（公開ページの表示。2026 年 11 月に確認）</td><td>450 mm の機械取扱い用ウェーハの規格が、維持の条件を満たさず Inactive と表示されていること。規格本文は読んでいません。</td></tr>
+    </tbody>
+  </table></div>
+</section>

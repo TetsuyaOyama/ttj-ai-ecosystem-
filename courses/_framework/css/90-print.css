@@ -1,0 +1,23 @@
+/* ===== 印刷：表示中の章だけを白地で ===== */
+@media print {
+  :root, :root[data-theme="dark"], :root[data-theme="light"] {
+    --bg: #fff; --surface: #fff; --surface2: #f3f5f9; --raise: #e8edf5; --line: #c8d0de; --line2: #8a99b3;
+    --text: #111; --muted: #333; --faint: #555; --link: #1F4278; --halo: #fff;
+    --k-ue-f:#EAF0F8; --k-ue-s:#5B7396; --k-ran-f:#DDEEFB; --k-ran-s:#1E73B8; --k-core-f:#FBF1CC; --k-core-s:#A98A1A;
+    --k-db-f:#E4E7FB; --k-db-s:#4F5FD0; --k-pol-f:#F0E5FB; --k-pol-s:#8240C8; --k-ext-f:#D9F3EC; --k-ext-s:#1B8A6E; --k-ims-f:#FBE3EA; --k-ims-s:#C23A64;
+    --cp: #1F5FB0; --up: #8F7010;
+  }
+  body { font-size: 10.5pt; background: #fff; }
+  .top, .side, .scrim, .results, .foot, .seq-ctl, .wg-tabs, .btn, .ch-foot .readrow, .pn, .scroll-hint, .skip { display: none !important; }
+  .main { margin: 0; padding: 0; }
+  .page { max-width: none; padding: 0; }
+  .chapter[hidden], #home[hidden] { display: none !important; }
+  .chapter h3, .wg { break-inside: avoid-page; }
+  .chapter h3 { break-after: avoid; }
+  .seq-stage { max-height: none !important; overflow: visible !important; }
+  .seq-svg .st { opacity: 1 !important; }
+  .wg-info { min-height: 0; }
+  a { color: #1F4278; }
+  .tbl-wrap, .scroll-x { overflow: visible; }
+  .hero { background: #fff; }
+}
