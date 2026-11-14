@@ -7,7 +7,7 @@
 - 日本語。専門用語は英語表記を併記（例：「加入者識別モジュール（eUICC）」）
 - スマホ（幅375px）でも崩れない。キーボード操作可能、`prefers-reduced-motion` ではアニメを止める
 - 内容は公開規格（3GPP TS、GSMA SGP）と一般知識だけ。勤め先・顧客・実在の事業者名・個人情報は書かない。規格番号は正確に
-- フッター：`© TTJ — TED TRADING JAPAN G.K.` と「ポートフォリオへ戻る」リンク（`../index.html`）。作者表記は「ビッグマウンテンテツヤ / TTJ」
+- フッター：`© TTJ — TED TRADING JAPAN G.K.` と「ポートフォリオへ戻る」リンク（`../index.html`）。作者名（個人名）は載せず、表記は「TTJ」のみ
 - console エラーなし。`python3 -I` の html.parser でタグの閉じ忘れがないことを確認
 
 ファイルの場所：

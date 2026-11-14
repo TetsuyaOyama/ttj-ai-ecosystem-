@@ -4,7 +4,7 @@
 
 | 列 | 元画像 | TTJ での実装 | 置き場所 |
 |---|---|---|---|
-| ① 人 | KEITO | ビッグマウンテンテツヤ | — |
+| ① 人 | KEITO | TTJ（運営者） | — |
 | ② 入口 | スマホアプリ・ターミナル・Discord・定期タスク | Claudeアプリ（スマホ/Web）、WSLのターミナル、クロ（Discord・任意）、claude.ai の定期タスク | bots/kuro-discord-bot/ |
 | ③ 司令塔 | Claude Code | Claude Code（WSL） | ~/.claude/ |
 | ④ ハーネス | 判断AI・フック11本・権限ルール・APIキー隔離・CLAUDE.md・品質の関所 | フック8本・権限ルール・APIキーは skills/.env の1か所・CLAUDE.md＋記憶メモ・公開前チェック | claude/settings.json, claude/hooks/, claude/CLAUDE.md |

@@ -85,7 +85,7 @@ AI の未来レポート、触れる展示、備蓄ガイドなどを収めた T
 
 ## 作者
 
-ビッグマウンテンテツヤ / TTJ（TED TRADING JAPAN G.K.）
+TTJ（TED TRADING JAPAN G.K.）
 
 専門はコネクテッドカー通信（eSIM/eUICC・VoLTE/IMS・SMS・国際ローミング）と AI エージェント開発環境です。
 
@@ -102,7 +102,7 @@ AI の未来レポート、触れる展示、備蓄ガイドなどを収めた T
 元画像の11列との対応は [docs/ecosystem-map.md](docs/ecosystem-map.md)、設計の詳細は [docs/spec.md](docs/spec.md) を参照してください。
 
 ```
-ビッグマウンテンテツヤ
+人（TTJ）
   ↓ 入口：ターミナル(WSL) / Claudeアプリ / クロ(Discord・任意) / 定期タスク
 Claude Code（司令塔 = ~/.claude/）
   ↓ ハーネス：CLAUDE.md・権限ルール・フック8本・記憶メモ・APIキー1か所

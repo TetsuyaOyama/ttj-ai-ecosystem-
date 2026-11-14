@@ -313,7 +313,7 @@ footer.site p { margin: 0; }
   <div class="wrap">
     <p class="kicker">TTJ AI ECOSYSTEM MAP</p>
     <h1>Claude Code 環境の全体図：依頼から公開まで、左から右へ</h1>
-    <p class="lead">人（ビッグマウンテンテツヤ）の依頼が、入口 → 司令塔（Claude Code）→ ハーネス（harness：安全柵）→ 振り分け → スキル（skill）→ サブエージェント（subagent）→ 道具・API → 公開 と流れます。ボックスを押す（Tab で移動）と、役割・実ファイルのパス・要点が下に出ます。</p>
+    <p class="lead">人の依頼が、入口 → 司令塔（Claude Code）→ ハーネス（harness：安全柵）→ 振り分け → スキル（skill）→ サブエージェント（subagent）→ 道具・API → 公開 と流れます。ボックスを押す（Tab で移動）と、役割・実ファイルのパス・要点が下に出ます。</p>
   </div>
 </header>
 
@@ -369,7 +369,7 @@ footer.site p { margin: 0; }
 
 <footer class="site">
   <div class="wrap">
-    <p>© TTJ — TED TRADING JAPAN G.K.　／　作：ビッグマウンテンテツヤ / TTJ</p>
+    <p>© TTJ — TED TRADING JAPAN G.K.</p>
     <p><a href="../index.html">ポートフォリオへ戻る</a></p>
   </div>
 </footer>
@@ -394,7 +394,7 @@ footer.site p { margin: 0; }
 
   /* ===== ノード定義 ===== */
   var NODES = [
-    { id: "person", col: 0, t1: "ビッグマウンテンテツヤ", t2: "依頼・最終判断", cls: "person", h: 96,
+    { id: "person", col: 0, t1: "TTJ", t2: "依頼・最終判断", cls: "person", h: 96,
       colName: "① 人",
       role: "依頼を出し、モデルの切り替え・公開（push / deploy）・削除など「人が決めること」を最終判断する人。",
       paths: ["（人のため、ファイルはありません）"],
@@ -576,7 +576,7 @@ footer.site p { margin: 0; }
   /* ===== 依頼1件の流れ ===== */
   var STEPS = [
     { name: "依頼", nodes: ["person", "in-app"], edges: ["person>in-app"],
-      text: "① 依頼：ビッグマウンテンテツヤがスマホのアプリ（またはターミナル）から「教材ページを1つ作って公開して」と依頼する。" },
+      text: "① 依頼：運営者がスマホのアプリ（またはターミナル）から「教材ページを1つ作って公開して」と依頼する。" },
     { name: "受付", nodes: ["claude"], edges: ["in-app>claude"],
       text: "② 受付：司令塔の Claude Code が依頼を受ける。CLAUDE.md と記憶メモ（先頭40行）が文脈に入っている。" },
     { name: "フック", nodes: ["band", "h-hooks", "h-perm"], edges: ["claude>band"],

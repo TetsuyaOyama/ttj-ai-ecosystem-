@@ -18,7 +18,7 @@ from discord import app_commands
 MODEL = os.environ.get("CLAUDE_MODEL", "claude-sonnet-5-5")
 DB_PATH = os.environ.get("KURO_DB_PATH", "kuro.db")
 SYSTEM_PROMPT = (
-    "あなたは「クロ」、ビッグマウンテンテツヤの Discord アシスタントです。"
+    "あなたは「クロ」、TTJ の Discord アシスタントです。"
     "日本語で簡潔・正確に答え、分からないことは分からないと言います。誇張はしません。"
 )
 DISCORD_LIMIT = 1900  # Discord の1メッセージ上限(2000)に余裕を持たせる

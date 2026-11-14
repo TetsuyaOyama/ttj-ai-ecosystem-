@@ -1,6 +1,6 @@
 # TTJ AIエコシステム 設計書（v1）
 
-ユーザー：ビッグマウンテンテツヤ（TTJ / GitHub: ttj-tokyo）。Windows + WSL2(Ubuntu) で Claude Code（ターミナル版）を使う。
+ユーザー：TTJ の運営者（GitHub: ttj-tokyo）。Windows + WSL2(Ubuntu) で Claude Code（ターミナル版）を使う。
 契約済み外部AI：OpenAI（Codex CLI / API）、xAI（Grok API）。Discord は未所持（クロBotはコードだけ用意し、使うときにBotを作る）。
 公開先：GitHub Pages（ttj.tokyo 現行）＋ Cloudflare Pages を追加。
 全ファイル・全コメント・README は日本語。コードの識別子は英語。
