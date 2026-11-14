@@ -1,0 +1,119 @@
+<!--
+num: 03
+part: 1
+title: マザーボードと規格：フォームファクタ・ソケット・チップセット
+track: 部品
+time: 40
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>マザーボードの上にある主な部分（ソケット、電源回路、メモリスロット、拡張スロット、チップセット、背面の端子）の場所と役割を、部品の名前で説明できる。</li>
+    <li>基板の大きさの区分（<b>フォームファクタ</b>）、プロセッサを載せる受け口（<b>ソケット</b>）、補助の部品（<b>チップセット</b>）が、それぞれ何を決めるかを区別できる。</li>
+    <li>仕様表の脚注から、スロットの形と使えるレーンの数の違い、スロットと端子の共有を読み取れる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch01">第01章</a>（PC の全体像）。あるとよい：<a href="#ch02">第02章</a>（プロセッサ）。</p>
+</section>
+
+<h3>マザーボードは、部品をつなぐ土台</h3>
+<p><b>マザーボード</b>（motherboard）は、PC の部品を載せて、つなぐ基板です。上には、CPU（Central Processing Unit）のソケット、電源回路（Voltage Regulator Module, VRM）、メモリスロット、拡張スロット、M.2 のスロット、チップセット、背面の端子が並びます。</p>
+<p>拡張スロットは PCIe（PCI Express）、ドライブの端子は SATA（Serial ATA）の規格です。M.2 のスロットには、SSD（Solid State Drive）などを差します。背面の端子には、USB（Universal Serial Bus）や映像の端子があります。それぞれの詳細は、<a href="#ch04">第04章</a>・<a href="#ch05">第05章</a>・<a href="#ch09">第09章</a>で扱います。</p>
+<p>次の図は、ATX（基板の大きさの区分の名前）の基板を上から見た模式図です。部位を押すと、役割と、確かめる資料が出ます。実際の配置は、製品のマニュアルの図で確かめます（出典：一般知識）。</p>
+<div data-widget="layers" data-src="c03-board"></div>
+<p>電源回路は、電源ユニットから届いた電力を、CPU が使う電圧に変えて送る回路です。大きな電力を扱うので、熱を持ち、ヒートシンクが付く製品が多くあります（一般知識）。CPU の電力の指標が大きいほど、電源回路への負担も大きくなります。指標の意味は<a href="#ch02">第02章</a>、電源ユニットは<a href="#ch07">第07章</a>です。</p>
+
+<h3>フォームファクタ：基板の大きさと取り付け穴</h3>
+<p><b>フォームファクタ</b>（form factor）は、基板の大きさと、取り付け穴の位置などを決めた区分です。ATX・microATX・Mini-ITX が代表です。区分が決まっているので、基板とケースが合うかを、名前で確かめられます。</p>
+<p>ATX の基板の大きさは、Intel（米国）の購入ガイドが 12 in × 9.6 in と書き、一般の基板は拡張スロットが 7 本、と書いています（出典：Intel『Gaming Motherboard Buying Guide』、更新 2025 年 7 月）。in は、インチの記号です。規格文書は Intel の『ATX Specification』ですが、その版を Intel の公式の個別ページで確かめられなかったので、この講座は版を書きません。寸法と拡張スロットの数は、購入ガイドの値だけを使います。</p>
+<p>microATX と Mini-ITX の寸法は、Intel の購入ガイドの値を表に示します。microATX の規格文書と、Mini-ITX を定めた主体は、この講座では確認できませんでした。VIA Technologies（台湾）の 2007 年の発表は、Mini-ITX を 17 cm × 17 cm の形として書いています。</p>
+<div data-widget="table" data-src="c03-form"></div>
+<p>基板の寸法は、製品の仕様ページで確かめます。「ATX 対応」の表示は、基板やケースがその区分に合う、という意味です。ケースが対応する区分と、基板の取り付けは、<a href="#ch11">第11章</a>と<a href="#ch15">第15章</a>で扱います。</p>
+
+<h3>ソケット：CPU の受け口</h3>
+<p><b>ソケット</b>（socket）は、CPU を載せて、電気の接点でつなぐ受け口です。名前は CPU メーカーが決めます。AMD（米国）は「Socket AM5」、Intel は製品ページに「FCLGA1851」と書いています。ソケットの名前が、CPU と基板で同じことが、最初の条件です。</p>
+<p>名前に付く LGA（Land Grid Array）は、接点の形の名前です。Intel の購入ガイドは、ソケットの名前はピンの数に由来する、と説明しています（例：LGA 1151 は 1,151 ピン）。AMD の 2022 年 5 月 23 日の発表は、Socket AM5 を「1718 ピンの LGA の設計」と書いています。</p>
+<div data-widget="table" data-src="c03-socket"></div>
+<p>ソケットが同じでも、基板によって対応する CPU は違います。AMD のページは、600 シリーズの基板で Ryzen 8000・9000 シリーズを使うときは、UEFI（Unified Extensible Firmware Interface）の更新が要ることがある、と書いています。これを確かめる資料が、後の節の「CPU サポートリスト」です。</p>
+<p>ソケットの接点は、傷つきやすい部分です。AMD の取扱いの指針は、CPU を無理にソケットへ入れてはいけない、と書いています。Intel の取り付け手順は、ソケットの接点と CPU の底面に触れないこと、CPU の縁を持つことを指示しています（この手順は、LGA1150〜LGA1200 の CPU 向けです）。取り付けの順序は<a href="#ch15">第15章</a>で扱います。作業は、各部品のマニュアルに従ってください。</p>
+
+<h3>チップセット：CPU を補う部品</h3>
+<p><b>チップセット</b>（chipset）は、CPU を補う部品です。CPU だけでは足りない、追加の PCIe のレーン・USB・SATA の端子などを受け持ちます。CPU とは、専用の接続でつながります。</p>
+<div data-widget="table" data-src="c03-chipset"></div>
+<p>チップセットは、<b>品番の違いが機能の違い</b>になります。Intel の 800 シリーズ（チップセットの系列名）では、品番 H810・B860・Z890 で、チップセットが出す PCIe 4.0 のレーンの数が 8・最大 14・最大 24 と書かれています（出典：Intel『Intel 800 Series Chipset Brief』、確認 2026 年 11 月）。次の表は、品番の違いの例です。製品の例であり、推奨ではありません。</p>
+<div data-widget="table" data-src="c03-chipset-ex"></div>
+<p>2 社の数え方は違います。Intel の資料の「Chipset PCIe 4.0 Lanes」の行と、AMD のページの「USABLE PCIe LANES」の欄は、同じものを数えているとは限りません。企業の間では比べず、買いたい基板が載せているチップセットの資料で確かめます。</p>
+
+<h3>PCIe のレーンと、スロットの形</h3>
+<p>PCIe の<b>レーン</b>（lane）は、データの通り道の単位です。「x16」は、レーンが 16 本、という表記です。レーンが多いほど、同じ時間に運べるデータが増えます。世代ごとの速度の数字は、<a href="../server/#ch07">計算サーバー講義 第07章</a>にあります。この章では、世代ごとの速度の表を作りません。</p>
+<p>PCIe は、世代が違っても、つながります。PCI-SIG（PCI Special Interest Group）は、PCIe 7.0 の発表で、これまでの世代との後方互換を保つ、と述べています（出典：PCI-SIG、2025 年 6 月 11 日〔配信の URL の日付〕、Business Wire 配信）。<b>後方互換</b>（backward compatibility）は、新しいものが古いものとも一緒に使えることです。つながる速さは、世代の古いほうに合うのが一般的です（一般知識）。</p>
+<p>図の「CPU に直結」と「チップセット経由」を切り替えて、どのスロットや端子が、どちらにつながるかを見てください。線はすべて、データと信号の線（実線）です。</p>
+<div data-widget="arch" data-src="c03-lanes"></div>
+<h4>スロットの形と、使えるレーンの数は別</h4>
+<p>スロットの形（物理の大きさ）と、使えるレーンの数は、別に決まります。ASRock（台湾）の B850M-C のマニュアルは、PCIE2 と PCIE3 を「PCIe 3.0 x16 Slots」と書きながら、「support x1 mode」と注記しています（出典：ASRock『B850M-C ユーザーマニュアル』、版 1.0、2025 年 2 月）。形は x16 でも、使えるレーンは 1 本です。</p>
+<p>同じスロットでも、載せる CPU でレーンが変わる基板があります。同じマニュアルは、1 本目の x16 スロット（マニュアルの名前は PCIE1）が、9000・7000 シリーズの CPU のときは「Gen5x16」（PCIe 5.0 の x16 の意味）、8000 シリーズの一部では「Gen4x8」や「Gen4x4」で動く、と書いています。スロットの数だけでなく、<b>どの CPU で何レーン使えるか</b>を、仕様表と脚注で確かめます。</p>
+<p>Intel の購入ガイドは、小さなカードは大きなスロットでも動くが、速さはカード側のレーンの数までになる、と書いています（出典：Intel『Gaming Motherboard Buying Guide』、更新 2025 年 7 月）。</p>
+<h4>M.2 と SATA、スロットの共有</h4>
+<p>基板によっては、M.2 のスロット、SATA の端子、拡張スロットが、接続の資源を分け合います。共有の書き方は、製品のマニュアルごとに違います。</p>
+<ul>
+  <li>ASRock の B850M-C のマニュアルは、「M2_3 に SATA 方式の M.2 の機器を差すと、SATA3_3_4 は無効になる」という内容の脚注を載せています（版 1.0、2025 年 2 月）。</li>
+  <li>ASRock の B650 Steel Legend WiFi（製品名）のマニュアルは、「SATA3_0 と SATA3_1 を使うと、PCIE2（2 本目のスロットの名前）は x2 動作に下がる」という内容の脚注を載せています（版 1.0、2023 年 12 月）。</li>
+  <li>ASUS（台湾。ASUSTeK Computer）の PRIME B560M-A のマニュアルは、「M.2_2 のスロットは SATA6G_2（SATA の端子の名前）と帯域を共有する。M.2_2 が SATA 方式で動くとき、SATA6G_2 は無効になる」という内容の注記を載せています（改訂版 V2、2021 年 7 月）。</li>
+</ul>
+<p>この 3 つは、特定の製品の記述です。どの基板でも同じとは限りません。買う前に、仕様表の脚注とブロック図で、自分の構成で使えなくなる端子がないかを確かめます（<a href="#ch11">第11章</a>）。M.2 の形と接続の種類は、<a href="#ch05">第05章</a>です。</p>
+
+<h3>UEFI の版と、CPU サポートリスト</h3>
+<p><b>CPU サポートリスト</b>（CPU support list）は、マザーボードメーカーが公開する、基板ごとの対応 CPU の一覧です。ASRock の「CPU Support List」のページは、ソケットとチップセットごとに基板を並べ、基板ごとに「Support BIOS」の欄で、必要な UEFI の版を示しています。CPU ごとの対応は、基板の個別ページで確かめます（出典：ASRock『CPU Support List』、確認 2026 年 11 月）。</p>
+<p>ページの表記は「BIOS」ですが、この講座では、ファームウェアを UEFI と書きます（第17章）。新しい CPU を載せるときは、基板に入っている UEFI の版が、リストの版以上かを確かめます。足りない場合は、UEFI の更新が先に要ることがあります。更新の方法は、マザーボードのマニュアルに従ってください。</p>
+
+<h3>背面の端子とヘッダー</h3>
+<p>背面の端子は、PC の外の機器をつなぎます。USB・映像・ネットワークなどの規格は、<a href="#ch09">第09章</a>で扱います。基板の上には、ケースの前面のボタンや USB、ファンの線を差す<b>ヘッダー</b>（header）もあります。ヘッダーは、ピンが並んだ小さな端子で、差す向きと位置がマニュアルの図で決まっています。配線は<a href="#ch16">第16章</a>で扱います。</p>
+
+<h3>演習：架空の仕様表から、使えなくなる端子を答える</h3>
+<p>次は、架空のマザーボード X の仕様表です。利用者 A さんは、M.2_2 と M.2_3 の両方に SSD を差します。SATA_1〜SATA_4 のうち、使えなくなる端子はどれでしょうか。レーンが減るスロットも答えてください。</p>
+<div data-widget="table" data-src="c03-practice"></div>
+<details><summary>答えを見る</summary>
+  <p>使えなくなる端子は、SATA_2・SATA_3・SATA_4 です。M.2_2 に差すと脚注 *1 で SATA_3 と SATA_4 が、M.2_3 に差すと脚注 *2 で SATA_2 が使えなくなります。SATA_1 は、どの脚注にも出てこないので使えます。</p>
+  <p>PCIE_2（x16 の形のスロット）は、使えなくなるのではなく、脚注 *3 で x4 から x2 に下がります。考え方は、差した M.2 ごとに、脚注を番号の順に拾うことです。M.2_1 は他と共有しないので、何も変わりません。（すべて架空の仕様表です。）</p>
+</details>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>スロットの形と、使えるレーンの数は別です。</b>形が x16 でも、x4 や x1 でしか動かないスロットがあります。大きなカードを複数差す計画では、2 本目のレーンの数を先に確かめます。</p>
+  <p><b>ソケットが同じでも、動くとは限りません。</b>基板に入っている UEFI の版が古いと、新しい CPU を動かせないことがあります。CPU サポートリストで、版を確かめます。</p>
+  <p><b>M.2 を増やすと、他の端子が使えなくなる基板があります。</b>仕様表の脚注を読まずに買うと、HDD（Hard Disk Drive）や追加のカードの置き場所がなくなることがあります。</p>
+  <p><b>「ATX 対応」は基板の大きさの話です。</b>電源ユニットの「ATX 電源」とは別の話で、ケースの対応する区分も別に確かめます（<a href="#ch07">第07章</a>・<a href="#ch11">第11章</a>）。</p></div>
+
+<div class="callout tip"><span class="ttl">自分の 1 台でのつながり</span>
+  <p>選ぶとき：CPU を決めたら、ソケットの名前で基板を絞り、CPU サポートリストで UEFI の版を確かめます。組むとき：ヘッダーと端子の位置を、基板のマニュアルの図で先に見ます。直すとき：端子が使えない症状は、まず仕様表の共有の脚注を疑います。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c03-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 14 日）。規格本文を読んでいない資料は、使い方の欄に書きました</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.intel.com/content/www/us/en/gaming/resources/how-to-choose-a-motherboard.html">Gaming Motherboard Buying Guide</a></th><td>Intel（米国）</td><td>更新 2025 年 7 月</td><td>microATX・Mini-ITX の寸法、ソケットの名前の由来、PCIe の読み方。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.viatech.com/en/2007/04/via-defines-pico-itx-form-factor-the-worlds-smallest-x86-mainboard/">VIA Defines Pico-ITX Form Factor</a></th><td>VIA Technologies（台湾）</td><td>2007 年 4 月 19 日</td><td>Mini-ITX を 17 cm × 17 cm と書く記述。</td></tr>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://www.businesswire.com/news/home/20250611299049/en">PCI-SIG Releases PCIe 7.0 Specification（Business Wire 配信）</a></th><td>PCI-SIG</td><td>2025 年 6 月（配信ページに日付の表示なし）</td><td>後方互換を保つという記述。規格本文は読んでいない。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.amd.com/en/products/processors/chipsets/am5.html">AMD Socket AM5 Chipset for Motherboards</a></th><td>AMD（米国）</td><td>確認 2026 年 11 月</td><td>Socket AM5 の対応、チップセットの数の例、UEFI の更新が要ることがある旨。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.amd.com/en/newsroom/press-releases/2022-5-22-amd-showcases-industry-leading-gaming-commercial-.html">AMD Showcases Industry-Leading Gaming, Commercial, and Mainstream PC Technologies at COMPUTEX 2022</a></th><td>AMD（米国）</td><td>2022 年 5 月 23 日</td><td>Socket AM5 が 1718 ピンの LGA である記述。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.amd.com/en/resources/support-articles/faqs/CPU-100.html">Processor Handling Guidance</a></th><td>AMD（米国）</td><td>更新 2024 年 2 月 29 日（ページの情報）</td><td>CPU を無理にソケットへ入れない注意。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.intel.com/content/www/us/en/products/sku/241063/intel-core-ultra-7-processor-265k-30m-cache-up-to-5-50-ghz/specifications.html">Intel Core Ultra 7 Processor 265K Product Specifications</a></th><td>Intel（米国）</td><td>発売 Q4'24。確認 2026 年 11 月</td><td>ソケットの名前（FCLGA1851）の例。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://cdrdv2-public.intel.com/842318/intel-800-series-chipset-brief-public.pdf">Intel 800 Series Chipset Brief</a></th><td>Intel（米国）</td><td>文書に日付なし。確認 2026 年 11 月</td><td>H810・B860・Z890 のレーン・SATA・USB の数の例。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.intel.com/content/www/us/en/products/sku/237777/intel-z890-chipset/specifications.html">Intel Z890 Chipset Product Specifications</a></th><td>Intel（米国）</td><td>発売 Q4'24。確認 2026 年 11 月</td><td>Z890 の PCIe のレーンの最大数と SATA の最大数の確認。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://intel.com/content/www/us/en/support/articles/000005762/processors.html">How to Install the LGA115x and LGA1200 Processor into the Socket</a></th><td>Intel（米国）</td><td>最終確認日 2025 年 2 月 11 日（ページの表示）</td><td>ソケットの接点に触れない注意。この手順は LGA1150〜LGA1200 向け。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://download.asrock.com/Manual/B850M-C.pdf">B850M-C ユーザーマニュアル</a></th><td>ASRock（台湾）</td><td>版 1.0、2025 年 2 月</td><td>x16 の形で x1 動作のスロット、CPU でレーンが変わる記述、M.2 と SATA の共有の脚注。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://download.asrock.com/Manual/B650%20Steel%20Legend%20WiFi.pdf">B650 Steel Legend WiFi ユーザーマニュアル</a></th><td>ASRock（台湾）</td><td>版 1.0、2023 年 12 月</td><td>SATA の使用で PCIE2 が x2 に下がる脚注。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://dlcdnets.asus.com/pub/ASUS/mb/LGA1200/PRIME_B560M-A/E18905_PRIME_B560M-A_v2_UM_WEB.pdf?model=PRIME+B560M-A">PRIME B560M-A ユーザーマニュアル</a></th><td>ASUS（台湾）</td><td>改訂版 V2、2021 年 7 月</td><td>M.2_2 と SATA6G_2 の共有の記述。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.asrock.com/support/cpu.asp?s=AM5&amp;u=746">CPU Support List</a></th><td>ASRock（台湾）</td><td>確認 2026 年 11 月</td><td>CPU サポートリストの公開の形（基板ごとの「Support BIOS」の欄）。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.asrock.com/general/about.asp">About ASRock</a></th><td>ASRock</td><td>確認 2026 年 11 月</td><td>本社の所在（台湾）の確認。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://esg.asus.com/files/documents/ASUS_ISO9001.pdf">ASUS ISO 9001 認証書</a></th><td>ASUS</td><td>確認 2026 年 11 月</td><td>社名（ASUSTeK Computer Inc.）と所在（台湾）の確認。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.intel.com/content/www/us/en/corporate-responsibility/intel-in-california.html">Intel in California</a></th><td>Intel</td><td>確認 2026 年 11 月</td><td>本社の所在（米国）の確認。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://ir.amd.com/financial-information/sec-filings/content/0000002488-26-000121/0000002488-26-000121.pdf">Form 8-K（報告日 2026 年 8 月 4 日）</a></th><td>AMD</td><td>2026 年 8 月 4 日</td><td>主たる事務所の所在（米国）の確認。</td></tr>
+      <tr><td>教科書・一般知識・他講座</td><th scope="row"><a href="../server/#ch07">計算サーバー講義 第07章</a></th><td>この講座の姉妹講座</td><td>—</td><td>PCIe の世代ごとの速度（この章では書かない）。</td></tr>
+      <tr><td>架空（見本のため）</td><th scope="row">架空のマザーボード X の仕様表</th><td>—</td><td>—</td><td>演習の資料。製品・店・数字はすべて架空。</td></tr>
+    </tbody>
+  </table></div>
+</section>

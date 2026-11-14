@@ -1,0 +1,29 @@
+/* 第26章 事実確認表（担当 A、確認 2026-11-14）
+| # | 区分 | 事実（本文での書き方） | 数値・単位 | 時点・版 | 出典（発行者『資料名』） | URL（個別ページ） | 一次 | 確認日 | 使った箇所 |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | 企業 | USB-IF の正式名は「USB Implementers Forum, Inc.」。USB の技術を開発した企業のグループが設立した非営利の法人で、互換性のある製品の普及を進める | — | 日付の記載なし | USB-IF『About USB-IF』 | https://usb.org/about | ○ | 2026-11-14 | 用語集、c26-map |
+| 2 | 企業 | VESA は「Video Electronics Standards Association」。DisplayPort は VESA が管理する映像の規格 | — | 日付の記載なし | VESA の DisplayPort の FAQ（displayport.org） | https://displayport.org/faq/ | ○ | 2026-11-14 | 用語集、c26-map |
+| 3 | 企業 | HDMI Forum, Inc. は、HDMI の仕様の次の版づくりに業界の参加を広げる非営利の相互利益法人。HDMI Licensing Administrator, Inc.（HDMI LA）は、使用許諾と、HDMI の商標を扱う（ページは HDMI 1.4b の許諾の説明。2.x の許諾は HDMI LA のサイトを案内） | — | 日付の記載なし | HDMI Forum『FAQ』 | https://hdmiforum.org/about/faq | ○ | 2026-11-14 | 用語集、c26-map |
+| 4 | 企業 | SATA-IO の正式名は「Serial ATA International Organization」。独立した非営利の団体で、SATA の仕様を保守し、将来の機能を開発する | — | 日付の記載なし | SATA-IO『About SATA-IO』 | https://sata-io.org/node/99 | ○ | 2026-11-14 | 用語集、c26-map |
+| 5 | 企業 | Wi-Fi Alliance は「global non-profit association」で、毎年多くの Wi-Fi 製品を認証すると自己紹介している | — | 日付の記載なし | Wi-Fi Alliance の紹介ページ | https://www.wi-fi.org/node/32321 | ○ | 2026-11-14 | 用語集、c26-map |
+| 6 | 企業 | Bluetooth SIG は「Bluetooth Special Interest Group」。国際的な標準化団体で、認定のしくみを運営する。ページの末尾の表記は「Bluetooth SIG, Inc.」 | — | 日付の記載なし | Bluetooth SIG『Who we are』 | https://www.bluetooth.com/about-us/who-we-are/ | ○ | 2026-11-14 | 用語集、c26-map |
+| 7 | 企業 | UEFI Forum の正式名は「Unified Extensible Firmware Interface (UEFI) Forum」。非営利の業界標準化団体 | — | 日付の記載なし | UEFI Forum のお知らせ（About 欄） | https://uefi.org/node/4114 | ○ | 2026-11-14 | 用語集、c26-map |
+| 8 | 企業 | NVM Express は、法人化された非営利の業界団体で、13 社の発起企業が理事を務める。ページは「Inc.」を含む正式名を書いていない。本文は「NVM Express」だけを使う | 13 社 | 2020-04-15（ページの日付） | NVM Express『Membership/General Information』（よくある質問のアーカイブ。以前の `?p=717` から個別のカテゴリのページに差し替え、2026-11-14） | https://archive.nvmexpress.org/faq_category/membership | ○ | 2026-11-14 | 用語集（数は書かない）、c26-map |
+| 9 | 企業 | TCG は「Trusted Computing Group」。紹介ページは「not-for-profit organization that develops open, vendor-neutral, global industry standards」と自己紹介し、TPM を「Hardware-based security module for key storage and integrity measurement」と説明する（ページに日付の記載なし。以前の `?p=41996`〔トップページ扱い〕から個別ページに差し替え、2026-11-14） | — | 日付の記載なし | TCG『About』 | https://trustedcomputinggroup.org/about/ | ○ | 2026-11-14 | 用語集、c26-map |
+| 10 | 企業 | JEDEC は、マイクロエレクトロニクスの開かれた標準を作る世界的な団体と自己紹介している（About のページは長い正式名を書いていない）。正式名「JEDEC Solid State Technology Association」は、JEDEC のサイトの利用規約（jedec.org のサブドメイン secondrise.jedec.org の『JEDEC Website Terms and Conditions of Use』：「The JEDEC Website is owned and operated by JEDEC Solid State Technology Association.」）で確認（検証 2026-11-14） | — | 日付の記載なし | JEDEC『About JEDEC』、JEDEC『JEDEC Website Terms and Conditions of Use』 | https://www.jedec.org/about-jedec 、https://secondrise.jedec.org/termsofuse | ○ | 2026-11-14 | 用語集、c26-map |
+| 11 | 企業 | PCI-SIG は「PCI Special Interest Group」。PCI の規格を所有・管理する業界団体（発表の末尾の団体紹介：「The PCI-SIG is the industry organization that owns and manages the PCI Local Bus specification as an open industry standard.」）。検証（2026-11-14）で、一次 × の業界情報サイトの展開形「Peripheral Component Interconnect Special Interest Group」をやめ、PCI-SIG と Arapahoe Work Group の共同発表（Microsoft のニュースサイトに掲載、△）の表記に直した。PCI-SIG 自身のページは取得できなかった。年と会員数は書かない | — | 2002-04-17 | PCI-SIG・Arapahoe Work Group『PCI-SIG Introduces “PCI Express” (Formerly 3GIO) High-Speed Serial Interconnect Specification』（Microsoft のニュースサイト） | https://news.microsoft.com/source/2002/04/17/pci-sig-introduces-pci-express-tm-formerly-3gio-high-speed-serial-interconnect-specification/ | △ | 2026-11-14 | 用語集、c26-map |
+| 12 | 企業 | IEEE の英語の展開形は GLOSSARY-RULES §8 の表記。公式ページを取得できなかった（一次 ×）。本文は、規格の発行者の 1 つで、番号は発行者ごとに別の体系、という一般論だけ | — | — | 一般知識（GLOSSARY-RULES §8） | — | × | 2026-11-14 | 用語集、c26-map |
+| 13 | 企業 | NIST の正式名は「National Institute of Standards and Technology」。米国の政府機関（ページの表示） | — | 2026-11-14 に確認 | NIST『SP 800-88 Rev. 2』（CSRC のページ） | https://csrc.nist.gov/pubs/sp/800/88/r2/final | ○ | 2026-11-14 | 用語集、c26-map |
+| 14 | 企業 | CISA のページ上の表記は「Cybersecurity & Infrastructure Security Agency」。親の省は U.S. Department of Homeland Security（ページ末尾） | — | 2026-11-14 に確認 | CISA『Back Up Business Data』 | https://www.cisa.gov/audiences/small-and-medium-businesses/secure-your-business/back-up-business-data | ○ | 2026-11-14 | 用語集 |
+| 15 | 企業 | NITE：日本語は「独立行政法人製品評価技術基盤機構」、英語は著作権表示の「National Institute of Technology and Evaluation」 | — | 2026-11-14 に確認 | NITE『製品安全情報マガジン Vol.442』 | https://www.nite.go.jp/jiko/chuikanki/mailmagazin/2023fy/vol442_231212.html | ○ | 2026-11-14 | 用語集 |
+| 16 | 企業 | IPA の日本語の正式名は「独立行政法人情報処理推進機構」。英語名は文書に記載がなく、書かない | — | 2026-11-14 に確認 | IPA『ランサムウェア被害から学ぶ教訓集』 | https://www.ipa.go.jp/security/todokede/rcu1hd000001ee1f-att/20260910.pdf | ○ | 2026-11-14 | 用語集 |
+| 17 | 規格 | 地図の各行（団体と載っている規格・資料の名前）は、第01〜25章の事実確認表と「参照資料」で確かめた内容だけを使った。新しい版・日付・数値は足していない | — | 各章の確認日 | 各章の参照資料 | 各章の参照資料 | ○ | 2026-11-14 | c26-map、c26-refs |
+| 18 | 一般知識 | 総合テストの横断問題 2 問は、第14・16・17・19・20・21・24章の本文の内容を組み合わせた説明用の問題 | — | — | この講座の他の章 | — | — | 2026-11-14 | 総合テスト |
+確認できず書かなかった：
+- 総務省の担当部署と技適の資料（第09章）：第09章が未執筆で、個別ページを確認していない。地図に載せていない。
+- IEEE の正式名の公式ページでの確認：開けなかった。用語集の英語の展開形は、規則の表記に合わせた（上の 12）。JEDEC（10）と PCI-SIG（11）は検証（2026-11-14）で確認・修正した。
+- 情報処理推進機構（IPA）の英語名：文書に記載がなく、書かない。
+- NVM Express の法人の形を含む正式名：ページに記載がなく、「NVM Express」だけを書いた。
+- 電源・冷却の当局（経済産業省の個別の制度）：第07章が扱った資源エネルギー庁のサイトだけ。地図には載せていない。
+- QVL（メモリの対応表）と M.2 の規格の発行団体：第04・05章の確認表を待って確認する。現時点では地図に載せていない。
+*/

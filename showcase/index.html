@@ -343,7 +343,7 @@ footer a:hover { color: var(--ttj-gold-200); }
       <li><a href="#field-telecom"><b>通信</b></a></li>
       <li><a href="#field-semi"><b>半導体</b></a></li>
       <li><a href="#field-compute"><b>計算サーバー</b></a></li>
-      <li><span class="off"><b>自作PC</b><i class="status">準備中</i></span></li>
+      <li><a href="#field-pc"><b>自作PC</b></a></li>
       <li><span class="off"><b>発電・ガスタービン</b><i class="status">準備中</i></span></li>
     </ol>
   </div>
@@ -674,10 +674,51 @@ footer a:hover { color: var(--ttj-gold-200); }
   <section id="field-pc" aria-labelledby="h-field-pc">
     <div class="wrap">
       <div class="sec-head"><span class="en">05 · Custom PC</span><h2 id="h-field-pc">自作PC</h2></div>
-      <div class="soon">
-        <h3>自作PC</h3>
-        <p>自作 PC を扱う講義。</p>
-        <span class="status">準備中</span>
+      <div class="cards">
+
+        <article class="card">
+          <div class="thumb">
+            <svg viewBox="0 0 320 160" role="img" aria-label="ケースの中にマザーボード、CPU、メモリ、グラフィックスカード、電源、ファンが並び、空気が通り抜ける様子を描いた抽象図">
+              <rect width="320" height="160" fill="#0B1F3A"/>
+              <rect x="24" y="14" width="214" height="132" rx="4" fill="#14305A" stroke="#C9A227" stroke-width="1.5"/>
+              <rect x="34" y="24" width="134" height="100" rx="2" fill="#0B1F3A" stroke="#8CA3C4" stroke-width="1"/>
+              <rect x="52" y="36" width="36" height="36" rx="2" fill="#14305A" stroke="#C9A227" stroke-width="1.5"/>
+              <rect x="61" y="45" width="18" height="18" fill="none" stroke="#EEDDA0" stroke-width="1.2"/>
+              <g fill="#14305A" stroke="#8CA3C4" stroke-width="1">
+                <rect x="108" y="32" width="6" height="52"/><rect x="118" y="32" width="6" height="52"/><rect x="128" y="32" width="6" height="52"/><rect x="138" y="32" width="6" height="52"/>
+              </g>
+              <rect x="44" y="92" width="116" height="18" rx="2" fill="#14305A" stroke="#C9A227" stroke-width="1.5"/>
+              <g fill="none" stroke="#EEDDA0" stroke-width="1.2" stroke-linecap="round">
+                <circle cx="68" cy="101" r="6"/><circle cx="100" cy="101" r="6"/>
+                <path d="M68 95 v12 M62 101 h12 M100 95 v12 M94 101 h12"/>
+              </g>
+              <rect x="34" y="130" width="84" height="10" rx="2" fill="#14305A" stroke="#8CA3C4" stroke-width="1"/>
+              <g fill="none" stroke="#C9A227" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M118 135 H176 V110 H160"/>
+              </g>
+              <circle cx="206" cy="58" r="22" fill="#0B1F3A" stroke="#EEDDA0" stroke-width="1.4"/>
+              <path d="M206 58 v-16 M206 58 l14 8 M206 58 l-14 8" stroke="#EEDDA0" stroke-width="1.6" stroke-linecap="round"/>
+              <circle cx="206" cy="108" r="16" fill="#0B1F3A" stroke="#8CA3C4" stroke-width="1.2"/>
+              <path d="M206 108 v-11 M206 108 l9.5 5.5 M206 108 l-9.5 5.5" stroke="#8CA3C4" stroke-width="1.4" stroke-linecap="round"/>
+              <g fill="none" stroke="#8CA3C4" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M250 50 h-24 M236 44 l-8 6 8 6"/>
+                <path d="M250 80 h-24 M236 74 l-8 6 8 6"/>
+                <path d="M250 110 h-24 M236 104 l-8 6 8 6"/>
+              </g>
+              <text x="296" y="152" fill="#EEDDA0" font-size="11" text-anchor="end" font-family="monospace">26 ch.</text>
+            </svg>
+          </div>
+          <div class="card-body">
+            <p class="field">自作PC</p>
+            <h3>自作PC講義 ― 部品選びから組み立て・調整まで</h3>
+            <p class="progress"><span>全 26 章を公開中</span></p>
+            <p class="desc">全26章。PC の部品のしくみと規格、用途に合わせた選び方と互換性・電力・冷却の確かめ方、組み立てと最初の起動、調整と不具合の切り分け、保守とデータの保護までを扱います。図とクイズつきで、全章を公開中。公開情報だけを出典にし、特定の製品や店は勧めません。</p>
+            <ul class="tags" aria-label="技術タグ"><li>自作PC</li><li>部品と規格</li><li>組み立て・調整</li><li>図とクイズ</li><li>公開情報</li></ul>
+            <a class="btn" href="pc/" aria-label="自作PC講義を開く">開く
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+          </div>
+        </article>
+
       </div>
     </div>
   </section>
@@ -738,14 +779,14 @@ footer a:hover { color: var(--ttj-gold-200); }
         <div class="profile-main">
           <h3>TTJ</h3>
           <p class="org">TED TRADING JAPAN G.K.</p>
-          <p>作者のこれまでの経験を活かしつつ、AI・開発環境、通信、半導体、計算サーバー、発電を、学べる形にまとめた学習用作品です。仕組みを図とアニメーションで分かりやすく見せること、そして AI エージェントを使って、迷わず使える開発環境をつくることに取り組んでいます。</p>
+          <p>作者のこれまでの経験を活かしつつ、AI・開発環境、通信、半導体、計算サーバー、自作PC、発電を、学べる形にまとめた学習用作品です。仕組みを図とアニメーションで分かりやすく見せること、そして AI エージェントを使って、迷わず使える開発環境をつくることに取り組んでいます。</p>
         </div>
         <ul class="fields" aria-label="分野">
           <li><strong>AI・開発環境</strong><span>Claude Code を軸にした環境づくり</span></li>
           <li><strong>通信</strong><span>eSIM / eUICC・VoLTE / IMS・SMS・国際ローミング</span></li>
           <li><strong>半導体</strong><span>物性から製造装置・装置輸送まで（全32章）</span></li>
           <li><strong>計算サーバー</strong><span>機器・電源と冷却・制御から産業・政策まで（全32章）</span></li>
-          <li><strong>自作PC</strong><span class="status">準備中</span></li>
+          <li><strong>自作PC</strong><span>部品選びから組み立て・調整・保守まで（全26章）</span></li>
           <li><strong>発電・ガスタービン</strong><span class="status">準備中</span></li>
         </ul>
       </div>

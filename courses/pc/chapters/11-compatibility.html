@@ -1,0 +1,125 @@
+<!--
+num: 11
+part: 2
+title: 互換性の確かめ方：ソケット・メモリ・寸法・電源のコネクタ
+track: 選び方
+time: 40
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>部品を組み合わせるときの<b>互換性の 5 つの関門</b>（CPU〔Central Processing Unit〕とソケットと起動プログラムの版、メモリ、ストレージ、寸法、電源ユニット）を、順に言える。</li>
+    <li>メーカーの<b>一次資料</b>（仕様ページ・マニュアル・CPU の対応リスト・メモリの対応表）のどこを見るかと、仕様表の<b>脚注</b>の読み方が分かる。</li>
+    <li>確かめた結果を<b>確認表</b>に残し、構成の自動チェックを「参考」にとどめて、一次資料で確かめ直せる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch03">第03章</a>（マザーボード）と<a href="#ch04">第04章</a>（メモリ）。<a href="#ch05">第05章</a>・<a href="#ch06">第06章</a>・<a href="#ch07">第07章</a>・<a href="#ch08">第08章</a>を読んでいると、確認の項目が分かりやすくなります。</p>
+</section>
+
+<div class="callout note"><span class="ttl">この章の約束</span>
+  <p>この章は、<b>特定の製品や店を勧めません</b>。部品の寸法や対応の数字は、持ち主の章（第02〜09章）にあります。この章は、それらを<b>どの順で、どの資料で突き合わせるか</b>を扱います。例に出る型番と数字は、すべて架空です。</p></div>
+
+<h3>互換性とは何か、なぜ「関門」に分けるのか</h3>
+<p><b>互換性</b>（compatibility）とは、部品どうしが、規格・寸法・電力・ファームウェアの面で一緒に使えることです。「相性が悪い」と言われる不具合の多くは、確かめる項目を一つずつ見ると、原因が説明できます。この講座では、「相性」とは書かず、互換性の<b>関門</b>で考えます。</p>
+<p>関門は 5 つです。<b>CPU とソケットと UEFI の版</b>、<b>メモリ</b>、<b>ストレージ</b>、<b>寸法</b>、<b>電源ユニット</b>の順です。UEFI（Unified Extensible Firmware Interface）は、マザーボードに入っていて、電源を入れたときに最初に動くプログラム（ファームウェア）です。詳しくは第17章で扱います。順に確かめると、前の関門で決まったことが、後の関門の条件になります。下の図で、確認の順序を一手ずつたどってください。</p>
+<div data-widget="flow" data-src="c11-flow"></div>
+<p>図には「不適合のときは選び直し」の分岐があります。<b>1 つの部品を替えると、ほかの関門に影響する</b>ことがあります。例えば、CPU を替えるとソケットが変わり、マザーボードも、メモリの世代も変わることがあります。選び直したら、確認表を最初から確かめ直します。</p>
+
+<h3>確かめる項目と、見る資料</h3>
+<p>次の表で使う略語を、先にまとめます。<b>DDR</b>（Double Data Rate、メモリの世代の名前。DDR4・DDR5 など）、<b>DIMM</b>（Dual In-line Memory Module、メモリの基板の形）と <b>SO-DIMM</b>（Small Outline DIMM、小さい形の DIMM）、<b>M.2</b>（SSD などを差す小さな拡張カードの形）、<b>SATA</b>（Serial ATA、ストレージをつなぐ規格）、<b>PCIe</b>（PCI Express、拡張スロットの規格）、<b>ATX</b>と<b>SFX</b>（マザーボードや電源ユニットの形の名前）です。</p>
+<p>次の表は、5 つの関門ごとの確かめる項目と、見る資料と、よくある見落としです。関門で絞り込めます。各項目の中身（数字や規格の名前）は、右端の章にあります。</p>
+<div data-widget="table" data-src="c11-check"></div>
+
+<h3>一次資料の読み方：CPU の対応リストとメモリの対応表</h3>
+<p>互換性の確認で、最も大事なのは<b>マザーボードメーカーが公開する 2 つの一覧</b>です。<b>CPU サポートリスト</b>は、そのマザーボードが対応する CPU と、必要な UEFI の版の一覧です。<b>QVL</b>（Qualified Vendor List）は、メモリなどについて、メーカーが対応として公開する製品の一覧です。公開の形は、メーカーごとに違います。2 社の例を挙げます。</p>
+<ul>
+  <li>ASUS（ASUSTeK Computer、台湾）の説明では、サポートのダウンロードのページで機種を探し、「CPU / Memory Support」の中の CPU とメモリの一覧を見ます。一覧に載っているモデルには、色の印が付きます（出典：ASUS『[Motherboard] How to query (CPU/memory) QVL List?』、2025 年 7 月 17 日更新の記載）。同じ ASUS の別の記事は、一覧に載っている CPU でも起動しないときは、UEFI の版が古い可能性があるとして、必要な版の確認を案内しています（出典：ASUS『[Motherboard] How to check the motherboard compatibility with the new generation CPU…』、2026 年 9 月 10 日更新の記載）。</li>
+  <li>MSI（Micro-Star International、台湾）の説明では、マザーボードの仕様のページの「DETAIL」の中の「PROCESSOR」に、対応する CPU の系列とソケットが載ります。さらに「See supported processors」の表の「Result」の列に、その CPU に必要な、マザーボードの UEFI（MSI の表記では BIOS〔Basic Input/Output System。UEFI より前のファームウェアの名前で、通称として今も使われる〕）の最小の版が載ります（出典：MSI『[Motherboard] How to Check CPU Support Specifications』、2024 年 12 月 4 日更新の記載）。</li>
+</ul>
+<p>この 2 社の例は、公開の形が違うことを見るためのもので、どちらが良いかの比較ではありません。実際には、<b>買うマザーボードの仕様のページと、サポートのページを自分で開いて、この 2 つの一覧の場所を探す</b>ことが、最初の作業になります。</p>
+<p>なお、QVL に<b>載っていること</b>は、メーカーが確認した手がかりですが、動作の保証ではありません。ASUS の同じ記事も、載っている製品でも、安定性や互換性の問題が起きることがあると書いています。載っていないメモリは、「そのメーカーの一覧には無い」という意味です。使えないと決まるわけではありませんが、確認は取れていません。世代・形・速度を仕様で確かめ、不安定なときは、一覧にあるメモリへ替えます。</p>
+
+<h3>仕様表の脚注の読み方</h3>
+<p>仕様表の中で、最も見落とされるのが<b>脚注</b>（specification footnote）です。表の本体には「M.2 スロット 3 つ、SATA 端子 6 つ」と書いてあっても、脚注に「M.2 を差すと、SATA 端子の一部が使えない」と書いてあることがあります。脚注は、<b>条件</b>と、<b>影響を受けるもの</b>と、<b>影響</b>の 3 つに分けると読めます。次の図は、架空のマザーボードの脚注を、3 つに分けた例です。</p>
+<div data-widget="ident" data-src="c11-note"></div>
+<p>脚注を読むときの原則は 3 つです。第一に、<b>表の本体より先に脚注を読む</b>。第二に、<b>自分の構成が「条件」に当たるか</b>を確かめる。第三に、当たるなら、<b>影響を受けるものを、自分が使うか</b>を確かめる。使わない端子なら、影響は問題になりません。</p>
+
+<h3>UEFI の版で新しい CPU に対応する場合</h3>
+<p>CPU がソケットに合い、対応リストにも載っていても、マザーボードに入っている UEFI の版が古いと、起動しないことがあります。その場合、古い版を新しい版に更新する必要があります。更新のためだけに、対応する別の CPU を用意するのは大変です。そこで、<b>CPU を載せなくても、UEFI を更新できる機能</b>を持つマザーボードがあります。呼称は、メーカーごとに違います。</p>
+<div class="tbl-wrap"><table class="tbl">
+  <caption>CPU なしで UEFI を更新する機能の呼称の例（出典：各社の公式資料。製品ごとに対応が違うので、必ず自分のマザーボードのマニュアルで確かめます）</caption>
+  <thead><tr><th>メーカー</th><th>呼称（各社の表記）</th><th>出典</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">ASUS（台湾）</th><td>BIOS FlashBack</td><td>ASUS『New CPU? No problem: how to update your BIOS without a processor using BIOS FlashBack』。記事は「ほとんどの ASUS のマザーボードで使える」と書き、自分の機種が対応するかを確かめるよう案内している（公表日の表示なし）</td></tr>
+    <tr><th scope="row">MSI（台湾）</th><td>Flash BIOS Button（フラッシュ BIOS ボタン）</td><td>MSI『[マザーボード] BIOSの更新方法』、2025 年 2 月 4 日更新の記載。「対応機種のみ」と書かれている</td></tr>
+    <tr><th scope="row">ASRock（台湾）</th><td>USB BIOS Flashback</td><td>ASRock『ASRock フラッシュバック機能ユーザーガイド』（版・日付の記載なし）</td></tr>
+  </tbody>
+</table></div>
+<p>呼称の中の BIOS は、この通称が製品の名前に残ったものです。この機能の具体的な手順は、書きません。<b>マザーボードごとに、使う USB 端子、ファイルの置き方、表示灯の意味が違う</b>ためです。必ず、そのマザーボードのマニュアルに従ってください。公開されている案内には、注意も書かれています。MSI の案内は、更新中に電源を切る、電源ケーブルを抜く、USB メモリを外す、という操作をしないよう書いています。ASRock の案内は、この機能を実行すると、鍵を守る仕組みの TPM（Trusted Platform Module）がリセットされるので、TPM に頼る暗号化の機能は事前に一時停止するよう書いています。UEFI の更新の注意は、第17章で扱います。</p>
+
+<h3>部品どうしの干渉</h3>
+<p>仕様の数字を比べるだけでは、見つからない問題があります。<b>部品どうしの干渉</b>（クリアランス、clearance）です。例えば、次のようなものです。</p>
+<ul>
+  <li><b>メモリの高さと CPU クーラー</b>：背の高いメモリが、クーラーのファンやフィンに当たる。</li>
+  <li><b>M.2 のヒートシンクとグラフィックスカード</b>：カードの下のスロットに付けたヒートシンクが、カードに当たる。厚いカードが、下のスロットを覆うこともある。</li>
+  <li><b>ケーブルの取り回し</b>：電源ユニットのケーブルの曲がりに余裕がなく、側板が閉まらない。</li>
+  <li><b>ラジエータの位置</b>：ケースの天面に付けると、メモリやマザーボードの上の部品に当たる。</li>
+</ul>
+<p>こうした干渉は、<b>マニュアルの図と寸法の表</b>で確かめます。組み立ての途中の確認は、第15章と第16章で扱います。</p>
+
+<h3>確認表を作る</h3>
+<p>確かめた結果は、<b>確認表</b>（checklist）に残します。確認表は、後から読み返せて、他の人にも見せられるものにします。各行に残すのは、次の 5 つです。<b>項目</b>、<b>資料</b>（個別のページ）、<b>版・時点</b>、<b>結果</b>、<b>確かめた日</b>です。資料のページの版や更新日が表示されているときは、それも書きます。</p>
+<div class="tbl-wrap"><table class="tbl">
+  <caption>確認表の見本（すべて架空。メーカー C・販売店 B は架空）</caption>
+  <thead><tr><th>項目</th><th>資料（個別のページ）</th><th>版・時点</th><th>結果</th><th>確かめた日</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">CPU とマザーボードのソケットが同じ</th><td>メーカー C の CPU の仕様ページと、マザーボード X の仕様ページ（架空）</td><td>確認時点の表示（架空）</td><td>一致</td><td>2026-11-14（架空）</td></tr>
+    <tr><th scope="row">CPU サポートリストに載る・必要な UEFI の版</th><td>メーカー C のマザーボード X の CPU サポートリスト（架空）</td><td>リストの更新日（架空）</td><td>載っている。必要な版は 1.20 以降（架空）</td><td>2026-11-14（架空）</td></tr>
+    <tr><th scope="row">出荷時の UEFI の版</th><td>販売店 B への問い合わせの記録（架空）</td><td>回答の日（架空）</td><td>1.10。更新が必要（架空）</td><td>2026-11-15（架空）</td></tr>
+  </tbody>
+</table></div>
+<p>「結果」が「更新が必要」「未確認」のままの行は、そのまま残します。<b>確認が済んでいない行を、済んだことにしない</b>ことが、確認表の使い方です。</p>
+
+<h3>構成の自動チェックの扱い</h3>
+<p>部品を選ぶと、組み合わせの適否を表示する<b>自動チェック</b>のサービスがあります。便利な参考ですが、この講座は特定のサービスを勧めません。扱いの原則は次のとおりです。</p>
+<ul>
+  <li>自動チェックの結果は、<b>参考</b>にとどめる。適合と表示されても、確認表の「資料」にはならない。</li>
+  <li>最終の判断は、<b>メーカーの一次資料</b>（仕様ページ、マニュアル、CPU サポートリスト、QVL）で確かめる。</li>
+  <li>自動チェックと一次資料が食い違ったら、<b>一次資料を優先</b>し、食い違った点を確認表に書く。</li>
+</ul>
+
+<h3>演習：6 つのケースで、どの関門かを選ぶ</h3>
+<p>次の 6 つのケース（すべて架空）で、<b>どの関門の問題か</b>と、<b>最初に確かめる資料</b>を選んでください。ケースは易しい順です。答えの説明には、なぜその順に確かめるかが書いてあります。</p>
+<div data-widget="drill" data-src="c11-drill"></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>ソケットが同じでも、動くとは限りません</b>。UEFI の版が足りないと、CPU を認識しないことがあります。ソケットの一致は、関門 1 の最初の項目にすぎません。</p>
+  <p><b>「対応」と「推奨」を混ぜない</b>こと。一覧に載っていることと、自分の使い方で十分に動くことは、別の話です。</p>
+  <p><b>仕様表の数字だけで決めない</b>こと。脚注と、部品どうしの干渉は、数字の表に出ません。</p>
+  <p><b>確認表の資料に、通販の商品説明や口コミを書かない</b>こと。確認表の資料は、メーカーの個別のページにします。</p></div>
+
+<div class="callout tip"><span class="ttl">自分の 1 台でのつながり</span>
+  <p>この章の確認表は、<b>選ぶ</b>段階の最後の関所です。ここを通った構成だけを、第12章の電力と熱の見積もりに進めます。組み立ての途中で不具合が出たら、確認表の「未確認」の行から疑います（第21章）。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c11-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.asus.com/support/faq/1043883/">[Motherboard] How to query (CPU/memory) QVL List?</a></th><td>ASUS</td><td>2025 年 7 月 17 日更新の記載</td><td>CPU とメモリの対応リストの公開の形（色の印）。載っていても問題が起きうること。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.asus.com/me-en/support/faq/1045511/">[Motherboard] How to check the motherboard compatibility with the new generation CPU and troubleshooting of the booting issue?</a></th><td>ASUS</td><td>2026 年 9 月 10 日更新の記載</td><td>対応リストに載る CPU でも、UEFI の版が古いと起動しないことがある。CPU なしで更新できる機能の案内。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://us.msi.com/support/technical_details/MB_SPEC_CPU">[Motherboard] How to Check CPU Support Specifications</a></th><td>MSI</td><td>2024 年 12 月 4 日更新の記載</td><td>仕様のページの「PROCESSOR」と、対応 CPU の表の「Result」の列（必要な最小の版）。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://jp.msi.com/support/technical_details/MB_BIOS_Update">[マザーボード] BIOSの更新方法</a></th><td>MSI</td><td>2025 年 2 月 4 日更新の記載</td><td>Flash BIOS Button の呼称と、更新中にしてはいけない操作。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://edgeup.asus.com/2026/new-cpu-no-problem-how-to-update-your-bios-without-a-processor-using-bios-flashback/">New CPU? No problem: how to update your BIOS without a processor using BIOS FlashBack</a></th><td>ASUS</td><td>公表日の表示なし（2026 年 11 月に確認）</td><td>BIOS FlashBack の呼称と、機種が対応するか確かめる案内。手順は書いていません。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.asrock.com/support/QA/FlashbackSOP.jp.pdf">ASRock フラッシュバック機能ユーザーガイド</a></th><td>ASRock</td><td>版・日付の記載なし（2026 年 11 月に確認）</td><td>USB BIOS Flashback の呼称と、TPM に頼る暗号化を事前に一時停止する案内。手順は書いていません。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.asus.com/EVENT/Investor/about_profile">ASUS Company Profile</a></th><td>ASUS</td><td>2026 年 11 月に確認</td><td>本社の所在地（台湾）。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.msi.com/about/contact-us-select">Contact us</a></th><td>MSI</td><td>2026 年 11 月に確認</td><td>本社の所在地（台湾）。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.asrock.com/general/about.us.asp?cat=Contact">ASRock Contact Us</a></th><td>ASRock</td><td>2026 年 11 月に確認</td><td>本社の所在地（台湾）。</td></tr>
+      <tr><td>教科書・一般知識・他講座</td><th scope="row">互換性の 5 つの関門と、確認表</th><td>この講座（一般知識）</td><td>—</td><td>整理の枠組み。各項目の数字・規格は、第02〜09章の持ち主の章を参照。</td></tr>
+      <tr><td>架空（見本のため）</td><th scope="row">確認表の見本、脚注の例、演習の 6 ケース</th><td>この講座</td><td>—</td><td>理解のための架空の例。型番・数字・メーカー C・販売店 B は実在のものと関係がありません。</td></tr>
+    </tbody>
+  </table></div>
+</section>

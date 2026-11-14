@@ -1,0 +1,94 @@
+<!--
+num: 25
+part: 4
+title: 発展：ローカル AI・小型機・静音機の構成の考え方
+track: 発展
+time: 35
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>要件 → 制約 → 負荷の重い部品 → 冷却と電源 → 確認表、という<b>共通の型</b>で、構成を考えられる。</li>
+    <li><b>ローカル AI</b>・<b>小型機</b>・<b>静音機</b>・<b>常時稼働</b>の機器の、強い制約と、先に確かめる項目を言える。</li>
+    <li>この講座が特定の構成を勧めない理由と、確かめる資料の種類を言える。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch10">第10章</a>（要件と予算）、<a href="#ch12">第12章</a>（電力と熱の見積もり）。あるとよい：<a href="#ch06">第06章</a>（グラフィックスカード）、<a href="#ch19">第19章</a>（負荷試験）、<a href="#ch20">第20章</a>（設定の範囲）。</p>
+</section>
+
+<div class="callout warn"><span class="ttl">この章の扱い（負荷試験と長時間の負荷）</span><p>負荷試験や長時間の負荷は、部品を高い温度と大きな電力で動かします。温度を見ながら行い、上限に近い温度が続く、異音やにおいがする、といった異常に気づいたら、すぐに止めてください。</p></div>
+
+<div class="callout note"><span class="ttl">この章の扱い（構成の推薦ではありません）</span><p>この章は、構成の考え方と、確かめる項目の説明です。特定の製品・構成・店の推薦ではありません。価格は載せません。数値は、各章の持ち主の章と、各社の公式ページで確かめてください。</p></div>
+
+<h3>構成の考え方の共通の型</h3>
+<p>用途が変わっても、構成を考える手順は同じです。まず<b>要件</b>を書き、次に<b>制約</b>（大きさ・音・電力）を書きます。制約は、部品の選び方を狭めます。そのうえで、負荷の重い部品を見つけ、冷却と電源の条件を考え、互換性を確かめ、見積もりをします。制約に収まらなければ、要件の優先順位を見直します。</p>
+<div data-widget="flow" data-src="c25-flow"></div>
+<p>この型は、第10章から第12章で学んだ手順を、1 本につなげたものです。以降の節は、型に当てはめる 4 つの場面です。</p>
+
+<h3>ローカルで AI を動かす PC</h3>
+<p><b>ローカル AI</b>（local AI）は、クラウドのサービスを使わず、自分の PC の上で AI のモデルを動かすことです。この講座では、学習済みのモデルで出力を計算する<b>推論</b>（inference）を中心に扱います。学習は扱いません。</p>
+<p>推論で最初に問題になるのは、モデルが、メモリに載り切るかです。モデルの重みは、動かす間、メモリに置かれます。置く場所は、GPU（Graphics Processing Unit）のビデオメモリか、主記憶です。載り切らないときの動作は、ソフトによって違います（出典：一般知識）。そこで、ビデオメモリの容量が、先に効きます。</p>
+<p>メモリの使用量を減らす方法に、<b>量子化</b>（quantization）があります。Hugging Face のドキュメントは、量子化を、重みなどを、32 ビットの浮動小数点ではなく、8 ビットの整数のような低い精度のデータ型で保存し、メモリの使用量と計算の負担を減らす方法と説明しています。効率と精度のかねあいがあり、小さな丸め誤差が出ます（出典：Hugging Face『Quantization concepts』、ページに日付の記載なし）。</p>
+<p>ソフトが、どの GPU に対応するかも、確かめます。一例として、あるローカル AI のソフトの公式ページ（Ollama のドキュメント）は、GPU の企業ごとに、GPU の世代とドライバの版などの条件を書いています。特定のソフトを勧めるものではなく、公式ページが条件を書く、という例です。数値は変わりやすいので、この講座に書きません。一覧の所在は<a href="#ch06">第06章</a>です。木で、確かめる順を見ます。</p>
+<div data-widget="tree" data-src="c25-ai"></div>
+<p>推論は、長い時間の負荷になることがあります。電力と温度を、第12章と第19章で確かめます。負荷試験の注意（上の囲み）に従います。</p>
+
+<h3>NPU と「AI PC」という呼び方</h3>
+<p><b>NPU</b>（Neural Processing Unit）は、AI の処理のための専用のチップです（<a href="#ch02">第02章</a>）。Microsoft（米国）の Microsoft Learn の案内は、NPU が、データを並列に処理し、CPU（Central Processing Unit）や GPU と協調して働くと説明しています。また、NPU を使うには、NPU 向けに作られたソフトが要ります。多くの NPU は、整数の形式（INT8 など）に対応するので、モデルを量子化する必要があります（出典：Microsoft『Copilot+ PCs developer guide』、2025 年 11 月更新）。</p>
+<p>「AI PC」という呼び方の、企業・OS 提供者の間で共通の定義は、この講座では確かめられていません。確かめられたのは、Microsoft が、<b>Copilot+ PC</b>（Microsoft の呼称）の最小の要件を、表で公表していることです。Windows 11 の仕様ページは、その要件として、NPU の性能が 40+ TOPS（trillion operations per second。1 秒あたりの演算の回数を、兆の単位で表したもの）、メモリが 16 GB の DDR5（Double Data Rate 5 SDRAM）または LPDDR5（Low Power DDR5）、ストレージが 256 GB の SSD（Solid State Drive）または UFS（Universal Flash Storage）、と書いています（出典：Microsoft『Windows 11 Specs and System Requirements』、ページに更新日の記載なし、確認 2026 年 11 月）。</p>
+<p>Microsoft の学習センターの記事は、すべての Copilot+ PC は Windows 11 の PC だが、すべての Windows 11 の PC が Copilot+ PC ではない、と述べています（出典：Microsoft『Copilot+ PCs & Windows PCs: Differences?』、2025 年 12 月 19 日）。要件は更新されうるので、必ず公式ページの最新の文言で確かめます。自作の PC がこの要件に当たるかは、CPU の公開仕様（NPU の性能の表記）と、マザーボードの対応を、公式ページと照らして確かめます。</p>
+
+<h3>小型機</h3>
+<p><b>小型機</b>（small form factor PC）は、小さなケースに組む PC です。マザーボードは Mini-ITX（<a href="#ch03">第03章</a>）、電源ユニットは SFX 電源（小型の電源ユニットの規格。<a href="#ch07">第07章</a>）を使うことがあります。強い制約は、ケースの空間の小ささです。クーラーの高さ、グラフィックスカードの長さと厚さ、電源ユニットの形が限られます。空気の通り道も狭くなるので、熱が逃げにくくなります（出典：一般知識）。</p>
+<p>そのため、小型機では、ケースの対応寸法を最初に確かめます（<a href="#ch11">第11章</a>）。そのうえで、負荷をかけたときの温度を、負荷試験で確かめます（<a href="#ch19">第19章</a>）。拡張は、スロットの数と、ケースの空間で、先に限られます。</p>
+
+<h3>静音機</h3>
+<p><b>静音機</b>（quiet PC）は、音を小さくすることを優先して組む PC です。音の大きな源は、ファンです。大きなファンは、同じ風量を、より遅い回転で得やすく、回転が遅いほど音を小さくしやすくなります（出典：一般知識）。騒音の値は、測定条件つきの出典の値を確かめ、製品の間で比べません（<a href="#ch19">第19章</a>）。</p>
+<p>吸音材を使うケースもあります。ただし、吸音材で覆うと、空気の通りが悪くなることがあります。静かさと冷却の釣り合いは、温度の記録で確かめます。</p>
+<p>ファンが止まる動作も、静かさに効きます。Corsair の FAQ（Frequently Asked Questions、よくある質問）は、冷却が要らないとき、ファンが完全に止まる電源ユニットを説明しています。設定した温度になると、自動で回り始め、温度とともに回転が上がります。各製品の既定の動作は、製品のマニュアルに書かれています（出典：Corsair『PSU: What are zero-RPM PSUs?』、ページに日付の記載なし）。ASUS（台湾）のグラフィックスカードの FAQ も、ファンが止まる条件と回り始める条件が、温度と消費電力などで決まり、製品で違うと述べています（出典：ASUS『Condition of Fan Start and Fan Stop on RTX30 & RTX40 & RTX50 series』、2025 年 4 月更新）。名前も条件も、各社で違うので、製品の資料で確かめます。</p>
+<div data-widget="compare" data-src="c25-quiet"></div>
+
+<h3>常時稼働の機器</h3>
+<p><b>常時稼働</b>（always-on operation）は、長い時間、電源を入れたまま動かし続けることです。家庭のファイル置き場や、小さなサーバーが当たります。この場合、2 つの点が重くなります。</p>
+<p>1 つ目は、消費電力です。電力量は、電力に時間をかけたものです（<a href="#ch12">第12章</a>）。時間が長いので、小さな電力の差が、電力量と電気代の差になります。2 つ目は、データの保護です。ストレージの冗長（RAID）は、ドライブの故障に備えますが、バックアップの代わりにはなりません（<a href="#ch24">第24章</a>）。ほこりと温度の保守も、長く動かすほど大切です（<a href="#ch23">第23章</a>）。</p>
+
+<h3>4 つの型の早見表</h3>
+<p>4 つの型の、強い制約と、確かめることを、表にまとめます。数値は載せません。</p>
+<div data-widget="table" data-src="c25-patterns"></div>
+
+<h3>構成表を作る</h3>
+<p>最後に、考えたことを 1 枚の構成表にまとめます。要件表（<a href="#ch10">第10章</a>）、確認表（<a href="#ch11">第11章</a>）、見積もり（第12章）、調整の計画（第19・20・23章）を、並べて書きます。構成表があると、後で部品を替えるとき（<a href="#ch22">第22章</a>）、何を確かめ直すかが分かります。この講座は、構成表の中身（具体の製品）は示しません。</p>
+
+<h3>演習：依頼から、構成の型と、最初に確かめる事項を選ぶ</h3>
+<p>3 つの依頼（すべて架空）を読みます。構成の型と、最初に確かめる事項を決めてから、行を押してください。</p>
+<div data-widget="table" data-src="c25-judge"></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>モデルが大きいほど、ビデオメモリが先に足りなくなります。</b>数値は、使うモデルとソフトの公式ページで確かめます。</p>
+  <p><b>NPU があっても、ソフトが対応していなければ、使われません。</b>NPU の性能の値と、ソフトの対応は、別に確かめます。</p>
+  <p><b>小型機は、先に寸法を確かめます。</b>性能の高い部品を選ぶ前に、ケースに入るかを確かめます。</p>
+  <p><b>静かな PC でも、温度が上がればファンは回ります。</b>静かさと温度の余裕は取り合います。</p></div>
+
+<div class="callout tip"><span class="ttl">自分の 1 台でのつながり</span>
+  <p>どの型でも、使うのは第10〜12章の手順です。型によって変わるのは、どの制約が強いかだけです。制約を先に書き、強いほうから確かめると、選ぶ範囲が狭まり、確認表が短くなります。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c25-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（アクセス日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.microsoft.com/en-us/windows/windows-11-specifications">Windows 11 Specs and System Requirements</a></th><td>Microsoft（米国）</td><td>ページに更新日の記載なし（確認 2026 年 11 月）</td><td>Copilot+ PC の最小のシステム要件（NPU・メモリ・ストレージ）。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://learn.microsoft.com/en-us/windows/ai/npu-devices/">Copilot+ PCs developer guide</a></th><td>Microsoft</td><td>2025 年 11 月 17 日</td><td>NPU の説明、ソフトの対応、量子化が要る理由。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.microsoft.com/en-us/windows/learning-center/copilot-plus-pcs-windows-pcs-differences">Copilot+ PCs &amp; Windows PCs: Differences?</a></th><td>Microsoft</td><td>2025 年 12 月 19 日</td><td>Copilot+ PC と、通常の Windows 11 の PC の違い。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://huggingface.co/docs/transformers/quantization/concept_guide">Quantization concepts</a></th><td>Hugging Face</td><td>ページに日付の記載なし（確認 2026 年 11 月）</td><td>量子化の説明（メモリの使用量と精度のかねあい）。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://docs.ollama.com/gpu">GPU のページ（Ollama のドキュメント）</a></th><td>Ollama</td><td>ページに日付の記載なし（確認 2026 年 11 月）</td><td>ソフトの公式ページが、対応する GPU の条件を書く例。特定のソフトの推薦ではない。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://help.corsair.com/hc/en-us/articles/4415184478477-PSU-What-are-zero-RPM-PSUs">PSU: What are zero-RPM PSUs?</a></th><td>Corsair</td><td>ページに日付の記載なし（確認 2026 年 11 月）</td><td>ファンが止まる電源ユニットの動作の説明の例（1 社）。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.asus.com/support/faq/1044879/">[Graphic Card] Condition of Fan Start and Fan Stop on RTX30 &amp; RTX40 &amp; RTX50 series</a></th><td>ASUS（台湾）</td><td>更新 2025 年 4 月 2 日</td><td>ファンが止まる条件が製品で違う、という例（1 社）。</td></tr>
+      <tr><td>教科書・一般知識・他講座</td><th scope="row">他の章（第02・03・06・07・08・10・11・12・19・20・23・24章）</th><td>本講座</td><td>—</td><td>NPU、寸法、対応 GPU、熱、要件、見積もり、試験、保守は、持ち主の章を参照。</td></tr>
+      <tr><td>架空（見本のため）</td><th scope="row">演習の依頼 1〜3</th><td>—</td><td>—</td><td>構成の型と最初に確かめる事項を選ぶ演習。すべて架空。</td></tr>
+    </tbody>
+  </table></div>
+</section>

@@ -1,0 +1,94 @@
+<!--
+num: 04
+part: 1
+title: メモリ：DDR の世代・モジュール・チャネル
+track: 部品
+time: 30
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>メインメモリの役割と、世代（DDR（Double Data Rate）4・5）の違い、世代の間で互換がないことを説明できる。</li>
+    <li>「DDR5-6000」のような表記の数字が、MHz ではなく MT/s（Mega Transfers per second。1 秒あたりの転送の回数）であることを理解し、製品表記を読める。</li>
+    <li>2 つのチャネルと、差すスロットの関係を理解し、マニュアルの図から差す位置を選べる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch02">第02章</a>（CPU）、<a href="#ch03">第03章</a>（マザーボードと規格）。</p>
+</section>
+
+<h3>メインメモリは、作業中のデータを置く場所</h3>
+<p><b>メインメモリ</b>（main memory）は、CPU が作業中のデータとプログラムを置く記憶です。電源を切ると、中身は消えます。ストレージ（<a href="#ch05">第05章</a>）より速く、容量は小さいのが普通です（一般知識）。</p>
+<p>容量が足りなくなると、OS（Operating System）は、使っていないデータをストレージへ移して、作業を続けようとします。ストレージはメインメモリより遅いので、体感の速さが落ちることがあります（一般知識）。用途に合う容量の考え方は、<a href="#ch10">第10章</a>で扱います。</p>
+
+<h3>世代：DDR4 と DDR5</h3>
+<p>メインメモリの標準は、JEDEC（JEDEC Solid State Technology Association、半導体の標準化団体）が定めています。世代は DDR4 と DDR5 が中心です。</p>
+<div data-widget="table" data-src="c04-gen"></div>
+<p>世代が違うと、切り欠きの位置が違い、差せません。Kingston Technology（米国）の資料は、DDR5 は DDR4 のスロットに差せない、と書いています。電圧の標準も違い、DDR4 は 1.2 V、DDR5 は 1.1 V です。世代の違うメモリは、混ぜられません。買う前に、マザーボードの仕様表で、対応する世代を確かめます（<a href="#ch03">第03章</a>）。</p>
+<p>DDR5 では、電圧を調整する回路が、メモリのモジュールの上にあります（JEDEC の発表）。そのため、モジュールの中の構成も、DDR4 とは違います。</p>
+
+<h3>モジュールの形：DIMM と、新しい形</h3>
+<p><b>DIMM</b>（Dual In-line Memory Module）は、メインメモリの DRAM（Dynamic Random Access Memory）チップを載せた、細長い基板です。デスクトップ PC では、この形を使います。小型の機器向けの形は SO-DIMM と呼びます（Kingston の用語集）。</p>
+<p>JEDEC は、別の形として、CAMM2（JESD318）を公表しています。DDR5 と LPDDR5・LPDDR5X を対象とする規格です。この講座では、名前と対象だけを扱います。ふだんのデスクトップ PC の自作では、基板の仕様表が対応する形を書いているので、それに合わせます。</p>
+
+<h3>速度の表記：MT/s と MHz</h3>
+<p>「DDR5-6000」の 6000 は、<b>MT/s</b> の値です。1 秒あたりの転送の回数で、MHz（クロック周波数）の値とは別です。Kingston の用語集は「DDR5-4800 または 4800MT/s」と、2 つの書き方を示しています。Micron Technology のページも、MT/s と MHz の違いを説明しています。</p>
+<p>この講座では、メモリの速度は MT/s で書きます。「DDR5-6000 は 6000 MHz」とは書きません。CPU のクロック周波数（<a href="#ch02">第02章</a>）とは、別の量です。</p>
+<p>もう 1 つの数字が<b>メモリタイミング</b>です。製品表記の「CL30」（CL は CAS Latency の略）などで、応答の待ち時間をクロックの回数で表します。同じ世代と速度の中で比べます。</p>
+<div data-widget="ident" data-src="c04-label"></div>
+
+<h3>チャネルと枚数：2 枚のときは、指定の位置に</h3>
+<p>CPU のメモリコントローラは、メモリへの通り道を、<b>チャネル</b>として持っています。デスクトップ PC の基板は、2 チャネルで、スロットが 4 本の構成が一般的です。各チャネルに 1 枚ずつ差すと、2 つの通り道が同時に働きます。これを<b>デュアルチャネル</b>と呼びます。</p>
+<div data-widget="arch" data-src="c04-channel"></div>
+<p>差す位置は、基板のマニュアルの図で決まっています。ASUS（台湾）のサポートの記事は、2 枚のときは DIMM_A2 と DIMM_B2 のスロットに差す、と書いています。ASRock（台湾）のマニュアルは、デュアルチャネルには同じ組のメモリが要り、1 枚や 3 枚では有効にならない、と書いています。位置の名前と決まりは基板で違うので、必ず自分の基板のマニュアルの図で確かめます。</p>
+<p>枚数で、対応する速度が変わることもあります。AMD（米国）の Ryzen 5 9600X の製品ページは、メモリの対応を「2x1R/2x2R は DDR5-5600、4x1R/4x2R は DDR5-3600」と書いています。Intel（米国）の Core Ultra 7 265K のページは「DDR5 の 6400 MT/s まで」と書きます。値の名前と数え方は、企業で違います。使う CPU の製品ページと、基板の仕様表で、枚数ごとの値を確かめます。</p>
+
+<h3>ECC：誤りを訂正する仕組み</h3>
+<p><b>ECC</b>（Error Correcting Code）は、メモリの誤りを訂正する仕組みです。PC では、CPU と基板の対応で決まります。Intel のチップセット（品番 Z890）のページは、ECC メモリへの対応を「No」と書いています。AMD の Ryzen AI 7 450G のページは「Yes (Requires mobo support)」、つまり、基板の対応が要ると書いています。必要かどうかは、用途と、CPU・基板の資料で確かめます。</p>
+
+<h3>プロファイルと QVL</h3>
+<p>メモリには、標準の速度のほかに、メーカーが用意した速い設定の情報（プロファイル）が入っていることがあります。Intel の呼称は XMP（Extreme Memory Profile）、AMD の呼称は EXPO（Extended Profiles for Overclocking）です。Intel の資料は、XMP 2.0 は DDR4、XMP 3.0 は DDR5 向けで、クロックや電圧を変えると保証が無効になることがある、と書いています。設定の詳細は<a href="#ch20">第20章</a>で扱います。</p>
+<p><b>QVL</b>（Qualified Vendor List）は、マザーボードメーカーが公開する、動作を確かめたメモリの一覧です。ASUS の記事は、QVL にあるメモリを使うことを勧めています。載っていない製品が動かないと決まるわけではありませんが、確かめる手がかりになります。</p>
+
+<h3>演習：2 枚のときに差すスロットを選ぶ</h3>
+<p>次は、架空のマザーボード Y のマニュアルの図です。利用者 B さんは、同じ 16 GB のメモリ 2 枚（DDR5）を差します。どのスロットに差せばよいでしょうか。理由も答えてください。</p>
+<div data-widget="table" data-src="c04-practice"></div>
+<details><summary>答えを見る</summary>
+  <p>答えは、スロット 2 とスロット 4 です。マニュアルの指定で、スロット 2 は「2 枚のときはここを使う」、スロット 4 は「2 枚のときはここも使う」と書かれています。スロット 2 はチャネル A、スロット 4 はチャネル B なので、各チャネルに 1 枚ずつ差さり、デュアルチャネルになります。スロット 1 と 3 は、4 枚のときだけ使うので、空けます。</p>
+  <p>考え方は、枚数の指定を表から拾うことです。（すべて架空のマニュアルです。実際の基板では、自分のマニュアルの図に従います。）</p>
+</details>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>世代の違うメモリは、混ぜられません。</b>買う前に、基板の仕様表で DDR4 か DDR5 かを確かめます。</p>
+  <p><b>「DDR5-6000」の 6000 は MHz ではありません。</b>MT/s です。製品の間で比べるときも、単位を揃えます。</p>
+  <p><b>スロットの数があっても、どこに差してもよいわけではありません。</b>2 枚のときの位置は、マニュアルの図で決まります。</p>
+  <p><b>枚数を増やすと、対応する速度が下がる CPU があります。</b>製品ページの枚数ごとの値を読みます。</p>
+  <p><b>メモリを差すときは、PC の電源を切り、電源ケーブルを抜いてから行います。</b>スロットの両側の留め具を確かめ、無理に押し込みません。具体の作業は、各部品のマニュアルに従います（<a href="#ch15">第15章</a>）。</p></div>
+
+<div class="callout tip"><span class="ttl">自分の 1 台でのつながり</span>
+  <p>選ぶとき：基板の対応する世代と、CPU の対応する速度を、仕様ページで確かめます。組むとき：2 枚を差す位置を、基板のマニュアルの図で決めます。直すとき：起動しない症状では、メモリがスロットの奥まで入っているかを、まず見ます。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c04-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 14 日）。規格本文を読んでいない資料は、使い方の欄に書きました</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://www.jedec.org/news/pressreleases/jedec-publishes-new-ddr5-standard-advancing-next-generation-high-performance">JEDEC Publishes New DDR5 Standard</a></th><td>JEDEC</td><td>2020 年 7 月 14 日</td><td>JESD79-5、電圧、副チャネル、モジュール上の電圧の調整回路。標準の本文は読んでいない。</td></tr>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://www.jedec.org/news/pressreleases/jedec-publishes-new-camm2-memory-module-standard">JEDEC Publishes New CAMM2 Memory Module Standard</a></th><td>JEDEC</td><td>2023 年 12 月 5 日</td><td>CAMM2（JESD318）の対象。</td></tr>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://www.jedec.org/standards-documents/docs/jesd318b">JESD318B CAMM2 Common Standard</a></th><td>JEDEC</td><td>版 1.14、2025 年 11 月</td><td>CAMM2 の版の確認。</td></tr>
+      <tr><td>団体の資料</td><th scope="row">DDR4 SDRAM STANDARD（JESD79-4）</th><td>JEDEC</td><td>2021 年 7 月の公表。改訂の記号は確認できず</td><td>DDR4 の標準の番号。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.micron.com/products/memory/dram-components/ddr5-sdram">DDR5 SDRAM</a></th><td>Micron Technology</td><td>©2023。確認 2026 年 11 月</td><td>DDR4 と DDR5 の速度の範囲、電圧、MT/s と MHz の説明。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.kingston.com/en/memory/kingston-glossary">Kingston Glossary</a></th><td>Kingston Technology（米国）</td><td>確認 2026 年 11 月</td><td>MT/s、DIMM、デュアルチャネルなどの用語。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://media.kingston.com/kingston/articles/MKF_954-DDR5-Collateral_us.pdf">DDR5 の資料</a></th><td>Kingston Technology（米国）</td><td>©2022</td><td>切り欠きの位置が違い、DDR4 のスロットに差せない記述。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.asus.com/support/faq/1047257/">ASUS サポート FAQ 1047257</a></th><td>ASUS（台湾）</td><td>更新 2026 年 2 月 23 日</td><td>2 枚のときに差すスロット、QVL の推奨。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row">ASRock のマザーボードのマニュアル（メモリの節）</th><td>ASRock（台湾）</td><td>確認 2026 年 11 月</td><td>デュアルチャネルに同じ組が要る記述。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-5-9600x.html">AMD Ryzen 5 9600X</a></th><td>AMD（米国）</td><td>確認 2026 年 11 月</td><td>枚数ごとの対応速度。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.intel.com/content/www/us/en/products/sku/241063/intel-core-ultra-7-processor-265k-30m-cache-up-to-5-50-ghz/specifications.html">Intel Core Ultra 7 Processor 265K Product Specifications</a></th><td>Intel（米国）</td><td>発売 Q4'24</td><td>対応するメモリ速度の記述。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.intel.com/content/www/us/en/products/sku/237777/intel-z890-chipset/specifications.html">Intel Z890 Chipset Product Specifications</a></th><td>Intel（米国）</td><td>発売 Q4'24</td><td>ECC メモリの対応の欄。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.intel.com/content/www/us/en/support/articles/000094616/processors.html">Intel の XMP の解説</a>（記事番号 000094616）</th><td>Intel（米国）</td><td>最終確認日 2026 年 4 月 9 日</td><td>XMP の版と保証の注意。</td></tr>
+      <tr><td>架空（見本のため）</td><th scope="row">架空の製品表記、架空のマザーボード Y のマニュアル</th><td>—</td><td>—</td><td>表記の解剖と演習の資料。すべて架空。</td></tr>
+    </tbody>
+  </table></div>
+</section>

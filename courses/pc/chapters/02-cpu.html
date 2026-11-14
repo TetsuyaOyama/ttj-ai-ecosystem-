@@ -1,0 +1,114 @@
+<!--
+num: 02
+part: 1
+title: CPU：コア・クロック・内蔵グラフィックス・電力の指標
+track: 部品
+time: 35
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>CPU（Central Processing Unit）の仕様表にある<b>コア</b>・<b>スレッド</b>・<b>クロック周波数</b>・<b>キャッシュ</b>が、それぞれ何を表すかを説明できる。</li>
+    <li>内蔵グラフィックスの有無が型番の接尾辞に表れること、ない製品ではグラフィックスカードが必須になることを、仕様ページで確かめられる。</li>
+    <li>TDP（Thermal Design Power）などの電力の指標は、企業ごとに名前も定義も違い、実際の消費電力そのものではないことを理解し、値の前に名前を確かめる習慣を持てる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch01">第01章</a>（PC の全体像）。</p>
+</section>
+
+<h3>CPU は、命令を実行する部品</h3>
+<p><b>CPU</b>（Central Processing Unit）は、プログラムの命令を読んで実行する部品です。中には、<b>コア</b>（core）、<b>キャッシュ</b>（cache）などが入っています。PC の中で、もっとも多くの種類の仕事を受け持ちます（一般知識）。</p>
+<p>この章では、仕様表の用語を 4 つ押さえます。コアとスレッド、クロック周波数、キャッシュ、そして内蔵グラフィックスです。最後に、読み違えやすい<b>電力の指標</b>を扱います。企業は、Intel（米国）と AMD（Advanced Micro Devices。米国）の製品ページの値を例にします。例であり、推奨ではありません。</p>
+
+<h3>コアとスレッド</h3>
+<p><b>コア</b>は、CPU の中で命令を実行する単位です。コアが受け持つ命令の流れを、<b>スレッド</b>（thread）と呼びます。1 つのコアが 2 つのスレッドを同時に扱う方式があり、その場合、スレッドの数はコアの数の 2 倍になります。</p>
+<p>実例を見ます。AMD の Ryzen 5 9600X の製品ページは、6 コア・12 スレッドと書いています。Intel の Core Ultra 7 265K の製品ページは、20 コア・20 スレッドで、数が同じです。数字だけでは、スレッドの扱い方は分かりません。仕様表の「コア」と「スレッド」の 2 つの欄を、両方読みます。</p>
+<div data-widget="table" data-src="c02-cpu"></div>
+<p>表の値は、各社の製品ページの値です。値の名前は企業ごとに違うので、行ごとに名前を書きました。企業の間で、優劣は示しません。ソケットの名前（FCLGA1851・AM5）は、<a href="#ch03">第03章</a>で基板との対応を扱います。</p>
+
+<h3>ハイブリッド構成：2 種類のコア</h3>
+<p>Intel の Core Ultra は、性能を重視したコアと、効率を重視したコアを、1 つの CPU に組み合わせています。これを<b>ハイブリッド構成</b>（hybrid architecture）と呼びます。Intel の呼称は、Performance-core（P コア）と Efficient-core（E コア）です。</p>
+<div data-widget="compare" data-src="c02-hybrid"></div>
+<p>どのコアにどの処理を任せるかは、OS（Operating System）が関わります。Intel は、この割り当てを助ける仕組みを Thread Director と呼んでいます。AMD の確認した製品ページには、コアの種類の別が書かれていません。他社の機能を、同じものと書くのは避けます。</p>
+
+<h3>クロック周波数と、自動で上がる速さ</h3>
+<p><b>クロック周波数</b>（clock frequency）は、CPU が処理を進める拍子の速さです。単位は GHz（ギガヘルツ）で、1 秒間に拍子が何十億回あるかを表します。</p>
+<p>多くの CPU には、基本の値のほかに、条件が良いときに自動で高くなる仕組みがあります。Intel は Turbo Boost、AMD は Precision Boost と呼びます。Intel のページは、この上昇が処理の内容と熱の余裕で決まると書いています。AMD のページは、温度・ソケットの電力・電流の上限の範囲で上がると書いています。つまり、<b>最大の値は、いつも出るとは限りません</b>。クーラーが弱いと、上がる幅が小さくなります。</p>
+
+<h3>キャッシュ：CPU の近くにある小さくて速い記憶</h3>
+<p><b>キャッシュ</b>は、よく使うデータの写しを置く、小さくて速い記憶です。CPU の中や近くにあります。メインメモリ（<a href="#ch04">第04章</a>）より小さく、速い記憶です。AMD の Ryzen 5 9600X の製品ページは、L2 キャッシュを 6 MB、L3 キャッシュを 32 MB と書いています。L は階層（level）の頭文字で、数字が小さいほど、コアの近くにあります（一般知識）。</p>
+<p>キャッシュの量が多いほど速い、とは限りません。使う処理の内容で、効き方が変わります。仕様表の数字は、同じ企業の同じ系列の中で、読み方を揃えて確かめます。</p>
+
+<h3>内蔵グラフィックス：映像を作る部分</h3>
+<p><b>内蔵グラフィックス</b>（integrated graphics）は、CPU の中に入っている、映像を作る部分です。あれば、グラフィックスカード（<a href="#ch06">第06章</a>）がなくても、基板の映像端子から画面に映せます。</p>
+<p>ない製品もあります。Intel は、型番の接尾辞 F を「Requires discrete graphics」（独立したグラフィックスが必要）と説明しています。AMD の Ryzen 5 9500F の製品ページは、Graphics Model の欄に「Discrete Graphics Card Required」と書いています。<b>この種の CPU で組むと、グラフィックスカードがないかぎり、画面が映りません</b>。選ぶ前に、必ず仕様ページの欄を読みます。</p>
+<p>内蔵グラフィックスの有無は、型番の字だけでは決めつけられません。AMD の Ryzen 5 9500F では、ページの欄が根拠です。製品ごとに、ページで確かめます。</p>
+
+<h3>型番の読み方</h3>
+<p>型番には、系列・階層・世代・接尾辞が入っています。Intel は、命名の規則を公式のページに載せています。AMD は、確認した範囲では、命名の規則を説明する公式のページを見つけられませんでした。そのため、AMD の読み方は、製品ページから読める範囲にとどめます。</p>
+<div data-widget="ident" data-src="c02-model"></div>
+<p>型番の数字が大きいほど性能が高い、とは限りません。同じ世代の中でも、階層や接尾辞で機能が違います。必ず、仕様ページで確かめます。</p>
+
+<h3>NPU：AI の計算のための部分</h3>
+<p><b>NPU</b>（Neural Processing Unit）は、人工知能（AI）の計算を、少ない電力で行うための専用の部分です。載せた製品の公開仕様に、性能が TOPS（Tera Operations Per Second。1 秒あたりに何兆回の演算ができるか）で書かれます。Intel の Core Ultra 7 265K のページは、NPU を「Intel AI Boost」、13 TOPS（Int8）と書いています。AMD の Ryzen AI 7 450G のページは、「Up to 50 TOPS」と書いています。TOPS は、測り方が企業ごとに違うため、企業の間では比べません。活用の話は<a href="#ch25">第25章</a>です。</p>
+
+<h3>電力の指標：TDP とその仲間</h3>
+<p>仕様表には、<b>TDP</b>（Thermal Design Power）に似た欄がよくあります。ところが、名前も定義も企業ごとに違います。Intel の最近の資料は、Processor Base Power（基準の電力）と Maximum Turbo Power（上限の電力）という 2 つの値を載せます。AMD の製品ページは「Default TDP」の欄を載せます。</p>
+<div data-widget="table" data-src="c02-power"></div>
+<p>共通して言えるのは、次の 3 点です。</p>
+<ul>
+  <li>どれも、<b>実際の消費電力そのものではありません</b>。処理の重さと温度で、実際の電力は変わります。</li>
+  <li>名前が違えば、定義も違います。数字が同じでも、同じ意味とは限りません。</li>
+  <li>定義の確認は、メーカーの公式の資料で行います。販売店の説明では、定義は確かめられません。</li>
+</ul>
+<p>CPU の電力は、マザーボードの電源回路（<a href="#ch03">第03章</a>）と、電源ユニット（<a href="#ch07">第07章</a>）、冷やす部品の選び方に関わります。ただし、「指標が大きい CPU にはこの電源ユニット」のような対応は、この章では書きません。各社の公式の資料で確かめます。</p>
+
+<h3>最大の動作温度</h3>
+<p>製品ページには、最大の動作温度の欄もあります。Intel の Core Ultra 7 265K のページは「Max Operating Temperature」を 105 ℃、AMD の Ryzen 5 9600X のページは「Max. Operating Temperature (Tjmax)」を 95 ℃ と書いています。名前が違うので、数字を企業の間で比べません。この温度を超えて使い続けることは、設計の範囲の外です。ふだんの運転で、この温度に近づくなら、冷却が足りていないしるしです。</p>
+<div class="callout warn"><span class="ttl">この章のしてはいけないこと</span>
+  <p>CPU の定格（メーカーが公表する動作条件）を超える設定や、冷却を外した状態での運転は、この講座では扱いません。定格を超える設定は、製品の保証の対象外になることがあります。Intel は、クロックや電圧を変えると保証が無効になることがある、と書いています。作業の前には、PC の電源を切り、電源ケーブルを抜きます。</p></div>
+
+<h3>演習：条件に合う CPU を選ぶ</h3>
+<p>次は、架空の CPU 3 つの仕様表です。利用者 A さんは、グラフィックスカードを使わず、電力の指標の値が小さい CPU を選びたい、と考えています。どれが条件に合うでしょうか。理由も答えてください。</p>
+<div data-widget="table" data-src="c02-practice"></div>
+<details><summary>答えを見る</summary>
+  <p>答えは CPU ア です。内蔵グラフィックスがあり、基準の電力も 65 W と小さい値です。CPU イ は 65 W ですが、内蔵グラフィックスがなく、グラフィックスカードが必須です。CPU ウ は、内蔵グラフィックスがありますが、125 W で、もっとも大きい値です。</p>
+  <p>考え方は、条件を 1 つずつ表に当てはめることです。まず、「必須の条件」（内蔵グラフィックス）で絞り、次に、「小さいほうが良い値」を比べます。（すべて架空の仕様表です。実際の製品では、値の名前と定義も確かめます。）</p>
+</details>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>末尾に F の付く CPU は、映像を出せないことがあります。</b>内蔵グラフィックスがない製品では、グラフィックスカードがないと、画面が映りません。買う前に、仕様ページの欄を読みます。</p>
+  <p><b>TDP の数字は、消費電力ではありません。</b>メーカーが設計のために決めた値です。Intel の資料では、短い間は、基準の値を超える電力が使われます。名前が違えば定義も違うので、企業の間で数字を比べません。</p>
+  <p><b>コアの数が多い CPU が、いつも速いわけではありません。</b>スレッドの数や、クロック周波数、処理の内容でも、結果は変わります。</p>
+  <p><b>クロックの最大の値は、いつも出るとは限りません。</b>温度や電力の余裕で、上がる幅が変わります。</p></div>
+
+<div class="callout tip"><span class="ttl">自分の 1 台でのつながり</span>
+  <p>選ぶとき：用途を決め、内蔵グラフィックスの有無と、コアとスレッドの数を、仕様ページで確かめます。組むとき：CPU の電力の指標の「名前」を、基板と冷やす部品の資料の言葉に揃えて読みます。直すとき：画面が映らない症状では、CPU に内蔵グラフィックスがあるかを、最初に疑います。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c02-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 14 日）。規格本文を読んでいない資料は、使い方の欄に書きました</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.intel.com/content/www/us/en/products/sku/241063/intel-core-ultra-7-processor-265k-30m-cache-up-to-5-50-ghz/specifications.html">Intel Core Ultra 7 Processor 265K Product Specifications</a></th><td>Intel（米国）</td><td>発売 Q4'24。確認 2026 年 11 月</td><td>コア・スレッド、Processor Base Power、Maximum Turbo Power、最大の動作温度、内蔵グラフィックス、NPU の値。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-5-9600x.html">AMD Ryzen 5 9600X</a></th><td>AMD（米国）</td><td>確認 2026 年 11 月</td><td>コア・スレッド、L2・L3 キャッシュ、Default TDP、Tjmax、内蔵グラフィックス。9950X・9500F・Ryzen AI 7 450G も、同じ形式の各製品ページで確認した。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://cdrdv2-public.intel.com/832586/832586-006.pdf">Intel Core Ultra 200S and 200HX Series Processors Datasheet, Volume 1 of 2</a></th><td>Intel（米国）</td><td>Rev. 006、2025 年 9 月</td><td>Processor Base Power と Maximum Turbo Power の定義。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.intel.com/content/www/us/en/support/articles/000089297/processors.html">Where to Find the Thermal Design Power (TDP) for Intel Processors</a>（記事番号 000089297）</th><td>Intel（米国）</td><td>最終確認日 2024 年 12 月 10 日</td><td>12 世代以降の TDP が Processor Base Power と同じ、という記述。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.intel.com/content/www/us/en/support/articles/000055611/processors.html">Thermal Design Power (TDP) in Intel Processors</a>（記事番号 000055611）</th><td>Intel（米国）</td><td>最終確認日 2023 年 4 月 4 日</td><td>TDP を最大の理論上の負荷のときの電力消費とする説明。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.amd.com/content/dam/amd/en/documents/products/software-tools/ryzen-master-quick-reference-guide.pdf">AMD Ryzen Master Reference Guide</a></th><td>AMD（米国）</td><td>2022 年 4 月の版と表示。Ryzen 1000〜5000 世代が対象</td><td>PPT の説明。AM5 の CPU に同じ定義が当てはまるかは確認できていない。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.intel.com/content/www/us/en/gaming/resources/how-hybrid-design-works.html">How Intel Core Processors Work</a></th><td>Intel（米国）</td><td>更新 2025 年 7 月 16 日</td><td>P コアと E コアの説明、Thread Director。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row">Intel Core Ultra Processors Names and Numbers（記事番号 000097596）</th><td>Intel（米国）</td><td>最終確認日 2026 年 1 月 5 日</td><td>型番の階層・世代・接尾辞の読み方。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row">What Do the Letters Mean in Intel Processor Names?（記事番号 000058567）</th><td>Intel（米国）</td><td>最終確認日 2025 年 12 月 9 日</td><td>接尾辞 K・F・T の意味。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.amd.com/en/resources/support-articles/faqs/CPU-PB2.html">Precision Boost 2 FAQ</a></th><td>AMD（米国）</td><td>更新 2024 年 2 月 29 日（ページの情報）</td><td>クロックが温度・電力・電流の上限の範囲で上がる説明。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row">Intel Turbo Boost Technology（Intel の解説ページ）</th><td>Intel（米国）</td><td>更新 2025 年 7 月 14 日（ページの情報）</td><td>上昇が処理の内容と熱の余裕による、という説明。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.intel.com/content/www/us/en/support/articles/000094616/processors.html">Intel の XMP の解説</a>（記事番号 000094616）</th><td>Intel（米国）</td><td>最終確認日 2026 年 4 月 9 日</td><td>クロックや電圧を変えると保証が無効になることがある、という注意。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.intel.com/content/www/us/en/corporate-responsibility/intel-in-california.html">Intel in California</a></th><td>Intel</td><td>確認 2026 年 11 月</td><td>本社の所在（米国）の確認。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://ir.amd.com/financial-information/sec-filings/content/0000002488-26-000121/0000002488-26-000121.pdf">Form 8-K（報告日 2026 年 8 月 4 日）</a></th><td>AMD</td><td>2026 年 8 月 4 日</td><td>主たる事務所の所在（米国）の確認。</td></tr>
+      <tr><td>教科書・一般知識・他講座</td><th scope="row">一般知識</th><td>—</td><td>—</td><td>CPU の役割、キャッシュの階層、F の付く製品で画面が映らない理由の一般論。</td></tr>
+      <tr><td>架空（見本のため）</td><th scope="row">架空の CPU ア・イ・ウの仕様表、架空の型番</th><td>—</td><td>—</td><td>演習と型番の解剖の資料。製品・数字はすべて架空。</td></tr>
+    </tbody>
+  </table></div>
+</section>

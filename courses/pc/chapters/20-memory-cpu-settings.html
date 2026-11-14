@@ -1,0 +1,84 @@
+<!--
+num: 20
+part: 4
+title: メモリと CPU の設定の基礎：メーカーが用意した設定の範囲
+track: 調整
+time: 35
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li><b>既定の設定</b>と、メーカーが用意した<b>メモリのプロファイル</b>・<b>電力の設定</b>が、何を変えるかを説明できる。</li>
+    <li>設定を変えた後に、<b>安定性</b>を確かめ、変更前の状態へ戻せる。</li>
+    <li>電圧や倍率を手で変える設定を、この講座で扱わない理由を言える。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch04">第04章</a>（メモリ）、<a href="#ch17">第17章</a>（最初の起動と設定）。あるとよい：<a href="#ch02">第02章</a>（電力の指標）、<a href="#ch19">第19章</a>（負荷試験）。</p>
+</section>
+
+<div class="callout warn"><span class="ttl">この章の扱い（定格と保証）</span><p>この章は、メーカーが用意した設定の範囲の説明です。電圧や倍率を手で変えて定格を超える設定は、部品の故障や寿命の短縮につながり、保証の対象外になるおそれがあるため、この講座では手順を扱いません。メーカーが用意したプロファイルや機能でも、保証の扱いはメーカーごとに違います。各社の保証規定で確かめてください。</p></div>
+
+<h3>既定の設定は、誰が決めているか</h3>
+<p><b>既定の設定</b>（default settings）は、部品を出荷したときの設定です。組み立てた直後の PC は、この設定で動きます。既定の設定は、1 人が決めているのではありません。3 者が重なっています。</p>
+<p>1 つ目は、メモリの規格団体です。JEDEC（JEDEC Solid State Technology Association）が、メモリの標準の速度を定めています。値は<a href="#ch04">第04章</a>で扱います。2 つ目は、CPU（Central Processing Unit）のメーカーです。CPU の電力などの既定を、製品ごとに定めます。指標の定義は<a href="#ch02">第02章</a>です。3 つ目は、マザーボードのメーカーです。UEFI（Unified Extensible Firmware Interface）の設定画面（製品や資料では BIOS（Basic Input/Output System）と表示されることがあります）に、出荷時の設定を入れます。</p>
+<p>注意したいのは、3 つ目が 2 つ目と同じとは限らないことです。Intel（米国）の社員は、2024 年 6 月の案内で、13 世代・14 世代の Core の CPU（型番の接尾辞が K・KF・KS のもの）で、不安定の報告が出たと述べました。不安定に関わる要因の一つとして、以前の設定による CPU への高い電圧を確認した、と書いています。Intel は、自社の既定の電力供給のプロファイル（Intel の呼称：Intel Default Settings）を勧め、マザーボードのメーカーのサイトで、最新の UEFI を確かめるよう案内しています（出典：Intel『June 2024 Guidance regarding Intel Core 13th and 14th Gen K/KF/KS instability reports』、2024 年 6 月 18 日投稿）。このページには、同年 9 月 25 日付で、より新しい Intel の投稿への案内が付いています。その後の説明は、新しい投稿で確かめます。この案内の対象は、その世代の CPU です。他の CPU に、そのまま当てはまると決めてはいけません。</p>
+
+<h3>メモリのプロファイル</h3>
+<p><b>メモリのプロファイル</b>（memory profile）は、メモリに記録された、標準より高い速度・タイミング・電圧の組です。UEFI の設定画面で選ぶと、メモリが標準とは別の設定で動きます。呼称は企業ごとに違い、Intel では XMP（Extreme Memory Profile）、AMD（米国）では EXPO（Extended Profiles for Overclocking）です。</p>
+<p>各社の資料は、プロファイルを次のように説明しています。Intel は、XMP を、標準の設定を超えた、より高い速度で動かす設定と書き、速度・タイミング・電圧の組だとしています。保証については、Intel の仕様の外で周波数や電圧を変えると、「may void the processor warranty」（プロセッサの保証が無効になることがある）と書いています（出典：Intel『Intel® XMP (Extreme Memory Profile) RAM Overclocking』、2026 年 4 月更新）。AMD は、EXPO を、主に DDR5（Double Data Rate 5 SDRAM）のメモリ向けの、メモリのオーバークロックの支援と書いています。対象は、ソケット（Socket AM5。名前は<a href="#ch03">第03章</a>）の Ryzen です。脚注では、AMD の公表した仕様の外で動かすと、AMD のハードウェアやソフトウェアで有効にしても、AMD 製品の保証が無効になる、と書いています（出典：AMD『AMD EXPO™ Technology for AMD Ryzen™ Processors for Socket AM5』、2026 年 5 月更新）。</p>
+<p>この 2 社の書き方は、同じではありません。Intel は「無効になることがある」、AMD は「無効になる」と書いています。1 社の記述を、他の会社に広げてはいけません。メモリのメーカー、マザーボードのメーカー、販売店の保証規定は、別に確かめます（保証の仕組みは<a href="#ch13">第13章</a>）。</p>
+<p>プロファイルが使えるかは、マザーボードの対応にも左右されます。Intel は、マザーボードが XMP に対応している必要があり、確認はマザーボードのメーカーに、と案内しています。メモリの対応表（Qualified Vendor List, QVL）の見方は<a href="#ch04">第04章</a>、<a href="#ch11">第11章</a>です。</p>
+<div data-widget="compare" data-src="c20-default"></div>
+
+<h3>CPU の電力の設定</h3>
+<p><b>電力の設定</b>（power settings）は、CPU が使う電力の上限などを決める設定です。CPU のメーカーとマザーボードのメーカーが、選択肢を用意します。名前は各社で違うので、名前だけで中身を決めず、各社の資料で確かめます。</p>
+<p>一例が、AMD の資料にあります。AMD の Ryzen Master のリファレンスガイド（2.9、2022 年 4 月）は、省電力の動作モード（資料の呼称：Eco-Mode）を、CPU の消費電力を既定より下げるものと説明しています。対象は 3000 系列の CPU で、マザーボードの対応が要ります。また、Eco-Mode では、Precision Boost Overdrive などの別の制御のモードは使えない、と書いています（出典：AMD『AMD Ryzen Master 2.9 Reference Guide』、2022 年 4 月）。この資料は古い世代の説明です。現行の製品は、製品ページとマザーボードのマニュアルで確かめます。</p>
+
+<h3>自動で性能を上げる機能の扱い</h3>
+<p>CPU には、負荷と温度に応じて、自動で性能を上げる機能があります（<a href="#ch02">第02章</a>）。機能そのものは、CPU のメーカーが仕様として定めたものです。確かめたいのは、マザーボードのメーカーが用意する設定が、CPU のメーカーの既定と同じ範囲かどうかです。</p>
+<p>見分け方は 3 つです。<b>誰が用意した設定か</b>（CPU のメーカーか、マザーボードのメーカーか）。<b>公式の資料が、仕様の外や保証について何と書いているか</b>。<b>その資料が、手元の製品に当てはまるか</b>（世代・型番）。3 つのどれかを確かめられないなら、既定のままにします。確かめられた範囲だけを、変えます。</p>
+<div data-widget="table" data-src="c20-settings"></div>
+
+<h3>安定性を確かめる</h3>
+<p><b>安定性</b>（stability）は、負荷をかけても、固まる・再起動する・エラーが出るなどが起きず、動き続ける性質です。設定を変えた後は、起動できただけで終わりません。負荷試験（<a href="#ch19">第19章</a>）で、温度とエラーを見ながら、決めた時間だけ負荷をかけます。</p>
+<p>変更は、一度に 1 つだけにします。メモリのプロファイルと CPU の電力の設定を同時に変えると、不安定になったとき、どちらが原因か分かりません。手順を流れ図にします。</p>
+<div data-widget="flow" data-src="c20-flow"></div>
+
+<h3>戻し方</h3>
+<p>戻すために、変える前に 3 つのことをします。設定を記録すること。メモリの速度とタイミング、CPU の電力の設定を、書くか撮影して残します。UEFI の設定画面に、設定の保存の機能がある製品では、保存します。そして、変更した日と内容を残すことです。</p>
+<p>戻す操作は、変えた設定を無効にして、記録のとおりにすることです。それでも起動しないときは、設定の初期化の方法をマザーボードのマニュアルで確かめます（<a href="#ch17">第17章</a>）。戻しても不安定なら、設定以外の原因です。<a href="#ch21">第21章</a>の切り分けへ進みます。</p>
+
+<h3>この講座で扱わないこと</h3>
+<p>電圧や倍率を手で変える設定は、この講座では扱いません。一般に<b>オーバークロック</b>（overclocking）と呼ばれる設定です。この講座では「定格を超える設定」と書きます。Intel の資料は、オーバークロックが仕様を超えうること、安定性・安全性・性能・部品の寿命を下げることがあることを述べています。AMD の Ryzen Master のリファレンスガイドの警告は、公表した仕様の外で CPU を使ったことによる損害を、AMD の製品保証の対象外としています。</p>
+<p>理由は 4 つです。寿命が縮むおそれがあること。故障のおそれがあること。保証の対象外になるおそれがあること。安全に関わること。手順を読んで試すのではなく、存在と危険を知っておく、という扱いにとどめます。</p>
+
+<h3>演習：設定の記録から、範囲と確かめる資料を選ぶ</h3>
+<p>3 つの設定の記録（すべて架空）を読みます。メーカーが用意した設定か、定格の範囲か、何で確かめるかを決めてから、行を押してください。</p>
+<div data-widget="table" data-src="c20-judge"></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>「メーカーが用意した設定」は、「定格の範囲」と同じ意味ではありません。</b>各社の資料は、プロファイルを標準の外の設定と説明しています。</p>
+  <p><b>起動できたことは、安定の証明ではありません。</b>負荷をかけて、エラーを見ます。</p>
+  <p><b>1 社の保証の書き方を、他社に広げてはいけません。</b>Intel と AMD でも、書き方が違います。</p>
+  <p><b>記録がないと、戻せません。</b>変える前に、設定を残します。</p></div>
+
+<div class="callout tip"><span class="ttl">自分の 1 台でのつながり</span>
+  <p>組み立てた直後（<a href="#ch17">第17章</a>・<a href="#ch19">第19章</a>）は、既定の設定のまま、温度と安定性の基準を記録します。そのうえで、プロファイルなどを使うかを、各社の保証の記述を読んで決めます。使うなら、1 つずつ変え、記録し、負荷試験をし、戻せる状態にします。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c20-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（アクセス日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.intel.com/content/www/us/en/gaming/extreme-memory-profile-xmp.html">Intel® XMP (Extreme Memory Profile) RAM Overclocking</a></th><td>Intel（米国）</td><td>ページの更新 2026 年 4 月</td><td>XMP の説明、保証の記述、マザーボードの対応の案内。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.amd.com/en/products/processors/technologies/expo.html">AMD EXPO™ Technology for AMD Ryzen™ Processors for Socket AM5</a></th><td>AMD（米国）</td><td>ページの更新 2026 年 5 月</td><td>EXPO の説明と、脚注の保証の記述。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://community.intel.com/t5/Mobile-and-Desktop-Processors/June-2024-Guidance-regarding-Intel-Core-13th-and-14th-Gen-K-KF/td-p/1607807">June 2024 Guidance regarding Intel Core 13th and 14th Gen K/KF/KS instability reports</a></th><td>Intel（社員による投稿）</td><td>2024 年 6 月 18 日投稿（9 月 25 日付で新しい投稿への案内あり）</td><td>出荷時の設定と CPU メーカーの既定の違い、既定の設定の案内。対象はその世代の CPU。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.amd.com/content/dam/amd/en/documents/products/software-tools/ryzen-master-quick-reference-guide.pdf">AMD Ryzen Master 2.9 Reference Guide</a></th><td>AMD</td><td>2.9、2022 年 4 月</td><td>省電力の動作モード（Eco-Mode）と警告の記述。古い世代の説明。</td></tr>
+      <tr><td>教科書・一般知識・他講座</td><th scope="row">他の章（第04章・第02章・第19章）</th><td>本講座</td><td>—</td><td>標準の速度、電力の指標の定義、負荷試験は、持ち主の章を参照。</td></tr>
+      <tr><td>架空（見本のため）</td><th scope="row">演習の設定の記録 1〜3</th><td>—</td><td>—</td><td>範囲と確かめる資料を選ぶ演習。すべて架空。</td></tr>
+    </tbody>
+  </table></div>
+</section>

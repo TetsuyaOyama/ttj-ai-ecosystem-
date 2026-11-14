@@ -1,0 +1,104 @@
+<!--
+num: 17
+part: 3
+title: 最初の起動と UEFI の設定
+track: 立ち上げ
+time: 35
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>電源を入れてから OS が起動するまでの流れを、<b>自己診断・メモリの準備・起動先の探索</b>の順に説明できる。</li>
+    <li>画面が出ないときに、<b>表示灯とコード</b>の手がかりから、最初に確かめる部品を選べる。</li>
+    <li>設定画面で、<b>最初に確かめる項目</b>（版・CPU・メモリ・ストレージ・温度・起動の順序）を挙げられる。</li>
+    <li>設定の更新と初期化で、<b>してはいけないこと</b>を説明できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch15">第15章</a>（取り付けの順序）、<a href="#ch16">第16章</a>（配線と確認表）。<a href="#ch03">第03章</a>（マザーボード）を読んでいると、対応リストの話が分かりやすくなります。</p>
+</section>
+
+<div class="callout warn"><span class="ttl">この章の扱い（定格と保証）</span><p>この章は、メーカーが用意した設定の範囲の説明です。電圧や倍率を手で変えて定格を超える設定は、部品の故障や寿命の短縮につながり、保証の対象外になるおそれがあるため、この講座では手順を扱いません。メーカーが用意したプロファイルや機能でも、保証の扱いはメーカーごとに違います。各社の保証規定で確かめてください。</p></div>
+
+<div class="callout warn"><span class="ttl">設定の更新中は、電源を切らない</span><p>UEFI（Unified Extensible Firmware Interface。起動を担うファームウェア）の更新の途中で、電源を切ったり、USB（Universal Serial Bus）メモリを抜いたりしないでください。更新が止まると、PC が起動しなくなるおそれがあります。ASUS（ASUSTeK Computer、台湾）の記事は更新を中断しないよう書き、MSI（Micro-Star International、台湾）の記事は更新中に電源を切らず USB メモリを抜かないよう書いています。具体の手順は、マザーボードのマニュアルに従ってください。</p></div>
+
+<div class="callout note"><span class="ttl">この章で「公開情報で確認できた範囲」</span>
+  <p>表示灯とコードは、ASUS のサポート記事 3 本と、MSI のユーザーガイド v2.0（2025 年 5 月）で確かめました。起動の仕組みは、UEFI Forum（業界団体）の仕様で確かめました。どれも 1 つの製品群の記述で、全製品の決まりではありません。メモリの初期化の時間は、MSI の FAQ（Frequently Asked Questions。よくある質問）1 本だけが根拠です。もう 1 つの CPU メーカーの取り付けガイドと、ビープ音の意味の一覧は、確認できなかったため書いていません。</p></div>
+
+<h3>電源を入れてから OS が起動するまで</h3>
+<p>この章の略語を、先に整理します。CPU（Central Processing Unit）、POST（Power-On Self-Test。起動時の自己診断）、LED（Light Emitting Diode。小さな表示灯）、M.2（小型の SSD を差す口と形の規格。第05章）、SATA（Serial ATA。ドライブをつなぐ規格。第05章）、SSD（Solid State Drive）、OS（Operating System）です。</p>
+<p>設定画面は、製品の画面に「BIOS」と出ることがあります。この講座では、UEFI の設定画面と呼びます。</p>
+<p>下の図は、電源ボタンを押してから OS が起動するまでの流れです。各段に、つまずきやすい点が付いています。</p>
+<div data-widget="seq" data-src="c17-seq"></div>
+<p>起動の段階の細部は、<a href="../server/#ch20">計算サーバー講義 第20章</a>にあります。この章では、PC の画面や表示灯で見えることだけを扱います。UEFI 仕様の説明では、メモリを使える状態にする段階があり、その後の段階で、多くの機器が初期化され、最後に起動の管理（Boot Device Selection, BDS）が OS を起動します（UEFI Forum、PI 仕様 1.8 の概要。執筆時点〔2026 年 11 月〕で確認できた最新の版は 1.10〔2026 年 7 月〕）。</p>
+
+<h3>初めての起動で、時間がかかることがある</h3>
+<p>初めて電源を入れたとき、画面が出るまでに時間がかかることがあります。ファームウェアが、メモリを使える状態にする処理（<b>メモリトレーニング</b>、memory training）を行っているためです。呼び方は、メーカーの資料で違います。MSI の FAQ は、起動時のメモリの確認が長い製品があり、設定でその確認を省ける製品もあると書いています。この設定は、掲載された一部の製品の話で、全製品の決まりではありません（出典：MSI の FAQ、2024 年 10 月 14 日）。</p>
+<p>画面が出ない間も、すぐには電源を切りません。表示灯が点いたままなら、その手がかりを見ます。表示灯が動いていて、しばらくしても進まないときに、電源ケーブルを抜いて、第15・16章の確認へ戻ります。</p>
+
+<h3>PC の電源の状態</h3>
+<p>PC には、電源ケーブルを抜いた状態、待機、動作中などがあります。下の図は、考え方の整理です。製品で細部は違います。</p>
+<div data-widget="state" data-src="c17-power"></div>
+
+<h3>画面が出ないときの手がかり</h3>
+<p>最近のマザーボードには、起動の途中で止まった場所を知らせる<b>表示灯</b>や、<b>POST コード</b>を持つ製品があります。意味と呼称は、製品ごとに違います。次の表は、ASUS と MSI の公開資料にある例です。他の製品の呼称・意味は違います。</p>
+<div data-widget="table" data-src="c17-post"></div>
+<p>ASUS の Q-LED（ASUS の呼称。マザーボードの表示灯）の記事は、表示灯が点いたままのとき、その部品を差し直し、別の部品で試すよう案内しています。見るのは、<b>電源ケーブルを抜いてから</b>です。電源を入れたまま部品を抜き差ししてはいけません（第14章）。</p>
+
+<h3>設定画面に入って確かめること</h3>
+<p>設定画面に入るキーは、製品ごとに違います。MSI のユーザーガイドは Delete キーと書いています。画面の案内や、マザーボードのマニュアルで確かめます。次の表は、最初に確かめる項目の一般論です。</p>
+<div data-widget="table" data-src="c17-settings"></div>
+
+<h4>UEFI の版と更新</h4>
+<p>マザーボードが、付けた CPU に対応しているかは、UEFI の版で決まることがあります。ASUS の Q-Code（ASUS の呼称。2 桁のコードの表示）の記事は、CPU が対応リストにあること、UEFI の版が推奨の版以上であることを確かめるよう書いています。更新するかどうかは、メーカーの案内で決めます。</p>
+<p>MSI の更新の記事は、更新中は電源を入れたままにし、USB メモリを抜かないよう書いています。更新したあとは、版を確かめます。ASUS の USB BIOS FlashBack の記事は、更新中は PC を終了した状態で電源につないだままにし、中断しないよう書いています（出典：ASUS の記事、2026 年 4 月 9 日更新。MSI の記事、2025 年 10 月 22 日更新）。更新の手順は、製品で違うため、マザーボードのマニュアルに従います。</p>
+
+<h4>CMOS クリア</h4>
+<p><b>CMOS クリア</b>（CMOS clear）は、UEFI の設定を、出荷時の状態へ戻す操作です。MSI のユーザーガイドは、JBAT1（MSI の呼称）のジャンパーで行うと書いています。方法は、ジャンパー・ボタン・電池など、製品で違います。<b>電源を切り、電源ケーブルを抜いてから</b>、マニュアルのとおりに行います。</p>
+
+<h4>セキュアブートと TPM</h4>
+<p><b>セキュアブート</b>（Secure Boot）は、起動用のプログラムやドライバが、認められた提供元のもので、改ざんされていないことを、署名で確かめてから実行する仕組みです（UEFI 仕様 2.11、第 32 章）。<b>TPM</b>（Trusted Platform Module）は、暗号の鍵を作り、安全に保管する、ハードウェアを基にした仕組みです。TCG（Trusted Computing Group）が仕様を定めます。</p>
+<p>Windows 11 は、セキュアブートに対応していることと、TPM 2.0 が要件に入ります（第18章）。Microsoft（米国）の案内は、自作する人が使う小売のマザーボードの多くは、TPM が初期で無効のまま出荷されると書いています。設定の名前の例として、Security Device、TPM State、AMD（Advanced Micro Devices、米国）の fTPM switch、Intel（米国）の PTT（Platform Trust Technology）を挙げています。Windows の中では、「Windows セキュリティ」の「デバイスのセキュリティ」か、tpm.msc で確かめます（出典：Microsoft、2026 年 2 月 20 日更新）。</p>
+<p>設定画面に CSM（Compatibility Support Module。古い方式の起動に対応するための項目）と出る製品があります。意味と既定の扱いは、製品のマニュアルで確かめます。この講座は、CSM の公式の定義を確認できなかったため、これ以上は書きません。</p>
+
+<h3>演習：設定画面を見て、最初に確かめる所を答える</h3>
+<p>次は、架空の設定画面（架空。出典：架空、見本のため）の 3 つの場面です。</p>
+<ol>
+  <li>(ア) 付けたメモリは 2 枚で、合計 32 GB のはずだが、設定画面は 16 GB と表示している。</li>
+  <li>(イ) 付けた M.2 の SSD が、ストレージの一覧に出ていない。</li>
+  <li>(ウ) CPU の名前が、付けた CPU と違う、または「不明」と出ている。UEFI の版は、とても古い。</li>
+</ol>
+<details><summary>答えを見る</summary>
+  <p>(ア) メモリが、奥まで差さっていない、またはスロットが違う可能性があります。電源ケーブルを抜いて、メモリを奥まで差し、マニュアルのスロットの配置を確かめます（第15章）。</p>
+  <p>(イ) M.2 の固定（ねじ）と、差し込みを確かめます。ASUS の Q-LED の記事も、M.2 を差し直し、ねじが締まっているか確かめるよう案内しています。SATA のドライブなら、データと電源のケーブルを確かめます（第16章）。</p>
+  <p>(ウ) UEFI の版が、CPU のサポートリストに満たない可能性があります。マザーボードのメーカーのサポートリストで、版を確かめます。更新が必要なとき、更新の方法はマニュアルに従います。更新中は電源を切りません。</p></details>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>画面が出ないからといって、故障とは限りません。</b>初めての起動は、時間がかかることがあります。表示灯で、止まっている場所を見ます。</p>
+  <p><b>設定は、保存してから終了します。</b>変えた項目は、再起動のあとに確かめます。分からない項目は、変えません。</p>
+  <p><b>電源を入れたまま、部品を抜き差ししてはいけません。</b>表示灯の確認のために部品を差し直すときも、電源ケーブルを抜いてから行います。</p></div>
+
+<div class="callout tip"><span class="ttl">自分の 1 台でのつながり</span>
+  <p>最初の起動で、版・CPU・メモリ・ストレージの 4 つを写真かメモで残すと、第21章の切り分けで、元の状態と比べられます。次は<a href="#ch18">第18章</a>（OS の導入）です。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c17-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.asus.com/support/faq/1042678/">Q-LED</a></th><td>ASUS（ASUSTeK Computer、台湾）</td><td>2026 年 4 月 7 日</td><td>表示灯の意味と、確かめる部品。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.asus.com/global/support/faq/1043948/">Q-Code</a></th><td>ASUS</td><td>2026 年 11 月 10 日更新</td><td>2 桁のコード、CPU の対応リストと UEFI の版。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.asus.com/support/faq/1047023/">Q-LED Core</a></th><td>ASUS</td><td>2026 年 6 月 11 日</td><td>点滅のパターン。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.asus.com/support/faq/1038568/">USB BIOS FlashBack</a></th><td>ASUS</td><td>2026 年 4 月 9 日</td><td>更新の途中で中断しない注意。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://download-2.msi.com/archive/mnu_exe/mb/PROH610M-ADDR4_English.pdf">PRO H610M-A DDR4 User Guide</a></th><td>MSI（Micro-Star International、台湾）</td><td>v2.0、2025 年 5 月</td><td>デバッグ用の表示灯（第 37 ページ）、CMOS クリアのジャンパー（第 34 ページ）、起動前の注意（第 4 ページ）。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.msi.com/support/technical_details/MB_BIOS_Update">BIOS の更新</a></th><td>MSI</td><td>2025 年 10 月 22 日</td><td>更新中の注意。更新後の版の確認。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://us.msi.com/faq/10883">メモリの確認についての FAQ</a></th><td>MSI</td><td>2024 年 10 月 14 日</td><td>起動時のメモリの確認が長い製品があること。</td></tr>
+      <tr><td>規格・仕様</td><th scope="row"><a href="https://uefi.org/specifications">UEFI Specification 2.11、PI Specification</a></th><td>UEFI Forum</td><td>UEFI 2.11（2024 年 12 月）。PI は 1.8 の概要を読んだ（最新は 1.10、2026 年 7 月）</td><td>起動の順序（Boot Manager）、セキュアブート、起動の段階。</td></tr>
+      <tr><td>規格・仕様</td><th scope="row"><a href="https://www.trustedcomputinggroup.org/work-groups/tpm">Trusted Platform Module (TPM)</a></th><td>Trusted Computing Group</td><td>2026 年 11 月に確認</td><td>TPM の位置づけ（鍵を作り安全に保管する、ハードウェアを基にした仕組み。中心の成果物は TPM 2.0 Library Specification）。版の細部は書かない。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://support.microsoft.com/en-us/windows/security/devicesecurity/enable-tpm-2-0-on-your-pc">Enable TPM 2.0 on your PC</a></th><td>Microsoft（米国）</td><td>2026 年 2 月 20 日</td><td>TPM の設定名の例と、確かめ方。</td></tr>
+      <tr><td>教科書・一般知識・他講座</td><th scope="row"><a href="../server/#ch20">計算サーバー講義 第20章</a></th><td>この講座の姉妹講座</td><td>—</td><td>起動の段階の細部（この章では書かない）。</td></tr>
+    </tbody>
+  </table></div>
+</section>

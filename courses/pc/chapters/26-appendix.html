@@ -1,0 +1,110 @@
+<!--
+num: 26
+part: A
+title: 用語集・規格と団体と公式資料の地図・総合テスト
+track: 付録
+time: 30
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>この講座に出てきた言葉を、<b>用語集</b>で検索して引ける。</li>
+    <li>規格を出す団体や当局・公的機関が<b>どの分野を担当しているか</b>を地図で言え、知りたい資料が<b>どの発行者のどこにあるか</b>を一覧から探せる。</li>
+    <li>総合テストで、<b>部ごとの理解</b>を確かめられる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：どの章からでも使えます。全部読んだあとに総合テストを解くと、確かめられます。</p>
+</section>
+
+<div class="callout note"><span class="ttl">この章の「公開情報で確認できた範囲」</span>
+  <p>団体・機関の名前と、確認できた版・時点は、各章の「参照資料」と事実確認で確かめた内容を集めたものです。この章で新しく数字や版を足してはいません。団体の正式名だけは、各団体の公式ページで確かめました。<b>確認できなかったものは、書いていません</b>。</p>
+  <p>規格は改訂され、当局の担当部署の名前は変わることがあります。実際に使うときは、発行者の公式ページで、最新の版と窓口を確かめてください。規格の本文は、この講座では転載していません。</p></div>
+
+<h3>① 用語集</h3>
+<p>この講座の全章の用語が、ここに集まります。検索すると、用語・英語・別名・説明から探せます。各項目の関連章から、その章へ移れます。団体・機関の名前（正式名）は、この章が持ち主です。</p>
+<div data-widget="glossary"></div>
+
+<h3>② 規格・団体の地図と、公的資料の地図</h3>
+<p>PC には、たくさんの規格と団体が関わります。名前だけを覚えると、混ざります。<b>分野から、団体・機関、規格・資料の順</b>にたどると、整理できます。下の図は、3 つの見方を切り替えられます。「部品の規格と認証」は、基板・メモリ・ストレージ・電源・騒音・静電気です。「接続・無線・起動」は、外へつなぐ規格と、起動の仕様です。「公的資料と制度」は、当局・公的機関と、メーカーの資料です。箱を押すと、何が載っているかと、関連する章が出ます。</p>
+<div data-widget="arch" data-src="c26-map"></div>
+<p>図で、次の点を確かめます。</p>
+<ul>
+  <li><b>分野ごとに、規格を出す団体が違います</b>。拡張スロットは PCI-SIG（PCI Special Interest Group）、メモリは JEDEC（JEDEC Solid State Technology Association）、起動の仕様は UEFI Forum（Unified Extensible Firmware Interface Forum）のように、分野と団体を組にして覚えます。</li>
+  <li><b>電源の設計の文書と、効率の認証は、別の主体が出します</b>。設計ガイドは Intel（米国）、80 PLUS の運営は CLEAResult、効率と騒音の認証は Cybenetics（キプロス）です。認証の等級は、規格そのものとは別の制度です。</li>
+  <li><b>団体の規格は、法令ではありません</b>。規格を使うかどうかは、メーカーの設計や契約で決まります。法令と制度は、当局の資料で確かめます。</li>
+  <li><b>同じ名前でも、仕様と団体は別です</b>。NVMe（Non-Volatile Memory Express）は仕様の名前で、団体の名前は NVM Express です。UEFI は仕様、UEFI Forum は団体です。</li>
+  <li><b>メーカーの資料は、種類で役割が違います</b>。仕様ページは数値と対応、マニュアルは手順と注意、サポート記事は個別の症状、保証規定は窓口と対象外を示します。互換性や保証を確かめるときは、どの種類の資料を見るかを決めてから探します（第11章・第13章）。</li>
+</ul>
+
+<h3>③ 参照資料の一覧</h3>
+<p>各章の「参照資料」を、1 つの一覧にしました。種類で絞って探せます。「関連章」は、その資料を使った章です。資料へのリンクは、各章の「参照資料」の表にあります。種類は、「規格・仕様」「団体の資料」「メーカーの資料」「当局・公的機関」「教科書・一般知識・他講座」「架空（見本のため）」の 6 つだけです。迷ったときは、発行者で決めました（団体が出した資料は「団体の資料」、規格そのものは「規格・仕様」）。各章の表で「規格」「規格団体の資料」「OS の提供元の資料」と書いた行は、それぞれ「規格・仕様」「団体の資料」「メーカーの資料」として数えています。</p>
+<div data-widget="table" data-src="c26-refs"></div>
+
+<h3>④ 規格の対応表</h3>
+<p>各章で出てきた「対象」と「規格・仕様（発行団体）」の対応が、ここに集まります。分類を選ぶと、行が絞られます。対応は「おおむね」です。買う前・組む前に、発行団体の公式ページと、メーカーの仕様ページで確かめてください。</p>
+<div data-widget="mapping"></div>
+
+<h3>⑤ 学習ルートの案内</h3>
+<p>講座の入口には、目的別の 3 つのルートがあります。章の番号を押すと、その章へ移れます。</p>
+<ul>
+  <li><b>ルート A「最短で 1 台組む」</b>（初めて自作する人向け。17 章、約 10 時間）：第01章 → 02 → 03 → 04 → 05 → 07 → 08 → 10 → 11 → 12 → 14 → 15 → 16 → 17 → 18 → 19 → 21。内蔵グラフィックスで組む人は、第06章を省けます。グラフィックスカードを使う構成なら、第06章を第11章の前に足します。</li>
+  <li><b>ルート B「標準」</b>（自作を続けたい人、家族や同僚の相談に乗りたい人向け。23 章、約 13 時間）：第01章 → 02 → 03 → 04 → 05 → 06 → 07 → 08 → 09 → 10 → 11 → 12 → 13 → 14 → 15 → 16 → 17 → 18 → 19 → 21 → 22 → 23 → 24。</li>
+  <li><b>ルート C「調整と保守を深める」</b>（ルート A を終えた人、または 1 台組んだことがある人向け。A の後に読みます。9 章、約 5 時間）：第06章 → 09 → 20 → 22 → 23 → 24 → 13 → 25 → 26。</li>
+</ul>
+<p>どのルートでも、最後に総合テストを解いて、部ごとの成績を見ます。弱い部があれば、その部の章へ戻ります。第4部は、第17章（最初の起動）と第19章（動作確認）を終えていれば、どこからでも読めます。</p>
+
+<h3>⑥ 総合テスト</h3>
+<p>全章から集めた問題です。部ごとの成績が出ます。付録の横断問題は、第3部と第4部の成績に入ります。まだ公開されていない章の問題は、含まれません。</p>
+<div data-widget="exam"></div>
+
+<h3>⑦ この講座が扱わないこと</h3>
+<div class="callout warn"><span class="ttl">この節の扱い</span><p>この節は、講座の範囲の説明です。個別の製品・取引・契約について、可否や適否を判断するものではありません。実際の判断は、メーカーと販売店の規定、所管の当局や相談窓口、必要なら専門家に確かめてください。</p></div>
+<p>この講座は、仕組みと確かめ方を説明するものです。次のことは、扱っていません。</p>
+<ul>
+  <li><b>特定の製品や店の推奨</b>：製品名や会社名は、公開情報の範囲で、例として出しています。順位づけや、優劣の評価はしません。</li>
+  <li><b>価格の予想と買い時の判断</b>：価格は載せません。金額の例は架空です。</li>
+  <li><b>定格を超える設定と、保証を外れる改造の手順</b>：メーカーが用意した範囲の設定と、保証の扱いの確かめ方だけを説明します。</li>
+  <li><b>電源ユニットの分解など、危険な作業の手順</b>：電気・静電気・けが・電池・液冷に関わる内容は、仕組みと注意点だけです。手順書の代わりにはなりません。</li>
+  <li><b>ライセンスを回避する方法</b>：OS とソフトウェアは、正規の配布元から入手し、条件に従って使います。</li>
+  <li><b>個別の取引と法令の判断</b>：古物営業や契約の可否などは判断しません。制度の入口だけを示します。</li>
+  <li><b>規格の本文</b>：規格の本文は転載していません。必ず、発行者の最新の版を確かめます。</li>
+  <li><b>演習に出る人物・店・会社の実在</b>：演習の人物・店・会社は、すべて架空です。</li>
+</ul>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>規格の番号は、発行者ごとに別の体系です。</b>番号だけでなく、発行者と一緒に覚えます。</p>
+  <p><b>団体は規格を作るだけで、法令ではありません。</b>使うかどうかは、メーカーの設計や契約で決まります。</p>
+  <p><b>版は変わります。</b>各章の版や時点は、執筆時（2026 年 11 月）に確認した内容です。買う前・組む前に、公式ページで確かめ直します。</p>
+  <p><b>認証の等級は、性能の保証ではありません。</b>決めた条件で試験した結果の区分です。条件は、運営の資料で確かめます。</p></div>
+
+<div class="callout tip"><span class="ttl">自分の 1 台でのつながり</span>
+  <p>仕様書やマニュアルに、規格の名前や番号が出てきたら、この章の地図で、発行者と分野を確かめます。そのあと、発行者の公式ページで、版を確認します。確かめた版と日付は、要件表と確認表（第10章・第11章）に書き足しておくと、後で見直せます。</p></div>
+
+<div class="callout note"><span class="ttl">この講義の背景</span>
+  <p>この講義は、作者が自作で得た経験をもとに、内容を公開資料で確かめ直して書いています。作者は、2004 年から水冷の PC を自作してきました。2011 年にはサーバーを自作し、2017 年には自作のリグでマイニングを行いました。</p>
+  <p>本文の手順や数値は、作者の経験ではなく、各章の参照資料に基づきます。水冷の配管を自分で組む手順と、マイニングの方法は、この講義では扱いません。</p></div>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://usb.org/about">About USB-IF</a></th><td>USB-IF（USB Implementers Forum, Inc.）</td><td>日付の記載なし。2026 年 11 月に確認</td><td>団体の正式名と、非営利の団体であること。</td></tr>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://displayport.org/faq/">DisplayPort の FAQ（displayport.org）</a></th><td>VESA</td><td>日付の記載なし。2026 年 11 月に確認</td><td>団体の正式名と、DisplayPort を管理していること。</td></tr>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://hdmiforum.org/about/faq">HDMI Forum FAQ</a></th><td>HDMI Forum, Inc.</td><td>日付の記載なし。2026 年 11 月に確認</td><td>HDMI Forum と HDMI Licensing Administrator の役割の違い。</td></tr>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://sata-io.org/node/99">About SATA-IO</a></th><td>SATA-IO（Serial ATA International Organization）</td><td>日付の記載なし。2026 年 11 月に確認</td><td>団体の正式名と、仕様を保守する団体であること。</td></tr>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://www.wi-fi.org/node/32321">Wi-Fi Alliance の紹介ページ</a></th><td>Wi-Fi Alliance</td><td>日付の記載なし。2026 年 11 月に確認</td><td>非営利の団体で、製品を認証していること。</td></tr>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://www.bluetooth.com/about-us/who-we-are/">Who we are</a></th><td>Bluetooth SIG</td><td>日付の記載なし。2026 年 11 月に確認</td><td>団体の名前と、標準の開発と認定を行うこと。</td></tr>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://uefi.org/node/4114">Unified Extensible Firmware Interface Forum のお知らせ（About 欄）</a></th><td>UEFI Forum</td><td>日付の記載なし。2026 年 11 月に確認</td><td>団体の正式名と、非営利の標準化団体であること。</td></tr>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://archive.nvmexpress.org/faq_category/membership">Membership/General Information（NVM Express のよくある質問のアーカイブ）</a></th><td>NVM Express</td><td>2020 年 4 月 15 日（ページの日付）。2026 年 11 月に確認</td><td>法人化された非営利の業界団体であること。法人の形を含む正式名は、ページに書かれていない。</td></tr>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://www.jedec.org/about-jedec">About JEDEC</a></th><td>JEDEC</td><td>日付の記載なし。2026 年 11 月に確認</td><td>団体の役割（標準づくり）。ページには長い正式名の記載がない。</td></tr>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://secondrise.jedec.org/termsofuse">JEDEC Website Terms and Conditions of Use</a></th><td>JEDEC</td><td>日付の記載なし。2026 年 11 月に確認</td><td>正式名（JEDEC Solid State Technology Association）。jedec.org のサブドメインのページ。</td></tr>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://trustedcomputinggroup.org/about/">About TCG（Trusted Computing Group の紹介ページ）</a></th><td>Trusted Computing Group</td><td>日付の記載なし。2026 年 11 月に確認</td><td>団体の正式名と、開かれた世界の業界標準を作る非営利の組織であること。TPM をハードウェアを土台にした安全のモジュールと説明していること。</td></tr>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://news.microsoft.com/source/2002/04/17/pci-sig-introduces-pci-express-tm-formerly-3gio-high-speed-serial-interconnect-specification/">PCI-SIG Introduces “PCI Express” (Formerly 3GIO) High-Speed Serial Interconnect Specification（Microsoft のニュースサイトに掲載）</a></th><td>PCI-SIG と Arapahoe Work Group の共同発表</td><td>2002 年 4 月 17 日</td><td>名前の展開（PCI Special Interest Group）と、PCI の規格を管理する業界団体であること（末尾の団体紹介）。PCI-SIG 自身のページは取得できなかった。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://csrc.nist.gov/pubs/sp/800/88/r2/final">SP 800-88 Rev. 2 Guidelines for Media Sanitization（CSRC のページ）</a></th><td>NIST（米国）</td><td>2025 年 9 月 26 日（第 24 章で確認）</td><td>発行者の正式名。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.cisa.gov/audiences/small-and-medium-businesses/secure-your-business/back-up-business-data">Back Up Business Data</a></th><td>CISA（米国）</td><td>ページに公表日の記載なし（第 24 章で確認）</td><td>発行者の正式名。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.nite.go.jp/jiko/chuikanki/mailmagazin/2023fy/vol442_231212.html">製品安全情報マガジン Vol.442</a></th><td>製品評価技術基盤機構（NITE）</td><td>2023 年 12 月 12 日（第 23 章で確認）</td><td>機関の正式名（日本語と英語の表記）。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.ipa.go.jp/security/todokede/rcu1hd000001ee1f-att/20260910.pdf">ランサムウェア被害から学ぶ教訓集</a></th><td>情報処理推進機構（IPA）</td><td>表紙は Ver.1.2、2026 年 9 月 8 日発行。更新履歴の最新は 2026 年 10 月 16 日（誤植修正）</td><td>機関の日本語の正式名。英語名は文書に記載がない。</td></tr>
+      <tr><td>教科書・一般知識・他講座</td><th scope="row">第01〜25章の「参照資料」と事実確認表</th><td>この講座</td><td>各章に記載</td><td>団体・当局の名前、版、時点を再利用。③の一覧は、これらの表から集めた。</td></tr>
+    </tbody>
+  </table></div>
+</section>

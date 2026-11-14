@@ -1,0 +1,97 @@
+<!--
+num: 06
+part: 1
+title: グラフィックスカード：GPU・ビデオメモリ・補助電源・寸法
+track: 部品
+time: 30
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>グラフィックスカードの構成（GPU、ビデオメモリ、電源回路、補助電源コネクタ、クーラー、映像の出力端子）と、それぞれの役割を説明できる。</li>
+    <li>消費電力の名前が企業ごとに違うこと、補助電源のコネクタの種類、寸法（長さ・スロット幅）が、選び方と取り付けにどう効くかを、製品ページで確かめられる。</li>
+    <li>重いカードのたわみと、支えの要否を理解し、安全な取り扱いの注意を言える。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch02">第02章</a>（CPU と内蔵グラフィックス）、<a href="#ch03">第03章</a>（マザーボードと規格）。あるとよい：<a href="#ch07">第07章</a>（電源ユニット）。</p>
+</section>
+
+<div class="callout warn"><span class="ttl">この章の扱い（電気の安全）</span><p>この章は、仕組みと注意点の説明で、作業の手順書の代わりにはなりません。部品の取り付け・取り外し・配線・掃除は、PC の電源を切り、電源ケーブルをコンセントから抜いてから行ってください。電源ユニットは分解しないでください。内部には、電源ケーブルを抜いた後も電気がたまっている部品があり、感電のおそれがあります。具体の作業は、各部品のマニュアルに従ってください。</p></div>
+
+<div class="callout warn"><span class="ttl">この章の扱い（けがの防止）</span><p>ケースの金属の縁や、重い部品（グラフィックスカード、クーラー、電源ユニット）で、けがをするおそれがあります。重い部品は両手で支え、回っているファンに指や物を入れないでください。</p></div>
+
+<h3>グラフィックスカードは、映像と並列計算の専用部品</h3>
+<p><b>グラフィックスカード</b>（graphics card）は、<b>GPU</b>（Graphics Processing Unit）と、専用のメモリを載せた部品です。PCIe（PCI Express）のスロットに差します。GPU は、多数の演算器で、同じ種類の計算を並列に行います。もともとは映像の描画用で、AI（人工知能）などの並列の計算にも使われます（<a href="#ch25">第25章</a>）。</p>
+<p><a href="#ch02">第02章</a>で見たとおり、CPU に内蔵グラフィックスがあれば、カードがなくても画面は映ります。内蔵グラフィックスのない CPU では、グラフィックスカードが必須です。</p>
+<div data-widget="compare" data-src="c06-igpu"></div>
+
+<h3>カードの構成</h3>
+<p>カードの上には、GPU、ビデオメモリ、電源回路、補助電源コネクタ、PCIe の端子、ヒートシンクとファン、映像の出力端子があります。図の部位を押すと、役割と、確かめる資料が出ます。</p>
+<div data-widget="layers" data-src="c06-card"></div>
+<p><b>ビデオメモリ</b>（video memory、VRAM）は、GPU が使う画像やモデルなどの作業データを置く、専用のメモリです。容量が足りない用途では、動作が遅くなったり、動かなかったりします。必要な量は、用途で違います。NVIDIA（米国）の GeForce RTX 5070 の製品ページは 12 GB・GDDR7、AMD（米国）の Radeon RX 9070 XT のページは 16 GB・GDDR6 と書いています。GDDR（Graphics Double Data Rate）は、グラフィックス用のメモリの規格の名前です。</p>
+
+<h3>性能の言葉と、公開値の読み方</h3>
+<p>グラフィックスカードの性能は、用途で変わります。演算の性能の数字は、測り方が企業ごとに違います。この講座では、製品の間で性能を比べません。製品ページの仕様は、<b>名前と条件を確かめて</b>読みます。確かめる順は、用途から決めます（演習を参照）。</p>
+
+<h3>接続：PCIe の x16 スロット</h3>
+<p>カードは、基板の PCIe スロットに差します。AMD の Radeon RX 9070 XT のページは PCIe 5.0 x16、Intel（米国）の Arc B580 のページは PCIe 4.0 x8 と書いています。PCIe は、世代が違っても、つながります（<a href="#ch03">第03章</a>）。スロットの形と、使えるレーンの数は別なので、基板の仕様表で確かめます。NVIDIA のクイックスタートガイドは、基板の主な x16 スロットに取り付けるよう案内しています。</p>
+
+<h3>消費電力と、補助電源のコネクタ</h3>
+<p>カードの消費電力を表す名前は、企業ごとに違います。NVIDIA は Total Graphics Power、AMD は Typical Board Power、Intel は TBP と書いています（確認した製品ページには、略さない名前の記載がありません）。定義が同じとは限らないので、企業の間で数字を比べません。CPU の指標（<a href="#ch02">第02章</a>）と同じ注意です。</p>
+<div data-widget="table" data-src="c06-gpu"></div>
+<p>表の「電源ユニットの欄」は、各社の名前と条件つきの値です。NVIDIA の製品ページは、Required System Power を、Ryzen 9 9950X を使った構成に基づく値と書き、「PCIe CEM（Card Electromechanical）5.1 に合う電源ユニット」を勧めています。自分の構成とは条件が違うので、他の部品の電力も考えます。電源ユニットは<a href="#ch07">第07章</a>、電力の見積もりは<a href="#ch12">第12章</a>、確認表は<a href="#ch11">第11章</a>です。</p>
+<p>電力は、2 つの経路でカードに届きます。マザーボードの PCIe スロットを通る経路と、補助電源コネクタに差すケーブルを通る経路です。図で、見分けてください。</p>
+<div data-widget="arch" data-src="c06-power"></div>
+<p>補助電源のコネクタには、種類があります。表の例では、PCIe 8 ピン（AMD と Intel の製品）、PCIe Gen 5 の 16 ピンのコネクタ（NVIDIA の製品。付属のアダプタか、対応するケーブル）があります。このうち 12V-2x6 は、Intel の ATX（<a href="#ch03">第03章</a>）Version 3 の電源ユニットの設計ガイドが、PCIe CEM 5.1 で導入され、PCIe CEM 5.0 で導入された 12VHPWR（それまでのコネクタの名前）に、信頼性の問題に対処するため代わるコネクタと書いています。同じガイドは、12 V の線で 600 W を送ると書いています。NVIDIA のクイックスタートガイドは、この名前を使わず、「PCIe Gen5（第 5 世代）の 16 ピンのコネクタ」と書いています。製品のマニュアルの名前と、電源ユニットの側の表記を、照らして確かめます。</p>
+<p><b>コネクタは、奥まで差します。</b>NVIDIA のクイックスタートガイドは、プラグを差し込み口に隙間なく、完全に差し込むよう案内しています。浅いと、接触が悪くなり、発熱や故障のおそれがあります。付属のアダプタを使うよう案内していて、第三者のアダプタの使用は避けます。ケーブルの扱いは<a href="#ch16">第16章</a>で扱います。</p>
+
+<h3>寸法：長さ・厚さ・高さ</h3>
+<p>カードは、ケースの中に収まる大きさが要ります。NVIDIA の RTX 5070 のページは、長さ 242 mm・幅 112 mm・2 スロットと書き、クイックスタートガイドは、必要な余裕を 244 mm × 112 mm × 41 mm と書いています。Intel の Arc B580 のページは 272 × 115 mm・2 スロットです。AMD のページには、寸法の欄が見つかりませんでした。製品ごとに寸法が違うので、販売する会社のページで確かめます。</p>
+<p><b>スロット幅</b>（slot width）は、カードがケースの背面のスロットをいくつ占めるかを表します。厚さの目安で、隣のスロットの使い方に関わります。ケースの側の上限と、照らして確かめます（<a href="#ch11">第11章</a>）。</p>
+
+<h3>重さとたわみ：サポートステー</h3>
+<p>大きなカードは、重くなります。差し込むのは、基板の 1 本のスロットだけなので、重さで、カードの先が下がることがあります。これを<b>たわみ</b>と呼びます。下から支える部品が<b>サポートステー</b>（support bracket）です。ケースや製品によって、付属や追加があります（一般知識）。カードの製品ページや、ケースのマニュアルで、支えが要るかを確かめます。取り付けと取り外しでは、両手で支えます。</p>
+
+<h3>ドライバと、計算用のソフト</h3>
+<p>カードを使うには、ドライバ（OS からカードを動かすソフト）が要ります。ドライバの入れ方は<a href="#ch18">第18章</a>で扱います。</p>
+<p>AI などの計算にカードを使うソフトは、企業ごとに呼び方が違います。NVIDIA の呼称は CUDA（NVIDIA の計算用ソフトの基盤の名前）、AMD の呼称は ROCm（AMD の計算用ソフトの基盤の名前）です。対応する GPU は、各社の公式の一覧で確かめます。NVIDIA の CUDA の GPU の一覧には、RTX 50 シリーズが載っています（確認 2026 年 11 月）。AMD の ROCm の Windows 向けの対応表は、Radeon RX 9000 と 7000 シリーズを載せ、Windows では ROCm の機能がすべてはそろっていない、と書いています。Intel のカードの対応は、この講座では確認できていません。用途の話は<a href="#ch25">第25章</a>です。</p>
+
+<h3>演習：3 つの用途で、先に確かめることを選ぶ</h3>
+<p>次は、架空の 3 人の利用者の用途です。それぞれ、「ビデオメモリの容量」「消費電力と電源ユニット」「寸法」のうち、どれから先に確かめればよいでしょうか。</p>
+<div data-widget="table" data-src="c06-practice"></div>
+<details><summary>答えを見る</summary>
+  <p>A さんは、ビデオメモリの容量です。大きな画像や 3D のデータを置く場所が、足りるかが先です。B さんは、消費電力と電源ユニットです。補助電源のケーブルが 1 本しかないので、カードの補助電源の種類と数が合うか、電源ユニットの出力が足りるかを、先に確かめます。C さんは、寸法です。ケースの上限が 240 mm なので、カードの長さがそれ以下かを、先に確かめます。</p>
+  <p>考え方は、用途や条件から、「それを満たさないと、そもそも使えない」ものを、先に確かめることです。（すべて架空の用途です。）</p>
+</details>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>消費電力の名前が、企業ごとに違います。</b>数字を、企業の間で比べません。電源ユニットの欄も、条件つきの値です。</p>
+  <p><b>補助電源のコネクタは、奥まで差します。</b>浅いと、接触が悪くなり、発熱や故障のおそれがあります。差す前に、PC の電源を切り、電源ケーブルを抜きます。</p>
+  <p><b>カードの長さと厚さを、ケースの上限と照らします。</b>入らないと、組めません。スロット幅は、隣のスロットも使えなくなります。</p>
+  <p><b>重いカードは、たわみます。</b>支えが要るかを、マニュアルで確かめます。</p>
+  <p><b>内蔵グラフィックスのない CPU では、カードがないと画面が映りません。</b>（<a href="#ch02">第02章</a>）</p></div>
+
+<div class="callout tip"><span class="ttl">自分の 1 台でのつながり</span>
+  <p>選ぶとき：用途から、ビデオメモリの容量を決め、消費電力・補助電源・寸法を、製品ページで確かめます。組むとき：補助電源のケーブルの種類と数を、電源ユニットの側と照らします。直すとき：画面が映らない症状では、映像のケーブルを、カードの端子につないだか（基板の背面の端子ではないか）を、最初に見ます。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c06-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 14 日）。規格本文を読んでいない資料は、使い方の欄に書きました</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5070-family/">GeForce RTX 5070 Family</a></th><td>NVIDIA（米国）</td><td>確認 2026 年 11 月</td><td>RTX 5070 と 5070 Ti の仕様、Required System Power の脚注。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.nvidia.com/content/geforce-gtx/geforce-rtx-5070-user-guide-r1.pdf">GeForce RTX 5070 Quick Start Guide</a></th><td>NVIDIA（米国）</td><td>©2025</td><td>取り付けの案内：奥まで差す、付属のアダプタ、必要な余裕の寸法、電源を切る。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.amd.com/en/products/graphics/desktops/radeon/9000-series/amd-radeon-rx-9070xt.html">AMD Radeon RX 9070 XT</a></th><td>AMD（米国）</td><td>確認 2026 年 11 月</td><td>ビデオメモリ、Typical Board Power、PSU の欄、補助電源、映像の端子。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.intel.com/content/www/us/en/products/sku/241598/intel-arc-b580-graphics/specifications.html">Intel Arc B580 Graphics</a></th><td>Intel（米国）</td><td>発売 Q4'24</td><td>ビデオメモリ、TBP、電源の欄、補助電源、寸法。</td></tr>
+      <tr><td>規格・仕様</td><th scope="row"><a href="https://edc.intel.com/content/www/us/en/design/ipla/software-development-platforms/client/platforms/alder-lake-desktop/atx-version-3-0-multi-rail-desktop-platform-power-supply-design-guide/2.1a/2.1a/pci-express-add-in-card-considerations/">ATX Version 3.0 Multi Rail Desktop Platform Power Supply Design Guide</a></th><td>Intel（米国）</td><td>文書 336521、版 2.1a、2023 年 11 月 1 日</td><td>12V-2x6 の位置づけ。PCI-SIG の原文は読めていない（Intel の記述）。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://developer.nvidia.com/cuda/gpus">CUDA GPUs</a></th><td>NVIDIA</td><td>確認 2026 年 11 月</td><td>対応する GPU の一覧。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://rocm.docs.amd.com/projects/radeon-ryzen/en/latest/docs/compatibility/compatibilityrad/windows/windows_compatibility.html">ROCm Windows compatibility</a></th><td>AMD</td><td>ROCm 7.2.1。確認 2026 年 11 月</td><td>対応する GPU と OS。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.nvidia.com/en-in/contact/">NVIDIA Contact</a></th><td>NVIDIA</td><td>確認 2026 年 11 月</td><td>本社の所在（米国）の確認。</td></tr>
+      <tr><td>教科書・一般知識・他講座</td><th scope="row">一般知識</th><td>—</td><td>—</td><td>GPU の役割、たわみとサポートステー。</td></tr>
+      <tr><td>架空（見本のため）</td><th scope="row">架空の 3 人の利用者の用途</th><td>—</td><td>—</td><td>演習の資料。すべて架空。</td></tr>
+    </tbody>
+  </table></div>
+</section>

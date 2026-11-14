@@ -1,0 +1,90 @@
+<!--
+num: 24
+part: 4
+title: データの保護とバックアップ
+track: 保守
+time: 30
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li><b>バックアップ・冗長・同期</b>の違いを説明できる。</li>
+    <li>何を・どこへ・どの頻度で複製するかを決め、<b>3-2-1 の考え方</b>で確かめ、<b>復元の試験</b>で戻せることを確かめられる。</li>
+    <li>暗号化の<b>回復キー</b>の保管と、手放す前の<b>データの消去</b>を計画できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch05">第05章</a>（ストレージ）。あるとよい：<a href="#ch18">第18章</a>（OS の導入）。</p>
+</section>
+
+<div class="callout warn"><span class="ttl">この章の扱い（データの消失）</span><p>OS の導入、ストレージの初期化・交換・消去では、データが消えることがあります。作業の前に、必要なデータのバックアップを取り、対象のドライブを取り違えないように確かめてください。</p></div>
+
+<h3>バックアップ・冗長・同期は別のもの</h3>
+<p>データを守る仕組みは、3 つに分けて考えます。<b>バックアップ</b>（backup）は、別の場所に、戻せる複製を残すことです。<b>同期</b>（synchronization）は、複数の場所を同じ内容に保つことです。<b>冗長</b>（redundancy）は、部品が壊れても動き続けるように重ねることです（出典：一般知識）。</p>
+<p>冗長の代表が、<b>RAID</b>（Redundant Array of Independent Disks）です。複数のドライブを組み合わせ、1 台が壊れても動き続けるようにします。RAID は、ドライブの故障に備える仕組みです。誤って消したファイルや、不正なプログラムで書き換えられた内容は、RAID にもそのまま反映されます。</p>
+<p>同期も、同じ点に注意します。一方で消したファイルが、同期先からも消えることがあります。過去の版を残す機能がある製品もありますが、残す期間と範囲は、製品とサービスで違います。各社の説明で確かめてください。</p>
+<div data-widget="compare" data-src="c24-sync"></div>
+
+<h3>3-2-1 の考え方</h3>
+<p>複製を何個、どこに置くかの目安に、<b>3-2-1 の考え方</b>があります。米国の CISA（Cybersecurity and Infrastructure Security Agency）は、小規模な事業者向けの案内で、重要なファイルの複製を 3 つ、保存の媒体を 2 種類、1 つは事業所から離れた場所に置く、と示しています（出典：CISA『Back Up Business Data』。ページに公表日の記載なし、確認 2026 年 11 月）。同じ案内は、オフラインの複製で守ることと、復旧の試験を日程に入れることも述べています。</p>
+<p>家庭の PC でも、考え方は使えます。ここでの「3 つ」は、元のデータを含めた数として読みます。内蔵のストレージに元のデータがあり、外付けのドライブに複製が 1 つ、離れた場所に複製がもう 1 つ、という形です。木の図で、置き場所を確かめてください。</p>
+<div data-widget="tree" data-src="c24-tree"></div>
+<p>「媒体の種類」は、内蔵の SSD（Solid State Drive）と外付けの HDD（Hard Disk Drive）のように、仕組みや置き方が違うものを指します。同じ種類の外付けドライブを 2 台置いても、種類は増えません。</p>
+
+<h3>何を・どこへ・どの頻度で</h3>
+<p>複製の計画は、3 つの問いで作ります。<b>何を</b>：失うと困るデータ。写真、書類、設定、仕事のファイルなど。OS やアプリは入れ直せるので、優先度を下げられます。<b>どこへ</b>：元と別の媒体、さらに離れた場所。<b>どの頻度で</b>：戻ったときに失ってよい期間から決めます。たとえば「1 日分までなら失える」なら、1 日に 1 回以上の複製が要ります。頻度の一般的な数字は、この講座では示しません。</p>
+<p>OS の機能も使えます。Microsoft のファイル履歴（File History）は、ライブラリやデスクトップを、外付けドライブかネットワークの場所へ保存し、以前の版へ戻せます（出典：Microsoft『Backup and restore with File History』、2026 年 9 月更新）。Windows バックアップ（Windows Backup）は、デスクトップやドキュメントなどのフォルダを OneDrive（Microsoft のクラウドの保存先）と同期する形で保存し、設定も保存します。Microsoft アカウントが要り、職場や学校のアカウントでは使えません（出典：Microsoft『Back up and restore with Windows Backup』、2026 年 9 月更新）。</p>
+<p>家庭や小さな事務所のネットワークにつなぐ記憶装置（Network Attached Storage, NAS）も、複製の置き場所にできます。方法ごとの強みと弱みは、表で比べます。</p>
+<div data-widget="table" data-src="c24-methods"></div>
+
+<h3>戻せるかを確かめる</h3>
+<p>バックアップを取ることと、戻せることは別です。複製が壊れていたり、必要な世代が残っていなかったりしても、取っている間は気づけません。CISA の案内は、復旧の試験を決まった間隔で行うことを勧めています。情報処理推進機構（IPA）の『ランサムウェア被害から学ぶ教訓集』（Ver.1.2、2026 年 9 月発行）も、バックアップからの復旧の訓練を定期的に行うことを挙げています。</p>
+<p>手順は、代表のファイルを選び、別の場所へ戻し、開いて確かめ、記録することです。元の場所へ戻さないのは、現在のファイルを置き換えてしまうためです。Microsoft の資料は、ファイル履歴での復元が現在の版を置き換え、元に戻せないと注意しています。「復元先を指定」を使うと、別の場所へ戻せます。</p>
+<div data-widget="flow" data-src="c24-restore"></div>
+
+<h3>ランサムウェアへの備え</h3>
+<p><b>ランサムウェア</b>（ransomware）は、データを使えなくし、元に戻すことと引き換えに金銭を要求する不正なプログラムです。この講座は、守る側の考え方だけを扱い、攻撃の手順は書きません。</p>
+<p>備えの考え方は 3 つです。1 つ目は、<b>つなぎっぱなしにしない複製</b>を持つこと。つながったままの外付けドライブや同期フォルダは、元と同時に被害を受けることがあります。2 つ目は、<b>世代を残す</b>こと。IPA の教訓集は、汚染された可能性のあるバックアップは復旧に使えず、侵入より前の時点のバックアップは安全と考えられる、と述べています。3 つ目は、<b>戻せることを試す</b>こと。IPA の教訓集は経営者向けの文書ですが、家庭の PC にも通じる考え方です。</p>
+
+<h3>暗号化と回復キー</h3>
+<p><b>暗号化</b>（encryption）は、データを、鍵がないと読めない形に変えることです。ドライブを暗号化すると、PC を盗まれても、中身を読まれにくくなります。そのかわり、鍵を失うと、持ち主も開けません。</p>
+<p>Microsoft のドライブの暗号化（Microsoft の呼称：BitLocker）には、<b>回復キー</b>があります。BitLocker が自動でドライブを開けないときに使う、数字の鍵です。起動時に、安全上の問題やハードウェアの変更の後に求められることがあります（第22章の部品の交換でも起こりえます）。Microsoft の案内によると、個人の PC での保存先は、Microsoft アカウント、USB（Universal Serial Bus）フラッシュドライブ、テキストファイル、印刷の 4 つです。職場や学校が管理する PC では、組織のアカウントに保存され、管理者が扱うことがあります。コンピュータとは別に置くことを勧め、暗号化したドライブの中には保存できません。失った回復キーは、Microsoft サポートでも、再発行できません（出典：Microsoft『Back Up Your BitLocker Recovery Key』、2026 年 9 月更新）。</p>
+<p>多くの場合、回復キーは暗号化を有効にしたときに自動で保存されます。ただし、保存されているかを確かめ、必要なら別の保存を足すよう、Microsoft は勧めています。</p>
+
+<h3>寿命の兆しと、手放す前のデータの消去</h3>
+<p>ストレージは、いつか壊れます。壊れる前の兆しは、ドライブの自己診断の仕組み S.M.A.R.T.（Self-Monitoring, Analysis and Reporting Technology）で見られます。読み方は<a href="#ch21">第21章</a>で扱います。書き込みの寿命の指標は<a href="#ch05">第05章</a>です。兆しが出たら、壊れる前にバックアップを取り、交換を計画します（<a href="#ch22">第22章</a>）。</p>
+<p>PC やドライブを、譲る・売る・捨てるときは、データの<b>消去</b>（data sanitization）が要ります。ファイルを消しただけでは足りません。米国の NIST（National Institute of Standards and Technology）の SP（Special Publication）800-88 Rev. 2『Guidelines for Media Sanitization』は、2025 年 9 月 26 日に公表され、Rev. 1 を置き換えました。情報の機微さに合わせて、消去と廃棄の方法と管理を選ぶ、計画づくりを助ける文書です（出典：NIST、2025 年 9 月 26 日。公開直前に版を再確認します）。手順書ではないので、この講座も手順は書きません。</p>
+<p>OS の機能にも、消去の選択肢があります。Microsoft の「PC をリセットする」には、個人のファイルとアプリを消す「Remove everything」と、さらにドライブを消去する「Clean data」があります。Microsoft は、この消去が消費者向けで、政府や業界のデータ消去の基準を満たさないと注記しています。暗号化したデバイスでは、リセットに回復キーが要ります（出典：Microsoft『Reset your PC』、2026 年 9 月更新）。SSD メーカーが提供する消去の機能の有無と使い方は、製品の資料で確かめてください。</p>
+
+<h3>演習：3-2-1 の考え方を満たすか</h3>
+<p>3 人の利用者（すべて架空）の保存の仕方を読み、満たすかどうかを決めます。答えを決めてから、行を押してください。</p>
+<div data-widget="table" data-src="c24-judge"></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>RAID と同期は、バックアップではありません。</b>どちらも、消した・壊した内容を反映します。バックアップは、別に持ちます。</p>
+  <p><b>取ったバックアップは、戻して初めて意味があります。</b>復元の試験を、決めた間隔で行います。</p>
+  <p><b>回復キーを、暗号化した PC の中だけに置いてはいけません。</b>PC を開けないときに、キーも読めなくなります。</p>
+  <p><b>OS の初期化は、消去の基準を満たすとは限りません。</b>譲る・売る前は、情報の機微さに合わせて方法を選びます。</p></div>
+
+<div class="callout tip"><span class="ttl">自分の 1 台でのつながり</span>
+  <p>組み立てた PC の保守として、まず「失うと困るデータ」を書き出し、複製の置き場所を 3 か所決めます。次に、最初の復元の試験の日を、保守の記録（<a href="#ch23">第23章</a>）に書きます。部品を交換する前（<a href="#ch22">第22章</a>）には、必ず最新のバックアップがあることを確かめます。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c24-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（アクセス日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.cisa.gov/audiences/small-and-medium-businesses/secure-your-business/back-up-business-data">Back Up Business Data</a></th><td>CISA（米国）</td><td>ページに公表日の記載なし（確認 2026 年 11 月）</td><td>3-2-1 の考え方、オフラインの複製、復旧の試験。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.ipa.go.jp/security/todokede/rcu1hd000001ee1f-att/20260910.pdf">ランサムウェア被害から学ぶ教訓集 〜 経営者のためのランサムウェア対策ハンドブック 〜</a></th><td>情報処理推進機構（IPA）</td><td>表紙は Ver.1.2、2026 年 9 月 8 日発行。更新履歴の最新は 2026 年 10 月 16 日（誤植修正）</td><td>汚染されたバックアップ、切り離した保管、復旧訓練。経営者向けの文書として読んだ範囲。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://csrc.nist.gov/pubs/sp/800/88/r2/final">SP 800-88 Rev. 2 Guidelines for Media Sanitization</a></th><td>NIST（米国）</td><td>2025 年 9 月 26 日（Rev. 1 を置き換え）</td><td>データの消去の計画づくりの考え方。規格本文の細部は読んでいない。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://support.microsoft.com/windows/security/encryption/back-up-your-bitlocker-recovery-key">Back Up Your BitLocker Recovery Key</a></th><td>Microsoft（米国）</td><td>ページの更新 2026 年 9 月</td><td>回復キーの意味、保存先、再発行できないこと。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://support.microsoft.com/en-us/windows/experience/backup-recovery/backup-and-restore-with-file-history">Backup and restore with File History</a></th><td>Microsoft</td><td>ページの更新 2026 年 9 月</td><td>ファイル履歴の保存先と復元、復元が現在の版を置き換える注意。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://support.microsoft.com/en-us/windows/experience/backup-recovery/back-up-and-restore-with-windows-backup">Back up and restore with Windows Backup</a></th><td>Microsoft</td><td>ページの更新 2026 年 9 月</td><td>Windows バックアップの対象・保存先・条件。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://support.microsoft.com/en-us/windows/experience/backup-recovery/reset-your-pc">Reset your PC</a></th><td>Microsoft</td><td>ページの更新 2026 年 9 月</td><td>PC のリセットの消去の選択肢と、消費者向けである旨の注記。</td></tr>
+      <tr><td>教科書・一般知識・他講座</td><th scope="row">計算機システム・ストレージの一般的な教科書</th><td>—</td><td>—</td><td>バックアップ・同期・冗長の違い、RAID の考え方。数値は使っていません。</td></tr>
+      <tr><td>架空（見本のため）</td><th scope="row">演習の利用者 A〜C さん</th><td>—</td><td>—</td><td>3-2-1 の判定の演習。すべて架空。</td></tr>
+    </tbody>
+  </table></div>
+</section>

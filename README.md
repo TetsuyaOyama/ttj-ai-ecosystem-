@@ -14,7 +14,7 @@ AI エージェント × 通信 × 半導体 × 計算サーバー × 発電
 2. 通信
 3. 半導体
 4. 計算サーバー
-5. 自作PC（準備中）
+5. 自作PC
 6. 発電・ガスタービン（準備中）
 
 ## 作品
@@ -101,9 +101,20 @@ VoLTE・IMS登録・SMS over SGs/IP・S8HR のシーケンスを、ステップ�
 
 この講座の元データ（章の HTML・図のデータ・検証記録）は `courses/server/` にあり、半導体講義と同じ基盤（`courses/_framework/`）で 1 枚の HTML に組み立てます（`courses/_framework/build.py` の `--publish courses/server-publish.json` で公開範囲と出力先を指定）。検証の記録は `courses/server/REVIEW-*.md` です。
 
-### 5〜6. 準備中の分野
+### 5. 自作PC
 
-- **自作PC**（準備中）
+#### 自作PC講義 ― 部品選びから組み立て・調整まで
+
+PC が何の部品でできていて、部品どうしがどんな規格でつながり、電力と熱がどう流れるかを土台に、用途に合わせた部品の選び方、互換性・電力・冷却の確かめ方、安全な組み立てと最初の起動、調整と不具合の切り分け、保守とデータの保護までを学ぶ講座です。全26章（4部と付録）をすべて公開しています。図を動かせる部品と確認問題、総合テストつき。公開情報だけを出典にし、特定の製品や店は勧めません。
+
+[講座を開く](https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/showcase/pc/)
+
+![自作PC講義の画面](docs/images/pc.png)
+
+この講座の元データ（章の HTML・図のデータ・検証記録）は `courses/pc/` にあり、半導体講義・計算サーバー講義と同じ基盤（`courses/_framework/`）で 1 枚の HTML に組み立てます（`courses/_framework/build.py` の `--publish courses/pc-publish.json` で公開範囲と出力先を指定）。検証の記録は `courses/pc/REVIEW-*.md`（最終の記録は `REVIEW-final.md`）です。第26章（付録）の生成スクリプトと自己点検の道具は `courses/pc/tools/` にあります。
+
+### 6. 準備中の分野
+
 - **発電・ガスタービン**（準備中）：発電事業の仕組みと、コンバインドサイクル発電用ガスタービンを扱う講義。
 
 ### その他
