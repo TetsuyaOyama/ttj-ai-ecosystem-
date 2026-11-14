@@ -1,0 +1,100 @@
+<!--
+num: 07
+part: 2
+title: メモリと相互接続：DIMM・PCIe・CXL
+track: 機器
+time: 40
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>メモリの載せ方（<b>DIMM の種類、メモリチャネル、NUMA</b>）と、それが性能の「近い・遠い」に効く理由を説明できる。</li>
+    <li>「PCIe 5.0 x16」「DDR5-6400 RDIMM」のような表記を、<b>規格・世代・レーン数・速度等級・種類</b>に切り分けて読める。</li>
+    <li><b>CXL</b> がメモリの拡張・共有をどう可能にするかと、世代の見方（<b>Type 1・2・3</b>）を言える。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch06">第06章</a>（CPU サーバーの中身）。メモリの誤り訂正（ECC）は<a href="#ch05">第05章</a>を読んでおくと分かりやすくなります。</p>
+</section>
+
+<h3>DIMM の種類と ECC</h3>
+<p>メインメモリは、DIMM（Dual In-line Memory Module）という細長い基板で、サーバーに差します。DIMM には、いくつかの種類があります。違いは、CPU とメモリチップの間に、信号を整える部品を入れるかどうかです（出典：一般知識）。</p>
+<ul>
+  <li><b>UDIMM</b>（Unbuffered DIMM）：信号を整える部品がない DIMM です。</li>
+  <li><b>RDIMM</b>（Registered DIMM）：レジスタという部品を載せた DIMM です。CPU の電気的な負担が減り、1 チャネルに多くの容量を載せやすくなります。サーバーで広く使われます。</li>
+  <li><b>LRDIMM</b>（Load-Reduced DIMM）：データの信号にもバッファを入れ、さらに多くの容量を載せやすくした DIMM です。</li>
+</ul>
+<p>サーバー向けの DIMM には、誤りを訂正する ECC（Error-Correcting Code）つきのものが一般的です（<a href="#ch05">第05章</a>）。DDR5 の規格番号は JESD79-5 で、JEDEC が 2020 年 7 月 14 日に新規格として公表しました。1 枚の DIMM に、独立したサブチャネルが 2 つあります（出典：JEDEC、2020 年 7 月 14 日）。</p>
+<p>DIMM の名前は、世代・速度等級・種類を 1 つにまとめた表記です。下の図で分けて読みます。値は、規格や製品仕様に載っている例です。</p>
+<div data-widget="ident" data-src="c07-dimm"></div>
+
+<h3>メモリチャネルと、帯域幅の考え方</h3>
+<p>CPU とメモリは、<b>メモリチャネル</b>（memory channel）という、独立した通り道でつながります。チャネルが多いほど、同時に運べるデータが増えます。1 つの CPU が持つチャネルの数は、CPU 製品で決まります（<a href="#ch06">第06章</a>の表）。</p>
+<p>メモリ全体の帯域幅は、おおまかに、「チャネルの数」と「1 チャネルの速度」で決まります。1 チャネルに何枚の DIMM を差すかも、速度に影響します。載せ方の決まりは、サーバーのメーカーが示す構成表に従います。チャネルを使い切らずに、DIMM を少なく載せると、帯域幅が下がることがあります。</p>
+
+<h3>NUMA：近いメモリと遠いメモリ</h3>
+<p>2 ソケットのサーバーでは、各 CPU に、自分に直結したメモリがあります。相手の CPU に直結したメモリも使えますが、ソケット間リンクを通ります。このため、待ちが長くなりやすくなります。この構成を、<b>NUMA</b>（Non-Uniform Memory Access）と呼びます。「メモリへの近さが、一様でない」という意味です。</p>
+<p>図の上のタブで、「近いメモリ」と「遠いメモリ」を切り替えてください。NIC や SSD のような PCIe の機器も、いずれかの CPU につながります。機器と同じソケットに、アプリのコアとメモリを寄せると、遠い経路を避けられます。</p>
+<div data-widget="arch" data-src="c07-numa"></div>
+
+<h3>PCIe：レーン・世代・x16</h3>
+<p>PCIe（PCI Express）は、CPU と、拡張カード・SSD・NIC・GPU などをつなぐ高速な接続の規格です。PCI-SIG が定めています。接続の太さは、<b>世代</b>と<b>レーンの数</b>で決まります。レーンは、送受信の信号線の組です。レーンを何本束ねるかを、「x16」のように書きます。</p>
+<p>CPU の側で、PCIe の接続の起点になる部分を、<b>ルートコンプレックス</b>（root complex）と呼びます。CPU 製品ごとに、使えるレーンの数が決まっています。たとえば、Intel（米国）の Xeon 6980P のページは、PCIe 5.0 で最大 96 レーンと記しています（出典：Intel『Intel Xeon 6980P Processor Product Specifications』、確認 2026 年 11 月）。</p>
+<div data-widget="ident" data-src="c07-pcie"></div>
+<p>スロットの形が x16 でも、中の配線が x8 のことがあります。仕様表で、実際の接続の幅を確かめます。</p>
+
+<h3>リタイマと PCIe スイッチ</h3>
+<p>PCIe の信号は、速度が上がるほど、基板の上で弱くなりやすくなります。そこで、<b>リタイマ</b>（retimer）という部品が、信号を整え直して送り出し、届く距離を延ばします。CXL 4.0 の発表は、最大 4 つのリタイマを使えるようにする、と述べています（出典：CXL Consortium、2025 年 11 月 18 日）。</p>
+<p><b>PCIe スイッチ</b>（PCIe switch）は、1 つの上流の接続を、複数の下流の機器に分ける部品です。GPU を多数載せるサーバーで、GPU や NIC をつなぐために使います（<a href="#ch08">第08章</a>）。</p>
+
+<h3>CXL：メモリを拡張し、共有する</h3>
+<p><b>CXL</b>（Compute Express Link）は、CPU と、アクセラレータやメモリ装置の間で、メモリを拡張・共有できるようにする規格です。CXL Consortium が定めています。デバイスの型は 3 つです（出典：CXL Consortium の 2023 年の資料）。</p>
+<ul>
+  <li><b>Type 1</b>：メモリをもたないアクセラレータ。CXL.io と CXL.cache を使います。例は NIC です。</li>
+  <li><b>Type 2</b>：メモリをもつアクセラレータ。CXL.io、CXL.cache、CXL.mem を使います。例は GPU や DPU です。</li>
+  <li><b>Type 3</b>：メモリの拡張装置。CXL.io と CXL.mem を使います。メモリの帯域幅や容量を増やす、プーリングに使います。</li>
+</ul>
+<p>CXL の「CXL.io」「CXL.cache」「CXL.mem」は、運ぶ内容の違う 3 つのプロトコルの名前です。<b>メモリプーリング</b>（memory pooling）は、複数のサーバーが、メモリ装置の容量を分け合って使う仕組みです。CXL 3.0 の発表は、メモリのプーリングと共有の強化を、機能の 1 つに挙げています（出典：CXL Consortium、2022 年 8 月 2 日）。</p>
+
+<h3>世代の早見表</h3>
+<p>PCIe と CXL は、世代が進むたびに、転送速度が上がります。次の表は、各団体の発表にある値を、そのまま並べた早見表です。行を押すと、補足が出ます。</p>
+<div data-widget="table" data-src="c07-gen"></div>
+
+<h3>メモリの新しい形</h3>
+<p><b>MRDIMM</b>（Multiplexed Rank DIMM）は、メモリの帯域幅を上げる、新しい形の DIMM です。JEDEC は 2024 年 7 月 22 日に、DDR5 の MRDIMM を JC-45 委員会で策定中と発表し、素の DRAM の最大 2 倍の帯域幅をめざすと述べました（出典：JEDEC、Business Wire 配信、2024 年 7 月 22 日）。この講座では、その後の規格化の状況を、一次資料で確認できませんでした。製品側では、Intel の Xeon 6980P のページが、MRDIMM 8800 MT/s への対応を記しています。</p>
+<p>もう 1 つの流れが、<b>CXL のメモリ拡張装置</b>です。SNIA の 2024 年の資料は、E3.S 2T と E1.S という SSD の形状が、CXL のメモリモジュールに x8 のコネクタを使う、と述べています（出典：SNIA『The Latest on Form Factors』、2024 年）。形状は<a href="#ch09">第09章</a>で扱います。</p>
+
+<h3>演習：NIC をどのソケット側に挿すか</h3>
+<p>3 つの場面（すべて架空）で、NIC を挿すソケット側を選びます。答えを決めてから、行を押してください。</p>
+<div data-widget="table" data-src="c07-choose"></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>「速度」の言葉を混ぜない</b>ことです。メモリの速度等級は MT/s、PCIe と CXL の転送速度は GT/s、帯域幅は GB/s で、単位が違います。「GT/s」は 1 レーンの転送の回数、「GB/s」は運べるデータの量です。</p>
+  <p><b>世代とレーン数は別です。</b>PCIe 5.0 x8 と PCIe 4.0 x16 のように、世代の違う接続を、レーン数だけで比べないでください。</p>
+  <p><b>CXL は PCIe の言い換えではありません。</b>CXL は、メモリの拡張・共有やキャッシュの一貫性など、PCIe にない機能を扱う規格です。</p></div>
+
+<div class="callout tip"><span class="ttl">現場でのつながり</span>
+  <p>サーバーの構成を決めるときは、CPU の PCIe レーン数と、NIC・SSD・GPU のレーンの割当て、DIMM の載せ方（チャネルの使い切り）を、構成表で確認します。性能が出ないときは、NUMA の「遠い」経路を通っていないかも、疑います。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c07-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（アクセス日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>規格団体の発表</td><th scope="row"><a href="https://www.jedec.org/news/pressreleases/jedec-publishes-new-ddr5-standard-advancing-next-generation-high-performance">JEDEC Publishes New DDR5 Standard for Advancing Next-Generation High Performance Computing Systems</a></th><td>JEDEC</td><td>2020 年 7 月 14 日</td><td>DDR5 の規格番号（JESD79-5）、サブチャネルが 2 つ。</td></tr>
+      <tr><td>規格団体の発表</td><th scope="row"><a href="https://www.businesswire.com/news/home/20240722188979/en">JEDEC Unveils Plans for DDR5 MRDIMM and LPDDR6 CAMM Standards to Propel High-Performance Computing and AI（Business Wire 配信）</a></th><td>JEDEC</td><td>2024 年 7 月 22 日（URL の日付）</td><td>MRDIMM を JC-45 で策定中という発表。</td></tr>
+      <tr><td>企業の製品仕様</td><th scope="row"><a href="https://www.intel.com/content/www/us/en/products/sku/240777/intel-xeon-6980p-processor-504m-cache-2-00-ghz/specifications.html">Intel Xeon 6980P Processor Product Specifications</a></th><td>Intel（米国）</td><td>発売 Q3'24（確認 2026 年 11 月）</td><td>DDR5 6400 MT/s と MRDIMM 8800 MT/s、PCIe 5.0 の最大 96 レーン。</td></tr>
+      <tr><td>規格団体の発表</td><th scope="row"><a href="https://businesswire.com/news/home/20220111005011/en/PCI-SIG%C2%AE-Releases-PCIe%C2%AE-6.0-Specification-Delivering-Record-Performance-to-Power-Big-Data-Applications">PCI-SIG Releases PCIe 6.0 Specification Delivering Record Performance to Power Big Data Applications（Business Wire 配信）</a></th><td>PCI-SIG</td><td>2022 年 1 月 11 日（URL の日付）</td><td>PCIe 6.0 の速度、PAM4、Flit。5.0 の速度。</td></tr>
+      <tr><td>規格団体の発表</td><th scope="row"><a href="https://www.businesswire.com/news/home/20250611299049/en">PCI-SIG Releases PCIe 7.0 Specification（Business Wire 配信）</a></th><td>PCI-SIG</td><td>2025 年 6 月 11 日（URL の日付）</td><td>PCIe 7.0 の速度と x16 の帯域幅。</td></tr>
+      <tr><td>規格団体の発表</td><th scope="row"><a href="https://www.businesswire.com/news/home/20250805675479/en/PCI-SIG-Announces-PCI-Express-8.0-Specification-to-Reach-256.0-GTs">PCI-SIG Announces PCI Express 8.0 Specification to Reach 256.0 GT/s（Business Wire 配信）</a></th><td>PCI-SIG</td><td>2025 年 8 月 5 日（URL の日付）</td><td>PCIe 8.0 の速度と公開の計画。</td></tr>
+      <tr><td>規格団体の発表</td><th scope="row"><a href="https://www.businesswire.com/news/home/20220802005028/en">CXL Consortium Releases Compute Express Link 3.0 Specification to Expand Fabric Capabilities and Management（Business Wire 配信）</a></th><td>CXL Consortium</td><td>2022 年 8 月 2 日</td><td>CXL 3.0 の速度、メモリのプーリングと共有。</td></tr>
+      <tr><td>規格団体の発表</td><th scope="row"><a href="https://businesswire.com/news/home/20241203881716/en/CXL-Consortium-Announces-Compute-Express-Link-3.2-Specification-Release">CXL Consortium Announces Compute Express Link 3.2 Specification Release（Business Wire 配信）</a></th><td>CXL Consortium</td><td>2024 年 12 月 3 日（URL の日付）</td><td>CXL 3.2 の追加内容と後方互換。</td></tr>
+      <tr><td>規格団体の発表</td><th scope="row"><a href="https://www.businesswire.com/news/home/20251118275848/en/CXL-Consortium-Releases-the-Compute-Express-Link-4.0-Specification-Increasing-Speed-and-Bandwidth">CXL Consortium Releases the Compute Express Link 4.0 Specification Increasing Speed and Bandwidth（Business Wire 配信）</a></th><td>CXL Consortium</td><td>2025 年 11 月 18 日（URL の日付）</td><td>CXL 4.0 の速度、リタイマ、後方互換。</td></tr>
+      <tr><td>規格団体の資料</td><th scope="row"><a href="https://computeexpresslink.org/wp-content/uploads/2023/12/CXL_FMS-Panel-2023_FINAL.pdf">Compute Express Link (CXL) Device Ecosystem and Usage Models</a></th><td>CXL Consortium</td><td>2023 年（資料の掲載は 2023 年 12 月）</td><td>Type 1・2・3 のデバイスの区分とプロトコル。</td></tr>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://www.snia.org/sites/default/files/SSSI/CMSS24/CMSS24-Hands-The-Latest-on-Form-Factors.pdf">The Latest on Form Factors（CMSS24）</a></th><td>SNIA</td><td>2024 年</td><td>CXL のメモリモジュールに、E3.S 2T と E1.S の x8 コネクタを使うこと。</td></tr>
+      <tr><td>一般知識</td><th scope="row">計算機アーキテクチャの教科書（Patterson・Hennessy『Computer Organization and Design』ほか）</th><td>—</td><td>—</td><td>UDIMM・RDIMM・LRDIMM の違い、NUMA、PCIe のレーン、リタイマ・スイッチの役割。数値は使っていません。</td></tr>
+    </tbody>
+  </table></div>
+</section>

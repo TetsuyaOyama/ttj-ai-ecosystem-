@@ -1,0 +1,105 @@
+<!--
+num: 21
+part: 4
+title: 構成管理と自動化
+track: 運用
+time: 30
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>台数が増えると手作業が破綻する理由（<b>構成のずれ</b>）と、サーバー 1 台の<b>プロビジョニング</b>の流れを説明できる。</li>
+    <li><b>宣言的</b>と<b>手続き的</b>の違い、<b>冪等性</b>が要る理由を言える。</li>
+    <li><b>資産管理（CMDB、Configuration Management Database、構成管理データベース）</b>、<b>イメージ</b>、<b>変更管理</b>が、それぞれ何を守るかを説明できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch20">第20章</a>（ファームウェアと起動）。<a href="#ch19">第19章</a>（基板管理コントローラ〔BMC〕と Redfish）と<a href="#ch04">第04章</a>（仮想化とコンテナ）を読んでいると、話がつながりやすくなります。</p>
+</section>
+
+<div class="callout note"><span class="ttl">この章で「公開情報で確認できた範囲」</span>
+  <p>用語の定義は、Ansible の公式の用語集、OpenTofu の公式の文書、NIST の用語集と SP 800-128 で確認しました。ツールは、例として 2 つ（Ansible と OpenTofu）だけ挙げ、比べません。運用の枠組みは、ITIL 4（IT サービス管理の枠組み）の「変更の実現（change enablement）」の公開説明を使いました。CMDB と資産管理は、一般的な説明です。この章は考え方の説明で、特定のツールの使い方の手順ではありません。</p></div>
+
+<h3>手作業が破綻する理由：構成のずれ</h3>
+<p>サーバーが 1 台なら、設定は 1 人が手で行えます。10 台でも、手順書があれば何とかなります。しかし、数百台、数千台になると、手作業は続きません。理由は 2 つあります。</p>
+<p>1 つは、作業量が台数に比例することです。もう 1 つは、<b>構成のずれ</b>（configuration drift）が起きることです。同じはずの機器の設定が、少しずつ違ってしまう現象です。台ごとに手でコマンドを打つと、打ち間違いや打ち忘れが入ります。障害の対応で一時的に変えた設定が、そのまま残ることもあります。ずれた機器は、同じ処理をしても結果が違い、原因の特定が難しくなります。</p>
+<p>NIST（米国国立標準技術研究所）は、構成管理を、システムの構成を初期化し、変更し、監視する方法を管理して、製品とシステムの完全性を守る一連の活動と定義しています（出典：NIST『Computer Security Resource Center Glossary』の「configuration management」の項、2026 年 11 月に確認。SP 800-128 の定義に基づく）。この章では、「構成を決め、そろえ、変更を管理する」活動として使います。</p>
+
+<h3>サーバー 1 台が使えるようになるまで：プロビジョニング</h3>
+<p><b>プロビジョニング</b>（provisioning）は、機器の受入から、本番で使える状態にするまでの一連の準備です。機器が届いてから、本番に入るまでに、決まった手順があります。下の図で、流れを一手ずつ追ってください。試験に合格しない場合の戻る道と、繰り返しの上限があります。</p>
+<div data-widget="flow" data-src="c21-flow"></div>
+<p>この流れを、人が 1 台ずつたどると時間がかかり、ずれの原因にもなります。そこで、各手を自動化して、同じ手順を、機器に同じように当てます。自動化の入口になるのが、第19章の管理インターフェース（BMC の API。API は Application Programming Interface、プログラムから機能を呼び出す入口）と、第20章のネットワーク起動です。</p>
+
+<h3>宣言的と手続き的、そして冪等性</h3>
+<p>構成を機械に任せるやり方は、大きく 2 つあります。<b>手続き的</b>は、手順を順に書く方法です。<b>宣言的</b>は、あるべき最終の状態を書く方法です。Ansible の公式の用語集は、宣言的なやり方を、手順ではなく望む最終の状態を書き、ツールが必要な手順を判断して、変更が要ったかどうかを報告する方法と説明しています。Ansible の資源（リソース）は、この方式で動くとされています（出典：Ansible の用語集、2026 年 11 月に確認）。</p>
+<div data-widget="compare" data-src="c21-cmp"></div>
+<p>もう 1 つ大切な考え方が<b>冪等性</b>（idempotency）です。同じ操作を 1 回行っても、何回も繰り返しても、結果が同じになる性質です（出典：Ansible の用語集）。たとえば、「この設定の行が、ファイルに 1 行だけある状態にする」は冪等です。「この設定の行を、ファイルの末尾に足す」は冪等ではありません。2 回実行すると、2 行になります。</p>
+<p>冪等な作りは、運用を楽にします。途中で失敗しても、もう一度最初から実行すれば、同じ状態になります。すでに合っている機器には、何も起きません。構成のずれた機器だけが、あるべき状態に戻ります。</p>
+<h4>ツールの例（比べません）</h4>
+<ul>
+  <li><b>Ansible</b>：オープンソースの自動化のツール。GitHub の公開ページによると、Red Hat（米国）がスポンサーで、ライセンスは GNU General Public License v3.0 以降です。機器へエージェントを入れずに、SSH（Secure Shell、遠隔から安全に操作する仕組み）で操作する、と説明されています（出典：GitHub『ansible/ansible』、2026 年 11 月に確認）。</li>
+  <li><b>OpenTofu</b>：オープンソースの Infrastructure as Code のツール。Terraform の MPL ライセンス版を引き継ぐものとして、Linux Foundation が 2023 年 9 月 20 日に発表しました。設定は宣言的で、書く（write）・計画する（plan）・適用する（apply）の 3 段階で使います（出典：Linux Foundation の発表、2023 年 9 月 20 日。OpenTofu の公式文書）。</li>
+</ul>
+<p>どのツールを使うかは、組織の事情で決まります。ここでは、考え方が同じであることを見てください。</p>
+
+<h3>Infrastructure as Code：構成をコードとして管理する</h3>
+<p><b>Infrastructure as Code</b>（IaC）は、機器やネットワークの構成を、ファイルに書いて管理する考え方です。OpenTofu の文書は、設定ファイルを、追跡し、再利用し、共有できるものとして説明しています（出典：OpenTofu の公式文書『Getting started』）。ファイルは、ソフトウェアのコードと同じように、版を管理します。</p>
+<p>この方式には、運用上の利点があります。誰がいつ何を変えたかが、版の履歴に残ります。変更は、適用の前に他の人がレビューできます。問題があれば、前の版に戻せます。構成を、手順書ではなく、実行できる記録として残せるのです。</p>
+
+<h3>資産管理と CMDB：機器を台帳で追う</h3>
+<p>機器の数が増えると、「どの機器が、どこにあり、何の状態か」を把握するだけでも大変です。<b>資産管理</b>は、機器を一意に識別して記録することです。記録する場所を、<b>CMDB</b>（Configuration Management Database、構成管理データベース）と呼びます。</p>
+<p>CMDB に残す項目の例は、シリアル番号、型番、設置位置（ホール・列・ラック・U の位置）、管理用の IP アドレス、ファームウェアの版、保守契約の期限、状態などです。設置位置を持つ理由は、障害や交換のときに、人と部品を迷わず手配できることと、同じラックや同じ電源系統の影響範囲が分かることです（第03章の位置表記、第05章の障害ドメイン）。</p>
+<p>機器は、受入から廃棄まで、状態が移ります。下の図は、状態の一般的な移り方です。状態が変わるたびに、CMDB を更新します。状態は台帳の項目の 1 つです。</p>
+<div data-widget="state" data-src="c21-state"></div>
+
+<h3>イメージの管理：ゴールデンイメージ</h3>
+<p>OS やソフトウェアを、機器へ入れる素材を<b>イメージ</b>と呼びます。基準にするイメージを<b>ゴールデンイメージ</b>（golden image）と呼び、基準の OS、設定、必要なソフトウェアを、1 つにまとめます。ここから、各機器へ同じ内容を入れます。</p>
+<p>ゴールデンイメージにも、版の管理が要ります。いつの版のイメージを、どの機器へ入れたかを、CMDB に記録します。そうすれば、イメージの修正があったとき、どの機器を入れ替えるかが分かります。仮想マシンとコンテナのイメージ（第04章）も、同じ考え方で管理します。</p>
+
+<h3>変更管理：変えるときの手続き</h3>
+<p>設定を自動化すると、1 つの変更が、数百台へ一度に届きます。間違った変更も、同じ速さで届きます。そこで、<b>変更管理</b>（change management）が要ります。変更を、承認と段階を踏んで進める仕組みです。</p>
+<p>ITIL 4 の「変更の実現」（change enablement）は、サービスや製品の変更が成功する割合を上げることを目的に、リスクを評価し、変更を承認し、日程を管理する、と説明されています（出典：PeopleCert『ITIL 4 Practitioner: Change Enablement』の公開説明、2026 年 11 月に確認）。変更管理の基本は、次の 4 つです。</p>
+<ul>
+  <li><b>影響の評価</b>：どの機器・サービスに、どう影響するかを、事前に考える。</li>
+  <li><b>承認</b>：変更する権限のある人が、評価をもとに許可する。</li>
+  <li><b>段階的な適用</b>：少数の台数で試し、問題がなければ広げる。</li>
+  <li><b>戻し方</b>：問題が出たときに、元へ戻す方法を、適用の前に決めておく。</li>
+</ul>
+<p>段階的に適用するのは、不具合の影響を、一部の台数で止めるためです。第20章のファームウェアの一括更新も、この考え方で進めます。</p>
+
+<h3>演習：100 台のうち 3 台だけ、構成がずれていた</h3>
+<p>次は、<b>顧客 C 社</b>のサーバー 100 台を、宣言的な方法で管理している場合の話です。数字はすべて架空です（出典：架空、見本のため）。定期的な構成の検査で、100 台のうち 3 台だけ、ある設定が基準と違っていました。3 台は同じラックにあり、いずれも先月の障害対応で、担当者が一時的に設定を手で変えていたことが、記録から分かりました。</p>
+<p><b>問い</b>：次の 3 つのうち、最初に取る対応はどれですか。理由も考えてください。<br>
+(ア) 100 台すべてに、基準の設定を一斉に適用し直す。<br>
+(イ) その 3 台だけ、基準の設定に戻し、戻したことと理由を記録する。<br>
+(ウ) 3 台の設定を基準として、残りの 97 台を 3 台に合わせる。</p>
+<details><summary>答えを見る</summary>
+  <p>(イ)です。ずれているのは 3 台だけで、原因（一時的な手作業）も分かっています。基準へ戻すのは、その 3 台で足ります。(ア)も、冪等な作りなら、合っている 97 台には何も起きず、結果は同じになりえます。ただし、対象を 100 台にすると、影響の評価と承認の範囲も 100 台に広がります。原因の分かっている 3 台に絞るほうが、最初の対応として小さく確かめやすい、というのがここでの考え方です。</p>
+  <p>(ウ)は、基準が逆になっています。一時的な手作業の結果を、基準にしてはいけません。基準を変えたいなら、基準の定義（コードやイメージ）を、レビューと承認を通して変更します。(イ)のあとに、「なぜ手作業で変えたのか」を振り返り、基準を直すべきなら、変更管理の手続きで直します。</p></details>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>「自動化すれば安全」ではありません。</b>自動化は、正しい変更も、誤った変更も、同じ速さで広げます。承認と段階的な適用と戻し方がなければ、自動化は、被害を広げる道具にもなります。</p>
+  <p>もう 1 つ。<b>CMDB は、作っただけでは役に立ちません。</b>機器の状態が変わるたびに更新しないと、台帳と現物がずれます。更新を、プロビジョニングと変更の手順の中に組み込みます。</p></div>
+
+<div class="callout tip"><span class="ttl">現場でのつながり</span>
+  <p>機器の立上げ（第28章）では、受入の記録がそのまま CMDB の最初の登録になります。調達（第29章）では、シリアル番号と保守契約の情報を、納入時に受け取る約束にしておくと、資産管理が楽になります。運用では、第23章の監視が、構成のずれを見つける入口の 1 つになります。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c21-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>公式文書</td><th scope="row"><a href="https://docs.ansible.com/ansible/latest/reference_appendices/glossary.html">Glossary — Ansible Community Documentation</a></th><td>Ansible コミュニティ</td><td>確認時のページ</td><td>冪等性、宣言的、インベントリ、プレイブックの定義。</td></tr>
+      <tr><td>公開リポジトリ</td><th scope="row"><a href="https://github.com/ansible/ansible">ansible/ansible</a></th><td>Ansible プロジェクト</td><td>確認時のページ</td><td>ライセンス（GPL v3.0 以降）、スポンサー（Red Hat, Inc.）、エージェント不要・SSH の説明。</td></tr>
+      <tr><td>企業の公開資料</td><th scope="row"><a href="https://www.redhat.com/en/about/office-locations">Office locations</a></th><td>Red Hat</td><td>確認時のページ</td><td>本社の所在地（初出の国の表記）。</td></tr>
+      <tr><td>発表資料</td><th scope="row"><a href="https://www.linuxfoundation.org/press/announcing-opentofu">Linux Foundation Launches OpenTofu: A New Open Source Alternative to Terraform</a></th><td>Linux Foundation</td><td>2023 年 9 月 20 日</td><td>OpenTofu の発表日、位置づけ（Terraform の MPL 版を引き継ぐ）。</td></tr>
+      <tr><td>公式文書</td><th scope="row"><a href="https://opentofu.org/docs/intro/">Getting started — OpenTofu</a></th><td>OpenTofu プロジェクト</td><td>確認時のページ</td><td>Infrastructure as Code、宣言的、write・plan・apply の流れ。</td></tr>
+      <tr><td>用語集</td><th scope="row"><a href="https://csrc.nist.gov/glossary/term/configuration_management">configuration management — CSRC Glossary</a></th><td>NIST</td><td>確認時のページ</td><td>構成管理の定義（SP 800-128 などに基づく）。</td></tr>
+      <tr><td>公的資料</td><th scope="row"><a href="https://csrc.nist.gov/pubs/sp/800/128/upd1/final">NIST SP 800-128：Guide for Security-Focused Configuration Management of Information Systems</a></th><td>NIST</td><td>2011 年 8 月（2019 年 10 月 10 日の更新を含む）。Final</td><td>構成管理を、セキュリティの目的で行う枠組みであること。本文は読んでいません（公開ページの要旨を確認）。</td></tr>
+      <tr><td>公開説明</td><th scope="row"><a href="https://www.peoplecert.org/browse-certifications/it-governance-and-service-management/ITIL-1/itil-4-practitioner-change-enablement-3794">ITIL 4 Practitioner: Change Enablement</a></th><td>PeopleCert</td><td>確認時のページ</td><td>変更の実現（change enablement）の目的（リスクの評価、承認、日程管理）。研修の説明ページで、ITIL 本体は読んでいません。</td></tr>
+      <tr><td>一般知識</td><th scope="row">構成のずれ、CMDB、ゴールデンイメージ、プロビジョニングの流れ</th><td>—</td><td>—</td><td>一般的な運用の説明（数値なし）。流れの順序は一例で、組織で異なります。</td></tr>
+    </tbody>
+  </table></div>
+</section>

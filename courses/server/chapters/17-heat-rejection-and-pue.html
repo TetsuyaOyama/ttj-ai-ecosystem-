@@ -1,0 +1,136 @@
+<!--
+num: 17
+part: 3
+title: 熱の捨て方と効率の指標：冷熱源・水・PUE
+track: 冷却
+time: 40
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>機器の熱が、<b>冷熱源</b>（チラー・冷却塔・乾式冷却器・外気冷房）を通って、大気や水へ捨てられるまでの行程と、<b>水の使い方</b>を説明できる。</li>
+    <li><b>PUE</b>（電力使用効率）の定義、測定点・期間・IT 機器のエネルギーの決め方を、ISO/IEC 30134-2 の枠で読める。</li>
+    <li>WUE・CUE・ERF など関連指標の位置づけと、<b>前提の違う数字を並べてはいけない</b>理由を言える。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch15">第15章</a>（熱を運ぶ式、顕熱と潜熱）。あるとよい：<a href="#ch12">第12章</a>（電力の流れ）、<a href="#ch16">第16章</a>（液冷、CDU、一次側・二次側）。</p>
+</section>
+
+<div class="callout warn"><span class="ttl">この章の扱い（冷却液・冷媒の安全）</span>
+  <p>冷却液・冷媒・水処理の薬品には、取扱いに注意が要るものがあります。漏れへの対応、充填・排出、廃棄は、製造者の安全データシート（SDS）と法令、現場の手順に従ってください。電気機器の近くの液体は感電と故障のおそれがあります。</p></div>
+
+<h3>熱の行き先：チップから大気まで</h3>
+<p>機器が出した熱は、最後に、建物の外へ捨てられます。道すじは、次の 4 つの区間で考えると分かりやすくなります。</p>
+<ol>
+  <li>チップから機器の中へ（ヒートシンクやコールドプレートを通る）。</li>
+  <li>機器から、室内の空気または冷却液へ（空冷では排気、液冷では CDU の二次側）。</li>
+  <li>室内の空気または冷却液から、冷熱源へ（空調機の冷水、CDU の一次側の水が運ぶ）。</li>
+  <li>冷熱源から、外気・水・地域へ（熱を捨てる）。</li>
+</ol>
+<p>下の図は、この 4 つの区間を、誰が受け持つかで色分けしています。上のタブで、冷却の構成を切り替えます。冷熱源を使わない時間がある外気冷房や、排熱を地域熱供給へ渡す構成では、受け持つ主体が変わります。図は模式で、「施設内の区間」を表します。</p>
+<div data-widget="route" data-src="c17-route"></div>
+
+<h3>冷熱源：熱を建物の外へ捨てる設備</h3>
+<p>熱を捨てる設備を、まとめて<b>冷熱源</b>と呼びます。この講座では、次の 4 つを扱います（教科書的な整理です）。</p>
+<ul>
+  <li><b>チラー</b>（chiller）：冷水をつくる機械です。圧縮機を使う冷凍サイクルで水を冷やし、その冷水を、空調機（CRAH）や CDU の一次側へ送ります。チラー自身の熱は、冷却塔の水や外気へ捨てます。</li>
+  <li><b>冷却塔</b>（cooling tower）：水を空気に触れさせ、一部を蒸発させて、残りの水を冷やします。冷やした水で、チラーや CDU の熱を受けます。</li>
+  <li><b>乾式冷却器</b>（dry cooler）：水を蒸発させず、管の外に空気を当てて、中の水を冷やす放熱器です。水をほとんど使いません。外気の温度が高いと、冷やせる水温に限りがあります。</li>
+  <li><b>外気冷房</b>（free cooling）：外気が低い時間に、圧縮機を使う冷凍機の運転を減らしたり止めたりして、外気の冷たさで冷やす方式の総称です。外気を直接取り込む方式や、熱交換器を挟む方式、冷却塔・乾式冷却器で冷やした水を使う方式（水側エコノマイザ）があります。</li>
+</ul>
+<p>どの冷熱源を使うかは、気候、水の入手のしやすさ、冷却液の供給温度で決まります。ASHRAE の液冷クラスの参照カードは、W17・W27 の一次側の設備の例にチラーと冷却塔を、W32・W40・W45・W+ の一次側の例に冷却塔を挙げます（<a href="#ch16">第16章</a>の表）。供給温度の高いクラスほど、冷凍機を使わず、冷却塔などの水で冷やせる範囲が広がります。</p>
+
+<h3>水の使い方：蒸発で熱を捨てる</h3>
+<p>冷却塔は、水の<b>蒸発</b>を使います。水が蒸発するとき、周りから熱（潜熱）を奪うので、その熱で、残りの水が冷えます。水を使う代わりに、同じ熱を、少ない電力で捨てやすくなります（一般的な説明）。一方、水の<b>補給</b>が要ります。</p>
+<ul>
+  <li><b>補給水</b>（make-up water）：蒸発や飛散、ブローで失った分を補う水です。</li>
+  <li><b>ブロー</b>（blowdown）：蒸発で水に溶けた成分が濃くなるので、一部を捨てて入れ替えることです。</li>
+  <li><b>水質管理</b>：配管や熱交換器の汚れ（スケール）、腐食、微生物を抑えるため、水を処理します。薬品を使う場合があります。取扱いは、冒頭の注意書きのとおり、SDS と法令、現場の手順に従います。</li>
+</ul>
+<p>水を使わない乾式冷却器を選ぶと、水の使用は減りますが、外気が高い時間の冷却に限りが出ます。水と電力と設備の大きさは、引き換えの関係です。水の使用を測る指標が、後で出る WUE です。地域の水の状況は<a href="#ch27">第27章</a>が扱います。</p>
+
+<h3>排熱の利用：捨てずに使う</h3>
+<p>捨てる熱を、別の用途に使う取組みがあります。公開されている例を 1 つ挙げます。ストックホルムの熱供給事業者 Stockholm Exergi（スウェーデン）が関わる Stockholm Data Parks の 2018 年 3 月 12 日付の記事は、データセンター事業者と Stockholm Exergi が、稼働中のデータセンターの排熱を、ストックホルムの地域熱供給の網へ流す協定を結んだと伝えています。回収する熱は、最大 10,000 戸の新しい集合住宅を暖められる量としています。</p>
+<p>低い温度の熱を、地域熱供給で使う温度へ上げるには、ヒートポンプなどの設備が要ることが多く、受け入れ側との契約も要ります（一般的な考え方）。排熱の再利用の程度を測る指標が、後で出る ERF です。</p>
+
+<h3>電力使用効率（PUE）の定義と測り方</h3>
+<p><b>PUE</b>（Power Usage Effectiveness、電力使用効率）は、データセンター全体のエネルギーを、IT 機器のエネルギーで割った比です。式にすると、次のとおりです。</p>
+<div class="callout std"><span class="ttl">PUE の式</span>
+  <p><b>PUE ＝ データセンター全体のエネルギー ÷ IT 機器のエネルギー</b>（同じ期間、同じ単位）</p></div>
+<p>PUE の定義と測定の指針は、業界団体 The Green Grid の 2012 年 10 月 2 日の白書 #49 にまとめられました。国際規格は ISO/IEC 30134-2 で、確認できた最新の版は、第2版（2026 年 1 月）です。ISO のページは、この版で、混在用途の建物の指針が加わり、測定の要件が更新され、計上されないエネルギーと敷地内の発電の扱いが明確になったと述べています。</p>
+<p>The Green Grid の白書によると、分子と分母に入るものは、次のとおりです。</p>
+<ul>
+  <li><b>IT 機器のエネルギー</b>：計算・ストレージ・ネットワークの機器と、管理に使う支援の機器（モニターなど）です。</li>
+  <li><b>データセンター全体のエネルギー</b>：IT 機器のエネルギーに、電力を届ける設備（UPS、受変電設備、発電機、PDU、蓄電池、配電の損失）、冷却（チラー、冷却塔、ポンプ、空調機）、照明などを足したものです。</li>
+</ul>
+<p>PUE は 1.0 より小さくなりません。1.0 は、すべてのエネルギーが IT 機器へ行く、理論上の理想です（同じ白書）。値が 1 に近いほど、<b>IT 機器以外</b>（冷却や電力変換など）に使うエネルギーが少ないことを表します。</p>
+<div data-widget="ident" data-src="c17-pue"></div>
+<p>測定の区分（カテゴリー）は、ISO/IEC 30134-2:2026 で、基本・中間・詳細の 3 つ（PUE1・PUE2・PUE3）に分かれています（規格の販売サイトの見本ページの目次。規格の本文は読んでいません）。The Green Grid の白書は、3 つの水準で、IT 機器のエネルギーを測る場所を、UPS の出力、PDU の出力、機器ごとと分けています。測る場所が機器に近いほど、IT 機器のエネルギーが正確になります。</p>
+<p>測る<b>期間</b>も大切です。白書は、全体のエネルギーを 1 年間測って、年平均で報告するよう勧めています。外気の温度や負荷が、季節や時間で変わるからです。</p>
+
+<h3>関連する指標：WUE・CUE・ERF</h3>
+<p>PUE は、電力だけを見る指標です。水、炭素、熱の再利用は、別の指標で見ます。ISO/IEC 30134 は、データセンターの主要な指標（KPI）を、複数の部（シリーズ）に分けています。</p>
+<div data-widget="table" data-src="c17-kpi"></div>
+<ul>
+  <li><b>WUE</b>（Water Usage Effectiveness）：データセンターの稼働中の水の使用を測る指標です。</li>
+  <li><b>CUE</b>（Carbon Usage Effectiveness）：稼働中の CO2 の排出を定量化する指標です。</li>
+  <li><b>ERF</b>（Energy Reuse Factor）：再利用したエネルギーを、データセンターが消費した全エネルギーで割った比です。</li>
+</ul>
+
+<h3>指標の読み方の注意</h3>
+<p>PUE の数字は、前提がそろっていないと比べられません。The Green Grid の白書は、PUE が、1 つの施設を時間をかけて追うのに最も役に立つと述べています。施設どうしを比べるなら、測定と報告の指針を守り、年齢・場所・負荷率・規模を考える必要があると述べています。</p>
+<ul>
+  <li><b>気候</b>：外気が低い地域は、外気冷房を使える時間が長く、PUE が小さくなりやすいです（一般的な説明）。</li>
+  <li><b>負荷率</b>：IT 機器の負荷が小さいと、冷却などの固定的な消費が相対的に大きくなり、PUE が大きく見えます（一般的な説明）。</li>
+  <li><b>規模</b>：Uptime Institute の 2026 年の調査は、業界全体の年平均 PUE を 1.52 と報告しています。同じ調査で、大きな施設を容量に比例して重くみる別の計算では、1.36 になると述べています（Uptime Institute『Global Data Center Survey 2026』に基づく UII Update 518、2026 年 8 月）。集計の仕方で、数字が変わります。</li>
+  <li><b>期間</b>：別の解説（UII Update 420、2025 年 10 月）は、世界の年平均 PUE が 2018 年ごろから大きく変わっていないと述べています。</li>
+  <li><b>測定点と IT 機器の定義</b>：測る場所で値が変わります。下の演習で確かめます。</li>
+</ul>
+<p>数字を引くときは、いつの調査か、何を対象に、どう平均したかを必ず書きます。この章の調査値は、本講座の他の PUE の数字（他の章・他の資料）と、並べて比べてはいけません。</p>
+
+<h3>演習：架空の 1 年分の電力量から PUE を計算する</h3>
+<p>次は、<b>架空の</b>施設の、1 年分の電力量です。</p>
+<ul>
+  <li>IT 機器：10,000 MWh（機器の電源の入口で測った値）</li>
+  <li>冷却（チラー、冷却塔、ポンプ、空調機）：2,500 MWh</li>
+  <li>電力変換と配電の損失：800 MWh（うち 300 MWh は、UPS の出力から機器の入口までの間の損失）</li>
+  <li>照明などその他：200 MWh</li>
+</ul>
+<p>問い（1）PUE はいくつですか。問い（2）IT 機器のエネルギーを、UPS の出力で測ると、PUE はどうなりますか。</p>
+<details><summary>答えを見る</summary>
+  <p>（1）全体のエネルギーは、10,000 ＋ 2,500 ＋ 800 ＋ 200 ＝ 13,500 MWh です。PUE ＝ 13,500 ÷ 10,000 ＝ <b>1.35</b> です。</p>
+  <p>（2）UPS の出力で測ると、UPS から機器の入口までの損失 300 MWh が、IT 機器のエネルギーに含まれます。IT 機器のエネルギーは 10,300 MWh になり、PUE ＝ 13,500 ÷ 10,300 ＝ 約 <b>1.31</b> です。</p>
+  <p>施設は何も変わっていないのに、測定点を変えただけで、値が小さく見えます。だから、PUE を示すときは、どこで測った IT 機器のエネルギーかを、必ず添えます。</p></details>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>PUE が小さいことは、消費電力が小さいことではありません</b>。PUE は比です。IT 機器の消費電力が大きい施設でも、PUE は小さくなりえます。</p>
+  <p><b>PUE は、IT 機器の電力効率を表しません</b>。分母の IT 機器が、どれだけ仕事をしたかは、PUE に出ません。</p>
+  <p><b>調査の平均値は、自分の施設の目標ではありません</b>。期間・測定点・施設の条件が違うからです。</p>
+  <p><b>水を使わないほうが、よいとは限りません</b>。水を使わない冷却は、電力や設備の大きさが増えることがあります。WUE と PUE は、合わせて見ます。</p></div>
+
+<div class="callout tip"><span class="ttl">現場でのつながり</span>
+  <p>商談や計画では、「PUE はいくつか」と聞かれたら、まず、測定点・期間・IT 機器の範囲・設計値か実測値かを確かめます。冷熱源の選び方は、液冷クラスの供給温度（<a href="#ch16">第16章</a>）、立地の気候と水（<a href="#ch27">第27章</a>）、制度（<a href="#ch30">第30章</a>）と結びつきます。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c17-quiz"></div></section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（アクセス日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>規格</td><th scope="row"><a href="https://www.iso.org/standard/85172.html">ISO/IEC 30134-2:2026 Information technology — Data centres key performance indicators — Part 2: Power usage effectiveness (PUE)</a></th><td>ISO／IEC</td><td>第2版、2026 年 1 月</td><td>PUE の規格の版と、第2版の変更点（ページの説明）。規格の本文は読んでいません。</td></tr>
+      <tr><td>規格の見本ページ</td><th scope="row"><a href="https://webstore.ansi.org/preview-pages/ISO/preview_ISO+IEC+30134-2-2026.pdf">ISO/IEC 30134-2:2026（見本ページ）</a></th><td>ANSI（規格の販売サイト）</td><td>2026 年版</td><td>測定の区分（PUE1・PUE2・PUE3）の名前。</td></tr>
+      <tr><td>規格</td><th scope="row"><a href="https://www.vde-verlag.de/iec-normen/222724/iso-iec-30134-1-2016.html">ISO/IEC 30134-1:2016 Part 1: Overview and general requirements</a></th><td>ISO／IEC（VDE Verlag の販売ページ）</td><td>第1版、2016 年 3 月</td><td>各部に共通の枠組み。</td></tr>
+      <tr><td>規格</td><th scope="row"><a href="https://www.iso.org/standard/71717.html">ISO/IEC 30134-6:2021 Part 6: Energy Reuse Factor (ERF)</a></th><td>ISO／IEC</td><td>第1版、2021 年 8 月。ページは改訂の作業中と表示</td><td>ERF の定義の要点。</td></tr>
+      <tr><td>規格</td><th scope="row"><a href="https://www.iso.org/standard/77691.html">ISO/IEC 30134-8:2022 Part 8: Carbon usage effectiveness (CUE)</a></th><td>ISO／IEC</td><td>第1版、2022 年 3 月</td><td>CUE の対象の要点。</td></tr>
+      <tr><td>規格</td><th scope="row"><a href="https://www.iso.org/standard/77692.html">ISO/IEC 30134-9:2022 Part 9: Water usage effectiveness (WUE)</a></th><td>ISO／IEC</td><td>第1版、2022 年 3 月。ページは改訂の作業中と表示</td><td>WUE の対象の要点。</td></tr>
+      <tr><td>業界団体の白書</td><th scope="row"><a href="https://www.thegreengrid.org/en/resources/library-and-tools/237-WP%2349---PUE%3A-A-Comprehensive-Examination-of-the-Metric">PUE: A Comprehensive Examination of the Metric（White Paper #49）</a></th><td>The Green Grid</td><td>2012 年 10 月 2 日</td><td>PUE の式、IT 機器と全体のエネルギーの範囲、3 つの測定水準、年間の測定、比較の注意。内容は、同団体の白書の写し（<a href="https://datacenters.lbl.gov/sites/default/files/WP49-PUE%20A%20Comprehensive%20Examination%20of%20the%20Metric_v6.pdf">ローレンス・バークレー国立研究所のサイトの写し</a>）で確認しました。</td></tr>
+      <tr><td>調査機関の報告</td><th scope="row"><a href="https://intelligence.uptimeinstitute.com/resource/growing-pue-advantage-larger-data-centers">The growing PUE advantage of larger data centers（UII Update 518）</a></th><td>Uptime Institute</td><td>2026 年 8 月（Global Data Center Survey 2026 の値）</td><td>業界全体の年平均 PUE 1.52 と、容量で重み付けした 1.36。</td></tr>
+      <tr><td>調査機関の報告</td><th scope="row"><a href="https://intelligence.uptimeinstitute.com/resource/mapping-pue-trends-data-center-region-age-and-size">Mapping PUE trends by data center region, age and size（UII Update 420）</a></th><td>Uptime Institute</td><td>2025 年 10 月</td><td>年平均 PUE の問い方、2018 年ごろから大きく変わらない傾向。</td></tr>
+      <tr><td>企業・事業者の記事</td><th scope="row"><a href="https://stockholmdataparks.com/2018/03/12/digiplex-data-center-heat-10000-stockholm-households/">DigiPlex data center to heat 10,000 Stockholm households</a></th><td>Stockholm Data Parks</td><td>2018 年 3 月 12 日</td><td>排熱を地域熱供給へ流す協定の公開例。</td></tr>
+      <tr><td>企業の会社概要</td><th scope="row"><a href="https://www.stockholmexergi.se/en/about-stockholm-exergi/">About Stockholm Exergi</a></th><td>Stockholm Exergi</td><td>2026 年 11 月に確認（日付の記載なし）</td><td>ストックホルムの地域熱供給網を運営する企業であること。</td></tr>
+      <tr><td>規格の参照カード</td><th scope="row"><a href="https://www.ashrae.org/file%20library/technical%20resources/bookstore/supplemental%20files/therm-gdlns-5th-r-e-refcard.pdf">2021 Equipment Thermal Guidelines for Data Processing Environments（参照カード）</a></th><td>ASHRAE TC 9.9</td><td>第5版（改訂増補版）</td><td>液冷クラスごとの冷熱源の例（水側エコノマイザ、冷却塔、地域熱供給）。</td></tr>
+      <tr><td>教科書的な一般知識</td><th scope="row">空調・冷凍の教科書（チラー、冷却塔、乾式冷却器、外気冷房、蒸発による冷却、補給水・ブロー、水処理）</th><td>—</td><td>—</td><td>数値を伴わない説明。</td></tr>
+    </tbody>
+  </table></div>
+</section>

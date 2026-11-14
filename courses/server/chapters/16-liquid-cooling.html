@@ -1,0 +1,144 @@
+<!--
+num: 16
+part: 3
+title: 液冷：コールドプレートと液浸
+track: 冷却
+time: 40
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li><b>液冷</b>（liquid cooling）の 3 つの方式（コールドプレート・液浸・リアドア）の構成と、液体が空気より熱を運べる理由を説明できる。</li>
+    <li><b>CDU</b>（冷却液の分配装置）で、施設側の水と機器側の液の系統を分ける理由と、一次側・二次側の呼び方を言える。</li>
+    <li>液冷の運用（水質、漏れ検知、流量・圧力・温度の監視）と、ASHRAE の液冷クラス、OCP の液冷関連の仕様の位置づけを整理できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch15">第15章</a>（熱を運ぶ式、顕熱）。あるとよい：<a href="#ch08">第08章</a>（アクセラレータの消費電力）、<a href="#ch11">第11章</a>（ラックの電力密度）。</p>
+</section>
+
+<div class="callout warn"><span class="ttl">この章の扱い（冷却液・冷媒の安全）</span>
+  <p>冷却液・冷媒・水処理の薬品には、取扱いに注意が要るものがあります。漏れへの対応、充填・排出、廃棄は、製造者の安全データシート（SDS）と法令、現場の手順に従ってください。電気機器の近くの液体は感電と故障のおそれがあります。</p></div>
+<div class="callout warn"><span class="ttl">この章の扱い（電気の安全）</span>
+  <p>この章は、電気設備の仕組みと注意点の説明です。作業の手順書の代わりにはなりません。受変電設備・UPS・配電・直流給電の操作や作業は、感電やアークによる重大な事故のおそれがあります。実際の作業は、法令で定められた有資格者が、設備の保安規程と現場の手順（作業計画・作業許可）に従って行ってください。</p></div>
+
+<h3>なぜ液体で冷やすのか</h3>
+<p><a href="#ch15">第15章</a>の式を思い出してください。運ぶ熱量は、<b>質量流量 × 比熱 × 温度差</b>です。質量流量は、密度 × 流れの体積です。比熱と密度が大きい流体ほど、同じ体積の流れで、多くの熱を運べます。</p>
+<div class="tbl-wrap"><table class="tbl">
+  <caption>空気と水の比熱と密度（出典の値と条件）</caption>
+  <thead><tr><th>流体</th><th>比熱</th><th>密度</th><th>出典</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">空気</th><td>1.005 kJ/(kg·K)（300 K の理想気体）</td><td>1.229 kg/m³（15 ℃、101.3 kN/m²）</td><td>Yan『Introduction to Engineering Thermodynamics』付録 G。NASA Glenn『Properties of Air』</td></tr>
+    <tr><th scope="row">水（液体）</th><td>4.184 kJ/(kg·K)（出典の表記は 4184 J/(kg·K)。温度の記載なし）</td><td>998.2071 kg/m³（20 ℃）</td><td>OpenStax『Chemistry 2e』付録の水の性質（LibreTexts 掲載）</td></tr>
+  </tbody></table></div>
+<p>表のとおり、比熱も密度も、水のほうが大きい値です。同じ温度差なら、水は、空気よりはるかに少ない体積で、同じ熱を運べます。ラックの熱負荷が大きくなると、空気では風量が足りなくなり（<a href="#ch15">第15章</a>の「空冷の限界」）、液体で熱を運ぶ方式が選ばれます。</p>
+<p>実際に使う冷却液は、純水ではなく、添加物を加えた水や、水とプロピレングリコールの混合液などです。値は液ごとに違うので、液の仕様書で確認します。OCP（Open Compute Project）の資料は、電気を通さない液（誘電性の液）は水より比熱が小さく、同じ熱を運ぶのに、より多くの体積が要ると述べています（OCP『Data Center Liquid Distribution: Guidance & Reference Designs』Rev 1.0、2024 年 1 月 8 日）。</p>
+<p>液冷の公開の採用例を 2 つ挙げます。Google（米国）は、2025 年 4 月 29 日の記事で、TPU（Tensor Processing Unit）の v3（2018 年に導入）で初めて液冷を使い、過去 7 年に 2,000 を超える TPU ポッドで、ギガワット規模の液冷を展開した、と述べています。NVIDIA（米国）は、GB200 NVL72 の製品ページで、36 個の Grace CPU（Central Processing Unit）と 72 個の Blackwell GPU（Graphics Processing Unit）を、ラック規模の液冷の設計でつなぐと書いています（確認 2026 年 11 月）。</p>
+
+<h3>3 つの方式：コールドプレート・液浸・リアドア</h3>
+<p>液冷は、熱を取る場所で、大きく 3 つに分かれます。</p>
+<ul>
+  <li><b>直接液冷</b>（Direct Liquid Cooling, DLC）：チップなどに<b>コールドプレート</b>（cold plate）を載せ、プレートの中を流れる液で熱を取ります。この章の中心です。</li>
+  <li><b>液浸冷却</b>（immersion cooling）：サーバー全体を、電気を通さない液に浸します。</li>
+  <li><b>リアドア熱交換器</b>（Rear Door Heat Exchanger）：ラックの背面の扉に熱交換器を付け、排気の熱を液に渡します。空冷と液冷の間の方式です。</li>
+</ul>
+<p>OCP の Cooling Environments プロジェクトは、先進の冷却を、コールドプレート、冷却液の分配装置（CDU）、液浸、リアドア熱交換器、排熱の再利用の 5 つの分野で扱っています（OCP のプロジェクトページ、確認 2026 年 11 月）。</p>
+
+<h3>コールドプレートの取付けの断面</h3>
+<p>コールドプレートは、チップの上に載る金属の板で、中に冷却液の通り道（流路）があります。チップとプレートの間には、<b>TIM</b>（Thermal Interface Material、熱伝導材）を挟みます。表面は細かく見ると凹凸があり、そのまま重ねると、隙間に空気が残って、熱が伝わりにくくなります。TIM は、この隙間を埋めて、熱を伝えやすくします。</p>
+<p>次の図で、断面が 5 つの手で組み上がる様子を見ます。寸法は模式です。実際の取付けの方法や締結の管理は、機器メーカーの指示書で決まり、この講座は値や手順を示しません。</p>
+<div data-widget="xsec" data-src="c16-cp"></div>
+<p>プレートの中を通った液は、機器の中の配管を通って、ラック内の<b>マニホールド</b>（manifold）へ集まります。マニホールドは、複数のサーバーへ液を分配し、回収する配管です。サーバーとマニホールドの間は、<b>クイックコネクタ</b>（quick connector、素早く着脱できる継手）でつなぎ、サーバーを外すときに、液の漏れを抑えます。OCP には、継手の仕様として、Universal Quick Disconnect（UQD）の仕様（V2.0.0）、大形のクイックコネクタの仕様（V2.0.0）、Open Rack V3 のブラインドメイト用の継手の仕様（Rev 01、2024 年 6 月 4 日）があります（OCP のプロジェクトページ）。</p>
+
+<h3>冷却液の分配装置（CDU）：施設の水と機器の液を分ける</h3>
+<p><b>CDU</b>（Coolant Distribution Unit、冷却液の分配装置）は、熱交換器とポンプを持つ設備です。機器側の液の系統と、施設側の水の系統を、熱交換器でつなぎます。熱は渡しますが、液は混ぜません。機器側（IT 側）を<b>二次側</b>（secondary）、施設側を<b>一次側</b>（primary）と呼びます（OCP の Project Deschutes 仕様の表現）。</p>
+<div data-widget="arch" data-src="c16-sys"></div>
+<p>系統を分ける理由は、主に 3 つあります（一般的な整理）。</p>
+<ol>
+  <li><b>水質と圧力の管理を分けられる</b>。機器側の液は、きれいに保つ必要があります。施設側の水は、長い配管と冷却塔などにつながり、条件が違います。</li>
+  <li><b>漏れの影響の範囲を限定できる</b>。二次側の液の量は、系統ごとに限られます。</li>
+  <li><b>温度と流量を、機器に合わせて整えられる</b>。施設側の条件が変わっても、機器側へ渡す液の条件を一定に保てます。</li>
+</ol>
+<p>Google の 2025 年 4 月 29 日の記事は、CDU がラックの液の系統を施設の系統から隔てると述べています。OCP の資料（2024 年 1 月）も、CDU で機器側の液と施設の水を隔てると述べています。</p>
+<p>CDU の仕様の公開例として、Google が OCP へ提供した「Project Deschutes」があります。第 5 世代の液対液の CDU で、約 2 MW の熱負荷、約 500 GPM（米ガロン毎分、出典の単位）の流量を対象にし、脱イオン水と PG25（プロピレングリコール系の冷却液。OCP の呼称）に対応します。ポンプの N+1、ろ過、膨張タンク、制御弁、流量計、漏れ検知などの構成を挙げています（出典：OCP『Project Deschutes: Data Center Facilities』V1.0.0、2026 年 2 月 26 日。Google が提供）。構成の例であり、すべての CDU が同じ構成ではありません。</p>
+
+<h3>液浸冷却：単相と二相</h3>
+<p>液浸は、サーバーを、電気を通さない液（誘電性の液）の槽に浸す方式です。液の扱い方で、2 つに分かれます。</p>
+<ul>
+  <li><b>単相</b>（single-phase）：液は、液体のまま循環し、熱を運びます。熱は、槽の外の熱交換器へ渡ります。</li>
+  <li><b>二相</b>（two-phase）：チップの表面で液が沸騰して熱を奪い、蒸気になった液が、槽の上部で冷やされて液に戻ります。状態が変わる熱（潜熱）を使います。</li>
+</ul>
+<p>OCP には、二相用の誘電性の熱伝達流体の基本仕様（V1.0.0）があります（OCP のプロジェクトページ）。</p>
+<p>液浸の流体は、化学物質の規制や供給の変化の影響を受けることがあります。たとえば、EU（欧州連合）では、デンマーク・ドイツ・オランダ・ノルウェー・スウェーデンの当局が、2023 年 1 月 13 日に、約 10,000 の PFAS（ペルフルオロアルキル化合物及びポリフルオロアルキル化合物（環境省の表記））の製造・上市・使用を制限する提案を欧州化学機関（ECHA）へ提出し、ECHA が 2023 年 2 月 7 日に公表しました（出典：ECHA のニュースリリース）。その後の評価の段階は、ECHA の公式ページで確認してください（確認日 2026 年 11 月 14 日。この章では、現在の段階を確認できなかったので書きません）。また、3M（米国）は、2022 年 12 月 20 日に、2025 年末までに PFAS の製造をやめると発表しました（出典：3M のニュースリリース）。</p>
+<p>どの流体がこうした規制や撤退に当たるかは、流体の成分、規制の本文、製造者の SDS で確認します。この章は、個別の流体の該当性を扱いません。二相の流体では、沸点が運転温度に合うか、材料と相性がよいか、蒸気が漏れにくいかも、確認の項目です。</p>
+
+<h3>コールドプレートと液浸の比較</h3>
+<div data-widget="compare" data-src="c16-cmp"></div>
+
+<h3>リアドア熱交換器：空冷と液冷の間</h3>
+<p>リアドア熱交換器は、ラックの背面の扉に取り付ける熱交換器です。サーバーの排気が扉を通るとき、熱が液に渡ります。サーバー自体は空冷のままなので、既存の機器を使いやすい方式です。OCP の「ACS Door Heat Exchanger Requirements for Open Rack」（Rev 1.0、2021 年 6 月 15 日）は、Open Rack 向けの、ラック背面に取り付ける熱交換器の要件を定めています。DMTF（Distributed Management Task Force）の資料（2023 年 11 月）は、リアドア熱交換器の管理のモデルを、ラックのファンの資源を使う例として示しています（<a href="#ch24">第24章</a>）。</p>
+
+<h3>ASHRAE の液冷クラスと OCP の仕様</h3>
+<p>ASHRAE（米国の暖房・冷凍・空調の学会）の技術委員会 TC 9.9 は、施設側の水の供給温度で、液冷のクラスを分けています。クラスの名前の数字は、施設側の水の供給温度の上限（℃）を表します（出典：ASHRAE TC 9.9 の白書、2021 年）。すべてのクラスで、水温の下限は 2 ℃です（参照カード）。</p>
+<div data-widget="table" data-src="c16-wclass"></div>
+<p>OCP は、液冷の機器・流体・接続・施設の仕様を、Cooling Environments プロジェクトにまとめています。主な文書を、次の表に示します。</p>
+<div data-widget="table" data-src="c16-ocp"></div>
+<p>仕様の版は、変わります。実務では、OCP の公開ページで、最新の版を確認してください。</p>
+
+<h3>液冷の運用：水質・漏れ検知・監視・保守</h3>
+<ul>
+  <li><b>水質と液の管理</b>：液の種類（脱イオン水、プロピレングリコール水溶液など）と、水質を保ちます。OCP には、水系のコールドプレート用冷却液の基本仕様（V1.3）と、PG25 の基本仕様（V1.0.0）があります。</li>
+  <li><b>漏れ検知</b>（leak detection）：漏れを早く見つけるために、センサーを置きます。OCP には、ロープ状の漏れ検知センサーの基本仕様（Rev 1.0.0）があります。DMTF の Redfish（管理インターフェースの規格、<a href="#ch19">第19章</a>）には、漏れ検知の資源（LeakDetection、LeakDetector）があります。</li>
+  <li><b>流量・圧力・温度の監視</b>：供給と戻りの接続点で、流量・温度・圧力を測り、異常を早く知ります。Redfish の CoolantConnector は、接続点の流量・温度・圧力の読み値を扱います（DMTF の資料、2023 年 11 月）。制御と監視の全体は<a href="#ch24">第24章</a>が扱います。</li>
+  <li><b>保守</b>：ポンプやろ過器などの部品は、冗長にして、系統を止めずに交換できる構成が使われます（Project Deschutes の構成の例）。サーバーの交換では、継手の着脱で、液が漏れないことが要ります。</li>
+</ul>
+<p>液冷のラックは、空冷より重くなることがあります。床荷重の確認は、建物の管理者に行い、<a href="#ch18">第18章</a>で扱います。</p>
+
+<h3>演習：漏れ検知の警報が出たとき、画面で確認する順</h3>
+<p>架空の液冷ラックで、漏れ検知の警報が出ました。次の 5 つの項目を、<b>確認する順</b>に並べてください。考え方の演習で、現場の手順書の代わりではありません。</p>
+<ol type="A">
+  <li>現場で状況を目で確かめる</li>
+  <li>同じ系統の、流量・圧力・温度の監視値に、異常な変化があるか</li>
+  <li>警報の出どころ（どのセンサー、どの区画、どの系統か）と、同時に出ている別の警報</li>
+  <li>施設管理者と運用者へ連絡し、現場の手順（安全の確認、作業許可）を始める</li>
+  <li>その系統につながる機器の負荷と温度に、影響が出ているか</li>
+</ol>
+<details><summary>答えを見る</summary>
+  <p>順は、<b>C → B → E → D → A</b> です。</p>
+  <p>C で、警報が本物か、どの範囲かを、まず画面で確かめます。B で、液の系統そのものに異常が出ているかを見ます。流量や圧力が変わっていれば、漏れの可能性が高まります。E で、影響を受ける機器と負荷の大きさを知ります。ここまでは、人が現場へ入らず、画面で確認できます。</p>
+  <p>D は、状況が分かった段階で、権限のある担当へ連絡します。ただし、警報を受けたらすぐに連絡すると現場の手順で決めていることも多く、その場合は手順が優先します（C と並行して連絡します）。A は最後です。漏れた液と電気機器が近いと、感電や故障のおそれがあるので、安全の確認と作業許可がそろってから、決められた担当が行います。</p>
+  <p>この順の理由は、「人を危険な場所へ入れる前に、画面で分かることを先に集める」ためです。どの弁を操作するか、どの機器を止めるかは、設備の手順書と権限で決まります。この講座は扱いません。</p></details>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>「冷媒」と「冷却液」を混ぜない</b>こと。冷媒は、冷凍サイクルで使う媒体です。液冷で熱を運ぶ液は、冷却液と書きます。</p>
+  <p><b>一次側・二次側は、場所で決まる呼び方です</b>。施設側が一次側、機器側が二次側です。熱の流れの順番ではありません。</p>
+  <p><b>液冷にしても、空冷が不要になるとは限りません</b>。コールドプレートは、主に発熱の大きい部品の熱を取ります。ほかの部品の熱は、空気が受ける場合があります（一般的な構成の例）。</p>
+  <p><b>クラスの数字は、機器の温度ではありません</b>。W32 のような数字は、施設側の水の供給温度の上限（℃）です。</p></div>
+
+<div class="callout tip"><span class="ttl">現場でのつながり</span>
+  <p>液冷の案件では、機器の仕様書に、必要な液の種類・温度・流量・圧力・接続の方式が並びます。それを、CDU と施設側の水の条件に合わせます。ここでは、機器メーカー・CDU メーカー・設備業者・DC 事業者の取り合いが、細かくなります。最初に確認するのは、冷却液の種類と水質、供給温度のクラス（W17 など）、接続の継手、漏れ検知の連動先です。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c16-quiz"></div></section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（アクセス日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>規格の参照カード</td><th scope="row"><a href="https://www.ashrae.org/file%20library/technical%20resources/bookstore/supplemental%20files/therm-gdlns-5th-r-e-refcard.pdf">2021 Equipment Thermal Guidelines for Data Processing Environments（参照カード）</a></th><td>ASHRAE TC 9.9</td><td>第5版（改訂増補版）。著作権表示は 2021 年と 2024 年</td><td>液冷クラス W17〜W45・W+ の供給温度と、水温の下限。規格の本文は読んでいません。</td></tr>
+      <tr><td>白書</td><th scope="row"><a href="https://www.ashrae.org/file%20library/technical%20resources/bookstore/emergence-and-expansion-of-liquid-cooling-in-mainstream-data-centers_wp.pdf">Emergence and Expansion of Liquid Cooling in Mainstream Data Centers</a></th><td>ASHRAE TC 9.9</td><td>2021 年</td><td>クラスの名前の数字の意味と、旧名との対応。</td></tr>
+      <tr><td>仕様の一覧</td><th scope="row"><a href="https://www.opencompute.org/projects/cooling-environments">Cooling Environments</a></th><td>Open Compute Project（OCP）</td><td>2026 年 11 月に確認（文書ごとの日付は不ぞろい）</td><td>5 つの分野、継手・冷却液・漏れ検知・二相用の流体などの仕様の名前と版。</td></tr>
+      <tr><td>仕様</td><th scope="row"><a href="https://www.opencompute.org/documents/ocp-specification-deschutes-v1-0-pdf">Project Deschutes: Data Center Facilities</a></th><td>OCP（Google が提供）</td><td>V1.0.0、2026 年 2 月 26 日</td><td>CDU の仕様の例、一次側・二次側の呼び方。</td></tr>
+      <tr><td>仕様</td><th scope="row"><a href="https://www.opencompute.org/documents/acs-door-hx-open-compute-requirements-for-open-rack-rev1-0-1-pdf">ACS Door Heat Exchanger Requirements for Open Rack</a></th><td>OCP</td><td>Rev 1.0、2021 年 6 月 15 日</td><td>リアドア熱交換器の要件。</td></tr>
+      <tr><td>白書</td><th scope="row"><a href="https://www.opencompute.org/documents/ocp-acf-reference-design-guidance-white-paper-r1-pdf/">Data Center Liquid Distribution: Guidance &amp; Reference Designs</a></th><td>OCP（Advanced Cooling Facilities サブプロジェクト）</td><td>Rev 1.0、2024 年 1 月 8 日</td><td>CDU による系統の分離、誘電性の液の比熱。</td></tr>
+      <tr><td>企業のブログ</td><th scope="row"><a href="https://cloud.google.com/blog/topics/systems/enabling-1-mw-it-racks-and-liquid-cooling-at-ocp-emea-summit">Enabling 1 MW IT racks and liquid cooling at OCP EMEA Summit</a></th><td>Google（Google Cloud のブログ）</td><td>2025 年 4 月 29 日</td><td>液冷の採用の公開例、CDU の役割。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.nvidia.com/en-us/data-center/gb200-nvl72/">GB200 NVL72</a></th><td>NVIDIA</td><td>2026 年 11 月に確認（日付の記載なし）</td><td>ラック規模の液冷の設計の公開例。</td></tr>
+      <tr><td>標準化団体の資料</td><th scope="row"><a href="https://www.dmtf.org/sites/default/files/Redfish_for_Cooling_Units_v1.0.pdf">Redfish for Liquid Cooling Equipment</a></th><td>DMTF Redfish Forum</td><td>2023 年 11 月（検討中のモデルの説明）</td><td>CDU・冷却ループ・接続点・漏れ検知の管理のモデル。標準の本文ではありません。</td></tr>
+      <tr><td>当局のニュースリリース</td><th scope="row"><a href="https://echa.europa.eu/-/echa-publishes-pfas-restriction-proposal">ECHA publishes PFAS restriction proposal</a></th><td>欧州化学機関（ECHA）</td><td>2023 年 2 月 7 日</td><td>PFAS の制限案の提出日・提出者・対象の規模。現在の段階は確認できませんでした。</td></tr>
+      <tr><td>当局の解説</td><th scope="row"><a href="https://www.env.go.jp/water/pfas/faq.html">PFAS に関するよくある質問</a></th><td>環境省</td><td>2026 年 11 月に確認（日付の記載なし）</td><td>PFAS の日本語の正式名称の表記（「化合物」）。</td></tr>
+      <tr><td>企業のニュースリリース</td><th scope="row"><a href="https://news.3m.com/2022-12-20-3M-to-Exit-PFAS-Manufacturing-by-the-End-of-2025">3M to Exit PFAS Manufacturing by the End of 2025</a></th><td>3M</td><td>2022 年 12 月 20 日</td><td>PFAS の製造をやめる発表。</td></tr>
+      <tr><td>教科書</td><th scope="row"><a href="https://chem.libretexts.org/Bookshelves/General_Chemistry/Book%3A_Chemistry_(OpenSTAX)/Appendices/Water_Properties">Water Properties（OpenStax Chemistry の付録）</a></th><td>OpenStax（LibreTexts 掲載）</td><td>2026 年 11 月に確認（版の日付の記載なし）</td><td>水の比熱と密度。</td></tr>
+      <tr><td>教科書・公的機関の解説</td><th scope="row">Yan『Introduction to Engineering Thermodynamics』付録 G、NASA Glenn『Properties of Air』</th><td>BCcampus／NASA</td><td>第15章の参照資料を参照</td><td>空気の比熱と密度（第15章が持つ）。</td></tr>
+      <tr><td>教科書的な一般知識</td><th scope="row">伝熱・空調の教科書（コールドプレートと TIM、CDU の分離の理由、単相と二相、運用の考え方）</th><td>—</td><td>—</td><td>数値を伴わない説明。</td></tr>
+    </tbody>
+  </table></div>
+</section>

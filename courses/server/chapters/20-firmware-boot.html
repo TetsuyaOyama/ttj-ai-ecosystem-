@@ -1,0 +1,109 @@
+<!--
+num: 20
+part: 4
+title: ファームウェアと起動
+track: 管理
+time: 30
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>サーバーのファームウェアの種類（UEFI〔Unified Extensible Firmware Interface〕、BMC〔基板管理コントローラ〕、ネットワークカード〔NIC〕・SSD〔Solid State Drive、フラッシュメモリの記憶装置〕・GPU〔Graphics Processing Unit、AI 計算向けの演算装置〕など）と、電源投入から OS が動くまでの<b>流れ</b>を、順に説明できる。</li>
+    <li><b>PXE</b>（Preboot Execution Environment）と <b>HTTP ブート</b>（HTTP は Hypertext Transfer Protocol、ウェブの通信の約束）の違いを、何で起動ファイルを取るかで言い分けられる。</li>
+    <li>ファームウェアを<b>一括で更新する</b>ときの順序・確認・戻し方の考え方を説明できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch19">第19章</a>（基板管理コントローラ〔BMC〕と Redfish）。<a href="#ch06">第06章</a>（CPU サーバーの中身）を読んでいると、部品の位置が分かりやすくなります。</p>
+</section>
+
+<div class="callout note"><span class="ttl">この章で「公開情報で確認できた範囲」</span>
+  <p>規格の名称・版・公開時期は、UEFI Forum と DMTF の公開ページで確認しました。UEFI 仕様書は、冒頭・目次・ネットワーク起動の章を確認し、全文は読んでいません。更新の失敗と回復の具体的な作りは、製品ごとに違い、公開資料の範囲も限られます。そのため、一般的な考え方として書き、製品の仕様としては書いていません。</p></div>
+
+<h3>ファームウェアは、機器ごとに入っている</h3>
+<p><b>ファームウェア</b>（firmware）は、機器の中に書き込まれ、その機器を動かす基本のソフトウェアです。サーバーには、ファームウェアを持つ部品がいくつもあります。</p>
+<ul>
+  <li><b>UEFI ファームウェア</b>：電源投入後に最初に動き、機器を初期化して OS を起動する。従来の BIOS に代わるもの（製品の画面では「BIOS」の名前が残ることがある）。</li>
+  <li><b>BMC のファームウェア</b>：第19章の管理のコントローラを動かす。</li>
+  <li><b>NIC・SSD・GPU などのファームウェア</b>：それぞれの部品が自分の動作に使う。</li>
+</ul>
+<p>どれも、OS の外にあり、版を管理して更新する必要があります。版が合わないと、起動できない、部品が認識されない、性能が出ないなどの問題が起きます。下の表は、種類ごとの更新の経路と、失敗したときの影響の一般論です。製品で例外があります。</p>
+<div data-widget="table" data-src="c20-fw"></div>
+
+<h3>UEFI と ACPI：OS とファームウェアの約束</h3>
+<p><b>UEFI</b>（Unified Extensible Firmware Interface）は、OS とプラットフォームのファームウェアの間の標準のインターフェースです。ファームウェアが OS へ渡す情報の表と、起動や実行中に OS が呼べる機能を決めています。目的は、機器が違っても、標準の OS が機器ごとの手直しなしに起動できるようにすることです。従来の PC-AT 型の起動環境から移ることも狙っています（出典：UEFI Forum『UEFI Specification 2.11』、第 1 章）。</p>
+<p>UEFI 仕様は、UEFI Forum が策定します。2.11 版は 2024 年 12 月に、プラットフォーム初期化（Platform Initialization, PI）仕様の 1.9 版とともに公開されました（出典：UEFI Forum の発表、2024 年 12 月）。UEFI Forum の仕様一覧には、執筆時（2026 年 11 月）、UEFI 仕様が 2.11 版、PI 仕様が 1.10 版（2026 年 7 月）と載っています（出典：UEFI Forum『Specifications』）。</p>
+<p><b>ACPI</b>（Advanced Configuration and Power Interface）は、OS が機器を設定し、電力を管理するための、ハードウェアとソフトウェアのインターフェースとデータの形を決めた仕様です。ファームウェアが、機器を説明する表を OS へ渡します。ACPI 仕様も UEFI Forum が持ち、6.6 版が 2025 年 5 月に公開されています（出典：UEFI Forum『ACPI Specification 6.6』、『Specifications』）。</p>
+
+<h3>電源投入から OS まで</h3>
+<p>電源を入れてから OS が動くまでには、いくつもの段階があります。UEFI ファームウェアの中は、PI 仕様が SEC、PEI、DXE、BDS などの段階を決めています。PEI の段階は、メモリを使える状態にして、DXE の段階へ引き継ぎます。DXE の段階は、機器の初期化の大部分を行います。BDS の段階は、コンソールと起動する機器を準備し、OS を起動できる状態にします（出典：UEFI Forum『UEFI PI Specification 1.8』第 2 章）。下の図で、一連の流れを一手ずつ追ってください。</p>
+<div data-widget="seq" data-src="c20-seq"></div>
+<p>図の「自己診断」は、<b>POST</b>（Power-On Self-Test）と呼ばれる、電源投入時の機器の確認です（第19章の HTTP の操作の名前「POST」とは別の意味です）。メモリや拡張機器が正しく見えるかを調べます。名前と画面表示は、製品によって違います。異常があると、BMC のログ（第19章）や画面の表示に残ります。</p>
+
+<h3>ネットワークで起動する：PXE と HTTP ブート</h3>
+<p>台数が多いサーバーは、機器の中のストレージではなく、ネットワーク越しに起動することがあります。OS の導入や、同じ OS を多数の機器で動かすときに便利です。UEFI 仕様は、そのための方法を 2 つ定めています（出典：UEFI Specification 2.11、第 24 章）。</p>
+<div data-widget="compare" data-src="c20-boot"></div>
+<p><b>PXE</b>（Preboot Execution Environment）は、DHCP（Dynamic Host Configuration Protocol、ネットワーク設定を自動で配る仕組み）で機器のネットワーク設定と起動サーバーの場所を知り、TFTP（Trivial File Transfer Protocol、簡単なファイル転送の約束）で起動ファイルを受け取ります。<b>HTTP ブート</b>は、起動するファイルの URL を指定し、DHCP で設定を得て、必要なら DNS（Domain Name System、名前から住所を引く仕組み）で名前を引き、HTTP でファイルを受け取ります。HTTP ブートは UEFI 2.5 で導入されました。UEFI Forum の 2015 年の講演資料は、PXE が使う TFTP には暗号化と認証がなく、遅く、損失に弱いことを課題に挙げ、HTTP ブートは HTTPS（HTTP を TLS で暗号化したもの）による保護と TCP（Transmission Control Protocol、確実に届ける通信の約束）による確実な転送を使えると説明しています（出典：UEFI Forum の講演資料『Goodbye PXE, Hello HTTP Boot』、2015 年 10 月 7 日。説明は講演者の資料の表現）。</p>
+<p>どちらを使うかは、機器と、起動サーバー側の環境で決まります。起動ファイルを受け取る通信は、OS が動く前に行われます。保護の仕組みを別に考える必要があります。起動の安全は、第25章でまとめます。</p>
+
+<h3>起動の設定は、台数が増えると手作業では済まない</h3>
+<p>UEFI には、設定の項目があります。性能に関わるもの、電力に関わるもの、仮想化の機能を使うかどうかに関わるものなどです。項目の名前と選択肢は、製品によって違います。</p>
+<p>台数が少ないうちは、機器の画面で 1 台ずつ設定できます。台数が増えると、設定のずれが起きます。起動の順序、仮想化の設定、電力の設定が、機器によって違うと、同じ OS とアプリケーションが、機器によって違う動きをします。そのため、設定も、第19章の管理インターフェースを使い、管理ツールから一括で行います。設定を宣言して、そろえる考え方は第21章です。</p>
+
+<h3>ファームウェアを一括で更新する</h3>
+<p>ファームウェアの更新は、1 台ずつ手で行うこともできますが、台数が多いと一括で行います。Redfish には、更新を扱う<b>UpdateService</b>があります。DMTF の白書は、次の点を説明しています（出典：DMTF『Redfish Firmware Update White Paper』DSP2062 1.2.0、2026 年 4 月 3 日）。</p>
+<ul>
+  <li><b>FirmwareInventory</b>：OS の外で動くプラットフォームのファームウェアの一覧。</li>
+  <li><b>更新の方法</b>：イメージの場所を渡して機器が取りに行く方法（SimpleUpdate）と、クライアントがイメージを送り込む方法（push）がある。push のうち、複数の部分を使う形式が推奨で、動作が各社の定義に任される古い方法は非推奨とされている。</li>
+  <li><b>順序</b>：機器を更新する順序は、サービス側が決め、並行して更新することが多い。順序の指定（StepOrder）は任意で、詳細な依存関係の仕組みは白書の範囲外である。</li>
+  <li><b>適用の時期</b>：イメージを置いておき、あとで有効にする（Stage）ことや、いつ適用するか（即時、再起動時、メンテナンス時間の開始時など）を指定できる。</li>
+</ul>
+<p>つまり、規格は更新の入口を決めていますが、<b>どの部品をどの順で更新するかの依存は、運用側が管理する</b>のが現実です。たとえば、新しい UEFI ファームウェアが、新しい版の BMC の機能を前提にすることがあります。製品の資料で、更新の組合せと順序を確認します。</p>
+<p>下の図は、更新の一般的な流れです。失敗したときに戻す分岐と、繰り返しの上限があります。上限の回数は、運用で決める値です。図の回数は例です。</p>
+<div data-widget="flow" data-src="c20-flow"></div>
+
+<h3>更新の失敗と回復：二重化された領域</h3>
+<p>ファームウェアの更新は、途中で電源が落ちる、イメージが壊れている、版が合わない、などの理由で失敗することがあります。失敗すると、機器が起動しなくなることがあります。そこで、ファームウェアを保存する領域を<b>二重化</b>して、更新中も動作する版を残す設計があります。更新に失敗したら、元の版へ戻せます。これが<b>ロールバック</b>（rollback）です。二重化の有無と、戻し方は、製品によって違います。</p>
+<p>運用側でもできる備えがあります。更新の前に現在の版を記録する、一度に更新する台数を絞る、更新後に版と動作を確認する、などです。全台を一度に更新すると、不具合があったときに、全台が同時に止まります。段階的に進める考え方は、第21章の変更管理でも扱います。</p>
+<p>起動のときにファームウェアが自分を確かめる仕組み（セキュアブート）と、更新の改ざんを防ぐ仕組みは、第25章で扱います。ここでは、UEFI 仕様に「Secure Boot and Driver Signing」の章があることだけを示します（出典：UEFI Specification 2.11 の目次）。</p>
+
+<h3>演習：更新計画の順序と、止める条件を選ぶ</h3>
+<p>次は、<b>顧客 C 社</b>の 20 台のサーバーを、更新する計画です。ファームウェアは 3 種類で、BMC、UEFI、NIC です。値はすべて架空です（出典：架空、見本のため）。</p>
+<ul>
+  <li>BMC の新しい版：UEFI の新しい版を管理するために必要。</li>
+  <li>UEFI の新しい版：新しい BMC を前提にする。NIC の新しい版とも組み合わせて確認済み。</li>
+  <li>NIC の新しい版：UEFI の新しい版とは独立に更新できる。</li>
+</ul>
+<p><b>問い</b>：更新する順序を決めてください。また、更新を<b>止めて調べる条件</b>を、2 つ挙げてください。</p>
+<details><summary>答えを見る</summary>
+  <p>順序は、<b>BMC → UEFI → NIC</b>です（NIC は先でも後でもよい）。UEFI の新しい版が、新しい BMC を前提にしているので、BMC を先に更新します。</p>
+  <p>止める条件の例：(1) 最初の少数の台数（たとえば 2 台）の更新後の確認で、版が想定と違う、または起動しない機器が 1 台でもあったとき。(2) 更新の後に、BMC のログ（第19章の SEL）に、想定外のエラーが記録されたとき。いずれも、残りの台数へ進む前に原因を調べます。</p>
+  <p>少数の台数で試してから、残りへ広げるのは、不具合が全台に広がるのを防ぐためです。</p></details>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>UEFI と BIOS は、同じものを指す言葉として使われることがあります。</b>厳密には、UEFI は仕様の名前で、BIOS は従来の PC の起動環境の名前です。製品の資料では、画面や設定項目が「BIOS」のままの場合もあります。仕様の名前と製品の呼び名を分けて読みます。</p>
+  <p>もう 1 つ。<b>更新が「完了」と表示されても、新しい版がまだ動いていないことがあります。</b>適用が再起動のときに行われる設定の場合、再起動するまで、古い版が動いたままです。更新の後は、版を読み直して確認します（第19章の Redfish で読める）。</p></div>
+
+<div class="callout tip"><span class="ttl">現場でのつながり</span>
+  <p>機器の立上げ（第28章）では、出荷時の版が、顧客の指定する版と違うことがあります。受入の前に版をそろえる作業が要るため、段取りに時間を見込みます。運用では、更新の計画を第21章の変更管理に載せ、第23章の監視で更新後の異常を見ます。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c20-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>規格</td><th scope="row"><a href="https://uefi.org/specs/UEFI/2.11/01_Introduction.html">UEFI Specification 2.11（第 1 章 Introduction）</a></th><td>UEFI Forum</td><td>2.11 版（2024 年）</td><td>UEFI の位置づけと目的、ブートマネージャ、Secure Boot の章の存在。全文は読んでいません。</td></tr>
+      <tr><td>規格</td><th scope="row"><a href="https://uefi.org/specs/UEFI/2.11/24_Network_Protocols_SNP_PXE_BIS.html">UEFI Specification 2.11（第 24 章 Network Protocols）</a></th><td>UEFI Forum</td><td>2.11 版</td><td>PXE Base Code（24.3、DHCP と TFTP）と HTTP Boot（24.7、DHCP・DNS・HTTP）の構成。章の一部を確認。</td></tr>
+      <tr><td>発表資料</td><th scope="row"><a href="https://www.businesswire.com/news/home/20241217759265/en">UEFI Forum Releases UEFI 2.11 and PI 1.9 Specifications</a></th><td>UEFI Forum</td><td>2024 年 12 月</td><td>UEFI 2.11 と PI 1.9 の公開。</td></tr>
+      <tr><td>仕様一覧</td><th scope="row"><a href="https://uefi.org/specifications">Specifications</a></th><td>UEFI Forum</td><td>確認時のページ</td><td>UEFI 2.11、ACPI 6.6、PI 1.10 の最新版の確認。</td></tr>
+      <tr><td>規格</td><th scope="row"><a href="https://uefi.org/specs/PI/1.8/V2_Overview.html">UEFI Platform Initialization Specification 1.8（Volume 2 Overview）</a></th><td>UEFI Forum</td><td>1.8 版</td><td>PEI・DXE・BDS の段階の役割。SEC は章題の確認のみ。</td></tr>
+      <tr><td>規格</td><th scope="row"><a href="https://uefi.org/specs/ACPI/6.6/01_Introduction.html">ACPI Specification 6.6（第 1 章）</a></th><td>UEFI Forum</td><td>6.6 版（2025 年 5 月）</td><td>ACPI の範囲と、UEFI Forum が持つ仕様であること。</td></tr>
+      <tr><td>公開ページ</td><th scope="row"><a href="https://uefi.org/node/5172">UEFI Advanced Configuration and Power Interface (ACPI) 6.6 Specification Available</a></th><td>UEFI Forum</td><td>2025 年 5 月ごろ（ページに日付の記載なし）</td><td>ACPI 6.6 の公開。月は「仕様一覧」の記載に合わせました。</td></tr>
+      <tr><td>講演資料</td><th scope="row"><a href="https://uefi.org/sites/default/files/resources/FINAL%20Pres4%20UEFI%20HTTP%20Boot.pdf">Goodbye PXE, Hello HTTP Boot</a></th><td>UEFI Forum（講演者の所属企業の資料）</td><td>2015 年 10 月 7 日</td><td>HTTP ブートの導入（UEFI 2.5）と、PXE との違いの説明。講演者の表現。</td></tr>
+      <tr><td>白書</td><th scope="row"><a href="https://www.dmtf.org/sites/default/files/standards/documents/DSP2062_1.2.0.html">Redfish Firmware Update White Paper（DSP2062）1.2.0</a></th><td>DMTF</td><td>2026 年 4 月 3 日</td><td>UpdateService、FirmwareInventory、更新の方法、順序、適用の時期。</td></tr>
+      <tr><td>一般知識</td><th scope="row">POST、ブートローダ、ファームウェアの二重化とロールバック</th><td>—</td><td>—</td><td>一般的な設計の説明（数値なし）。製品で違う旨を本文に注記しました。</td></tr>
+    </tbody>
+  </table></div>
+</section>

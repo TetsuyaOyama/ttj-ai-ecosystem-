@@ -1,0 +1,76 @@
+<!--
+num: 10
+part: 2
+title: ネットワーク機器と光トランシーバ
+track: 機器
+time: 40
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li><b>リーフ・スパイン</b>構成で、サーバー・リーフ・スパインがどうつながるかを説明できる。</li>
+    <li><b>イーサネット</b>と <b>InfiniBand</b>、<b>RDMA</b> と <b>RoCE</b> の関係を言える。</li>
+    <li>「800G OSFP」のような表記を、速度と形に分けて読み、<b>DAC</b>・<b>AOC</b>・光トランシーバの使い分けを考えられる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch07">第07章</a>（PCIe）。あるとよい：<a href="#ch08">第08章</a>（GPU サーバー）、<a href="#ch09">第09章</a>（ストレージ）。</p>
+</section>
+
+<h3>サーバーをつなぐ構成：リーフ・スパイン</h3>
+<p>データセンターには、多数のサーバーがあります。サーバーの間の通信を、同じ条件で、速く通す必要があります。そのために、<b>リーフ・スパイン</b>（leaf-spine）構成がよく使われます。サーバーを収容するスイッチが「リーフ」、リーフ同士を結ぶスイッチが「スパイン」です。サーバーは、リーフにだけつなぎます。リーフは、すべてのスパインとつなぎます（出典：一般知識）。</p>
+<div data-widget="tree" data-src="c10-leafspine"></div>
+<p>この構成の利点は、どのサーバーの間も、通る段数がほぼ同じなことです。スパインを増やすと、リーフ間の経路が増えます。1 台のスパインが止まっても、残りの経路で通信を続けやすくなります。ラックの上に置くスイッチ（ToR スイッチ、Top of Rack switch）が、リーフの役を担うことが多くあります（<a href="#ch03">第03章</a>のラックの話）。</p>
+
+<h3>イーサネットと InfiniBand</h3>
+<p>通信の方式は、大きく 2 つあります。<b>イーサネット</b>（Ethernet）は、広く使われる有線の通信方式です。<b>InfiniBand</b> は、AI やスーパーコンピュータ向けに、高速・低遅延を重視した方式です。どちらも、<b>RDMA</b>（Remote Direct Memory Access）を使えます。RDMA は、相手のメモリを、CPU をあまり介さずに、直接読み書きする方式です。</p>
+<div data-widget="compare" data-src="c10-eth-ib"></div>
+<p>イーサネットの規格は、IEEE 802.3 です。速度は、改訂（amendment）を重ねて加わってきました。IEEE SA のページは、200 Gb/s と 400 Gb/s を加えた IEEE 802.3bs-2017、800 Gb/s を加えた IEEE 802.3df-2024 を挙げ、1.6 Tb/s を扱う P802.3dj を策定中の改訂として挙げています（出典：IEEE SA『IEEE 802.3-2022』のページ、確認 2026 年 11 月）。InfiniBand の仕様は、業界団体の InfiniBand Trade Association（IBTA）が定めます。</p>
+<p>イーサネットの上で RDMA を行う方式を、<b>RoCE</b>（RDMA over Converged Ethernet）と呼びます。RoCEv2 は、UDP と IP の上で動きます（出典：一般知識）。層で見ると、次のようになります。</p>
+<div data-widget="stack" data-src="c10-roce"></div>
+
+<p>AI と HPC 向けに、イーサネットを作り直す動きもあります。Ultra Ethernet Consortium（UEC）は、2025 年 6 月 11 日に、仕様 1.0 を公開したと発表しました。NIC、スイッチ、光部品、ケーブルにわたる、イーサネットを土台にした通信の積層で、イーサネットと IP の上の RDMA を含む、と説明しています（出典：UEC、2025 年 6 月 11 日）。UEC は、Linux Foundation の関連団体（Joint Development Foundation のプロジェクト）です。</p>
+<h3>製品の公開仕様を読む</h3>
+<p>NVIDIA（米国）は、AI 向けのイーサネットとして Spectrum-X を、InfiniBand として Quantum-X800 を、公開しています。公開ページの記載は、次のとおりです。</p>
+<div data-widget="table" data-src="c10-eth"></div>
+<p>表の最後の行は、Broadcom（米国）が公開しているスイッチ用チップの記載です。どの値も、企業の自社ページの記載です。時点は、確認した日（2026 年 11 月 14 日）です。方式の間や、企業の間で、優劣は比べません。</p>
+
+<h3>光トランシーバと、表記の読み方</h3>
+<p>スイッチやサーバーのカードの差し口には、<b>光トランシーバ</b>（optical transceiver）を差します。電気の信号と、光の信号を変換するモジュールです。形の名前に、QSFP-DD や OSFP があります。「800G OSFP」のような表記は、速度と形に分けて読みます。</p>
+<div data-widget="ident" data-src="c10-trx"></div>
+<p>NVIDIA のページは、スイッチが、従来のプラガブル光と、パッケージ一体の光（<b>CPO</b>、Co-Packaged Optics）の両方に対応すると記しています。CPO は、光の部品を、スイッチのチップのすぐ近くに載せる方式です。差し口の形を変えずに、後から部品を交換できるのは、プラガブルのほうです。</p>
+
+<h3>ケーブルの選び方</h3>
+<p>接続の距離で、ケーブルの種類を選びます。銅線の <b>DAC</b>、光の部品を内蔵した一体の <b>AOC</b>、差し口のモジュールと光ファイバを別に選ぶ構成、の 3 つが基本です。距離の上限、電力、費用は、製品の仕様書で確認します。</p>
+<div data-widget="table" data-src="c10-cables"></div>
+
+<h3>演習：どのケーブルから考えるか</h3>
+<p>3 つの接続（すべて架空）で、どのケーブルから考えるかを選びます。答えを決めてから、行を押してください。</p>
+<div data-widget="table" data-src="c10-choose"></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>「800G」は、1 ポートの合計の速度です。</b>レーン 1 本の速度ではありません。</p>
+  <p><b>OSFP と QSFP-DD は、通信の方式ではなく、形の名前です。</b>形が違うと、そのままでは差せません。</p>
+  <p><b>RoCE は、InfiniBand の別名ではありません。</b>RoCE は、イーサネットの上で RDMA を行う方式です。</p>
+  <p><b>製品の公開値は、企業の間で比べません。</b>測り方と条件が、資料ごとに違います。</p></div>
+
+<div class="callout tip"><span class="ttl">現場でのつながり</span>
+  <p>案件では、サーバーの台数、1 台あたりのポートの速度、ラックの配置、距離を聞きます。そこから、スイッチの台数と、ケーブルの種類を決めます。ケーブルの電力と発熱、配線が冷却の流れを邪魔しないことも、確認します（<a href="#ch15">第15章</a>）。AI の計算用のネットワークは、<a href="#ch11">第11章</a>で扱います。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c10-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（アクセス日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.nvidia.com/en-us/networking/spectrumx/">Spectrum-X</a></th><td>NVIDIA（米国）</td><td>2026 年 11 月に確認</td><td>SN6600・SN6800・ConnectX-8 の値、RoCE の記載。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.nvidia.com/en-us/networking/products/infiniband/quantum-x800/">Quantum-X800</a></th><td>NVIDIA（米国）</td><td>2026 年 11 月に確認</td><td>InfiniBand のスイッチのポート数と速度。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.broadcom.com/products/ethernet-connectivity/switching/strataxgs/bcm78910-series">Tomahawk 6 / BCM78910 Series</a></th><td>Broadcom（米国）</td><td>2026 年 11 月に確認（製品の公表日の記載なし）</td><td>スイッチ用チップの容量（102.4 Tb/s）、ポート構成の例、SerDes の速度。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.nvidia.com/en-us/networking/products/ethernet/">Ethernet Networking</a></th><td>NVIDIA（米国）</td><td>2026 年 11 月に確認</td><td>Spectrum の速度の範囲、プラガブル光と CPO の対応。</td></tr>
+      <tr><td>標準化団体の公開資料</td><th scope="row"><a href="https://standards.ieee.org/ieee/802.3/10422/">IEEE Standard for Ethernet（IEEE 802.3-2022）</a></th><td>IEEE SA</td><td>2022 年 7 月 29 日発行、Active Standard の表示（2026 年 11 月に確認）</td><td>改訂の一覧（802.3bs-2017、802.3df-2024、策定中の P802.3dj）と、その題名にある速度。規格本文は読んでいません。</td></tr>
+      <tr><td>団体の発表</td><th scope="row"><a href="https://ultraethernet.org/ultra-ethernet-consortium-uec-launches-specification-1-0-transforming-ethernet-for-ai-and-hpc-at-scale/">Ultra Ethernet Consortium (UEC) Launches Specification 1.0 Transforming Ethernet for AI and HPC at Scale</a></th><td>Ultra Ethernet Consortium</td><td>2025 年 6 月 11 日</td><td>仕様 1.0 の公開の時期と範囲。</td></tr>
+      <tr><td>一般知識</td><th scope="row">ネットワークの教科書（Kurose・Ross『Computer Networking』など）</th><td>—</td><td>—</td><td>リーフ・スパイン、RDMA・RoCE、DAC・AOC の考え方。数値は使っていません。</td></tr>
+    </tbody>
+  </table></div>
+</section>

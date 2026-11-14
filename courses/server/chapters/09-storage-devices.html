@@ -1,0 +1,72 @@
+<!--
+num: 09
+part: 2
+title: ストレージ：SSD の形・つなぎ方・冗長
+track: 機器
+time: 35
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li><b>ブロック・ファイル・オブジェクト</b>の違いと、<b>NAS</b>・<b>SAN</b>・<b>NVMe-oF</b>・分散ストレージのつなぎ方を説明できる。</li>
+    <li>SSD の形（<b>EDSFF</b> の E1.S・E3.S）の表記を読める。</li>
+    <li><b>RAID</b> と<b>イレイジャーコーディング</b>が、何に備える仕組みかを言える。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch07">第07章</a>（PCIe）。あるとよい：<a href="#ch05">第05章</a>（信頼性と冗長）。</p>
+</section>
+
+<h3>3 種類のデータの扱い方</h3>
+<p>ストレージは、データの「扱い方」で、3 種類に分けて考えます。<b>ブロック</b>は、固定長の区切りを、番号で読み書きします。<b>ファイル</b>は、名前と階層で扱います。<b>オブジェクトストレージ</b>（object storage）は、名前（キー）で、1 まとまりをまるごと出し入れします。</p>
+<div data-widget="table" data-src="c09-types"></div>
+<p>分け方は、SSD か HDD かという、記憶の素材の違いではありません。同じ SSD の上に、3 種類のどれも作れます。</p>
+
+<h3>SSD の形と NVMe</h3>
+<p>サーバーの SSD は、<b>NVMe</b>（NVM Express）で使うのが一般的です。NVMe は、SSD を PCIe 経由で効率よく使うための、命令とインターフェースの規格です（出典：一般知識）。PCIe は<a href="#ch07">第07章</a>で扱いました。</p>
+<p>形の規格に、<b>EDSFF</b>（Enterprise and Datacenter Standard Form Factor）があります。SNIA（米国の団体）の資料は、SFF-TA-1006 を E1.S（1U の短い形）の規格とし、最新版を 1.5（2021 年 8 月）と記しています。SFF-TA-1008 は、E3.S、E3.S 2T、E3.L、E3.L 2T を定め、最新版は 2.1（2023 年 10 月）です。E3.S は、SSD と同じ x4（1C）のコネクタを使います。E3.S 2T と E1.S は、CXL のメモリモジュールに、x8（2C）のコネクタを使います（出典：SNIA『The Latest on Form Factors』）。寸法と「2T」の意味は、この資料に書かれていません。調達では、仕様書で確かめます。</p>
+<p>EDSFF より前からある形に、基板に直接差す <b>M.2</b> と、2.5 インチのドライブの形の <b>U.2</b>・<b>U.3</b> があります（一般知識）。同じ SNIA の資料は、E1.S を「M.2 より容量が大きく、U.2 と同じ性能」の形と比べ、M.2 は第 5 世代（PCIe 5.0）の大容量のドライブには向かない、と述べています。E3.S は、U.2 より多くのドライブを載せられる、とも述べています（出典：SNIA『The Latest on Form Factors』）。</p>
+<div data-widget="ident" data-src="c09-edsff"></div>
+
+<h3>つなぎ方の 5 つの形</h3>
+<p>ストレージは、サーバーとの「つなぎ方」でも分けます。サーバーの中に差す方式、ネットワーク越しにファイルを共有する<b>NAS</b>（Network Attached Storage）、専用のネットワークでブロックを渡す<b>SAN</b>（Storage Area Network）、NVMe の命令をネットワークで送る<b>NVMe-oF</b>（NVMe over Fabrics）、多数のノードにデータを分けて置く<b>分散</b>の方式です。タブで切り替えて、経路を比べてください。</p>
+<div data-widget="arch" data-src="c09-conn"></div>
+<p>近い順に、サーバー内は遅延が小さく、仕組みも単純です。ネットワーク越しにすると、複数のサーバーで共有できます。そのかわり、ネットワークの混雑や障害の影響を受けます。ネットワークは<a href="#ch10">第10章</a>で扱います。</p>
+
+<h3>冗長：壊れても読めるようにする</h3>
+<p>記憶装置は、いつか壊れます。そこで、一部が壊れても読めるように、データを冗長にします。<b>RAID</b>（Redundant Array of Independent Disks）は、複数の装置を組み合わせ、コピーや、計算した「パリティ」で冗長にします。<b>イレイジャーコーディング</b>（erasure coding）は、データを分け、計算した符号を足して置き、一部を失っても元に戻せるようにします。コピーより少ない容量で、冗長にできる場合があります（出典：一般知識）。</p>
+<p>注意点があります。冗長は、装置の故障に備える仕組みです。誤って消したデータや、ランサムウェアによる破壊は、冗長にも反映されます。バックアップは、別に持ちます（<a href="#ch05">第05章</a>）。</p>
+<p>1 回の書き込みが、冗長に保存されるまでを見ます。</p>
+<div data-widget="seq" data-src="c09-write"></div>
+
+<h3>多数のサーバーが使うストレージ</h3>
+<p>AI や研究の計算では、多数のサーバーが、同じデータを同時に読みます。このとき、1 台の NAS では、性能が足りなくなりやすくなります。そこで、<b>並列ファイルシステム</b>（parallel file system）を使います。多数のストレージノードにデータを分けて置き、多数のクライアントが並列に読み書きします。ジョブの運用は<a href="#ch22">第22章</a>で扱います。</p>
+
+<h3>廃棄とデータ消去</h3>
+<p>ストレージは、廃棄や返却のときに、データの消去が要ります。NIST（米国国立標準技術研究所）の SP 800-88 Rev. 2『Guidelines for Media Sanitization』は、2025 年 9 月 26 日に公表され、Rev. 1（2014 年）を置き換えました。データの機微さに合わせて、消去と廃棄の方法と管理を選ぶ、サニタイズの計画づくりを助ける文書です（出典：NIST CSRC）。詳しい手順は、この章では書きません。</p>
+
+<h3>演習：どの方式から考えるか</h3>
+<p>3 つの案件（すべて架空）で、種類とつなぎ方を選びます。答えを決めてから、行を押してください。</p>
+<div data-widget="table" data-src="c09-choose"></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>NAS と SAN は、同じではありません。</b>NAS はファイル、SAN はブロックを渡します。NVMe-oF は、ブロックを、NVMe の命令のままネットワークで送る方式です。</p>
+  <p><b>冗長はバックアップではありません。</b>RAID やイレイジャーコーディングは、装置の故障に備えます。誤って消したデータは、冗長だけでは戻せません。</p>
+  <p><b>形の名前は、速度や容量の表記ではありません。</b>「E3.S 2T」の「2T」は、容量（2 TB）ではありません。</p></div>
+
+<div class="callout tip"><span class="ttl">現場でのつながり</span>
+  <p>案件では、データの量、同時に使う数、遅延の条件、廃棄の方針を、先に聞きます。そのうえで、サーバー内の SSD で足りるか、共有や分散が要るかを決めます。形（E1.S・E3.S）は、サーバーの筐体と冷却（<a href="#ch15">第15章</a>）の条件に合うものを、仕様書で確認します。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c09-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（アクセス日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://www.snia.org/sites/default/files/SSSI/CMSS24/CMSS24-Hands-The-Latest-on-Form-Factors.pdf">The Latest on Form Factors（CMSS24）</a></th><td>SNIA（米国）</td><td>2024 年</td><td>E1.S・E3.S の規格番号と版、コネクタの幅。M.2・U.2 との比べ方。</td></tr>
+      <tr><td>公的な文書</td><th scope="row"><a href="https://csrc.nist.gov/pubs/sp/800/88/r2/final">SP 800-88 Rev. 2 Guidelines for Media Sanitization</a></th><td>NIST（米国）</td><td>2025 年 9 月 26 日（Rev. 1 を置き換え）</td><td>データ消去（サニタイズ）の計画づくりの指針。</td></tr>
+      <tr><td>一般知識</td><th scope="row">オペレーティングシステムの教科書（Silberschatz ほか『Operating System Concepts』など）</th><td>—</td><td>—</td><td>ブロック・ファイル・オブジェクト、NAS・SAN、RAID、NVMe の考え方。数値は使っていません。</td></tr>
+    </tbody>
+  </table></div>
+</section>
