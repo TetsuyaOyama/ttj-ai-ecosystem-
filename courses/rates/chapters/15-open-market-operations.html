@@ -1,0 +1,93 @@
+<!--
+num: 15
+part: 3
+title: 公開市場操作：資金供給と資金吸収のオペ
+track: 中央銀行
+time: 40
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>日銀のオペの<b>種類</b>（資金供給と資金吸収、買入れ・現先・貸付）を、名前と仕組みで説明できる。</li>
+    <li>オペの<b>1 回の流れ</b>（オファー・応札・落札・受渡し・結果の公表）と、結果を確かめる場所を説明できる。</li>
+    <li>米国のオペ（国債の買入れ・レポ取引・リバース・レポ）の種類と、一時的なオペと買入れのオペの<b>効き方の違い</b>を説明できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch11">第11章</a>（レポ取引）、<a href="#ch14">第14章</a>（準備預金と当座預金）。</p>
+</section>
+
+<div class="callout warn"><span class="ttl">この章の扱い（制度の時点）</span><p>この章の制度・規則・商品の仕様は、本文に明記した国・地域と時点のものです。金融政策の枠組み、取引所と清算機関の規則、商品の仕様は改定されます。最新の内容は、本文の参照資料に挙げた公式のページで確かめてください。</p></div>
+
+<h3>オペとは：資金供給と資金吸収</h3>
+<p><b>公開市場操作</b>（open market operations）は、中央銀行が金融機関と債券や資金をやり取りして、当座預金・準備預金の量を調節することです。日本では、日本銀行（以下、日銀）が行います。日銀は、これをオペレーション（以下、オペ）と呼んでいます。</p>
+<p>日銀は、オペを 2 つに分けて説明しています（出典：日本銀行『オペレーション（公開市場操作）にはどのような種類がありますか？』、日付の表示なし、確認 2026 年 11 月）。</p>
+<ul>
+  <li><b>資金供給</b>のオペ：金融市場に資金を供給する。日銀が国債を買い入れたり、金融機関に貸し付けたりして、当座預金を増やす。</li>
+  <li><b>資金吸収</b>のオペ：金融市場から資金を吸収する。日銀が国債や手形を売って、当座預金を減らす。</li>
+</ul>
+<p>当座預金が増える・減る仕組みは、<a href="#ch13">第13章</a>の国債買入れの図と同じです。もう 1 つの分け方は、<b>期日があるか</b>です。期日のある取引（貸付・現先・手形）は、期日に逆の取引が行われます。期日のない取引が<b>買入れのオペ</b>（outright purchase）です。日銀の取引概要は「買い切り」の語を使いませんが、買い戻し・売り戻しの約束を付けない買入れのことを、そう呼ぶことがあります。</p>
+
+<h3>日銀のオペの種類</h3>
+<p>【日本】日銀の「オペレーション等の一覧」には、次の表のオペなどが載っています（出典：日本銀行『オペレーション等の一覧』、確認 2026 年 11 月）。各オペの名前と仕組みは、取引概要・基本要領の語のとおりです。</p>
+<div data-widget="table" data-src="c15-ops"></div>
+<p>表のうち、<b>共通担保資金供給オペレーション</b>（Funds-Supplying Operations against Pooled Collateral、以下、共通担保オペ）は、適格担保を担保にした貸付です。貸付期間は 10 年以内の期間で、貸付けのつど決められます。貸付利率は、金利入札方式・固定金利方式・変動金利方式のいずれかで決まります（出典：日本銀行『共通担保資金供給オペレーション基本要領』、決定 2006 年 4 月 11 日、最終改正 2026 年 9 月 18 日）。国債買入れは、国債を入札で買い入れる資金供給のオペで、国債現先オペは、売り戻し・買い戻しの条件を付けて、国債や国庫短期証券を売買します。</p>
+<p>日銀の「オペレーション等の一覧」には、このほか、各通貨の資金供給オペや、補完貸付制度（貸出の制度）なども載っています。補完貸付制度は<a href="#ch18">第18章</a>で扱います。この章の表は、当座預金の量を調節する主なオペに絞っています。</p>
+
+<h3>担保：適格担保</h3>
+<p><b>適格担保</b>（eligible collateral）は、日銀が貸付などで受け入れる担保です。日銀の『適格担保取扱基本要領』は、日銀が行う与信について、担保の種類・担保価格・適格基準を統一すると定めます（決定 2000 年 10 月 13 日）。適格基準は、信用度（元利金の支払いが確実であると日銀が認めること）と、市場性（換価処分による資金化が容易であること）などです。担保の種類には、国債、国庫短期証券、政府保証債券、地方債、社債、企業が振り出す手形、コマーシャル・ペーパー、証書貸付債権などがあります（出典：日本銀行『適格担保取扱基本要領』、確認 2026 年 11 月）。</p>
+<p>担保の価格（担保価格）の決め方は、『適格担保の担保価格』のページに載っています。最近の改正は、日銀の制度変更一覧で確かめます。この講座は、担保価格の値を書きません。</p>
+
+<h3>オペの 1 回：オファーから結果の公表まで</h3>
+<p>日銀の取引概要は、オペの流れを次のように書いています。日銀が入札参加者に売買要項を日銀ネットで通知し（オファー）、参加者が締切までに応募し、日銀が募入を決定して通知します。決めた日に、国債と代金を受け渡します。受渡しの仕組みは<a href="#ch12">第12章</a>です。</p>
+<div data-widget="flow" data-src="c15-flow"></div>
+<p>結果は、2 段階で伝わります。応募した参加者には、募入の決定が通知されます（取引概要）。一般への公表は、日銀の統計『オペレーション』が担います。この統計の日次のデータは、「オペレーションのオファーおよびオファーバックの都度」更新されます。月次のデータは月ごとに 1 回公表されます。2026 年 10 月分は 11 月 9 日、9 月分は 10 月 7 日に掲載されています。ただし、このページに公表の日程の決まりは書かれていません（出典：日本銀行『オペレーション』統計、確認 2026 年 11 月）。</p>
+<p>統計の項目と単位は、リンク先の Excel ファイルで確かめます。この章では、統計の中身の値を書きません。オペと当座預金の動きの関係は<a href="#ch19">第19章</a>で、統計の読み方は<a href="#ch25">第25章</a>で扱います。</p>
+
+<h3>一時的なオペと、買入れのオペ</h3>
+<p>期日のある取引と、期日の約束がない買入れは、当座預金への効き方の期間が違います。比べると、次のとおりです。</p>
+<div data-widget="compare" data-src="c15-temp-perm"></div>
+
+<h3>米国のオペ：公開市場デスク</h3>
+<p>【米国】米国のオペは、ニューヨーク連邦準備銀行（Federal Reserve Bank of New York、以下 NY 連銀）の<b>公開市場デスク</b>（Open Market Trading Desk、以下デスク）が行います。連邦公開市場委員会（Federal Open Market Committee, FOMC）の指示に基づく実施です。デスクのオペの主な種類は、次のとおりです。</p>
+<ul>
+  <li><b>国債の買入れ</b>：NY 連銀のページは、システム公開市場勘定（System Open Market Account, SOMA）のための、国債の月次の買入れとして、<b>reserve management purchases</b>（短期国債の買入れ）と、エージェンシー証券の元本の短期国債への再投資を載せます。買入れは、国債の流通市場で行われます（出典：NY 連銀『Treasury Securities Operational Details』、確認 2026 年 11 月）。<a href="#ch22">第22章</a>・<a href="#ch23">第23章</a>で位置づけを扱います。</li>
+  <li><b>常設の翌日物レポ取引</b>（standing overnight repurchase agreement operations）：デスクが証券を買い、翌日に売り戻す取引で、資金を供給します。取引相手は、プライマリー・ディーラー（primary dealer）と、預金取扱機関を含む常設レポの取引相手です。入札ではなく、固定の金利で、申込みをすべて受け入れる形（full allotment）で行われます（出典：NY 連銀『FAQs: Standing Repurchase Agreement Operations』、2026 年 9 月 16 日）。</li>
+  <li><b>翌日物リバース・レポ</b>（ON RRP。Overnight Reverse Repurchase Agreement Facility）：デスクが、適格な取引相手に証券を売り、同じ証券を買い戻す約束をする取引で、資金を吸収します。取引相手は、プライマリー・ディーラーと、マネー・マーケット・ファンドや銀行などです。担保は米国債だけです（出典：NY 連銀『FAQs: Reverse Repurchase Agreement Operations』、2026 年 9 月 16 日）。</li>
+</ul>
+<p>日本の用語と並べると、常設の翌日物レポ取引が「資金供給の現先」、ON RRP が「資金吸収の売現先」にあたります。ただし、制度の位置づけと相手方は同じではありません。金利の値は、この章に書きません（<a href="#ch23">第23章</a>）。</p>
+<p>結果の公表も、デスクの各ページにあります。常設レポ取引は、各オペの後に、種類ごとの受入総額と金利の要約を公表します。ON RRP も、各オペの後に、応札総額・受入総額・金利の要約を公表します。ON RRP は、取引相手の種類ごとの内訳が、月に 1 回、1 か月遅れで公表されます（出典：NY 連銀の上の 2 つのページ）。常設レポ取引は、取引相手の名前を含む詳しい結果が、各四半期の取引期間の 2 年後に公表されます（連邦準備法第 11 条の定めと、ページは説明しています）。</p>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>オファーと結果の公表は、別のものです</b>。オファーは入札参加者への通知で、一般への結果の公表は統計『オペレーション』です。</p>
+  <p><b>国債の「買入れ」と「現先」は、別の取引です</b>。買入れは、戻す約束を付けません。現先は、期日に逆の取引をします。</p>
+  <p><b>「資金吸収」は、日銀が資金を集めて使うことではありません</b>。当座預金を減らす取引のことです。</p>
+  <p><b>日本と米国のオペの名前は、そのままの対応ではありません</b>。ON RRP を売現先と言い換えるのは、取引の形の目安で、制度の位置づけは違います。</p>
+  <p><b>この章の表の版は、ページごとに違います</b>。取引概要の現在の版の日付が、2018 年のものと 2026 年のものがあります。最新の内容は、日銀のページで確かめます。</p></div>
+
+<div class="callout tip"><span class="ttl">実務でのつながり</span>
+  <p>金融機関の資金繰りでは、オペのオファーの日程と、受渡しの日が、当座預金の残高を動かします。システムの開発では、統計『オペレーション』の日次データを取り込むときに、オファーがない日に行がないことに注意します。債券の運用では、国債の買入れの予定が、国債の需給の説明に使われます（予測はしません）。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c15-quiz"></div></section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 15 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.boj.or.jp/about/education/oshiete/seisaku/b34.htm">オペレーション（公開市場操作）にはどのような種類がありますか？</a></th><td>日本銀行</td><td>日付の表示なし</td><td>資金供給と資金吸収の分け方、各オペの説明。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.boj.or.jp/mopo/measures/mkt_ope/index.htm">オペレーション等の一覧</a></th><td>日本銀行</td><td>日付の表示なし</td><td>オペの名前の一覧。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.boj.or.jp/mopo/measures/term_cond/yoryo33.htm">共通担保資金供給オペレーション基本要領</a></th><td>日本銀行</td><td>決定 2006 年 4 月 11 日、最終改正 2026 年 9 月 18 日</td><td>貸付期間・担保・貸付利率の方式。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.boj.or.jp/mopo/measures/mkt_ope/ope_f/opetori4.htm">国債買入オペの取引概要</a></th><td>日本銀行金融市場局</td><td>2026 年 6 月 16 日現在</td><td>対象・入札方式・オファー・受渡し。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.boj.or.jp/mopo/measures/mkt_ope/ope_c/opetori7.htm">国債現先オペの取引概要</a></th><td>日本銀行金融市場局</td><td>2024 年 8 月 30 日現在</td><td>売戻条件付買入・買戻条件付売却の期間・方式。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.boj.or.jp/mopo/measures/mkt_ope/ope_e/opetori8.htm">国庫短期証券売買オペの取引概要</a></th><td>日本銀行金融市場局</td><td>2018 年 10 月 12 日現在</td><td>国庫短期証券の買入れ・売却の方式。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.boj.or.jp/mopo/measures/mkt_ope/ope_d/index.htm">手形売出オペ</a></th><td>日本銀行</td><td>日付の表示なし</td><td>資金吸収の手形売出オペの説明。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.boj.or.jp/mopo/measures/mkt_ope/ope_b/opetori11.htm">国債補完供給の取引概要</a></th><td>日本銀行金融市場局</td><td>2026 年 7 月 16 日現在</td><td>買戻条件付売却の方式と期間。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.boj.or.jp/mopo/measures/term_cond/yoryo18.htm">適格担保取扱基本要領</a></th><td>日本銀行</td><td>決定 2000 年 10 月 13 日（ページに載る最終改正 2017 年 1 月 31 日）</td><td>適格基準と担保の種類。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.boj.or.jp/statistics/boj/fm/ope/index.htm">オペレーション（統計）</a></th><td>日本銀行</td><td>日次は 2026 年 11 月 13 日分まで、月次は 2026 年 11 月 9 日掲載（10 月分）</td><td>結果の公表の頻度とリンク。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.newyorkfed.org/markets/domestic-market-operations/monetary-policy-implementation/treasury-securities/treasury-securities-operational-details">Treasury Securities Operational Details</a></th><td>ニューヨーク連邦準備銀行</td><td>日付の表示なし（最新の項目は 2026 年 10 月 30 日の発表）</td><td>国債の買入れ（reserve management purchases）と結果の公表。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.newyorkfed.org/markets/repo-agreement-ops-faq">FAQs: Standing Repurchase Agreement Operations</a></th><td>ニューヨーク連邦準備銀行</td><td>2026 年 9 月 16 日</td><td>常設の翌日物レポ取引の取引相手・方式・結果の公表。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.newyorkfed.org/markets/rrp_faq">FAQs: Reverse Repurchase Agreement Operations</a></th><td>ニューヨーク連邦準備銀行</td><td>2026 年 9 月 16 日</td><td>ON RRP の取引相手・担保・結果の公表。</td></tr>
+      <tr><td>教科書・一般知識・他講座</td><th scope="row">金融論の教科書（一時的なオペと買入れの効き方の期間）</th><td>—</td><td>—</td><td>数値を伴わない一般的な整理。</td></tr>
+    </tbody>
+  </table></div>
+</section>

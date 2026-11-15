@@ -1,0 +1,80 @@
+<!--
+num: 12
+part: 2
+title: 国債の決済：日銀ネットと Fedwire、DVP
+track: 国債
+time: 30
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>決済とは何か（債券の受渡しと資金の支払い）と、DVP（delivery versus payment）が減らすリスクを説明できる。</li>
+    <li>日本の日銀ネット（当預系・国債系）、国債振替決済制度、清算機関による清算の役割を説明できる。</li>
+    <li>米国の Fedwire Securities Service・Fedwire Funds Service・FICC（Fixed Income Clearing Corporation）の役割と、日本の仕組みとの違いを説明できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch10">第10章</a>（国債の流通市場）、<a href="#ch11">第11章</a>（レポ取引）。日銀の当座預金は<a href="#ch14">第14章</a>です。</p>
+</section>
+
+<h3>決済とは</h3>
+<p><b>決済</b>（settlement）は、売買が成立したあとに、債券を渡し、代金を支払って、取引を完了させることです（一般的な説明）。売買の約定（取引の成立）と、決済は、別の時点です。約定のあと、決済までの間に、相手方が債券か代金のどちらかを渡さないリスクがあります。</p>
+<p><b>DVP</b>（delivery versus payment）は、債券の引渡しと代金の支払いを、一方が行われなければ他方も行われない形で、同時に行う方式です。債券だけ、または代金だけが渡されて、相手方が他方を渡さない元本リスクを減らします。</p>
+
+<h3>日本：日銀ネットと国債振替決済制度</h3>
+<p><b>日銀ネット</b>は、正式名称を「日本銀行金融ネットワークシステム」といい、日本銀行と取引先金融機関との間の、資金や国債の決済をオンライン処理により行う、日本銀行が運営するネットワークです（日本銀行『日銀ネットとは何ですか？』）。機能は 2 つです。</p>
+<ul>
+  <li><b>日銀ネット当預系</b>：資金決済のシステムです。日本銀行当座預金間の振替により、短期金融市場の取引や国債取引の資金決済などを行います。</li>
+  <li><b>日銀ネット国債系</b>：国債決済のシステムです。売買に伴う国債の決済、国債発行時の入札・発行・払込みなどを処理します。</li>
+</ul>
+<p><b>国債振替決済制度</b>は、日本銀行が、社債、株式等の振替に関する法律に基づく国債の振替機関として運営する、国債の受渡しを帳簿上の振替で行う仕組みです（日本銀行『日本銀行が運営する国債振替決済制度に関する情報開示』、2025 年 7 月 31 日）。国債は、現物が渡されるのではなく、帳簿上の保有者が、売り手から買い手へ、振り替えられます。</p>
+
+<h3>DVP：国債系と当預系をリンクする</h3>
+<p>日銀の情報開示によると、国債系は国債の振替を、当預系は日本銀行当座預金による資金決済を処理し、日本銀行は両者をリンクさせて、国債の振替と資金の振替を相互に紐づけています。方式は「グロス＝グロス型の DVP 決済」で、取引 1 件ごとに、国債と資金の振替が対応し、両者が同時にファイナルになります。一方が行われない限り他方も行われません。決済のタイミングは「即時グロス決済」で、振替申請等の入力後、国債残高を確認したうえで、1 件ごとに、直ちに決済が行われます。</p>
+<p>国債の決済に、資金の決済として、日本銀行当座預金が使われるのは、当預系が、国債取引の資金決済を、当座預金間の振替で処理するからです。当座預金の仕組みは第14章です。</p>
+<div data-widget="seq" data-src="c12-dvp"></div>
+
+<h3>清算機関とネッティング</h3>
+<p>店頭の国債の取引には、清算機関を使う方法があります。<b>JSCC</b>（日本証券クリアリング機構）の国債店頭取引の清算は、清算機関が、取引当事者の債務（証券の引渡しまたは資金の支払い）を引き受けると同時に、ネッティングを行って、決済リスクの削減をはかります（JPX のページ）。対象は、日本国債の現物取引の主な形態である、売買、現先取引、現金担保付債券貸借取引です。決済は、日銀ネットを利用した DVP 決済で、元本リスクを排除するとされています。</p>
+<p>ネッティングは、複数の取引の受渡しと支払いを差し引いて、実際に決済する量を減らすことです。清算機関を使うかどうかは、取引ごとに決まります。清算と DVP は別の話で、清算を使わない売買でも、日銀ネットの DVP で決済できます。</p>
+
+<h3>決済の期間</h3>
+<p>日本の国債の決済期間は、2018 年 5 月に T+1（約定日の翌営業日）に短縮されました。前段は、1997 年の T+3、2012 年 4 月の T+2 です。日銀の論文は、T+1 決済は T+3 決済に比べて、国債の未決済残高が 3 分の 1 になると書き、決済リスクの削減の観点から説明しています（日本銀行金融市場局、2019 年 5 月）。財務省『債務管理リポート 2026』も、標準的な決済期間を T+1（平成 30 年 5 月 1 日から）と書きます。米国債の決済期間は、確認した資料に書かれていないので、この講座は書きません。</p>
+
+<h3>米国：Fedwire と FICC</h3>
+<p>米国では、連邦準備銀行が、2 つの決済のサービスを運営しています（Federal Reserve Financial Services）。</p>
+<ul>
+  <li><b>Fedwire Securities Service</b>：Treasury と、一部の federal agency・government-sponsored enterprise（GSE）・国際機関の証券の、発行・保有・移転・決済のサービスです。準備銀行が証券を電子的に保有し、移転はリアルタイムで決済されます。ほとんどの移転が、支払いと証券の同時の交換を伴い、これを delivery-versus-payment と呼びます。</li>
+  <li><b>Fedwire Funds Service</b>：リアルタイムグロス決済（real-time gross settlement）のシステムで、参加者が最終の支払いを行えます。参加者は、準備銀行の master account を持ちます。受取側への支払いは、最終で取り消せません（2025 Fedwire Funds PFMI Disclosure、2025 年 12 月 5 日）。</li>
+</ul>
+<p>清算は、DTCC の FICC（Fixed Income Clearing Corporation）の Government Securities Division が行います。1986 年から、米国債市場に clearing, netting and settlement のサービスを提供し、多者間のネッティングで、多数の二者間の取引を置き換えます（第11章）。FICC の清算と Fedwire の接続は、確認した資料に書かれていないので、次の図に線を引いていません。</p>
+<div data-widget="arch" data-src="c12-infra"></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>DVP と清算は、別のものです</b>。DVP は、国債と資金を同時に受け渡す方式で、清算は、清算機関が債務を引き受けてネッティングを行う仕組みです。清算を使わない売買でも、DVP の決済はあります。</p>
+  <p><b>約定と決済は、別の時点です</b>。日本の国債の標準的な決済期間は T+1 ですが、個々の取引の決済日は、取引の条件で確かめます。</p>
+  <p><b>日本の当預系・国債系は、米国の Fedwire Funds Service・Securities Service と、そのままは対応しません</b>。運営者・参加者・仕組みが違います。名前の近さで同じ仕組みと決めつけません。</p>
+  <p><b>資料の語で書きます</b>。この章で確かめた日銀の情報開示（国債振替決済制度）は、決済のタイミングを「即時グロス決済」と書いています。米国の資料の「real-time gross settlement」と近い考え方の語ですが、運営者と仕組みが違うので、それぞれの資料の語で読みます。</p></div>
+
+<div class="callout tip"><span class="ttl">実務でのつながり</span>
+  <p>決済のデータを扱うときは、「約定日」と「決済日」を別の列に持ち、決済の場（日銀ネット・Fedwire など）と、清算機関を使ったかどうかの列を添えておくと、取引の状態を追いやすくなります。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c12-quiz"></div></section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 15 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.boj.or.jp/announcements/education/oshiete/kess/i10.htm/">日銀ネットとは何ですか？</a></th><td>日本銀行</td><td>日付の記載なし（2026 年 11 月 15 日に閲覧）</td><td>日銀ネットの定義、当預系と国債系。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.boj.or.jp/paym/outline/pay_boj/pboj250731b.pdf">日本銀行が運営する国債振替決済制度に関する情報開示</a></th><td>日本銀行</td><td>2025 年 7 月 31 日</td><td>国債振替決済制度、グロス＝グロス型の DVP 決済、即時グロス決済。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.boj.or.jp/research/brp/ron_2019/data/ron190530a.pdf">国債決済期間短縮（T+1）化後の市場取引動向 ―レポ市場を中心に―</a></th><td>日本銀行金融市場局</td><td>2019 年 5 月</td><td>T+1 化の日付と経緯。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.mof.go.jp/jgbs/publication/debt_management_report/2026/saimu2026-1-2.pdf">債務管理リポート 2026（国債流通市場）</a></th><td>財務省</td><td>令和 8 年度（発行年月の記載なし）</td><td>標準的な決済期間 T+1。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/jscc/seisan/tentou/acceptance_debt.html">国債店頭取引清算業務：債務引受</a></th><td>JPX（日本証券クリアリング機構）</td><td>日付の記載なし（2026 年 11 月 15 日に閲覧）</td><td>債務引受け、ネッティング、日銀ネットを利用した DVP 決済。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.frbservices.org/financial-services/securities">Fedwire Securities Service</a></th><td>Federal Reserve Financial Services（連邦準備銀行）</td><td>日付の記載なし（© 2026）</td><td>証券の保有・移転・決済、DVP。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.frbservices.org/wp-content/uploads/funds-service-disclosure.pdf">2025 Fedwire Funds PFMI Disclosure</a></th><td>Federal Reserve Financial Services（連邦準備銀行）</td><td>2025 年 12 月 5 日</td><td>Fedwire Funds Service の説明（リアルタイムグロス決済）。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.dtcc.com/products-and-services/clearing-settlement-services/fixed-income-clearing-corporation-ficc/government-securities-division-gsd">Government Securities Division (GSD)</a></th><td>DTCC</td><td>Data as of Q2 2026</td><td>FICC の GSD の役割。</td></tr>
+      <tr><td>教科書・一般知識・他講座</td><th scope="row">決済の一般的な説明</th><td>—</td><td>—</td><td>決済の定義の補足。一般知識と明記。</td></tr>
+      <tr><td>架空（見本のため）</td><th scope="row">c12-dvp の売り手・買い手・額面</th><td>この講座</td><td>—</td><td>DVP の 1 回を追う図（実在の取引ではない）。</td></tr>
+    </tbody>
+  </table></div>
+</section>

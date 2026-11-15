@@ -1,0 +1,106 @@
+<!--
+num: 16
+part: 3
+title: 短期金利の誘導：フロアとコリドー
+track: 中央銀行
+time: 45
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>短期金利を導く 2 つの考え方、<b>コリドー方式</b>（準備を少なめにして、量の調節で導く）と<b>フロア方式</b>（準備を潤沢にして、付利で床を作る）の違いを説明できる。</li>
+    <li>米国の金利の並び（常設の貸出・目標の範囲・付利・翌日物リバース・レポ）と、日本の並び（基準貸付利率・誘導目標・補完当座預金制度）を、役割で説明できる。</li>
+    <li>付利だけでは床が漏れる理由と、米国の翌日物リバース・レポがその穴を支える理由を説明できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch14">第14章</a>（準備預金と付利）、<a href="#ch15">第15章</a>（オペ）。</p>
+</section>
+
+<div class="callout warn"><span class="ttl">この章の扱い（制度の時点）</span><p>この章の制度・規則・商品の仕様は、本文に明記した国・地域と時点のものです。金融政策の枠組み、取引所と清算機関の規則、商品の仕様は改定されます。最新の内容は、本文の参照資料に挙げた公式のページで確かめてください。</p></div>
+
+<h3>短期金利を導く 2 つの考え方</h3>
+<p>中央銀行は、短期の市場金利を、目標の水準の近くに導こうとします。金融機関は、余った資金を市場で貸すか、中央銀行に預けるか、足りない資金を市場で借りるか、中央銀行から借りるかを選べます。中央銀行の預け入れの金利（付利）と貸出の金利は、市場金利の下と上に「枠」を作ります。この枠の中で、市場金利を目標へ導く方法が 2 つあります。</p>
+<ul>
+  <li><b>コリドー方式</b>（corridor system）：上限は常設の貸出の金利、下限は付利の金利です。準備が少ないとき、市場金利は準備の量に敏感に動きます。中央銀行は、オペで準備の量を調節して、金利を目標へ導きます。</li>
+  <li><b>フロア方式</b>（floor system）：準備を潤沢にして、付利の金利が、市場金利の床になるようにします。準備を増やしても、金利は付利の近くから大きくは下がりません。金利は、主に付利の設定で決まります。</li>
+</ul>
+<p>2 つの方式は、教科書で一般に使われる整理です（次の図は、この整理を架空の曲線で描いたものです）。実際の枠組みは、国と時期で違い、どちらかにきれいに当てはまるとは限りません。</p>
+
+<h4>図：準備の量と短期金利（架空）</h4>
+<div data-widget="lab" data-src="c16-corridor"></div>
+<p>準備の量を増やすと、曲線は下限（付利）に近づいて平らになります。準備が少ない所では、曲線は急で、準備の量が少し変わるだけで金利が大きく動きます。この図は、考え方を見るための架空のモデルです。実在の需要の曲線の形は、この章では書きません。</p>
+
+<h4>演習：準備の量と金利の位置（値はすべて架空）</h4>
+<p>上限 3.0、下限 1.0、k ＝ 20（いずれも架空）の曲線で、準備の量が 20 のときと 60 のときの短期の市場金利を求めます。式は、金利 ＝ 下限 ＋（上限 − 下限）× e<sup>−R ÷ k</sup> です。</p>
+<ol>
+  <li>準備の量 R ＝ 20 のときの金利はいくつですか（小数第 2 位まで）。</li>
+  <li>R ＝ 60 のときの金利はいくつですか（小数第 2 位まで）。</li>
+</ol>
+<details><summary>答えを見る</summary>
+  <ol>
+    <li>e<sup>−20÷20</sup> ＝ e<sup>−1</sup> ≒ 0.3679。金利 ＝ 1.0 ＋ 2.0 × 0.3679 ≒ <b>1.74</b>。幅のうち、下限から約 36.8％の位置です。</li>
+    <li>e<sup>−60÷20</sup> ＝ e<sup>−3</sup> ≒ 0.0498。金利 ＝ 1.0 ＋ 2.0 × 0.0498 ≒ <b>1.10</b>。準備が 3 倍になると、金利は下限の近くまで下がり、準備をさらに増やしても、ほとんど下がりません。</li>
+  </ol>
+  <p>値はすべて架空です。実在の金利・準備の量ではありません。</p></details>
+
+<h3>米国の枠組み：ample reserves と管理金利</h3>
+<p>【米国】連邦公開市場委員会（Federal Open Market Committee, FOMC）は、2019 年 1 月 30 日の『Statement Regarding Monetary Policy Implementation and Balance Sheet Normalization』で、準備の十分な供給（an ample supply of reserves）のもとで金融政策を運営することを続ける（intends to continue）意図を示しました。声明は、その体制では、フェデラル・ファンド金利などの短期金利の水準の制御は、主に連邦準備の管理金利（administered rates）の設定を通じて行われ、準備の供給の能動的な管理（active management of the supply of reserves）は必要ないと書きます。また、フェデラル・ファンド金利の目標の範囲（target range）の変更を、金融政策のスタンスを調整する主な手段と書きます（出典：FOMC、2019 年 1 月 30 日）。</p>
+<p>理事会のスタッフの FEDS Notes（2020 年 7 月 1 日）は、この体制を、準備が潤沢で、準備の量が動いても連邦準備のフェデラル・ファンド金利が大きくは変わらない状態と説明します。その体制では、オペで金利を調節することはできないので、連邦準備は主に管理金利に頼ると書きます（出典：連邦準備制度理事会、FEDS Notes）。FOMC の文書は「フロア方式」の語を使いません。この講座は、教科書の語として、この体制をフロア方式と呼びます。</p>
+<p>管理金利の位置は、次の図の並びです。上が貸出の側、下が預け入れの側で、値は書きません。</p>
+<div data-widget="layers" data-src="c16-floor"></div>
+<ul>
+  <li><b>primary credit rate</b>：預金取扱機関が連邦準備銀行から借りるときの金利です。FEDS Notes は、短期の市場金利の上限（ceiling）を与えるためのものと説明します。利用をためらう問題は<a href="#ch18">第18章</a>です。</li>
+  <li><b>常設の翌日物レポ</b>：NY 連銀のデスクが、適格な取引相手から証券を買い、翌日に売り戻す取引です（<a href="#ch15">第15章</a>）。金利は FOMC の実施の指示が定めます。</li>
+  <li><b>IORB</b>：準備預金への付利の金利です（<a href="#ch14">第14章</a>）。FEDS Notes は、金利の管理の主な道具と呼びます。</li>
+  <li><b>ON RRP</b>：デスクが証券を売り、同じ証券を買い戻す約束をする、資金吸収の翌日物の取引です（<a href="#ch15">第15章</a>）。</li>
+</ul>
+<p>FOMC の実施の指示は、2026 年 10 月 28 日にも、IORB・ON RRP・常設の翌日物レポの金利と、primary credit rate の決定を並べて出しました。値は<a href="#ch23">第23章</a>にまとめます。</p>
+
+<h3>日本の枠組み：基準貸付利率・誘導目標・補完当座預金制度</h3>
+<p>【日本】日銀の金融市場調節は、次の 3 つの役割で見ると整理できます。図は、役割の並びだけを示します。</p>
+<div data-widget="layers" data-src="c16-floor-jp"></div>
+<ul>
+  <li><b>基準貸付利率</b>：補完貸付制度の適用金利です。日銀は、かつての「公定歩合」は、現在は「基準貸付利率」と呼ばれ、補完貸付制度の適用金利として、無担保コールレート（オーバーナイト物）の上限を画する役割を担うと説明します（出典：日本銀行『以前の「公定歩合」は、現在、どのように位置づけられていますか？』）。補完貸付制度は、貸付期間を 1 営業日とし、担保の範囲内で、貸付先の申込みを受けて受動的に行う貸付けです。</li>
+  <li><b>誘導目標</b>：日銀の金融市場調節方針です。2026 年 10 月 30 日の「当面の金融政策運営について」は、「無担保コールレート（オーバーナイト物）を、…程度で推移するよう促す」の形で書きます（値は<a href="#ch21">第21章</a>）。</li>
+  <li><b>補完当座預金制度</b>：超過準備に付利する仕組みです（<a href="#ch14">第14章</a>）。日銀は、補完当座預金制度の枠組みのもとで、「超過準備」に一定の金利を付すことにより、金融機関の裁定行動を通じて短期市場金利を一定の範囲内で推移するよう促していると説明します（出典：日本銀行『準備預金制度とは何ですか？ 超過準備とは何ですか？』）。</li>
+</ul>
+<p>基準貸付利率・誘導目標・適用利率の値の関係は、時期によって変わります。現在の値は<a href="#ch21">第21章</a>、過去の付利の形は<a href="#ch20">第20章</a>です。</p>
+
+<h3>床が漏れる理由：付利を受けられない参加者</h3>
+<p>付利が床になるのは、付利を受けられる参加者が、付利より低い金利で貸さないからです。付利を受けられない参加者がいると、その参加者は、付利より低い金利で貸すことがあり得ます。FEDS Notes は、連邦住宅貸付銀行（Federal Home Loan Banks）とマネー・マーケット・ファンドは付利を受け取れないと書き、付利だけでは翌日物の金利の確かな床にならないと説明します。</p>
+<p>この穴を支えるのが ON RRP です。NY 連銀の説明では、ON RRP の取引相手は、プライマリー・ディーラーと RRP 取引相手で、2a-7 のマネー・マーケット・ファンド・銀行・政府関連機関（GSE）を含みます。付利を受けられない参加者も、ON RRP の金利で預けられれば、それより低い金利で貸す理由が小さくなります。FEDS Notes は、この点で、ON RRP の金利は、付利が銀行に対して果たす役割と同じ役割を果たすと説明します。</p>
+<p>日本の付利を受けられない参加者（準備預金制度の対象でない先など）の扱いは、この章では確認していません。日銀の資料で確かめてください。</p>
+
+<h3>2 つの方式を比べる</h3>
+<div data-widget="compare" data-src="c16-floor-corridor"></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>付利の値と、誘導目標の値は、別のものです</b>。同じ値になる時期があっても、名前も、決める目的も違います。</p>
+  <p><b>フロア方式でも、上限は残ります</b>。常設の貸出の金利は、上限の役割を持ち続けます。違うのは、準備の量を調節して金利を導く必要が小さい点です。</p>
+  <p><b>「フロア方式」は、FOMC の文書の語ではありません</b>。FOMC の声明の語は、ample reserves と administered rates です。</p>
+  <p><b>図の曲線は架空です</b>。実在の準備の需要の曲線の形や、準備がどの水準から「潤沢」なのかは、この章では述べていません。</p></div>
+
+<div class="callout tip"><span class="ttl">実務でのつながり</span>
+  <p>資金繰りの担当者は、翌日物の金利を、付利・上限の金利と並べて見ます。システムの開発では、金利の名前（IORB・ON RRP の金利・誘導目標）が別の項目になることに注意します。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c16-quiz"></div></section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 15 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.federalreserve.gov/newsevents/pressreleases/monetary20190130c.htm">Statement Regarding Monetary Policy Implementation and Balance Sheet Normalization</a></th><td>連邦公開市場委員会（連邦準備制度理事会のページ）</td><td>2019 年 1 月 30 日</td><td>ample supply of reserves と administered rates、目標の範囲の位置づけ。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.federalreserve.gov/econres/notes/feds-notes/implementing-monetary-policy-in-an-ample-reserves-regime-the-basics-note-1-of-3-20200701.html">Implementing Monetary Policy in an "Ample-Reserves" Regime: The Basics (Note 1 of 3)（FEDS Notes）</a></th><td>連邦準備制度理事会（スタッフ。FEDS Notes は著者の見解）</td><td>2020 年 7 月 1 日</td><td>潤沢な準備の体制、IORB・ON RRP・primary credit rate の役割、付利を受けられない参加者。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://federalreserve.gov/newsevents/pressreleases/monetary20261028a1.htm">実施の指示（Implementation Note）</a></th><td>連邦準備制度理事会</td><td>2026 年 10 月 28 日発表（IORB と実施の指示は 10 月 29 日から）</td><td>IORB・ON RRP・常設の翌日物レポ・primary credit rate が並ぶことの確認（値は書かない）。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.newyorkfed.org/markets/rrp_faq">FAQs: Reverse Repurchase Agreement Operations</a></th><td>ニューヨーク連邦準備銀行</td><td>2026 年 9 月 16 日</td><td>ON RRP の定義と取引相手。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.newyorkfed.org/markets/repo-agreement-ops-faq">FAQs: Standing Repurchase Agreement Operations</a></th><td>ニューヨーク連邦準備銀行</td><td>2026 年 9 月 16 日</td><td>常設の翌日物レポの定義。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.boj.or.jp/about/education/oshiete/seisaku/b38.htm">以前の「公定歩合」は、現在、どのように位置づけられていますか？</a></th><td>日本銀行</td><td>日付の表示なし</td><td>基準貸付利率が上限を画する役割、補完貸付制度の定義。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.boj.or.jp/mopo/measures/term_cond/yoryo20.htm">補完貸付制度基本要領</a></th><td>日本銀行</td><td>決定 2001 年 2 月 28 日、最終改正 2017 年 1 月 31 日（要領の表示）</td><td>貸付期間 1 営業日、貸付利率が基準貸付利率であること。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.boj.or.jp/about/education/oshiete/seisaku/b33.htm">準備預金制度とは何ですか？ 超過準備とは何ですか？</a></th><td>日本銀行</td><td>日付の表示なし</td><td>超過準備への付利で短期市場金利を一定の範囲内で推移するよう促す、という説明。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.boj.or.jp/mopo/mpmdeci/mpr_2026/k261030a.pdf">当面の金融政策運営について</a></th><td>日本銀行</td><td>2026 年 10 月 30 日</td><td>金融市場調節方針の文の形（値は書かない）。</td></tr>
+      <tr><td>教科書・一般知識・他講座</td><th scope="row">フロア方式・コリドー方式の一般的な整理</th><td>金融論の教科書（一般知識）</td><td>—</td><td>2 つの方式の定義と、比較表の 1 行目〜3 行目の整理。</td></tr>
+      <tr><td>架空（見本のため）</td><th scope="row">準備の需要の曲線・上限・下限・準備の量</th><td>本講座</td><td>架空</td><td>図 c16-corridor と演習。</td></tr>
+    </tbody>
+  </table></div>
+</section>

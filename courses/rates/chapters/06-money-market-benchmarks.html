@@ -1,0 +1,101 @@
+<!--
+num: 06
+part: 1
+title: 短期金融市場と指標金利：コール・レポ・TONA・SOFR
+track: 短期市場
+time: 40
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>短期金融市場の主な市場（日本：コール市場・債券レポなど、米国：レポ・フェデラル・ファンド）を、担保の有無と仲介の違いで区別し、指標金利が何のためにあるかを説明できる。</li>
+    <li>日本の TONA（Tokyo Overnight Average Rate）と、米国の SOFR（Secured Overnight Financing Rate）・EFFR（Effective Federal Funds Rate）の、対象の取引・担保・算出者・公表の時刻の違いを、一次資料の言葉で説明できる。</li>
+    <li>LIBOR（London Interbank Offered Rate）とユーロ円 TIBOR（Tokyo Interbank Offered Rate）の公表停止の発表の日付と、翌日物の金利から期間の金利を作る後決め複利の計算を、架空の例で説明できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch01">第01章</a>（金利の表し方：年率・日数計算・単利と複利）。</p>
+</section>
+
+<div class="callout warn"><span class="ttl">この章の扱い（制度の時点）</span><p>この章の制度・規則・商品の仕様は、本文に明記した国・地域と時点のものです。金融政策の枠組み、取引所と清算機関の規則、商品の仕様は改定されます。最新の内容は、本文の参照資料に挙げた公式のページで確かめてください。</p></div>
+
+<h3>まず全体像：短期の資金の貸し借りと、そこから生まれる指標金利</h3>
+<p>金融機関は、日々の資金の過不足を、短い期間の貸し借りで調整します。日本銀行（Bank of Japan、以下日銀）の説明（「教えて！にちぎん」）は、<b>短期金融市場</b>を、期間 1 年以内の短期の資金取引が行われる市場と説明し、市場の名前として、コール市場、CD（譲渡性預金）市場、CP（コマーシャル・ペーパー）市場、国庫短期証券市場、債券現先市場、債券レポ市場を挙げています（出典：日本銀行『短期金融市場』。ページに日付の記載なし）。</p>
+<p>この章は、日本のコール市場と、米国のレポ市場・フェデラル・ファンド市場を中心に、そこから算出される<b>指標金利</b>（benchmark rate）を扱います。指標金利は、契約や商品の金利を決める基準として使われる、公表された金利です。日銀の金融市場調節（第15章・第16章）や、国債の担保（第11章）とも、つながります。</p>
+<p>下の図は、日本と米国の構成です。上の切替で、日本と米国を選びます。ノードと線を押すと、説明が出ます。</p>
+<div data-widget="arch" data-src="c06-mm"></div>
+
+<h3>コール市場と TONA</h3>
+<p>日本では、日銀の説明（ページに日付の記載なし。確認日 2026 年 11 月 15 日）の時点で、<b>コール市場</b>（call market）は、金融機関が日々の短期的な資金の過不足を調整するための取引を行う場です。参加者は、銀行、信託銀行、信用金庫、投資信託、証券会社、保険会社、短資会社などです。取引は、担保の有無で、有担保コールと無担保コールに分かれ、無担保コール市場が取引の中心とされています。取引の仲介を業とする<b>短資会社</b>を通す取引と、仲介を介さないダイレクトディール（DD）があります（出典：日本銀行『コール市場』）。</p>
+<p>期間では、取引期間が 1 営業日の<b>翌日物</b>（オーバーナイト物）と、2 営業日以上 1 年以下の期日物・ターム物があります。無担保コールのオーバーナイト物は、約定日に資金を受け渡し、翌営業日に返済する取引です（同上）。</p>
+<p>日銀は、この取引の金利を、無担保コールレート（オーバーナイト物）（Tokyo Overnight Average Rate, TONA）として公表します。日銀の『「コール市場関連統計」の解説』は、無担保コール O/N 物レートを、「無担保コール市場において、当日約定、当日資金受渡し、翌営業日を期日とする条件で成立した取引のレート」と説明しています。算出の対象は、情報提供会社が媒介した取引（ブローキング取引）で、レートごとの積数の合計を、レートごとの出来高の合計で割る加重平均です。結果は小数点第 3 位まで（単位未満四捨五入）で示されます（出典：日本銀行、同解説。版の日付の記載なし）。</p>
+<p>公表の時刻は、日銀の『コール市場関連統計（毎営業日）』のページの「データ更新日時」に、日本時間で書かれています。通常日は、当営業日の速報が午後 5 時 15 分頃、前営業日の確報が午前 10 時頃です。年末日を除く月末日は、速報が午後 6 時 15 分頃になります（出典：日本銀行、同ページ。確認日に開いた版）。<b>速報と確報</b>の 2 段階があるので、どちらの値かを確かめて使います。</p>
+<p>名前に注意します。日銀の統計と解説の語は「無担保コール O/N 物レート（TONA）」で、金融市場調節方針の文は「無担保コールレート（オーバーナイト物）」と書きます（第21章）。この講座は、共通の用語として「無担保コールレート（オーバーナイト物）」と書き、TONA を別名にします。値は、この章では書きません（政策金利の値の持ち主は第21章）。</p>
+
+<h3>SOFR：米国債を担保にした、翌日物のレポの金利</h3>
+<p>米国では、NY 連銀（ニューヨーク連邦準備銀行、Federal Reserve Bank of New York）の SOFR のページ（ページに日付の記載なし。確認日 2026 年 11 月 15 日）の時点で、SOFR は「a broad measure of the cost of borrowing cash overnight collateralized by Treasury securities」（米国債を担保にした翌日物の資金の貸借のコストの、広い指標）です。算出に使うデータは、三者間レポ（BNY Mellon と金融研究局〔Office of Financial Research, OFR〕のデータ）、GCF レポ（OFR のデータ）、FICC（Fixed Income Clearing Corporation）の DVP サービスで清算された二者間の米国債レポ（OFR 経由）です。取引の一部（specials と見なされるもの）は除かれます。NY 連銀が、各営業日の午前 8 時頃（米東部時間）に、サイトで公表します（出典：NY 連銀『Secured Overnight Financing Rate Data』）。レポ取引の仕組みは<a href="#ch11">第11章</a>、決済の仕組みは<a href="#ch12">第12章</a>で扱います。</p>
+<p>NY 連銀の『Additional Information about Reference Rates Administered by the New York Fed』（Last Updated 2026 年 10 月 5 日）の時点で、SOFR は取引量加重中央値（volume-weighted median）で、公表時に最も近いベーシスポイントに丸めて算出されます。SOFR は、値日の翌営業日に公表されます。同日の午後 2 時 30 分頃（米東部時間）に改定されることがありますが、改定は、変化が 1 bp を超える場合だけで、最初の公表の日に限られます（出典：NY 連銀、同ページ）。</p>
+<p>同じページによると、NY 連銀は、SOFR を複利でつないだ SOFR Averages（30・90・180 暦日の平均）と、SOFR Index（基準値は SOFR の最初の値日 2018 年 4 月 2 日の 1.00000000）も、SOFR の公表の直後に公表します。Index は営業日ごとに SOFR を複利で反映し、非営業日は前営業日の SOFR による単利を適用します。日数計算は実日数/360です（出典：NY 連銀、同ページ、『SOFR Averages and Index Data』）。</p>
+
+<h3>EFFR：預金取扱機関の、担保なしの翌日物の借入の金利</h3>
+<p>米国では、NY 連銀の EFFR のページ（ページに日付の記載なし。確認日 2026 年 11 月 15 日）の時点で、<b>フェデラル・ファンド実効金利</b>（Effective Federal Funds Rate, EFFR）は、翌日物のフェデラル・ファンドの取引の取引量加重中央値（volume-weighted median）です。対象は、預金取扱機関による米ドル建ての国内の無担保借入で、ページは、借入の相手として、ほかの預金取扱機関のほか、主に政府支援機関（government-sponsored enterprises）などの機関を挙げています。算出元は FR 2420（Report of Selected Money Market Rates）の報告です。NY 連銀が、前営業日分を、午前 9 時頃に公表します。ページは、目標の範囲（target range）は連邦公開市場委員会（Federal Open Market Committee, FOMC）が設定する、と書いています（出典：NY 連銀『Effective Federal Funds Rate』）。FOMC の枠組みは<a href="#ch23">第23章</a>で扱います。</p>
+
+<h3>指標金利の見方：何が違うかを表で確かめる</h3>
+<p>3 つの金利は、「翌日物」で並びますが、対象の取引・担保・算出者・公表の時刻が違います。下の表で、確認した範囲を並べます。日数計算は、確認した資料に書かれていないものは、書かれていないと表に書いてあります。TONA の日数計算は、日銀の統計のページには記載がありません。後の節の大阪取引所の規則（TONA 先物の最終決済）は、実日数/365です。</p>
+<div data-widget="table" data-src="c06-rates"></div>
+<p>最も大きな違いは担保です。TONA と EFFR は担保なしの取引、SOFR は米国債を担保にした取引の金利です。担保のある取引の金利は、担保の需給の影響を受けうるので、同じ「翌日物」でも、動きは同じとは限りません（出典：一般知識。この講座は水準の比較をしません）。</p>
+
+<h3>LIBOR・TIBOR の公表停止の発表</h3>
+<p><b>LIBOR</b>（London Interbank Offered Rate）は、ロンドンの銀行間の貸借の金利を表す指標金利として使われてきました。ユーロ円 <b>TIBOR</b>（Tokyo Interbank Offered Rate）は、日本の銀行間の貸借の金利で、一般社団法人全銀協 TIBOR 運営機関が公表してきました。どちらも、期間（1 週間・1 か月・3 か月など）ごとに公表される金利です。</p>
+<p>英国では、金融行為規制機構（Financial Conduct Authority, FCA）が 2021 年 3 月 5 日に、LIBOR の将来の公表の停止と代表性の喪失を発表しました。日本では、全銀協 TIBOR 運営機関が 2024 年 3 月 6 日に、ユーロ円 TIBOR の全テナーの恒久的な公表停止（2024 年 12 月末）を発表し、金融庁がその公表をページに載せました。金融庁は 2024 年 11 月 18 日に、この停止に伴う告示の改正案を公表しました。次の表は、発表の日付と内容です。</p>
+<div data-widget="table" data-src="c06-transition"></div>
+<p>「公表が止まる」と「代表性を失う」は、別の言葉です。1・3・6 か月の米ドル LIBOR は、後者として書かれています。表の内容は、発表の時点のものです。その後の決定や、実際の停止の実施は、各当局・運営機関の最新の資料で確かめます。</p>
+
+<h3>後決め複利：翌日物の金利から、期間の金利を作る</h3>
+<p>TONA や SOFR は、翌日物の金利です。ここから、1 か月や 3 か月のような期間の金利を作る方法の 1 つが、<b>後決め複利</b>（compounding in arrears）です。参照期間が終わってから、その間の翌日物の金利を、日ごとに複利でつなぎます（式 13）。</p>
+<div class="callout std"><span class="ttl">式 13：後決め複利の年率</span><p>(Π(1 ＋ r<sub>i</sub> × d<sub>i</sub> ÷ D) − 1) × D ÷ Σ d<sub>i</sub>。 r<sub>i</sub> は各営業日の翌日物の金利（小数）、d<sub>i</sub> はその金利が適用される日数（金曜の金利は土日を含めて 3 日）、D は日数計算の分母（365 か 360）、Π は積、Σ は合計。</p></div>
+<p>実例の 1 つが、大阪取引所の TONA 3 か月金利先物のコンベンション・ルール（利息計算方式）です。大阪取引所の資料（2024 年の著作権表示。版の記載なし）は、最終決済の金利を、参照期間の各営業日の TONA の確報値の日次累積複利で求め、365 を実日数で割った値を掛けて年利換算する、と書きます。休業日は、前営業日の確報値を、複利計算せずに適用します。丸めは、パーセンテージで小数 5 桁目を四捨五入して小数 4 桁です（出典：大阪取引所、同資料）。先物の仕組みは、この講座では扱いません。</p>
+<p>米国では、先に見た SOFR Index が、同じ考え方の計算を、NY 連銀が代わりに公表するものです（営業日は日次の複利、非営業日は前営業日の SOFR による単利、実日数/360）。</p>
+<p>下の実験台で、5 営業日（月曜から金曜）の架空の翌日物の金利から、後決め複利の年率を求めます。金曜の金利を土日の分も含めて 3 日に掛ける点が、要点です。日数計算の分母を 365 から 360 に変えると、同じ金利でも結果が変わります。</p>
+<div data-widget="lab" data-src="c06-compound"></div>
+<p>後決めの意味に注意します。参照期間の最後の日の金利が分かるのは、その翌営業日です。だから、期間の利息の額は、期間が終わった後に決まります。契約の条件で、支払いの日を数営業日後ろにずらす（ラグを置く）扱いがあるのは、このためです（出典：一般知識）。</p>
+
+<h3>演習：後決め複利と指標金利</h3>
+<p>次の 3 問は、<b>架空の値</b>です（出典：架空・見本のため）。考えてから、行を押して答えを開きます。</p>
+<div data-widget="table" data-src="c06-calc"></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>TONA は「無担保」、SOFR は「担保つき（米国債）」です</b>。名前が似ていても、取引の性質が違います。EFFR は「無担保」です。</p>
+  <p><b>公表の時刻と、速報・確報を確かめます</b>。TONA は当日の速報と翌営業日の確報、SOFR は値日の翌営業日の午前 8 時頃（同日の午後に改定がありうる）、EFFR は前営業日分を午前 9 時頃です。</p>
+  <p><b>日数計算は金利ごとに違いうります</b>。実日数/365 か実日数/360 かは、規則や出典で確かめます。確かめていないものは、決めつけません。</p>
+  <p><b>金曜の金利は、土日の分にも掛かります</b>。後決め複利で、週末の日数を数えないと、参照期間と利息が暦と合いません。</p>
+  <p><b>LIBOR や TIBOR の「公表停止」と「代表性の喪失」は別の語です</b>。日付は、発表の時点のものです。</p></div>
+
+<div class="callout tip"><span class="ttl">実務でのつながり</span>
+  <p>資金繰りやリスク管理では、金利の指標を、どの金利（担保の有無・算出者）で見ているかを確かめます。システムの開発では、指標金利のデータを取り込む処理が、公表の時刻（日本時間と米東部時間）、速報と確報、改定を、別のデータとして持ちます。金利の契約や商品の計算では、後決め複利のような日数と複利の規則を、規則の文書に合わせて実装します（<a href="#ch01">第01章</a>の日数計算）。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c06-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 15 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.boj.or.jp/statistics/outline/exp/exmenu_m.pdf">「コール市場関連統計」の解説</a></th><td>日本銀行</td><td>日付の記載なし（確認 2026 年 11 月 15 日）</td><td>TONA の定義・対象の取引・算出方法。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.boj.or.jp/statistics/market/short/mutan/index.htm">コール市場関連統計（毎営業日）</a></th><td>日本銀行</td><td>確認 2026 年 11 月 15 日（掲載データの最新日は 2026 年 11 月 13 日）</td><td>TONA の速報・確報の公表時刻。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.boj.or.jp/about/education/oshiete/glossary/market/m07.htm">短期金融市場（教えて！にちぎん）</a></th><td>日本銀行</td><td>日付の記載なし（確認 2026 年 11 月 15 日）</td><td>短期金融市場の定義と市場の名前。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.boj.or.jp/about/education/oshiete/glossary/market/m08.htm">コール市場（教えて！にちぎん）</a></th><td>日本銀行</td><td>日付の記載なし（確認 2026 年 11 月 15 日）</td><td>コール市場の参加者・取引の種類・翌日物の定義。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/derivatives/products/interest-rate/3m-tona-futures/TONA%20Conventions%20(Calculation%20Methodology)%20and%20Example%20of%20Schedule_JP.pdf">コンベンション・ルール（利息計算方式）（TONA 3 か月金利先物）</a></th><td>大阪取引所</td><td>2024 年の著作権表示（版の記載なし）</td><td>後決め複利（日次累積複利・実日数/365・丸め）の実例。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.newyorkfed.org/markets/reference-rates/sofr">Secured Overnight Financing Rate Data</a></th><td>ニューヨーク連邦準備銀行</td><td>日付の記載なし（確認 2026 年 11 月 15 日）</td><td>SOFR の定義・データ・公表の時刻。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.newyorkfed.org/markets/treasury-repo-reference-rates-information">Additional Information about Reference Rates Administered by the New York Fed</a></th><td>ニューヨーク連邦準備銀行</td><td>Last Updated 2026 年 10 月 5 日</td><td>SOFR の算出方法・改定の方針、SOFR Averages と Index の日数計算。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.newyorkfed.org/markets/reference-rates/sofr-averages-and-index">SOFR Averages and Index Data</a></th><td>ニューヨーク連邦準備銀行</td><td>日付の記載なし（確認 2026 年 11 月 15 日）</td><td>SOFR Averages と Index の定義と公表の時刻。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.newyorkfed.org/markets/reference-rates/effr">Effective Federal Funds Rate</a></th><td>ニューヨーク連邦準備銀行</td><td>日付の記載なし（確認 2026 年 11 月 15 日）</td><td>EFFR の定義・対象・公表の時刻。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.fca.org.uk/publication/documents/future-cessation-loss-representativeness-libor-benchmarks.pdf">Future cessation and loss of representativeness of the LIBOR benchmarks</a></th><td>英国 金融行為規制機構（FCA）</td><td>2021 年 3 月 5 日</td><td>円・米ドルの LIBOR の公表停止・代表性の喪失の日付。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.fca.org.uk/news/press-releases/announcements-end-libor">Announcements on the end of LIBOR</a></th><td>英国 金融行為規制機構（FCA）</td><td>確認 2026 年 11 月 15 日</td><td>上の発表の一覧（設定ごとの日付の照合）。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.fsa.go.jp/news/r5/sonota/20240306/20240306.html">全銀協TIBOR運営機関によるユーロ円TIBORの公表停止（金融庁のページに掲載）</a></th><td>金融庁（公表は一般社団法人全銀協 TIBOR 運営機関）</td><td>令和 6 年 3 月 6 日</td><td>ユーロ円 TIBOR の全テナーの公表停止（令和 6 年 12 月末）。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.fsa.go.jp/news/r6/shouken/20241118/241118.html">ユーロ円TIBORの恒久的な公表停止に伴う告示の一部改正案の公表</a></th><td>金融庁</td><td>令和 6 年 11 月 18 日</td><td>停止に伴う告示の改正案（案の段階）。</td></tr>
+      <tr><td>教科書・一般知識・他講座</td><th scope="row">指標金利の役割、担保のある取引の金利の性質、後決め複利のラグの考え方</th><td>—</td><td>—</td><td>金融の教科書の基本の内容（一般知識）。式 13 はこの講座の定義。</td></tr>
+      <tr><td>架空（見本のため）</td><th scope="row">演習・実験台の翌日物の金利</th><td>この講座</td><td>—</td><td>理解のための架空の値。実在の金利ではない。</td></tr>
+    </tbody>
+  </table></div>
+</section>

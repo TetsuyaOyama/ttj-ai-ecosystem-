@@ -1,0 +1,91 @@
+<!--
+num: 27
+part: 5
+title: 銀行と短期金融市場の統計：H.8・SOFR・EFFR・ON RRP・TGA
+track: 統計
+time: 40
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>米国の商業銀行の資産と負債の週次の統計（H.8）が<b>推計</b>である理由と、公表の曜日・時刻を説明できる。</li>
+    <li>ニューヨーク連邦準備銀行が公表する指標金利（担保付翌日物調達金利とフェデラル・ファンド実効金利）の<b>公表の時刻</b>と、金利のほかに公表される項目を言える。</li>
+    <li>統計をつなげて読むとき、<b>時点・単位・季節調整</b>を統計ごとに確かめて記録に残せる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch24">第24章</a>（政府の口座と資金供給）、<a href="#ch26">第26章</a>（H.4.1）。あるとよい：<a href="#ch06">第6章</a>（短期金融市場と指標金利）、<a href="#ch23">第23章</a>（米国の中央銀行の現在の枠組み）。</p>
+</section>
+
+<div class="callout warn"><span class="ttl">この章の扱い（統計の読み方）</span><p>この章は、公表統計の見方の説明です。統計の動きから金融政策や相場の先行きを予測するものではありません。統計の定義・公表の時刻・改定は公表元の説明で確かめてください。</p></div>
+
+<div class="callout note"><span class="ttl">この章の数字について</span>
+  <p>この章は、統計の<b>値</b>を書きません。書くのは、名前・公表者・頻度・時刻・時点・単位・ページです。時刻は、確認したページの記載の語のままです（確認日 2026 年 11 月 15 日）。FRB の現在の金利の値は<a href="#ch23">第23章</a>が持ち主です。</p></div>
+
+<h3>米国の統計の早見表</h3>
+<p>第26章の H.4.1 に加えて、米国で短期金融市場と準備を読むときに並べる統計を、次の表に集めます。公表者は、FRB（連邦準備制度の理事会）、NY 連銀（ニューヨーク連邦準備銀行）、米財務省です。並べるのは、H.8、SOFR（Secured Overnight Financing Rate、担保付翌日物調達金利）、EFFR（Effective Federal Funds Rate、フェデラル・ファンド実効金利）、ON RRP（Overnight Reverse Repurchase Agreement、翌日物のリバース・レポ）のオペの結果、DTS（Daily Treasury Statement）、H.4.1 です。DTS には TGA（Treasury General Account、米財務省の一般口座）が載ります。</p>
+<div data-widget="table" data-src="c27-stats"></div>
+<p>時刻の「ET」は米東部時間です。H.8 の時刻の基準は、確認したページに書かれていません。ON RRP の結果の公表の時刻は、確認したページになかったので、表も書きません。</p>
+
+<h3>H.8：商業銀行の資産と負債</h3>
+<p>H.8 の題は「Assets and Liabilities of Commercial Banks in the United States」です。FRB の About のページ（最終更新 2024 年 3 月 8 日）は、米国のすべての商業銀行の「estimated weekly aggregated balance sheet」を提供すると説明します。国内で設立された銀行、その中の大規模な銀行と小規模な銀行、外国関連の機関の集計も別に載ります。</p>
+<p>公表は「by 4:15 p.m. each Friday」で、金曜が連邦の祝日なら木曜です。</p>
+<p>値が<b>推計</b>なのは、標本を使うからです。ページは「voluntary authorized panel of 850 domestically chartered banks and foreign-related institutions」と書き、標本の数は週ごとに変わるとします。報告する銀行は、商業銀行の資産の約 90 percent を占めます。標本にない銀行は、四半期の Call Report のデータで補います。</p>
+<p>2026 年 9 月 4 日公表の版では、表 2・4・6 の単位が「Seasonally adjusted, billions of dollars」、表 3・5・7 が「Not seasonally adjusted, billions of dollars」でした。表 2〜7 の週の列は「Week ending」で、水曜の日付が並びます。この週の値が水曜の値か週平均かは、読んだ範囲に書かれていませんでした。記録するときは、現行の版で確かめます。</p>
+
+<h3>H.4.1 と H.8</h3>
+<p>H.4.1 と H.8 は、どちらも FRB が毎週出す統計ですが、対象が違います。</p>
+<div data-widget="compare" data-src="c27-h41-h8"></div>
+
+<h3>NY 連銀の指標金利：SOFR と EFFR</h3>
+<p>SOFR の定義は<a href="#ch06">第6章</a>が持ち主です。ここでは、公表の時刻と、金利のほかに何が公表されるかを書きます。</p>
+<p>SOFR のページは、金利を毎営業日「at approximately 8:00 a.m. ET」に公表すると書きます。EFFR のページは、<b>前営業日</b>の金利を「at approximately 9:00 a.m.」に公表すると書きます。</p>
+<p>NY 連銀の Additional Information のページ（更新 2026 年 10 月 5 日）は、両方の金利について、「1st, 25th, 75th and 99th volume-weighted percentiles」と、翌日物の取引量（10 億ドル単位に丸める）も公表すると書きます。同じページには、同じ日の午後 2:30 ごろに改定があり得ることも書かれています。取引データの改定や計算の誤りのときで、公表した金利が 1 bp（ベーシスポイント、0.01 パーセントポイント）を超えて変わる場合だけです。改定には脚注が付きます。</p>
+<p>金利と一緒に取引量を見るのは、その金利がどれだけの取引にもとづくかを知る手がかりになるからです（これは講座の説明で、ページが理由を述べているわけではありません）。</p>
+<p>確認できなかった点があります。Additional Information のページは、SOFR が「published one business day following its value date」だと書き、8:00 a.m. ET を SOFR の Averages and Index の公表（SOFR の公表の後すぐ）と結びつけています。SOFR のページの記載と、この記載の関係は、どちらのページも説明していません。記録には、ページごとの記載を、そのまま残します。</p>
+
+<h3>ON RRP の結果と TGA</h3>
+<p>ON RRP のオペの時間は、NY 連銀の説明で「Every business day from 12:45 p.m. to 1:15 p.m. (ET), unless otherwise stated」です。仕組みと現在の offering rate は<a href="#ch23">第23章</a>です。NY 連銀の『Reverse Repo』のページは、Historical Transaction Data へのリンクを載せますが、結果の公表の時刻と表の列の名前は、確認したページに書かれていませんでした。</p>
+<p>TGA は、米財務省の Daily Treasury Statement（DTS）の表 I「Operating Cash Balance」に、「Treasury General Account (TGA) Opening Balance」と「Closing Balance」として載ります。注記は「The Daily Treasury Statement (DTS) is available by 4:00 p.m. the following business day on the Fiscal Service website」です。H.4.1 にも、「U.S. Treasury, General Account」の行があります。どちらの統計の、どの時点の値かを書いて使います（<a href="#ch24">第24章</a>）。</p>
+
+<h3>1 営業日と 1 週間の公表の流れ</h3>
+<p>次の図は、確認したページの記載の時刻を、公表の順に並べたものです。ON RRP の結果の公表の時刻は、記載がないので書いていません。</p>
+<div data-widget="flow" data-src="c27-day"></div>
+
+<h3>統計をつなげて読むときの注意</h3>
+<p>統計を並べるとき、次の 3 つを統計ごとに確かめます。</p>
+<ul>
+  <li><b>時点</b>：DTS は日付つきの statement、H.4.1 は水曜の値と週平均の列、H.8 は週の列です。金利は、公表の日と価値日（前営業日）が違うことがあります。</li>
+  <li><b>単位</b>：H.4.1 は Millions of dollars、H.8 の表は billions of dollars です。換算は、記録のときにしません。</li>
+  <li><b>季節調整</b>：H.8 は、季節調整済みと季節調整なしの表を分けます。どちらの表の値かを、記録に書きます。</li>
+</ul>
+<p>日本の対応する統計（日本銀行の短期金融市場の金利、業態別の当座預金）は、<a href="#ch25">第25章</a>で扱います。この章では、日本側の個別のページを確かめていません。</p>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>H.8 の値は推計です</b>。標本の報告から推計した値を、全銀行の確定した集計と同じに扱いません。</p>
+  <p><b>H.8 と H.4.1 は、対象が違います</b>。H.4.1 は FRB 自身の勘定、H.8 は商業銀行の資産と負債です。同じ「週」の統計でも、単位と季節調整の扱いが違います。</p>
+  <p><b>時刻は、ページの記載の語のままです</b>。「約 8:00」と「by 4:15」は、同じ種類の時刻ではありません。ON RRP の結果の公表の時刻は、確認できていません。</p>
+  <p><b>SOFR と EFFR は、公表の日と対象の日が違います</b>。EFFR は前営業日の金利です。記録には、公表の日と、金利の対象の日を別に残します。</p></div>
+
+<div class="callout tip"><span class="ttl">実務でのつながり</span>
+  <p>資金繰りやリスク管理の担当は、金利と取引量、準備に関わる統計を、決まった時刻に決まった項目で確かめます。システムの開発では、取り込みのときに、統計名・公表日・対象の日・単位・季節調整の別を、別の項目にします。公表の日程の組み方と記録の形は<a href="#ch28">第28章</a>です。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c27-quiz"></div></section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 15 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.federalreserve.gov/releases/H8/about.htm">H.8 About the Release</a></th><td>FRB</td><td>2024-03-08 更新</td><td>H.8 の題、公表の曜日と時刻、標本、季節調整。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://federalreserve.gov/releases/h8/20260904">H.8（2026 年 9 月 4 日公表の版）</a></th><td>FRB</td><td>2026-09-04 公表</td><td>表の題、単位、週の列の見出し。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.newyorkfed.org/markets/reference-rates/sofr">Secured Overnight Financing Rate Data</a></th><td>NY 連銀</td><td>ページ日付なし（確認日 2026-11-15）</td><td>SOFR の公表の時刻。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.newyorkfed.org/markets/reference-rates/effr">Effective Federal Funds Rate</a></th><td>NY 連銀</td><td>ページ日付なし（確認日 2026-11-15）</td><td>EFFR の公表の時刻。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.newyorkfed.org/markets/reference-rates/additional-information-about-reference-rates">Additional Information about Reference Rates</a></th><td>NY 連銀</td><td>2026-10-05 更新</td><td>パーセンタイル、取引量、同じ日の改定。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.newyorkfed.org/markets/desk-operations/reverse-repo">Reverse Repo</a></th><td>NY 連銀</td><td>ページ日付なし（確認日 2026-11-15）</td><td>ON RRP のオペの結果のページの位置づけ。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.federalreserve.gov/monetarypolicy/overnight-reverse-repurchase-agreements.htm">Overnight Reverse Repurchase Agreement Operations</a></th><td>FRB</td><td>2026-05-12 更新</td><td>結果の公表の記載がないことの確認。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://fiscal.treasury.gov/reports-statements/dts/index.html">Daily Treasury Statement</a></th><td>米財務省 Fiscal Service</td><td>注記（確認日 2026-11-15）</td><td>DTS の公表の時刻、表 I の TGA の行。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.federalreserve.gov/releases/h41/">H.4.1 Release Dates</a></th><td>FRB</td><td>2026-11-12 更新</td><td>H.4.1 の公表の曜日と時刻（第26章から参照）。</td></tr>
+      <tr><td>教科書・一般知識・他講座</td><th scope="row">第6章・第23章・第24章・第26章（本講座）</th><td>本講座</td><td>—</td><td>指標金利の定義、ON RRP の枠組み、TGA、H.4.1。</td></tr>
+    </tbody>
+  </table></div>
+</section>
