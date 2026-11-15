@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MNO × SIMサプライヤー｜プロファイル生成・納品フロー | TTJ</title>
+<style>
+  :root{
+    --navy-900:#060F1D; --navy-800:#0B1D33; --navy-700:#12304F;
+    --gold-500:#C9A227; --gold-400:#D9B84A; --gold-200:#EFDD9A;
+    --ink:#F5F1E3; --ink-dim:#B9BDC9; --line:#33507A;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{background:var(--navy-900); color:var(--ink);
+    font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans CJK JP","Yu Gothic",sans-serif;
+    padding:28px 16px 48px;}
+  .wrap{max-width:1060px; margin:0 auto;}
+  header{border-bottom:1px solid var(--gold-500); padding-bottom:14px; margin-bottom:14px;}
+  .kicker{color:var(--gold-400); font-size:12px; letter-spacing:.18em; font-weight:700;}
+  h1{font-size:25px; margin:6px 0 4px;}
+  h2{font-size:19px; margin:30px 0 10px; color:var(--ink);}
+  h2 .no{color:var(--gold-400); margin-right:8px;}
+  .sub{color:var(--ink-dim); font-size:14px; line-height:1.7;}
+  .modebar{display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin:14px 0 4px;}
+  .mode-btn{background:var(--navy-800); color:var(--ink-dim); border:1px solid var(--line);
+    border-radius:999px; padding:10px 22px; font-size:15px; font-weight:700; cursor:pointer; min-height:44px;}
+  .mode-btn.on{background:var(--gold-500); border-color:var(--gold-500); color:var(--navy-900);}
+  .mode-note{color:var(--gold-200); font-size:13.5px; line-height:1.7; margin:6px 0 2px;}
+  .controls{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:12px 0 10px;}
+  button{background:var(--navy-700); color:var(--ink); border:1px solid var(--gold-500);
+    border-radius:999px; padding:9px 18px; font-size:14px; font-weight:700; cursor:pointer; min-height:44px;}
+  button:hover{background:var(--gold-500); color:var(--navy-900);}
+  button.primary{background:var(--gold-500); color:var(--navy-900); min-width:128px;}
+  button.primary:hover{background:var(--gold-400);}
+  select{background:var(--navy-800); color:var(--ink); border:1px solid var(--line);
+    border-radius:8px; padding:9px 10px; font-size:14px; min-height:44px;}
+  .step-ind{margin-left:auto; font-size:14px; color:var(--ink-dim); font-variant-numeric:tabular-nums;}
+  .step-ind b{color:var(--gold-400); font-size:18px;}
+  .progress{height:6px; background:var(--navy-700); border-radius:3px; overflow:hidden; margin-bottom:14px;}
+  .progress > div{height:100%; background:var(--gold-500); width:0%; transition:width .45s ease;}
+  .stage{background:var(--navy-800); border:1px solid var(--line); border-radius:14px; padding:10px 6px 2px;}
+  svg{width:100%; height:auto; display:block;}
+  .panel{margin-top:14px; background:var(--navy-800); border:1px solid var(--line);
+    border-left:4px solid var(--gold-500); border-radius:10px; padding:16px 18px; min-height:118px;}
+  .panel .ptitle{font-size:17px; font-weight:700; margin-bottom:6px;}
+  .panel .ptitle .no{color:var(--gold-400); margin-right:8px;}
+  .panel .pdesc{font-size:14.5px; line-height:1.8; color:var(--ink);}
+  .panel .ppoint{margin-top:8px; font-size:13.5px; line-height:1.7; color:var(--gold-200);}
+  .panel .ppoint::before{content:"実務ポイント："; font-weight:700; color:var(--gold-400);}
+  .cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:10px;}
+  .fcard{background:var(--navy-800); border:1px solid var(--line); border-radius:10px; padding:14px 16px;}
+  .fcard h3{font-size:15px; color:var(--gold-400); margin-bottom:6px;}
+  .fcard p{font-size:13.5px; line-height:1.75; color:var(--ink);}
+  .table-wrap{overflow-x:auto; border:1px solid var(--line); border-radius:10px;}
+  table{border-collapse:collapse; width:100%; min-width:640px; font-size:13.5px;}
+  th, td{border-bottom:1px solid var(--line); padding:10px 12px; text-align:left; line-height:1.7; vertical-align:top;}
+  thead th{background:var(--navy-700); color:var(--gold-200); font-size:13px;}
+  tbody th{color:var(--gold-400); font-weight:700; white-space:nowrap;}
+  tbody tr:last-child th, tbody tr:last-child td{border-bottom:none;}
+  footer{margin-top:26px; color:var(--ink-dim); font-size:12.5px; line-height:1.9; border-top:1px solid var(--line); padding-top:14px;}
+  footer a{color:var(--gold-400); font-weight:700;}
+  .msg{cursor:pointer;}
+  @keyframes dashmove{to{stroke-dashoffset:-26;}}
+  .cur-line{stroke-dasharray:9 4; animation:dashmove .7s linear infinite;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker">TTJ SHOWCASE — eSIM / RSP インタラクティブ解説</div>
+    <h1>MNO × SIMサプライヤー：プロファイル生成・納品フロー</h1>
+    <p class="sub">QRコードが利用者に届く「前段」の裏側です。MNOからの発注（Input File）に始まり、サプライヤーでのキー生成とプロファイル生成、納品（Output File）、そしてMNO側での回線管理登録と認証登録までを追えます。コンシューマ（SGP.22）・IoT（SGP.31/32）・M2M（SGP.01/02）はボタンで切り替えられます。</p>
+  </header>
+
+  <div class="modebar" role="group" aria-label="方式の切り替え">
+    <button type="button" class="mode-btn on" id="mode-consumer">コンシューマ（SGP.22）</button>
+    <button type="button" class="mode-btn" id="mode-iot">IoT（SGP.31/32）</button>
+    <button type="button" class="mode-btn" id="mode-m2m">M2M（SGP.01/02）</button>
+  </div>
+  <p class="mode-note" id="mode-note"></p>
+
+  <div class="controls">
+    <button id="btn-first" type="button">⏮ 最初から</button>
+    <button id="btn-prev" type="button">◀ 前へ</button>
+    <button id="btn-play" type="button" class="primary">▶ 再生</button>
+    <button id="btn-next" type="button">次へ ▶</button>
+    <select id="speed" aria-label="再生速度">
+      <option value="3400">ゆっくり</option>
+      <option value="2400" selected>標準</option>
+      <option value="1400">速い</option>
+    </select>
+    <span class="step-ind">STEP <b id="cur-no">1</b> / 12</span>
+  </div>
+  <div class="progress"><div id="bar"></div></div>
+
+  <div class="stage"><svg id="diagram" viewBox="0 0 1000 660" role="img" aria-label="MNOとSIMサプライヤーのシーケンス図"></svg></div>
+
+  <div class="panel">
+    <div class="ptitle"><span class="no" id="p-no">STEP 1</span><span id="p-title"></span></div>
+    <div class="pdesc" id="p-desc"></div>
+    <div class="ppoint" id="p-point"></div>
+  </div>
+
+  <h2><span class="no">補足1</span>やり取りされるファイルの形式と中身</h2>
+  <div class="cards">
+    <div class="fcard"><h3>Input File（発注）</h3><p>形式は CSV／固定長テキストが今も主流で、SFTP や専用線で受け渡します。中身は発注番号、ICCID の採番レンジ（IoT では EID リスト）、IMSI、プロファイル種別（USIM の構成）、PIN／PUK の方針、数量、納期などです。</p></div>
+    <div class="fcard"><h3>Output File（納品）</h3><p>形式は CSV／固定長。中身は ICCID、IMSI、Ki（暗号化）、PIN1／PUK1、PIN2／PUK2、ADM キーなど。IoT では EID が対応表の先頭キーになります。鍵データは暗号化して渡すことが前提です。</p></div>
+    <div class="fcard"><h3>プロファイル本体</h3><p>SIMalliance の相互運用フォーマット（ETSI TS 102 226 系の TLV 構造）で組み立てられます。eSIM として配布されるときは、SGP.22／SGP.32 の BPP（Bound Profile Package：ASN.1 DER 符号化＋暗号化）の形になります。</p></div>
+    <div class="fcard"><h3>API 方式（ES2+）</h3><p>MNO と SM-DP+ の間では、注文・確定・解放を ES2+ でオンライン処理する方式も標準化されています。ただし大量一括の製造現場では、ファイル方式が今も併用されています。M2M（SGP.02）では、EUM→SM-SR の ES1、SM-DP⇔SM-SR の ES3、SM-SR⇔eUICC の ES8 という専用のインターフェース群を使います。</p></div>
+  </div>
+
+  <h2><span class="no">補足2</span>方式が変わると何が変わるか</h2>
+  <p class="sub" style="margin-bottom:10px;">SGP.31 はアーキテクチャと要件（eIM・IPA の役割分担やユースケース）を定めた文書で、SGP.32 はその技術仕様です。2つは対になっていて、流れそのものは1つです。</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th scope="col">観点</th><th scope="col">コンシューマ（SGP.22）</th><th scope="col">IoT（SGP.31/32）</th><th scope="col">M2M（SGP.01/02）</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">きっかけ</th><td>人が QR コードを読み取って開始</td><td>企業の管理基盤（eIM）が遠隔で指示して開始。人の操作は前提にしない</td><td>MNO が SM-SR 経由でプッシュして開始</td></tr>
+        <tr><th scope="row">端末側の主役</th><td>LPA（スマホ・車載機のソフトウェア）</td><td>IPA（端末内または eUICC 内）＋ eIM の組み合わせ</td><td>SM-SR と eUICC の ISD-R。端末側のソフトは最小限</td></tr>
+        <tr><th scope="row">発注のキー ID</th><td>ICCID・IMSI が中心</td><td>EID（eUICC 固有の ID）が中心。Input File は EID の大量リストになる</td><td>EID・ICCID。対応関係は SM-SR の EIS で管理</td></tr>
+        <tr><th scope="row">初期プロファイル</th><td>原則なし。契約後にダウンロード</td><td>工場出荷時にプロビジョニング用プロファイルを入れておき、現地で運用プロファイルに切り替えるのが基本</td><td>最初の事業者プロファイルを格納して出荷する</td></tr>
+        <tr><th scope="row">端末への到達</th><td>人が手元で操作する前提</td><td>スリープする端末が前提。SM-DS やポーリング、低消費電力への配慮が要る</td><td>SMS／BIP 等の OTA チャネルで SM-SR が届ける</td></tr>
+        <tr><th scope="row">回線管理</th><td>個人契約の単位で管理</td><td>法人の大量回線をプラットフォームで一括管理（開通・停止・APN 単位）</td><td>MNO と SM-SR 事業者で分担して管理</td></tr>
+        <tr><th scope="row">生成・納品の骨格</th><td colspan="3">Input File → キー生成 → プロファイル生成 → Output File → CRM 登録・HSS 登録、という骨格は共通。IoT では件数が万〜百万単位になり、バッチ処理の色が濃くなります。</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    各ステップの行をクリックしても移動できます。キーボードの ← → でも進めます。<br>
+    <a href="sgp22-sequence.html">→ 続き：SGP.22 プロファイルダウンロード（プレゼン版）</a>　｜　<a href="./index.html">eSIM / RSP インタラクティブ解説に戻る</a>　｜　<a href="../index.html">ポートフォリオへ戻る</a><br>
+    © TTJ — TED TRADING JAPAN G.K.
+    <p class="analytics-note" data-analytics-note hidden></p>
+  </footer>
+</div>
+
+<script>
+'use strict';
+var AX = [110, 305, 500, 695, 890];
+var MODES = {
+  consumer: {
+    note: 'コンシューマ（SGP.22）：人が QR コードを読み取って開通する、個人向けの流れです。',
+    actors: ['MNO（CRM）', 'MNO（HLR/HSS）', 'サプライヤー（生成）', 'サプライヤー（発行）', '利用者・端末'],
+    steps: [
+      {f:0, t:2, label:'Input File（発注）', title:'MNOがサプライヤーへ発注ファイルを送る',
+       desc:'ICCIDの採番レンジ、IMSI、作るプロファイルの種別（USIMの構成）、PIN／PUKの方針、数量・納期などをまとめた Input File を、MNOがSIMサプライヤーへ送ります。すべての製造はここから始まります。',
+       point:'形式はCSV・固定長テキストが今も主流で、受け渡しはSFTPや専用線です。オンラインAPI（ES2+）への移行も進んでいます。'},
+      {f:2, t:2, label:'受注登録・採番確定', title:'サプライヤーがICCIDとIMSIを確定する',
+       desc:'発注を受けたサプライヤーは、ICCID（末尾のチェックディジットを含む）とIMSIの対応を確定させ、製造データとして生成ラインへ流します。',
+       point:'この対応表が、後の Output File とMNO側の登録の土台になります。ここがずれると全工程がずれます。'},
+      {f:2, t:2, label:'Ki生成（HSM）', title:'認証キー Ki を生成する',
+       desc:'加入者認証の心臓部である Ki（128bit）を、サプライヤーの HSM（耐タンパの鍵管理装置）の中で生成します。プロファイル1件ごとに異なる Ki が割り当てられます。',
+       point:'Ki は平文で外に出ないのが原則です。MNO が自ら Ki を生成し、暗号化してサプライヤーへ渡す方式もあります。'},
+      {f:2, t:2, label:'プロファイル生成', title:'プロファイルの中身を組み立てる',
+       desc:'ファイルシステム（MF／DF／EF）、USIMアプリケーション、eSIM用の ISD-P、セキュリティドメイン、OTAキー、アクセス条件などを、Profile Elements として1件ずつ組み立てます。',
+       point:'形式は SIMalliance 相互運用フォーマット（TLV構造）。「プロファイル＝ファイルとアプリとキーの束」と捉えると分かりやすいです。'},
+      {f:2, t:3, label:'生成データを連携', title:'発行工程へデータを渡す',
+       desc:'組み立てたプロファイルとキー情報を、発行側（物理SIMのパーソナライゼーション工程、または SM-DP+）へ渡します。',
+       point:'工程間の連携でも、キー情報は暗号化されたまま受け渡されます。'},
+      {f:3, t:3, label:'書き込み／在庫化', title:'物理SIMは書き込み、eSIMはSM-DP+へ格納',
+       desc:'物理SIMならチップへ電気的に書き込み、表面に ICCID を刻印します。eSIMなら SM-DP+ にプロファイルを在庫として格納し、配布（BPP生成）に備えます。',
+       point:'eSIMでは「モノの納品」が消え、データの納品だけになります。物流が消えるのが eSIM の大きな変化です。'},
+      {f:3, t:0, label:'Output File（納品）', title:'対応表をMNOへ返送する',
+       desc:'ICCID・IMSI・Ki・PIN／PUK の対応表を Output File として MNO へ返します。これが「納品データ」です。',
+       point:'Ki は MNO の鍵で暗号化して渡します。形式は CSV・固定長が中心です。'},
+      {f:0, t:0, label:'回線管理登録', title:'MNOの回線管理システムへ登録する',
+       desc:'MNOは Output File を取り込み、ICCID・IMSI・MSISDN（電話番号）を紐付けて回線管理システム（CRM／BSS）へ登録し、「在庫／開通待ち」の状態にします。',
+       point:'この登録がないと、店頭やオンラインで「回線」として扱えません。認証の登録とは別に、契約側の登録が要ります。'},
+      {f:0, t:1, label:'認証情報を登録', title:'HLR／HSSへIMSIとKiを渡す',
+       desc:'MNOの網側設備である HLR／HSS（加入者データベース）へ、IMSI と Ki の登録を行います。',
+       point:'契約管理（CRM）と網側（HSS）で二重に登録が要る、というのが実務で押さえるべきポイントです。'},
+      {f:1, t:1, label:'AuC登録完了', title:'認証の準備が整う',
+       desc:'HSS内の AuC（認証センター）に Ki が登録され、端末が接続してきたときに AKA 認証のベクトルを生成できる状態になります。',
+       point:'これで網側の認証準備は完了です。Ki 自体が端末や店舗に出回ることはありません。'},
+      {f:3, t:0, label:'QRコード発行', title:'eSIMはアクティベーションコードを発行する',
+       desc:'eSIMの場合、発行側（SM-DP+）が、SM-DP+アドレスと Matching ID を含むアクティベーションコード（QR）を発行し、MNOへ渡します。',
+       point:'ES2+ の注文確定フローに相当します。物理SIMの場合はこの工程はなく、カードそのものが届けられます。'},
+      {f:0, t:4, label:'QR交付', title:'利用者へ交付（ここからSGP.22の流れ）',
+       desc:'MNOが利用者へ QRコードを交付します。利用者がスキャンした後の流れは「SGP.22 プロファイルダウンロード（プレゼン版）」の通りです。',
+       point:'裏側の生成・納品・登録がすべて済んでいるからこそ、QRを読むだけで開通できます。'}
+    ]
+  },
+  iot: {
+    note: 'IoT（SGP.31/32）：工場出荷と eIM の遠隔管理が前提の、法人・大量デバイス向けの流れです。SGP.31 がアーキテクチャと要件、SGP.32 が技術仕様を定めています。',
+    actors: ['MNO（CRM）', 'MNO（HLR/HSS）', 'サプライヤー（生成）', 'サプライヤー（発行）', '工場・eIM'],
+    steps: [
+      {f:0, t:2, label:'Input File（EIDリスト）', title:'MNOがEIDの大量リストで発注する',
+       desc:'企業案件向けに、対象デバイスの EID リスト、台数、プロファイル種別、納入先（工場・国別）などをまとめた Input File をサプライヤーへ送ります。',
+       point:'コンシューマとの違いは、キーになるIDが ICCID より EID（eUICC固有ID）で、件数が万〜百万台単位になることです。'},
+      {f:2, t:2, label:'受注登録・EID確定', title:'サプライヤーがEIDと回線情報を紐付ける',
+       desc:'発注を受けたサプライヤーは、EID・ICCID・IMSI の対応を確定させ、製造データとして生成ラインへ流します。',
+       point:'デバイス1台ごとに eUICC が決まっているため、「どのEIDに・どのプロファイルか」の対応管理が中心になります。'},
+      {f:2, t:2, label:'Ki生成（HSM）', title:'認証キー Ki を台数分まとめて生成する',
+       desc:'加入者認証の Ki を HSM の中で台数分生成します。工程はコンシューマと同じですが、バッチ処理で一括して行われます。',
+       point:'Ki は平文で外に出ないのが原則、という点もコンシューマと共通です。'},
+      {f:2, t:2, label:'プロファイル生成', title:'「仮」と「本番」の2種類を用意する',
+       desc:'工場出荷時に入れるプロビジョニング用プロファイル（まずつながるための仮の回線）と、現地で使う運用プロファイルの、2種類を組み立てます。',
+       point:'IoTの基本形は「工場で仮プロファイルを入れて出荷 → 現地で本番へ切替」です。ここがコンシューマとの最大の違いです。'},
+      {f:2, t:3, label:'生成データを連携', title:'発行工程へデータを渡す',
+       desc:'組み立てたプロファイルとキー情報を、発行側（eUICCへの書き込み工程と SM-DP+）へ渡します。',
+       point:'キー情報は暗号化されたまま受け渡されます。'},
+      {f:3, t:4, label:'工場へeUICCを納入', title:'初期プロファイル入りのeUICCが工場へ届く',
+       desc:'プロビジョニング用プロファイルを格納した eUICC が、デバイス工場へ納入され、製造ラインでデバイスに実装されます。',
+       point:'出荷時点で「最低限つながる」状態を作っておくことで、現地での開通作業が不要になります。'},
+      {f:3, t:0, label:'Output File（納品）', title:'EID対応表をMNOへ返送する',
+       desc:'EID・ICCID・IMSI・Ki（暗号化）・PIN／PUK の対応表を Output File として MNO へ返します。',
+       point:'形式は CSV・固定長が中心です。EID が先頭キーになるのが IoT 版の特徴です。'},
+      {f:0, t:0, label:'回線管理登録', title:'法人・回線群として一括登録する',
+       desc:'MNOは Output File を取り込み、回線管理システムへ法人単位・回線グループ単位で一括登録します（APN や料金プランも含みます）。',
+       point:'個人契約単位のコンシューマと違い、大量回線をプラットフォームでまとめて開通・停止できることが重要です。'},
+      {f:0, t:1, label:'認証情報を登録', title:'HLR／HSSへIMSIとKiを渡す',
+       desc:'網側の HLR／HSS へ IMSI と Ki を登録します。骨格はコンシューマと同じです。',
+       point:'台数が多いため、登録もバッチ連携が前提になります。'},
+      {f:1, t:1, label:'AuC登録完了', title:'認証の準備が整う',
+       desc:'HSS内の AuC に Ki が登録され、AKA 認証が可能な状態になります。',
+       point:'ここまでが「裏側」の準備です。この時点ではデバイスはまだ仮プロファイルで待機しています。'},
+      {f:4, t:3, label:'eIMが切替を指示', title:'企業のeIMが運用プロファイルへの切替を指示する',
+       desc:'デバイスが現地に設置されると、企業の管理基盤である eIM が SM-DP+ へ切替を指示します。端末側では IPA が受けて処理します。人の QR スキャンはありません。',
+       point:'デバイスがスリープしている場合は、SM-DS やポーリングで「起きたタイミング」に届けます。低消費電力への配慮が要るのが IoT の実務です。'},
+      {f:3, t:4, label:'運用プロファイルを配布', title:'SM-DP+が本番プロファイルを配布する',
+       desc:'SM-DP+ が運用プロファイルをデバイスの eUICC へ配布し、有効化します。ダウンロード自体の流れは SGP.32 の方式（ES9+系）です。',
+       point:'工場の仮プロファイルから本番プロファイルへ切り替わって、IoT 回線として開通します。'}
+    ]
+  },
+  m2m: {
+    note: 'M2M（SGP.01/02）：自動車やスマートメーター向けの方式。SM-SR が eUICC を遠隔管理し、MNO 主導のプッシュ型でプロファイルを切り替えます。',
+    actors: ['MNO（CRM）', 'MNO（HLR/HSS）', 'SM-DP（生成）', 'SM-SR（管理）', 'デバイス（eUICC）'],
+    steps: [
+      {f:0, t:2, label:'Input File（発注）', title:'MNOがSM-DPへ発注ファイルを送る',
+       desc:'EID・ICCID・IMSI、プロファイル種別、数量などをまとめた Input File を MNO が SM-DP（プロファイル生成基盤）へ送ります。製造の入口は他方式と共通です。',
+       point:'違いが出るのはこの先です。M2M では「作る」SM-DP と「管理する」SM-SR が分かれているのが最大の特徴です。'},
+      {f:2, t:2, label:'受注登録・採番確定', title:'SM-DPがEIDと回線情報を紐付ける',
+       desc:'発注を受けた SM-DP は、EID・ICCID・IMSI の対応を確定させ、生成ラインへ流します。',
+       point:'eUICC 側の情報は、後で SM-SR が持つ EIS（eUICC情報セット）と突き合わされます。'},
+      {f:2, t:2, label:'Ki生成（HSM）', title:'認証キー Ki を生成する',
+       desc:'加入者認証の Ki を HSM の中で生成します。方式が変わっても、この工程は共通です。',
+       point:'Ki は平文で外に出ないのが原則です。'},
+      {f:2, t:2, label:'プロファイル生成', title:'M2M向けプロファイルを組み立てる',
+       desc:'ファイルシステム、USIM アプリ、キー類を Profile Elements として組み立てます。eUICC 上では SM-SR の管理領域（ISD-R）の配下に格納される前提で作られます。',
+       point:'プロファイルの「持ち主」を切り替えられるよう、管理の鍵は SM-SR が握る設計です。'},
+      {f:2, t:3, label:'EIS連携・在庫登録', title:'SM-SRへプロファイルとeUICC情報を渡す',
+       desc:'生成したプロファイルの在庫と、対象 eUICC の情報（EIS）を SM-SR へ連携します。SM-SR は遠隔操作の司令塔になります。',
+       point:'SM-DP は「作る」、SM-SR は「届けて切り替える」。この役割分担が SGP.02 の心臓部です。'},
+      {f:3, t:4, label:'初期プロファイルを格納', title:'最初の事業者プロファイル入りで出荷する',
+       desc:'対象の eUICC に最初の事業者のプロファイルを格納し、デバイス（自動車・メーター等）へ実装して出荷します。SM-SR との管理チャネル（ISD-R の鍵）もこの時点で設定されます。',
+       point:'出荷後に事業者を変えられるのが M2M の存在意義です。物理 SIM の差し替えなしに移行できます。'},
+      {f:3, t:0, label:'Output File（納品）', title:'対応表をMNOへ返送する',
+       desc:'EID・ICCID・IMSI・Ki（暗号化）などの対応表を Output File として MNO へ返します。',
+       point:'形式は CSV・固定長が中心です。管理側の主キーは EID になります。'},
+      {f:0, t:0, label:'回線管理登録', title:'MNOの回線管理システムへ登録する',
+       desc:'MNO は Output File を取り込み、回線管理システム（CRM／BSS）へ登録します。SM-SR 上の管理対象としても紐付けられます。',
+       point:'契約管理は MNO、eUICC の遠隔管理は SM-SR、と管理が二層になるのが M2M の実務感です。'},
+      {f:0, t:1, label:'認証情報を登録', title:'HLR／HSSへIMSIとKiを渡す',
+       desc:'網側の HLR／HSS へ IMSI と Ki を登録します。',
+       point:'認証の仕組み自体は他方式と共通です。'},
+      {f:1, t:1, label:'AuC登録完了', title:'認証の準備が整う',
+       desc:'HSS 内の AuC に Ki が登録され、AKA 認証が可能な状態になります。',
+       point:'この時点では、デバイスは最初の事業者のプロファイルで稼働しています。'},
+      {f:0, t:3, label:'切替を指示（プッシュ）', title:'事業者変更時、MNOがSM-SRへ切替を指示する',
+       desc:'契約事業者を変えるとき、MNO が SM-SR へプロファイルのダウンロードと切替を指示します。人が端末を操作する必要はありません。',
+       point:'コンシューマの「人が QR」、IoT の「eIM の指示」と違い、MNO 主導のプッシュ型なのが SGP.02 の個性です。'},
+      {f:3, t:4, label:'新プロファイルを有効化', title:'SM-SRがeUICCへ届けて切り替える',
+       desc:'SM-SR が OTA チャネル（SMS／BIP 等）で eUICC に到達し、新プロファイルをダウンロード・有効化して、旧プロファイルを無効化します。',
+       point:'失敗したときは旧プロファイルへ切り戻せる設計（ロールバック）が、車載など止められない用途では特に重要です。'}
+    ]
+  }
+
+};
+
+var svg = document.getElementById('diagram');
+var NS = 'http://www.w3.org/2000/svg';
+function el(name, attrs){
+  var e = document.createElementNS(NS, name);
+  for (var k in attrs) e.setAttribute(k, attrs[k]);
+  return e;
+}
+var TOP = 66, ROW = 46, Y0 = 108;
+var mode = 'consumer', groups = [], cur = 0, timer = null;
+
+var curNo = document.getElementById('cur-no'), bar = document.getElementById('bar');
+var pNo = document.getElementById('p-no'), pTitle = document.getElementById('p-title'),
+    pDesc = document.getElementById('p-desc'), pPoint = document.getElementById('p-point');
+var btnPlay = document.getElementById('btn-play');
+var modeNote = document.getElementById('mode-note');
+
+function buildDiagram(){
+  while (svg.firstChild) svg.removeChild(svg.firstChild);
+  var M = MODES[mode];
+  M.actors.forEach(function(name, i){
+    svg.appendChild(el('line', {x1:AX[i], y1:TOP+34, x2:AX[i], y2:640, stroke:'#33507A', 'stroke-width':1.4, 'stroke-dasharray':'5 5'}));
+    var g = el('g', {});
+    g.appendChild(el('rect', {x:AX[i]-82, y:TOP-44, width:164, height:44, rx:9, fill:'#12304F', stroke:'#C9A227', 'stroke-width':1.4}));
+    var tx = el('text', {x:AX[i], y:TOP-17, 'text-anchor':'middle', fill:'#F5F1E3', 'font-size':13.5, 'font-weight':'700'});
+    tx.textContent = name;
+    g.appendChild(tx); svg.appendChild(g);
+  });
+  groups = M.steps.map(function(s, i){
+    var y = Y0 + i*ROW;
+    var x1 = AX[s.f], x2 = AX[s.t];
+    var self = s.f === s.t;
+    var g = el('g', {class:'msg', 'data-i':i});
+    var line, ah, label, motionD;
+    if (self){
+      motionD = 'M ' + x1 + ' ' + (y-9) + ' L ' + (x1+36) + ' ' + (y-9) + ' L ' + (x1+36) + ' ' + (y+9) + ' L ' + x1 + ' ' + (y+9);
+      line = el('path', {d:motionD, fill:'none', 'stroke-width':2.4});
+      ah = el('path', {d:'M ' + x1 + ' ' + (y+9) + ' l 10 -4.6 l 0 9.2 z'});
+      label = el('text', {x:x1+48, y:y+4.5, 'font-size':13.5});
+      label.textContent = s.label;
+    } else {
+      motionD = 'M ' + x1 + ' ' + y + ' L ' + x2 + ' ' + y;
+      line = el('line', {x1:x1, y1:y, x2:x2, y2:y, 'stroke-width':2.4});
+      var dir = x2 > x1 ? 1 : -1;
+      ah = el('path', {d:'M ' + x2 + ' ' + y + ' l ' + (-9*dir) + ' -4.6 l 0 9.2 z'});
+      label = el('text', {x:(x1+x2)/2, y:y-9, 'text-anchor':'middle', 'font-size':13.5});
+      label.textContent = s.label;
+    }
+    var badge = el('text', {x:22, y:y+4.5, 'font-size':12.5, 'font-weight':'700'});
+    badge.textContent = (i+1);
+    var path = el('path', {id:'mp'+i, d:motionD, fill:'none', stroke:'none'});
+    var packet = el('circle', {r:5.5, fill:'#EFDD9A', stroke:'#C9A227', 'stroke-width':1.5, visibility:'hidden'});
+    var am = document.createElementNS(NS, 'animateMotion');
+    am.setAttribute('dur', '1.15s');
+    am.setAttribute('repeatCount', 'indefinite');
+    var mp = document.createElementNS(NS, 'mpath');
+    mp.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#mp'+i);
+    am.appendChild(mp); packet.appendChild(am);
+    g.appendChild(path); g.appendChild(line); g.appendChild(ah); g.appendChild(label); g.appendChild(badge); g.appendChild(packet);
+    g.addEventListener('click', function(){ stop(); cur = i; render(); });
+    svg.appendChild(g);
+    return {g:g, line:line, ah:ah, label:label, badge:badge, packet:packet};
+  });
+}
+
+function render(){
+  var steps = MODES[mode].steps;
+  groups.forEach(function(gr, i){
+    var col, op, w;
+    if (i < cur){ col = '#C9A227'; op = .92; w = 2.2; gr.line.removeAttribute('class'); }
+    else if (i === cur){ col = '#D9B84A'; op = 1; w = 3.4; gr.line.setAttribute('class','cur-line'); }
+    else { col = '#5B7292'; op = .38; w = 2; gr.line.removeAttribute('class'); }
+    gr.line.setAttribute('stroke', col); gr.line.setAttribute('stroke-width', w); gr.line.setAttribute('opacity', op);
+    gr.ah.setAttribute('fill', col); gr.ah.setAttribute('opacity', op);
+    gr.label.setAttribute('fill', i === cur ? '#EFDD9A' : '#F5F1E3');
+    gr.label.setAttribute('opacity', i > cur ? .45 : 1);
+    gr.label.setAttribute('font-weight', i === cur ? '700' : '400');
+    gr.badge.setAttribute('fill', i <= cur ? '#D9B84A' : '#5B7292');
+    gr.packet.setAttribute('visibility', i === cur ? 'visible' : 'hidden');
+  });
+  var s = steps[cur];
+  curNo.textContent = cur + 1;
+  bar.style.width = ((cur+1)/steps.length*100) + '%';
+  pNo.textContent = 'STEP ' + (cur+1);
+  pTitle.textContent = s.title;
+  pDesc.textContent = s.desc;
+  pPoint.textContent = s.point;
+}
+function stop(){ if (timer){ clearInterval(timer); timer = null; btnPlay.textContent = '▶ 再生'; } }
+function play(){
+  if (timer){ stop(); return; }
+  btnPlay.textContent = '⏸ 一時停止';
+  timer = setInterval(function(){
+    if (cur >= MODES[mode].steps.length - 1){ stop(); return; }
+    cur++; render();
+  }, parseInt(document.getElementById('speed').value, 10));
+}
+function setMode(m){
+  stop(); mode = m; cur = 0;
+  document.getElementById('mode-consumer').className = 'mode-btn' + (m === 'consumer' ? ' on' : '');
+  document.getElementById('mode-iot').className = 'mode-btn' + (m === 'iot' ? ' on' : '');
+  document.getElementById('mode-m2m').className = 'mode-btn' + (m === 'm2m' ? ' on' : '');
+  modeNote.textContent = MODES[m].note;
+  buildDiagram(); render();
+}
+document.getElementById('mode-consumer').addEventListener('click', function(){ setMode('consumer'); });
+document.getElementById('mode-iot').addEventListener('click', function(){ setMode('iot'); });
+document.getElementById('mode-m2m').addEventListener('click', function(){ setMode('m2m'); });
+document.getElementById('btn-first').addEventListener('click', function(){ stop(); cur = 0; render(); });
+document.getElementById('btn-prev').addEventListener('click', function(){ stop(); if (cur > 0) cur--; render(); });
+document.getElementById('btn-next').addEventListener('click', function(){ stop(); if (cur < MODES[mode].steps.length-1) cur++; render(); });
+btnPlay.addEventListener('click', function(){ if (!timer && cur >= MODES[mode].steps.length-1) cur = 0; play(); render(); });
+document.getElementById('speed').addEventListener('change', function(){ if (timer){ stop(); play(); } });
+document.addEventListener('keydown', function(e){
+  if (e.key === 'ArrowRight'){ stop(); if (cur < MODES[mode].steps.length-1) cur++; render(); }
+  if (e.key === 'ArrowLeft'){ stop(); if (cur > 0) cur--; render(); }
+  if (e.key === ' '){ e.preventDefault(); if (!timer && cur >= MODES[mode].steps.length-1) cur = 0; play(); render(); }
+});
+var q = new URLSearchParams(location.search);
+var qm = q.get('mode'); if (qm === 'iot' || qm === 'm2m') mode = qm;
+setMode(mode);
+var qs = parseInt(q.get('step') || '1', 10);
+if (qs >= 1 && qs <= MODES[mode].steps.length){ cur = qs - 1; render(); }
+if (q.get('play') === '1') play();
+</script>
+<script defer src="../analytics.js"></script>
+</body>
+</html>
