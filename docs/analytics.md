@@ -59,3 +59,9 @@
 - 各ページの末尾に `<script defer src="…/analytics.js"></script>`（`showcase/` 直下のポートフォリオは `analytics.js`、ほかは `../analytics.js`）と、フッターの注記の置き場所 `<p class="analytics-note" data-analytics-note hidden></p>` が入っています。置き場所が無いページでは、有効になったときに analytics.js がフッターの末尾へ足します。
 - 生成元がある物は、生成元に入れてあります。講座の共通基盤は、公開設定（`courses/*-publish.json`）の `"analytics": "../analytics.js"`。コア講義は `scripts/core-net/build.py`、通信の講義室と学習マップは `site-work/gh-build/gh_build.py`、コネクテッドカー資料は `ccp/build/publish.py` です（いずれも作者の環境のパスです）。ttj.tokyo 用など別の出力には入りません。
 - 各ページは単一ファイルで外部リソースなし、が基本です。`analytics.js`（同じ場所から配信されるファイル）が、その唯一の例外です。識別子を書いたときだけ、そのサービスのスクリプトが外部から読み込まれます。
+
+## 現在の状態
+
+- 2026-11-15 から、Cloudflare Web Analytics を有効にしています（`showcase/analytics.js` の `service` と `id`）。
+- 手元での確認（localhost など）と、Do Not Track を有効にした閲覧者は、数えません。
+- 止めるときは、`service` と `id` を空にして push します。

@@ -1,7 +1,7 @@
 /* TTJ Showcase アクセス解析の受け口（クッキーを使わず、個人を追跡しない型の 2 サービスに対応）
  *
- * いまは無効です。下の CONFIG の service と id の両方を書くと、全ページで有効になります。
- * 空のままのあいだは、このファイルは何もせず、外部への通信は 1 件も起きません。
+ * いまは有効です（Cloudflare Web Analytics、2026-11-15 から）。下の CONFIG の service と id で決まります。
+ * 両方を空にすると無効になり、このファイルは何もせず、外部への通信は 1 件も起きません。
  * 有効にする手順・確認の仕方・止め方は docs/analytics.md を見てください。
  *
  *   service: 'cloudflare'  → Cloudflare Web Analytics。id は beacon の token（英数字 32 文字）
@@ -12,8 +12,8 @@
   'use strict';
 
   var CONFIG = {
-    service: '',   // '' | 'cloudflare' | 'goatcounter'
-    id: ''         // 識別子（token またはサイトのコード）。空のままなら無効
+    service: 'cloudflare',   // '' | 'cloudflare' | 'goatcounter'
+    id: 'f552b99afe7047028a13eaf6be909627'         // 識別子（token またはサイトのコード）。空のままなら無効
   };
 
   var NOTE = 'このサイトは、クッキーを使わないアクセス解析で閲覧数を数えています。';
@@ -23,7 +23,7 @@
       load: function (id) {
         // 公式の埋め込み（beacon.min.js と data-cf-beacon）。スクリプトで後から足すので、公式の案内どおり token は URL にも付ける
         var s = document.createElement('script');
-        s.type = 'module';
+        s.defer = true;
         s.src = 'https://static.cloudflareinsights.com/beacon.min.js?token=' + encodeURIComponent(id);
         s.setAttribute('data-cf-beacon', JSON.stringify({ token: id }));
         document.head.appendChild(s);
@@ -66,6 +66,7 @@
     var id = String(CONFIG.id || '').trim();
     if (!svc || !id) return;                                   // 無効（既定）
     if (!/^https?:$/.test(location.protocol)) return;           // ファイルを直接開いたときは数えない
+    if (/^(localhost|127\.0\.0\.1|\[::1\]|0\.0\.0\.0)$/.test(location.hostname)) return; // 手元の確認や検査では数えない（外部への通信もしない）
     if (dnt()) return;                                         // Do Not Track
     if (!svc.valid.test(id)) {
       if (window.console && console.warn) console.warn('analytics.js: id の形式が正しくありません（' + CONFIG.service + '）');
