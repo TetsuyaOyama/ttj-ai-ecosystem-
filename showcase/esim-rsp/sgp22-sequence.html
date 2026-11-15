@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SGP.22 プロファイルダウンロード｜動くシーケンス図（プレゼン版） | TTJ</title>
+<style>
+  :root{
+    --navy-900:#060F1D; --navy-800:#0B1D33; --navy-700:#12304F;
+    --gold-500:#C9A227; --gold-400:#D9B84A; --gold-200:#EFDD9A;
+    --ink:#F5F1E3; --ink-dim:#B9BDC9; --line:#33507A;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{background:var(--navy-900); color:var(--ink);
+    font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans CJK JP","Yu Gothic",sans-serif;
+    padding:28px 16px 48px;}
+  .wrap{max-width:1060px; margin:0 auto;}
+  header{border-bottom:1px solid var(--gold-500); padding-bottom:14px; margin-bottom:18px;}
+  .kicker{color:var(--gold-400); font-size:12px; letter-spacing:.18em; font-weight:700;}
+  h1{font-size:26px; margin:6px 0 4px;}
+  .sub{color:var(--ink-dim); font-size:14px; line-height:1.7;}
+  .controls{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:16px 0 10px;}
+  button{background:var(--navy-700); color:var(--ink); border:1px solid var(--gold-500);
+    border-radius:999px; padding:9px 18px; font-size:14px; font-weight:700; cursor:pointer; min-height:44px;}
+  button:hover{background:var(--gold-500); color:var(--navy-900);}
+  button.primary{background:var(--gold-500); color:var(--navy-900); min-width:128px;}
+  button.primary:hover{background:var(--gold-400);}
+  select{background:var(--navy-800); color:var(--ink); border:1px solid var(--line);
+    border-radius:8px; padding:9px 10px; font-size:14px; min-height:44px;}
+  .step-ind{margin-left:auto; font-size:14px; color:var(--ink-dim); font-variant-numeric:tabular-nums;}
+  .step-ind b{color:var(--gold-400); font-size:18px;}
+  .progress{height:6px; background:var(--navy-700); border-radius:3px; overflow:hidden; margin-bottom:14px;}
+  .progress > div{height:100%; background:var(--gold-500); width:0%; transition:width .45s ease;}
+  .stage{background:var(--navy-800); border:1px solid var(--line); border-radius:14px; padding:10px 6px 2px;}
+  svg{width:100%; height:auto; display:block;}
+  .panel{margin-top:14px; background:var(--navy-800); border:1px solid var(--line);
+    border-left:4px solid var(--gold-500); border-radius:10px; padding:16px 18px; min-height:118px;}
+  .panel .ptitle{font-size:17px; font-weight:700; margin-bottom:6px;}
+  .panel .ptitle .no{color:var(--gold-400); margin-right:8px;}
+  .panel .pdesc{font-size:14.5px; line-height:1.8; color:var(--ink);}
+  .panel .ppoint{margin-top:8px; font-size:13.5px; line-height:1.7; color:var(--gold-200);}
+  .panel .ppoint::before{content:"実務ポイント："; font-weight:700; color:var(--gold-400);}
+  footer{margin-top:18px; color:var(--ink-dim); font-size:12.5px; line-height:1.7;}
+  .msg{cursor:pointer;}
+  @keyframes dashmove{to{stroke-dashoffset:-26;}}
+  .cur-line{stroke-dasharray:9 4; animation:dashmove .7s linear infinite;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker">TTJ SHOWCASE — eSIM / RSP インタラクティブ解説</div>
+    <h1>SGP.22 プロファイルダウンロード</h1>
+    <p class="sub">eSIMのリモートSIMプロビジョニング（コンシューマ向け）の流れを、1ステップずつ大きく追える動くシーケンス図です。再生ボタンで自動で進みます。大きな画面での説明・プレゼン用に、実務ポイント付きで構成しています。</p>
+  </header>
+
+  <div class="controls">
+    <button id="btn-first" type="button">⏮ 最初から</button>
+    <button id="btn-prev" type="button">◀ 前へ</button>
+    <button id="btn-play" type="button" class="primary">▶ 再生</button>
+    <button id="btn-next" type="button">次へ ▶</button>
+    <select id="speed" aria-label="再生速度">
+      <option value="3400">ゆっくり</option>
+      <option value="2400" selected>標準</option>
+      <option value="1400">速い</option>
+    </select>
+    <span class="step-ind">STEP <b id="cur-no">1</b> / 12</span>
+  </div>
+  <div class="progress"><div id="bar"></div></div>
+
+  <div class="stage"><svg id="diagram" viewBox="0 0 1000 660" role="img" aria-label="SGP.22シーケンス図"></svg></div>
+
+  <div class="panel">
+    <div class="ptitle"><span class="no" id="p-no">STEP 1</span><span id="p-title"></span></div>
+    <div class="pdesc" id="p-desc"></div>
+    <div class="ppoint" id="p-point"></div>
+  </div>
+
+  <footer>各ステップの行をクリックしても移動できます。キーボードの ← → でも進めます。<br>
+    <a href="./index.html" style="color:var(--gold-400); font-weight:700;">← eSIM / RSP インタラクティブ解説に戻る</a>　｜　<a href="../index.html" style="color:var(--gold-400); font-weight:700;">ポートフォリオへ戻る</a><br>
+    © TTJ — TED TRADING JAPAN G.K.
+    <p class="analytics-note" data-analytics-note hidden></p>
+  </footer>
+</div>
+
+<script>
+'use strict';
+var ACTORS = ['利用者', '端末（LPA）', 'eUICC', 'SM-DP+', 'MNO'];
+var AX = [110, 305, 500, 695, 890];
+var STEPS = [
+  {f:0, t:4, label:'回線を契約', title:'利用者がMNOに回線を申し込む',
+   desc:'eSIM対応回線の契約がすべての起点です。契約情報は、後でダウンロードされるプロファイルの「注文（オーダー）」としてSM-DP+側に紐づきます。',
+   point:'この時点でプロファイルはMNO側で用意され、SM-DP+に「誰の・どの回線か」が登録されます。'},
+  {f:4, t:0, label:'QRコードを交付', title:'MNOがアクティベーションコードを渡す',
+   desc:'MNOは、SM-DP+のアドレスとMatching ID（注文と端末を結ぶ合言葉）を含むアクティベーションコードを、QRコードで利用者に交付します。',
+   point:'Matching IDは使い捨てです。第三者に知られると先にダウンロードされる恐れがあるため、SNS等にQRを載せるのは厳禁です。'},
+  {f:0, t:1, label:'QRをスキャン', title:'利用者が端末のLPAでQRを読み取る',
+   desc:'端末側のソフトウェアであるLPA（Local Profile Assistant）がQRを読み取り、接続先のSM-DP+とMatching IDを取り出します。',
+   point:'LPAは端末側の司令塔で、ダウンロード担当（LPD）・発見担当（LDS）・画面担当（LUI）の総称です。'},
+  {f:1, t:3, label:'InitiateAuthentication', title:'LPAがSM-DP+へ認証を開始する（ES9+）',
+   desc:'LPAがSM-DP+に接続し、eUICCの情報とチャレンジ（乱数）を送って認証セッションを開始します。これがES9+インターフェースの入口です。',
+   point:'ここから先の通信は、すべてTLSと電子署名で保護されます。平文でプロファイルが流れることはありません。'},
+  {f:3, t:1, label:'サーバ認証データを返送', title:'SM-DP+が署名とチャレンジを返す',
+   desc:'SM-DP+は自らの署名とチャレンジをLPAへ返します。LPAはそれをeUICCに渡して検証させ、「本物のサーバか」を確認します。',
+   point:'偽のSM-DP+を弾くための相互認証の前半です。証明書の検証に失敗すれば、ダウンロードはここで止まります。'},
+  {f:1, t:2, label:'検証と署名を依頼', title:'LPAがeUICCに署名を頼む',
+   desc:'LPAはeUICCに、サーバの検証と、eUICC自身の署名（チャレンジへの応答）の生成を依頼します。',
+   point:'署名に使う秘密鍵はeUICCの中だけにあり、外に取り出すことはできません。これがeSIMの安全性の核です。'},
+  {f:2, t:1, label:'eUICC署名を返却', title:'eUICCがチップ内の鍵で署名する',
+   desc:'eUICCが内部の鍵で署名を生成し、LPAへ返します。この署名が「本物のeUICCである」ことの証明になります。',
+   point:'コピーできない鍵で署名するからこそ、物理SIMの差し替えなしに回線を配れるのです。'},
+  {f:1, t:3, label:'AuthenticateClient', title:'LPAが認証を完了させる（ES9+）',
+   desc:'LPAがeUICCの署名をSM-DP+へ提示し、相互認証が完了します。同時にMatching IDとオーダーが照合され、ダウンロードの許可が出ます。',
+   point:'認証と注文照合がそろって初めて、プロファイルの送信に進めます。どちらか欠けても先へは進みません。'},
+  {f:3, t:1, label:'BPP（暗号化プロファイル）', title:'SM-DP+がプロファイルを送る',
+   desc:'SM-DP+は、プロファイルをそのeUICC専用に暗号化したパッケージ（BPP：Bound Profile Package）にしてLPAへ送ります。',
+   point:'BPPは宛先のeUICCでしか開けません。途中で横取りされても、別のeUICCにはインストールできない仕組みです。'},
+  {f:1, t:2, label:'BPPをロード', title:'LPAがeUICCへプロファイルを書き込む',
+   desc:'LPAがBPPをeUICCへ渡し、プロファイルのインストールが行われます。ICCIDや認証情報（IMSI・Ki等）がeUICC内に格納されます。',
+   point:'インストール中の電源断や通信断は失敗の原因になります。車載機では特に、電源が安定した状態で行うのが実務の鉄則です。'},
+  {f:2, t:1, label:'インストール成功', title:'eUICCが結果をLPAへ知らせる',
+   desc:'eUICCがインストールの成否をLPAへ通知します。成功すれば、結果はLPA経由でSM-DP+にも報告され、オーダーが「完了」になります。',
+   point:'この結果報告までがダウンロード手続きの一部です。失敗時はエラー内容がSM-DP+側にも残り、再発行の判断材料になります。'},
+  {f:1, t:4, label:'有効化してアタッチ', title:'端末がプロファイルを有効化し、網へ登録する',
+   desc:'端末が新しいプロファイルを有効化し、MNOのネットワークへアタッチ（位置登録）します。ここで初めて、その回線で通信できるようになります。',
+   point:'ダウンロード完了と通信開始は別物です。有効化とアタッチまで見届けて、初めて開通と言えます。'}
+];
+
+var svg = document.getElementById('diagram');
+var NS = 'http://www.w3.org/2000/svg';
+function el(name, attrs){
+  var e = document.createElementNS(NS, name);
+  for (var k in attrs) e.setAttribute(k, attrs[k]);
+  return e;
+}
+var TOP = 66, ROW = 46, Y0 = 108;
+
+// lifelines + actor boxes
+ACTORS.forEach(function(name, i){
+  svg.appendChild(el('line', {x1:AX[i], y1:TOP+34, x2:AX[i], y2:640, stroke:'#33507A', 'stroke-width':1.4, 'stroke-dasharray':'5 5'}));
+  var g = el('g', {});
+  var rect = el('rect', {x:AX[i]-78, y:TOP-44, width:156, height:44, rx:9, fill:'#12304F', stroke:'#C9A227', 'stroke-width':1.4});
+  var tx = el('text', {x:AX[i], y:TOP-17, 'text-anchor':'middle', fill:'#F5F1E3', 'font-size':16.5, 'font-weight':'700'});
+  tx.textContent = name;
+  g.appendChild(rect); g.appendChild(tx); svg.appendChild(g);
+});
+
+// message groups
+var groups = STEPS.map(function(s, i){
+  var y = Y0 + i*ROW;
+  var x1 = AX[s.f], x2 = AX[s.t];
+  var g = el('g', {class:'msg', 'data-i':i});
+  var line = el('line', {x1:x1, y1:y, x2:x2, y2:y, 'stroke-width':2.4});
+  var dir = x2 > x1 ? 1 : -1;
+  var ah = el('path', {d:'M ' + x2 + ' ' + y + ' l ' + (-9*dir) + ' -4.6 l 0 9.2 z'});
+  var label = el('text', {x:(x1+x2)/2, y:y-9, 'text-anchor':'middle', 'font-size':13.5});
+  label.textContent = s.label;
+  var badge = el('text', {x:22, y:y+4.5, 'font-size':12.5, 'font-weight':'700'});
+  badge.textContent = (i+1);
+  var path = el('path', {id:'mp'+i, d:'M ' + x1 + ' ' + y + ' L ' + x2 + ' ' + y, fill:'none', stroke:'none'});
+  var packet = el('circle', {r:5.5, fill:'#EFDD9A', stroke:'#C9A227', 'stroke-width':1.5, visibility:'hidden'});
+  var am = document.createElementNS(NS, 'animateMotion');
+  am.setAttribute('dur', '1.15s');
+  am.setAttribute('repeatCount', 'indefinite');
+  var mp = document.createElementNS(NS, 'mpath');
+  mp.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#mp'+i);
+  am.appendChild(mp); packet.appendChild(am);
+  g.appendChild(path); g.appendChild(line); g.appendChild(ah); g.appendChild(label); g.appendChild(badge); g.appendChild(packet);
+  g.addEventListener('click', function(){ stop(); cur = i; render(); });
+  svg.appendChild(g);
+  return {g:g, line:line, ah:ah, label:label, badge:badge, packet:packet};
+});
+
+var cur = 0, timer = null;
+var curNo = document.getElementById('cur-no'), bar = document.getElementById('bar');
+var pNo = document.getElementById('p-no'), pTitle = document.getElementById('p-title'),
+    pDesc = document.getElementById('p-desc'), pPoint = document.getElementById('p-point');
+var btnPlay = document.getElementById('btn-play');
+
+function render(){
+  groups.forEach(function(gr, i){
+    var col, op, w;
+    if (i < cur){ col = '#C9A227'; op = .92; w = 2.2; gr.line.removeAttribute('class'); }
+    else if (i === cur){ col = '#D9B84A'; op = 1; w = 3.4; gr.line.setAttribute('class','cur-line'); }
+    else { col = '#5B7292'; op = .38; w = 2; gr.line.removeAttribute('class'); }
+    gr.line.setAttribute('stroke', col); gr.line.setAttribute('stroke-width', w); gr.line.setAttribute('opacity', op);
+    gr.ah.setAttribute('fill', col); gr.ah.setAttribute('opacity', op);
+    gr.label.setAttribute('fill', i === cur ? '#EFDD9A' : '#F5F1E3');
+    gr.label.setAttribute('opacity', i > cur ? .45 : 1);
+    gr.label.setAttribute('font-weight', i === cur ? '700' : '400');
+    gr.badge.setAttribute('fill', i <= cur ? '#D9B84A' : '#5B7292');
+    gr.packet.setAttribute('visibility', i === cur ? 'visible' : 'hidden');
+  });
+  var s = STEPS[cur];
+  curNo.textContent = cur + 1;
+  bar.style.width = ((cur+1)/STEPS.length*100) + '%';
+  pNo.textContent = 'STEP ' + (cur+1);
+  pTitle.textContent = s.title;
+  pDesc.textContent = s.desc;
+  pPoint.textContent = s.point;
+}
+function stop(){ if (timer){ clearInterval(timer); timer = null; btnPlay.textContent = '▶ 再生'; } }
+function play(){
+  if (timer){ stop(); return; }
+  btnPlay.textContent = '⏸ 一時停止';
+  timer = setInterval(function(){
+    if (cur >= STEPS.length - 1){ stop(); return; }
+    cur++; render();
+  }, parseInt(document.getElementById('speed').value, 10));
+}
+document.getElementById('btn-first').addEventListener('click', function(){ stop(); cur = 0; render(); });
+document.getElementById('btn-prev').addEventListener('click', function(){ stop(); if (cur > 0) cur--; render(); });
+document.getElementById('btn-next').addEventListener('click', function(){ stop(); if (cur < STEPS.length-1) cur++; render(); });
+btnPlay.addEventListener('click', function(){ if (!timer && cur >= STEPS.length-1) cur = 0; play(); render(); });
+document.getElementById('speed').addEventListener('change', function(){ if (timer){ stop(); play(); } });
+document.addEventListener('keydown', function(e){
+  if (e.key === 'ArrowRight'){ stop(); if (cur < STEPS.length-1) cur++; render(); }
+  if (e.key === 'ArrowLeft'){ stop(); if (cur > 0) cur--; render(); }
+  if (e.key === ' '){ e.preventDefault(); if (!timer && cur >= STEPS.length-1) cur = 0; play(); render(); }
+});
+var q = new URLSearchParams(location.search);
+var qs = parseInt(q.get('step') || '1', 10);
+if (qs >= 1 && qs <= STEPS.length) cur = qs - 1;
+render();
+if (q.get('play') === '1') play();
+</script>
+<script defer src="../analytics.js"></script>
+</body>
+</html>
