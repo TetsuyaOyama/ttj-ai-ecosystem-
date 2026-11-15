@@ -143,6 +143,22 @@ AI の未来レポート、触れる展示、備蓄ガイドなどを収めた T
 
 [サイトを開く](https://ttj.tokyo/)
 
+### 番外：ttj.tokyo の展示
+
+学習用の講座とは別に、ttj.tokyo で公開している展示です。
+
+#### 麻雀教室
+
+はじめての人向けの麻雀教室。ルールと役を、順に手を動かして覚えます。
+
+[サイトで開く](https://ttj.tokyo/mahjong_dojo.html)
+
+#### 相場研究ラボ（オプション × 資源株）
+
+オプションと資源株を、基礎の訓練からシナリオの検証と反対意見まで順に学ぶ研究ノートです。投資助言・推奨ではありません。
+
+[サイトで開く](https://ttj.tokyo/#market)
+
 ## このリポジトリの見どころ
 
 - [claude/settings.json](claude/settings.json) — `sudo`・force push・`.env` 読み取りを拒否し、`git push` や `rm` は確認に回す権限ルール。
