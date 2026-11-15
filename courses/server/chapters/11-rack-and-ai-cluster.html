@@ -1,0 +1,77 @@
+<!--
+num: 11
+part: 2
+title: ラック単位の設計と AI クラスタ
+track: 機器
+time: 40
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>ラックの<b>電力・重量・高さ・冷却</b>の 4 つの枠から、載せられる台数を考えられる。</li>
+    <li><b>スケールアップ</b>と<b>スケールアウト</b>、<b>ラックスケール</b>の設計の考え方を説明できる。</li>
+    <li>AI クラスタで、<b>計算・ストレージ・フロントエンド・管理</b>のネットワークを分ける考え方を言える。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch08">第08章</a>（GPU サーバー）、<a href="#ch10">第10章</a>（ネットワーク）。あるとよい：<a href="#ch09">第09章</a>（ストレージ）。</p>
+</section>
+
+<h3>ラックの「予算」</h3>
+<p>サーバーは、ラックに載せて使います。ラックには、載せられる量の枠があります。<b>電力</b>（kW）、<b>重量</b>（kg）、<b>高さ</b>（U）、そして<b>冷却</b>の能力です。GPU サーバーは、1 台の電力と重量が大きいので、台数が、電力や重量の枠で決まることが増えます（一般論）。</p>
+<p>次の表は、架空の値と、公開された製品の記載を並べたものです。「架空」の行は、練習のための値で、実在の施設の値ではありません。</p>
+<div data-widget="table" data-src="c11-budget"></div>
+<p>NVIDIA（米国）の GB200 NVL72 のページは、36 個の Grace CPU と 72 個の Blackwell GPU を、ラックスケールの液冷の設計でつなぐ、と記しています。<b>ラックスケール</b>（rack-scale）は、ラック 1 本を、1 つの計算の単位として設計する考え方です。このページには、ラックの電力の値は書かれていません。電力は、データシートや施設の設計書で確認します（出典：NVIDIA『GB200 NVL72』、確認 2026 年 11 月）。</p>
+<p>AMD（米国）の Helios のページも、72 個の GPU をもつ、液冷のラックスケールの構成を記しています。幅の広い Open Rack Wide（ORW）のラックで、ラックの電力の値は書かれていません（出典：AMD『AMD Helios Rackscale Solution』、ページの更新 2026 年 11 月 12 日）。2 つの例は、同じ条件の比較ではなく、優劣を示すものでもありません。</p>
+
+<h3>演習：何台入るか</h3>
+<p>3 つの枠（電力・重量・高さ）で、台数を計算します。すべて架空の値です。答えを先に考えてから、行を押してください。</p>
+<div data-widget="table" data-src="c11-calc"></div>
+
+<h3>スケールアップとスケールアウト</h3>
+<p>計算の能力を上げる方法は、2 つあります。1 つの単位の中を太くするのが<b>スケールアップ</b>（scale-up）、台数やラックの数を増やすのが<b>スケールアウト</b>（scale-out）です。実際の AI クラスタでは、両方を組み合わせます。</p>
+<div data-widget="compare" data-src="c11-scale"></div>
+
+<h3>AI クラスタのネットワークの分け方</h3>
+<p>多数のサーバーを結ぶとき、ネットワークを役割ごとに分けることがあります（一般論）。<b>計算用</b>は、GPU 同士の<b>集団通信</b>（collective communication）を運びます。<b>ストレージ用</b>は、学習データの読み込みと、チェックポイントの保存に使います。<b>フロントエンド</b>は、利用者がログインし、ジョブを投入する入口です。<b>管理用</b>は、機器の電源・状態・ファームウェアの管理に使います。分けると、互いに邪魔し合いにくくなり、守り方も分けられます。</p>
+<div data-widget="arch" data-src="c11-cluster"></div>
+<p>NVIDIA の DGX SuperPOD のページは、計算・ストレージ・ネットワーク・ソフトウェア・インフラ管理を組み合わせた「フルスタックのデータセンタープラットフォーム」と説明しています。DGX GB200 の構成は液冷のラックスケールで、数万の GPU へ拡張できる、と記されています（出典：NVIDIA『DGX SuperPOD』、確認 2026 年 11 月）。ネットワークをいくつに分けるかは、製品と設計で違います。</p>
+<p>こうした、多数のラックを 1 つの計算の単位として扱う集まりを、<b>ポッド</b>（pod）と呼ぶことがあります。範囲と名前は、資料ごとに違います。また、計算の通信の網の目全体を<b>ファブリック</b>（fabric）と呼びます。ジョブの割り当ては<a href="#ch22">第22章</a>で扱います。</p>
+
+<h3>ラック電力密度の調査値</h3>
+<p>ラック 1 本あたりの電力（ラック電力密度）の調査値として、Uptime Institute の 2026 年の調査（2026 年 3 月 17 日〜5 月 1 日に実施、データセンターの所有者・運営者 801 件の回答に基づく報告書）があります。「あなたのデータセンターで最も多い（最頻の）サーバーラックの密度は」という問いに、679 件が答えています。</p>
+<div class="tbl-wrap"><table class="tbl">
+  <caption>最も多いサーバーラックの密度（Uptime Institute、2026 年の調査、n＝679）</caption>
+  <thead><tr><th>ラック 1 本あたり</th><th>回答の割合</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">10 kW 未満</th><td>69%</td></tr>
+    <tr><th scope="row">10〜19 kW</th><td>20%</td></tr>
+    <tr><th scope="row">20〜49 kW</th><td>8%</td></tr>
+    <tr><th scope="row">50 kW 以上</th><td>3%</td></tr>
+  </tbody>
+</table></div>
+<p>これは、各施設の「いちばん多い密度」の分布です。AI 向けの最新のラックの値や、ラック全体に占める割合ではありません。報告書は、同じ問いで「最も高い密度」も別に尋ねています。調査の対象と時点が変わると値も変わるので、数字を使うときは、調査の年と問いの文言を確かめてください。冷却と配電への影響は、<a href="#ch15">第15章</a>・<a href="#ch16">第16章</a>・<a href="#ch18">第18章</a>で扱います。</p>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>台数は、1 つの枠だけで決めません。</b>電力が足りても、重量や冷却が足りないことがあります。いちばん厳しい枠で決まります。</p>
+  <p><b>「ポッド」は、統一された定義がありません。</b>資料ごとに、範囲が違います。数字の比較をするときは、その資料の定義を確認します。</p>
+  <p><b>ラックの電力の値を、1 つの数字として覚えないでください。</b>製品と世代、冷却方式で、大きく変わります。下の調査値も、回答した施設の「最も多い値」の分布で、特定のラックや製品の値ではありません。</p></div>
+
+<div class="callout tip"><span class="ttl">現場でのつながり</span>
+  <p>案件では、GPU の台数から、ラック数と、ラック 1 本あたりの電力を逆算します。そのうえで、配電（<a href="#ch12">第12章</a>）と冷却（<a href="#ch15">第15章</a>、<a href="#ch16">第16章</a>）が、その電力に耐えるかを確認します。空冷でよいか、液冷が要るかは、ここで決まります。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c11-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（アクセス日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.nvidia.com/en-us/data-center/gb200-nvl72/">GB200 NVL72</a></th><td>NVIDIA（米国）</td><td>2026 年 11 月に確認</td><td>ラックスケールの構成（36 CPU・72 GPU）、液冷、NVLink ドメイン。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.amd.com/en/products/rackscale-solutions/helios.html">AMD Helios Rackscale Solution</a></th><td>AMD（米国）</td><td>ページの更新 2026-11-12、2026 年 11 月に確認</td><td>72 GPU のラックスケール、液冷、ORW、HBM4 の容量、スケールアップの帯域。電力の記載なし。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.nvidia.com/en-us/data-center/dgx-superpod/">DGX SuperPOD</a></th><td>NVIDIA（米国）</td><td>2026 年 11 月に確認</td><td>フルスタックの構成、液冷のラックスケール、数万の GPU への拡張。</td></tr>
+      <tr><td>団体の調査報告</td><th scope="row"><a href="https://datacenter.uptimeinstitute.com/rs/711-RIA-145/images/2026%20Annual%20Survey%20Data%20Center%20Growth%20v6.pdf?version=0">Data Center Capacity Growth Trends: Findings from the 2026 Global Data Center Survey</a></th><td>Uptime Institute</td><td>2026 年の調査（2026-03-17〜05-01）、報告書は 2026 年 8 月</td><td>最も多いサーバーラックの密度の分布（n＝679）。</td></tr>
+      <tr><td>一般知識</td><th scope="row">計算機アーキテクチャの教科書（Hennessy・Patterson『Computer Architecture』など）</th><td>—</td><td>—</td><td>スケールアップ・スケールアウト、ネットワークを分ける考え方。数値は使っていません。</td></tr>
+    </tbody>
+  </table></div>
+</section>

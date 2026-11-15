@@ -1,0 +1,92 @@
+{
+  "permissions": {
+    "defaultMode": "acceptEdits",
+    "allow": [
+      "Read",
+      "Grep",
+      "Glob",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(ls:*)",
+      "Bash(python3:*)",
+      "Bash(node:*)",
+      "Bash(npx wrangler pages deploy:*)",
+      "Bash(codex exec:*)"
+    ],
+    "ask": [
+      "Bash(git push:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(rm:*)",
+      "Bash(npx wrangler:*)",
+      "Bash(gh:*)"
+    ],
+    "deny": [
+      "Bash(sudo:*)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Read(**/.env)",
+      "Read(~/.claude/skills/.env)",
+      "Read(**/*.pem)"
+    ]
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          { "type": "command", "command": "python3 ~/.claude/hooks/prompt_reminder.py" }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          { "type": "command", "command": "python3 ~/.claude/hooks/bash_guard.py" }
+        ]
+      },
+      {
+        "matcher": "Read",
+        "hooks": [
+          { "type": "command", "command": "python3 ~/.claude/hooks/secret_guard.py" }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          { "type": "command", "command": "python3 ~/.claude/hooks/change_log.py" }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          { "type": "command", "command": "python3 ~/.claude/hooks/session_start.py" }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          { "type": "command", "command": "python3 ~/.claude/hooks/pre_compact.py" }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          { "type": "command", "command": "python3 ~/.claude/hooks/stop_notify.py" }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          { "type": "command", "command": "python3 ~/.claude/hooks/session_end.py" }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,23 @@
+第08章 事実確認表（担当 B、確認 2026-11-14）
+
+| # | 区分 | 事実（本文での書き方） | 数値・単位 | 時点 | 出典（発行者『資料名』） | URL（個別ページ） | 一次 | 確認日 | 使った箇所 |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | 仕様値 | NVIDIA H100 SXM：形状 SXM、GPU メモリ 80 GB、最大 TDP は 700 W まで（設定可能）、NVLink 900 GB/s、PCIe Gen5 128 GB/s。H100 NVL：PCIe（デュアルスロット・空冷）、94 GB、最大 TDP 350〜400 W（設定可能）、NVLink 600 GB/s | 80 GB／700 W／900 GB/s、94 GB／350〜400 W／600 GB/s | 2026-11-14 に確認（ページに日付なし） | NVIDIA『H100 GPU』 | https://www.nvidia.com/en-us/data-center/h100/ | ○ | 2026-11-14 | c08-accel 1・2 行目、本文 |
+| 2 | 仕様値 | AMD Instinct MI300X：OAM モジュール、ピーク TBP 750 W、HBM3 最大 192 GB、PCIe Gen5 x16、スケールアップの Infinity Fabric リンク 7 本（各 128 GB/s） | 750 W／192 GB／7 本 | データシートに版・日付の記載なし（© 2025） | AMD『AMD Instinct MI300X Accelerator Data Sheet』 | https://www.amd.com/content/dam/amd/en/documents/instinct-tech-docs/data-sheets/amd-instinct-mi300x-data-sheet.pdf | ○ | 2026-11-14 | c08-accel 3 行目 |
+| 3 | 仕様値 | AMD Instinct MI300X Platform：OCP の OAM モジュール 8 個を Universal Baseboard（UBB 2.0 と記載）に載せ、GPU 間は Infinity Fabric の全結合、ホストとの接続は OAM ごとに PCIe Gen5 x16 | 8 GPU／UBB 2.0 | データシートに版・日付の記載なし（© 2023） | AMD『AMD Instinct MI300X Platform Data Sheet』 | https://www.amd.com/content/dam/amd/en/documents/instinct-tech-docs/data-sheets/amd-instinct-mi300x-platform-data-sheet.pdf | ○ | 2026-11-14 | 本文「GPU サーバーの形」、c08-gpu-server |
+| 4 | 仕様値 | Intel Gaudi 3：HBM2e 128 GB、200 Gb のイーサネットポート 24 本。OAM（UBB に 8 個）と PCIe CEM の版がある。TDP は同資料に記載なし | 128 GB／24×200 Gb | 2024-09-24 | Intel『Intel Unveils Next-Generation AI Solutions with the Launch of Xeon 6 and Gaudi 3』／Intel『Press Kit: Intel Xeon 6 with P-cores and Gaudi 3 AI Accelerators』 | https://newsroom.intel.com/artificial-intelligence/next-generation-ai-solutions-xeon-6-gaudi-3 ／ https://intel.com/content/www/us/en/newsroom/resources/enterprise-ai-products.html | ○ | 2026-11-14 | c08-accel 4 行目 |
+| 5 | 規格 | OCP の OAI（Open Accelerator Infrastructure）サブプロジェクトは、さまざまなアクセラレータの共通のインフラ仕様（電気・機械・熱・管理・セキュリティ・保守）を定める。現行の仕様は OAI-OAM Base Specification r2.0 v1.0 と OAI-UBB Base Specification r2.0 v1.0（提出 2023-09-14、文書日付 2023-09-19）。以前の版：OAM Design Specification v1.5（2022-02-23）など | r2.0 v1.0 | 2023-09-14（提出） | OCP『OCP Accelerator Module (OAM)』／OCP『Open Accelerator Infrastructure (OAI)』 | https://www.opencompute.org/wiki/Server/OAM ／ https://www.opencompute.org/wiki/Server/OAI | ○ | 2026-11-14 | 本文「OAM」、c08-quiz、mapping |
+| 6 | 発表 | UALink Consortium は 2025-04-08 に UALink 200G 1.0 仕様を公開したと発表した。1 レーン 200G、1 ポッドにアクセラレータ最大 1,024 個、スイッチで AI の計算ポッドを結ぶスケールアップ向けの低遅延・広帯域の接続。理事会に Alibaba、AMD、Apple、Astera Labs、AWS、Cisco、Google、HPE、Intel、Meta、Microsoft、Synopsys の名がある（本文では社名は挙げない） | 200G／1,024 | 2025-04-08（Business Wire の配信日。URL の日付） | UALink Consortium『UALink Consortium Releases the Ultra Accelerator Link 200G 1.0 Specification』（Business Wire 配信） | https://www.businesswire.com/news/home/20250408050548/en/UALink-Consortium-Releases-the-Ultra-Accelerator-Link-200G-1.0-Specification | △ | 2026-11-14 | 本文「GPU 間接続」、c08-quiz、mapping |
+| 7 | 仕様値 | NVLink は NVIDIA の GPU 間接続の呼称。H100 SXM のページは 900 GB/s と記す（#1）。「第 5 世代 NVLink の GPU 間接続 1.8 TB/s」は GB200 NVL72 のページの記載（第11章の c11-budget の行） | 900 GB/s | 2026-11-14 | NVIDIA『H100 GPU』 | #1 に同じ | ○ | 2026-11-14 | 本文「GPU 間接続」 |
+| 8 | 企業 | NVIDIA・AMD・Intel の本社は米国（第06章の事実確認表 #6・#7・#8） | — | 2026-11-14 | 第06章の表に同じ | 第06章の表に同じ | ○ | 2026-11-14 | 本文（初出の括弧） |
+| 9 | 一般知識 | アクセラレータの役割、GPU の構成、学習と推論の違い、学習の 1 ステップ（データ読込み → 順伝播 → 損失 → 逆伝播 → 勾配の集約 → 重みの更新）、HBM の役割、PCIe カード型とベースボード型の違い。数値は使わない | — | — | Goodfellow・Bengio・Courville『Deep Learning』（教科書）ほか、一般知識 | —（数値を伴わない） | × | 2026-11-14 | 本文、c08-train-step、c08-compare、c08-gpu-server |
+| 10 | 一般知識 | 演習の 3 案件はすべて架空 | — | — | 架空（見本のため） | — | × | 2026-11-14 | c08-choose |
+
+確認できず書かなかった：
+- Intel Gaudi 3 の TDP：Intel の発表ページ・プレスキットに記載がなく、メーカー一次資料のデータシートを確認できなかったため、表では「同資料に記載なし」とした。
+- NVIDIA の Blackwell 世代・AMD の MI350 系などの最新製品の公開値：個別の仕様ページ（データシート）を確認していないため、書かなかった（ラックスケールの GB200 NVL72 だけ第11章で、製品ページの値を書く）。
+- NVLink の世代の一覧（第 4 世代など）：H100 のページに世代の記載がなく、確認できなかったため、世代の番号は書かなかった。
+- Google・AWS など、他社の自社開発チップ：一次資料の個別ページを確認しなかったため、書かなかった。
+- GPU の消費電力の「実測」や、学習中のピーク電力：公開資料を確認できなかったため書かなかった。
+
+仕上げ時の追記（2026-11-14）：#11 NVIDIA『NVIDIA HGX Platform』（https://www.nvidia.com/en-us/data-center/hgx/ 、ページの更新 2026-09-30、一次○）：HGX Vera Rubin NVL8・HGX Rubin NVL8・HGX B300・HGX B200、いずれも GPU 8 個。B200・B300 は GPU 間 1.8 TB/s・合計 14.4 TB/s、メモリ合計 B200 1.4 TB・B300 2.1 TB。電力（TDP）の記載なし。#12 AMD『DATASHEET: AMD INSTINCT MI355X GPU』（https://www.amd.com/content/dam/amd/en/documents/instinct-tech-docs/product-briefs/amd-instinct-mi355x-gpu-brochure.pdf 、© 2026、LE-92703-00-A 9/26、一次○）：OAM（8 GPU は UBB 2.0）、HBM3E 288 GB、帯域 8 TB/s、最大 TBP 1400 W（「MAXIMUM TBP」、TDP ではない）、Infinity Fabric 7×144 GB/s、PCIe Gen5 x16。これで表に新しい世代の例が NVIDIA・AMD の両方に入った。Intel の新世代は確認していない。

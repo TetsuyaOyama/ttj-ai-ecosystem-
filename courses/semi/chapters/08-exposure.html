@@ -1,0 +1,100 @@
+<!--
+num: 08
+part: 2
+title: リソグラフィ（1）露光
+track: 前工程
+time: 40
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>露光で回路の形を写す原理（フォトマスク → 投影光学系 → レジスト）を、装置の構成と対応づけて説明できる。</li>
+    <li>解像度の式の 3 つの項（波長・開口数・k1）を言い、ArF 液浸、EUV、High-NA EUV、計算リソグラフィが、どの項を動かした技術かを答えられる。</li>
+    <li>ステッパーとスキャナーの違い、<b>重ね合わせ</b>、<b>マルチパターニング</b>の考え方を説明できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch06">第06章</a>（基本ループ）。<a href="#ch04">第04章</a>（世代の呼び方）を読むと、技術の節目が分かりやすくなります。</p>
+</section>
+
+<h3>写真と同じ原理：原版の影を縮めて焼き付ける</h3>
+<p><b>リソグラフィ</b>（lithography）は、回路の形を、光でレジスト（感光材）に写す工程です。写真の焼き付けに似ています。原版の役をするのが<b>フォトマスク</b>（レチクルとも呼びます。<a href="#ch09">第09章</a>）です。光がフォトマスクを通り、投影光学系で縮められ、ウェーハ上のレジストに当たります。</p>
+<p>この工程に使う装置が<b>露光装置</b>（exposure tool）です。光源、照明系、フォトマスクを載せるステージ、投影光学系、ウェーハを載せるステージが、一列に並びます。先端の ArF 液浸装置は、フォトマスク上の形を 4 分の 1 に縮めて投影します（出典：ニコン（日本）『NSR-S636E』製品発表、2023 年 12 月）。下の図で、ArF 液浸と EUV の違いを切り替えて見てください。</p>
+<div data-widget="arch" data-src="c08-tool"></div>
+
+<h3>解像度の式：何を変えると細かく写せるか</h3>
+<p>どれだけ細かい形を写せるかを表す<b>解像度</b>は、次の式で見積もります。</p>
+<p><b>R = k1 × λ / NA</b></p>
+<p>R は、写せる最小の寸法の目安です。ASML（オランダ）は、同じ式を CD = k1・λ / NA と書いています（出典：ASML『CD = k1 • λ / NA』、2026 年 11 月に確認）。式の中身は、次の 3 つです。</p>
+<ul>
+  <li><b>λ</b>（ラムダ）は、光の波長です。短いほど、細かく写せます。</li>
+  <li><b>開口数</b>（Numerical Aperture, NA）は、光学系が取り込める光の角度の広さを表す数です。大きいほど、細かく写せます。</li>
+  <li><b>k1 係数</b>（k1 factor）は、プロセスで決まる係数です。レジストや照明、マスクの工夫で小さくできます。ASML は、k1 の物理的な限界を 0.25 としています。</li>
+</ul>
+<p>つまり、細かくするには、波長を短くするか、NA を大きくするか、k1 を小さくするかの 3 通りです。次の節から、この 3 つを動かした技術を見ます。</p>
+
+<h3>光源の世代：波長を短くしてきた歴史</h3>
+<p>露光の光は、水銀ランプから始まり、エキシマレーザー、そして EUV へと、波長が短くなってきました。波長の数字は、次の表のとおりです。行を押すと補足が出ます。「光学系」で絞り込めます。</p>
+<div data-widget="table" data-src="c08-source"></div>
+<p>EUV（Extreme Ultraviolet、極端紫外線）の光は、スズの液滴にレーザーを当ててつくります。ASML の説明では、直径約 25 μm のスズの液滴に、弱いレーザーで平らにしてから強いレーザーを当て、プラズマにして EUV を出します。これを 1 秒に 5 万回繰り返します（出典：ASML『Light and lasers』、2026 年 11 月に確認）。</p>
+
+<h3>ArF 液浸：レンズとウェーハの間を水で満たす</h3>
+<p><b>ArF 液浸</b>（ArF immersion）は、波長 193 nm の ArF エキシマレーザーを使い、投影レンズとウェーハの間を水で満たす方式です。水は空気より屈折率が高いので、NA を 1 より大きくできます。ASML によると、水がなければ NA を 1 より大きくすることはできませんでした。液浸は 2003 年に導入され、最高性能の装置は NA 1.35 に達します（出典：ASML『Lenses and mirrors』、2026 年 11 月に確認）。</p>
+<p>この動きは、解像度の式では <b>NA を大きくした</b>技術にあたります。波長は 193 nm のままです。</p>
+
+<h3>EUV と High-NA EUV：波長を一気に縮める</h3>
+<p><b>EUV 露光</b>（Extreme Ultraviolet lithography）は、波長 13.5 nm の光を使います。ArF の 193 nm より、ずっと短い光です（出典：ASML『EUV lithography systems』、2026 年 11 月に確認）。EUV は 2019 年に、ロジックの量産で初めて使われました（出典：imec、2021 年 10 月）。</p>
+<p>EUV の光は、多くの物質に吸収されます。そのため、レンズでは光が吸収されてしまい、反射鏡を使います。ASML の反射鏡は、100 層以上の薄い膜を重ねて、EUV を反射させます（出典：ASML『Lenses and mirrors』）。空気中の気体も EUV を吸収するので、装置の光の通り道は真空にします（教科書的な説明）。</p>
+<p><b>High-NA EUV</b>（開口数を高めた EUV 露光）は、EUV の NA を 0.33 から 0.55 に高めた方式です。ASML の資料では、NA 0.33 の装置（NXE）の解像度が 13 nm、NA 0.55 の装置（EXE）が 8 nm です（出典：ASML『EUV lithography systems』）。その代わり、露光できる領域は半分になります。imec は、この装置が縦横で縮小の倍率を変える光学系を使い、露光領域が半分になると説明しています（出典：imec、2021 年 10 月）。</p>
+<p>High-NA EUV の現状は、次のとおりです（執筆時点）。ASML は、2023 年 12 月に最初の High-NA システムを納入（delivered）したと説明しています。2026 年 1 月の決算説明では、Intel（米国）が、量産に使う最初の EXE:5200B の受入れを報告したと述べています（出典：ASML『2025 年第 4 四半期・通期決算の説明（書き起こし）』、2026 年 1 月）。</p>
+
+<h3>ステッパーとスキャナー、ショットとフィールド</h3>
+<p>露光装置には、2 つの方式があります。<b>ステッパー</b>（stepper）は、フォトマスクの形を一括で露光し、ウェーハを少しずつ動かして繰り返します。<b>スキャナー</b>（scanner）は、細いスリット状の光の下で、フォトマスクとウェーハを同期して動かし、走査しながら露光します。先端の露光装置はスキャナー方式です。</p>
+<p>1 回の露光でウェーハに写す領域を<b>ショット</b>（shot）と呼びます。ウェーハ全面を、ショットで敷き詰めます。装置が一度に露光できる最大の領域を、<b>フィールド</b>（field）と呼びます。たとえば、ニコンの NSR-S636E の最大露光領域は 26 mm × 33 mm です（出典：ニコン、2023 年 12 月）。</p>
+<p>露光装置のメーカーには、ASML、ニコン、キヤノン（日本）などがあります。キヤノンは、i 線のステッパーと KrF のスキャナーなどを製品として紹介しています（出典：キヤノン『Semiconductor Lithography Equipment』、2026 年 11 月に確認）。</p>
+
+<h3>重ね合わせ：下の層に、ぴったり重ねる</h3>
+<p>回路は、何十もの層を重ねてできています。新しい層を、すでにある層に正確に重ねる精度を、<b>重ね合わせ</b>（overlay）と呼びます。ASML は、チップが最大 100 のパターンを必要とし、すべてが正確に重なって初めて動くと説明しています。最先端のシステムでは、重ね合わせの精度が 2 nm より良いとしています（出典：ASML『Aligning lithography to the nanometer』、2021 年 12 月）。</p>
+<p>重ねるために、ウェーハには、層ごとに<b>アライメントマーク</b>が描かれます。装置は、マークに当てた光の反射から、ウェーハの位置を測ります。この位置合わせを<b>アライメント</b>（alignment）と呼びます。マークの断面が傾いていると位置が曖昧になり、接続不良やショートの原因になります（出典：ASML、2021 年 12 月）。</p>
+
+<h3>マルチパターニング：1 回で写せないときは、分けて重ねる</h3>
+<p>1 回の露光で写せる限界より細かい形が必要なとき、形を複数回に分けて写します。これを<b>マルチパターニング</b>（multiple patterning）と呼びます。2 回に分けるのがダブルパターニングです。下の図は、露光とエッチングを 2 回繰り返す方式です。2 回目を、1 回目の間に重ねるので、重ね合わせの精度が出来を決めます。</p>
+<div data-widget="xsec" data-src="c08-dp"></div>
+<p>マルチパターニングは、工程が増え、時間とコストが増えます。imec は、ロジックの金属層の一部について評価しています。NA 0.33 の EUV だと 3〜4 枚のマスクが要りますが、NA 0.55 だと 1 回の露光でできます（出典：imec、2026 年 2 月）。これが、High-NA EUV を導入する理由の 1 つです。</p>
+
+<h3>どの項を動かした技術か</h3>
+<p>解像度の式で、技術を整理します。下の表の右の列を手で隠し、技術名だけを見て、「波長・NA・k1 のどれを動かしたか」を答えてください。</p>
+<div data-widget="table" data-src="c08-lever"></div>
+<div class="callout tip"><span class="ttl">演習</span>
+  <p>表の 4 つの技術について、動かした項を答えます。答え合わせのあとで、「ArF 液浸と High-NA EUV の共通点」を言ってみてください。どちらも、NA を大きくした技術です。</p></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>「EUV なら何でも 1 回で写せる」わけではありません。</b>細かさは、波長・NA・k1 の組み合わせで決まります。EUV でも、条件によっては複数回に分けます。</p>
+  <p><b>ステッパーとスキャナーは、装置の世代ではなく、露光の方式の違いです。</b>i 線や KrF のように、同じ光源で両方の方式の装置がある世代もあります。ArF 液浸と EUV の装置は、スキャナーです。</p>
+  <p><b>「3 nm 世代」は、波長や NA の値ではありません。</b>世代の呼称は、物理寸法ではありません（<a href="#ch04">第04章</a>）。</p></div>
+
+<div class="callout note"><span class="ttl">現場でのつながり</span>
+  <p>露光装置は、前工程の装置の中で、もっとも大きく、複雑な部類です。EUV 装置は、光源・真空・反射光学系の設備が要るので、搬入や据付の計画も大がかりになります。<a href="#ch16">第16章</a>、<a href="#ch21">第21章</a>、<a href="#ch24">第24章</a>につながります。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c08-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（アクセス日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://www.asml.com/products/euv-lithography-systems">EUV lithography systems</a></th><td>ASML</td><td>2026 年 11 月に確認（日付の記載なし）</td><td>EUV の波長・NA、NXE と EXE の解像度、High-NA の初号機の納入。</td></tr>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://www.asml.com/technology/lithography-principles/lenses-and-mirrors">Lenses and mirrors</a></th><td>ASML</td><td>2026 年 11 月に確認（日付の記載なし）</td><td>液浸の NA、液浸の導入年、EUV に反射鏡を使う理由。</td></tr>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://www.asml.com/technology/lithography-principles/rayleigh-criterion">CD = k1 • λ / NA</a></th><td>ASML</td><td>2026 年 11 月に確認（日付の記載なし）</td><td>解像度の式、k1 の限界。</td></tr>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://www.asml.com/technology/lithography-principles/light-and-lasers">Light and lasers</a></th><td>ASML</td><td>2026 年 11 月に確認（日付の記載なし）</td><td>i 線・KrF・ArF・EUV の波長、EUV の発生。</td></tr>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://www.asml.com/company/stories/2021/fellow-simon-mathijssen-aligning-lithography-nanometer">Aligning lithography to the nanometer</a></th><td>ASML</td><td>2021 年 12 月 22 日</td><td>重ね合わせとアライメントの説明。</td></tr>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://ourbrand.asml.com/m/2c5d94d7b9619350/original/ASML-Results-Video-Transcript-Q4-and-FY-2025.pdf">ASML Results Video Transcript Q4 and FY 2025</a></th><td>ASML</td><td>2026 年 1 月</td><td>High-NA EUV の量産への受入れの現状。</td></tr>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://www.nikon.com/company/news/2023/1206_01/">Nikon Releases the NSR-S636E ArF Immersion Scanner</a></th><td>ニコン</td><td>2023 年 12 月 6 日</td><td>ArF 液浸装置の NA・波長・縮小比・最大露光領域。</td></tr>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://www.nikon.com/business/semi/history/">Semiconductor Lithography Systems History</a></th><td>ニコン</td><td>2026 年 11 月に確認</td><td>i 線ステッパー（1984 年）、ArF ドライ（1999 年）の初号機。</td></tr>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://global.canon/en/product/indtech/semicon/index.html">Semiconductor Lithography Equipment</a></th><td>キヤノン</td><td>2026 年 11 月に確認</td><td>i 線ステッパー・KrF スキャナーなどの製品の種類。</td></tr>
+      <tr><td>研究機関</td><th scope="row"><a href="https://imec-int.com/en/articles/high-na-euvl-next-major-step-lithography">High-NA EUVL: the next major step in lithography</a></th><td>imec</td><td>2021 年 10 月 4 日</td><td>EUV の NA、2019 年のロジック量産、High-NA の光学系と露光領域。</td></tr>
+      <tr><td>研究機関</td><th scope="row"><a href="https://imec-int.com/en/articles/case-high-na-euv-unlocking-next-era-chip-manufacturing">High NA EUV lithography: launching the industry into the angstrom era</a></th><td>imec</td><td>2026 年 2 月 26 日</td><td>マルチパターニングを 1 回の露光に置き換える評価。</td></tr>
+      <tr><td>博物館の展示資料</td><th scope="row"><a href="https://www.shmj.or.jp/english/pdf/process/exhibi412E.pdf">Exhibit 412（光リソグラフィの展示）</a></th><td>Semiconductor History Museum of Japan</td><td>2026 年 11 月に確認</td><td>g 線・i 線の波長と使われた世代。</td></tr>
+    </tbody>
+  </table></div>
+</section>

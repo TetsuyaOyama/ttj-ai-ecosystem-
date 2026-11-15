@@ -1,0 +1,60 @@
+<!--
+num: 02
+part: 2
+title: 梱包・番号・状態を分けて見る
+track: 実務
+time: 30
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>梱包の<b>断面</b>を層ごとに見て、各層の役割を言えること。</li>
+    <li><b>積み重なり</b>・<b>番号の構造</b>・<b>料金表</b>・<b>情報の派生</b>を部品に分けて読むこと。</li>
+    <li>荷物の<b>状態</b>がどう移り変わるかを、条件つきで説明できること。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch01">第01章</a>（全体像と工程）。</p>
+</section>
+
+<h3>梱包の断面を見る</h3>
+<p>壊れ物を送るときの梱包は、外から内へ層になっています。各層を押すと、材料と役割が出ます。</p>
+<div data-widget="layers" data-src="c02-pack"></div>
+
+<h3>梱包を一手ずつ作る</h3>
+<p>断面が、手ごとに変わります。凡例を押すと、その材料だけを強調できます。</p>
+<div data-widget="xsec" data-src="c02-packing"></div>
+
+<h3>入れ物の積み重なり</h3>
+<p>荷物は、箱・台車・トラックと、入れ物を重ねて運ばれます。輸送の区間によって重ね方が変わります。</p>
+<div data-widget="stack" data-src="c02-stack"></div>
+
+<h3>番号の中身を読む</h3>
+<p>追跡番号や仕分けコードは、桁ごとに意味があります。部分を押して確かめましょう。</p>
+<div data-widget="ident" data-src="c02-tracking"></div>
+
+<h3>サイズ別の料金表</h3>
+<div data-widget="table" data-src="c02-rates"></div>
+
+<h3>情報はどこから導かれるか</h3>
+<p>送り状の情報から、追跡番号や配達ルートが順に決まります。矢印の元をたどると、何に依存しているかが分かります。</p>
+<div data-widget="tree" data-src="c02-derive"></div>
+
+<h3>荷物の状態の移り変わり</h3>
+<div data-widget="state" data-src="c02-parcel"></div>
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p>「不在」は終わりではなく、<b>再配達へ戻る</b>状態です。保管期限が切れたときだけ「返送」へ進みます。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c02-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（見本のため、すべて架空）</caption>
+    <thead><tr><th>資料</th><th>時点</th><th>使ったところ</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">架空の「梱包の基準表」（見本用の創作）</th><td>2026-11</td><td>断面図の材料・寸法</td></tr>
+      <tr><th scope="row">架空の「料金表」（見本用の創作）</th><td>2026-11</td><td>早見表の数字</td></tr>
+      <tr><th scope="row">架空の「番号の付け方」（見本用の創作）</th><td>2026-11</td><td>追跡番号・仕分けコード</td></tr>
+    </tbody>
+  </table></div>
+</section>

@@ -1,0 +1,130 @@
+<!--
+num: 18
+part: 4
+title: コンバインドサイクル発電所の全体と軸の構成：一軸式と多軸式
+track: 設備
+time: 40
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>コンバインドサイクル発電所の<b>設備の全体</b>と、<b>6 つの流れ</b>（空気・燃料・排ガス・蒸気・水・電気）を説明できる。</li>
+    <li><b>一軸式</b>と<b>多軸式</b>の違い、クラッチを使う構成がある理由、<b>1 on 1</b>・<b>2 on 1</b>の呼び方を説明できる。</li>
+    <li>国内の発電所の公開例を、<b>出典と条件を添えて</b>読み、公表のない項目を「記載なし」と区別できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch11">第11章</a>（ガスタービンの全体の構成）、<a href="#ch17">第17章</a>（ガスタービンの形式）。あるとよい：<a href="#ch09">第09章</a>（コンバインドサイクルの原理）。</p>
+</section>
+
+<h3>発電所の設備の全体</h3>
+<p>コンバインドサイクル発電所は、ガスタービンの排気の熱を使って蒸気をつくり、蒸気タービンも回して、電気をつくる発電所です。主な設備は、次のとおりです。</p>
+<ul>
+  <li><b>ガスタービン</b>：燃料を燃やして回る主機（<a href="#ch11">第11章</a>）。</li>
+  <li><b>排熱回収ボイラ</b>（Heat Recovery Steam Generator, HRSG）：排気の熱で蒸気をつくる（<a href="#ch19">第19章</a>）。</li>
+  <li><b>蒸気タービン</b>：蒸気で回る主機（<a href="#ch20">第20章</a>）。</li>
+  <li><b>復水器と冷却設備</b>：蒸気を水に戻し、熱を捨てる（<a href="#ch21">第21章</a>）。</li>
+  <li><b>発電機・主変圧器・開閉所</b>：電気をつくり、昇圧して系統へつなぐ（<a href="#ch22">第22章</a>）。</li>
+  <li><b>燃料の受入と調整、吸気、水処理、所内電源、制御装置</b>：主機を支える設備。</li>
+</ul>
+<p>次の図は、この講座の発電所の<b>全体の図</b>です。他の章は、部分の図を描き、全体はこの図へリンクします。</p>
+<div data-widget="arch" data-src="c18-plant"></div>
+
+<h3>6 つの流れ</h3>
+<p>発電所の中を流れるものは、次の 6 つに分けて考えると整理できます。図の 3 つの表示は、この 6 つを分けて見せています。</p>
+<ol>
+  <li><b>空気</b>：吸気から、ガスタービンの圧縮機へ。</li>
+  <li><b>燃料</b>：受入の設備から、ガスタービンの燃焼器へ。</li>
+  <li><b>排ガス</b>：ガスタービンの排気が、排熱回収ボイラで熱を渡し、煙突から出る。</li>
+  <li><b>蒸気</b>：排熱回収ボイラから、蒸気タービンへ。タービンを出た蒸気は復水器へ。</li>
+  <li><b>水</b>：復水器で水に戻り、ポンプで排熱回収ボイラへ戻る。補給水が加わる。</li>
+  <li><b>電気</b>：発電機から、主変圧器・開閉所を通り、系統へ。一部は所内で使う。</li>
+</ol>
+<p>これに、機器どうしを結ぶ<b>制御の信号</b>が加わります。制御の信号は流れの線とは別の線で、図の「すべて」の表示に、例として描いています（制御は<a href="#ch23">第23章</a>）。</p>
+<p>電気の出力の読み方には、端があります。発電機の端子の出力が<b>発電端</b>の出力、そこから所内電力を引いたものが<b>送電端</b>の出力です（<a href="#ch06">第06章</a>）。</p>
+
+<h3>一軸式と多軸式</h3>
+<p>ガスタービンと蒸気タービンを、どの軸につなぎ、どの発電機を回すかで、発電所の構成が分かれます。</p>
+<ul>
+  <li><b>一軸式</b>（single-shaft configuration）：ガスタービン・蒸気タービン・発電機が 1 本の軸につながります。クラッチを使う構成と、使わない構成があります。</li>
+  <li><b>多軸式</b>：ガスタービンと蒸気タービンが別の軸で、別の発電機を回します。</li>
+</ul>
+<div data-widget="arch" data-src="c18-axes"></div>
+<p>図の並びは、構成を説明するための一例です。製品や発電所で、機器の並びが違います。</p>
+
+<h4>クラッチを使う構成</h4>
+<p>一軸式で、クラッチを使わない構成では、蒸気タービンは、いつもガスタービンといっしょに回ります。クラッチを使う構成では、蒸気タービンを切り離したまま、ガスタービンと発電機を先に回せます。</p>
+<p>SSS Gears Limited の事例ページは、東北電力の上越火力発電所１号機（新潟県上越市）を、三菱重工業製の「single-shaft combined cycle」と説明しています。クラッチは 2 つ使われます。蒸気タービンと発電機の間のクラッチは、ガスタービンが回転数に達し、発電機が系統に並列できるようにします。もう 1 つは、冷却中に低速で回す<b>ターニング装置</b>（<a href="#ch15">第15章</a>）とつなぎます（出典：SSS Gears Limited『Joetsu Thermal Power Station Unit 1』、確認 2026 年 11 月）。</p>
+<p>同社は、自社の SSS クラッチを「Synchro-Self-Shifting (SSS) Clutch」と呼び、「a sophisticated freewheel」と説明しています。<b>SSS クラッチは、この会社の製品の呼称です</b>。クラッチを使う構成の一般の名前ではありません（出典：SSS Gears Limited『About』、確認 2026 年 11 月）。</p>
+<p>一軸式の全部の発電所がクラッチを使うわけではありません。使うかどうかは、製品と構成で決まります。</p>
+
+<h4>多軸式</h4>
+<p>多軸式は、ガスタービンと蒸気タービンが別の軸で、別の発電機につながります。そのため、ガスタービン側だけを先に運転し、蒸気の準備ができてから、蒸気タービンを起動できます（出典：一般知識）。ガスタービンだけで運転するときの排気の逃がし道は、<a href="#ch16">第16章</a>の図にあります。</p>
+
+<h3>組み合わせの呼び方</h3>
+<p>ガスタービンと蒸気タービンの台数の組み合わせは、<b>1 on 1</b>、<b>2 on 1</b> のように呼ばれます。</p>
+<ul>
+  <li><b>1 on 1</b>：ガスタービン 1 台と、蒸気タービン 1 台。</li>
+  <li><b>2 on 1</b>：ガスタービン 2 台と、蒸気タービン 1 台。排熱回収ボイラは、ガスタービンごとに置き、2 台分の蒸気が 1 台の蒸気タービンへ集まります。</li>
+</ul>
+<p>三菱重工業の M501J のページは、複合サイクルの出力を「1 on 1」「2 on 1」で示しています（出典：三菱重工業『M501J Series』、確認 2026 年 11 月）。Siemens Energy のブローシャは、「1×1」「2×1」と書き、「single- and multishaft designs」の語を使っています（出典：Siemens Energy『Gas turbines at combined-cycle power plants（technical data）』、確認 2026 年 11 月）。<b>呼び方は資料ごとに違う</b>ので、この講座は「1 on 1」「2 on 1」で統一します。機種の出力の数字は、<a href="#ch17">第17章</a>の表にあります。</p>
+<p>Siemens Energy の蒸気タービン SST-3000 のページは、2 つの車室の設計を、「single-shaft and multi-shaft combined cycle plants」向けと説明しています（出典：Siemens Energy『Utility steam turbines』、ページ表示の日付 2026 年 8 月 5 日。確認 2026 年 11 月）。</p>
+
+<h3>軸の構成の選び方の考え方</h3>
+<p>一軸式と多軸式のどちらを選ぶかは、起動・部分負荷・保守・敷地・段階的な建設などの観点で検討します。<b>どちらが優れるとは言えません</b>。観点ごとの違いを、次の表に整理します。</p>
+<div data-widget="compare" data-src="c18-shaft"></div>
+<p>機器を建屋の中に置くか、屋外に置くかも、発電所ごとに違います。公式の発電所のページでは、配置の公開例を確認できなかったので、この章は一般的な説明にとどめます。</p>
+
+<h3>発電所の中の、誰が何を担うか</h3>
+<p>発電所の設備は、発電事業者が所有し、運転します。機器の供給や保守は、メーカーや建設会社（Engineering, Procurement and Construction, EPC）が担う分があります。保守を誰が担うかは、契約で決まります。次の図は、<b>契約で決まる一般例</b>です。実在の契約ではありません。</p>
+<div data-widget="route" data-src="c18-route"></div>
+<p>図の上のタブで、所有と運転、保守の担当（ガスタービンだけの長期保守契約のとき）、保守の担当（発電所全体の契約のとき）を切り替えます。ガスタービンだけの契約か、全体の契約かで、保守の担当の色が変わります。長期保守契約の考え方は<a href="#ch25">第25章</a>が扱います。</p>
+
+<h3>国内の公開例</h3>
+<p>事業者・メーカーの公式のページで確認できた国内の例を、次の表に載せます。例であり、<b>優劣や推奨を示しません</b>。出力などの数字は、資料の表記のまま写し、条件の記載がないものは「記載なし」と書いています。</p>
+<div data-widget="table" data-src="c18-plants"></div>
+<p>表のうち、軸の構成を確認できたのは、上越火力発電所１号機（メーカーの事例ページ）だけです。事業者の発表やページに軸の構成が書かれていない発電所は、軸の構成を推測せず、「記載なし」としました。出力の値の名前や、端と大気条件の書かれ方も、資料ごとに違います。行どうしを、そのまま比べないでください。</p>
+
+<h3>演習：台数の組み合わせから、出力を求める</h3>
+<p>2 on 1 の発電所があります。ガスタービン 2 台が各 300 MW、蒸気タービン 1 台が 300 MW です。所内電力の割合は 2% です（値はすべて<b>架空</b>）。</p>
+<ol>
+  <li>発電端の出力を求めてください。</li>
+  <li>送電端の出力を求めてください。</li>
+</ol>
+<details><summary>答えを見る</summary>
+  <ol>
+    <li>発電端の出力は、ガスタービンの出力の合計と、蒸気タービンの出力の合計です。2 × 300 MW ＋ 300 MW ＝ <b>900 MW</b>。</li>
+    <li>送電端の出力は、発電端の出力から所内電力を引いたものです（<a href="#ch06">第06章</a>の式）。900 MW ×（1 − 0.02）＝ <b>882 MW</b>。</li>
+  </ol>
+  <p>この値は、説明のための架空の値です。実在の発電所の値ではありません。実際の出力は、大気条件で変わります（<a href="#ch16">第16章</a>）。</p></details>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>発電所の「一軸式・多軸式」と、ガスタービンの「一軸・二軸」は別の話です</b>。前者は、ガスタービンと蒸気タービンと発電機の並べ方、後者は、ガスタービンの中の軸の話です（<a href="#ch17">第17章</a>）。</p>
+  <p><b>SSS クラッチは、1 社の製品の呼称です</b>。一般のクラッチの名前として使わないでください。</p>
+  <p><b>1 on 1・2 on 1 の呼び方は資料ごとに違います</b>。資料の表記を確かめてから読みます。</p>
+  <p><b>公開例の出力は、条件が違います</b>。端・大気条件・値の種類を確かめてから読みます。発表に書かれていない軸の構成を、推測しないでください。</p>
+  <p><b>軸の構成に優劣はありません</b>。運転の目的・敷地・建設の進め方・保守の方針で決まります。</p></div>
+
+<div class="callout tip"><span class="ttl">実務でのつながり</span>
+  <p>案件の初期に、軸の構成と組み合わせ（1 on 1・2 on 1 など）を決めると、機器の数、敷地、建設の進め方、保守の契約の範囲が決まっていきます。契約の範囲（誰がどの設備を供給し、保守するか）は、図の例のように契約で決まるので、案件ごとに契約書で確かめます。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c18-quiz"></div></section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 14 日。製品ページの多くは日付の表示がありません）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.tohoku-epco.co.jp/news/normal/1230291_2558.html">上越火力発電所１号機の営業運転開始について</a></th><td>東北電力</td><td>2022 年 12 月 1 日</td><td>上越火力発電所１号機の出力・形式・営業運転の開始。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.sssclutch.com/en/case-studies/joetsu/">Joetsu Thermal Power Station Unit 1</a></th><td>SSS Gears Limited</td><td>確認 2026 年 11 月</td><td>一軸式とクラッチの説明。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.sssclutch.com/en/about/">About</a></th><td>SSS Gears Limited</td><td>確認 2026 年 11 月</td><td>SSS クラッチの呼称の説明。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.kepco.co.jp/energy_supply/energy/thermal_power/plant/himeji2.html">姫路第二発電所</a></th><td>関西電力</td><td>日付なし。確認 2026 年 11 月</td><td>出力・運転開始・形式。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.kepco.co.jp/corporate/pr/2009/0226-2j.html">姫路第二発電所のコンバインドサイクル発電方式への設備更新について</a></th><td>関西電力</td><td>2009 年 2 月 26 日</td><td>更新後の出力と大気温度の条件。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.jera.co.jp/en/news/information/20230801_1588">Commercial Operation Begins at Anegasaki Thermal Power Station New Unit 3</a></th><td>JERA</td><td>2023 年 8 月 1 日</td><td>姉崎火力発電所の新 3 号機の出力と方式。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://assets.siemens-energy.com/dam/8224a82f-9ed8-475e-b946-b26c0169f8fd/brochure-combined-cycle-technical-Data-250121b-pdf_Original%20file.pdf">Gas turbines at combined-cycle power plants（technical data）</a></th><td>Siemens Energy</td><td>ファイル名に 250121。確認 2026 年 11 月</td><td>1×1・2×1 と single-/multishaft の語。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://power.mhi.com/products/gasturbines/lineup/m501j">M501J Series</a></th><td>三菱重工業</td><td>日付なし。確認 2026 年 11 月</td><td>1 on 1・2 on 1 の語。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.siemens-energy.com/global/en/home/products-services/product/utility-steam-turbines.html">Utility steam turbines</a></th><td>Siemens Energy</td><td>ページ表示の日付 2026 年 8 月 5 日</td><td>single-shaft と multi-shaft の説明。</td></tr>
+      <tr><td>教科書・一般知識・他講座</td><th scope="row">複合サイクル発電の教科書（6 つの流れ、一軸式と多軸式の違い、軸の構成の選び方の観点）</th><td>—</td><td>—</td><td>数値を伴わない説明。送電端の式の持ち主は <a href="#ch06">第06章</a>。</td></tr>
+      <tr><td>架空（見本のため）</td><th scope="row">行程帯図の契約の例と、演習の出力</th><td>本講座</td><td>架空</td><td>契約で決まる一般例と、発電端・送電端の計算の練習。</td></tr>
+    </tbody>
+  </table></div>
+</section>

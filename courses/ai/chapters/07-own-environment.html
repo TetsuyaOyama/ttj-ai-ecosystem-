@@ -1,0 +1,67 @@
+<!--
+num: 07
+part: 1
+title: 自分の環境を作る
+track: 実践
+time: 30
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>学んだ先の一歩として、<b>Claude Code</b>を使う準備（契約・アカウント・導入）の見方を説明できる。</li>
+    <li>このショーケースの<b>「AI エコシステム図」</b>と、リポジトリの<b>設定例</b>（権限・フック・サブエージェント・スキル）が、何を示すかを言える。</li>
+    <li>自分の環境を、<b>小さく始めて、少しずつ足す</b>順を確かめられる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch04">第 04 章</a>までを、必要な範囲で終えていること。ターミナル（文字で操作する画面）を、少し使えると進めやすくなります。</p>
+</section>
+
+<h3>学んだ先の一歩</h3>
+<p>ここまでの教材は、AI の使い方を学ぶものでした。この章は、<b>学んだことを、自分の作業の中で繰り返し使える環境にする</b>ための、最初の一歩です。</p>
+<p><b>Claude Code</b>は、Anthropic が提供する、AI のコーディング支援ツールです。公式のクイックスタートは、ターミナルに入れて、サインインし、コードのプロジェクトで質問や変更を頼む手順を説明しています。ターミナルのほかに、ウェブ、デスクトップアプリ、Slack でも使える、とも書かれています。VS Code と JetBrains の IDE（統合開発環境）にも対応しています（出典：Anthropic『Claude Code Quickstart』、確認 2026 年 11 月）。</p>
+<p>前提も、ページに書かれています。<b>Claude の契約</b>（Pro・Max・Team・Enterprise）、<b>Claude Console のアカウント</b>（プリペイドの API）、または<b>対応するクラウド経由のアクセス</b>のどれかが要ります。契約の料金の額は、このページには書かれていません。使う前に、Anthropic の料金のページで確かめてください。</p>
+<div data-widget="table" data-src="c07-res"></div>
+
+<h3>自分の環境を作る 5 歩</h3>
+<p>次の図は、環境を作る順の例です。順は、この講座の提案です。公式ドキュメントは、導入のあとの拡張として、CLAUDE.md、スキル、フック、MCP などを挙げています。</p>
+<div data-widget="flow" data-src="c07-steps"></div>
+<p>図で確かめる点は 3 つです。1 つ目は、<b>最初は、導入と小さな作業</b>だけにすることです。2 つ目は、<b>決まりを書く（CLAUDE.md）</b>と<b>安全柵を足す（権限・フック）</b>を、使いながら足すことです。3 つ目は、<b>繰り返す作業</b>が見えてから、スキルやサブエージェントにすることです。</p>
+
+<h3>AI エコシステム図と、リポジトリの設定例</h3>
+<p>このショーケースには、<a href="../ai-ecosystem/">AI エコシステム図</a>があります。依頼が、入口 → 司令塔（Claude Code）→ ハーネス（安全柵）→ 振り分け → スキル → サブエージェント → 道具・API → 公開、と流れる様子を、図にしたものです。図の箱を押すと、役割・実ファイルのパス・要点が出ます。</p>
+<p>図の元になった設定は、このリポジトリの <code>claude/</code> フォルダにあります。次の表は、そこに実在するファイルを、確認した範囲で説明したものです。</p>
+<div data-widget="table" data-src="c07-files"></div>
+<p>表で確かめる点は 3 つです。1 つ目は、<b>権限ルール</b>が、許可・確認・拒否の 3 つに分かれていることです。2 つ目は、権限だけでは防ぎきれない危険を、<b>フック</b>が止めていることです。3 つ目は、作業の種類ごとに、<b>サブエージェント</b>が分かれていることです。</p>
+<p>この設定は、<b>1 つの例</b>です。推奨の設定ではありません。リポジトリの持ち主の作業に合わせて作られています。そのまま入れずに、自分の作業に合うかを確かめて、必要な部分だけを取り入れてください。設定ファイルの書き方は、公式ドキュメントの「設定」「権限」の節で確かめます。</p>
+
+<div class="callout std"><span class="ttl">終えるとできること（この章）</span>
+  <p>この章を終えると、次のことに取り組めるようになります。保証ではなく、目安です。</p>
+  <ul>
+    <li>Claude Code を使うための前提（契約・アカウント）を、自分の状況に照らして確かめられる。</li>
+    <li>権限・フック・サブエージェント・スキルが、何のための仕組みかを、設定例から読み取れる。</li>
+    <li>自分の環境を、小さく始めて、足していく順を、自分で計画できる。</li>
+  </ul></div>
+<div class="callout tip"><span class="ttl">次の一歩の目安</span>
+  <p>自分の作業から、<b>繰り返している作業</b>を 1 つ選び、AI に任せる手順と、自分で確かめる手順を、書き出せたら、その作業から始めます。環境は、使いながら足します。</p></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>安全柵を、最初に作り込みすぎる</b>ことです。まず、導入と小さな作業で、動きを知ります。足りない安全柵は、困った場面を見てから足します。反対に、<b>安全柵なしで、強い権限を与える</b>ことも避けます。</p>
+  <p>もう 1 つは、<b>API キーなどの秘密を、設定ファイルに書いて公開する</b>ことです。このリポジトリの設定例は、秘密のファイルの読み取りを止める仕組みを持っています。ただし、フックや権限は、安全の補助で、すべてを防ぐものではありません。秘密は、公開のリポジトリに載せません。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c07-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 15 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+<!--GEN:refs-->
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://code.claude.com/docs/ja/quickstart" target="_blank" rel="noopener noreferrer">Claude Code ドキュメント（クイックスタート）</a></th><td>Anthropic</td><td>日付の記載なし（確認 2026-11-15）</td><td>導入の手順と前提。経路：日本語版と英語版のページを開いて確認</td></tr>
+<!--/GEN:refs-->
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://code.claude.com/docs/llms.txt" target="_blank" rel="noopener noreferrer">Claude Code ドキュメントの目次（llms.txt）</a></th><td>Anthropic</td><td>日付の記載なし（確認 2026 年 11 月）</td><td>節の構成（導入、Build、設定、リファレンスなど）と、日本語版の索引があること。</td></tr>
+      <tr><td>この講座のリポジトリ</td><th scope="row"><a href="../ai-ecosystem/">AI エコシステム図</a></th><td>TTJ</td><td>確認 2026 年 11 月</td><td>設定の全体像の図。</td></tr>
+      <tr><td>この講座のリポジトリ</td><th scope="row">claude/settings.json、claude/hooks/、claude/agents/、claude/skills/、claude/CLAUDE.md、install.sh、README</th><td>TTJ</td><td>確認 2026 年 11 月（ファイルを開いて確認）</td><td>設定例の内容。表の「中身の要点」は、これらのファイルに書かれていることだけ。</td></tr>
+    </tbody>
+  </table></div>
+</section>

@@ -1,0 +1,99 @@
+<!--
+num: 03
+part: 1
+title: 形状と規格：ラックマウント・ブレード・OCP
+track: 基礎
+time: 35
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>サーバーの形（<b>タワー型・ラックマウント型・ブレード型・マルチノード型</b>）の違いと、それぞれが共有するものを説明できる。</li>
+    <li><b>19 インチラック</b>の高さの単位 <b>U</b> と、Open Rack の <b>OU</b> を区別し、ラックの正面図（エレベーション）を読める。</li>
+    <li><b>OCP</b>（Open Compute Project）が何をする団体かと、OCP NIC 3.0 の位置づけを言える。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch01">第01章</a>（サーバーとデータセンター）。あるとよい：<a href="#ch02">第02章</a>（主要部品）。</p>
+</section>
+
+<h3>サーバーの形は 4 種類に分けて読む</h3>
+<p>サーバーの形は、設置の仕方で決まります。数が少なければ床や机に置き、数が増えれば棚（ラック）に収めます。台数が多くなるほど、電源やファンなどを複数のサーバーで共有する形が有利になります。主な形は、次の 4 つです（一般知識。製品によって違いがあります）。</p>
+<ul>
+  <li><b>タワー型</b>（tower server）：PC に似た縦長の筐体で、床や机に置きます。台数が少ない事務所や店舗で使います。</li>
+  <li><b>ラックマウント型</b>（rack-mount server）：ラックに水平に収める、薄い箱形の筐体です。データセンターで最も一般的な形です。高さは U で表します。</li>
+  <li><b>ブレード型</b>（blade server）：薄い基板型のサーバー（ブレード）を、共通の<b>シャーシ</b>（chassis）に何枚も差し込む形です。電源・ファン・ネットワークの接続をシャーシが共有します。</li>
+  <li><b>マルチノード型</b>（multi-node server）：1 つの筐体の中に、独立した複数のサーバー（ノード）を収める形です。電源やファンを共有して、ラックの中の密度を上げます。</li>
+</ul>
+<p>ブレード型とマルチノード型は、どちらも「共有」で台数あたりの部品を減らします。違いは、共有の範囲です。ブレード型は、ネットワーク機器まで共有するのが一般的で、マルチノード型は、電源とファンの共有が中心です。</p>
+
+<h3>19 インチラックと U</h3>
+<p><b>19 インチラック</b>（19-inch rack）は、機器の前面の幅をそろえて積み重ねる、棚の標準の形です。ラックの寸法は、<b>EIA-310</b> という規格の系列が決めてきました。高さは<b>ラックユニット</b>（<b>U</b>、rack unit）で数えます。1U は高さを数える基本の単位で、最も薄いラックマウント型の機器が 1U を使います。2U、4U の機器は、その倍数の高さを使います。</p>
+<p>OCP の仕様書は、EIA-310-D のラックユニットの高さを 44.45 mm と書いています（出典：OCP『Open Rack Base Frame V3 Specification』、Revision 1.0）。EIA-310 の現行の版と全文は、規格の発行元で確認してください。本講座は規格本文を読んでいません。</p>
+<p>ラックは、「42U」のように高さを U で呼びます。「42U のラック」は、1U の機器なら 42 台分の高さがあるラックです。ただし、すべてを機器で埋められるとは限りません。スイッチ、配電機器、ケーブルの余裕も要ります。</p>
+
+<h3>ラックの正面図（エレベーション）の読み方</h3>
+<p><b>ラック正面図</b>（rack elevation）は、ラックを前から見て、どの U にどの機器が入るかを描く図です。機器の名前、高さ（U）、位置（U 番号）が並びます。設計・調達・設置で、共通の言葉として使います。</p>
+<p>下の図は、42U のラックの正面図の<b>模式図</b>（架空の構成の例）です。部位を押すと、高さ・重量の扱い・吸気と排気の向きが出ます。</p>
+<div data-widget="layers" data-src="c03-rack"></div>
+<p>U の番号を、下から数えるか、上から数えるかは、図面や施設の慣習で違うことがあります。位置を伝えるときは、図面の凡例で、数え方を確かめます。ラック内の位置の表記の例を、次の図で分解して見ましょう。この表記は<b>架空の例</b>で、施設ごとに決まりが違います。</p>
+<div data-widget="ident" data-src="c03-pos"></div>
+
+<h3>奥行き・重量・吸気面と排気面の向き</h3>
+<p>ラックに収める機器は、高さだけでなく、<b>奥行き</b>と<b>重量</b>でも制約を受けます。奥行きが深い機器は、ラックの奥行きと、背面のケーブルの余裕を使い切ります。重量は、ラック全体と床の荷重（第18章）に効きます。重い機器は、ラックの下側に置くのが一般的です。重心が上がると、ラックが不安定になるからです。実際の搭載の可否は、ラックと機器の仕様書の許容荷重で確かめます。</p>
+<p>機器には、空気を取り込む<b>吸気面</b>と、熱い空気を出す<b>排気面</b>があります。多くのラックマウント型は、前から吸って後ろへ出します。ラックの列で吸気面の向きをそろえると、冷たい空気の通路と熱い空気の通路を分けられ、排気の再吸込みを減らせます。この考え方は、第15章で詳しく扱います。</p>
+
+<h3>ブレードとシャーシ：何を共有するか</h3>
+<p>ブレード型では、シャーシが、電源、ファン、ネットワークの接続、管理の接続を持ちます。ブレードは、これらを借りて動きます。台数あたりの部品が減り、保守の箇所も減ります。一方、シャーシが止まると、中のブレードが影響を受けます。共有した部品は、<b>障害の範囲を広げる</b>面を持ちます（障害の範囲の考え方は第05章）。</p>
+
+<h3>OCP と Open Rack</h3>
+<p><b>OCP</b>（Open Compute Project）は、データセンターと IT 機器のための、オープンな技術を作る世界的なコミュニティです。OCP 自身は、財団（Open Compute Project Foundation）が 2011 年に始まったと説明しています（出典：Open Compute Project『About』、2026 年 11 月に確認）。OCP は、メンバーが仕様を公開して共有し、機器の効率と互換性を高めることを狙います。</p>
+<p>OCP が定めた代表的な仕様の一つが、<b>Open Rack</b> です。Open Rack V3 の仕様書（Revision 1.0）は、高さの単位として、<b>OpenU</b> の 48 mm と、EIA-310-D の 44.45 mm の 2 つを挙げています（同出典）。本講座は、OpenU を <b>OU</b> と書き、19 インチラックの U と、<b>混ぜません</b>。</p>
+<p>Open Rack V3 は、ラックの中に 48 V の直流の<b>バスバー</b>（busbar、太い導体の板）を持ちます。機器は、このバスバーから電力を受けます（同出典）。直流給電の詳細は第14章で扱います。2 つのラックの違いは、次の表で整理できます。</p>
+<div data-widget="compare" data-src="c03-rack-cmp"></div>
+
+<h3>カードの形：PCIe カードと OCP NIC 3.0</h3>
+<p>サーバーに差すカードには、PCIe（PCI Express）カードがあります。カードの高さと長さには区分があり、低い（ロープロファイル）か高い（フルハイト）か、短いか長いかで呼び分けます（一般知識）。GPU のように大きなカードは、収まる筐体が限られます。接続の規格（PCIe）は第07章で扱います。</p>
+<p>ネットワークカードには、<b>OCP NIC 3.0</b> という形の規格があります。OCP の Server ワークグループの NIC サブグループが作る設計仕様で、カードの形として、SFF、TSFF、DSFF、TDSFF、LFF を定めています。2026 年 11 月に確認した OCP の公開ページの版は、1.5.0（2024 年 9 月 20 日）です（出典：OCP『OCP NIC 3.0 Design Specification』）。</p>
+
+<h3>演習：ラック正面図に機器を足す</h3>
+<p>次の表は、<b>架空の</b> 42U ラックの使用状況です（U は下から数えます）。ここへ、4U の GPU サーバー 1 台（重い）と、2U のストレージ装置 1 台を足します。置ける位置の候補と、確認する点を答えてください。</p>
+<div class="tbl-wrap"><table class="tbl">
+  <caption>架空の 42U ラックの使用状況（出典：架空、見本のため）</caption>
+  <thead><tr><th>U の範囲</th><th>内容</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">U42</th><td>ToR スイッチ（1U）</td></tr>
+    <tr><th scope="row">U41</th><td>管理スイッチ（1U）</td></tr>
+    <tr><th scope="row">U37〜U40</th><td>1U サーバー × 4 台</td></tr>
+    <tr><th scope="row">U33〜U36</th><td>空き（4U 分）</td></tr>
+    <tr><th scope="row">U29〜U32</th><td>4U の既設サーバー（重い）</td></tr>
+    <tr><th scope="row">U27〜U28</th><td>空き（2U 分）</td></tr>
+    <tr><th scope="row">U1〜U26</th><td>空き（26U 分）</td></tr>
+  </tbody>
+</table></div>
+<details><summary>答えを見る</summary>
+  <p>4U の GPU サーバーは重いので、下側の U1〜U4 など、<b>ラックの低い位置</b>が候補です。U33〜U36 は、4U 分が空いていますが、上のほうに重い機器を置くと、重心が上がります。2U のストレージ装置は、U27〜U28 に収まります。</p>
+<p>確認する点は、次のとおりです。ラックと機器の許容荷重、ラック PDU の電力の余り、ToR スイッチへのケーブルが届くか、空いた U にブランキングパネルを付けるか（第15章）。床荷重は第18章です。</p></details>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>U と OU を混ぜない</b>こと。U は 19 インチラックの高さの単位、OU は Open Rack の高さの単位で、1 つあたりの高さが違います。図面で「48」と書かれていたら、どちらのラックかを確かめます。</p>
+  <p>もう一つ。ブレード型もマルチノード型も「共有」で密度を上げる形ですが、共有した部品が止まると、<b>複数のサーバーが同時に影響を受けます</b>。共有の範囲は、障害の範囲でもあります。</p></div>
+
+<div class="callout tip"><span class="ttl">現場でのつながり</span>
+  <p>機器の選定では、高さ（U）、奥行き、重量、吸気の向きを、ラックの仕様と照らします。設置・搬入では、ラック正面図が、機器の置き場所と、ケーブルや配電の割当ての基準になります。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c03-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（アクセス日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>団体の公開資料</td><th scope="row"><a href="https://opencompute.org/documents/open-rack-base-specification-version-3-pdf">Open Rack Base Frame V3 Specification（Open Rack V3 Base Specification）</a></th><td>OCP（Open Compute Project）</td><td>Revision 1.0（2022 年 8 月 24 日付、2022 年 9 月 22 日にコミュニティへ公開）</td><td>OpenU の 48 mm、EIA-310-D のラックユニットの 44.45 mm、48 V のバスバー。</td></tr>
+      <tr><td>団体の公開資料</td><th scope="row"><a href="https://www.opencompute.org/documents/ocp-nic-3-0-r1v50-20240920a-tn-no-cb-pdf/">OCP NIC 3.0 Design Specification</a></th><td>OCP Server ワークグループ（NIC サブグループ）</td><td>1.5.0（2024 年 9 月 20 日）</td><td>OCP NIC 3.0 のカードの形（SFF・TSFF・DSFF・TDSFF・LFF）。目次の範囲だけ。</td></tr>
+      <tr><td>団体の公開ページ</td><th scope="row"><a href="https://www.opencompute.org/about">About - Open Compute Project</a></th><td>OCP（Open Compute Project）</td><td>2026 年 11 月に確認</td><td>OCP の自己紹介（世界的なコミュニティ、財団は 2011 年に始まった）。</td></tr>
+      <tr><td>団体の公開ページ</td><th scope="row"><a href="https://www.ecianow.org/eia-technical-standards/list-of-eia-standards/">List of EIA Standards</a></th><td>ECIA（Electronic Components Industry Association）</td><td>ページの表示：2025 年 5 月 8 日時点の一覧（2026 年 11 月に確認）</td><td>EIA の規格の入手先の案内。EIA-310 の個別の記載は見つからず、現行の版は確認できていません。規格本文は読んでいません。</td></tr>
+      <tr><td>一般知識</td><th scope="row">特定の資料はありません</th><td>—</td><td>—</td><td>形状の分類（タワー・ラックマウント・ブレード・マルチノード）、カードの高さ・長さの区分、重い機器を下に置く慣習。数値は使っていません。</td></tr>
+    </tbody>
+  </table></div>
+</section>

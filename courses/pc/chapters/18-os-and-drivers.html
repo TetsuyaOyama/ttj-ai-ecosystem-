@@ -1,0 +1,121 @@
+<!--
+num: 18
+part: 3
+title: OS の導入とドライバ
+track: 立ち上げ
+time: 30
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>基本ソフト（OS、Operating System）を、<b>公式の入手先</b>から導入する流れを説明できる。</li>
+    <li>Windows 11 の<b>動作の条件</b>を、Microsoft の公式ページで確かめられる。</li>
+    <li><b>導入先のドライブが消えてよいか</b>を、導入の前に確かめる必要を説明できる。</li>
+    <li>導入のあとに、<b>ドライバ</b>が足りない機器を見つけ、公式の入手先から入れる流れを説明できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch05">第05章</a>（ストレージ）、<a href="#ch17">第17章</a>（最初の起動と設定画面）。</p>
+</section>
+
+<div class="callout warn"><span class="ttl">この章の扱い（データの消失）</span><p>OS の導入、ストレージの初期化・交換・消去では、データが消えることがあります。作業の前に、必要なデータのバックアップ（第24章）を取り、対象のドライブを取り違えないように確かめてください。</p></div>
+
+<div class="callout warn"><span class="ttl">この章の扱い（ライセンス）</span><p>OS とソフトウェアは、正規の配布元から入手し、ライセンスの条件に従って使ってください。この講座は、ライセンスや動作要件を回避する方法を扱いません。</p></div>
+
+<div class="callout note"><span class="ttl">この章で「公開情報で確認できた範囲」</span>
+  <p>Windows は、Microsoft（米国）の公式ページ 4 本（2026 年 7 月から 10 月の更新）で確かめました。Linux は、Ubuntu の導入の案内（Ubuntu 24.04 LTS）1 本を例にしました。Fedora など他の配布の案内は、確認できなかったため書いていません。ドライバは、AMD（Advanced Micro Devices、米国）の記事 1 本と Microsoft の記事 1 本で確かめました。要件は更新されるため、導入の前に、公式ページの最新を確かめてください。</p></div>
+
+<h3>OS を導入するまでの流れ</h3>
+<p>この章の略語を、先に整理します。USB（Universal Serial Bus）、ISO（ディスクの内容を 1 つのファイルにまとめた形式のファイル）、UEFI（Unified Extensible Firmware Interface。第17章）、TPM（Trusted Platform Module。第17章）、LAN（Local Area Network。有線と無線のネットワーク）、CPU（Central Processing Unit）、SATA（Serial ATA。第05章）、M.2（小型の SSD を差す口と形の規格。第05章）、SSD（Solid State Drive）です。</p>
+<p>下の図は、導入の流れの一般的な例です。導入先が見えないときは、第17章へ戻ります。</p>
+<div data-widget="flow" data-src="c18-flow"></div>
+
+<h3>Windows 11 の要件を確かめる</h3>
+<p>Microsoft の公式ページは、Windows 11 の動作の条件を、次のように載せています。条件は更新されます。導入の前に、公式ページの最新を確かめます（出典：Microsoft『Windows 11 のシステム要件』、ページ下部の日付 2026 年 7 月 14 日）。</p>
+<div class="tbl-wrap"><table class="tbl">
+  <caption>Windows 11 の要件（Microsoft のページの記述。確認日 2026 年 11 月 14 日）</caption>
+  <thead><tr><th>項目</th><th>ページの記述</th><th>関連章</th></tr></thead>
+  <tbody>
+    <tr><td>CPU</td><td>1 GHz（ギガヘルツ。周波数の単位）以上で、2 コア以上の 64 ビット。対応する CPU の一覧が、ページからリンクされている</td><td>第02章</td></tr>
+    <tr><td>メモリ</td><td>4 GB（ギガバイト。容量の単位）</td><td>第04章</td></tr>
+    <tr><td>ストレージ</td><td>64 GB</td><td>第05章</td></tr>
+    <tr><td>ファームウェア</td><td>UEFI で、セキュアブートに対応</td><td>第17章</td></tr>
+    <tr><td>TPM</td><td>TPM 2.0</td><td>第17章</td></tr>
+    <tr><td>グラフィックス</td><td>DirectX 12（Microsoft のグラフィックスの仕組み）に対応し、WDDM（Windows Display Driver Model）2.0 のドライバを持つ</td><td>第06章</td></tr>
+    <tr><td>ディスプレイ</td><td>9 インチ以上の、720p（高精細）、色は 8 ビット</td><td>第10章</td></tr>
+    <tr><td>インターネット</td><td>更新のために必要。Home は、最初の設定で、インターネットと Microsoft アカウントが要る</td><td>第09章</td></tr>
+  </tbody>
+</table></div>
+<p>条件を満たさない部品で、無理に導入する方法を、この講座は扱いません。CPU が対応しているかは、Microsoft のページにある CPU の一覧で確かめます。セキュアブートと TPM は、UEFI の設定で無効のことがあります（第17章）。</p>
+
+<h3>導入用メディアを作る</h3>
+<p><b>インストールメディア</b>（installation media）は、OS を導入するための、起動できる USB メモリなどです。作るのは、別の PC で行います。</p>
+<p>Windows は、Microsoft の公式ページから、メディア作成ツール（MediaCreationTool.exe）を入手して、作ります。USB メモリは 8 GB 以上で、できれば空のものを使います。中身は消えます。先にバックアップを取ります。プロダクトキーが要ることがありますが、デジタルライセンスなら、要りません（出典：Microsoft、2026 年 9 月 28 日更新）。</p>
+<p>Ubuntu は、ubuntu.com から ISO を入手し、起動できる形で書き込みます。ISO のファイルを、そのまま USB メモリにコピーしても、起動用にはなりません。ディスクを消す操作には、警告が出ます。更新は、Software Updater か、sudo apt update と sudo apt upgrade で行います（出典：Ubuntu の案内、24.04 LTS）。</p>
+<div data-widget="compare" data-src="c18-os"></div>
+
+<h3>導入の途中で気をつけること</h3>
+<h4>起動と導入先の選択</h4>
+<p>導入用メディアから起動するには、起動メニューのキー（Ubuntu の案内は、F12 などの例を挙げています。製品で違います）か、UEFI の起動の順序を使います（第17章）。導入の画面では、導入先のドライブを選びます。ドライブは、<b>パーティション</b>（partition）という単位に区切って使います。区切り方の形式の 1 つに、GPT（GUID Partition Table。GUID は Globally Unique Identifier）があり、UEFI 仕様が定めています。</p>
+<p>導入先のドライブには、残したいデータがないか、先に確かめます。複数のドライブがあるときは、別のドライブを選ばないようにします。Ubuntu の案内は、BitLocker（Windows のドライブ暗号化の機能）を使う Windows の入ったドライブへ導入するときの警告も載せています。</p>
+
+<h4>ライセンスと認証</h4>
+<p><b>ライセンス認証</b>（activation）は、OS が正規の権利で使われているかを確かめる仕組みです。Microsoft の案内は、認証が、プロダクトキーか、デジタルライセンスの権利を、ハードウェアと結びつけると説明しています。マザーボードの交換のような変更で、認証が外れることがあり、導入する版（エディション）も、権利と合わせる必要があると書いています（出典：Microsoft、2026 年 10 月 19 日更新）。</p>
+<p>認証の細部は、権利の種類で違います。Microsoft の公式の案内で確かめます。</p>
+
+<h3>ドライバを確かめる</h3>
+<p><b>ドライバ</b>（driver）は、OS が機器を使うための小さなプログラムです。導入のあとに、機器の一覧（Windows ではデバイスマネージャー）で、<b>不明なデバイス</b>や警告の印がないかを確かめます。Microsoft の案内は、エラーコード 28 を「ドライバが入っていない」ことと説明し、ハードウェアの変更をスキャンするか、メーカーのドライバを入れるよう案内しています（出典：Microsoft、2026 年 9 月 28 日更新）。</p>
+<p>AMD の記事は、チップセットのドライバを、AMD の公式の入手先から入れる手順を案内しています（2025 年 6 月 10 日）。種類ごとの入手先の考え方を、次の表にまとめます。</p>
+<div data-widget="table" data-src="c18-drivers"></div>
+
+<h3>演習：架空の機器の一覧から、次にすることを答える</h3>
+<p>次は、OS の導入の後の、架空の機器の一覧（架空。出典：架空、見本のため）です。</p>
+<div class="tbl-wrap"><table class="tbl">
+  <caption>機器の一覧（架空）</caption>
+  <thead><tr><th>機器</th><th>状態</th></tr></thead>
+  <tbody>
+    <tr><td>ディスプレイ アダプター</td><td>基本の表示。解像度が低い</td></tr>
+    <tr><td>ネットワーク アダプター</td><td>表示なし</td></tr>
+    <tr><td>不明なデバイス</td><td>警告の印。エラーコード 28</td></tr>
+    <tr><td>サウンド</td><td>正常</td></tr>
+    <tr><td>ストレージ コントローラー</td><td>正常</td></tr>
+  </tbody>
+</table></div>
+<p>利用者 C さん（架空）は、ネットワークが使えません。次にすることを、順に答えてください。</p>
+<ol>
+  <li>(ア) 不明なデバイスと、ネットワークの機器の、どちらを先に直しますか。</li>
+  <li>(イ) 必要なドライバの入手先は、どこですか。</li>
+  <li>(ウ) ネットワークが使えないとき、どうやってドライバを入手しますか。</li>
+  <li>(エ) 直したあと、最後に何を確かめますか。</li>
+</ol>
+<details><summary>答えを見る</summary>
+  <p>(ア) <b>ネットワーク</b>を先に直します。他のドライバを、ネットワークから取りに行くためです。</p>
+  <p>(イ) マザーボードのメーカーの公式ページです。型番は、箱やマニュアルで確かめます。不明なデバイスは、型番を手がかりに、メーカーの公式ページで探します。</p>
+  <p>(ウ) 別の PC で、公式ページから入手し、USB メモリで移します。ハードウェアの変更をスキャンしても、直らないときの手です。</p>
+  <p>(エ) 直したあと、機器の一覧をもう一度見ます。まだ警告があれば、その機器だけを調べます。</p></details>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>導入先のドライブを取り違えないでください。</b>残したいデータが入ったドライブを選ぶと、消えます。</p>
+  <p><b>公式の入手先だけを使ってください。</b>OS もドライバも、メーカーと提供元の公式ページから入手します。</p>
+  <p><b>導入のあとに、更新と再起動を済ませてから、次へ進みます。</b>更新が途中だと、機器の状態が変わることがあります。</p></div>
+
+<div class="callout tip"><span class="ttl">自分の 1 台でのつながり</span>
+  <p>導入のあとに、ドライバの版と、機器の一覧を、メモか写真で残します。第21章の切り分けや、第22章の交換で、元の状態と比べられます。次は<a href="#ch19">第19章</a>（動作確認と負荷試験）です。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c18-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://learn.microsoft.com/windows/whats-new/windows-11-requirements">Windows 11 のシステム要件</a></th><td>Microsoft（米国）</td><td>ページ下部の日付 2026 年 7 月 14 日</td><td>要件の表。CPU の一覧へのリンク。Home の最初の設定。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://support.microsoft.com/help/15088">Windows のインストールメディアの作成</a></th><td>Microsoft</td><td>2026 年 9 月 28 日更新</td><td>USB メモリの条件、消える中身、バックアップ。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://support.microsoft.com/help/12440">Windows のライセンス認証</a></th><td>Microsoft</td><td>2026 年 10 月 19 日更新</td><td>認証の考え方、ハードウェアの変更。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://support.microsoft.com/en-us/windows/hardware/drivers/error-codes-in-device-manager-in-windows">Error codes in Device Manager in Windows</a></th><td>Microsoft</td><td>2026 年 9 月 28 日更新</td><td>エラーコード 28。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://ubuntu.com/tutorial/tutorial-install-ubuntu-desktop">Install Ubuntu desktop</a></th><td>Canonical（英国）</td><td>Ubuntu 24.04 LTS</td><td>入手、書き込み、警告、更新。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.amd.com/en/resources/support-articles/faqs/CHIPSET-INSTALL.html">Chipset driver installation</a></th><td>AMD（Advanced Micro Devices、米国）</td><td>2025 年 6 月 10 日</td><td>チップセットのドライバの入手。</td></tr>
+      <tr><td>規格・仕様</td><th scope="row"><a href="https://uefi.org/specs/UEFI/2.11/05_GUID_Partition_Table_Format.html">UEFI Specification 2.11 第 5 章（GPT）</a></th><td>UEFI Forum</td><td>2.11（2024 年 12 月）</td><td>パーティションの形式。</td></tr>
+    </tbody>
+  </table></div>
+</section>

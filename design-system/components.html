@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TTJ デザインシステム 見本</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<style>
+  /* この見本ページ専用のスタイル。色・余白などはすべて tokens.css の変数を使う */
+  .container { max-width: var(--ttj-container); margin: 0 auto; padding: 0 var(--ttj-space-5); }
+  .site-header { background: var(--ttj-bg-inverse); color: var(--ttj-text-inverse); padding: var(--ttj-space-6) 0; border-bottom: 4px solid var(--ttj-accent); }
+  .site-header h1 { color: var(--ttj-text-inverse); margin: 0 0 var(--ttj-space-2); font-size: var(--ttj-text-2xl); }
+  .site-header p { margin: 0; color: var(--ttj-navy-100); }
+  section { padding: var(--ttj-space-6) 0; border-bottom: 1px solid var(--ttj-border); }
+  h2 { font-size: var(--ttj-text-xl); margin: 0 0 var(--ttj-space-4); padding-left: var(--ttj-space-3); border-left: 6px solid var(--ttj-accent); }
+  h3 { font-size: var(--ttj-text-lg); margin: var(--ttj-space-5) 0 var(--ttj-space-3); }
+
+  /* ボタン */
+  .btn { display: inline-block; font: inherit; font-weight: 700; padding: var(--ttj-space-3) var(--ttj-space-5); border-radius: var(--ttj-radius-md); border: 2px solid transparent; cursor: pointer; text-decoration: none; transition: box-shadow .15s, background .15s; }
+  .btn-primary { background: var(--ttj-navy-800); color: var(--ttj-text-inverse); }
+  .btn-primary:hover { background: var(--ttj-navy-700); box-shadow: var(--ttj-shadow-md); }
+  .btn-accent { background: var(--ttj-accent); color: var(--ttj-navy-900); }
+  .btn-accent:hover { background: var(--ttj-gold-400); box-shadow: var(--ttj-shadow-gold); }
+  .btn-outline { background: transparent; color: var(--ttj-navy-800); border-color: var(--ttj-navy-800); }
+  .btn-outline:hover { background: var(--ttj-navy-50); }
+  .btn-row { display: flex; flex-wrap: wrap; gap: var(--ttj-space-3); }
+
+  /* カード */
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--ttj-space-5); }
+  .card { background: var(--ttj-bg); border: 1px solid var(--ttj-border); border-top: 4px solid var(--ttj-accent); border-radius: var(--ttj-radius-lg); padding: var(--ttj-space-5); box-shadow: var(--ttj-shadow-sm); }
+  .card h3 { margin-top: 0; }
+  .card-dark { background: var(--ttj-bg-inverse); color: var(--ttj-text-inverse); border-color: var(--ttj-navy-700); border-top-color: var(--ttj-accent); }
+  .card-dark h3 { color: var(--ttj-accent); }
+
+  /* バッジ・通知 */
+  .badge { display: inline-block; font-size: var(--ttj-text-sm); font-weight: 700; padding: 0 var(--ttj-space-3); border-radius: var(--ttj-radius-pill); }
+  .badge-success { background: var(--ttj-success-bg); color: var(--ttj-success); }
+  .badge-warning { background: var(--ttj-warning-bg); color: var(--ttj-warning); }
+  .badge-accent  { background: var(--ttj-accent-soft); color: var(--ttj-accent-strong); }
+  .notice { padding: var(--ttj-space-4); border-radius: var(--ttj-radius-md); border-left: 6px solid; margin: var(--ttj-space-3) 0; }
+  .notice-success { background: var(--ttj-success-bg); border-color: var(--ttj-success); }
+  .notice-warning { background: var(--ttj-warning-bg); border-color: var(--ttj-warning); }
+
+  /* 表 */
+  .table-wrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { padding: var(--ttj-space-3) var(--ttj-space-4); border-bottom: 1px solid var(--ttj-border); text-align: left; }
+  thead th { background: var(--ttj-navy-800); color: var(--ttj-text-inverse); border-bottom: 3px solid var(--ttj-accent); }
+  tbody tr:nth-child(even) { background: var(--ttj-bg-subtle); }
+
+  /* コード */
+  code { font-family: var(--ttj-font-mono); background: var(--ttj-navy-50); padding: 0.1em 0.4em; border-radius: var(--ttj-radius-sm); }
+  pre { background: var(--ttj-navy-900); color: var(--ttj-text-inverse); padding: var(--ttj-space-4); border-radius: var(--ttj-radius-md); overflow-x: auto; box-shadow: var(--ttj-shadow-md); }
+  pre code { background: none; padding: 0; color: inherit; }
+
+  /* 引用 */
+  blockquote { margin: var(--ttj-space-4) 0; padding: var(--ttj-space-3) var(--ttj-space-5); border-left: 4px solid var(--ttj-accent); background: var(--ttj-accent-soft); font-family: var(--ttj-font-serif); }
+
+  /* 色見本 */
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: var(--ttj-space-3); }
+  .swatch { border: 1px solid var(--ttj-border); border-radius: var(--ttj-radius-md); overflow: hidden; font-size: var(--ttj-text-sm); }
+  .swatch i { display: block; height: 56px; }
+  .swatch span { display: block; padding: var(--ttj-space-2); }
+
+  .site-footer { background: var(--ttj-bg-inverse); color: var(--ttj-navy-100); padding: var(--ttj-space-5) 0; font-size: var(--ttj-text-sm); }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <h1>TTJ デザインシステム 見本</h1>
+    <p>紺 × 金のトークン（tokens.css）を使った部品の見本ページです。</p>
+  </div>
+</header>
+
+<main class="container">
+
+  <section aria-labelledby="sec-color">
+    <h2 id="sec-color">色</h2>
+    <div class="swatches">
+      <div class="swatch"><i style="background:var(--ttj-navy-800)"></i><span>navy-800<br>基準の紺</span></div>
+      <div class="swatch"><i style="background:var(--ttj-navy-600)"></i><span>navy-600</span></div>
+      <div class="swatch"><i style="background:var(--ttj-navy-100)"></i><span>navy-100</span></div>
+      <div class="swatch"><i style="background:var(--ttj-gold-500)"></i><span>gold-500<br>基準の金</span></div>
+      <div class="swatch"><i style="background:var(--ttj-gold-700)"></i><span>gold-700</span></div>
+      <div class="swatch"><i style="background:var(--ttj-gold-100)"></i><span>gold-100</span></div>
+      <div class="swatch"><i style="background:var(--ttj-success)"></i><span>success</span></div>
+      <div class="swatch"><i style="background:var(--ttj-warning)"></i><span>warning</span></div>
+      <div class="swatch"><i style="background:var(--ttj-border)"></i><span>border</span></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="sec-type">
+    <h2 id="sec-type">見出しと文章</h2>
+    <h3>見出し（Noto Serif JP）</h3>
+    <p>本文は Noto Sans JP、行間は 1.8。<a href="#">リンクの例</a>はこのように表示されます。<strong>強調</strong>は太字で示します。</p>
+    <blockquote>引用や一言メッセージには、金の縦線と淡い金の面を使います。</blockquote>
+  </section>
+
+  <section aria-labelledby="sec-btn">
+    <h2 id="sec-btn">ボタン</h2>
+    <div class="btn-row">
+      <button class="btn btn-primary" type="button">主要ボタン</button>
+      <button class="btn btn-accent" type="button">強調ボタン</button>
+      <a class="btn btn-outline" href="#">アウトライン</a>
+    </div>
+  </section>
+
+  <section aria-labelledby="sec-card">
+    <h2 id="sec-card">カード</h2>
+    <div class="card-grid">
+      <article class="card">
+        <h3>標準カード</h3>
+        <p>白い面に金の上線。<span class="badge badge-success">公開中</span></p>
+      </article>
+      <article class="card">
+        <h3>注意つき</h3>
+        <p>状態をバッジで示します。<span class="badge badge-warning">確認待ち</span></p>
+      </article>
+      <article class="card card-dark">
+        <h3>紺のカード</h3>
+        <p>強く見せたい情報に使います。<span class="badge badge-accent">注目</span></p>
+      </article>
+    </div>
+    <div class="notice notice-success"><strong>成功：</strong>チェックがすべて通りました。</div>
+    <div class="notice notice-warning"><strong>警告：</strong>公開前に codex-review を実行してください。</div>
+  </section>
+
+  <section aria-labelledby="sec-table">
+    <h2 id="sec-table">表</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>区分</th><th>モデル</th><th>担当</th></tr></thead>
+        <tbody>
+          <tr><td>軽い</td><td>haiku</td><td>確認・検索・チェック</td></tr>
+          <tr><td>方針決定済み</td><td>sonnet</td><td>実装・編集・ライティング</td></tr>
+          <tr><td>判断がいる</td><td>opus</td><td>練り直し・レビュー</td></tr>
+          <tr><td>特に重要</td><td>fable</td><td>全体設計・最終確認</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="sec-code">
+    <h2 id="sec-code">コード</h2>
+    <p>文中のコードは <code>var(--ttj-accent)</code> のように書きます。</p>
+    <pre><code>&lt;link rel="stylesheet" href="tokens.css"&gt;
+.my-card {
+  border-top: 4px solid var(--ttj-accent);
+  border-radius: var(--ttj-radius-lg);
+}</code></pre>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">&copy; TTJ — デザインシステム見本</div>
+</footer>
+
+</body>
+</html>

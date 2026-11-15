@@ -1,0 +1,51 @@
+<!--
+num: 01
+part: 1
+title: 荷物が届くまでの全体像
+track: 入門
+time: 20
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>荷物が届くまでに関わる<b>人・拠点・情報システム</b>の役割。</li>
+    <li>取り扱いの<b>工程</b>と、やり直し（分岐と繰り返し）の入り方。</li>
+    <li>集荷から配達まで、<b>誰が何を記録するか</b>を一手ずつ追うこと。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：宅配便を使った経験があれば十分です。</p>
+</section>
+
+<h3>登場するのは 3 種類</h3>
+<p>荷物の旅には、<b>人</b>、<b>拠点</b>、<b>情報システム</b>が関わります。まず全体を図で見ましょう。</p>
+<div data-widget="arch" data-src="c01-network"></div>
+<div class="callout note"><span class="ttl">この見本について</span>
+  <p>登場する会社・拠点・数字はすべて<b>架空</b>です。部品の動きを確かめるための設定で、実際の宅配事業とは関係ありません。</p></div>
+
+<h3>取り扱いの工程</h3>
+<p>荷物は、受付から受け渡しまで 7 つの工程を通ります。検品に通らなければ梱包をやり直し、不在なら再配達します。</p>
+<div data-widget="flow" data-src="c01-flow"></div>
+<div class="callout tip"><span class="ttl">ポイント</span>
+  <p>やり直しの工程は<b>回数に上限</b>があります。上限を超えたときの行き先まで決めておくと、荷物が行方不明になりません。</p></div>
+
+<h3>費用と責任は、どこで誰に移るか</h3>
+<p>元払いと着払いでは、運賃を払う人が変わります。<b>責任</b>が移る場所は同じです。上のタブで条件を切り替えて比べましょう。</p>
+<div data-widget="route" data-src="c01-route"></div>
+
+<h3>受け渡しを一手ずつ</h3>
+<p>依頼者が荷物を渡してから、受取人が受け取るまでを、登場人物ごとに追います。</p>
+<div data-widget="seq" data-src="c01-seq"></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c01-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（見本のため、すべて架空）</caption>
+    <thead><tr><th>資料</th><th>時点</th><th>使ったところ</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">架空の事業者「ミドリ運送」の運用メモ（見本用の創作）</th><td>2026-11</td><td>拠点の役割、工程、再配達の上限（図・フロー・手順）</td></tr>
+      <tr><th scope="row">架空の「受け渡し記録の項目表」（見本用の創作）</th><td>2026-11</td><td>手順で記録される項目</td></tr>
+    </tbody>
+  </table></div>
+</section>

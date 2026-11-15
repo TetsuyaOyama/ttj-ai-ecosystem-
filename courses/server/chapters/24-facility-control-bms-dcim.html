@@ -1,0 +1,116 @@
+<!--
+num: 24
+part: 4
+title: 施設側の監視制御と電力・冷却の制御：BMS・DCIM
+track: 施設
+time: 40
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>施設の設備（電力・空調・液冷）の監視制御が、<b>現場の機器 → 制御器 → BMS（Building Management System、ビル管理システム）・EPMS（Electrical Power Monitoring System、電力監視システム）→ DCIM（Data Center Infrastructure Management、データセンターの設備と IT の管理システム）</b>の層でできていることと、各層の役割を説明できる。</li>
+    <li><b>BACnet</b>（ビル設備の通信の規格）・<b>Modbus</b>（機器の値を読み書きする通信の規格）・<b>SNMP</b>（Simple Network Management Protocol、ネットワーク機器の管理の規格）の位置づけ、冷却の<b>制御ループ</b>（測る → 比べる → 動かす）と、遅れで起きる問題を説明できる。</li>
+    <li>IT 側の電力制御（<b>パワーキャッピング</b>・<b>DVFS</b>〔Dynamic Voltage and Frequency Scaling、電圧と周波数を負荷に合わせて変える仕組み〕・スケジューラとの連携）と、電力網とのつながり（<b>デマンドレスポンス</b>）の仕組みを言える。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch12">第12章</a>（電力の流れ）、<a href="#ch15">第15章</a>（熱と空冷）。あるとよい：<a href="#ch13">第13章</a>（UPS〔Uninterruptible Power Supply、無停電電源装置〕）、<a href="#ch16">第16章</a>（液冷、CDU〔Coolant Distribution Unit、冷却液の分配装置〕）、<a href="#ch17">第17章</a>（冷熱源）、<a href="#ch19">第19章</a>（基板管理コントローラ〔BMC〕と Redfish）。</p>
+</section>
+
+<div class="callout warn"><span class="ttl">この章の扱い（電気の安全）</span>
+  <p>この章は、電気設備の仕組みと注意点の説明です。作業の手順書の代わりにはなりません。受変電設備・UPS・配電・直流給電の操作や作業は、感電やアークによる重大な事故のおそれがあります。実際の作業は、法令で定められた有資格者が、設備の保安規程と現場の手順（作業計画・作業許可）に従って行ってください。</p></div>
+
+<div class="callout warn"><span class="ttl">この章の扱い（制御の変更）</span>
+  <p>この章の「制御」も、同じ考え方です。設定温度、ファンやポンプの回転数、電力の上限、警報のしきい値などの変更は、施設の運用手順と、変更する権限を持つ担当の承認に従います。この章は、設定値や調整の手順を示しません。</p></div>
+
+<h3>施設の監視制御の層</h3>
+<p>データセンターの施設には、電力の設備（受変電、無停電電源装置〔Uninterruptible Power Supply, UPS〕、ラック PDU〔rack Power Distribution Unit〕）、空調（CRAH〔Computer Room Air Handler〕など）、液冷（冷却液の分配装置〔Coolant Distribution Unit, CDU〕など）があります。これらを、人が 1 台ずつ見て回ることはできません。そこで、設備の状態を<b>測り</b>、必要なら<b>動かす</b>ための仕組みが、層になって重なっています。</p>
+<ol>
+  <li><b>現場の機器</b>：センサー、PDU、UPS、CRAH、CDU など。測定値を出し、指令を受けて動きます。</li>
+  <li><b>制御器</b>：現場の機器の値を読み、決められた規則で、弁・ファン・ポンプなどへ指令を出します。上位が止まっても、制御は続けられるように作られることが多いです（一般的な考え方）。</li>
+  <li><b>BMS</b>と<b>EPMS</b>：建物の設備を、まとめて監視し、制御する層です。次の節で説明します。</li>
+  <li><b>DCIM</b>：IT 側と施設側の情報を、つなぎます。</li>
+</ol>
+<p>図の 3 つの表示を切り替えて、施設側、IT 側、両方をつないだ姿を見てください。図は模式で、実在の施設の構成ではありません。</p>
+<div data-widget="arch" data-src="c24-layers"></div>
+
+<h3>BMS と EPMS：空調と電力の監視と制御</h3>
+<p><b>BMS</b>（Building Management System、ビル管理システム）は、空調や換気などの建物の設備を、まとめて監視し、制御する仕組みです。データセンターでは、空調機、冷水の系統、液冷の CDU などが対象になります。</p>
+<p><b>EPMS</b>（Electrical Power Monitoring System、電力監視システム）は、受変電設備、UPS、配電盤、PDU などの電力の設備を、まとめて監視する仕組みです。電圧・電流・電力・遮断器の状態・UPS の運転状態などを、見ます。</p>
+<p>BMS と EPMS は、別のシステムとして置かれることもあれば、1 つにまとめられることもあります（一般的な構成の例）。どちらも、主な役割は<b>監視</b>と、決められた範囲の<b>制御</b>です。電力の遮断や切替のような保護の動作は、設備自身の保護の仕組みが担い、監視の層はその状態を見ます（一般的な考え方。第13章）。</p>
+
+<h3>DCIM：IT と施設をつなぐ</h3>
+<p><b>DCIM</b>（Data Center Infrastructure Management）は、データセンターの<b>資産</b>（どの機器が、どのラックの何 U にあるか）、<b>容量</b>（電力・冷却・スペースの残り）、<b>電力</b>、<b>温度</b>を、IT 側と施設側をまたいで見る仕組みです。</p>
+<p>なぜ、つなぐ層が要るのでしょうか。IT 側は、サーバーを増やすとき、「このラックに、あと何 kW 置けるか」を知りたいです。施設側は、受電・UPS・冷却の余力を知っています。IT 側の情報（機器の台数、消費電力）と、施設側の情報（設備の容量、現在の負荷）が別々だと、容量の見積りが食い違います。DCIM は、両方を 1 か所で見られるようにします。</p>
+<p>IT 側の値は、BMC（<a href="#ch19">第19章</a>）が出す温度や電力の測定値から集められます。DMTF の Redfish には、機器の管理に加えて、施設側の資源（Facility、PowerDistribution、CoolingUnit、CoolingLoop、LeakDetection など）のスキーマもあります（出典：DMTF『Redfish Schema Bundle』DSP8010、2026.1、2026 年 4 月 2 日）。ただし、実際の DCIM や BMS が、どの通信方式で何をつなぐかは、製品と施設ごとに違います。</p>
+
+<h3>通信の方式：BACnet・Modbus・SNMP</h3>
+<p>施設の機器どうし、機器と上位の層は、<b>通信の方式</b>（プロトコル）でつながります。代表的な 3 つを、次の表にまとめます。</p>
+<div class="tbl-wrap"><table class="tbl">
+  <caption>施設の監視制御で使われる通信の方式（位置づけ）</caption>
+  <thead><tr><th>方式</th><th>主な使われ方</th><th>規格・仕様</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">BACnet</th><td>ビルの設備（空調など）の監視制御</td><td>ANSI/ASHRAE 135-2024（ASHRAE）。ISO の規格としては ISO 16484-5（2026 年版が第 8 版）</td></tr>
+    <tr><th scope="row">Modbus</th><td>電力計や制御器など、機器の値の読み書き</td><td>Modbus Organization の仕様。TCP/IP 上の使い方は『Modbus Messaging on TCP/IP Implementation Guide』V1.0b</td></tr>
+    <tr><th scope="row">SNMP</th><td>ネットワーク機器や、UPS・PDU などの機器の監視</td><td>IETF の STD 62（RFC 3411〜3418、2002 年 12 月）</td></tr>
+  </tbody></table></div>
+<p>どの方式も、「機器の値を読む」「機器へ指令を書く」「異常を知らせる」ための取り決めです。1 つの施設で、複数の方式が混ざることがよくあります。方式の間をつなぐ変換器（ゲートウェイ）を使うこともあります（一般的な構成）。</p>
+<p>次の図で、3 つの方式の積み重ねを見ます。<b>Modbus TCP</b> は、クライアントが要求を送り、サーバーが応答を返す形で、7 バイトの MBAP ヘッダを付け、TCP のポート 502 を使います（出典：Modbus Organization『Modbus Messaging on TCP/IP Implementation Guide』V1.0b、2006 年 10 月 24 日付）。BACnet は、層の構造を持ち、ISO 16484-5（2022 年版で確認）には、イーサネットや MS/TP の方式の規定があります。SNMP は、RFC 3411〜3418 に、構造、メッセージの処理、アプリケーション、セキュリティ（USM・VACM）、トランスポートの対応、MIB が分かれて書かれています。</p>
+<div data-widget="stack" data-src="c24-stack"></div>
+<p>図の BACnet は、イーサネット上の例です。BACnet/IP などの、IP 上の方式の詳細は、この章では確認できなかったので書きません。</p>
+<p>ネットワークにつながる施設の機器は、攻撃の入口にもなります。施設の監視制御の網は、IT の網から分け、通信の許可を絞るのが基本です（<a href="#ch25">第25章</a>）。</p>
+
+<h3>冷却の制御：測って、比べて、動かす</h3>
+<p>空調の制御の基本は、<b>制御ループ</b>（フィードバック制御）です。<b>測る → 目標と比べる → 動かす → 結果が変わる → また測る</b>、という 1 周を、くり返します。</p>
+<ul>
+  <li><b>設定温度</b>（目標）：運用者が決める値です。給気の温度や、戻りの温度で決めます。<a href="#ch15">第15章</a>の ASHRAE の推奨範囲が、決める根拠のひとつです。</li>
+  <li><b>ファン・ポンプの回転数</b>：動かす量です。回転数を変えて、運ぶ空気や水の量（<a href="#ch15">第15章</a>の質量流量）を変えます。熱を運ぶ量は、質量流量 × 比熱 × 温度差でした。</li>
+  <li><b>制御器</b>：測定値と設定温度の差を見て、回転数などを決めます。</li>
+</ul>
+<div data-widget="seq" data-src="c24-loop"></div>
+<p>制御ループで問題になるのは、<b>遅れ</b>です。空調機のファンを速くしても、部屋の空気の温度が変わるまでには、時間がかかります。制御器が、変化を待たずに、指令を大きく出し続けると、行き過ぎます。次に反対へ戻し、また行き過ぎます。温度が上下をくり返す、この状態を<b>ハンチング</b>と言います。遅れがあるほど、制御器の反応は、ゆっくりにする必要があります。調整の値は、設備ごとに違い、この講座は示しません。</p>
+<p>液冷の制御も同じ形です。CDU の二次側の供給温度を測り、ポンプの回転数や、一次側との熱交換の量を動かします（<a href="#ch16">第16章</a>）。</p>
+
+<h3>IT 側の電力制御：パワーキャッピングと DVFS</h3>
+<p>施設の電力と冷却には、上限があります。IT 側は、機器の消費電力を<b>制限する</b>ことで、この上限に合わせられます。</p>
+<ul>
+  <li><b>パワーキャッピング</b>（power capping）：サーバーやラックの消費電力に、上限を設ける仕組みです。上限を超えそうになると、機器が性能を下げて、消費電力を抑えます。使いどころは、ラックの電力の割当てを超えないようにするとき、冷却や受電の余力が減った非常時、電力の割当てより多い台数を置くときの安全弁、などです（一般的な使われ方）。上限を設けられる機器と、設定の方法は、製品ごとに違います。</li>
+  <li><b>DVFS</b>（Dynamic Voltage and Frequency Scaling）：プロセッサの電圧と動作周波数を、負荷に合わせて変える仕組みです。周波数と電圧を下げると、消費電力が下がります。同時に、処理の速さも下がります（<a href="#ch06">第06章</a>、<a href="#ch08">第08章</a>）。</li>
+  <li><b>スケジューラとの連携</b>：ジョブスケジューラ（<a href="#ch22">第22章</a>）は、どのジョブを、どの機器へ割り当てるかを決めます。電力の上限を知っていれば、割当てを調整して、上限に収められます。負荷の高いジョブを分散する、後回しにする、などです。</li>
+</ul>
+<p>パワーキャッピングは、性能を下げる代わりに、電力を守ります。上限を低くしすぎると、処理が遅くなり、ジョブの終了時刻に影響します。上限を決めるのは、IT 側と施設側の合意と、権限のある担当です。</p>
+
+<h3>電力網との関係：デマンドレスポンス</h3>
+<p><b>デマンドレスポンス</b>（Demand Response、需要応答）は、電力の需給が厳しいときなどに、電力の使い方を変えて、需給の調整に協力する仕組みです。電力の事業者から合図を受けて、使う電力を減らす、または時間をずらします。</p>
+<p>データセンターでも、検討と試行が始まっています。Google（米国）は、2025 年 8 月 4 日の記事で、機械学習の処理を対象にした需要応答の合意を、米国の 2 つの電力事業者と結んだと述べています。合図を受けたときに、一部の機械学習の処理を減らす、または時間をずらします。同じ記事は、データセンターの需要の柔軟性はまだ初期の段階で、使えるのは一部の場所だけだとも述べています（出典：Google『How we’re making data centers more flexible to benefit power grids』、2025 年 8 月 4 日）。</p>
+<p>この仕組みでは、ここまでの層が働きます。電力事業者の合図を、施設側が受け、IT 側のパワーキャッピングやスケジューラが、処理を調整します。制度や市場の仕組み（どの市場で、どう報酬が決まるか）は、<a href="#ch30">第30章</a>が扱います。</p>
+
+<h3>演習：施設の警報の切り分け（6 ケース）</h3>
+<p>架空の警報（ログと値はすべて架空）を読み、<b>影響の範囲</b>と、<b>最初に連絡する担当</b>を選んでください。「最初に連絡する担当」は、この教材の簡略な見方で、実際は、契約と運用の手順で変わります。</p>
+<div data-widget="drill" data-src="c24-drill"></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>BMS と DCIM は、同じものではありません</b>。BMS は建物の設備の監視制御で、DCIM は IT と施設をまたいで資産・容量・電力・温度を見る層です。製品によっては、機能が重なります。</p>
+  <p><b>監視と制御は別です</b>。値を見るだけの接続と、設備へ指令を書く接続は、権限と危険の大きさが違います。指令を書ける経路は、特に厳しく守ります。</p>
+  <p><b>パワーキャッピングは、電力を使わない仕組みではありません</b>。上限を超えないように、性能を下げて抑える仕組みです。</p>
+  <p><b>デマンドレスポンスは、いつでも使える手段ではありません</b>。仕組みと制度の条件が合って、はじめて使えます（第30章）。</p></div>
+
+<div class="callout tip"><span class="ttl">現場でのつながり</span>
+  <p>施設の警報が出たとき、IT の運用者と施設の管理者は、最初に、「影響する範囲はどこか」を共有します。1 台か、1 つの電力系統か、1 つの冷却系統か、部屋全体か。範囲が分かれば、連絡する相手と、急ぐ度合いが決まります。DCIM は、この「範囲」を、ラックと設備の対応から素早く出すために使われます。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c24-quiz"></div></section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>規格</td><th scope="row"><a href="https://www.ashrae.org/file%20library/technical%20resources/standards%20and%20guidelines/standards%20errata/standards/135-2024-errata-summary-2026-06-29.pdf">ANSI/ASHRAE Standard 135-2024（BACnet）の訂正の要約</a>、<a href="https://bacnet.org/news/ansi-ashrae-135-2024-now-published/">ANSI/ASHRAE 135-2024 Now Published</a></th><td>ASHRAE、ASHRAE SSPC 135（BACnet 委員会のサイト）</td><td>2024 年版（委員会の告知は 2024 年 12 月 31 日、訂正の要約は 2026 年 6 月 29 日付）</td><td>BACnet の規格番号と版。規格の本文は読んでいません（有料の規格。販売ページの個別 URL は確認できず、ASHRAE の訂正の要約と委員会の告知にリンクしています）。</td></tr>
+      <tr><td>規格</td><th scope="row"><a href="https://www.iso.org/standard/92057.html">ISO 16484-5:2026（Building automation and control systems (BACS) — Part 5: Data communication protocol）</a>、<a href="https://www.iso.org/standard/84964.html">ISO 16484-5:2022</a></th><td>ISO（ISO/TC 205）</td><td>2026 年 8 月（第 8 版）。2022 年 9 月の第 7 版も公開ページで確認</td><td>BACnet の通信方式の ISO の規格。イーサネットと MS/TP の規定は 2022 年版の目次で確認。規格の本文は読んでいません。</td></tr>
+      <tr><td>仕様</td><th scope="row"><a href="https://modbus.org/modbus-specifications">Modbus Messaging on TCP/IP Implementation Guide V1.0b（Modbus Organization の仕様のページ、「Modbus TCP/IP」の項）</a></th><td>Modbus Organization</td><td>2006 年 10 月 24 日付</td><td>クライアントとサーバーの要求と応答、MBAP ヘッダ、TCP のポート 502。仕様のページで掲載を確認。本文は公開の写しで読みました。</td></tr>
+      <tr><td>標準</td><th scope="row"><a href="https://www.rfc-editor.org/info/std62">STD 62（RFC 3411〜3418）</a></th><td>IETF（RFC Editor のページ）</td><td>2002 年 12 月</td><td>SNMP（バージョン 3）を構成する 8 つの RFC の番号と題名。</td></tr>
+      <tr><td>標準化団体の資料</td><th scope="row"><a href="https://redfish.dmtf.org/schemas/v1/DSP8010_2026.1.pdf">Redfish Schema Bundle（DSP8010）</a></th><td>DMTF</td><td>2026.1、2026 年 4 月 2 日</td><td>Facility・PowerDistribution・CoolingUnit・CoolingLoop・LeakDetection のスキーマがあること。</td></tr>
+      <tr><td>企業のブログ</td><th scope="row"><a href="https://blog.google/innovation-and-ai/infrastructure-and-cloud/global-network/how-were-making-data-centers-more-flexible-to-benefit-power-grids/">How we’re making data centers more flexible to benefit power grids</a></th><td>Google</td><td>2025 年 8 月 4 日</td><td>需要応答の合意の公開例（2 つの電力事業者）と、柔軟性が初期の段階であること。</td></tr>
+      <tr><td>教科書的な一般知識</td><th scope="row">制御工学・ビル設備・データセンター運用の教科書（層の構成、BMS・EPMS・DCIM の役割、制御ループとハンチング、パワーキャッピングと DVFS の考え方）</th><td>—</td><td>—</td><td>数値を伴わない説明。</td></tr>
+    </tbody>
+  </table></div>
+</section>

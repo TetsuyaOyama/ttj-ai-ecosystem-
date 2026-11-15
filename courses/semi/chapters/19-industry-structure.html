@@ -1,0 +1,102 @@
+<!--
+num: 19
+part: 3
+title: 装置産業の構造と主要企業
+track: 産業
+time: 40
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>半導体を<b>作る側</b>の 4 つの業態（IDM・ファウンドリ・ファブレス・OSAT）と、<b>装置を作る側</b>が、産業の流れのどこに入るかを説明できる。</li>
+    <li>装置市場の区分（WFE・後工程・テスト）と、公開統計（SEMI・SEAJ）の<b>範囲・期間・通貨の違い</b>を言える。</li>
+    <li>装置が売れてから検収・保守までの流れと、<b>直販と商社経由</b>の商流の違いを説明できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch03">第03章</a>（集積回路）、<a href="#ch16">第16章</a>（工程別の装置の仕組み）。<a href="#ch14">第14章</a>（後工程）を読んでいると、OSAT の役割が分かりやすくなります。</p>
+</section>
+
+<div class="callout warn"><span class="ttl">この章の扱い</span>
+  <p>この章は産業と指標の仕組みの説明で、投資の推奨や、特定の企業・銘柄の評価ではありません。</p></div>
+
+<div class="callout note"><span class="ttl">この章で「公開情報で確認できた範囲」</span>
+  <p>市場の数字は、SEMI と SEAJ の公表資料から書いています。企業の事業内容と売上は、各社の決算発表・有価証券報告書・10-K など、企業自身の公開資料で確認できたものだけです。業態の定義と商流の考え方は、教科書的な一般知識で整理しています。</p>
+  <p>数字は変わりやすいものです。表と本文の「時点」を見て、実務で使うときは最新の資料を確認してください。</p></div>
+
+<h3>半導体を作る側：4 つの業態</h3>
+<p>半導体チップができるまでには、設計、前工程、後工程の 3 つの段があります。この 3 つの段を、誰が受け持つかで企業を分けると、4 つの業態が見えてきます。</p>
+<ul>
+  <li><b>IDM</b>（Integrated Device Manufacturer）：設計から製造までを自社で行う企業。</li>
+  <li><b>ファウンドリ</b>（foundry）：他社が設計した半導体を、受託して製造する企業。</li>
+  <li><b>ファブレス</b>（fabless）：設計に専念し、製造を外部に任せる企業。</li>
+  <li><b>OSAT</b>（Outsourced Semiconductor Assembly and Test）：後工程の組立とテストを受託する企業。</li>
+</ul>
+<p>メモリメーカー（第03章、第04章に出る DRAM・NAND の企業）は、自社の製品を自社の工場で作る点で、IDM に近い形です。公開資料にも、この区分が表れています。たとえば NVIDIA は、自社を「fabless and contracting」の製造モデルと説明しています（出典：NVIDIA『Form 10-K』、会計年度 2026 年 1 月期）。TSMC の公式ページは、顧客の製品の製造に専念するモデルを説明しています（出典：TSMC 公式ページ、2026 年 11 月に確認）。Amkor（米国）は、顧客に IDM、ファブレス、ファウンドリがあると書いています（出典：Amkor『Form 10-K』、会計年度 2025 年 12 月期）。</p>
+<p>下の図で、作る側の流れと、装置・材料の入り方を切り替えて見ます。箱を押すと、役割と説明が出ます。</p>
+<div data-widget="arch" data-src="c19-industry"></div>
+<p>装置メーカーと材料メーカーは、作る側の外にいる<b>供給する側</b>です。装置は前工程にも後工程にも入ります。材料の供給網は<a href="#ch20">第20章</a>で扱います。</p>
+
+<h3>装置を作る側：市場の区分</h3>
+<p>装置市場は、どの工程の装置かで区分します。SEMI は、装置の売上を前工程と後工程に分け、さらに細かく集計しています（出典：SEMI、2026 年 4 月）。</p>
+<ul>
+  <li>前工程：ウェーハ処理装置と、その他の前工程装置。</li>
+  <li>後工程：テスト装置と、組立とパッケージ装置。</li>
+</ul>
+<p>前工程の装置は<b>WFE</b>（Wafer Fab Equipment）と呼ばれます。SEMI の 2026 年 7 月の予測は、WFE にテスト装置、組立とパッケージ装置を加えたものを「総装置売上」として示しています（出典：SEMI、公表 2026 年 7 月 14 日）。同じ発表で、SEMI の WFE は、ウェーハ処理装置のほか、マスク・レチクルの装置と工場設備（fab facilities）の区分を含みます。WFE の範囲は統計ごとに違うことがあるので、使うときは定義を確認します。</p>
+<p>装置メーカーは、1 つの工程に特化する企業も、複数の工程を持つ企業もあります。次の表は、公開資料で事業内容を確認できた企業の例です。順位ではなく、網羅でもありません。</p>
+<div data-widget="table" data-src="c19-eq-companies"></div>
+<p>企業の規模は、売上高で見ることがあります。次の表は、各社が公表した直近の通期売上です。決算期と通貨が違うので、企業どうしを比べる表ではありません。</p>
+<div data-widget="table" data-src="c19-eq-revenue"></div>
+
+<h3>市場規模と地域別の見方</h3>
+<p>SEMI は、2025 年の世界の半導体製造装置の売上を 1,351 億米ドルと公表しました。前年の 1,171 億米ドルから 15% の増加です（出典：SEMI『Global Semiconductor Equipment Billings Reached $135 Billion in 2025』、公表 2026 年 4 月 7 日、数値は 2025 年暦年）。この数字は、SEMI と SEAJ の会員企業が報告する月次の売上データ（WWSEMS）を集計したものです。</p>
+<p>地域別に見ると、中国、台湾、韓国の 3 地域で世界の 79% を占めました（同上）。次の表は、地域別の数字です。</p>
+<div data-widget="table" data-src="c19-market"></div>
+<p>SEMI は 2026 年 7 月に、2026 年の総装置売上が 1,659 億米ドルに達するという予測を公表しました。前年比 23.2% 増の見込みです。内訳の予測は、WFE が 1,439 億米ドル、テスト装置が 153 億米ドル、組立とパッケージ装置が 67 億米ドルです（出典：SEMI、公表 2026 年 7 月 14 日、2026 年暦年の予測）。これは SEMI の予測で、将来を保証するものではありません。</p>
+
+<h3>日本の統計：SEAJ の「日本製装置」</h3>
+<p>日本の業界団体である SEAJ は、別の見方で統計を出します。<b>日本製装置販売高</b>です。定義は、日系企業（海外拠点を含む）の国内及び海外への販売高です（出典：SEAJ、2026 年 7 月）。期間は<b>年度</b>（4 月〜翌年 3 月）で、単位は円です。</p>
+<div data-widget="table" data-src="c19-seaj"></div>
+<p>SEAJ の 2025 年度の実績は 5 兆 1,986 億円でした。2026 年 7 月発表の予測は、2026 年度が 6 兆 5,502 億円、2027 年度が 7 兆 4,017 億円、2028 年度が 7 兆 7,718 億円です。2026 年 1 月の発表と比べると、予測が大きく上に見直されています。予測は、定期的に見直されるものです。</p>
+<p>SEMI の数字と SEAJ の数字は、期間（暦年と年度）、範囲（世界の支出と日本の企業の販売）、通貨（米ドルと円）が違います。同じ「装置の売上」でも、足し引きはできません。</p>
+
+<h3>装置の売り方：受注から検収・保守まで</h3>
+<p>装置は、1 台ずつ契約して、時間をかけて売ります。引合いから検収までの流れと、売上がどこで計上されるかを、順に追います。</p>
+<div data-widget="seq" data-src="c19-deal"></div>
+<p>売上を計上する時点は、<b>契約と会社の会計方針</b>で決まります。Lam Research（米国）の 10-K は、装置の売上は、一般に出荷または引渡しの時点で認識し、サービスは期間にわたって認識すると書いています（出典：Lam Research『Form 10-K』、会計年度 2026 年 6 月期）。他の会社や契約では違う場合があります。企業の決算資料で、収益認識の注記を確認します。</p>
+<p>装置は、売った後も事業が続きます。装置メーカーの技術者による<b>フィールドサービス</b>、点検・部品・技術者の派遣を決める<b>保守契約</b>、使用済みの装置を整備して再び売る<b>リファービッシュ</b>（中古装置）などです。東京エレクトロンの有価証券報告書（2026 年 3 月期）は、売上を「新規装置」と「フィールドソリューション他」に分けています。後者は、納入済みの装置への保守用部品・サービス・装置の改造の提供と、中古装置の販売などを含むと説明しています。</p>
+
+<h3>商流：直販と商社経由</h3>
+<p>装置メーカーが顧客に売る形には、直接売る<b>直販</b>と、<b>商社</b>が入る形があります。商社が入ると、契約の本数と窓口が変わります。次の表は、架空の装置メーカー A 社が顧客 B 社に売る場合の比較です。</p>
+<div data-widget="compare" data-src="c19-channel"></div>
+<p><b>演習</b>：表を見て、次の 2 つを考えてみましょう。(1) 検収の条件を、商社経由の場合に 2 本の契約でそろえる必要があるのはなぜか。(2) 輸出の手続きの「輸出者」が誰になるかを、契約で決めておく理由は何か（<a href="#ch26">第26章</a>、<a href="#ch27">第27章</a>）。答えは、表の「考え方」の列にあります。</p>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p>「装置市場の規模」という言葉は、統計ごとに指すものが違います。SEMI の数字は<b>世界の支出</b>（暦年、米ドル）、SEAJ の数字は<b>日本の企業の販売</b>（年度、円）です。企業の売上は、決算期と通貨がまた違います。数字を比べるときは、期間・範囲・通貨を最初にそろえます。</p>
+  <p>もう 1 つ。<b>受注</b>は売上ではなく、<b>検収</b>も売上の計上時点とは限りません。それぞれが別の時点です（受注と売上の時間差は<a href="#ch30">第30章</a>で扱います）。</p></div>
+
+<div class="callout tip"><span class="ttl">現場でのつながり</span>
+  <p>営業・調達の実務では、顧客が「ファブレス」「ファウンドリ」「OSAT」のどれかで、使う装置と購買の流れが変わります。装置の輸送・据付の案件では、商社が入るかどうかで、連絡の窓口と書類の宛先が変わります（第21〜26章）。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c19-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（アクセス日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>業界団体の統計</td><th scope="row"><a href="https://www.semi.org/en/SEMI-Reports-Global-Semiconductor-Equipment-Billings-Reached-135-Billion-in-2025">Global Semiconductor Equipment Billings Reached $135 Billion in 2025</a></th><td>SEMI</td><td>2026 年 4 月 7 日</td><td>2025 年の世界の装置売上、地域別、前工程・後工程の区分、WWSEMS。</td></tr>
+      <tr><td>業界団体の予測</td><th scope="row"><a href="https://www.semi.org/en/semi-press-release/global-semiconductor-equipment-sales-forecast-to-reach-a-record-229-billion-dollars-in-2028-semi-reports">Global Semiconductor Equipment Sales Forecast to Reach a Record $229 Billion in 2028</a></th><td>SEMI</td><td>2026 年 7 月 14 日</td><td>2026 年の予測と、WFE・テスト・組立とパッケージの内訳。</td></tr>
+      <tr><td>業界団体の予測</td><th scope="row"><a href="https://www.seaj.or.jp/file/jan2026seajforecastforpress_j.pdf">半導体・FPD 製造装置 需要予測（2026 年 1 月発表）</a></th><td>SEAJ（日本半導体製造装置協会）</td><td>2026 年 1 月 15 日</td><td>日本製装置販売高の定義と、2025〜2027 年度の予測（予測が見直される例）。</td></tr>
+      <tr><td>業界団体の予測</td><th scope="row"><a href="https://www.seaj.or.jp/file/july2026seajforecastforpress_j.pdf">半導体・FPD 製造装置 需要予測（2026 年 7 月発表）</a></th><td>SEAJ</td><td>2026 年 7 月 2 日</td><td>2025 年度の実績と、2026〜2028 年度の予測。</td></tr>
+      <tr><td>企業の決算</td><th scope="row"><a href="https://www.sec.gov/Archives/edgar/data/937966/000162828026003701/pressreleasefinancialresul.htm">ASML Q4 2025 financial results（Form 6-K）</a></th><td>ASML</td><td>2026 年 1 月 28 日</td><td>2025 年の総売上、受注と受注残の定義。</td></tr>
+      <tr><td>企業の決算</td><th scope="row"><a href="https://www.sec.gov/Archives/edgar/data/0000006951/000162828026073360/exhibit991q42026earningsre.htm">Applied Materials 第 4 四半期・2026 会計年度の決算発表（Form 8-K 付属書）</a></th><td>Applied Materials</td><td>2026 年 11 月 12 日</td><td>2026 会計年度の売上、会社の説明。</td></tr>
+      <tr><td>企業の決算・年次報告</td><th scope="row"><a href="https://www.sec.gov/Archives/edgar/data/0000707549/000070754926000037/lrcx-20260628.htm">Lam Research Form 10-K（2026 会計年度）</a>、<a href="https://www.sec.gov/Archives/edgar/data/0000707549/000070754926000033/lrcx_exhibitx991xq4x2026.htm">決算発表（Form 8-K 付属書）</a></th><td>Lam Research</td><td>2026 年 7 月 29 日</td><td>2026 会計年度の売上、事業内容、収益認識の説明。</td></tr>
+      <tr><td>企業の決算</td><th scope="row"><a href="https://www.sec.gov/Archives/edgar/data/0000319201/000031920126000024/exhibit991earningsrelease7.htm">KLA Corporation Reports Fiscal 2026 Fourth Quarter and Full Year Results</a>（Form 8-K 付属書）</th><td>KLA</td><td>2026 年 7 月 28 日</td><td>2026 会計年度の売上、会社の説明。</td></tr>
+      <tr><td>企業の有価証券報告書・決算短信・ファクトブック</td><th scope="row"><a href="https://www.tel.co.jp/ir/library/fs/arfnn500000000ni-att/yuho63q4.pdf">東京エレクトロン 有価証券報告書（第63期）</a>、<a href="https://hdjp-corporateweb-files.screen.co.jp/6017/9072/7321/SCREEN_FB_2026.pdf">SCREEN ホールディングス ファクトブック 2026</a>、<a href="https://www.disco.co.jp/jp/ir/library/doc/fs/fs87.pdf">ディスコ 有価証券報告書（第87期）</a>、<a href="https://www.advantest.com/document/ja/investors/ir-library/result/J_FR_FY2025_FN.pdf">アドバンテスト 決算短信（2026 年 3 月期）</a></th><td>各社（各社の IR ページの原本）</td><td>2026 年 3 月期。2026 年 11 月に確認</td><td>事業内容、売上の区分。</td></tr>
+      <tr><td>企業の公開資料</td><th scope="row"><a href="https://www.tsmc.com/japanese/dedicatedFoundry">TSMC 専業ファウンドリ</a>、<a href="https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm">NVIDIA Form 10-K</a>、<a href="https://www.sec.gov/Archives/edgar/data/1047127/000104712726000014/amkr-20251231.htm">Amkor Form 10-K</a></th><td>TSMC、NVIDIA、Amkor</td><td>2026 年 11 月に確認／会計年度 2026 年 1 月期／2025 年 12 月期</td><td>ファウンドリ、ファブレス、OSAT の業態の説明。</td></tr>
+      <tr><td>一般知識</td><th scope="row">業態の定義、商流の考え方</th><td>—</td><td>—</td><td>IDM・ファウンドリ・ファブレス・OSAT の定義と、直販・商社経由の比較。数字は使っていません。</td></tr>
+    </tbody>
+  </table></div>
+</section>

@@ -1,0 +1,91 @@
+<!--
+num: 09
+part: 2
+title: リソグラフィ（2）塗布・現像とマスク
+track: 前工程
+time: 35
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li><b>フォトレジスト</b>（ポジ型・ネガ型、化学増幅型）の働きと、塗布 → ベーク → 露光 → 露光後ベーク → 現像の流れを説明できる。</li>
+    <li><b>コータ・デベロッパ</b>が露光装置とつながって動く理由と、待ち時間が品質に効く箇所を言える。</li>
+    <li><b>フォトマスク</b>の構造（基板・遮光膜・ペリクル、EUV は反射多層膜）と、<b>OPC</b> の考え方を説明できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch08">第08章</a>（露光装置、解像度の式）。</p>
+</section>
+
+<h3>フォトレジスト：光で性質が変わる膜</h3>
+<p><b>フォトレジスト</b>（photoresist）は、光に当たると、現像液への溶けやすさが変わる材料です。以降はレジストと呼びます。露光のあと、現像液で溶ける部分と残る部分が分かれ、回路の形をした膜になります。</p>
+<p>レジストには 2 種類あります。光が当たった部分が溶けるのが<b>ポジ型</b>、光が当たった部分が残るのが<b>ネガ型</b>です。次の図で、同じ露光をしたとき、現像後の形がどう逆になるかを確かめてください。</p>
+<div data-widget="xsec" data-src="c09-posneg"></div>
+
+<h3>化学増幅型レジスト：光で酸をつくり、熱で反応を進める</h3>
+<p>先端の露光では、レジストに当たる光が少なくなります。そこで使われるのが、<b>化学増幅型レジスト</b>（Chemically Amplified Resist, CAR）です。光が当たると、レジストの中で酸が生まれます。その酸が、あとの加熱で連鎖的に反応を進めるので、少ない光でも大きな変化が起きます（教科書的な説明）。</p>
+<p>この加熱が<b>露光後ベーク</b>（Post Exposure Bake, PEB）です。露光で生まれた酸を働かせ、現像液に溶ける部分と溶けない部分を、はっきり分けます。化学増幅型レジストは、露光から PEB までの待ち時間や、雰囲気の汚れの影響を受けやすいことが知られています（教科書的な説明）。そのため、工場では待ち時間を管理します。</p>
+<p>EUV 露光では、金属酸化物を使う新しいレジストも試されています。imec は、High-NA EUV で、金属酸化物レジストを使った細い線の結果を報告しています（出典：imec、2026 年 2 月）。</p>
+
+<h3>塗布とプリベーク：薄く、均一に</h3>
+<p>レジストは、<b>スピンコート</b>で塗ります。ウェーハを回転させ、中央に垂らしたレジストを、遠心力で薄く均一に広げます。塗る前に、ウェーハの表面を、レジストが密着しやすい状態に整えます。その処理にはヘキサメチルジシラザン（HMDS）などを使います（教科書的な説明）。</p>
+<p>塗ったあとに加熱して、溶剤を飛ばす手順が<b>プリベーク</b>（塗布後ベーク）です。そのあとウェーハを冷やし、温度をそろえてから露光装置へ渡します。温度のずれは、寸法や重ね合わせのずれにつながります。</p>
+
+<h3>コータ・デベロッパ：塗る、焼く、現像する装置</h3>
+<p><b>コータ・デベロッパ</b>（coater/developer）は、4 つの機能を 1 台にまとめた装置です。レジストを塗るコータ、現像するデベロッパ、加熱・冷却の部分、それらをつなぐ搬送ロボットです。トラックとも呼ばれます。露光装置のすぐ隣に連結し、ウェーハを装置の外に出さずに受け渡します。この連結を<b>インライン接続</b>と呼びます。</p>
+<p>コータ・デベロッパのメーカーには、東京エレクトロンや SCREEN セミコンダクターソリューションズ（いずれも日本）があります。どちらも製品を公開しています（出典：東京エレクトロン『CLEAN TRACK LITHIUS Pro Z』発表、2012 年 2 月、Patexia 掲載の転載。SCREEN セミコンダクターソリューションズ、SEMICON 2025 の発表資料、2025 年 11 月掲載）。</p>
+<p>次の図は、1 枚のウェーハが、コータ・デベロッパと露光装置の間を行き来しながら、現像まで進む様子です。待ち時間が品質に効く手に注目してください。</p>
+<div data-widget="seq" data-src="c09-inline"></div>
+<div class="callout tip"><span class="ttl">演習：待ち時間が効く箇所を選ぶ</span>
+  <p>上の図を最後まで追い、次の問いを考えてください。「露光の前後で、待ち時間が長くなると困る箇所はどこか。」考えたあとで、図の「つまずきやすい点」の欄と、確認問題の 4 問目で答え合わせをします。</p></div>
+
+<h3>現像：回路の形が現れる</h3>
+<p>PEB の後、ウェーハに現像液をかけて、溶ける部分を洗い流します。そのあと純水ですすぎ（リンス）、乾かします。ここで、レジストに回路の形の開口ができます。現像のあとに、寸法と重ね合わせを測ります（<a href="#ch13">第13章</a>）。外れていれば、レジストを剥がして塗り直します。</p>
+
+<h3>フォトマスクとマスクブランクス</h3>
+<p><b>フォトマスク</b>（photomask）は、回路の形を持つ原版です。レチクル（reticle）とも呼びます。ArF などの透過型のフォトマスクは、透明な石英ガラスの基板の上に、光を通さない膜でパターンを描いたものです。光を通す部分と通さない部分で、形をつくります。</p>
+<p>パターンを描く前の、基板と膜を重ねた板を<b>マスクブランクス</b>（mask blank）と呼びます。描画前のブランクスの品質が、フォトマスクの品質の土台になります。HOYA（日本）は、マスクブランクスを開発・製造し、半導体メーカーやファウンドリ、マスクメーカーへ販売していると説明しています（出典：HOYA の IR 資料（2023 年版）の事業説明）。AGC（日本）は、EUV 用のマスクブランクスを 2017 年から製造しており、ガラス材料から成膜までの全工程を扱うと説明しています（出典：AGC、2026 年 11 月に確認）。</p>
+<p>EUV 用のフォトマスクは、構造が違います。EUV の光は多くの物質に吸収されるので、光を通すのではなく、<b>反射</b>させます。低熱膨張のガラス基板の上に、反射の多層膜を重ね、その上に光を吸収する膜でパターンを描きます。多層膜は、モリブデンとシリコンの薄い膜を交互に重ねたものです（出典：レーザーテック『ABICS E320』発表、2024 年 12 月）。次の図で、ArF 用と EUV 用の構造を切り替えて見てください。</p>
+<div data-widget="arch" data-src="c09-mask"></div>
+
+<h3>マスクの描画・検査・ペリクル</h3>
+<p>マスクブランクスのレジストに、回路の形を描くのは<b>電子ビーム描画装置</b>です。描いたあと、現像とエッチングでパターンの膜を形づくり、欠陥の検査と修正を行い、洗浄して、最後に<b>ペリクル</b>（pellicle）を貼ります。</p>
+<p>ペリクルは、フォトマスクのパターン面を、わずかな距離をあけて覆う、薄い透明な膜です。膜を枠で支えます。ごみが膜に付いても、ごみはパターン面から離れているので、焦点が合わず、ウェーハに写りにくくなります。つまり、ペリクルはフォトマスクの<b>防塵カバー</b>です。</p>
+<p>EUV 用は、膜が EUV を通す必要があるので、非常に薄くしなければならず、熱にも耐える必要があります。公開情報から、実用の状況をまとめます。三井化学（日本）は、2021 年 5 月に、EUV ペリクルの商業生産の開始を発表しました。ASML のライセンスを受けたものです（出典：三井化学のニュースリリース、2021 年 5 月 26 日。MarketScreener 掲載の転載）。</p>
+<p>高出力の EUV 向けには、カーボンナノチューブ（CNT）を使うペリクルを開発しています。2024 年 5 月に、年産 5,000 枚の設備を岩国大竹工場に設ける決定を発表し、建設の完了を 2025 年 12 月（予定）としました。そのペリクルは、EUV の透過率 92% 以上、出力 1 kW を超える露光への耐久性をうたっています（出典：三井化学のニュースリリース、2024 年 5 月 28 日）。2026 年 4 月には、高出力 EUV 向けのペリクル開発が NEDO の助成事業に選ばれたと発表しました。目標は、透過率 95% 以上、出力 1,000 W の EUV で、10,000 枚以上のウェーハに相当する時間の耐久です（出典：三井化学のニュースリリース、2026 年 4 月 23 日）。透過率と耐久性は、一方を上げると他方が下がる関係にあり、両立が課題とされています（出典：EE Times Japan、2025 年 12 月 17 日）。</p>
+<p>マスクブランクスの内部の欠陥を検査する装置も専門化しています。レーザーテック（日本）は、2024 年 12 月に、露光と同じ波長の EUV の光（波長は<a href="#ch08">第08章</a>）を使って、多層膜の内部の欠陥（位相欠陥）を検出する装置を発表しました（出典：レーザーテック『ABICS E320』発表、2024 年 12 月 2 日）。</p>
+
+<h3>OPC：マスクの形を、わざと変える</h3>
+<p>光は回折します。そのため、フォトマスクの形をそのまま写しても、ウェーハ上では角が丸くなったり、線の端が縮んだりします。この<b>光近接効果</b>を、あらかじめ見込んで、マスクの形を変えておく補正が <b>OPC</b>（Optical Proximity Correction）です。</p>
+<p>OPC は、ソフトウェアで行う計算リソグラフィの代表です。ウェーハ上で狙いの形になるよう、マスクの形を変えます。したがって、OPC を施したマスクの形は、設計した回路の形とは一致しません。解像度の式でいうと、k1 を小さくする技術です（<a href="#ch08">第08章</a>）。</p>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>ポジ型とネガ型は、マスクの明暗の話ではありません。</b>同じ露光をしても、残る部分が逆になるのは、<b>レジストの性質</b>が逆だからです。</p>
+  <p><b>PEB は「ただの焼き固め」ではありません。</b>化学増幅型レジストでは、酸を働かせて反応を進める、大事な手です。露光から PEB までの<b>待ち時間と雰囲気</b>が、寸法に響きます。</p>
+  <p><b>ペリクルは、マスクの代わりではありません。</b>マスクのパターン面を、ごみから守る膜です。</p>
+  <p><b>「マスク」と「フォトマスク」を使い分けます。</b>この講座では、単独の「マスク」とは書かず、フォトマスク（レチクル）、ハードマスク、注入マスクのいずれかで書きます。</p></div>
+
+<div class="callout note"><span class="ttl">現場でのつながり</span>
+  <p>コータ・デベロッパは露光装置と連結するので、据付ではまず両者の位置関係と、ウェーハの受け渡しの調整が重なります。EUV 用のフォトマスクとペリクルは、取扱いの管理が特に厳しい消耗品・資材です。<a href="#ch16">第16章</a>、<a href="#ch24">第24章</a>につながります。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c09-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（アクセス日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://jp.mitsuichemicals.com/en/release/2024/2024_0528_1/index.htm">Mitsui Chemicals to set up mass production facilities for CNT pellicles</a></th><td>三井化学</td><td>2024 年 5 月 28 日</td><td>CNT ペリクルの生産設備の決定、年産枚数、透過率・出力の記述。</td></tr>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://jp.mitsuichemicals.com/en/release/2026/2026_0423_2/index.htm">NEDO 助成事業の採択に関するリリース</a></th><td>三井化学</td><td>2026 年 4 月 23 日</td><td>高出力 EUV 向けペリクル開発の目標値。</td></tr>
+      <tr><td>企業の一次資料（転載）</td><th scope="row"><a href="https://www.marketscreener.com/quote/stock/MITSUI-CHEMICALS-INC-6491309/news/Mitsui-Chemicals-Commences-Commercial-Production-of-EUV-Pellicles-33351827/">Mitsui Chemicals Commences Commercial Production of EUV Pellicles</a></th><td>三井化学（MarketScreener 掲載の転載）</td><td>2021 年 5 月 26 日</td><td>EUV ペリクルの商業生産開始の発表。</td></tr>
+      <tr><td>解説記事</td><th scope="row"><a href="https://eetimes.itmedia.co.jp/ee/articles/2512/17/news040.html">EUV 露光のペリクルに関する記事（ITF Japan 2025 の講演）</a></th><td>EE Times Japan</td><td>2025 年 12 月 17 日</td><td>CNT ペリクルの透過率と耐久性の関係。</td></tr>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://www.lasertec.co.jp/en/news/2024/20241202_3887.html">Lasertec releases ABICS Series E320 EUV Mask Blanks Inspection and Review System</a></th><td>レーザーテック</td><td>2024 年 12 月 2 日</td><td>EUV ブランクスの多層膜と、位相欠陥の検査。</td></tr>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://www.hoya.com/ir/2023/en/review/it.html">Information Technology（IR 資料 2023 年版）</a></th><td>HOYA</td><td>2023 年版</td><td>マスクブランクスの事業内容。</td></tr>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://agcem.com/products/euv-mask-blanks/">Extreme Ultraviolet Lithography (EUV) Mask Blanks</a></th><td>AGC</td><td>2026 年 11 月に確認（日付の記載なし）</td><td>EUV 用マスクブランクスの製造開始年と範囲。</td></tr>
+      <tr><td>企業の一次資料（転載）</td><th scope="row"><a href="https://patexia.com/feed/tokyo-electron-to-launch-clean-track-lithius-pro-z-to-support-advanced-scaling-2713">Tokyo Electron to Launch CLEAN TRACK LITHIUS Pro Z to Support Advanced Scaling</a></th><td>東京エレクトロン（転載）</td><td>2012 年 2 月 14 日</td><td>300 mm 用コータ・デベロッパの製品。</td></tr>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://www.semi.org/sites/semi.org/files/2025-11/6.Goeke_Sustainable%20Single%20Wafer%20Processing_L1%20Semicon_2025_Final%20%28002%29.pdf">Sustainable Single Wafer Processing（SEMICON 2025 の発表資料）</a></th><td>SCREEN セミコンダクターソリューションズ</td><td>2025 年 11 月掲載</td><td>コーティング・デベロップの装置を製品群に載せていること。</td></tr>
+      <tr><td>研究機関</td><th scope="row"><a href="https://imec-int.com/en/articles/case-high-na-euv-unlocking-next-era-chip-manufacturing">High NA EUV lithography: launching the industry into the angstrom era</a></th><td>imec</td><td>2026 年 2 月 26 日</td><td>金属酸化物レジストの使用例。</td></tr>
+      <tr><td>教科書的な一般知識</td><th scope="row">リソグラフィの教科書（レジストの化学増幅、PEB、OPC、ペリクルの働き）</th><td>—</td><td>—</td><td>原理の説明。数値は使っていません。</td></tr>
+    </tbody>
+  </table></div>
+</section>

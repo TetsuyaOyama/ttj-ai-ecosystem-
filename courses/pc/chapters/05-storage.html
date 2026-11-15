@@ -1,0 +1,94 @@
+<!--
+num: 05
+part: 1
+title: ストレージ：SSD と HDD、M.2・NVMe・SATA
+track: 部品
+time: 30
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>SSD（Solid State Drive）と HDD（Hard Disk Drive）の仕組みの違いと、電源を切っても残る記憶というストレージの役割を説明できる。</li>
+    <li>SSD の接続（SATA〔Serial ATA〕と NVMe〔Non-Volatile Memory Express〕）と、M.2 という形を区別して、仕様表を読める。</li>
+    <li>速さ・寿命（書き込める総量の目安）・容量の表示が、条件や定義つきの値であることを理解し、読み違えを避けられる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch03">第03章</a>（マザーボードと規格）、<a href="#ch04">第04章</a>（メモリ）。</p>
+</section>
+
+<h3>ストレージは、電源を切っても残る記憶</h3>
+<p><b>ストレージ</b>（storage）は、データを長く置く記憶です。電源を切っても、中身は残ります。メインメモリ（<a href="#ch04">第04章</a>）は、電源を切ると消えます。OS（Operating System）やソフト、写真、文書は、ストレージに置きます。</p>
+<p>PC のストレージは、おもに SSD と HDD の 2 種類です。サーバー向けの形や、NVMe のキューの仕組みは、<a href="../server/#ch09">計算サーバー講義 第09章</a>で扱います。この章では、PC で使う形と接続だけを扱います。</p>
+
+<h3>SSD と HDD：仕組みの違い</h3>
+<p><b>SSD</b>は、<b>フラッシュメモリ</b>（flash memory）にデータを書く記憶です。回転する部品がありません。<b>HDD</b>は、回転する円盤に、磁気でデータを書く記憶です。</p>
+<div data-widget="compare" data-src="c05-ssd-hdd"></div>
+<p>どちらが良いかは、用途で決まります。ここでは優劣を示しません。大容量の保管と、速い読み書きを、分けて考える人もいます（一般知識）。</p>
+
+<h3>SSD の接続：SATA と NVMe</h3>
+<p><b>SATA</b>は、ドライブをつなぐ接続の規格です。SATA-IO（SATA International Organization）が発行します。SATA-IO は、名前を「SATA 6Gb/s」「SATA Revision 3.x」と書くよう案内していて、「SATA III」「SATA 3.0」は使わないよう求めています。ホームページが現行として載せる版は、SATA Revision 3.5 です。</p>
+<p><b>NVMe</b>は、SSD を PCIe（PCI Express）経由で効率よく使うための、命令とインターフェースの規格です。NVM Express, Inc. が発行します。公式ページは、NVM Express Base Specification の版 2.4 を、2026 年 7 月 31 日に承認し、8 月 4 日に公開した、と記しています。SSD ごとに、対応する版は違います。</p>
+<div data-widget="table" data-src="c05-iface"></div>
+<p>NVMe で読み書きするとき、要求は、アプリケーションから SSD の中のフラッシュメモリまで、いくつかの層を順に通ります。図で、NVMe がどの層にあるかを見てください。</p>
+<div data-widget="stack" data-src="c05-stack"></div>
+
+<h3>形：2.5 インチと M.2</h3>
+<p>SSD の形には、HDD と同じ大きさの 2.5 インチ型と、小型の基板の <b>M.2</b>（エムドットツー）があります。M.2 は、基板の M.2 スロットに直接差す形です。</p>
+<p>M.2 の表記には、幅と長さ、キー、接続、方式が並びます。次の図で、例の表記を分解します。</p>
+<div data-widget="ident" data-src="c05-m2"></div>
+<p>大切なのは、<b>M.2 は形の名前で、接続の名前ではない</b>ことです。同じ M.2 の形でも、PCIe の NVMe の製品と、SATA 方式の製品があります。スロットが対応する接続と長さは、マザーボードの仕様表で確かめます（<a href="#ch03">第03章</a>）。</p>
+
+<h3>性能の言葉：速さの数字の読み方</h3>
+<p>SSD の速さは、<b>順次</b>の読み書き（大きなデータを続けて）と、<b>ランダム</b>の読み書き（小さなデータをあちこちへ）で分けて示されます。ランダムの読み書きは、1 秒にこなせる回数（IOPS、Input/Output Operations Per Second）で表すことが多くあります。</p>
+<p>メーカーの公開値は、条件つきです。Samsung Electronics（韓国）の 990 PRO のデータシート（版 2.0、2023 年 7 月）は、順次の読み出しと書き込みの最大の値を載せたうえで、測定に IOmeter（測定のソフト）の版 1.1.0 を使ったこと、実際の性能は変わりうることを書いています。数字だけを見て、製品の間で比べません。測定の条件と、自分の使い方に近いかを確かめます。</p>
+<p>もう 1 つの言葉が、<b>DRAM キャッシュ</b>です。SSD の中の DRAM（Dynamic Random Access Memory）に、管理の情報などを置く仕組みです。990 PRO のデータシートは、LPDDR4（低電力の DRAM の規格）の DRAM を載せると書き、990 EVO Plus のデータシート（版 1.0、2024 年 10 月）は、キャッシュの欄に HMB（Host Memory Buffer）と書いています。HMB は、PC 側のメモリの一部を使う仕組みです。製品によって、構成が違います。</p>
+
+<h3>寿命の指標：TBW</h3>
+<p><b>TBW</b>（Terabytes Written）は、書き込める総量の目安を、テラバイトで表した指標です。Samsung の 990 PRO のデータシートは、容量の違う型番で 600・1,200・2,400 TB と書き、保証は 5 年と書いています。保証は、年数と TBW の、先に達したほうで切れます。</p>
+<p>JEDEC（半導体の標準化団体）は、2010 年の発表で、JESD218 が SSD の耐久性の指標として TBW を定め、クライアント向けと企業向けの区分を持つ、と書いています。指標の定義と、保証との関係は、メーカーごとに違います。購入前に、データシートと保証規定を読みます。</p>
+
+<h3>容量の表示の違い</h3>
+<p>製品の容量は、10 進で表示されます。1 GB は 1,000,000,000 バイトです。Samsung のデータシートは、この定義（IDEMA の定義）を書き、使える容量は違うことがある、と注記しています。2 進の単位（GiB）では、1 GiB は 1,073,741,824 バイトです。OS の表示の単位は、OS ごとに確かめます。この講座では、OS の表示の単位を断定しません。</p>
+
+<h3>温度と、ヒートシンク</h3>
+<p>M.2 の SSD も、読み書きで熱を持ちます。990 PRO のデータシートは、動作温度を 0〜70 ℃ と書いています。高い温度が続くと、速度が下がる製品があります（一般知識）。ヒートシンクの要否と取り付けは、SSD と基板のマニュアルに従います。</p>
+
+<h3>演習：3 つのスロットと 3 つの SSD を組み合わせる</h3>
+<p>次は、架空のマザーボード Z の M.2 スロット 3 つと、3 つの SSD の仕様です。それぞれの SSD を、どのスロットに差せばよいでしょうか。理由も答えてください。</p>
+<div data-widget="table" data-src="c05-practice"></div>
+<details><summary>答えを見る</summary>
+  <p>答えは、SSD ウ は M.2_3、SSD ア は M.2_1、SSD イ は M.2_2 です。まず、長さ 110 mm の SSD ウ を受けられるのは M.2_3 だけです。次に、PCIe 方式の SSD ア は、PCIe に対応する M.2_1 に差せます。最後に、SATA 方式の SSD イ は、SATA に対応する M.2_2 に差せます。M.2_1 は SATA 方式に非対応なので、SSD イ は差せません。</p>
+  <p>考え方は、条件の厳しいものから決めることです。（すべて架空の仕様です。実際の基板では、仕様表と脚注で確かめます。）</p>
+</details>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>M.2 の SSD でも、SATA 方式の製品があります。</b>形だけで決めず、接続と、スロットの対応を確かめます。</p>
+  <p><b>製品の速さの数字は、条件つきの最大の値です。</b>測定の条件を読み、実際の使い方で同じ速さが出るとは限りません。</p>
+  <p><b>TBW は、速さの指標ではありません。</b>書き込める総量の目安で、定義と保証との関係は、メーカーが決めます。</p>
+  <p><b>容量が少なく見えるのは、故障とは限りません。</b>製品の表示は 10 進で、使える容量や OS の単位と違うことがあります。</p>
+  <p><b>ストレージの初期化や交換で、データが消えることがあります。</b>作業の前に、必要なデータの写しを取ります（<a href="#ch24">第24章</a>）。</p></div>
+
+<div class="callout tip"><span class="ttl">自分の 1 台でのつながり</span>
+  <p>選ぶとき：基板の M.2 スロットの対応（長さ・接続）を先に確かめ、SSD の仕様表と照らします。組むとき：M.2 のスロットの位置とネジ、ヒートシンクの付き方を、基板のマニュアルの図で見ます。直すとき：ドライブが認識されない症状では、接続の種類と、スロットの共有の脚注（<a href="#ch03">第03章</a>）を疑います。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c05-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 14 日）。規格本文を読んでいない資料は、使い方の欄に書きました</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>規格・仕様</td><th scope="row"><a href="https://nvmexpress.org/specification/nvm-express-base-specification/">NVM Express Base Specification</a></th><td>NVM Express, Inc.</td><td>版 2.4（2026 年 7 月 31 日承認、8 月 4 日公開）</td><td>NVMe の版と公開日。規格本文は読んでいない。</td></tr>
+      <tr><td>規格・仕様</td><th scope="row"><a href="https://sata-io.org/developers/sata-naming-guidelines">SATA Naming Guidelines</a></th><td>SATA-IO</td><td>確認 2026 年 11 月</td><td>SATA の名前の書き方。SATA Revision 3.5 は同団体のホームページの記述。</td></tr>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://us.design-reuse.com/news/33500/pci-sig-pci-express-m-2-specification-revision-1-0.html">PCI-SIG Releases PCI Express M.2 Specification Revision 1.0</a></th><td>PCI-SIG（再掲：design-reuse）</td><td>2013 年 12 月 16 日（再掲）</td><td>M.2 が PCI-SIG の規格であること。版は書かない。第三者サイトの再掲で、PCI-SIG 自身のページは確認できなかった。</td></tr>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://www.jedec.org/news/pressreleases/jedec-announces-publication-solid-state-drive-standards">JEDEC Announces Publication of Solid State Drive Standards</a></th><td>JEDEC</td><td>2010 年 9 月 23 日</td><td>JESD218 が TBW を耐久性の指標とする記述。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://download.semiconductor.samsung.com/resources/data-sheet/samsung_nvme_ssd_990_pro_datasheet_rev.2.0.pdf">Samsung NVMe SSD 990 PRO Data Sheet</a></th><td>Samsung Electronics（韓国）</td><td>Rev. 2.0、2023 年 7 月</td><td>TBW、保証、速度の測定条件、動作温度、容量の定義。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://download.semiconductor.samsung.com/resources/data-sheet/samsung_nvme_ssd_990_evo_plus_datasheet_rev.1.0.pdf">Samsung NVMe SSD 990 EVO Plus Data Sheet</a></th><td>Samsung Electronics</td><td>Rev. 1.0、2024 年 10 月</td><td>キャッシュの欄の HMB。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://semiconductor.samsung.com/consumer-storage/support/faqs/internalssd-installation/">Internal SSD Installation FAQ</a></th><td>Samsung Electronics</td><td>確認 2026 年 11 月</td><td>M.2 の幅・長さ、キーとレーンの数。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.intel.com/content/www/us/en/gaming/resources/how-to-choose-a-motherboard.html">Gaming Motherboard Buying Guide</a></th><td>Intel（米国）</td><td>更新 2025 年 7 月</td><td>M.2 の長さの範囲。</td></tr>
+      <tr><td>教科書・一般知識・他講座</td><th scope="row"><a href="../server/#ch09">計算サーバー講義 第09章</a></th><td>この講座の姉妹講座</td><td>—</td><td>NVMe のキューとサーバー向けの形。</td></tr>
+      <tr><td>架空（見本のため）</td><th scope="row">架空のマザーボード Z と SSD</th><td>—</td><td>—</td><td>演習の資料。すべて架空。</td></tr>
+    </tbody>
+  </table></div>
+</section>

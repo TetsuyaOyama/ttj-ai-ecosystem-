@@ -1,0 +1,126 @@
+<!--
+num: 18
+part: 3
+title: 工場とクリーンルームと用役
+track: 装置
+time: 40
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li><b>ファブ</b>（fab、半導体工場）が、クリーンルーム・サブファブ・用役棟などでできていることを、断面図で説明できる。</li>
+    <li><b>ISO クラス</b>の読み方（クラス番号・対象粒径・状態）と、クリーンルームの気流、<b>AMHS</b>（自動搬送）の役割を言える。</li>
+    <li>装置が使う<b>用役</b>（ユーティリティ）と、排気・排液の<b>除害</b>、振動などへの対策を整理し、装置 1 台に必要な用役を仕様書から探せる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch16">第16章</a>（装置の形）、<a href="#ch17">第17章</a>（装置の部品）、<a href="#ch05">第05章</a>（FOUP）。</p>
+</section>
+
+<h3>ファブの全体構成</h3>
+<p>第16章・第17章で、装置とその中の部品を見ました。装置は、単独では動きません。電力、水、ガス、空気を受け取り、排気と排液を出します。これらを装置まで届け、引き取る建物と設備が、ファブです。装置を動かすための電力・水・ガス・空気・排気を、まとめて<b>用役</b>（ユーティリティ、utility）と呼びます。</p>
+<p>ファブは、大きく次の部分に分けて考えます。</p>
+<ul>
+  <li><b>クリーンルーム</b>（cleanroom）：製造装置が並ぶ、清浄に保たれた部屋です。</li>
+  <li><b>サブファブ</b>（subfab）：クリーンルームの下や横にある階です。Kuehne+Nagel（スイス）の解説は、サブファブが、ユーティリティ・真空・ガス・排気などの設備を置き、製造装置へ入力を供給し、製造で出る副生成物を扱うと述べています。例として、真空ポンプと配管、ガスや薬液の供給、超純水の設備、除害装置、チラー、電力の分配などを挙げています。</li>
+  <li><b>用役棟</b>：電力、超純水、窒素などを大きな単位でつくる建物です（一般的な例。呼び名と置き場は、工場ごとに違います）。</li>
+  <li><b>屋根上設備</b>：外気の処理や、処理後の排気を出す設備です（一般的な例）。</li>
+</ul>
+<div data-widget="arch" data-src="c18-fab"></div>
+<p class="note">図の配置は模式です。タブで「装置 1 台の用役」に切り替えると、装置が受け取るものと出すものが見られます。</p>
+
+<h3>清浄度の表し方：ISO クラス</h3>
+<p>クリーンルームの清浄度は、空気中の粒子の数で表します。国際規格 ISO 14644-1:2015 は、空気中の粒子の濃度で清浄度を分類する規格です。0.1〜5 μm の粒子が対象で、光散乱式の粒子計数器で測ります（ISO の規格ページ。第 2 版、2015 年 12 月発行。2021 年に見直して、現行と確認されています）。</p>
+<p>この規格では、クラスを<b>ISO クラス 1〜9</b>で表します。<b>番号が小さいほど、許容される粒子の数が少なく、空気がきれい</b>です。規格は、クラスと粒径ごとの上限を表（表 1）で示しています。表の値は、上限の濃度 Cn（個/m³）を、クラス番号 N と粒径 D（μm）から Cn = 10^N × (0.1/D)^2.08 で求め、有効数字 3 桁に丸めた値と一致します（式の形は cky-4pt の解説による。本講座で表の値と照合）。たとえば、ISO クラス 5 の 0.5 μm の粒子は、1 m³ あたり 3,520 個までです。</p>
+<p>クラスは、<b>番号だけでなく、粒径と、状態をそろえて</b>言います。規格は、状態（占有状態）を 3 つに分けています。竣工時（as-built）は、部屋が完成し、用役がつながって動いているが、装置・什器・材料・人がない状態です。非稼働時（at-rest）は、装置が据え付けられ、取り決めた方法で動いているが、人はいない状態です。運転時（operational）は、装置が動き、決めた人数の人が作業している状態です（ISO 14644-1:2015 の 3.3。規格の販売サイトが公開する見本ページで確認）。下の図で、表記を分けて読んでみましょう。</p>
+<div data-widget="ident" data-src="c18-iso"></div>
+<p>クラスごとの上限の値は、次の表のとおりです。行を押すと、補足が出ます。</p>
+<div data-widget="table" data-src="c18-isotab"></div>
+<p class="note">表の値は、規格の販売サイトが公開する ISO 14644-1:2015 の見本ページの表 1 と、転載された表（cleanroom.net）で確認したものです。規格の全文は有料のため、本講座では参照していません。実際の仕様は、必ず規格の本文と、契約書で確認してください。</p>
+
+<h3>気流：天井から床へ</h3>
+<p>粒子は、人、装置、部屋の材料から出ます。ASHRAE Journal（2021 年）は、粒子が部屋の中で、人・プロセス・装置・部屋の材料から出るほか、隣の部屋から、ドアの開け閉めや隙間を通って入ると述べています。</p>
+<p>清浄度の高いクラス（ISO クラス 1〜5）では、天井から清浄な空気を一方向に吹き下ろし、床側から戻す方式が一般的だと、同じ記事が説明しています。空気は HEPA フィルタ（粒子の捕集効率 99.97% 以上）、または ULPA フィルタ（99.997% 以上）を通します。換気の回数は、記事では毎時 250〜600 回とされています（ISO クラス 1〜5 の一般論で、半導体工場に限った値ではありません）。第16章で出た FFU（ファンフィルタユニット）は、送風機とフィルタを一体にした部品で、こうした空気をつくる部品の例です。</p>
+
+<h3>AMHS：FOUP を自動で運ぶ</h3>
+<p>FOUP（第05章）は、装置から装置へ運ばれます。この運搬を自動で行う仕組みが、<b>AMHS</b>（Automated Material Handling System）です。</p>
+<ul>
+  <li><b>OHT</b>（Overhead Hoist Transport）：天井の軌道を走る搬送車です。村田機械（日本。ブランド名 Muratec）の米国法人の解説は、OHT が FOUP などのキャリアを、装置のロードポートやストッカー、床面積を使わない保管場所（OHB）へ直接運ぶと述べています。電力は、非接触の誘導で給電し、汚れを出さない作りです。</li>
+  <li><b>ストッカー</b>（stocker）：FOUP を、棚に一時的に保管する設備です。村田機械は、軌道の脇に置く保管棚で、従来のストッカーを減らせる構成も載せています。</li>
+</ul>
+<p>床ではなく天井を使うのは、床の上の作業と、装置の配置を邪魔しないためと、粒子を出しにくいためです（村田機械の解説は、高い位置の軌道が粒子の発生を抑えると述べています）。</p>
+
+<h3>用役：装置へ届くもの、出ていくもの</h3>
+<p>装置 1 台は、次の用役を受け取ります。ここで述べる使い道は、本講座の一般的な整理です。</p>
+<ul>
+  <li><b>電力</b>：装置の電源と、RF 電源（第17章）が使います。受電の位置と容量が、仕様書の項目になります。</li>
+  <li><b>超純水</b>（Ultrapure Water、UPW）：不純物を極力除いた水です。MKS の解説は、洗浄、湿式のエッチング、溶剤の処理、CMP に使うと述べています。つくり方は、逆浸透膜とイオン交換樹脂が中心で、フィルタ、限外ろ過、紫外線、脱気を組み合わせます（同解説）。純度の指針として、MKS の解説は ITRS（2015 年版など）の値を引いて、25 °C で抵抗率が 18.0 MΩ·cm より大きいこと、TOC（全有機炭素）が 1.0 ppb 未満であることを挙げています。値は古いロードマップの指針で、現在の工場の仕様とは限りません。</li>
+  <li><b>冷却水</b>：装置の熱を運びます。チラー（第17章）などへつながります。</li>
+  <li><b>CDA と窒素</b>：CDA（Clean Dry Air）は、清浄で乾いた圧縮空気です。弁の駆動などに使います。窒素は、パージ（残ったガスを押し出すこと）などに使います。</li>
+  <li><b>特殊材料ガス</b>（specialty gas）：処理に使うガスです。種類が多く、ガスボックスを通って処理室へ入ります（第17章）。MKS の解説は、ガスは供給源で高純度であり、配管の中でも保つ必要があり、工程によっては使う場所で精製すると述べています。</li>
+  <li><b>薬液</b>：洗浄などに使います（第13章、第17章）。</li>
+</ul>
+<p>出ていくものは、<b>排気</b>と<b>排液</b>です。次の節で見ます。</p>
+
+<h3>排気・排液と除害</h3>
+<p>処理室の排気は、ポンプ（第17章）を通って、除害装置へ送られます。MKS の解説は、排気に腐食性や毒性のガスが含まれることが多く、外へ出す前に、化学的に洗い流す処理が要ると述べています。また、副生成物がたまらないよう、配管を温める例も挙げています。</p>
+<p><b>除害装置</b>（abatement system）は、排気に含まれるガスを処理して、無害にしてから出す設備です。荏原製作所の解説は、温暖化ガス（PFC など）の分解、有害ガスの無害化、可燃性ガスの安全な処理、臭気のあるガスの脱臭を挙げ、処理の方式に、燃焼式、湿式、乾式、触媒式があると述べています。発生源の近くに置く方式（使用点式、point-of-use）なら、長い配管で大きな焼却炉へ送る必要がありません。</p>
+<p>排液は、薬液の種類ごとに分けて集め、排水の処理へ送ります。混ぜてはいけない薬液があるため、種類を分ける配管と、分け方の取り決めが要ります。個別の取扱いは、顧客の安全の規則と、SEMI S2（半導体製造装置の環境・安全・衛生のガイドライン。SEMI のストアの説明では、性能ベースの EHS の考え方を示す。版 S2-0724E）に従います。この講座では、仕組みと注意点だけを扱います。</p>
+
+<h3>振動・温湿度・静電気・地震</h3>
+<p>装置を安定して動かすには、空気の清浄さのほかにも、環境の管理が要ります。</p>
+<ul>
+  <li><b>振動</b>：Tata Consulting Engineers（インド）のブログ（2026 年 7 月）は、人が感じない振動でも、装置の精度、重ね合わせ、寸法の管理に影響しうると述べています。対策は、敷地と配置、床の板（質量と剛性の高いスラブ）、建物（ポンプやチラーなどの回転機器を、防振して分ける）、装置（空気ばねなどの防振台）の 4 段で考えます。振動の許容の曲線（VC 曲線）は、床や建物の設計目標で、装置の性能の保証ではないと、同ブログは述べています。</li>
+  <li><b>温湿度</b>：装置の精度と、材料の状態に影響します。公開の一次資料で、一般化できる数値を確認できなかったので、数値は載せていません。</li>
+  <li><b>静電気</b>：ウェーハに粒子が付いたり、素子が壊れたりする原因になります。第16章で見た EFEM のイオナイザは、静電気を除く装置の例です。</li>
+  <li><b>地震</b>：揺れで、装置が動いたり、倒れたりしないよう、床に固定します（耐震固定、<a href="#ch24">第24章</a>）。数値は、公開の一次資料で確認できなかったので、載せていません。</li>
+</ul>
+
+<h3>建設から装置搬入（ツールイン）まで</h3>
+<p>ファブは、建物ができてから、装置が入るまでに、段階があります。ABM（米国）の解説（2026 年 8 月）は、3 段階に分けています。</p>
+<ol>
+  <li><b>建屋の建設</b>：敷地の準備、建物の骨組み。配置、搬入口、汚染の管理の考え方が、ここで決まります。</li>
+  <li><b>設備の取付け</b>：サブファブに、ガスや薬液、電力、超純水、除害の設備が入ります。同解説は、ここを「建設全体で最も、作業が密で、互いに依存する」段階と呼び、誤りが、立上げの試験や認証まで気づかれないことが多いと述べています。</li>
+  <li><b>装置の搬入と立上げ</b>：装置が届き、据え付け、試運転し、認証します。クリーンルームの認証、風量の調整、電気の試験も、この順に進みます。</li>
+</ol>
+<p>JE Dunn Construction（米国）の解説（2022 年 3 月）は、装置を入れられる状態（Ready for Equipment）になったあと、サブファブと床下に前もって設備を置き（prefac）、装置を最終の位置に置いて接続（hook-up、<a href="#ch24">第24章</a>）し、接続点ごとに、電力と一部のガス、次に薬液と一部のガス、最後に可燃性・毒性のガスと薬液の系統を、段階的に承認する流れを書いています。接続点（POC）が、装置を入れる前に、ファブの品質基準に合っていることが、前提です。</p>
+<p>装置メーカーから見ると、ここが、装置の据付と立上げ（<a href="#ch25">第25章</a>）の入口です。</p>
+
+<h3>演習：仕様書の項目から用役を探す</h3>
+<p>装置の仕様書には、用役の項目が並びます。項目名と値から、どの用役かを選び、最初に確認することを選びます。</p>
+<div data-widget="drill" data-src="c18-drill"></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>クラスの番号が小さいほど、「きれい」です。</b>数が増えるほど良い、とは逆です。</p>
+  <p><b>クラスは、番号だけでは比べられません。</b>粒径と、状態（竣工時・非稼働時・運転時）をそろえます。</p>
+  <p><b>サブファブは、倉庫ではありません。</b>装置が動くために必要な設備が、並ぶ階です。</p>
+  <p><b>用役は、装置を置いてから探すものではありません。</b>仕様書の段階で、接続点と容量を、顧客の設備部門と合わせます。</p></div>
+
+<div class="callout note"><span class="ttl">現場でのつながり</span>
+  <p>据付では、搬入経路、床の強度、用役の接続点、排気と排液の取り合いが、最初に確認する項目です（<a href="#ch24">第24章</a>）。立上げ（<a href="#ch25">第25章</a>）では、用役がそろったあとに、ガスや薬液の流しと、リークの確認、動作確認が進みます。可燃性や毒性のガスの接続は、顧客の安全の規則と、作業許可のもとで、段階を踏んで行います。この章の用役の言葉は、顧客の設備部門との打合せで、そのまま使われます。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c18-quiz"></div></section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（アクセス日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>規格情報</td><th scope="row"><a href="https://www.iso.org/standard/53394.html">ISO 14644-1:2015</a></th><td>ISO</td><td>第 2 版、2015 年 12 月。2021 年に見直して現行と確認</td><td>分類の対象（0.1〜5 μm、光散乱式の粒子計数器）。本文は有料のため参照していません。</td></tr>
+      <tr><td>規格の見本ページ</td><th scope="row"><a href="https://cdn.standards.iteh.ai/samples/53394/b5d9892aab0b4683bfb17888f661d555/ISO-14644-1-2015.pdf">ISO 14644-1:2015（見本ページ）</a></th><td>iTeh Standards（規格の販売サイト）</td><td>第 2 版、2015 年 12 月 15 日</td><td>3.3 の占有状態の定義、表 1 のクラスの値と脚注。</td></tr>
+      <tr><td>解説記事（転載）</td><th scope="row"><a href="https://cleanroom.net/faqs/what-are-the-iso-classes-of-air-cleanliness-by-particle-concentration/">ISO 14644-1:2015(E) の ISO クラス表</a></th><td>cleanroom.net</td><td>2019 年 8 月 16 日更新</td><td>クラス表の値。</td></tr>
+      <tr><td>解説記事</td><th scope="row"><a href="https://cky-4pt.pages.dev/en/insights/cleanroom-iso-14644">cleanroom ISO 14644</a></th><td>cky-4pt（個人・小規模の解説サイト）</td><td>2025 年 7 月 29 日</td><td>クラスの式の形だけ（本講座で表 1 の値と照合）。状態の説明には使っていません。</td></tr>
+      <tr><td>解説記事</td><th scope="row"><a href="https://www.kuehne-nagel.com/market-insights/semiconductor/sub-fabs-the-unsung-heroes">Sub-fabs: the unsung heroes</a></th><td>Kuehne+Nagel</td><td>2026 年（記事の日付の記載なし。出典の確認日 2026 年 5 月 13 日）</td><td>サブファブの定義と置く設備。</td></tr>
+      <tr><td>企業の技術解説</td><th scope="row"><a href="https://www.mks.com/n/semiconductor-utilities-overview">Semiconductor Fab Utilities Overview</a></th><td>MKS（米国）</td><td>2026 年閲覧（日付の記載なし）</td><td>超純水・ガス・排気処理・空気の設備。</td></tr>
+      <tr><td>企業の技術解説</td><th scope="row"><a href="https://www.mks.com/n/semiconductor-ultrapure-water">Ultrapure Water for Semiconductor Manufacturing</a></th><td>MKS</td><td>2026 年閲覧（日付の記載なし。引用する ITRS の値は古い）</td><td>超純水の用途、つくり方、純度の指針値。</td></tr>
+      <tr><td>学会誌の記事</td><th scope="row"><a href="https://www.ashrae.org/file%20library/technical%20resources/ashrae%20journal/2021journaldocuments/sep2021_46-51_ieq_sun.pdf">Inspirations From Cleanroom HVAC Technologies</a></th><td>ASHRAE Journal（Wei Sun）</td><td>2021 年 9 月号、46〜51 ページ</td><td>一方向の気流、HEPA・ULPA、粒子の発生源。半導体工場に限った記述ではない。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.muratec-usa.com/product-lines/cleanroom-transport-systems">Cleanroom Transport Systems</a></th><td>Muratec USA（村田機械の米国法人）</td><td>2026 年閲覧（日付の記載なし）</td><td>OHT、ストッカー、OHB、非接触給電。数値は使っていません。</td></tr>
+      <tr><td>企業の技術ページ</td><th scope="row"><a href="https://ebara.com/en/precision/index/gas-abatement.html">Exhaust Abatement Systems</a></th><td>荏原製作所（日本）</td><td>2026 年閲覧（日付の記載なし）</td><td>除害装置の対象と方式。</td></tr>
+      <tr><td>企業のブログ</td><th scope="row"><a href="https://www.tataconsultingengineers.com/blogs/?p=1416">Why Vibration Isolation Matters in Semiconductor Fabs and OSAT Facilities</a></th><td>Tata Consulting Engineers（インド）</td><td>2026 年 7 月 6 日</td><td>振動対策の 4 段、VC 曲線の位置づけ。</td></tr>
+      <tr><td>企業の解説</td><th scope="row"><a href="https://www.abm.com/perspectives/guide-to-semiconductor-readiness">A phase-by-phase guide to semiconductor readiness</a></th><td>ABM</td><td>2026 年 8 月 10 日</td><td>建設から装置搬入までの 3 段階。</td></tr>
+      <tr><td>企業の解説</td><th scope="row"><a href="https://www.jedunn.com/blog/closing-the-loop-integrating-design-construction-in-semiconductor-manufacturing/">Closing The Loop: Integrating Design &amp; Construction In Semiconductor Manufacturing</a></th><td>JE Dunn Construction（米国）</td><td>2022 年 3 月 22 日（2023 年 6 月 8 日に更新）</td><td>Ready for Equipment、prefac、hook-up、接続点、段階的な承認。</td></tr>
+      <tr><td>規格情報</td><th scope="row"><a href="https://store-us.semi.org/products/s00200-semi-s2-environmental-health-and-safety-guideline-for-semiconductor-manufacturing-equipment">SEMI S2</a></th><td>SEMI</td><td>版 S2-0724E（日付の記載なし）</td><td>S2 の目的。本文は有料のため参照していません。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row">Yaskawa Europe Technology ブログ（第16章と共通）</th><td>Yaskawa Europe Technology（安川電機のグループ会社）</td><td>2022 年 10 月 6 日</td><td>FFU・イオナイザの定義。</td></tr>
+      <tr><td>教科書的な一般知識</td><th scope="row">クリーンルーム・用役の教科書（用役棟・屋根上設備の位置づけ、温湿度・静電気・地震の対策の考え方）</th><td>—</td><td>—</td><td>断面図の構成、環境管理の一般的な説明。数値は使っていません。</td></tr>
+    </tbody>
+  </table></div>
+</section>

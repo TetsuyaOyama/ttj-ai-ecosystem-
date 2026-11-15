@@ -1,0 +1,74 @@
+<!--
+num: 04
+part: 1
+title: 段階 3　エージェント
+track: 段階3
+time: 35
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li><b>AI エージェント</b>の動きを、「考える → 道具を使う → 結果を見る → 繰り返す」の流れで説明できる。</li>
+    <li>段階 3 の 5 つの教材の<b>特徴</b>と、<b>前提・費用</b>（API キー、アカウント）の違いを言える。</li>
+    <li>「ここまでで実用的」の<b>区切り</b>の位置を言い、段階 4 へ進む<b>目安</b>を確かめられる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch03">第 03 章</a>（段階 2）。教材の多くは、Python の基礎が前提です。</p>
+</section>
+
+<h3>エージェントとは</h3>
+<p><b>AI エージェント</b>（AI agent）は、道具を使って作業を進める AI です。質問に 1 回答えて終わるのではなく、自分で次の動きを決め、道具を使い、結果を見て、また次を決めます。</p>
+<p>Hugging Face の講座は、エージェントの基礎として、ツール、思考、行動、観察を挙げています（出典：Hugging Face『Agents Course』、確認 2026 年 11 月）。次の図は、その流れを、この講座がまとめたものです。<b>ツール利用</b>（tool use）は、AI が検索や計算などの外部の道具を呼び出して、結果を使うことです。</p>
+<div data-widget="flow" data-src="c04-loop"></div>
+<p>図で確かめる点は 3 つです。1 つ目は、「考える → 道具を使う → 結果を見る」の<b>繰り返し</b>です。2 つ目は、答えが出たら終わる、<b>終わる条件</b>があることです。3 つ目は、繰り返しに<b>回数の上限</b>を決めておくことです。上限がないと、終わらずに、API の利用料が増えることがあります。</p>
+
+<h3>段階 3 の教材</h3>
+<p>段階 3 の教材は 5 つあります。Anthropic の Cookbook は、<b>Claude Cookbooks</b> に改名されています。表の行を押して、前提と注意を確かめてください。</p>
+<div data-widget="table" data-src="c04-res"></div>
+<p>用語を 3 つ整理します。<b>MCP</b>（Model Context Protocol）は、AI アプリを外部のデータやツールにつなぐための、オープンソースの標準です。<b>ノートブック</b>は、説明とコードを 1 つの文書にまとめたものです。<b>RAG</b>は、第 02 章の用語です。外部の資料を検索して、答えに使います。</p>
+
+<h3>どれを選ぶか：内容の特徴で決める</h3>
+<p>Hugging Face の講座、Microsoft の講座、Cookbook、MCP の入門の順に並べました。並べた理由は、内容の特徴です。優劣ではありません。</p>
+<ul>
+  <li><b>Hugging Face の Agents Course</b>：単元が順に並び、<b>無料で、修了の条件が書かれています</b>。週に 3〜4 時間という設計が、ページに書かれています。</li>
+  <li><b>Microsoft の AI Agents for Beginners</b>：<b>レッスンが 18 本</b>で、設計パターンから、運用、セキュリティまで幅広く扱います。日本語訳があります。</li>
+  <li><b>Claude Cookbooks と OpenAI Cookbook</b>：<b>作り方の例</b>を集めたものです。通して読む講座ではなく、必要なレシピを拾って使います。API キーが要る場合があります。</li>
+  <li><b>MCP の入門</b>：<b>短い説明のページ</b>です。エージェントを外部の道具につなぐ標準を知る入口になります。</li>
+</ul>
+
+<div class="callout std"><span class="ttl">ここが「実用的」の区切りです</span>
+  <p>この道筋は、<b>段階 1 をしっかりやり、この段階の Hugging Face の講座あたりまで進めば、実用の入口に立てる</b>、と考えます。目安で、保証ではありません。ここで止めても構いません。段階 4 は、複数のエージェントを実際に動かしたい人が選びます。</p></div>
+
+<div class="callout std"><span class="ttl">終えるとできること（段階 3）</span>
+  <p>この段階の教材を 1 つ進めると、次のことに取り組めるようになります。保証ではなく、目安です。</p>
+  <ul>
+    <li>エージェントの動きと、終わる条件・回数の上限の必要さを説明できる。</li>
+    <li>ツール利用、RAG、MCP の言葉を、簡単な例とともに説明できる。</li>
+    <li>自分の作業の中から、エージェントに任せやすい作業と、任せない作業を分けられる。</li>
+  </ul></div>
+<div class="callout tip"><span class="ttl">次へ進む目安</span>
+  <p>小さな作業を 1 つ選び、<b>AI に任せる手順と、自分で確かめる手順</b>を、紙に書けたら、段階 4 へ進みます。動かす経験は、段階 4 で積めます。</p></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>教材の料金と、API の利用料を混ぜる</b>ことです。Hugging Face の講座は、無料で認定も無料と書いています。ただし、動かすときに使うモデルの API の利用料については、ページに記載がありません。Cookbook は、API キーが前提です。</p>
+  <p>もう 1 つは、<b>API キーの扱い</b>です。API キーは、他人に見せません。ノートブックやコードに直接書いて、公開のリポジトリに載せると、他人に使われることがあります。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c04-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 15 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+<!--GEN:refs-->
+      <tr><td>公式の講座</td><th scope="row"><a href="https://huggingface.co/learn/agents-course" target="_blank" rel="noopener noreferrer">Agents Course</a></th><td>Hugging Face</td><td>日付の記載なし（確認 2026-11-15）</td><td>単元・前提・修了証の条件。経路：公式の講座ページを開いて確認</td></tr>
+      <tr><td>公式リポジトリ（講座）</td><th scope="row"><a href="https://github.com/microsoft/ai-agents-for-beginners" target="_blank" rel="noopener noreferrer">AI Agents for Beginners</a></th><td>Microsoft</td><td>日付の記載なし（2025-02-19 の公式ブログでは 10 レッスン。今は 18）（確認 2026-11-15）</td><td>レッスン構成・前提・日本語訳。経路：公式 Pages を開いて確認（GitHub 本体は開けず）</td></tr>
+      <tr><td>公式リポジトリ（レシピ集）</td><th scope="row"><a href="https://github.com/anthropics/claude-cookbooks" target="_blank" rel="noopener noreferrer">Claude Cookbooks</a></th><td>Anthropic</td><td>日付の記載なし（確認 2026-11-15）</td><td>内容・ライセンス・前提。経路：README を開いて確認</td></tr>
+      <tr><td>公式のレシピ集（サイト）</td><th scope="row"><a href="https://developers.openai.com/cookbook" target="_blank" rel="noopener noreferrer">OpenAI Cookbook</a></th><td>OpenAI</td><td>日付の記載なし（確認 2026-11-15）</td><td>内容の確認。経路：サイトのトップページを開いて確認</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://modelcontextprotocol.io/docs/getting-started/intro" target="_blank" rel="noopener noreferrer">What is MCP?（Model Context Protocol の入門）</a></th><td>Model Context Protocol プロジェクト</td><td>日付の記載なし（確認 2026-11-15）</td><td>MCP の定義と入口。経路：公式ドキュメントを開いて確認</td></tr>
+<!--/GEN:refs-->
+      <tr><td>この講座の整理</td><th scope="row">エージェントの動きの図</th><td>この講座</td><td>—</td><td>Hugging Face の講座が挙げる基礎（ツール、思考、行動、観察）を、繰り返しの流れにまとめた。</td></tr>
+    </tbody>
+  </table></div>
+</section>

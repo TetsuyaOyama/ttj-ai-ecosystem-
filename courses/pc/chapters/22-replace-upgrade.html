@@ -1,0 +1,93 @@
+<!--
+num: 22
+part: 4
+title: 部品の交換と増設
+track: 保守
+time: 30
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>メモリ・ストレージ・グラフィックスカード・CPU（Central Processing Unit）・電源ユニットを交換・増設するとき、<b>先に確かめること</b>、作業の流れ、<b>後で確かめること</b>を説明できる。</li>
+    <li>CPU の交換で、マザーボードのファームウェアを<b>先に</b>更新する理由と、メモリを足すと設定が変わることがある理由を言える。</li>
+    <li><b>OS の移行</b>の 2 つの方法（ドライブの複製と新しく導入）と、ライセンスの再認証の考え方を説明できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch15">第15章</a>（取り付けの順序）、<a href="#ch16">第16章</a>（配線）。あるとよい：<a href="#ch11">第11章</a>（互換性）、<a href="#ch21">第21章</a>（不具合の切り分け）。</p>
+</section>
+
+<div class="callout warn"><span class="ttl">この章の扱い（電気の安全）</span><p>この章は、仕組みと注意点の説明で、作業の手順書の代わりにはなりません。部品の取り付け・取り外し・配線・掃除は、PC の電源を切り、電源ケーブルをコンセントから抜いてから行ってください。電源ユニットは分解しないでください。内部には、電源ケーブルを抜いた後も電気がたまっている部品があり、感電のおそれがあります。具体の作業は、各部品のマニュアルに従ってください。</p></div>
+
+<div class="callout warn"><span class="ttl">この章の扱い（静電気）</span><p>静電気は、気づかないうちに部品を壊すことがあります。部品は使う直前まで帯電防止の袋に入れておき、端子や部品の面に触れず、縁を持ってください。具体の対策は、各部品のマニュアルの指示に従ってください。</p></div>
+
+<div class="callout warn"><span class="ttl">この章の扱い（データの消失）</span><p>OS の導入、ストレージの初期化・交換・消去では、データが消えることがあります。作業の前に、必要なデータのバックアップ（第24章）を取り、対象のドライブを取り違えないように確かめてください。</p></div>
+
+<div class="callout warn"><span class="ttl">この章の扱い（液冷）</span><p>液冷のクーラーは、液が漏れると部品の故障や感電のおそれがあります。取り付けと点検はメーカーのマニュアルに従い、配管やポンプを分解しないでください。漏れに気づいたら、すぐに電源を切り、電源ケーブルを抜いてください。部品を自分で組み合わせる本格的な液冷は、この講座では仕組みの紹介だけにとどめます。</p></div>
+
+<h3>交換・増設の前に</h3>
+<p><b>増設</b>（upgrade）は、部品を足す、または替えて、性能や容量を上げることです。作業の前に、4 つを済ませます。</p>
+<p>1 つ目は、<b>互換性を確かめ直す</b>ことです。組み立てたときと同じ 5 つの関門を、新しい部品でもう一度通ります（<a href="#ch11">第11章</a>）。2 つ目は、<b>バックアップ</b>です。最新の複製を取り、戻せることを確かめます（<a href="#ch24">第24章</a>）。3 つ目は、<b>UEFI（Unified Extensible Firmware Interface）とドライバの版</b>の確認です。UEFI はマザーボードのファームウェアです。4 つ目は、<b>替えるものを 1 つに絞る</b>ことです。一度に複数を替えると、不具合が出たとき、原因を絞れません（<a href="#ch21">第21章</a>）。</p>
+<p>一般の手順を、流れ図にします。CPU の交換だけ、UEFI の更新が先に入ります。</p>
+<div data-widget="flow" data-src="c22-flow"></div>
+<p>具体の作業は、各部品のマニュアルに従ってください。この章は、マニュアルの代わりにはなりません。部品ごとの注意を、表にまとめます。</p>
+<div data-widget="table" data-src="c22-parts"></div>
+
+<h3>メモリの増設</h3>
+<p>メモリを足すときは、まず、マザーボードのマニュアルで、対応する世代と形、スロットの数、枚数ごとの条件を確かめます（<a href="#ch04">第04章</a>）。次に、今のメモリとの組み合わせを考えます。</p>
+<p>Kingston Technology（米国）の記事は、できるかぎり、異なる速度・容量のメモリの混在を避けるよう述べています。また、多くの PC は、同じ 2 枚のモジュールを組にするデュアルチャネルを使うと説明しています（出典：Kingston Technology『Upgrading RAM for HP, Dell, Lenovo and Acer Laptops and Desktops』、記事に公表日の記載なし）。同じ仕様のモジュールを複数枚の組にして売るものを、<b>メモリキット</b>（memory kit）と呼びます。同じ製品でも、足りない分を後から買うと、組になりません。</p>
+<p>枚数が増えると、使える速度の設定が変わることがあります（第04章）。足した後は、UEFI の設定画面で、容量と速度の設定が想定どおりかを確かめます。メモリのプロファイルを使っていたときは、有効のままかも確かめます（<a href="#ch20">第20章</a>）。</p>
+
+<h3>ストレージの増設と入れ替え</h3>
+<p>ストレージを足すときは、M.2 のスロット（形の規格。<a href="#ch05">第05章</a>）が、別の端子と共有になっていないかを確かめます（<a href="#ch03">第03章</a>）。入れ替えるときは、OS をどう移すかが問題になります。</p>
+<p>方法は 2 つあります。<b>ドライブの複製</b>（disk cloning）は、ドライブの内容を、別のドライブへそのまま写します。OS・アプリ・設定を入れ直さずに済みます。<b>新しく導入</b>は、新しいドライブに OS を入れ直し（<a href="#ch18">第18章</a>）、ファイルと設定を戻します。表で比べます。</p>
+<div data-widget="compare" data-src="c22-migrate"></div>
+<p>OS のライセンスの扱いも確かめます。Microsoft（米国）の案内によると、デジタルライセンスは、デバイスのハードウェアに結びつきます。大きな変更の後は、一致するライセンスが見つからず、再認証が要ることがあります。大きな変更の例として、マザーボードの交換が挙げられています。認証のトラブルシューティングを使うには、Microsoft アカウントとの関連付けが要ります。エディション（Home か Pro か）は、同じものにします。プロダクトキーで認証していたときは、同じキーを使います（出典：Microsoft『Reactivating Windows after a hardware change』、2026 年 9 月更新）。ストレージだけを替えたときの扱いは、この案内に書かれていないので、この講座では書きません。認証の仕組みは<a href="#ch18">第18章</a>です。</p>
+<p>移行が済むまで、元のドライブのデータは消しません。古いドライブを手放すときは、データを消去します（<a href="#ch24">第24章</a>）。</p>
+
+<h3>グラフィックスカードの交換</h3>
+<p>先に、新しいカードの長さ・厚さ・補助電源のコネクタが、ケースと電源ユニットに合うかを確かめます（<a href="#ch06">第06章</a>、<a href="#ch11">第11章</a>）。電源ユニットの容量も、確かめ直します（<a href="#ch12">第12章</a>）。重いカードは、サポートステーで支えることを考えます（第06章）。</p>
+<p>交換した後は、ディスプレイのケーブルを、新しいカードの端子に差し替えます。マザーボードの端子に差したままでは、映像が出ないことがあります（<a href="#ch21">第21章</a>）。ドライバは、新しいカードのメーカーの案内に従って入れます（<a href="#ch18">第18章</a>）。最後に、負荷試験で温度と騒音を確かめ、基準の記録を取り直します（<a href="#ch19">第19章</a>）。</p>
+
+<h3>CPU の交換</h3>
+<p>CPU の交換では、<b>UEFI の更新を先に</b>行います。新しい CPU を付ける前に、マザーボードの UEFI を、その CPU に対応した版へ更新します。AMD（米国）の案内は、マザーボードが新しい Ryzen に対応していないと、PC が起動しないことがあると述べています（出典：AMD『BIOS Updates for AMD Ryzen™ Desktop Systems』、2026 年 8 月更新。資料の表記は BIOS（Basic Input/Output System））。ASUS（ASUSTeK Computer、台湾）の FAQ（Frequently Asked Questions、よくある質問）は、新しい CPU がマザーボードの CPU サポートリストにあるかを確かめ、載っていれば、対応する UEFI の版へ更新する、と順に案内しています（出典：ASUS『How to check the motherboard compatibility with the new generation CPU and troubleshooting of the booting issue?』、2026 年 9 月更新）。</p>
+<p>更新に使える古い CPU がなく、起動できないときは、CPU を載せずに UEFI を更新できる機能があるかを確かめます。AMD の案内は、対応するマザーボードでは、USB（Universal Serial Bus）メモリから更新する機能（資料の呼称：USB BIOS Flashback）を挙げています。呼称は各社で違います（<a href="#ch11">第11章</a>）。</p>
+<p>クーラーを外したときは、古い TIM（Thermal Interface Material、熱を伝える材料）を拭き取り、新しく塗り直します（<a href="#ch08">第08章</a>）。一体型液冷クーラーを外すときは、配管とポンプを分解しません。交換の後は、UEFI の設定画面で CPU が正しく認識されているかを確かめ、負荷試験で温度を見ます（<a href="#ch17">第17章</a>、第19章）。</p>
+
+<h3>電源ユニットの交換</h3>
+<p>電源ユニットを替えるときは、<b>ケーブルも、すべて新しい電源ユニットのものに替えます</b>。着脱式のケーブルは、ピンの並びが製品で違うことがあります。他の製品のケーブルを混ぜると、部品を壊すおそれがあります（<a href="#ch07">第07章</a>）。容量・コネクタ・寸法も、確かめ直します（第12章、第11章）。</p>
+<p>電源ユニットは分解しません。古い電源ユニットを手放すときも同じです。廃棄の制度は<a href="#ch13">第13章</a>で扱います。</p>
+
+<h3>外した部品の扱い</h3>
+<p>外した部品は、すぐ捨てません。新しい部品が不良だったとき、元に戻して確かめるために、動作が確認できるまで保管します。保管は、帯電防止の袋に入れて、端子に触れないようにします（<a href="#ch14">第14章</a>）。譲る・売る・捨てるときは、ストレージのデータを消去します（<a href="#ch24">第24章</a>）。</p>
+
+<h3>演習：増設の計画から、先に確かめる事項を選ぶ</h3>
+<p>3 つの計画（すべて架空）を読みます。先に確かめることを決めてから、行を押してください。</p>
+<div data-widget="table" data-src="c22-judge"></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>CPU は、付けてから UEFI を更新するのではありません。</b>先に更新します。古い CPU がなく、起動できないと、更新の方法が限られます。</p>
+  <p><b>メモリは、同じ製品でも、後から足すと別の組になります。</b>混在はできるだけ避け、足した後に設定を確かめます。</p>
+  <p><b>OS の複製は、ライセンスの再認証を不要にするとは限りません。</b>ハードウェアが大きく変わると、再認証が要ることがあります。</p>
+  <p><b>一度に複数を替えない。</b>不具合が出たとき、原因を絞れなくなります。</p></div>
+
+<div class="callout tip"><span class="ttl">自分の 1 台でのつながり</span>
+  <p>替える前に、構成表と確認表（<a href="#ch11">第11章</a>）を更新し、バックアップを取ります。替えた後は、負荷試験と温度の基準の記録を取り直し、保守の記録に残します（<a href="#ch23">第23章</a>）。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c22-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（アクセス日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.amd.com/en/resources/support-articles/faqs/cpu-99.html">BIOS Updates for AMD Ryzen™ Desktop Systems</a></th><td>AMD（米国）</td><td>ページの更新 2026 年 8 月</td><td>新しい CPU に UEFI の更新が要る場合と、起動しないときの選択肢。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.asus.com/me-en/support/faq/1045511/">How to check the motherboard compatibility with the new generation CPU and troubleshooting of the booting issue?</a></th><td>ASUS（台湾）</td><td>ページの更新 2026 年 9 月</td><td>CPU サポートリスト、UEFI の更新、起動しないときの順序。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.kingston.com/en/blog/pc-performance/ram-upgrade-for-hp-dell-lenovo-acer">Upgrading RAM for HP, Dell, Lenovo and Acer Laptops and Desktops</a></th><td>Kingston Technology（米国）</td><td>記事に公表日の記載なし</td><td>メモリの混在を避ける考え方、デュアルチャネル。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://support.microsoft.com/en-us/windows/activation/reactivating-windows-after-a-hardware-change">Reactivating Windows after a hardware change</a></th><td>Microsoft（米国）</td><td>ページの更新 2026 年 9 月</td><td>ハードウェアの変更後の再認証、条件。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://support.microsoft.com/en-us/windows/experience/backup-recovery/back-up-and-restore-with-windows-backup">Back up and restore with Windows Backup</a></th><td>Microsoft</td><td>ページの更新 2026 年 9 月</td><td>移行で、Microsoft Store 以外のアプリが入れ直しになること。</td></tr>
+      <tr><td>教科書・一般知識・他講座</td><th scope="row">他の章（第04・07・08・11・14・24章）</th><td>本講座</td><td>—</td><td>メモリの条件、ケーブルを混ぜない注意、TIM、互換性、静電気、バックアップは、持ち主の章を参照。</td></tr>
+      <tr><td>架空（見本のため）</td><th scope="row">演習の増設の計画 1〜3</th><td>—</td><td>—</td><td>先に確かめる事項を選ぶ演習。すべて架空。</td></tr>
+    </tbody>
+  </table></div>
+</section>

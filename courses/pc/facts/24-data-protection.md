@@ -1,0 +1,24 @@
+第24章 事実確認表（担当 E、確認 2026-11-14）
+
+| # | 区分 | 事実（本文での書き方） | 数値・単位 | 時点・版 | 出典（発行者『資料名』） | URL（個別ページ） | 一次 | 確認日 | 使った箇所 |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | 安全 | CISA（米国）の小規模事業者向けの案内は、バックアップの目安として「重要なファイルの複製を 3 つ、保存媒体を 2 種類、1 つは事業所から離れた場所」の 3-2-1 の考え方を示す。あわせて、オフラインの複製で守ること、復旧の試験を日程に入れること、自動で定期的に動く方法を選ぶことを述べる | 3・2・1（ページの文言） | ページに公表日・更新日の記載なし（確認 2026-11-14） | CISA『Back Up Business Data』 | https://www.cisa.gov/audiences/small-and-medium-businesses/secure-your-business/back-up-business-data | ○ | 2026-11-14 | 本文「3-2-1 の考え方」、c24-tree、c24-judge |
+| 2 | 安全 | IPA『ランサムウェア被害から学ぶ教訓集』は、汚染された可能性のあるバックアップは復旧に使えないこと、侵入の開始より前の時点のバックアップは安全と考えられること、バックアップをネットワークから切り離して安全を確保すること、復旧訓練を定期的に行うことを述べる（経営者向けの文書。IPA の解説書の記述として引用する形） | — | Ver.1.2、2026-09-08 発行（文書の更新履歴：2026-09-10 に Ver.1.1、2026-10-16 に誤植の修正） | 情報処理推進機構（IPA）『ランサムウェア被害から学ぶ教訓集 〜 経営者のためのランサムウェア対策ハンドブック 〜』 | https://www.ipa.go.jp/security/todokede/rcu1hd000001ee1f-att/20260910.pdf | ○ | 2026-11-14（公開前の再確認でも、表紙 Ver.1.2・2026-09-08 発行、更新履歴の最新 2026-10-16 の誤植修正を目で確認。履歴に Ver.1.2 の行はない） | 本文「ランサムウェアへの備え」、c24-sync、c24-methods |
+| 3 | 規格 | NIST SP 800-88 Rev. 2『Guidelines for Media Sanitization』は 2025-09-26 に公表（Final）。Rev. 1（2014-12-17）を置き換える。サニタイズ（媒体上のデータへのアクセスを現実的でなくすこと）の計画づくりを助け、情報の機微さに合わせて、消去と廃棄の方法と管理を選ぶ。★公開直前に再確認 | Rev. 2 | 2025-09-26 | NIST『SP 800-88 Rev. 2』（CSRC） | https://csrc.nist.gov/pubs/sp/800/88/r2/final | ○ | 2026-11-14 | 本文「手放す前のデータの消去」、mapping、用語集 |
+| 4 | 仕様値 | Microsoft の BitLocker 回復キーの案内：回復キーは、BitLocker が自動で開けないときにドライブを開く数字の鍵。起動時に、安全上の問題やハードウェアの変更の後に求められることがある。保存先は（個人の PC で）、Microsoft アカウント、USB フラッシュドライブ、テキストファイル、印刷。コンピュータと別に置く。暗号化したドライブ自体には保存できない。Microsoft サポートは失われた回復キーを再発行・提供できない。多くの場合、BitLocker を最初に有効にしたとき自動で保存される。保存されているかを確かめるか、別の保存を足すよう勧めている | — | ページの更新日（メタデータ）2026-09-28、ms.date 2026-03-16 | Microsoft『Back Up Your BitLocker Recovery Key』 | https://support.microsoft.com/windows/security/encryption/back-up-your-bitlocker-recovery-key | ○ | 2026-11-14 | 本文「暗号化と回復キー」、c24-methods | 
+| 5 | 仕様値 | Microsoft のファイル履歴（File History）の案内：ライブラリ（ドキュメント・ピクチャ・ビデオ・ミュージックなど）とデスクトップを保存する。保存先は外付けドライブか、設定したネットワークの場所。フォルダを右クリックし、以前の版から選んで復元する。「復元先を指定」を使うと現在のファイルを上書きしない。復元は現在の版を置き換え、元に戻せない | — | ms.date 2026-01-08、更新日 2026-09-28 | Microsoft『Backup and restore with File History』 | https://support.microsoft.com/en-us/windows/experience/backup-recovery/backup-and-restore-with-file-history | ○ | 2026-11-14 | 本文「何を・どこへ」、「戻せるかを確かめる」、c24-methods、c24-restore |
+| 6 | 仕様値 | Microsoft の Windows バックアップ（Windows Backup）の案内：デスクトップ・ドキュメント・ピクチャ・ビデオ・ミュージックのフォルダを OneDrive と同期する形で保存し、設定やアプリの情報も保存する。保存先は Microsoft アカウントに結びつく。Microsoft アカウントが必要で、職場・学校のアカウントは使えない（組織が許す設定を除く）。新しい PC の設定時や再インストール後に、同じアカウントでサインインして復元できる | — | 日付 2026-02-24、更新 2026-09-28（メタデータ） | Microsoft『Back up and restore with Windows Backup』 | https://support.microsoft.com/en-us/windows/experience/backup-recovery/back-up-and-restore-with-windows-backup | ○ | 2026-11-14 | 本文「何を・どこへ」、c24-methods |
+| 7 | 仕様値 | Microsoft の「PC をリセットする」の案内：「Remove everything」は個人のファイル・アプリ・設定を消して Windows を入れ直す。手放す・売る前に使う。「Clean data」を選ぶとドライブを消去し、復元を難しくするが、時間がかかる。この消去は消費者向けで、政府や業界のデータ消去の基準を満たさない、と Microsoft は注記している。暗号化したデバイスでは、リセットに BitLocker の回復キーが要る | — | 内容の日付 2026-03-11、更新 2026-09-28（メタデータ） | Microsoft『Reset your PC』 | https://support.microsoft.com/en-us/windows/experience/backup-recovery/reset-your-pc | ○ | 2026-11-14 | 本文「手放す前のデータの消去」、c24-judge |
+| 8 | 定義 | バックアップ＝別の場所に戻せる複製を残すこと／同期＝複数の場所を同じ内容に保つこと／冗長＝壊れても動き続けるように重ねること。同期と冗長は、消した・壊した内容も反映しうるので、バックアップの代わりにならない場合がある。RAID は複数ドライブを組み合わせ、1 台の故障に備える方式 | — | — | 教科書的な一般知識（計算機システム・ストレージの一般的な教科書）。計算サーバー講義 第09章の RAID の説明と食い違わない | —（数値を伴わない） | × | 2026-11-14 | 本文「違い」、c24-sync、c24-methods、用語集 |
+| 9 | 一般知識 | 演習の利用者 A〜C さんの保存の仕方は、すべて架空 | — | — | 架空（見本のため） | — | × | 2026-11-14 | c24-judge |
+| 10 | 企業 | CISA（Cybersecurity and Infrastructure Security Agency）と NIST（National Institute of Standards and Technology）は米国の政府機関。本文は「米国」と書く | — | 2026-11-14 に確認 | CISA『Back Up Business Data』、NIST『SP 800-88 Rev. 2』（CSRC）の各ページの発行者表示 | https://www.cisa.gov/ 、https://csrc.nist.gov/ | ○ | 2026-11-14 | 本文の初出「（米国）」 |
+| 11 | 企業 | Microsoft の本社：公式ページ『Office Locations』に、世界の本社は Redmond, Washington とある。国名の明記はなく、米国のワシントン州として「米国」と書いた | — | 2026-11-14 に確認 | Microsoft『Office Locations』 | https://www.microsoft.com/en-us/about/office-locations | ○ | 2026-11-14 | 本文の初出「（米国）」 |
+
+確認できず書かなかった：
+- CISA の 3-2-1 のページの公表日：ページに日付の記載がないため、本文では日付を書かず「確認 2026 年 11 月」とした。CISA の『Data Backup Options』の PDF は取得できなかった（個別ページとして使っていない）。
+- IPA の個人向けのバックアップの案内：検索した範囲では、バックアップの具体的な推奨が書かれた個人向けの個別ページを確かめられなかった。IPA の記述は経営者向けの文書の範囲だけを書いた。
+- ストレージメーカーが提供する消去の機能（SSD の消去の機能など）の公式説明：確かめていない。本文では機能の有無と手順を書かず、「製品の資料で確かめる」とした。
+- NVMe・SATA の S.M.A.R.T. の読み方：第21章が持ち主。この章はリンクだけ。
+- 世代の保存期間・頻度・容量の目安の数字：一般的な値の一次資料がなく、書かない。
+
+検証（2026-11-14）で追記：BitLocker の案内は、職場・学校の管理された PC では組織のアカウント（Azure AD）への保存の選択肢があり、IT 部門が扱うと書く。本文に 1 文足した。IPA の英語名は教訓集に記載がないので、本文の英語名の併記をやめ「情報処理推進機構（IPA）」とした。

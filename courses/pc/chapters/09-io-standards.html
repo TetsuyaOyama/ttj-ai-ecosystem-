@@ -1,0 +1,99 @@
+<!--
+num: 09
+part: 1
+title: 周辺の接続規格：USB・映像出力・有線 LAN・無線
+track: 部品
+time: 35
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>端子の<b>速度の名前</b>と<b>コネクタの形</b>が別の話であること、同じ形の端子でも、速度・映像・給電が違うことを説明できる。</li>
+    <li>映像出力の規格と、ケーブルの認証の名前を区別し、<b>ディスプレイをどの端子に差すか</b>を、PC の構成から決められる。</li>
+    <li>有線のネットワークと無線の規格の名前を読み、無線の部品で<b>技術基準適合証明</b>を確かめる理由を言える。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch01">第01章</a>（PC の全体像）と<a href="#ch03">第03章</a>（マザーボードの背面の端子）。</p>
+</section>
+
+<h3>周辺機器をつなぐ端子：3 つの問い</h3>
+<p>PC の外には、ディスプレイ、キーボード、外付けのドライブ、ネットワークがつながります。つなぐ端子を決めるとき、問いは 3 つです。<b>名前</b>（どんな規格か）、<b>形</b>（差し込み口が合うか）、<b>差す先</b>（PC のどの端子か）です。この章は、この 3 つを分けて考えます。</p>
+<p>速さの単位は、Gb/s（ギガビット毎秒。1 秒あたりのギガビット）です。この章では、団体が名前に使う表記（「USB 10Gbps」など）だけは、原文どおり Gbps と書きます。1 byte は 8 bit です。10 Gb/s は、1 秒に 10 ギガビットを送る速さの目安で、バイトに直すと、10 ÷ 8 ＝ 1.25 GB/s です。これは<b>上限の目安</b>で、実際の速さは、これより遅くなります。この講座は、実際の速さを計算しません（出典の値を使います）。</p>
+
+<h3>名前と形は別の話：速度とコネクタ</h3>
+<p>USB（Universal Serial Bus）は、周辺機器をつなぐ規格です。規格を決める団体は USB-IF（USB Implementers Forum）です。USB-IF の指針は、消費者向けの表示に使う速度の名前を、USB 5Gbps・10Gbps・20Gbps・40Gbps・80Gbps と示しています。同じ指針は、「USB 3.2」「USB4 Version 1.0」のような仕様書の名前（USB4 は、USB の第 4 世代の仕様書の名前）を、製品の名前・広告・包装などの消費者向けの内容に使う目的のものではない、としています（出典：USB-IF『USB Data Performance Language Usage Guidelines』。公開ページに日付の記載なし）。古い資料やマニュアルには、仕様書の名前が出ます。速度の名前と、製品の仕様表の値で、読み替えます。</p>
+<p>差し込み口の形は、別の話です。USB-IF の資料の一覧には、USB Type-C Cable and Connector Specification（Release 2.5）が、速度の仕様書とは別に載っています（出典：USB-IF の資料の一覧）。次の図で、架空の表記を分けて読みます。</p>
+<div data-widget="ident" data-src="c09-usb"></div>
+
+<h3>給電の規格と、高速な外部接続</h3>
+<p>USB の端子は、データのほかに、電力も送れます。給電の電力を決める規格が、USB PD（Power Delivery）です。USB-IF の資料の一覧には、USB Power Delivery の Revision 3.3 が載っています。USB-IF のケーブルの名前の指針は、ケーブルの名前に、速度と給電の電力（60W・240W）を並べる形を示しています（出典：USB-IF『Integrators List Marketing Name Guidance』、2023 年 1 月）。実際に出る電力は、充電器・機器・ケーブルのうち、いちばん低い値で決まります（一般知識）。</p>
+<p>Thunderbolt は、Intel（米国）の規格です。Intel の説明では、Thunderbolt 5 は最大 80Gbps（条件つきで最大 120Gbps）、Thunderbolt 4 は最低 40Gbps で、どちらも USB4 に対応します。Type-C の形の端子を使い、認証が必須です（出典：Intel の Thunderbolt の概要ページ、2026 年 8 月 27 日の更新表示）。形は USB の Type-C と同じに見えます。次の表で、見た目が同じものの違いを整理します。</p>
+<div data-widget="compare" data-src="c09-typec"></div>
+
+<h3>映像出力：規格とケーブルの認証</h3>
+<p>映像を出す端子の代表は、HDMI（High-Definition Multimedia Interface）と DisplayPort です。規格は、管理団体が決めます。次の表で、版と、ケーブルの認証の名前を見ます。</p>
+<div data-widget="table" data-src="c09-video"></div>
+<p>表の「版」と「ケーブルの区分」は、別のものです。新しい版の端子どうしでも、ケーブルが低い区分だと、その速さは出せません。ディスプレイの仕様表の対応と、ケーブルの表記を照らします。</p>
+<p><b>どの端子に差すか</b>は、PC の構成で決まります。グラフィックスカードがあるときは、ディスプレイをカードの端子につなぎます（第01章・<a href="#ch21">第21章</a>）。マザーボードの背面にも映像の端子がありますが、これは、CPU の中の内蔵グラフィックスの出力で、条件はマザーボードと CPU のマニュアルで確かめます（出典：一般知識）。カードを付けているのにマザーボード側へ差すと、映らないことがあります。カードの仕組みは<a href="#ch06">第06章</a>です。</p>
+
+<h3>有線のネットワークと無線</h3>
+<p>有線のネットワークの規格は、IEEE（Institute of Electrical and Electronics Engineers）の 802.3 の系列です。1Gbps の端子を、ギガビットイーサネットと呼びます。無線の Wi-Fi は、IEEE 802.11 の系列の規格に基づき、世代の名前（Wi-Fi 6 など）は、Wi-Fi Alliance が付けます。Bluetooth は、Bluetooth SIG（Special Interest Group）が管理する、近い距離の無線の規格です。LAN（Local Area Network）は、家や職場の中のネットワークの呼び名です。</p>
+<div data-widget="table" data-src="c09-net"></div>
+<p>「世代の名前」と「規格番号」は、別のものです。表のとおり、Wi-Fi 6 は 802.11ax に基づきます。製品の仕様表は、片方しか書かないことがあります。両方を、表で読み替えます。</p>
+
+<h3>無線の部品と技術基準適合証明</h3>
+<p>Wi-Fi や Bluetooth のように、電波を出す部品は、日本の電波法の技術基準に合うことが要ります。それを示すのが、技術基準適合証明（技適）で、マークで表示されます。総務省の説明では、マークのない無線の機器を使うと、電波法に違反するおそれがあります。違反したときの罰則は、1 年以下の拘禁刑又は 100 万円以下の罰金と、総務省のページに書かれています。総務省は、技適の番号を調べる検索の仕組みも出しています。機器を改造すると、技適の効力が失われる、とも説明しています（出典：総務省『技適マークのご案内』、日付の記載なし）。</p>
+<div class="callout tip"><span class="ttl">技適の確かめ方</span><p>無線の部品（無線のカード、USB の無線の端末、無線つきのマザーボード）を選ぶときは、日本向けの製品か、技適のマークか番号があるかを、仕様ページとマニュアルで確かめます。海外から取り寄せた製品は、とくに確かめます。この講座は法律の解説ではありません。判断に迷うときは、総務省のページに従います。</p></div>
+
+<h3>マザーボードの背面とヘッダー</h3>
+<p>マザーボードの背面パネルに出ている端子と、ケース前面の端子につなぐヘッダーは、別のものです。背面の端子の種類と数は、マザーボードのマニュアルの「背面パネル」の表で確かめます。ケース前面の端子との配線は<a href="#ch16">第16章</a>です。</p>
+
+<h3>演習：架空の機器を、背面の端子に割り当てる</h3>
+<p>次の条件は、すべて<b>架空</b>です（出典：架空、見本のため）。マザーボードの背面に、USB 5Gbps の Type-A が 2 つ、USB 10Gbps の Type-C が 1 つ、有線のネットワークが 1 つあります。この PC には、グラフィックスカードが付いていて、カードに DisplayPort の端子が 3 つ、HDMI の端子が 1 つあります。</p>
+<p>つなぐ機器は 3 つです。<b>外付け SSD</b>（Solid State Drive）は、USB 10Gbps の Type-C で、できるだけ速く使いたい機器です。<b>ディスプレイ</b>は、DisplayPort の端子を持ちます。<b>有線のヘッドセット</b>は、USB の Type-A のプラグで、速さは要りません。</p>
+<p><b>問い</b>：それぞれを、どの端子につなぎますか。答えを開きます。</p>
+<details><summary>答えを見る</summary>
+  <p><b>外付け SSD</b>は、背面の USB 10Gbps の Type-C です。機器と口の速度の名前が合うので、その速さの目安が使えます。<b>ディスプレイ</b>は、<b>グラフィックスカードの DisplayPort</b> の端子です。カードがある PC では、映像はカードから出ます。マザーボードの背面に映像端子があっても、ここでは使いません。<b>ヘッドセット</b>は、背面の USB 5Gbps の Type-A のどちらかです。速さが要らない機器は、速い口を空けておけます。</p></details>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>Type-C の口なら、どれも同じ速さで使える</b>わけではありません。形と速度の名前は、別の仕様で決まります。</p>
+  <p><b>端子が新しい版なら、速く映る</b>わけでもありません。ケーブルの区分と、ディスプレイの対応が、低いほうで決まります。</p>
+  <p><b>カードがあるのに、マザーボードの映像端子に差す</b>と、映らないことがあります（第21章で見ます）。</p>
+  <p><b>Wi-Fi の「世代の名前」と「規格番号」</b>は別です。仕様表の片方しか書かれていないときは、表で読み替えます。</p>
+  <p><b>技適のない無線の機器</b>は、電波法に違反するおそれがあります。部品の選び方の段階で、確かめます。</p></div>
+
+<div class="callout tip"><span class="ttl">自分の 1 台でのつながり</span>
+  <p><b>選ぶとき</b>は、必要な端子の種類と数、速度の名前、無線の部品の技適を、仕様ページで確かめます（<a href="#ch11">第11章</a>）。<b>組むとき</b>は、前面の端子の配線を第16章で行います。<b>直すとき</b>は、映らない・遅いときに、差す先とケーブルの区分から見ます（第21章）。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c09-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://www.usb.org/sites/default/files/usb_data_performance_language_usage_guidelines_jan_2024.pdf">USB Data Performance Language Usage Guidelines</a></th><td>USB-IF</td><td>日付の記載なし（ファイル名に jan_2024）</td><td>速度の名前（5・10・20・40・80Gbps）。仕様書の名前は消費者向けの表示に使わない。</td></tr>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://usb.org/sites/default/files/USB-IF%20Integrators%20List%20Marketing%20Name%20Guidance_January%202023.pdf">Integrators List Marketing Name Guidance</a></th><td>USB-IF</td><td>2023 年 1 月</td><td>ケーブルの名前に、速度と給電の電力を並べる形（USB 40Gbps / 240W の形）。</td></tr>
+      <tr><td>規格・仕様</td><th scope="row"><a href="https://usb.org/document-library/usb-type-cr-cable-and-connector-specification-release-25">USB Type-C Cable and Connector Specification Release 2.5</a>（資料の個別ページ）</th><td>USB-IF</td><td>Release 2.5（公開日は確認できず）</td><td>コネクタの形の仕様書があること。本文は読んでいません。</td></tr>
+      <tr><td>規格・仕様</td><th scope="row"><a href="https://www.usb.org/document-library/usb-power-delivery">USB Power Delivery</a>（資料の個別ページ）</th><td>USB-IF</td><td>Revision 3.3 Version 1.0（公開日は確認できず）</td><td>給電の規格の版。本文は読んでいません。</td></tr>
+      <tr><td>メーカーの資料</td><th scope="row"><a href="https://www.intel.com/content/www/us/en/architecture-and-technology/thunderbolt/overview.html">Thunderbolt の概要</a></th><td>Intel</td><td>最終更新 2026 年 8 月 27 日の表示</td><td>Thunderbolt 5・4 の速さ、USB4 への対応、Type-C の形、認証が必須。</td></tr>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://hdmiforum.org/hdmi-forum-releases-version-2-2-of-the-hdmi-specification/">HDMI Forum Releases Version 2.2 of the HDMI Specification</a></th><td>HDMI Forum, Inc.</td><td>2025 年 6 月 25 日</td><td>HDMI 2.2、96Gbps、Ultra96 HDMI Cable。</td></tr>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://www.hdmi.org/resource/cables">HDMI Cables</a></th><td>HDMI Licensing Administrator, Inc.（米国）</td><td>日付の記載なし（2026 年 11 月に確認）</td><td>ケーブルの区分と帯域。</td></tr>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://vesa.org/featured-articles/vesa-releases-displayport-2-1-specification/">VESA Releases DisplayPort 2.1 Specification</a></th><td>VESA</td><td>2022 年 10 月 17 日</td><td>DisplayPort 2.1、UHBR10・UHBR20。</td></tr>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://vesa.org/press/vesa-to-update-displayport-2-1-with-new-active-cable-specification-for-up-to-3x-longer-dp80-cables/">VESA to Update DisplayPort 2.1 …</a></th><td>VESA</td><td>2025 年 1 月 6 日</td><td>更新の予定（DP80LL）。公開は確認できていません。</td></tr>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://vesa.org/displayport-developer/certified-components/">DisplayPort Certified Components</a></th><td>VESA</td><td>2025 年 5 月 9 日更新の表示</td><td>DP40・DP54・DP80 の認証の名前。</td></tr>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://www.ieee802.org/3/archive.html">IEEE 802.3 の規格の一覧</a></th><td>IEEE 802.3 ワーキンググループ</td><td>日付の記載なし</td><td>802.3ab-1999、802.3an-2006、802.3bz-2016。</td></tr>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://standards.ieee.org/ieee/802.3bz/6130/">IEEE 802.3bz-2016</a></th><td>IEEE SA</td><td>公開 2016 年 10 月 18 日</td><td>2.5G・5GBASE-T。状態は Superseded。</td></tr>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://www.wi-fi.org/news-events/newsroom/wi-fi-alliance-introduces-wi-fi-6">Wi-Fi Alliance introduces Wi-Fi 6</a></th><td>Wi-Fi Alliance</td><td>2018 年 10 月 3 日</td><td>Wi-Fi 6・5・4 と 802.11ax・ac・n の対応。</td></tr>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://www.wi-fi.org/beacon/the-beacon/wi-fi-7-advanced-connectivity-for-the-next-generation">Wi-Fi 7: Advanced connectivity for the next generation</a></th><td>Wi-Fi Alliance</td><td>2023 年 10 月 31 日</td><td>Wi-Fi 7 と 802.11be。</td></tr>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://www.wi-fi.org/news-events/newsroom/wi-fi-alliance-introduces-wi-fi-certified-7">Wi-Fi Alliance introduces Wi-Fi CERTIFIED 7</a></th><td>Wi-Fi Alliance</td><td>2024 年 1 月 8 日</td><td>Wi-Fi CERTIFIED 7 の発表。</td></tr>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://www.wi-fi.org/system/files/202103_Wi-Fi_6E_and_6_GHz_Update.pdf">Wi-Fi 6E and 6 GHz Update</a></th><td>Wi-Fi Alliance</td><td>2021 年 3 月</td><td>Wi-Fi 6E は Wi-Fi CERTIFIED 6 の中の 6GHz 帯の選択肢。</td></tr>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://www.bluetooth.com/specifications/specs/core-specification-6-2/">Core Specification 6.2</a></th><td>Bluetooth SIG</td><td>2025 年 11 月 4 日の表示</td><td>Bluetooth の版（仕様の一覧は 6.0〜7.0 を採択済みと表示。2026 年 11 月 14 日に確認）。6.3・7.0 の個別ページは確認できていません。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.tele.soumu.go.jp/j/adm/monitoring/summary/qa/giteki_mark/">技適マークについて（Q&amp;A）</a></th><td>総務省</td><td>日付の記載なし</td><td>技適マークのない機器の使用、罰則、番号の検索、改造。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.tele.soumu.go.jp/j/sys/equ/tech/faq/index.htm">技術基準適合証明等に関する FAQ</a></th><td>総務省</td><td>日付の記載なし</td><td>技適マークは、適合表示無線設備を示すこと。</td></tr>
+      <tr><td>教科書・一般知識・他講座</td><th scope="row">映像端子の使い分けの一般知識</th><td>—</td><td>—</td><td>カードがあるときの差す先。マザーボードのマニュアルで確かめます。</td></tr>
+      <tr><td>架空（見本のため）</td><th scope="row">c09-usb の表記、演習の機器と背面の端子</th><td>この講座</td><td>—</td><td>理解のための架空の例。実在の製品とは関係がありません。</td></tr>
+    </tbody>
+  </table></div>
+</section>

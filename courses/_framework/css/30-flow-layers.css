@@ -1,0 +1,85 @@
+/* ===== 10 工程フロー / 11 断面・構成の層図 ===== */
+.fl-stage { padding: .2rem 0; }
+.fl-svg, .ly-svg { display: block; width: 100%; height: auto; margin: 0 auto; }
+.fl-step .l1 { text-anchor: middle; }
+.fl-step .l2 { text-anchor: middle; }
+.fl-step .fl-no { fill: var(--surface); stroke: var(--line2); stroke-width: 1.4; }
+.fl-step .fl-nn { font-size: 10px; font-weight: 700; text-anchor: middle; fill: var(--text); font-family: var(--ttj-font-mono); }
+.fl-step .fl-rp { font-size: 15px; font-weight: 700; fill: var(--accent); }
+.fl-step.sel > rect:first-child { stroke-width: 4; stroke: var(--accent-fill); }
+.fl-step.sel .fl-no { fill: var(--accent-fill); stroke: var(--accent-fill); } .fl-step.sel .fl-nn { fill: var(--accent-ink); }
+.fl-step.vis:not(.sel) .fl-no { fill: var(--accent-soft); stroke: var(--accent); }
+.fe .ln { fill: none; stroke: var(--cp); stroke-width: 2.2; }
+.fe .hd { fill: var(--cp); }
+.fe.loop .ln { stroke-dasharray: 7 5; stroke: var(--muted); } .fe.loop .hd { fill: var(--muted); }
+.fe .el { font-size: 11.5px; font-weight: 700; }
+.fe.out .ln { stroke: var(--accent-fill); stroke-width: 3.6; } .fe.out .hd { fill: var(--accent-fill); }
+.fe.out.loop .ln { stroke: var(--accent-fill); }
+.ly-part { cursor: pointer; }
+.ly-part rect { stroke-width: 2; transition: filter .15s, opacity .15s; }
+.ly-part:hover rect { filter: brightness(1.18); }
+.ly-part .l1 { font-weight: 700; text-anchor: middle; } .ly-part .l2 { font-size: 11.5px; fill: var(--muted); text-anchor: middle; }
+.ly-part.kind-ue rect { fill: var(--k-ue-f); stroke: var(--k-ue-s); } .ly-part.kind-ran rect { fill: var(--k-ran-f); stroke: var(--k-ran-s); }
+.ly-part.kind-core rect { fill: var(--k-core-f); stroke: var(--k-core-s); } .ly-part.kind-db rect { fill: var(--k-db-f); stroke: var(--k-db-s); }
+.ly-part.kind-pol rect { fill: var(--k-pol-f); stroke: var(--k-pol-s); } .ly-part.kind-ext rect { fill: var(--k-ext-f); stroke: var(--k-ext-s); }
+.ly-part.kind-ims rect { fill: var(--k-ims-f); stroke: var(--k-ims-s); }
+.ly-part.dim { opacity: .7; }
+.legend i.vs { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--accent); background: var(--accent-soft); border-radius: 50%; margin-right: .35rem; vertical-align: -2px; }
+.ly-part.sel rect { stroke-width: 4; }
+.ly-svg .ly-gn { font-size: 12px; fill: var(--muted); font-weight: 700; }
+.ly-svg .ly-dim { font-size: 12px; fill: var(--faint); font-family: var(--ttj-font-mono); }
+.ly-svg .ly-end { font-size: 12.5px; fill: var(--accent); font-weight: 700; letter-spacing: .05em; }
+.fl-info .meta { display: flex; flex-wrap: wrap; gap: .35rem; margin: .35rem 0; }
+.fl-info .meta .chip { color: var(--text); }
+@media print { .fl-stage, .xs-stage { overflow: visible; } .rt-table { display: block; } .rt-table:not([open]) > :not(summary) { display: block; } }
+
+/* ===== 12 工程断面 xsec：材料の色（ダーク・ライトの両方で面と区別できる色） ===== */
+:root, :root[data-theme="dark"] {
+  --m-si:#6b7c99; --m-si-n:#3f7fd0; --m-si-p:#d0803f; --m-sio2:#7ac4d6; --m-sin:#3fa088; --m-poly:#c4ad4a; --m-hk:#c06fb0; --m-metal:#9aa0a8; --m-cu:#e07a45; --m-w:#7a7ab8;
+  --m-al:#c4ceda; --m-barrier:#4a5d6c; --m-lowk:#7fcf94; --m-resist:#e6c84a; --m-resist-exp:#ff8a9c; --m-mold:#5a4d80; --m-bump:#e8e8e8; --m-substrate:#2f8a66; --m-void:#060f1d; --m-stroke: rgba(255,255,255,.45);
+}
+:root[data-theme="light"] {
+  --m-si:#a3b0c6; --m-si-n:#8db6f0; --m-si-p:#f2b98a; --m-sio2:#b4e2ec; --m-sin:#8fd2bd; --m-poly:#e4d48e; --m-hk:#ebb0dd; --m-metal:#c4c9cf; --m-cu:#f0a077; --m-w:#b4b4e0;
+  --m-al:#dbe1e8; --m-barrier:#8c9eac; --m-lowk:#bfe9cb; --m-resist:#f3e08a; --m-resist-exp:#ffb8c4; --m-mold:#a99fd0; --m-bump:#b9b9b9; --m-substrate:#7bc9a4; --m-void:#ffffff; --m-stroke: rgba(15,26,51,.55);
+}
+@media print { :root, :root[data-theme="dark"], :root[data-theme="light"] { --m-void:#ffffff; --m-stroke: rgba(0,0,0,.6); } }
+.xs-svg, .rt-svg { display: block; width: 100%; height: auto; margin: 0 auto; }
+.xs-sh { stroke: var(--m-stroke); stroke-width: 1; }
+.xs-sh.m-void { stroke-dasharray: 4 3; }
+.xs-sh.chg { stroke: var(--accent-fill); stroke-width: 3; }
+.xs-sh.dim { opacity: .25; } .xs-sh.hi { stroke: var(--text); stroke-width: 3; }
+.xs-sh.m-si { fill: var(--m-si); } .xs-sh.m-si-n { fill: var(--m-si-n); } .xs-sh.m-si-p { fill: var(--m-si-p); } .xs-sh.m-sio2 { fill: var(--m-sio2); } .xs-sh.m-sin { fill: var(--m-sin); }
+.xs-sh.m-poly { fill: var(--m-poly); } .xs-sh.m-hk { fill: var(--m-hk); } .xs-sh.m-metal { fill: var(--m-metal); } .xs-sh.m-cu { fill: var(--m-cu); } .xs-sh.m-w { fill: var(--m-w); }
+.xs-sh.m-al { fill: var(--m-al); } .xs-sh.m-barrier { fill: var(--m-barrier); } .xs-sh.m-lowk { fill: var(--m-lowk); } .xs-sh.m-resist { fill: var(--m-resist); } .xs-sh.m-resist-exp { fill: var(--m-resist-exp); }
+.xs-sh.m-mold { fill: var(--m-mold); } .xs-sh.m-bump { fill: var(--m-bump); } .xs-sh.m-substrate { fill: var(--m-substrate); } .xs-sh.m-void { fill: var(--m-void); }
+.xs-lg { display: inline-flex; align-items: center; gap: .35rem; background: transparent; border: 1px solid transparent; border-radius: 999px; padding: .1rem .55rem .1rem .3rem; cursor: pointer; color: var(--muted); font-size: .78rem; }
+.xs-lg:hover, .xs-lg[aria-pressed="true"] { border-color: var(--accent); color: var(--text); }
+.xs-lg .sw { display: inline-block; width: 16px; height: 12px; border: 1px solid var(--m-stroke); border-radius: 2px; }
+.xs-lg .sw.m-si { background: var(--m-si); } .xs-lg .sw.m-si-n { background: var(--m-si-n); } .xs-lg .sw.m-si-p { background: var(--m-si-p); } .xs-lg .sw.m-sio2 { background: var(--m-sio2); } .xs-lg .sw.m-sin { background: var(--m-sin); }
+.xs-lg .sw.m-poly { background: var(--m-poly); } .xs-lg .sw.m-hk { background: var(--m-hk); } .xs-lg .sw.m-metal { background: var(--m-metal); } .xs-lg .sw.m-cu { background: var(--m-cu); } .xs-lg .sw.m-w { background: var(--m-w); }
+.xs-lg .sw.m-al { background: var(--m-al); } .xs-lg .sw.m-barrier { background: var(--m-barrier); } .xs-lg .sw.m-lowk { background: var(--m-lowk); } .xs-lg .sw.m-resist { background: var(--m-resist); } .xs-lg .sw.m-resist-exp { background: var(--m-resist-exp); }
+.xs-lg .sw.m-mold { background: var(--m-mold); } .xs-lg .sw.m-bump { background: var(--m-bump); } .xs-lg .sw.m-substrate { background: var(--m-substrate); } .xs-lg .sw.m-void { background: var(--m-void); border-style: dashed; }
+.xs-fx { font-size: 22px; font-weight: 700; fill: var(--accent); text-anchor: middle; animation: xspulse 1.6s ease-in-out infinite; }
+.xs-fxl { font-size: 12px; font-weight: 700; fill: var(--accent); }
+.xs-lb { font-size: 11px; font-weight: 700; text-anchor: middle; fill: var(--text); paint-order: stroke; stroke: var(--surface); stroke-width: 3px; }
+.xs-note { margin: .3rem 0 0; font-size: .78rem; color: var(--faint); }
+@keyframes xspulse { 0%, 100% { opacity: .35; transform: translateY(-2px); } 50% { opacity: 1; transform: translateY(3px); } }
+.xs-info .meta { display: flex; flex-wrap: wrap; gap: .35rem; margin: .35rem 0; } .xs-info .meta .chip { color: var(--text); }
+
+/* ===== 13 行程帯図 route ===== */
+:root { --pt-a: #2f6fb0; --pt-b: #9a5a14; --pt-c: #2f7a4f; --pt-d: #8a4fb0; --pt-none: transparent; --pt-ink: #fff; }
+.rt-seg, .rt-pt, .rt-gate, .rt-mark { cursor: pointer; }
+.rt-seg .hit, .rt-mark .hit { fill: transparent; } .rt-seg:hover .hit { fill: var(--accent-soft); }
+.rt-seg .ln { stroke: var(--muted); stroke-width: 3; }
+.rt-ic path, .rt-ic circle { fill: none; stroke: var(--text); stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; }
+.rt-pt circle { fill: var(--surface2); stroke: var(--accent-fill); stroke-width: 3; }
+.rt-pl { font-size: 13px; font-weight: 700; } .rt-ps, .rt-sl { font-size: 11.5px; fill: var(--muted); }
+.rt-gate line { stroke: var(--muted); stroke-width: 1.6; } .rt-gate path { fill: var(--accent-soft); stroke: var(--accent-fill); stroke-width: 1.8; } .rt-gl { font-size: 11.5px; font-weight: 700; }
+.rt-rl { font-size: 12.5px; font-weight: 700; fill: var(--muted); }
+.rt-b { stroke: var(--line2); stroke-width: 1; } .rt-b.pt-a { fill: var(--pt-a); } .rt-b.pt-b { fill: var(--pt-b); } .rt-b.pt-c { fill: var(--pt-c); } .rt-b.pt-d { fill: var(--pt-d); } .rt-b.pt-none { fill: none; stroke-dasharray: 4 3; }
+.rt-bt { font-size: 14px; font-weight: 700; fill: var(--pt-ink); } .rt-b.pt-none + .rt-bt { fill: var(--faint); }
+.rt-mark path { fill: var(--accent-fill); stroke: var(--text); stroke-width: 1.5; } .rt-ml { font-size: 11.5px; font-weight: 700; }
+.rt-seg.sel .ln { stroke: var(--accent-fill); } .rt-pt.sel circle { fill: var(--accent-fill); } .rt-gate.sel path { fill: var(--accent-fill); } .rt-mark.sel path { stroke-width: 3; stroke: var(--accent); }
+.legend i.pt { display: inline-block; width: 14px; height: 14px; border-radius: 3px; margin-right: .35rem; vertical-align: -2px; border: 1px solid var(--line2); }
+.legend i.pt-a { background: var(--pt-a); } .legend i.pt-b { background: var(--pt-b); } .legend i.pt-c { background: var(--pt-c); } .legend i.pt-d { background: var(--pt-d); }
+.rt-table table { min-width: 420px; }

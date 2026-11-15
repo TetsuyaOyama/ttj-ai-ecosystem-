@@ -1,0 +1,79 @@
+<!--
+num: 05
+part: 1
+title: 段階 4　動かしてみる
+track: 段階4
+time: 35
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li><b>マルチエージェント</b>（複数のエージェントを組み合わせる方法）の枠組みを、<b>優劣を付けずに</b>、事実で並べて見られる。</li>
+    <li><b>保守終了</b>の札の意味と、後継へ移る考え方を、AutoGen の例で説明できる。</li>
+    <li>段階 4 を終えて<b>できること</b>と、次へ進む<b>目安</b>を確かめられる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch04">第 04 章</a>（段階 3）。Python の基礎と、API キーを扱う心得があると進めやすくなります。</p>
+</section>
+
+<h3>複数のエージェントを動かす枠組み</h3>
+<p><b>マルチエージェント</b>（multi-agent）は、役割の違う複数のエージェントを組み合わせて、1 つの作業を進める方法です。たとえば、調べる役、まとめる役、確かめる役、のように分けます。</p>
+<p>この方法を実際に動かすには、<b>フレームワーク</b>（framework、部品と使い方の枠組み）を使います。段階 4 では、フレームワークを選んで、動くサンプルを試します。</p>
+<p>この道筋の元の案では、「CrewAI か Microsoft AutoGen」でした。このうち AutoGen は、<b>アーカイブされ、保守が終わっています</b>。新規には、Microsoft Agent Framework が案内されています。AutoGen は、状態の札を付けて、表に残しました。</p>
+
+<h3>AutoGen と、後継の Microsoft Agent Framework</h3>
+<p>AutoGen の README は、プロジェクトがアーカイブされ、Microsoft による保守は終わったと書いています。バグやセキュリティの修正も、新機能も、サポートも提供されません。本番での利用は勧められていません。リポジトリは、歴史と参照のために公開が続いています（出典：Microsoft『AutoGen』README、確認 2026 年 11 月）。</p>
+<p>Microsoft Agent Framework の Learn のページは、AutoGen と Semantic Kernel の直接の後継と書いています。AutoGen からの移行ガイドも、用意されています（出典：Microsoft Learn『Microsoft Agent Framework overview』、ページ表示の更新日 2026 年 10 月 28 日）。</p>
+<div data-widget="compare" data-src="c05-af"></div>
+<p>表で確かめる点は 3 つです。1 つ目は、<b>状態</b>の違いです。一方は保守が終わり、もう一方は、更新日が 2026 年 10 月 28 日と表示されています。2 つ目は、<b>対応言語</b>です。3 つ目は、移行ガイドがあることです。</p>
+<p>なお、2025 年 10 月の公式の発表は、AutoGen の保守を続け、重大なバグとセキュリティの修正は提供する、と書いていました（出典：microsoft/autogen の Discussions #7066、2025 年 10 月 2 日）。2026 年 4 月の記事（二次情報）にも、同じ書き方があります。確認日（2026 年 11 月 15 日）の README は、アーカイブの表示に変わっています。この講座は、<b>提供元の今の README の表示</b>に合わせました。古い記事と今のページが食い違うときは、提供元の今のページを見ます。</p>
+
+<h3>段階 4 の教材（選択肢）</h3>
+<p>段階 4 の選択肢は 5 つです。<b>優劣の順位はつけません。</b>選ぶときは、使う言語、API キーの提供元、状態、ライセンスなど、ページに書かれた事実で決めます。表の行を押して、前提を確かめてください。</p>
+<div data-widget="table" data-src="c05-res"></div>
+<p>用語を整理します。<b>SDK</b>（software development kit）は、ある機能をプログラムから使いやすくするための、道具一式です。<b>ハンドオフ</b>は、あるエージェントが、別のエージェントへ作業を引き継ぐことです。<b>ガードレール</b>は、入力や出力を検証して、望まない動きを防ぐ仕組みです。OpenAI Agents SDK のドキュメントは、これらを構成要素として挙げています。</p>
+
+<h3>どれを選ぶか：事実で絞る</h3>
+<ul>
+  <li><b>使う言語</b>：CrewAI と OpenAI Agents SDK は Python です。Microsoft Agent Framework は、Python と .NET です。</li>
+  <li><b>API キーと利用料</b>：CrewAI の既定は OpenAI の API です。OpenAI Agents SDK の例は、OPENAI_API_KEY を使います。どちらも、利用料がかかる場合があります。</li>
+  <li><b>状態</b>：AutoGen は、保守終了です。新規には勧めません。</li>
+  <li><b>動くサンプルを見たい</b>：Awesome LLM Apps は、100 以上のサンプルを集めた、個人のリポジトリです。公式の教材ではありません。</li>
+</ul>
+<p>これらは、優劣ではなく、前提の違いです。自分が使える言語と、API キーの持ち方で、候補を絞ります。</p>
+
+<div class="callout std"><span class="ttl">終えるとできること（段階 4）</span>
+  <p>この段階の教材を 1 つ動かすと、次のことに取り組めるようになります。保証ではなく、目安です。</p>
+  <ul>
+    <li>複数のエージェントに役割を割り当てる、小さなサンプルを動かせる。</li>
+    <li>保守終了や、後継への移行といった、フレームワークの状態の変化を、札から読み取れる。</li>
+    <li>自分の作業に合うフレームワークを、前提の違いから絞れる。</li>
+  </ul></div>
+<div class="callout tip"><span class="ttl">次へ進む目安</span>
+  <p>サンプルを動かして、<b>エージェントごとの役割と、1 回あたりにかかる API の利用料の見積もり</b>を、自分の言葉で説明できたら、先へ進みます。任意の段階（第 06 章）か、自分の環境づくり（第 07 章）です。</p></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>保守終了の枠組みを、新規に選ぶ</b>ことです。検索すると、AutoGen の古い解説が、たくさん見つかります。解説の日付と、提供元の README の状態を、先に確かめます。</p>
+  <p>もう 1 つは、<b>動かす回数が増えて、API の利用料が増える</b>ことです。複数のエージェントは、それぞれが API を呼びます。繰り返しの回数の上限と、費用の上限を、先に決めます。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c05-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 15 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+<!--GEN:refs-->
+      <tr><td>公式リポジトリ（フレームワーク）</td><th scope="row"><a href="https://github.com/crewAIInc/crewAI" target="_blank" rel="noopener noreferrer">CrewAI</a></th><td>CrewAI Inc</td><td>日付の記載なし（確認 2026-11-15）</td><td>概要・ライセンス・前提。経路：README とドキュメントの導入ページを開いて確認</td></tr>
+      <tr><td>公式リポジトリ（アーカイブ）</td><th scope="row"><a href="https://github.com/microsoft/autogen" target="_blank" rel="noopener noreferrer">AutoGen</a></th><td>Microsoft</td><td>日付の記載なし（確認 2026-11-15）</td><td>状態・後継・ライセンス・発表からの変化。経路：README と、2025 年 10 月の公式の発表（GitHub Discussions #7066、Microsoft のブログ）を開いて確認</td></tr>
+      <tr><td>公式ドキュメント（フレームワーク）</td><th scope="row"><a href="https://learn.microsoft.com/en-us/agent-framework/overview/" target="_blank" rel="noopener noreferrer">Microsoft Agent Framework</a></th><td>Microsoft</td><td>ページ表示の更新日 2026-10-28（確認 2026-11-15）</td><td>概要・後継の位置づけ・前提。経路：Learn の概要ページと GitHub の README を開いて確認</td></tr>
+      <tr><td>公式ドキュメント（SDK）</td><th scope="row"><a href="https://openai.github.io/openai-agents-python/" target="_blank" rel="noopener noreferrer">OpenAI Agents SDK</a></th><td>OpenAI</td><td>日付の記載なし（確認 2026-11-15）</td><td>概要・前提・ライセンス。経路：ドキュメントと GitHub の README を開いて確認</td></tr>
+      <tr><td>個人のリポジトリ（サンプル集）</td><th scope="row"><a href="https://github.com/Shubhamsaboo/awesome-llm-apps" target="_blank" rel="noopener noreferrer">Awesome LLM Apps</a></th><td>個人のオープンソース（Shubhamsaboo）</td><td>週ごとに新しいテンプレートが加わる、と記載（確認 2026-11-15）</td><td>内容・ライセンス・前提。経路：README の写し（jsDelivr）を開いて確認</td></tr>
+<!--/GEN:refs-->
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://learn.microsoft.com/ja-jp/agent-framework/migration-guide/from-autogen" target="_blank" rel="noopener noreferrer">AutoGen から Microsoft Agent Framework への移行ガイド</a></th><td>Microsoft</td><td>ページ表示の更新日 2026-09-29（確認 2026 年 11 月）</td><td>移行ガイドの案内（日本語版）。</td></tr>
+      <tr><td>公式の発表</td><th scope="row"><a href="https://github.com/microsoft/autogen/discussions/7066" target="_blank" rel="noopener noreferrer">AutoGen Update（Discussions #7066）</a></th><td>Microsoft（AutoGen の保守担当）</td><td>2025-10-02</td><td>発表の時点の AutoGen の状態（保守を続ける）。今の README と比べるため。</td></tr>
+      <tr><td>二次情報</td><th scope="row">Microsoft Agent Framework 1.0 の発表を伝える記事（2026 年 4 月）</th><td>Visual Studio Magazine</td><td>2026 年 4 月</td><td>AutoGen の状態の書き方が、README と食い違う例。README を優先した。</td></tr>
+    </tbody>
+  </table></div>
+</section>

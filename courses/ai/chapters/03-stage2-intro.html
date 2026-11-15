@@ -1,0 +1,74 @@
+<!--
+num: 03
+part: 1
+title: 段階 2　体系的な入門
+track: 段階2
+time: 30
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>段階 2 の<b>体系的な入門</b>が、段階 1 の単発の教材と何が違うかを説明できる。</li>
+    <li>4 つの教材の<b>特徴</b>と、<b>状態の札</b>（改名・移転、保守終了）の読み方を言える。</li>
+    <li>段階 2 を終えて<b>できること</b>と、段階 3 へ進む<b>目安</b>を確かめられる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch02">第 02 章</a>（段階 1）。プロンプトを整える感覚があると、読みやすくなります。</p>
+</section>
+
+<h3>体系的な入門とは</h3>
+<p>段階 1 の教材は、プロンプトという 1 つのテーマに絞っていました。段階 2 の教材は、<b>基礎から順に、全体を通して学べるように並べた講座</b>です。生成 AI で何ができるか、どう作るか、どう気をつけるかを、順に学びます。</p>
+<p>体系的な教材は、長くなります。ここでは、全部を終える必要はありません。<b>1 つ選んで、全体の見取り図を作る</b>ことが目的です。</p>
+
+<h3>例：Microsoft の入門講座の流れ</h3>
+<p>Microsoft の「Generative AI for Beginners」は、21 レッスンの講座です。README の表を、学ぶ順にまとめたのが次の図です。「Learn」は考え方を学ぶレッスン、「Build」は作るレッスンです（出典：Microsoft『Generative AI for Beginners』、確認 2026 年 11 月）。</p>
+<div data-widget="flow" data-src="c03-path"></div>
+<p>図で確かめる点は 3 つです。1 つ目は、最初に環境の準備（レッスン 00）があることです。2 つ目は、基礎、プロンプト、アプリ作り、設計と運用、RAG とエージェント、発展、の順に進むことです。3 つ目は、「全部を読む」のではなく、<b>必要な所から入る</b>こともできることです。</p>
+
+<h3>段階 2 の教材</h3>
+<p>段階 2 の教材は 4 つあります。「Anthropic Courses（GitHub）」は、2026 年 9 月 15 日に<b>アーカイブ</b>され、状態の札は「保守終了」です。Anthropic の学習サイトは、<b>Claude Academy</b> に移転しました。表の行を押して、注意を読んでください。</p>
+<div data-widget="table" data-src="c03-res"></div>
+
+<h3>どれを選ぶか：内容の特徴で決める</h3>
+<p><b>Microsoft の入門講座</b>、<b>Anthropic の講座</b>、<b>OpenAI Academy</b> の順に並べました。並べた理由は、内容の特徴です。優劣ではありません。</p>
+<ul>
+  <li><b>Microsoft の Generative AI for Beginners</b>：レッスンが番号順に並び、<b>作りながら学べます</b>。日本語訳があります。実行には、Azure か OpenAI の API などの環境が要ります。</li>
+  <li><b>Claude Academy</b>：Anthropic の<b>セルフペース</b>の講座群です。Claude Code の公式ドキュメントが、無料の講座として案内しています。academy.claude.com の講座の一覧と、登録の要否は、確認できていません。</li>
+  <li><b>Anthropic Courses（GitHub）</b>：API の基礎、プロンプト、評価、ツール利用の 5 講座を並べたリポジトリです。アーカイブされ、読み取り専用です。<b>新規には勧めません。</b>中身を参照として読むことはできます。</li>
+  <li><b>OpenAI Academy</b>：ChatGPT アカウントで登録する、無料の講座群です。仕事での AI の使い方の講座は、60〜75 分と<b>短め</b>です（ページ記載。所要は目安）。</li>
+</ul>
+
+<div class="callout std"><span class="ttl">終えるとできること（段階 2）</span>
+  <p>この段階の教材を 1 つ進めると、次のことに取り組めるようになります。保証ではなく、目安です。</p>
+  <ul>
+    <li>生成 AI でできることと、気をつける点を、全体の地図として説明できる。</li>
+    <li>RAG、関数呼び出し、ファインチューニングなどの<b>言葉の意味</b>を、聞かれたときに説明できる。</li>
+    <li>次の段階（エージェント）で出てくる言葉が、初めての言葉ではなくなる。</li>
+  </ul></div>
+<div class="callout tip"><span class="ttl">次へ進む目安</span>
+  <p>教材の全体の地図の中で、<b>自分が使いたい場面</b>（たとえば、資料を調べる、決まった作業を自動にする）を 1 つ決められたら、段階 3 へ進みます。教材の最後まで終えていなくても構いません。</p></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>環境の説明が古くなっていること</b>です。Microsoft の入門講座の README は、GitHub Models が 2026 年 7 月末に終了し、Microsoft Foundry Models を使う、と書いています。講座の環境の作り方は、最新の README で確かめてください。</p>
+  <p>もう 1 つは、<b>アーカイブされた教材を、今も更新されていると読む</b>ことです。「Anthropic Courses（GitHub）」は、アーカイブ後は更新されません。Claude Academy の講座の一覧は、この講座では確かめていません。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c03-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 15 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+<!--GEN:refs-->
+      <tr><td>公式リポジトリ（講座）</td><th scope="row"><a href="https://github.com/microsoft/generative-ai-for-beginners" target="_blank" rel="noopener noreferrer">Generative AI for Beginners</a></th><td>Microsoft</td><td>日付の記載なし（確認 2026-11-15）</td><td>レッスン構成・前提・日本語訳の確認。経路：公式 Pages の README を開いて確認（GitHub 本体は開けず）</td></tr>
+      <tr><td>公式の学習サイト</td><th scope="row"><a href="https://academy.claude.com/" target="_blank" rel="noopener noreferrer">Claude Academy</a></th><td>Anthropic</td><td>日付の記載なし（確認 2026-11-15）</td><td>移転と無料の案内の確認。経路：リダイレクトの確認、Claude の公式記事、Claude Code のドキュメント、Skilljar 上の講座一覧</td></tr>
+      <tr><td>公式リポジトリ（アーカイブ）</td><th scope="row"><a href="https://github.com/anthropics/courses" target="_blank" rel="noopener noreferrer">Anthropic Courses（GitHub）</a></th><td>Anthropic</td><td>2026-09-15 にアーカイブ（GitHub の表示）（確認 2026-11-15）</td><td>状態・講座の構成・前提。経路：GitHub のリポジトリのページを開いて確認</td></tr>
+      <tr><td>公式の学習サイト</td><th scope="row"><a href="https://academy.openai.com/pages/courses" target="_blank" rel="noopener noreferrer">OpenAI Academy</a></th><td>OpenAI</td><td>日付の記載なし（相対表記のみ）（確認 2026-11-15）</td><td>講座の一覧・無料・修了証の条件。経路：講座の一覧のページと、OpenAI のヘルプ記事（公式）を開いて確認</td></tr>
+<!--/GEN:refs-->
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://code.claude.com/docs/en/quickstart" target="_blank" rel="noopener noreferrer">Quickstart（Claude Code）</a></th><td>Anthropic</td><td>日付の記載なし（確認 2026 年 11 月）</td><td>Claude Academy の無料のセルフペースコースと、Claude Code 101 の案内。</td></tr>
+      <tr><td>公式の講座</td><th scope="row"><a href="https://anthropic.skilljar.com/claude-in-amazon-bedrock" target="_blank" rel="noopener noreferrer">Claude with Amazon Bedrock</a></th><td>Anthropic</td><td>日付の記載なし（確認 2026 年 11 月）</td><td>Anthropic の講座の例。登録ボタンの無料の表示と、前提（Python、AWS）。</td></tr>
+      <tr><td>公式記事</td><th scope="row"><a href="https://claude.com/resources/articles/anthropics-approach-to-teaching-and-learning-ai" target="_blank" rel="noopener noreferrer">Anthropic’s approach to teaching and learning AI</a></th><td>Anthropic</td><td>日付の記載なし（確認 2026 年 11 月）</td><td>Claude Academy（academy.claude.com）の紹介。</td></tr>
+    </tbody>
+  </table></div>
+</section>

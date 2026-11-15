@@ -1,0 +1,90 @@
+<!--
+num: 08
+part: 2
+title: アクセラレータ搭載サーバー：GPU と AI 向けの機器
+track: 機器
+time: 40
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li><b>アクセラレータ</b>が CPU とどう分担し、<b>学習</b>と<b>推論</b>で機器への要求がどう違うかを説明できる。</li>
+    <li>GPU サーバーの 2 つの形（<b>PCIe カード型</b>と<b>ベースボード型</b>）と、GPU 間接続（<b>NVLink</b>、<b>UALink</b>）の役割を言える。</li>
+    <li>電力と発熱が大きくなる理由を、公開された製品の値（出典・時点つき）の読み方と合わせて説明できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch06">第06章</a>（CPU サーバーの中身）。あるとよい：<a href="#ch04">第04章</a>（仮想化）、<a href="#ch07">第07章</a>（PCIe）。</p>
+</section>
+
+<h3>アクセラレータとは</h3>
+<p><b>アクセラレータ</b>（accelerator）は、CPU の代わりに、特定の計算を高速に行う部品です。AI で多く使うのは、行列の積のような、同じ種類の計算を大量に行う処理です。これを、多数の演算器で並列に行うのが得意なのが、<b>GPU</b>（Graphics Processing Unit）です。</p>
+<p>CPU と GPU は、役割を分担します。CPU は、プログラムの流れを制御し、データを準備し、GPU に仕事を渡します。GPU は、渡された計算を並列に行います。GPU には、専用のメモリ（<b>HBM</b>、High Bandwidth Memory）が付いています。HBM は、DRAM を縦に積んだ、広い帯域幅のメモリです。サーバーから見た役割は、「GPU のすぐ隣にある、速いメモリ」です。チップとパッケージの作り方は、<a href="../semi/#ch15">半導体講義 第15章</a>で扱います。この章では、チップの作り方は書きません。</p>
+
+<h3>学習と推論：機器への要求の違い</h3>
+<p>AI の計算は、大きく 2 つに分かれます。<b>学習</b>（training）は、大量のデータで、モデルの重みを作る計算です。<b>推論</b>（inference）は、学習済みのモデルで、入力から出力を計算する計算です。機器への要求が違うので、構成も違ってきます。</p>
+<div data-widget="compare" data-src="c08-train-infer"></div>
+
+<h3>学習の 1 ステップを見る</h3>
+<p>学習は、同じ手順を何度も繰り返します。1 回の手順（ステップ）の中で、どこに計算が起き、どこで通信が起きるかを、図で見ましょう。ここでは、データ並列という、各 GPU が別のデータで学習する方法を例にします（出典：一般知識）。</p>
+<div data-widget="flow" data-src="c08-train-step"></div>
+<p>通信が大量に起きるのは、「勾配の集約」の工程です。各 GPU が、別々の勾配を持っているので、全 GPU で集めてそろえる必要があります。これを<b>集団通信</b>と呼びます（<a href="#ch11">第11章</a>）。この工程が遅いと、全 GPU が待ちます。GPU 間接続とネットワークの速さが、学習全体の速さに効くのは、このためです。</p>
+
+<h3>GPU サーバーの 2 つの形</h3>
+<p>GPU を載せるサーバーには、大きく 2 つの形があります（一般論）。</p>
+<ul>
+  <li><b>PCIe カード型</b>：GPU を、PCIe の拡張カードとして差します。GPU の数は数枚から、サーバーによっては 8 枚程度です。既存の空冷のサーバーに収めやすい形です。</li>
+  <li><b>ベースボード型</b>：複数の GPU モジュール（<b>OAM</b>、OCP Accelerator Module など）を、1 枚の基板（<b>UBB</b>、Universal Baseboard など）に載せます。基板の上に、GPU 間の高速な接続があります。</li>
+</ul>
+<p>OCP（Open Compute Project）の OAI（Open Accelerator Infrastructure）は、さまざまなアクセラレータの共通のインフラ仕様（電気・機械・熱・管理・セキュリティ・保守）を定めるサブプロジェクトです。現行の仕様は、OAI-OAM Base Specification r2.0 v1.0 と OAI-UBB Base Specification r2.0 v1.0 です（出典：OCP の OAM・OAI のページ、確認 2026 年 11 月。仕様の提出は 2023 年 9 月 14 日）。OAM は、異なる種類のアクセラレータを、共通の約束で載せるための仕様です。</p>
+<p>AMD（米国）の MI300X Platform のデータシートは、OCP の OAM モジュール 8 個を、UBB に載せた構成を説明しています（出典：AMD『AMD Instinct MI300X Platform Data Sheet』）。図のタブで、2 つの形を比べてください。</p>
+<div data-widget="arch" data-src="c08-gpu-server"></div>
+
+<h3>GPU 間の接続：NVLink、UALink、PCIe</h3>
+<p>学習では、GPU 同士が大量のデータを交換します。この通信を、PCIe だけで行うと、待ちが大きくなることがあります。そこで、GPU 同士を直接つなぐ<b>GPU 間接続</b>（GPU interconnect）があります。方式は、製品ごとに違います。</p>
+<p>NVIDIA（米国）は、GPU 間接続を NVLink と呼びます。H100 のページは、SXM の版の NVLink を 900 GB/s と記しています（出典：NVIDIA『H100 GPU』、確認 2026 年 11 月）。AMD は、Infinity Fabric のリンクで、GPU 同士をつなぎます。MI300X のデータシートは、スケールアップ用のリンクを 7 本、各 128 GB/s と記しています。新しい世代の MI355X のデータシートでは、同じ 7 本で、各 144 GB/s です。NVIDIA の HGX B200・B300 のページは、GPU 間を 1.8 TB/s と記しています（出典：各社の公式ページ、確認 2026 年 11 月）。</p>
+<p>特定の会社の呼称ではない、共通の規格もあります。<b>UALink</b>（Ultra Accelerator Link）は、その 1 つです。UALink Consortium は、2025 年 4 月 8 日に、UALink 200G 1.0 の仕様を公開したと発表しました。1 レーン 200G で、1 つのポッドに、アクセラレータを最大 1,024 個つなげる、と述べています（出典：UALink Consortium、Business Wire 配信、2025 年 4 月 8 日）。「ポッド」は、<a href="#ch11">第11章</a>で扱います。</p>
+
+<h3>消費電力と発熱の大きさ</h3>
+<p>GPU サーバーは、CPU サーバーより、電力と発熱が大きくなります。理由は、1 枚の GPU の電力が大きいことと、1 台に載る GPU の数が多いことの 2 つです。次の表は、各社の公開値の例です。冷却のしかたは、<a href="#ch15">第15章</a>と<a href="#ch16">第16章</a>で扱います。</p>
+<div data-widget="table" data-src="c08-accel"></div>
+<p>表の「電力の値」は、資料ごとに、言葉が違います。NVIDIA の資料は「最大 TDP」、AMD の資料は「ピークの TBP」「最大 TBP」と書きます。表の例は、執筆時（2026 年 11 月）に各社の公式ページで確認できたものに限り、新旧の世代が混ざっています。意味と測り方が違うことがあるので、企業の間で、値を比べることはしません。</p>
+
+<h3>GPU 以外のアクセラレータ</h3>
+<p>アクセラレータは、GPU だけではありません。各社が、AI 向けのチップを作っています。この章の表の Intel（米国）の Gaudi 3 は、その例です。Intel の発表は、128 GB の HBM2e と、200 Gb のイーサネットポート 24 本をもち、OAM の版と PCIe の版がある、と説明しています（出典：Intel、2024 年 9 月 24 日）。GPU と同じように、HBM と高速なネットワークを持つ点が、AI 向けの機器に共通です。他社の自社開発チップは、公開資料の個別ページを確認できなかったため、この章では扱いません。</p>
+
+<h3>演習：どちらの形から考えるか</h3>
+<p>3 つの案件（すべて架空）で、PCIe カード型とベースボード型のどちらから考えるかを選びます。答えを決めてから、行を押してください。</p>
+<div data-widget="table" data-src="c08-choose"></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>NVLink は、GPU 間接続の一般名ではありません。</b>NVIDIA の呼称です。一般名は「GPU 間接続」で、AMD や Intel など、他社の方式もあります。UALink は、特定の会社の呼称ではない規格です。</p>
+  <p><b>電力の値は、企業の間で比べません。</b>「TDP」「TBP」は、資料ごとに定義が違います（<a href="#ch06">第06章</a>）。数値の大小で、製品の優劣を判断しないでください。</p>
+  <p><b>学習と推論は、必要な機器が違います。</b>推論は、モデルが 1 台に収まれば 1 台から数台の GPU で足りることが多く、学習は、大規模なクラスタになりやすい、という傾向です。大きなモデルでは、推論でも複数の GPU やサーバーに分けて動かします。モデルの大きさで変わります。</p></div>
+
+<div class="callout tip"><span class="ttl">現場でのつながり</span>
+  <p>案件では、まず「学習か推論か」「モデルの大きさ」「GPU の台数」を聞きます。そのうえで、ラック 1 本あたりの電力・冷却・ネットワークの予算（<a href="#ch11">第11章</a>）に、GPU サーバーが何台入るかを考えます。製品の公開値は、世代ごとに変わるので、商談の時点のデータシートで確認します。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c08-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（アクセス日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.nvidia.com/en-us/data-center/h100/">H100 GPU</a></th><td>NVIDIA（米国）</td><td>2026 年 11 月に確認</td><td>H100 SXM と H100 NVL の形状、メモリ、最大 TDP、NVLink の値。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.nvidia.com/en-us/data-center/hgx/">NVIDIA HGX Platform</a></th><td>NVIDIA（米国）</td><td>ページの更新 2026-09-30、2026 年 11 月に確認</td><td>HGX B200・B300 の GPU 8 個のベースボード、NVLink の値、メモリの合計。電力の記載なし。</td></tr>
+      <tr><td>企業のデータシート</td><th scope="row"><a href="https://www.amd.com/content/dam/amd/en/documents/instinct-tech-docs/product-briefs/amd-instinct-mi355x-gpu-brochure.pdf">DATASHEET: AMD INSTINCT MI355X GPU</a></th><td>AMD（米国）</td><td>© 2026、資料番号の表示 9/26</td><td>OAM、HBM3E、最大 TBP、Infinity Fabric のリンク。</td></tr>
+      <tr><td>企業のデータシート</td><th scope="row"><a href="https://www.amd.com/content/dam/amd/en/documents/instinct-tech-docs/data-sheets/amd-instinct-mi300x-data-sheet.pdf">AMD Instinct MI300X Accelerator Data Sheet</a></th><td>AMD（米国）</td><td>版・日付の記載なし（© 2025）</td><td>OAM、ピークの TBP、HBM3、PCIe、Infinity Fabric のリンク。</td></tr>
+      <tr><td>企業のデータシート</td><th scope="row"><a href="https://www.amd.com/content/dam/amd/en/documents/instinct-tech-docs/data-sheets/amd-instinct-mi300x-platform-data-sheet.pdf">AMD Instinct MI300X Platform Data Sheet</a></th><td>AMD（米国）</td><td>版・日付の記載なし（© 2023）</td><td>OAM 8 個を UBB に載せた構成。</td></tr>
+      <tr><td>企業の発表</td><th scope="row"><a href="https://newsroom.intel.com/artificial-intelligence/next-generation-ai-solutions-xeon-6-gaudi-3">Intel Unveils Next-Generation AI Solutions with the Launch of Xeon 6 and Gaudi 3</a></th><td>Intel（米国）</td><td>2024 年 9 月 24 日</td><td>Gaudi 3 の HBM2e の容量と、200 Gb のイーサネットポート。</td></tr>
+      <tr><td>企業のプレスキット</td><th scope="row"><a href="https://intel.com/content/www/us/en/newsroom/resources/enterprise-ai-products.html">Press Kit: Intel Xeon 6 with P-cores and Gaudi 3 AI Accelerators</a></th><td>Intel（米国）</td><td>2026 年 11 月に確認</td><td>Gaudi 3 の OAM（UBB に 8 個）と PCIe CEM の版。</td></tr>
+      <tr><td>団体の公開ページ</td><th scope="row"><a href="https://www.opencompute.org/wiki/Server/OAM">OCP Accelerator Module (OAM)</a></th><td>OCP</td><td>2026 年 11 月に確認</td><td>OAM・UBB の現行の仕様（r2.0 v1.0）と、以前の版。</td></tr>
+      <tr><td>団体の公開ページ</td><th scope="row"><a href="https://www.opencompute.org/wiki/Server/OAI">Open Accelerator Infrastructure (OAI)</a></th><td>OCP</td><td>2026 年 11 月に確認</td><td>OAI の目的（共通のインフラ仕様）と、仕様の一覧。</td></tr>
+      <tr><td>規格団体の発表</td><th scope="row"><a href="https://www.businesswire.com/news/home/20250408050548/en/UALink-Consortium-Releases-the-Ultra-Accelerator-Link-200G-1.0-Specification">UALink Consortium Releases the Ultra Accelerator Link 200G 1.0 Specification（Business Wire 配信）</a></th><td>UALink Consortium</td><td>2025 年 4 月 8 日（URL の日付）</td><td>UALink 200G 1.0 の公開時期、1 レーンの速度、ポッドあたりの最大数。</td></tr>
+      <tr><td>企業の公開ページ</td><th scope="row">本社の所在の確認（NVIDIA・AMD・Intel）</th><td>—</td><td>—</td><td>第06章の参照資料と同じ（米国）。</td></tr>
+      <tr><td>半導体講義</td><th scope="row"><a href="../semi/#ch15">半導体講義 第15章</a></th><td>—</td><td>—</td><td>HBM と先端パッケージの中身。この章では、チップの作り方を書かない。</td></tr>
+      <tr><td>一般知識</td><th scope="row">機械学習の教科書（Goodfellow・Bengio・Courville『Deep Learning』ほか）</th><td>—</td><td>—</td><td>学習の 1 ステップ、データ並列、学習と推論の違い。数値は使っていません。</td></tr>
+    </tbody>
+  </table></div>
+</section>

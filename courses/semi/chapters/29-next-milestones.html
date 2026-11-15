@@ -1,0 +1,145 @@
+<!--
+num: 29
+part: 5
+title: 技術の次の節目
+track: 産業
+time: 35
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>これから数年の技術の節目（CFET、裏面電源供給、High-NA EUV、3D DRAM、ハイブリッドボンディング、ガラス基板、光電融合、SiC・GaN の大口径化）を、<b>何を解決するか</b>で説明できる。</li>
+    <li>それぞれの節目が<b>工程・装置・輸送と据付</b>のどこに効くかを、公開資料で確認できた事実と、この講座の整理に分けて言える。</li>
+    <li>技術ニュースの<b>時期の書き方</b>（研究発表、試作、公表された計画、出荷開始、量産開始）を区別して読める。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch04">第04章</a>（世代の呼び方）と<a href="#ch15">第15章</a>（先端パッケージ）。あると読みやすい章：<a href="#ch08">第08章</a>（露光）、<a href="#ch12">第12章</a>（配線と平坦化）。</p>
+</section>
+
+<div class="callout warn"><span class="ttl">この章の扱い</span>
+  <p>この章は、各社・団体が<b>公表している計画・見通し</b>を整理したものです。将来の予測ではありません。技術や企業の優劣の評価、投資の推奨でもありません。時期は「公表された計画」で、変わることがあります。</p></div>
+
+<div class="callout note"><span class="ttl">この章で「公開情報で確認できた範囲」</span>
+  <p>2026 年 11 月 14 日までに、各社・団体の公開資料で確認できた内容だけを書いています。本文では、公表の主体と時点を付けました。</p>
+  <p>確認できなかった項目は書いていません。具体的には、<b>ガラス基板の量産時期</b>、<b>3D DRAM の量産時期</b>、<b>High-NA EUV 装置の重量と寸法</b>です。TSMC の A16 の量産時期は、同社の 2026 年 1 月 15 日の決算説明会が「2026 年後半に量産の予定」と述べ、VLSI 2026 の資料は 2026 年第 4 四半期としています（2026 年 4 月の同社の発表文には A16 の記述がありません）。IRDS は、公開版の一覧に 2026 年版が最新として載っていることまでを確認し、ロードマップの本文は使っていません。</p></div>
+
+<h3>まず全体像：節目を 3 つの問いで見る</h3>
+<p>新しい技術のニュースを読むときは、3 つの問いで整理すると、講座のほかの章につなげられます。</p>
+<ul>
+  <li><b>何を解決するのか</b>：配線の混雑、露光の細かさ、メモリの容量など。</li>
+  <li><b>工程と装置の何が変わるのか</b>：新しい工程が加わるのか、既存の装置の条件が変わるのか。</li>
+  <li><b>輸送と据付で何を確認するのか</b>：荷の大きさと重量、クリーン度、用役。</li>
+</ul>
+<p>下の図で、技術を選び、「工程 → 装置 → 輸送・据付の確認点」をたどります。箱には、「公開資料」（出典のある事実）と「この講座の整理」（考え方の例）の区別を書きました。</p>
+<div data-widget="arch" data-src="c29-impact"></div>
+<p>図の「確認点」は、答えではなく<b>問いの立て方</b>です。公開資料では、装置の重量・寸法・用役の数値が出ていないものが多くあります。実際の案件では、装置メーカーの仕様書とサイトサーベイ（<a href="#ch21">第21章</a>）で確認します。</p>
+
+<h3>節目の早見表</h3>
+<p>下の表は、7 つの節目について、解決する問題・影響する工程と装置・公表されている計画と状況を並べたものです。区分で絞り込め、行を押すと補足が出ます。表の時点は、各行の最後の列にあります。</p>
+<div data-widget="table" data-src="c29-roadmap"></div>
+
+<h3>① トランジスタ：GAA の普及と CFET</h3>
+<p><b>GAA</b>（Gate-All-Around）は、ゲートがチャネルを囲む構造です（<a href="#ch02">第02章</a>）。Samsung（韓国）は 2022 年 6 月に、GAA の 3 nm 世代の初期生産を始めました（世代の呼称で、物理寸法ではありません。<a href="#ch04">第04章</a>）。Intel（米国）は 2025 年 10 月の発表で、18A に RibbonFET（同社の GAA の呼称）と PowerVia を使うと説明しました（出典：Intel プレスリリース、2025 年 10 月 9 日）。</p>
+<p><b>CFET</b>（Complementary FET）は、n 型と p 型のトランジスタを<b>上下に積む</b>構造です。横に並べる制約がなくなるので、標準セルの面積を縮められる可能性があります（出典：imec、2026 年 2 月 26 日）。GAA の次の構造として、研究が進んでいます。</p>
+<p>時期について、imec は、モノリシック CFET を「A7」の世代で導入すると見込んでいます（imec の呼称で、記事に西暦年の記載はありません）。それまでは、フォークシートという構造が「A10」までのつなぎを担うと説明しています（出典：imec、2026 年 2 月 26 日）。Samsung と Intel は、VLSI 2026 で CFET の試作を発表しました。Samsung は 3 段のナノシートを積んだ CFET を 42 nm のゲートピッチで、Intel は 45 nm のゲートピッチの CFET インバータを示しました（出典：VLSI Symposium 2026 技術ティップシート、2026 年 4 月 25 日版）。試作の発表は、量産の開始ではありません。</p>
+<p>工程では、上下のトランジスタを分けるための中間の膜と、特定の膜だけを削る選択エッチングが要点になります（出典：imec、IEEE Spectrum、2023 年 12 月 16 日）。新しい種類の装置が必要かどうかは、公開資料では確認できませんでした。</p>
+
+<h3>② 配線：裏面電源供給（BSPDN）</h3>
+<p>これまでは、電源の配線も、信号の配線と同じく、トランジスタの上の配線層に作っていました。電源と信号が、同じ場所を取り合います。Intel は、電力線が表側の配線スペースの最大 20% を占めていたと説明しています（出典：Intel、2023 年 6 月 5 日）。</p>
+<p><b>裏面電源供給</b>（Backside Power Delivery Network, BSPDN）は、電源の配線を<b>ウェーハの裏面</b>へ移します。表側は信号の配線に専念できます。製造の流れは、次のとおりです（出典：imec、2022 年 11 月 25 日）。</p>
+<ol>
+  <li>表側に、トランジスタと配線を作り終える。</li>
+  <li>表側を支えの基板に貼り合わせ、裏面を薄く削る。</li>
+  <li>薄くした裏面に、穴と金属の配線を作る。</li>
+</ol>
+<p>つまり、<b>表と裏の両面から加工する</b>点が、これまでと大きく違います（出典：Intel、2023 年 6 月 5 日）。貼り合わせ、薄化、CMP（<a href="#ch12">第12章</a>）、成膜、エッチングの装置が関わります。</p>
+<p>時期について、各社は別の呼称で説明しています。Intel は 18A で PowerVia を採用し、Panther Lake を 2025 年内に出荷開始する予定と発表しました（出典：Intel、2025 年 10 月 9 日）。TSMC（台湾）は、2026 年 4 月の発表で、Super Power Rail を A12 に載せ、2029 年に量産する予定と説明しました（出典：TSMC、2026 年 4 月）。A16 は、VLSI 2026 の資料に 2026 年第 4 四半期の量産予定とありますが、TSMC の 2026 年 4 月の発表文には記述がなく、最新の時期は確認できていません。Samsung は、2024 年 6 月に、SF2Z で 2027 年に量産する予定と発表しました（出典：Samsung Newsroom、2024 年 6 月 13 日。当時の計画です）。</p>
+
+<h3>③ 露光：High-NA EUV の導入</h3>
+<p><b>High-NA EUV</b>（開口数を高めた EUV 露光）の物理は、第08章が持ち主です。ここでは、導入が、露光の周辺と工場側に与える変化だけを見ます。</p>
+<p>ASML（オランダ）の製品ページによると、NA 0.55 の装置は、露光フィールドが NA 0.33 の装置（NXE）の半分です（出典：ASML『TWINSCAN EXE:5000』、2026 年 11 月に確認）。そのため、<b>大きなチップは、領域をつなぐ（スティッチング）必要</b>があります。Intel は、現在の 6 インチのマスク形式のままスティッチングを使う方法を示し、将来は 6×12 インチの大型マスクへ進める方針を説明しました（出典：Intel プレスリリース、2026 年 9 月 8 日）。</p>
+<p>導入の状況について、Intel は、18A の一部の層で High-NA EUV を量産に使い、Panther Lake の一部の製品に使っていると発表しました（出典：Intel、2026 年 9 月 8 日）。ASML も、2026 年 7 月に、量産での節目としてこの内容を公表しました（出典：ASML プレスリリース、2026 年 7 月 15 日）。</p>
+<p>装置は、NXE と同様に<b>モジュール構成</b>で、モジュールごとに試験できます。最初のシステムのモジュールは、2023 年 12 月に Intel へ出荷されました（出典：ASML、2024 年 1 月 25 日）。このため、<b>分割出荷と現地の組立て</b>が、案件の要点になります（<a href="#ch21">第21章</a>、<a href="#ch25">第25章</a>）。装置の重量と寸法は、ASML の公式資料で確認できなかったので、この章では書きません。</p>
+
+<h3>④ メモリ：3D DRAM と 3D NAND の積層</h3>
+<p>3D NAND は、メモリセルを縦に積んで、容量を増やしてきました（<a href="#ch03">第03章</a>）。DRAM でも、同じ発想の<b>3D DRAM</b>が研究されています。1 枚のチップの中で、セルを縦に積みます。DRAM チップを複数積む HBM（<a href="#ch15">第15章</a>）とは、積む単位が違います。</p>
+<p>状況は、研究と試作の段階です。imec とゲント大学は、300 mm ウェーハの上に、Si と SiGe の膜を 120 組、エピタキシャル成長させたと報告しました。後の工程で、SiGe だけを横から選択的に除くことが前提です（出典：Journal of Applied Physics 138, 055702、2025 年 8 月 4 日オンライン公開）。Samsung は 16 段の縦積み DRAM を、SK hynix（韓国）は 4F² の縦型ゲート DRAM を、VLSI 2026 で発表しました（出典：VLSI Symposium 2026 技術ティップシート）。3D DRAM の量産時期は、公開資料で確認できませんでした。</p>
+<p>3D NAND については、Kioxia（日本）と Sandisk（米国）が、1,000 層超を目指す 3D フラッシュで QLC の動作を VLSI 2026 で発表しました（目標の表明です。同じ出典）。層数の現状は第04章を参照してください。</p>
+<p>工程では、厚い多層膜の成膜と、深い穴・横方向の選択エッチングが中心です（<a href="#ch07">第07章</a>、<a href="#ch10">第10章</a>）。</p>
+
+<h3>⑤ 実装：ハイブリッドボンディングとチップレットの拡大</h3>
+<p>ハイブリッドボンディングは、バンプを使わずに、銅のパッドを直接つなぐ接合です（<a href="#ch15">第15章</a>）。VLSI 2026 では、Intel が 3DIC の DNN プロセッサ、NVIDIA が光受信器で、ハイブリッドボンディングの使用を報告しました。Kioxia は、セルアレイのウェーハ同士を銅で直接接合する方式（資料の表記は Cu Direct Bonding）を報告しました（出典：VLSI Symposium 2026 技術ティップシート）。</p>
+<p>チップレットの周辺では、規格と大型化が進んでいます。UCIe 3.0 は 2025 年 8 月に公表され、48 GT/s と 64 GT/s を扱います（出典：UCIe コンソーシアム、2025 年 8 月 5 日）。JEDEC の HBM4（JESD270-4）は 2025 年 4 月に公表され、4・8・12・16 段の構成を定めています（出典：JEDEC、2025 年 4 月 16 日）。TSMC は 2026 年 4 月に、CoWoS の 14 レチクルサイズを 2028 年に量産、A14 同士の SoIC を 2029 年に提供する予定と説明しました（出典：TSMC、2026 年 4 月）。レチクルサイズは、1 回の露光で写せる最大の領域（<a href="#ch08">第08章</a>）の倍数で、パッケージの大きさを表します。</p>
+<p>この講座の整理として、パッケージが大きくなると、後工程の装置とトレイ、梱包の寸法を、案件ごとに確認することになります（公開資料には、大型パッケージ用の装置の寸法は出ていません）。</p>
+
+<h3>⑥ 実装と光：ガラス基板と光電融合（CPO）</h3>
+<p><b>ガラス基板</b>は、パッケージ基板の材料を有機材料からガラスに替える動きです。Intel と Lens Technology（中国）は、2026 年 7 月 24 日に協業を発表しました。Intel は、ガラスの利点を、高性能化、配線の高密度化、電力効率の向上と説明しています（出典：Intel プレスリリース、2026 年 7 月 24 日）。発表は「探る」段階の表現で、<b>量産時期の記載はありません</b>。この講座も、量産時期は書きません（<a href="#ch15">第15章</a>と同じ扱い）。</p>
+<p><b>光電融合</b>（Co-Packaged Optics, CPO）は、光の送受信部をスイッチなどの近くに置き、電気配線を短くする方式です。NVIDIA（米国）は 2025 年 3 月に、Quantum-X Photonics を 2025 年内、Spectrum-X Photonics を 2026 年に提供する予定と発表しました（出典：NVIDIA プレスリリース、2025 年 3 月 18 日）。TSMC は 2026 年 4 月に、基板上の COUPE（同社の呼称）を使う CPO の量産開始を 2026 年と説明しました（出典：TSMC、2026 年 4 月）。性能の数値は各社の主張なので、この章では使いません。</p>
+
+<h3>⑦ パワー半導体：SiC・GaN の大口径化</h3>
+<p>ウェーハを大きくすると、1 枚から取れるチップが増えます（<a href="#ch05">第05章</a>）。パワー半導体の SiC と GaN（<a href="#ch01">第01章</a>）でも、大口径化が進んでいます。</p>
+<p>Infineon（ドイツ）は、2026 年 10 月 27 日に、Villach（オーストリア）で 300 mm の GaN を量産する計画を発表しました。投資は 2034 年までに約 11 億ユーロで、量産の開始は 2027 年末までの予定です（出典：Infineon プレスリリース、2026 年 10 月 27 日）。2026 年 11 月 9 日には、300 mm の SiC ウェーハから、機能するデバイスを作ったと発表しました。既存のシリコン用の製造装置を使ったと説明しています。300 mm は 200 mm の約 2.3 倍のチップが取れるとしています。量産の時期は示していません（出典：Infineon プレスリリース、2026 年 11 月 9 日）。</p>
+<p>結晶の切り出しでは、Infineon はレーザー方式の Cold Split が 300 mm の SiC でも機能すると、Dresden の拠点で示したと発表しています（同じ出典）。</p>
+
+<h3>輸送と据付への影響を考える 3 つの観点</h3>
+<p>公開資料だけでは、技術の節目が輸送と据付にどう効くかを、数字で言えません。そこで、案件では次の 3 つの観点で、装置メーカーの仕様書と現地調査から確認します。</p>
+<ul>
+  <li><b>大きさと重量</b>：荷の数、寸法、重量、搬入口、床荷重（<a href="#ch21">第21章</a>、<a href="#ch24">第24章</a>）。</li>
+  <li><b>清浄度</b>：クリーン梱包、開梱エリア、搬入時のクリーン度（<a href="#ch22">第22章</a>、<a href="#ch18">第18章</a>）。</li>
+  <li><b>用役</b>：電力、ガス、水、排気の容量と接続（<a href="#ch18">第18章</a>、<a href="#ch24">第24章</a>）。</li>
+</ul>
+<p>また、技術ニュースの「時期」は、次の段階を区別して読みます。</p>
+<ul>
+  <li>研究発表（学会・論文）</li>
+  <li>試作・デモ</li>
+  <li>公表された計画（「予定」「目標」）</li>
+  <li>出荷開始・量産開始（企業が実績として公表したもの）</li>
+</ul>
+<p>この章の表の多くの行は、最初の 3 つの段階にあたります。輸送や据付の需要が実際に生まれるのは、企業が装置を発注し、出荷する段階からです（<a href="#ch30">第30章</a>）。</p>
+
+<h3>演習：架空のニュース見出しから、影響する層と章を選ぶ</h3>
+<p>次の 7 つの見出しは、すべて架空です。見出しを読み、影響が最初に表れる層と、最初に読み返す章を選びます。</p>
+<div data-widget="drill" data-src="c29-drill"></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>試作の発表は、量産の開始ではありません。</b>学会の発表、協業の発表、「予定」は、それぞれ段階が違います。</p>
+  <p><b>「2 nm」「A7」などの呼称は、物理寸法ではありません。</b>各社の呼称は、同じ世代として並べて比べません（<a href="#ch04">第04章</a>）。</p>
+  <p><b>3D DRAM と HBM は、別のものです。</b>3D DRAM はセルを、HBM はチップを積みます。</p>
+  <p><b>重量・寸法・用役の数字は、公開資料に出ていないことが多くあります。</b>推測で書かず、装置メーカーの仕様書で確認します。</p></div>
+
+<div class="callout tip"><span class="ttl">現場でのつながり</span>
+  <p>新しい技術の装置は、分割出荷、クリーン梱包、搬入経路、用役の確認が、これまで以上に重要になる場合があります。商談では、「それは計画ですか、実績ですか」と、時点を確かめます。案件の進め方は、第31章で扱います。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c29-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（アクセス日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>研究機関の記事</td><th scope="row"><a href="https://www.imec-int.com/en/articles/performance-boosters-scale-monolithic-cfet-across-multiple-logic-technology-nodes">Performance boosters to scale monolithic CFET across multiple logic technology nodes</a></th><td>imec</td><td>2026 年 2 月 26 日</td><td>CFET の構造、モノリシック CFET の導入の見込み（A7）、フォークシートの役割。</td></tr>
+      <tr><td>専門誌の記事</td><th scope="row"><a href="https://spectrum.ieee.org/cfet-intel-samsung-tsmc">Intel, Samsung, and TSMC Demo 3D-Stacked Transistors</a></th><td>IEEE Spectrum</td><td>2023 年 12 月 16 日</td><td>CFET の構造の説明。IEDM 2023 での発表。</td></tr>
+      <tr><td>学会の資料</td><th scope="row"><a href="https://vlsisymposium.org/wp-content/uploads/2026/04/2026-VLSI-Technical-Tipsheet-REVISED-FINAL-4.25.26-.pdf">2026 VLSI Technical Tipsheet</a></th><td>VLSI Symposium</td><td>2026 年 4 月 25 日版（会期は 2026 年 6 月 14〜18 日）</td><td>CFET、3D DRAM、3D NAND、ハイブリッドボンディング・銅の直接接合の発表内容。A16 の量産予定の記述。</td></tr>
+      <tr><td>企業のプレスリリース</td><th scope="row"><a href="https://www.intc.com/news-events/press-releases/detail/1752/intel-unveils-panther-lake-first-ai-pc">Intel Unveils Panther Lake Architecture: First AI PC Platform Built on 18A</a></th><td>Intel</td><td>2025 年 10 月 9 日</td><td>18A、RibbonFET、PowerVia、Panther Lake の出荷予定。</td></tr>
+      <tr><td>企業のプレスリリース</td><th scope="row"><a href="https://www.intel.com/content/www/us/en/newsroom/news/powervia-intel-achieves-chipmaking-breakthrough.html">With PowerVia, Intel Achieves a Chipmaking Breakthrough</a></th><td>Intel</td><td>2023 年 6 月 5 日</td><td>裏面電源供給の仕組み、電力線の割合、両面加工の工程。</td></tr>
+      <tr><td>研究機関の記事</td><th scope="row"><a href="https://www.imec-int.com/en/articles/how-power-chips-backside">Backside power delivery</a></th><td>imec</td><td>2022 年 11 月 25 日</td><td>裏面電源供給が解決する問題と、貼り合わせ・薄化・裏面配線の工程。</td></tr>
+      <tr><td>企業のプレスリリース</td><th scope="row"><a href="https://www.businesswire.com/news/home/20260422346925/en/">TSMC Debuts A13 Technology at 2026 North America Technology Symposium</a></th><td>TSMC</td><td>2026 年 4 月（配信 URL の日付は 4 月 22 日）</td><td>A12 の Super Power Rail、CoWoS・SoIC・COUPE の計画。A16 の記述がないこと。</td></tr>
+      <tr><td>企業の決算説明会</td><th scope="row"><a href="https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-01/51d09df96cd89ac19d65af39032b038dc2896a24/TSMC%204Q25%20Transcript.pdf">TSMC 4Q25 決算説明会の書き起こし</a></th><td>TSMC</td><td>2026 年 1 月 15 日</td><td>A16 の量産時期（2026 年後半の予定）。</td></tr>
+      <tr><td>企業のニュース</td><th scope="row"><a href="https://news.samsung.com/global/tag/sf2z/feed">Samsung Showcases AI-Era Vision and Latest Foundry Technologies at SFF 2024（SF2Z のタグ）</a></th><td>Samsung Newsroom</td><td>2024 年 6 月 13 日</td><td>SF2Z の裏面電源供給と、2027 年量産の計画（当時）。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.asml.com/en/products/euv-lithography-systems/twinscan-exe-5000">TWINSCAN EXE:5000</a></th><td>ASML</td><td>2026 年 11 月に確認</td><td>NA 0.55、露光フィールドが NXE の半分。</td></tr>
+      <tr><td>企業の記事</td><th scope="row"><a href="https://www.asml.com/en/company/stories/2024/5-things-high-na-euv">5 things you should know about High NA EUV lithography</a></th><td>ASML</td><td>2024 年 1 月 25 日</td><td>モジュール構成、2023 年 12 月のモジュール出荷。</td></tr>
+      <tr><td>企業のプレスリリース</td><th scope="row"><a href="https://www.asml.com/en/news/press-releases/2026/high-na-euv-reaches-new-readiness-milestone">High NA EUV reaches new readiness milestone with first high-volume Logic product</a></th><td>ASML</td><td>2026 年 7 月 15 日</td><td>High-NA EUV の量産での節目。ASML のページは自動取得ができなかったため、同社のリリースの配信先（MFN、2026 年 7 月 15 日）で内容を確認。2026 年 11 月 14 日に確認。</td></tr>
+      <tr><td>企業のプレスリリース</td><th scope="row"><a href="https://www.intc.com/news-events/press-releases/detail/1781/">Intel Foundry and ASML Collaborate to Accelerate Industry Readiness for High NA EUV</a></th><td>Intel</td><td>2026 年 9 月 8 日</td><td>High-NA EUV の量産での使用、スティッチング、6×12 インチの大型マスクの方針。</td></tr>
+      <tr><td>学術論文</td><th scope="row"><a href="https://imec-publications.be/bitstreams/60c58550-1e78-4387-a18c-1eeabef55711/download">Epitaxial growth of up to 120× {Si0.8Ge0.2/Si} bilayers in view of three dimensional dynamic random access memory applications</a></th><td>imec、ゲント大学（Journal of Applied Physics 138, 055702）</td><td>2025 年 8 月 4 日（オンライン公開）</td><td>3D DRAM に向けた多層膜の成長。</td></tr>
+      <tr><td>規格団体の発表</td><th scope="row"><a href="https://businesswire.com/news/home/20250416843598/en/JEDEC-and-Industry-Leaders-Collaborate-to-Release-JESD270-4-HBM4-Standard-Advancing-Bandwidth-Efficiency-and-Capacity-for-AI-and-HPC">JEDEC and Industry Leaders Collaborate to Release JESD270-4 HBM4 Standard</a></th><td>JEDEC</td><td>2025 年 4 月 16 日（配信 URL の日付）</td><td>HBM4 の公表時期と積層数の構成。</td></tr>
+      <tr><td>コンソーシアムの発表</td><th scope="row"><a href="https://www.businesswire.com/news/home/20250805909613/en/UCIe-Consortium-Introduces-3.0-Specification-With-64-GTs-Performance-and-Enhanced-Manageability">UCIe Consortium Introduces 3.0 Specification</a></th><td>UCIe コンソーシアム</td><td>2025 年 8 月 5 日（配信 URL の日付）</td><td>UCIe 3.0 の公表時期とデータレート。</td></tr>
+      <tr><td>企業のプレスリリース</td><th scope="row"><a href="https://nvidianews.nvidia.com/news/nvidia-spectrum-x-co-packaged-optics-networking-switches-ai-factories">NVIDIA Announces Spectrum-X Photonics, Co-Packaged Optics Networking Switches</a></th><td>NVIDIA</td><td>2025 年 3 月 18 日</td><td>CPO スイッチの提供予定の時期。</td></tr>
+      <tr><td>企業のプレスリリース</td><th scope="row"><a href="https://www.intel.com/content/www/us/en/newsroom/news/corporate/intel-and-lens-technology-collaborate-to-enable-advanced-semiconductor-packaging-for-the-ai-era.html">Intel and Lens Technology Collaborate to Enable Advanced Semiconductor Packaging for the AI Era</a></th><td>Intel</td><td>2026 年 7 月 24 日</td><td>ガラス基板の協業。量産時期の記載がないこと。</td></tr>
+      <tr><td>企業のプレスリリース</td><th scope="row"><a href="https://www.infineon.com/regional/austria/press-release/2026/infpr202610-021">Infineon to establish the world's first high-volume 300 mm GaN manufacturing</a></th><td>Infineon</td><td>2026 年 10 月 27 日</td><td>Villach の 300 mm GaN の投資額と量産開始の予定。</td></tr>
+      <tr><td>企業のプレスリリース</td><th scope="row"><a href="https://www.infineon.com/press-release/2026/infpr202611-028">Infineon marks innovation milestone with world's first 300 mm SiC</a></th><td>Infineon</td><td>2026 年 11 月 9 日</td><td>300 mm SiC のデバイス、既存装置の利用、チップ数の比、Cold Split。</td></tr>
+      <tr><td>業界のロードマップ</td><th scope="row"><a href="https://irds.ieee.org/editions/">IRDS 公開版の一覧</a></th><td>IEEE IRDS</td><td>2026 年 11 月に確認</td><td>2026 年版が最新として載っていること。本文のロードマップは使っていません。</td></tr>
+      <tr><td>一般知識</td><th scope="row">影響の見方（確認点）、演習</th><td>—</td><td>—</td><td>この講座の整理と、架空の見出しです（出典欄に「この講座の整理」とある箱を含む）。</td></tr>
+    </tbody>
+  </table></div>
+</section>

@@ -1,0 +1,20 @@
+第20章 事実確認表（担当 E、確認 2026-11-14）
+
+| # | 区分 | 事実（本文での書き方） | 数値・単位 | 時点・版 | 出典（発行者『資料名』） | URL（個別ページ） | 一次 | 確認日 | 使った箇所 |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | 保証 | Intel（米国）は、XMP（Intel の呼称。Extreme Memory Profile）を、対応する DDR5・DDR4 のメモリを「標準の設定を超えた」より高い速度で動かす、事前にテストされたプロファイルと説明する。プロファイルは速度・タイミング・電圧の組。Intel の仕様の外で周波数や電圧を変えると、プロセッサの保証が無効になることがある（原文：may void the processor warranty）。FAQ は、XMP を有効にすることはメモリのオーバークロックの一種で、仕様を超えて使うと保証が無効になることがある、と述べる。オーバークロックは仕様を超えうるので、安定性・安全性・性能・部品の寿命を下げることがある、とも書く。マザーボードが XMP に対応している必要があり、確認はマザーボードメーカーに。認定したメモリは Intel の XMP データシートに載る | — | ページの最終更新（メタデータ）2026-04-24 | Intel『Intel® XMP (Extreme Memory Profile) RAM Overclocking』 | https://www.intel.com/content/www/us/en/gaming/extreme-memory-profile-xmp.html | ○ | 2026-11-14 | 本文「メモリのプロファイル」、c20-default、c20-settings、c20-judge |
+| 2 | 保証 | AMD（米国）は、EXPO（AMD の呼称。AMD Extended Profiles for Overclocking）を、主に DDR5 のメモリ向けの、AMD Ryzen に最適化したプロファイルによるメモリのオーバークロックの支援と説明する。対象は Socket AM5 の AMD Ryzen プロセッサ。脚注 1：AMD の公表した仕様の外でプロセッサやメモリをオーバークロック・アンダーボルトすると、AMD のハードウェアやソフトウェアで有効にしても、該当する AMD 製品の保証が無効になる（原文：will void any applicable AMD product warranty）。システムメーカーや販売店の保証も無効になることがある。利用者は関連するリスクを負う | — | ページの最終更新 2026-05-31 | AMD『AMD EXPO™ Technology for AMD Ryzen™ Processors for Socket AM5』 | https://www.amd.com/en/products/processors/technologies/expo.html | ○ | 2026-11-14 | 本文「メモリのプロファイル」、c20-default、c20-settings |
+| 3 | 発表 | Intel の社員（コミュニティの「Employee」表示）の投稿：2024-06-18 投稿、2024-09-25 更新。Intel Core 13 世代・14 世代の K・KF・KS の不安定の報告について、原因に関わる要因の一つ（原文：confirmed contributing factor）として「以前の BIOS の設定による、プロセッサへの高い電圧の入力」を確認した。Intel の既定の電力供給のプロファイル（Intel Default Settings）を、安定性と信頼性を試験したものとして勧める。マザーボードメーカーのサイトで最新の BIOS を確かめる。より高い電力やオーバークロックは利用者の自己責任で、保証が無効になることや、システムの健全性に影響することがある。この投稿は、マイクロコードの案内と保証の延長には触れていない | — | 2024-06-18 投稿（2024-09-25 付で、新しい投稿への案内のバナー。検証 2026-11-14 で、9 月 25 日は投稿の更新日ではなく案内の日付と確認） | Intel（Intel コミュニティの社員の投稿）『June 2024 Guidance regarding Intel Core 13th and 14th Gen K/KF/KS instability reports』 | https://community.intel.com/t5/Mobile-and-Desktop-Processors/June-2024-Guidance-regarding-Intel-Core-13th-and-14th-Gen-K-KF/td-p/1607807 | △ | 2026-11-14 | 本文「既定の設定は、誰が決めているか」、c20-settings、c20-default |
+| 4 | 仕様値 | AMD の Ryzen Master のリファレンスガイド（2.9、2022 年 4 月）：Eco-Mode は、3000 系列の CPU で、マザーボードの対応を条件に、消費電力を既定より下げる動作モード。Precision Boost Overdrive、自動のオーバークロック、手動のオーバークロックは Eco-Mode では使えない。PPT は「プロセッサのソケットでの電力の合計の上限」（AMD の言葉）。警告：AMD の公表した仕様の外でプロセッサを使うことによる損害は、AMD の製品保証の対象外 | — | 2.9、2022 年 4 月（AM4 世代） | AMD『AMD Ryzen Master 2.9 Reference Guide』 | https://www.amd.com/content/dam/amd/en/documents/products/software-tools/ryzen-master-quick-reference-guide.pdf | ○ | 2026-11-14 | 本文「CPU の電力の設定」、c20-settings |
+| 5 | 定義 | メモリのプロファイル＝メモリに記録された、標準より高い速度・タイミング・電圧の組。呼称は Intel が XMP、AMD が EXPO（企業の呼称）。既定の設定＝部品を出荷したときの設定（GLOSSARY-RULES §2.3）。定格＝メーカーが仕様として定め、動作を保証する範囲 | — | — | 本講座の用語規則（GLOSSARY-RULES §2.3）と、1・2 の各社の説明 | — | × | 2026-11-14 | 本文、用語集 |
+| 6 | 一般知識 | 設定を変えたら、起動できたことだけで終えず、負荷をかけて安定性を確かめ、変更前の設定の記録から戻せるようにする。画面が固まる・再起動する・アプリが終了する、などが不安定の兆しになる（数値を伴わない） | — | — | 一般知識（計算機システムの運用の一般的な考え方）。負荷試験の具体は第19章 | —（数値を伴わない） | × | 2026-11-14 | 本文「安定性を確かめる」、c20-flow |
+| 7 | 一般知識 | 演習の設定の記録 3 つは、すべて架空 | — | — | 架空（見本のため） | — | × | 2026-11-14 | c20-judge |
+| 8 | 企業 | Intel の所在国：Intel の投資家向けページ（Investor Relations）の連絡先の住所は Santa Clara, California（米国）。本社と明記した記述ではなく、住所の記載から「米国」と書いた | — | 2026-11-14 に確認 | Intel『Investor Relations』 | https://www.intc.com/ | ○ | 2026-11-14 | 本文の初出「（米国）」 |
+| 9 | 企業 | AMD の所在国：AMD の投資家向けページの連絡先の住所は Santa Clara, California（米国）。本社と明記した記述ではなく、住所の記載から「米国」と書いた | — | 2026-11-14 に確認 | AMD『Investor Relations』 | https://ir.amd.com/contacts-faq/contacts | ○ | 2026-11-14 | 本文の初出「（米国）」 |
+
+確認できず書かなかった：
+- JEDEC の標準の速度の値：第04章が持ち主。この章は値を書かず、第04章へリンクした。
+- CPU メーカーが公表した現行の既定の電力の設定（Intel・AMD）：Intel は 2024 年 6 月の社員の投稿（上の 3）を確かめたが、現行の製品の既定の値を書いた個別ページは確かめられなかった。TDP などの定義は第02章が持ち主。この章は値を書かない。
+- AMD の現行世代の省電力の設定の公式説明：確かめられたのは 2022 年 4 月版のリファレンスガイド（AM4 世代）だけ。現行の製品の対応は、製品ページで確かめるよう本文に書いた。
+- メモリメーカー・マザーボードメーカー・販売店の保証規定の文言：各社で違い、確かめていない。本文は「各社の規定で確かめる」とだけ書いた。
+- Intel の XMP の対象となる世代の一覧、AMD の EXPO の対応メモリの一覧：書いていない（製品ごとの確認が必要）。

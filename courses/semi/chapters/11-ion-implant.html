@@ -1,0 +1,86 @@
+<!--
+num: 11
+part: 2
+title: イオン注入と熱処理
+track: 前工程
+time: 35
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>不純物を入れる 2 つの方式（拡散とイオン注入）の違いと、<b>エネルギー（深さ）とドーズ量（量）</b>の意味を説明できる。</li>
+    <li>イオン注入装置が、<b>イオン源 → 質量分析 → 加速 → 走査</b>の順で、狙ったイオンだけを全面に当てる仕組みを言える。</li>
+    <li>注入のあとの<b>熱処理</b>が何を直し、何を動かしてしまうかを説明し、<b>サーマルバジェット</b>を小さく抑える理由が分かる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch06">第06章</a>（工程の全体像）と、<a href="#ch02">第02章</a>（MOSFET のソース・ドレイン、しきい値電圧）。</p>
+</section>
+
+<h3>不純物を入れる 2 つの方式</h3>
+<p>第01章で見たとおり、n 型・p 型の領域は、不純物（ドーパント）を少量加えて作ります（ドーピング）。p 型にはホウ素、n 型にはリンやヒ素がよく使われます。入れ方には 2 つの方式があります。</p>
+<p><b>拡散</b>は、高温の炉で、ウェーハの表面から不純物を染み込ませる方法です。<b>イオン注入</b>（ion implantation）は、不純物をイオンにして電界で加速し、ウェーハに打ち込む方法です。</p>
+<p>量産の多くの場面で使われるのはイオン注入です（教科書的な説明）。理由は 3 つあります。深さと量を<b>別々に</b>決められること。低い温度で行えること。レジストのマスクで<b>場所を選べる</b>ことです。拡散では、表面の濃度がいちばん高くなり、深さと量を独立に決めにくくなります。</p>
+
+<h3>イオン注入装置のしくみ</h3>
+<p>装置の中心は、真空の中を通るイオンビームの通り道（ビームライン）です。狙いは 1 つにまとめられます。<b>狙った元素の、狙った電荷のイオンだけを、狙ったエネルギーで、ウェーハの全面に均一に当てる</b>ことです。そのために、イオン源・質量分析・加速・走査・エンドステーションが、この順に並びます。図のノードを押すと、役割が出ます。</p>
+<div data-widget="arch" data-src="c11-implanter"></div>
+<p>ウェーハにプラスのイオンを当て続けると、電荷がたまって絶縁膜を傷めます。そのため、エンドステーションには、電荷を打ち消す仕組みが入っています。ソースには毒性のあるガスを使うものがあるので、ガスの供給と排気・除害（<a href="#ch18">第18章</a>）も装置の一部として考えます。</p>
+
+<h3>深さを決めるエネルギー、量を決めるドーズ量</h3>
+<p>注入の条件は、主に 2 つで決まります。<b>エネルギー</b>は、イオンを加速する強さで、<b>深さ</b>を決めます。単位は keV や MeV です。電子ボルト（eV）の千倍が keV、百万倍が MeV です。エネルギーが高いほど、イオンは深くまで入ります。</p>
+<p><b>ドーズ量</b>（dose）は、単位面積に打ち込んだイオンの個数で、<b>量</b>を決めます。装置は、ビーム電流を時間で積み上げて、ドーズ量を管理します。決めた量に達したら止めます。</p>
+<p>結晶の並びに沿ってイオンが進むと、予定より深く入り込みます（チャネリング）。そのため、ウェーハをわずかに傾けて当てることがあります。</p>
+<p>装置は、ドーズ量とエネルギーの範囲によって、おおまかに 3 つの区分で呼ばれます。<b>高電流・中電流・高エネルギー</b>です。区分の境目は会社ごとに違うので、下の表の値を会社間で比べないでください。</p>
+<div data-widget="table" data-src="c11-classes"></div>
+<p>会社名は、公開資料に載っているものを例として挙げています。優劣を示すものではありません。</p>
+
+<div class="callout tip"><span class="ttl">演習：注入の目的から条件を考える</span>
+  <p>次の表で、目的ごとに「深さ」と「濃さ」を先に自分で答え、行を押して解説を確かめてください。注入の条件は、<b>エネルギーとドーズ量を別々に</b>考えます。</p></div>
+<div data-widget="table" data-src="c11-combo"></div>
+
+<h3>場所はレジストで決める</h3>
+<p>注入する場所は、<b>レジスト</b>のパターンで決めます。イオンは、十分な厚さのレジストの中で止まるので、覆った場所には不純物が入りません。この「注入マスク」は、<a href="#ch09">第09章</a>の塗布・露光・現像で作ります。注入が終わったら、レジストを剥離して洗浄します（第10・13章）。</p>
+
+<h3>注入のあとに残る問題：ダメージと活性化</h3>
+<p>高いエネルギーで打ち込まれたイオンは、結晶の原子をはじき飛ばします。そのため、注入のあとの結晶は<b>乱れて</b>います。さらに、打ち込まれた不純物の多くは、結晶の原子の位置に入っておらず、<b>電気的に働きません</b>。</p>
+<p>この 2 つを解決するのが、<b>活性化アニール</b>（activation anneal）です。加熱して、結晶を直し、不純物を原子の位置に入れます。ところが、加熱すると不純物は動いて広がります（拡散）。浅い接合を作りたいときは、これが困ります。「直す」と「動かす」は同じ熱で起きるので、直すだけにはできません。</p>
+<p>次の図で、ウェルを作る流れを一手ずつ見てください。アニールは、効果を 2 つに分けて示しています。</p>
+<div data-widget="xsec" data-src="c11-well"></div>
+
+<h3>熱処理の種類</h3>
+<p>熱処理は、加熱の方法と時間で、いくつかの方式に分かれます。長い時間をかけて多数枚を処理する<b>縦型炉</b>、1 枚ずつを秒の桁で処理する<b>RTP</b>（Rapid Thermal Processing）、表面だけを極めて短く加熱する<b>フラッシュランプアニール</b>と<b>レーザーアニール</b>があります。</p>
+<div data-widget="table" data-src="c11-anneal"></div>
+<p>方式が増えてきた理由は、不純物の広がりを抑えたいからです。時間が短いほど、不純物が動く距離は小さくなります。</p>
+
+<h3>サーマルバジェット：熱の総量を管理する</h3>
+<p>ウェーハは、工程の中で何度も加熱されます。その温度と時間の積み重ねを、<b>サーマルバジェット</b>（thermal budget、熱予算）と呼びます。熱が多すぎると、先に作った不純物の分布が広がり、薄い膜や、あとで作る金属の配線も傷みます。</p>
+<p>そのため、熱が必要な工程は、なるべく<b>前</b>に置きます。後ろの工程ほど、低い温度と短い時間にします。RTP やフラッシュランプアニールが使われる理由の 1 つがこれです。<a href="#ch12">第12章</a>で見る配線は、熱に弱い材料を使うので、もっとも後ろにあります。</p>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>注入しただけでは、電気的に働きません。</b>活性化アニールをして、はじめて n 型・p 型の領域になります。</p>
+  <p><b>深さを決めるのはエネルギー</b>で、<b>ドーズ量ではありません</b>。ドーズ量を増やすと、濃くなるだけで、深くはなりません。</p>
+  <p>アニールは、「直す」だけでなく、不純物を「動かす」ことも起こします。熱処理を短くするのは、後者を抑えるためです。</p></div>
+
+<div class="callout note"><span class="ttl">現場でのつながり</span>
+  <p>注入装置は、ビームラインと真空、ガス、排気・除害が一体になった装置で、用役の仕様が多い装置です（第17・18章）。熱処理装置は、縦型炉のようにバッチ式で多数枚を扱うものと、枚葉式のものがあり、搬送の形も違います（<a href="#ch16">第16章</a>）。どの装置が、どの工程の「前」に置かれるかは、サーマルバジェットの考え方で決まります。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c11-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（アクセス日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>企業の技術資料</td><th scope="row"><a href="https://www.axcelis.com/wp-content/uploads/2024/05/Ion_Implantation_and_Applications_for_Power_Devices.pdf">Ion Implantation and Applications for Power Devices</a></th><td>Axcelis Technologies（米国）</td><td>2024 年 5 月掲載</td><td>注入装置の 3 区分、エネルギーの例、SiC の高温注入と活性化アニール、レーザーアニールの提案。</td></tr>
+      <tr><td>企業の公開資料</td><th scope="row"><a href="https://www.axcelis.com/about/our-history/">Our History</a></th><td>Axcelis Technologies</td><td>2026 年 11 月閲覧</td><td>本社の所在国。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.shi.co.jp/english/products/machinery/ion/index.html">Ion Implanters</a></th><td>住友重機械工業（日本）</td><td>2026 年 11 月閲覧</td><td>高電流・中電流・高エネルギー・兼用機の製品群とエネルギーの範囲。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.appliedmaterials.com/us/en/product-library/viista-900xp.html">VIISta 900XP</a></th><td>Applied Materials（米国）</td><td>2026 年 11 月閲覧</td><td>中電流の注入装置の例。</td></tr>
+      <tr><td>企業の技術報告</td><th scope="row"><a href="https://k.nissin.jp/technical/technicalreport/pdf/2022-158/2022-158-07.pdf">Changes in Ion Implantation Tools and Future Efforts</a>（『日新電機技術報告』Vol.67 No.2）</th><td>日新イオン機器（日本。日新電機グループ）</td><td>2022 年 11 月</td><td>中電流の装置の例（EXCEED シリーズ）。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.screen.co.jp/spe/en/products/la-3000-f">Flash Lamp Annealer LA-3000-F</a></th><td>SCREEN セミコンダクターソリューションズ（日本）</td><td>2026 年 11 月閲覧</td><td>フラッシュランプアニールの加熱の方法と時間の桁。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.appliedmaterials.com/us/en/product-library/vantage-radiance-plus-rtp.html">Vantage Radiance Plus RTP</a></th><td>Applied Materials</td><td>2026 年 11 月閲覧</td><td>RTP の用途（注入後のアニール、シリサイド）。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.kokusai-electric.com/en/products">Products &amp; Services（製品一覧。上位ページ）</a></th><td>KOKUSAI ELECTRIC（日本）</td><td>2026 年 11 月閲覧</td><td>バッチ式の熱処理装置の用途（酸化・アニール・拡散など）。</td></tr>
+      <tr><td>教科書的な一般知識</td><th scope="row">半導体プロセスの教科書（拡散・イオン注入、活性化、熱予算）</th><td>—</td><td>—</td><td>方式の違い、エネルギーとドーズ量、サーマルバジェットの説明。数値は使っていません。</td></tr>
+    </tbody>
+  </table></div>
+</section>

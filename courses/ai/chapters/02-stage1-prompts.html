@@ -1,0 +1,72 @@
+<!--
+num: 02
+part: 1
+title: 段階 1　プロンプトの基礎
+track: 段階1
+time: 30
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li><b>プロンプトを整える</b>とは、依頼に何を書き足すことかを説明できる。</li>
+    <li>段階 1 の 4 つの教材の<b>特徴の違い</b>（手を動かせる、短い、調べながら読める、別のモデルの見方）を言える。</li>
+    <li>段階 1 を終えて<b>できること</b>と、段階 2 へ進む<b>目安</b>を、自分の言葉で確かめられる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#chI1">序章</a>と<a href="#ch01">第 01 章</a>。教材によっては、Python の基礎か、AI のサービスを試せる環境が要ります。</p>
+</section>
+
+<h3>プロンプトとは、何を整えるのか</h3>
+<p><b>プロンプトエンジニアリング</b>（prompt engineering）は、AI に出す依頼を、望む答えが返りやすい形に整えることです。依頼が整っていないと、AI は、足りない部分を推測して答えます。推測が外れると、望まない答えになります。</p>
+<p>次の表は、あいまいな依頼と、整えた依頼を並べたものです。例は、この講座が作った<b>架空</b>の例です。Google の Gemini API のドキュメントは、プロンプト設計の項目を挙げています。明確で具体的な指示、少数の例、文脈の追加、プロンプトの分解、試して直す方法です（出典：Google『Prompt design strategies』、確認 2026 年 11 月）。表は、そのうち 4 つを使いました。</p>
+<div data-widget="compare" data-src="c02-prompt"></div>
+<p>表で確かめる点は 3 つです。1 つ目は、整えた依頼が、<b>誰が読むか（文脈）</b>と、<b>条件</b>と、<b>出力の形</b>を書いていることです。2 つ目は、<b>例</b>を見せると、望む形が伝わりやすくなることです。3 つ目は、整えるのは、依頼を長くすることではなく、<b>足りない情報を書き足すこと</b>だという点です。</p>
+
+<h3>段階 1 の教材</h3>
+<p>段階 1 の教材は 4 つあります。表の行を押すと、学べること・所要の目安・日本語・注意・確認の経路が出ます。</p>
+<div data-widget="table" data-src="c02-res"></div>
+<p>表の「料金の札」と「状態の札」は、第 01 章の意味で読みます。確認日は、いずれも 2026 年 11 月 15 日です。</p>
+
+<h3>どれを選ぶか：内容の特徴で決める</h3>
+<p>この道筋では、次の順に並べました。順の理由は、<b>教材の内容の特徴</b>です。優劣ではありません。</p>
+<ul>
+  <li><b>Anthropic Prompt Engineering Interactive Tutorial</b>：例を試しながら進める形式の教材です。<b>手を動かせる</b>のが特徴です。状態の札は「現行」で、9 章と付録の構成です。ただし、最後の更新は約 2 年前で、README は Claude 3 Haiku を使うと書いています。考え方は今も使えますが、モデル名や画面は読み替えが要ります。</li>
+  <li><b>DeepLearning.AI の講座</b>：全体が 1 時間 40 分と、<b>短い</b>講座です。動画とコード例で進みます。Python の基礎が前提です。</li>
+  <li><b>Prompt Engineering Guide</b>：プロンプト、コンテキストエンジニアリング、RAG、エージェントを扱うガイドです。テーマごとに<b>必要な所を拾い読みできる</b>形です（About ページの説明による）。</li>
+  <li><b>Gemini API のドキュメント</b>：Google の公式ドキュメントです。<b>別のモデルの見方</b>を知りたいときに、読み比べに使えます。</li>
+</ul>
+<p>1 つだけ選ぶなら、まず、手を動かせる 1 つ目か、短い 2 つ目です。Python を使わずに考え方だけ知りたいなら、3 つ目か 4 つ目を、読み物として使えます。</p>
+
+<div class="callout std"><span class="ttl">終えるとできること（段階 1）</span>
+  <p>この段階の教材を 1 つ終えると、次のことに取り組めるようになります。保証ではなく、目安です。</p>
+  <ul>
+    <li>依頼に、目的・条件・出力の形・例を、書き分けられる。</li>
+    <li>AI の答えが望みと違うとき、依頼のどこを直せばよいかを、仮説として立てられる。</li>
+    <li>プロンプトの書き方を、ほかの人に説明できる。</li>
+  </ul></div>
+<div class="callout tip"><span class="ttl">次へ進む目安</span>
+  <p>自分の仕事や勉強の依頼を 1 つ選び、<b>あいまいな依頼と、整えた依頼</b>の両方を AI に出して、答えを見比べられたら、段階 2 へ進みます。見比べたときに、どの項目を足したのかを説明できると、目安を満たしています。</p></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>Anthropic のドキュメントの注記を読み落とす</b>ことです。ドキュメントは、この教材が Claude 3 のモデル向けだと書いています。内容が違う所は、Prompting best practices を優先する、とも書いています（出典：Anthropic『Prompt engineering overview』）。教材の例が、今のモデルと違う答えを返すことがあります。また、同じ名前の講座を含む「Anthropic Courses（GitHub）」は、2026 年 9 月 15 日にアーカイブされました。使う前に、リポジトリのページの上部に「archived」の表示がないかを確かめてください。</p>
+  <p>もう 1 つは、<b>無料の条件</b>です。DeepLearning.AI の講座のページは、無料で受講できる期間があると書き、終了日を書いていません。修了証は PRO 会員の条件です。使う日に、ページで確かめてください。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c02-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 15 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+<!--GEN:refs-->
+      <tr><td>公式リポジトリ</td><th scope="row"><a href="https://github.com/anthropics/prompt-eng-interactive-tutorial" target="_blank" rel="noopener noreferrer">Anthropic Prompt Engineering Interactive Tutorial</a></th><td>Anthropic</td><td>最後のコミットは約 2 年前の表示。リリースの公開なし（確認 2026-11-15）</td><td>状態・構成・注記の確認。最新の状態はページで確認。経路：GitHub のリポジトリのページ（2026-11-15 に確認）</td></tr>
+      <tr><td>講座</td><th scope="row"><a href="https://www.deeplearning.ai/short-courses/chatgpt-prompt-eng/" target="_blank" rel="noopener noreferrer">ChatGPT Prompt Engineering for Developers</a></th><td>DeepLearning.AI（OpenAI と提携）</td><td>ページ表示の更新日 2026-10-12（確認 2026-11-15）</td><td>講座の概要・料金・修了証の条件。経路：講座ページ（公式）を開いて確認</td></tr>
+      <tr><td>ガイド（団体のサイト）</td><th scope="row"><a href="https://www.promptingguide.ai/" target="_blank" rel="noopener noreferrer">Prompt Engineering Guide</a></th><td>DAIR.AI</td><td>著作権表示 2026（更新日の記載なし）（確認 2026-11-15）</td><td>ガイドの趣旨と有料講座の案内。経路：サイトの About ページ（公式）を開いて確認</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://ai.google.dev/gemini-api/docs/prompting-strategies" target="_blank" rel="noopener noreferrer">Prompt design strategies（Gemini API）</a></th><td>Google</td><td>ページ表示の更新日 2026-09-18（確認 2026-11-15）</td><td>プロンプト設計の項目の確認。経路：公式ドキュメントを開いて確認</td></tr>
+<!--/GEN:refs-->
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview" target="_blank" rel="noopener noreferrer">Prompt engineering overview</a></th><td>Anthropic</td><td>日付の記載なし（確認 2026 年 11 月）</td><td>Interactive Tutorial の案内と、「Claude 3 向け」の注記。</td></tr>
+      <tr><td>この講座の整理</td><th scope="row">あいまいな依頼と整えた依頼の例</th><td>この講座</td><td>—</td><td>架空の例（見本のため）。</td></tr>
+    </tbody>
+  </table></div>
+</section>

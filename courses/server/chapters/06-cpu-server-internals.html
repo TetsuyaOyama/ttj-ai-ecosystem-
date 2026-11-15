@@ -1,0 +1,92 @@
+<!--
+num: 06
+part: 2
+title: CPU サーバーの中身
+track: 機器
+time: 40
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>汎用の CPU サーバーの筐体の中で、<b>何がどこに置かれ</b>、空気・電力・信号がどう流れるかを説明できる。</li>
+    <li><b>ソケット、メモリスロット、拡張スロット、電源ユニット、ファン</b>の役割と、<b>FRU</b>（現場で交換する部品の単位）の考え方を言える。</li>
+    <li><b>TDP</b>・消費電力・定格を区別し、CPU 製品の公開仕様の表を、定義に気をつけて読める。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch02">第02章</a>（主要部品）、<a href="#ch03">第03章</a>（形状と規格）。あるとよい：<a href="#ch05">第05章</a>（冗長・ホットスワップ）。</p>
+</section>
+
+<h3>筐体の中を、前から後ろへ見る</h3>
+<p>サーバーの筐体は、<b>前から後ろへ</b>並べて読むと、分かりやすくなります。空気は、ラックの前面から入り、背面から出ます（<a href="#ch03">第03章</a>）。前面には、ドライブを差す区画があります。その奥にファン列があり、さらに奥に CPU とメモリ、背面に拡張カードと電源ユニットがあります。</p>
+<p>下の図は、<b>2U</b> のサーバーを上から見た模式図です。2U は、高さが 2 ラックユニット（<a href="#ch03">第03章</a>）の筐体です。部位を押すと、役割と、FRU か、交換時の注意が出ます。形・数・位置は製品で違います（出典：一般知識）。</p>
+<div data-widget="layers" data-src="c06-top"></div>
+<p>CPU（Central Processing Unit）の上には、ヒートシンクが付きます。エアシュラウドは、空気を CPU とメモリの間へ導くカバーです。ファンが送った空気が、わきへ逃げずに、冷やしたい部品を通るようにします。</p>
+
+<h3>結線：電力・データ・管理</h3>
+<p>筐体の中では、3 種類のものが流れます。<b>電力</b>は、電源ユニットから基板とファンへ届きます。<b>データ</b>は、CPU を中心に、メモリ・拡張カード・ストレージとの間を行き来します。<b>管理の信号</b>は、基板管理コントローラ（Baseboard Management Controller, BMC）が、温度と電源の状態を読み、ファンを制御するために使います。BMC の詳細は<a href="#ch19">第19章</a>です。</p>
+<div data-widget="arch" data-src="c06-wiring"></div>
+<p>この図は、2 ソケットの構成の例です。ソケットが 1 つの製品は、CPU 1 とその周りの部品がありません。部品の数は、製品で違います。</p>
+
+<h3>マザーボードとソケット</h3>
+<p><b>マザーボード</b>（motherboard）は、部品をつなぐ土台の基板です。CPU を載せる受け口が<b>ソケット</b>（socket）で、1 台のサーバーに 1 つ載せる構成を 1 ソケット、2 つ載せる構成を 2 ソケットと呼びます。</p>
+<p>ソケットの数は、製品で決まります。Intel（米国）の製品仕様ページは、Xeon 6980P のスケーラビリティを「2S」と記しています。2S は、2 ソケットの構成まで、という意味です（出典：Intel『Intel Xeon 6980P Processor Product Specifications』、確認 2026 年 11 月）。NVIDIA（米国）は、Grace CPU Superchip を、「2 ソケットのサーバーの中心を小さなモジュールにしたもの」と説明しています（出典：NVIDIA『Introducing the NVIDIA Grace CPU Superchip』、確認 2026 年 11 月）。</p>
+<p>2 ソケットでは、各 CPU に直結したメモリがあります。相手の CPU に直結したメモリを使うときは、ソケット間リンクを通ります。このため、メモリには「近い」と「遠い」ができます。詳しくは<a href="#ch07">第07章</a>で扱います。</p>
+
+<h3>メモリスロット・拡張スロット・ライザーカード</h3>
+<p>メモリは、DIMM（Dual In-line Memory Module）という細長い基板で、<b>メモリスロット</b>に差します。スロットは、CPU から出るメモリチャネルごとに並びます。DIMM の種類とチャネルは、<a href="#ch07">第07章</a>です。</p>
+<p>拡張カード（NIC、GPU、ストレージのコントローラなど）は、PCIe（PCI Express）のスロットに差します。薄い筐体では、カードを寝かせて差すために、<b>ライザーカード</b>（riser card）を使います。ライザーカードは、マザーボードに差す小さな基板で、その上にスロットがあります。NIC（Network Interface Card）には、背面から抜き差しできる OCP NIC 3.0 の形を使う製品があります（<a href="#ch03">第03章</a>）。</p>
+<p>前面の<b>ドライブベイ</b>（drive bay）には、SSD や HDD を差します。ドライブの形状と接続の規格は<a href="#ch09">第09章</a>が持ち主です。</p>
+
+<h3>電源ユニット</h3>
+<p><b>電源ユニット</b>（Power Supply Unit, PSU）は、施設から来る電力を、機器の中で使う電圧に変える部品です。サーバーには、PSU を 2 台以上入れて、<b>冗長</b>にする製品が多くあります。1 台が止まっても、残りで動き続けるためです。2 台を別々の給電系統（A 系・B 系）につなぐ使い方もあります（<a href="#ch05">第05章</a>）。</p>
+<p>冗長な PSU は、稼働したまま取り替えられる（<b>ホットスワップ</b>、hot swap）製品が多くあります。PSU の効率の等級と、ラックへの給電は<a href="#ch14">第14章</a>が持ち主です。電力が機器へ届くまでの流れは<a href="#ch12">第12章</a>です。</p>
+
+<h3>ファンと風の通り道</h3>
+<p>CPU やメモリは、熱を出します。この熱を運び出すのが、<b>ファン</b>と<b>風の通り道</b>です。前面から吸った空気が、ファン列に押されて、CPU・メモリ域を通り、背面へ抜けます。通り道を決めるのが<b>エアシュラウド</b>（air shroud）です。</p>
+<p>ファンは、複数を並べて冗長にする製品が多くあります。1 個が止まったとき、他のファンの回転数を上げて補う設計が一般的です（出典：一般知識。製品で異なる）。空気の流れとラック全体の冷却は<a href="#ch15">第15章</a>が持ち主です。</p>
+
+<h3>保守部品の単位：FRU</h3>
+<p><b>FRU</b>（Field Replaceable Unit）は、現場で、保守する人が取り替えられる部品の単位です。PSU、ファンモジュール、DIMM、ドライブ、ライザーカードなどが、FRU として扱われます。マザーボードのように大きな部品も、FRU です。ただし、交換には多くの部品を外す必要があります。</p>
+<p>FRU の考え方があると、障害のとき、「どの部品を取り替えれば直るか」を、メッセージから決めやすくなります。交換のしかたは、機器のメーカーの保守文書が正です。</p>
+<div class="callout note"><span class="ttl">この章の扱い</span>
+  <p>この章は、サーバーの筐体の仕組みの説明です。保守作業の手順書の代わりにはなりません。実際の部品の取り外し・取付けは、メーカーの保守文書と、現場の手順に従ってください。</p></div>
+<p>部品ごとに、冗長にするか、停止して交換するかをまとめた表です。行を押すと補足が出ます。</p>
+<div data-widget="table" data-src="c06-parts"></div>
+
+<h3>CPU 製品の公開仕様と、TDP の読み方</h3>
+<p>CPU の仕様は、各社が公開しています。次の表は、3 社の公開資料にある値を、そのまま並べた例です。比較や順位を示すものではありません。数字は、製品・世代・時点で変わります。</p>
+<div data-widget="table" data-src="c06-cpu"></div>
+<p>表の「電力の値」に、<b>TDP</b>（Thermal Design Power）が出てきます。TDP は、冷却と電力の設計の目安として、メーカーが示す電力の値です。Intel は、TDP を「最大の理論上の負荷のときの消費電力（W）」と説明しています。軽い負荷では、消費電力は TDP を下回ります。ターボなどで、一時的に TDP を超えることもある、と書いています（出典：Intel『Thermal Design Power (TDP) in Intel Processors』、ページ表示の最終確認日 2023 年 4 月 4 日）。</p>
+<p>この講座では、3 つの言葉を、次のように使い分けます。<b>消費電力</b>は、実際に使っている電力です。<b>定格</b>は、機器に表示された上限の値です。<b>TDP</b>は、熱設計の目安です。同じ「電力」でも、意味が違います。AMD（米国）の発表は「既定の TDP」と書き、NVIDIA の Grace CPU Superchip のページは「CPU とメモリで 500 W」と書いています。資料ごとに、言葉の意味が違うので、比べる前に、各社の定義を読んでください。</p>
+
+<h3>演習：障害メッセージから FRU を選ぶ</h3>
+<p>3 つの障害メッセージ（すべて架空）から、交換する FRU を選びます。まず、どの部品かを自分で決めてから、行を押してください。答えと、考える順序が出ます。</p>
+<div data-widget="table" data-src="c06-choose"></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>TDP は、実際の消費電力ではありません。</b>TDP を、サーバーの電力の見積りにそのまま足すと、実際とずれます。電力の設計は、機器全体の定格と、負荷の見込みで行います（<a href="#ch12">第12章</a>、<a href="#ch14">第14章</a>）。</p>
+  <p><b>「ホットスワップできる」は、製品で違います。</b>表の「一般論」は、多くの製品の傾向です。実際に稼働したまま交換できるかは、その製品の保守文書で確認してください。</p>
+  <p><b>エアシュラウドは、小さな部品でも、冷却に効きます。</b>外したまま動かすと、空気が通らず、温度が上がることがあります。</p></div>
+
+<div class="callout tip"><span class="ttl">現場でのつながり</span>
+  <p>機器の選定では、ソケット数、メモリチャネル数、拡張スロットの数と世代、PSU の冗長を、仕様表で確かめます。運用では、障害メッセージから FRU を特定し、保守業者に伝える部品名がそろっていると、復旧が早くなります。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c06-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（アクセス日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>企業の発表</td><th scope="row"><a href="https://www.amd.com/en/newsroom/press-releases/2024-10-10-amd-launches-5th-gen-amd-epyc-cpus-maintaining-le.html">AMD Launches 5th Gen AMD EPYC CPUs, Maintaining Leadership Performance and Features for the Modern Data Center</a></th><td>AMD（米国）</td><td>2024 年 10 月 10 日</td><td>EPYC 9005 シリーズのコア数、メモリチャネル数、既定の TDP、SP5 との互換。</td></tr>
+      <tr><td>企業の製品仕様</td><th scope="row"><a href="https://www.intel.com/content/www/us/en/products/sku/240777/intel-xeon-6980p-processor-504m-cache-2-00-ghz/specifications.html">Intel Xeon 6980P Processor (504M Cache, 2.00 GHz) Product Specifications</a></th><td>Intel（米国）</td><td>発売 Q3'24（確認 2026 年 11 月）</td><td>コア数、TDP、メモリチャネル、メモリの種類と速度、PCIe のレーン数、2S。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.nvidia.com/en-us/data-center/grace-cpu-superchip/">Introducing the NVIDIA Grace CPU Superchip</a></th><td>NVIDIA（米国）</td><td>2026 年 11 月に確認</td><td>2 つの CPU チップでできたモジュール、コア数、メモリ、「CPU とメモリで 500 W」。</td></tr>
+      <tr><td>企業の技術資料</td><th scope="row"><a href="https://www.intel.com/content/www/us/en/support/articles/000055611/processors.html">Thermal Design Power (TDP) in Intel Processors</a></th><td>Intel（米国）</td><td>ページ表示の最終確認日 2023 年 4 月 4 日</td><td>TDP の説明（最大の理論上の負荷のときの消費電力。軽い負荷では下回る）。</td></tr>
+      <tr><td>企業の公開ページ</td><th scope="row"><a href="https://www.intel.com/content/www/us/en/corporate-responsibility/intel-in-california.html">Intel in California</a></th><td>Intel（米国）</td><td>2026 年 11 月に確認</td><td>本社の所在（米国）の確認。</td></tr>
+      <tr><td>企業の提出書類</td><th scope="row"><a href="https://ir.amd.com/financial-information/sec-filings/content/0000002488-26-000121/0000002488-26-000121.pdf">Form 8-K（報告日 2026 年 8 月 4 日）</a></th><td>AMD（米国）</td><td>2026 年 8 月 4 日</td><td>主たる事務所の所在（米国）の確認。</td></tr>
+      <tr><td>企業の公開ページ</td><th scope="row"><a href="https://www.nvidia.com/en-us/contact/">Contact Us: Americas Locations &amp; Regional Offices</a></th><td>NVIDIA（米国）</td><td>2026 年 11 月に確認</td><td>本社（NVIDIA Corporate）の所在（米国）の確認。</td></tr>
+      <tr><td>一般知識</td><th scope="row">サーバーメーカーの保守文書に共通する一般的な説明（特定の資料なし）</th><td>—</td><td>—</td><td>筐体の構成、ファン・エアシュラウド・ライザーカード・FRU・ホットスワップの説明。数値は使っていません。製品によって違います。</td></tr>
+    </tbody>
+  </table></div>
+</section>

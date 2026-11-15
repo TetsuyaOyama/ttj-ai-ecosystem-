@@ -1,0 +1,97 @@
+<!--
+num: 15
+part: 2
+title: 先端パッケージ：横に並べ、縦に積む
+track: 後工程
+time: 40
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>パッケージが性能を左右するようになった理由と、<b>2.5D・3D・チップレット・HBM</b> が何を解決するかを説明できる。</li>
+    <li><b>TSV</b> の形成と積層、<b>ハイブリッドボンディング</b>の流れを、断面の図で説明できる。</li>
+    <li>各社の呼称（CoWoS、EMIB、Foveros など）が、どの方式にあたるかを、表で対応づけられる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch14">第14章</a>（後工程、フリップチップ、薄化）。<a href="#ch12">第12章</a>（めっきと CMP）を読んでおくと、TSV とハイブリッドボンディングが分かりやすくなります。</p>
+</section>
+
+<h3>なぜパッケージが性能を左右するのか</h3>
+<p>チップの性能は、ダイの中だけでは決まりません。ダイとダイの間、ダイとメモリの間を<b>どれだけ短く、太くつなげるか</b>も、性能と消費電力に効きます。ダイを大きくする方法もありますが、大きなダイは歩留まりが下がりやすくなります（<a href="#ch13">第13章</a>）。IRDS の 2024 年の解説は、パッケージが保護の役割から、性能を引き出す役割に変わったこと、ダイを小さく分けると歩留まりや漏れ電流の面で有利なことを述べています（出典：IRDS 2024 Executive Packaging Tutorial, Part 1）。</p>
+<p>そこで、パッケージの側で工夫をします。ダイを<b>横に並べて細かな配線で結ぶ</b>方式、<b>縦に積む</b>方式、そして機能ごとに小さなダイに分ける<b>チップレット</b>という考え方です。これらを<b>先端パッケージ</b>と呼びます。ここから先は、後工程でありながら、<b>前工程の技術</b>（エッチング、成膜、めっき、CMP）を多く使います。</p>
+
+<h3>構成の比較：従来・2.5D・3D・チップレット</h3>
+<p>図の上のタブで、構成を切り替えてください。ノードを押すと、役割と、新しく必要になる工程が分かります。</p>
+<div data-widget="arch" data-src="c15-pkg"></div>
+
+<h3>2.5D：インターポーザの上に並べる</h3>
+<p><b>2.5D</b> は、<b>インターポーザ</b>（細かな配線をもつ中継の基板）の上に、複数のダイを横に並べてつなぐ方式です。代表的な使い方は、演算のダイと <b>HBM</b>（High Bandwidth Memory、広帯域メモリ）を並べる構成です。</p>
+<p>HBM は、DRAM のダイを縦に積み、TSV（Through-Silicon Via、シリコン貫通ビア。次の節）でつないだ、入出力の幅が広いメモリです。JEDEC が規格を定めていて、HBM3（JESD238）は 2022 年 1 月に発表されました（出典：JEDEC プレスリリース、2022 年 1 月 27 日）。JEDEC は 2025 年 4 月に、HBM4 の規格（JESD270-4）を公開したと発表しました（出典：JEDEC プレスリリース、2025 年 4 月 16 日、Business Wire 配信）。この章では、速度や積層数の数値は書きません。世代ごとに変わるので、最新の規格書で確認してください。</p>
+<p>インターポーザには、<b>TSV</b> が必要になります。次の節で、その作り方を見ます。</p>
+
+<h3>TSV の形成と積層</h3>
+<p><b>TSV</b>（シリコン貫通ビア）は、ダイを貫く縦の配線です。つくり方は、前工程の技術の組み合わせです。深い穴を掘り（エッチング）、内側を絶縁膜とバリア膜で覆い（成膜）、銅で埋め（めっき）、余った銅を削ります（CMP）。そのあと、裏面を薄くして、TSV の先を出します。図で、7 つの段階を見てください。</p>
+<div data-widget="xsec" data-src="c15-tsv"></div>
+<p>薄いウェーハは割れやすいので、支えの基板に貼って扱います。積み重ねるたびに、薄化・位置合わせ・接合・樹脂での埋め込みが必要です。工程が増えるほど、<b>歩留まりの積み重ね</b>が効いてきます。良品のダイだけを積むために、ウェーハテスト（<a href="#ch14">第14章</a>）が重要です。</p>
+
+<h3>ハイブリッドボンディング</h3>
+<p>ダイを積むとき、小さなバンプでつなぐ方法があります。<b>ハイブリッドボンディング</b>は、バンプを使わず、<b>酸化膜どうしを貼り合わせ</b>、表面の<b>銅パッドどうしを直接つなぐ</b>方法です。細かな間隔で、高密度の接続をつくれる方式として使われます。IEEE EPS の技術委員会の解説記事は、これを 3D IC や先端パッケージの重要な技術として扱っています（出典：IEEE EPS の解説記事、2025 年 11 月掲載。日付はファイルの URL による）。</p>
+<p>要点は、<b>表面がきわめて平らで、清浄であること</b>です。そのため、CMP（<a href="#ch12">第12章</a>）と洗浄・検査（<a href="#ch13">第13章</a>）の技術が、そのまま使われます。装置の例として、Applied Materials（米国）は 2025 年 10 月に、Besi（オランダ）と共同で開発した Kinex という名のハイブリッドボンディング装置を発表しました。同社は、ダイをウェーハに接合する一体型の装置としては業界初と主張しています（出典：Applied Materials プレスリリース、2025 年 10 月 7 日）。</p>
+<div data-widget="xsec" data-src="c15-hybrid"></div>
+
+<h3>チップレットと接続規格</h3>
+<p><b>チップレット</b>は、1 つの大きなダイを、機能ごとに小さなダイに分け、<b>パッケージの中で</b>つなぎ直す考え方です。機能ごとに、適した製造プロセスを選べます。小さなダイは、歩留まりも保ちやすくなります。</p>
+<p>ただし、別々のダイを、つなぐ方法がそろっていないと、組み合わせられません。そこで、ダイ間の接続の規格が必要になります。<b>UCIe</b>（Universal Chiplet Interconnect Express）は、その 1 つで、コンソーシアムが仕様を公開しています。1.0、1.1、2.0、3.0、4.0 の版が一覧にあります（出典：UCIe コンソーシアムの仕様ページ、2026 年 11 月閲覧）。仕様は、申請すると入手できます。最新の版の内容は、仕様ページで確認してください。</p>
+
+<h3>方式の早見表と、各社の呼称</h3>
+<p>先端パッケージには、会社ごとに呼び名があります。表では、<b>方式の一般的な説明</b>と、<b>各社の呼称</b>を別の列に分けています。呼称は、各社の公開ページに書かれたもので、定義は会社ごとに違うことがあります。</p>
+<p>TSMC（台湾）は、先端パッケージを 3DFabric と総称し、SoIC、CoWoS、InFO を含めています。Intel（米国）は、EMIB、Foveros（2.5D の型を含む）、Foveros Direct を挙げています。Samsung（韓国）は、I-Cube（2.5D）、X-Cube（3D）を挙げ、ファンアウトのパッケージは FoWLP と呼んでいます（出典：各社の公開ページ、2026 年 11 月閲覧。Samsung の発表は 2020 年と 2021 年のもので、現行の製品構成は同社のページで確認してください）。</p>
+<div data-widget="table" data-src="c15-methods"></div>
+
+<h3>ファンアウト、パネルレベル、ガラス基板の動き</h3>
+<p><b>ファンアウト</b>は、ダイの外側まで、再配線層（Redistribution Layer, RDL）で配線を広げ、基板なしで外部端子を作る方式です。薄く小さなパッケージに向きます。ウェーハの形ではなく、<b>四角いパネル</b>の上で行う方式（パネルレベル、FOPLP）もあります。成熟した製品では使われていて、先端の製品向けは開発が続いている、と報じられています（出典：Semiconductor Engineering、2024 年 11 月 21 日）。</p>
+<p>基板の材料を、有機材料から<b>ガラス</b>に変える動きもあります。Intel と Lens Technology（中国）は、2026 年 7 月 24 日に、ガラス基板を使う先端パッケージを加速する方法を探る協業を発表しました（出典：Intel のニュースルーム、2026 年 7 月 24 日）。ただし、<b>量産の時期</b>を示す公開資料は確認できなかったので、この章では書きません。</p>
+
+<h3>演習：用途に合う方式を選ぶ</h3>
+<p>3 つの用途（架空）に、パッケージの方式を選びます。まず、その用途で<b>何を最優先するか</b>を考えます。性能、薄さ、信頼性のどれかです。そのうえで、方式を選び、理由を言います。答えを決めてから、行を押してください。</p>
+<div data-widget="table" data-src="c15-choose"></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>「2.5D」は、「2.5 倍」ではありません。</b>平面（2D）に並べるが、インターポーザという中継の層がある、という意味の呼び名です。</p>
+  <p><b>TSV とハイブリッドボンディングは、別のものです。</b>TSV はダイを貫く配線、ハイブリッドボンディングは、積んだダイの接合のやり方です。組み合わせて使われます。</p>
+  <p><b>各社の呼称は、会社の定義です。</b>同じ名前でも、世代で中身が変わります。方式と呼称は、分けて覚えてください。</p></div>
+
+<div class="callout note"><span class="ttl">現場でのつながり</span>
+  <p>先端パッケージの工場は、清浄度の要求が、前工程に近づいています（<a href="#ch18">第18章</a>）。装置は、位置合わせの精度が価値の中心で、据付後の調整が重要です（<a href="#ch25">第25章</a>）。輸送では、精密な位置決めの機構と、光学系を衝撃から守る梱包と記録が求められます（<a href="#ch22">第22章</a>）。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c15-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（アクセス日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>規格団体の発表</td><th scope="row"><a href="https://www.jedec.org/news/pressreleases/jedec-publishes-hbm3-update-high-bandwidth-memory-hbm-standard">JEDEC Publishes HBM3 Update to High Bandwidth Memory (HBM) Standard</a></th><td>JEDEC</td><td>2022 年 1 月 27 日</td><td>HBM3（JESD238）の発表時期。</td></tr>
+      <tr><td>規格団体の発表</td><th scope="row"><a href="https://businesswire.com/news/home/20250416843598/en/JEDEC-and-Industry-Leaders-Collaborate-to-Release-JESD270-4-HBM4-Standard-Advancing-Bandwidth-Efficiency-and-Capacity-for-AI-and-HPC">JEDEC and Industry Leaders Collaborate to Release JESD270-4 HBM4 Standard（Business Wire 配信）</a></th><td>JEDEC</td><td>2025 年 4 月 16 日</td><td>HBM4 の規格の公開時期。</td></tr>
+      <tr><td>報道</td><th scope="row"><a href="https://www.allaboutcircuits.com/news/jedec-officially-releases-hbm4-memory-standard">JEDEC Officially Releases HBM4 Memory Standard</a></th><td>All About Circuits</td><td>2025 年 4 月</td><td>上記の照合。</td></tr>
+      <tr><td>コンソーシアム</td><th scope="row"><a href="https://www.uciexpress.org/specifications">UCIe Specifications</a></th><td>UCIe コンソーシアム</td><td>2026 年 11 月閲覧</td><td>UCIe の位置づけと、一覧にある版（1.0、1.1、2.0、3.0、4.0）。</td></tr>
+      <tr><td>企業の技術ページ</td><th scope="row"><a href="https://3dfabric.tsmc.com/english/dedicatedFoundry/technology/3DFabric.htm">TSMC 3DFabric</a></th><td>TSMC（台湾）</td><td>2026 年 11 月閲覧</td><td>3DFabric の総称と、SoIC・CoWoS・InFO を含むこと。</td></tr>
+      <tr><td>企業の技術ページ</td><th scope="row"><a href="https://3dfabric.tsmc.com/english/dedicatedFoundry/technology/cowos.htm">CoWoS</a></th><td>TSMC（台湾）</td><td>2026 年 11 月閲覧</td><td>CoWoS を 2.5D のパッケージ技術と説明していること。</td></tr>
+      <tr><td>企業の技術ページ</td><th scope="row"><a href="https://3dfabric.tsmc.com/english/dedicatedFoundry/technology/SoIC.htm">TSMC-SoIC</a></th><td>TSMC（台湾）</td><td>2026 年 11 月閲覧</td><td>SoIC を縦に積む（3D）技術と説明していること。</td></tr>
+      <tr><td>企業の技術ページ</td><th scope="row"><a href="https://3dfabric.tsmc.com/english/dedicatedFoundry/technology/InFO.htm">InFO</a></th><td>TSMC（台湾）</td><td>2026 年 11 月閲覧</td><td>InFO（Integrated Fan-Out）がファンアウトであること。</td></tr>
+      <tr><td>企業の技術ページ</td><th scope="row"><a href="https://www.intel.com/content/www/us/en/foundry/packaging.html">Intel Foundry Advanced Packaging</a></th><td>Intel（米国）</td><td>2026 年 11 月閲覧</td><td>EMIB（2.5D）、Foveros-S・R（2.5D）、Foveros Direct（3D）の分類と呼称。</td></tr>
+      <tr><td>企業の技術資料</td><th scope="row"><a href="https://www.intel.com/content/dam/www/central-libraries/us/en/documents/2025-07/emib-product-brief.pdf">EMIB Product Brief（PDF）</a></th><td>Intel（米国）</td><td>2025 年 7 月（URL の日付）</td><td>EMIB が基板に埋め込んだシリコンブリッジを使う 2.5D の技術であること。</td></tr>
+      <tr><td>企業の技術資料</td><th scope="row"><a href="https://www.intel.com/content/dam/www/central-libraries/us/en/documents/2025-11/foveros-direct-3d-tech-brief.pdf">Foveros Direct 3D Tech Brief（PDF）</a></th><td>Intel（米国）</td><td>2025 年 11 月（URL の日付）</td><td>Foveros Direct が銅どうしの直接接合による 3D 積層であること。</td></tr>
+      <tr><td>企業の発表</td><th scope="row"><a href="https://news.samsungsemiconductor.com/global/samsung-electronics-announces-availability-of-its-next-generation2-5d-integration-solution-i-cube4-for-high-performance-applications/">Samsung Electronics Announces Availability of Its Next-Generation 2.5D Integration Solution I-Cube4</a></th><td>Samsung（韓国）</td><td>2021 年 5 月 6 日</td><td>I-Cube が、シリコンインターポーザの上にロジックと HBM を載せる 2.5D の技術であること。</td></tr>
+      <tr><td>企業の発表</td><th scope="row"><a href="https://www.businesswire.com/news/home/20200812005784/en/Samsung-Announces-Availability-of-its-Silicon-Proven-3D-IC-Technology-for-High-Performance-Applications">Samsung Announces Availability of its Silicon Proven 3D IC Technology for High Performance Applications（Business Wire 配信）</a></th><td>Samsung（韓国）</td><td>2020 年 8 月 12 日（URL の日付）</td><td>X-Cube が TSV を使う 3D IC の技術であること。</td></tr>
+      <tr><td>企業の技術ページ</td><th scope="row"><a href="https://semiconductor.samsung.com/technologies/processor/mobile-pkg">Mobile Package（FoWLP）</a></th><td>Samsung（韓国）</td><td>2026 年 11 月閲覧</td><td>Samsung がファンアウトのパッケージを FoWLP（Fan-out Wafer Level Package）と呼んで説明していること。</td></tr>
+      <tr><td>企業の発表</td><th scope="row"><a href="https://ir.appliedmaterials.com/news-releases/news-release-details/applied-materials-unveils-next-gen-chipmaking-products">Applied Materials Unveils Next-Gen Chipmaking Products to Supercharge AI Performance</a></th><td>Applied Materials（米国。Kinex は Besi〔オランダ〕と共同開発）</td><td>2025 年 10 月 7 日</td><td>ハイブリッドボンディング装置の例。</td></tr>
+      <tr><td>学会の解説</td><th scope="row"><a href="https://eps.ieee.org/wp-content/uploads/2025/11/TC_Article_M_and_P_-_Hybrid_Bonding_Pioneering_Innovations_and_Pathways_to_Future_Semiconductor_Integration.pdf">Hybrid Bonding: Pioneering Innovations and Pathways to Future Semiconductor Integration（Kuan-Neng Chen 氏、PDF）</a></th><td>IEEE EPS（技術委員会の記事）</td><td>2025 年 11 月（ファイルの URL の日付）</td><td>ハイブリッドボンディングの位置づけ。銅と絶縁膜を一度に接合する方式で、3D IC の重要な技術。</td></tr>
+      <tr><td>業界のロードマップ</td><th scope="row"><a href="https://irds.ieee.org/images/files/pdf/2024/2024IRDS_EPT-Part1.pdf">2024 IRDS Executive Packaging Tutorial, Part 1: Integrated Circuit Packaging Evolution（PDF）</a></th><td>IEEE IRDS</td><td>2024 年</td><td>パッケージの役割が変わったこと。2.5D・3D・チップレットの位置づけ。</td></tr>
+      <tr><td>企業のニュース</td><th scope="row"><a href="https://www.intel.com/content/www/us/en/newsroom/news/corporate/intel-and-lens-technology-collaborate-to-enable-advanced-semiconductor-packaging-for-the-ai-era.html">Intel and Lens Technology Collaborate to Enable Advanced Semiconductor Packaging for the AI Era</a></th><td>Intel（米国）</td><td>2026 年 7 月 24 日</td><td>協業の発表。ガラス基板を使うパッケージを探る内容で、量産時期は記載なし。</td></tr>
+      <tr><td>業界媒体の記事</td><th scope="row"><a href="https://semiengineering.com/foplp-gains-traction-in-advanced-semiconductor-packaging/">FOPLP Gains Traction in Advanced Semiconductor Packaging</a></th><td>Semiconductor Engineering</td><td>2024 年 11 月 21 日</td><td>パネルレベルのファンアウトの状況。成熟した製品では使われ、先端向けは開発中。</td></tr>
+      <tr><td>教科書的な一般知識</td><th scope="row">半導体パッケージングの教科書（TSV、インターポーザ、アンダーフィル、ファンアウト）</th><td>—</td><td>—</td><td>方式と工程の説明。数値は使っていません。</td></tr>
+    </tbody>
+  </table></div>
+</section>

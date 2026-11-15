@@ -1,0 +1,137 @@
+<!--
+num: 22
+part: 4
+title: クラスタの資源管理とジョブスケジューラ
+track: 運用
+time: 35
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>クラスタで管理する<b>資源</b>と、<b>ジョブスケジューラ</b>の役割（キュー・パーティション・優先度）を説明できる。</li>
+    <li><b>フェアシェア</b>と<b>バックフィル</b>が何を狙った方針かを言え、待ち行列からバックフィルで先に走るジョブを選べる。</li>
+    <li><b>トポロジを考えた配置</b>、GPU（Graphics Processing Unit）の割当てと分割、障害時の<b>チェックポイント</b>が必要な理由を説明できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch04">第04章</a>（仮想化とコンテナ）と<a href="#ch11">第11章</a>（ラック単位の設計と AI 向けクラスタ）。<a href="#ch08">第08章</a>（アクセラレータ）と<a href="#ch21">第21章</a>（構成管理）を読んでいると、つながりが分かりやすくなります。</p>
+</section>
+
+<div class="callout note"><span class="ttl">この章で「公開情報で確認できた範囲」</span>
+  <p>Slurm の機能と状態名は、Slurm の公式文書で確認しました。Slurm の開発元の変更は、NVIDIA の発表で確認しました。Kubernetes の GPU の扱いは、Kubernetes の公式文書で確認できた範囲だけ書いています。GPU の分割機能は、各社が別の名前と仕様で提供します。この章は、仕組みの考え方の説明にとどめ、特定の製品の設定手順は書きません。</p></div>
+
+<h3>クラスタで管理する資源</h3>
+<p>多数のサーバーを 1 つの計算の場として使うとき、利用者のジョブ（仕事）に、資源をどう割り当てるかが問題になります。第11章では、クラスタの中の 1 台を<b>ノード</b>（node）と呼びました。ジョブスケジューラが扱う資源は、次のとおりです。</p>
+<ul>
+  <li><b>ノード</b>：サーバー 1 台。ジョブはノード単位で割り当てることが多い。</li>
+  <li><b>CPU とメモリ</b>：ノード内の計算とメモリの量。</li>
+  <li><b>GPU などのアクセラレータ</b>：数と種類。</li>
+  <li><b>ネットワーク</b>：同じスイッチの配下かどうかなど、通信の近さ（第10章）。</li>
+  <li><b>ストレージ</b>：共有のファイルシステム、ローカルの SSD（Solid State Drive、第09章）。</li>
+  <li><b>電力</b>：クラスタ全体で使える電力の上限。電力の制御は第24章で扱う。</li>
+</ul>
+<p>資源の割当てを、人が毎回決めると、空きが見つからなかったり、同じ資源を 2 つのジョブが取り合ったりします。そこで、<b>ジョブスケジューラ</b>（job scheduler）が、要求と空きを見て、割当てを自動で決めます。</p>
+
+<h3>Slurm：ジョブスケジューラの例</h3>
+<p>HPC（High Performance Computing、高性能計算）と AI のクラスタで使われるジョブスケジューラの例が、<b>Slurm</b> です。Slurm の公式文書は、役割を 3 つにまとめています。ノードを、決まった時間、利用者へ割り当てること。割り当てたノードで、仕事を開始し、実行し、監視する方法を提供すること。資源が足りないとき、待っているジョブの待ち行列を管理することです（出典：Slurm の公式文書『Overview』、2026 年 11 月に確認）。</p>
+<p>構成は、次の 3 つの部分です（出典：同上）。</p>
+<ul>
+  <li><b>slurmctld</b>：中央の管理役。資源とジョブを把握する。故障に備えて、予備を置ける。</li>
+  <li><b>slurmd</b>：各計算ノードで動き、仕事を待ち、実行し、状態を報告する。</li>
+  <li><b>slurmdbd</b>：任意の部分。複数のクラスタの利用の記録を、1 つのデータベースに残す。</li>
+</ul>
+<p>NVIDIA（米国）は、2025 年 12 月 15 日に、Slurm の開発元の会社を買収したと発表しました。NVIDIA は、Slurm を引き続きオープンソースで、特定の機器に依存しない形で開発・配布すると述べています（出典：NVIDIA『NVIDIA Acquires Open-Source Workload Management Provider SchedMD』、2025 年 12 月 15 日）。この章では、Slurm を、ジョブスケジューラの考え方を説明する例として使います。優劣は比べません。</p>
+<p><b>パーティション</b>（partition）は、ノードを論理的に分けた集まりで、ジョブの待ち行列（キュー）として働きます。パーティションごとに、サイズや時間の上限、使える利用者などの制約を持てます。パーティションは、ノードを共有できます（出典：同上）。</p>
+<p>ジョブの 1 本が、どのように動くかを、下の図で追ってください。</p>
+<div data-widget="seq" data-src="c22-seq"></div>
+
+<h3>ジョブの状態</h3>
+<p>ジョブは、投入されてから終わるまで、状態が移ります。Slurm の公式文書が決めている状態の名前を、括弧で添えます（出典：Slurm の公式文書『Job State Codes』、2026 年 11 月に確認）。下の図で、状態と遷移を押してください。</p>
+<div data-widget="state" data-src="c22-state"></div>
+<p>状態の読み方で大切なのは、<b>終わり方が複数ある</b>ことです。成功（<code>COMPLETED</code>）、失敗（<code>FAILED</code>）、時間切れ（<code>TIMEOUT</code>）、取消（<code>CANCELLED</code>）、ノードの故障（<code>NODE_FAIL</code>）は、原因も、次の対応も違います。次の章（第23章）の切り分けでは、ジョブの終わり方が最初の手がかりになります。</p>
+
+<h3>スケジューリングの方針</h3>
+<p>待っているジョブが、空いている資源より多いとき、どのジョブから動かすかを決める方針が要ります。主な方針は、次のとおりです。</p>
+<div data-widget="table" data-src="c22-policy"></div>
+<h4>優先度とフェアシェア</h4>
+<p>Slurm の多要素の優先度（multifactor priority）は、9 つの要素を組み合わせて、ジョブの順位を決めます。待ち時間（age）、管理者が決める関連づけ（association）、ジョブの大きさ、利用者が調整できる値（nice）、パーティション、QOS（Quality of Service、サービス品質の区分。Slurm の文書の表記）、サイトの値、資源の種類ごとの値（TRES）、そしてフェアシェアです（出典：Slurm の公式文書『Multifactor Priority Plugin』、2026 年 11 月に確認）。</p>
+<p><b>フェアシェア</b>（fair share）は、割り当てられた分と、実際に使った分を比べる考え方です。割当てより使っていない利用者のジョブは、早く動きます。使いすぎた利用者のジョブは、資源が余っているときに動きます。上限で止めるものではありません。過去の使用量は、時間とともに薄れていくので、最近の使用が重く見られます（出典：同上）。</p>
+<h4>バックフィル</h4>
+<p><b>バックフィル</b>（backfill）は、優先順位の高いジョブの開始を遅らせない範囲で、後ろの小さなジョブを先に動かして、空きを埋める方法です。Slurm の公式文書は、バックフィルが、優先順位の低いジョブを、高いジョブの予想開始時刻を遅らせないときだけ始める、と説明しています。そのため、各ジョブの時間の上限が、あまり大きく外れていないことが前提になります（出典：Slurm の公式文書『Scheduling Configuration Guide』、2026 年 11 月に確認）。</p>
+<p>バックフィルがない場合、先頭のジョブが待っている間は、同じパーティションの後ろのジョブは動けません。そのため、先頭のジョブのために資源を空けて待つ間に、空いたノードが遊んでしまいます。バックフィルは、この遊びを減らす方針です。</p>
+
+<h3>コンテナ基盤での資源管理</h3>
+<p>HPC のスケジューラとは別に、コンテナを動かす基盤（第04章の Kubernetes など）にも、資源の割当ての仕組みがあります。Kubernetes は、Pod（コンテナの実行の単位）を、ノードへ割り当てます。GPU のように、ベンダー固有の設定が要る装置は、<b>デバイスプラグイン</b>（device plugin）の仕組みで、クラスタが使えるようにします（出典：Kubernetes の公式文書『Device Plugins』、2026 年 11 月に確認）。</p>
+<p>さらに、装置を要求して、Pod の間で共有する仕組みとして、<b>Dynamic Resource Allocation</b>（DRA）があります。デバイスの種類と要求を定義し、Kubernetes が合う装置を割り当て、その装置に届くノードへ Pod を配置します。DRA は、Kubernetes 1.35 で安定版（stable）になったと、公式文書にあります（出典：Kubernetes の公式文書『Dynamic Resource Allocation』、v1.36 版の文書、2026 年 11 月に確認）。</p>
+<p>バッチ型のスケジューラと、コンテナの基盤は、考え方が違います。前者は「待ち行列と時間」、後者は「常時動くサービスの配置」に重きを置くことが多い、という一般論があります。どちらを使うかは、用途で決まります。両者をつなぐ構成もあります（製品による）。</p>
+
+<h3>GPU の割当てと分割</h3>
+<p>GPU は高価で、1 台の GPU を丸ごと割り当てると、小さなジョブでは使い切れません。そこで、割り当て方に 3 つの形があります。</p>
+<ul>
+  <li><b>丸ごと</b>：GPU 1 台を、1 つのジョブへ専有させる。性能が安定する。</li>
+  <li><b>分割</b>：GPU の資源を、決まった単位に分けて、別々のジョブへ割り当てる。<b>GPU の分割</b>（GPU partitioning）は、メモリや計算の部分を分離する機能として、GPU のメーカーが提供する場合がある。</li>
+  <li><b>時分割</b>：時間で区切り、複数のジョブが交代で GPU を使う。分離の強さは、分割より弱いのが一般的。</li>
+</ul>
+<p>分割と時分割の機能の名前と仕様は、<b>メーカーごとに違います</b>。企業固有の機能名は、「◯◯社の呼称」の形で、各社の公式資料で確かめてください（第08章の GPU の呼称の扱いと同じです）。この章では、機能名を挙げず、考え方だけを示します。</p>
+
+<h3>トポロジを考えた配置</h3>
+<p>多数のノードが 1 つのジョブで通信するとき、ノードが<b>ネットワークで近い</b>ほど、通信の競合が減り、性能が出やすくなります。同じスイッチの配下のノードにまとめる、という考え方です。これが<b>トポロジを考えた配置</b>（topology-aware scheduling）です。</p>
+<p>Slurm の公式文書は、トポロジのプラグインがないと、ノードを平らな 1 本の一覧として扱い、最も合うところへ割り当てる、と説明しています。トポロジの情報（スイッチの階層）を設定すると、要求を満たせる最も下のスイッチを探して、その配下のノードへ割り当てます。また、ノードを決まった大きさのブロックにまとめ、断片化を減らす方式もあります。ブロックの方式には、ノード数の範囲が窮屈になるなどの代償があります（出典：Slurm の公式文書『Topology Guide』、2026 年 11 月に確認）。</p>
+<p>配置を厳しく考えるほど、待ち時間が増える場合があります。性能と待ち時間は、トレードオフです。第10章のリーフ・スパインの考え方と、第11章の AI クラスタの構成を、あわせて読むと理解が進みます。</p>
+
+<h3>障害とジョブ：チェックポイントと再実行</h3>
+<p>ノードが多いほど、実行中にどれかが故障する確率が上がります。数日かかる学習が、途中で止まると、最初からやり直しでは大きな損失です。そこで、<b>チェックポイント</b>（checkpoint）を使います。実行の途中の状態を、定期的にストレージへ保存し、障害のあとに、その時点から再開する仕組みです。</p>
+<p>障害への備えは、次の 3 点です。</p>
+<ul>
+  <li><b>チェックポイント</b>：状態を保存する。保存の間隔は、失う仕事の量と、保存にかかる時間の兼ね合いで決める。</li>
+  <li><b>再実行</b>：失敗したジョブを、自動または手動で、待ち行列へ戻す。</li>
+  <li><b>ノードの切り離し</b>：故障したノードを、割当ての対象から外す。直ったら戻す（第23章）。</li>
+</ul>
+<p>Slurm の状態名では、ノードの故障による終了が <code>NODE_FAIL</code>、先取りによる終了が <code>PREEMPTED</code> です。再投入（待ちへ戻すこと）の扱いは、ジョブの指定と運用の設定で決まります。</p>
+
+<h3>演習：バックフィルで、先に走るジョブを選ぶ</h3>
+<p>次は、<b>顧客 D 社</b>の小さなクラスタの例です。GPU は全部で 8 台、すべて空いています。ジョブは、優先順位の高い順に待っています。値はすべて架空です（出典：架空、見本のため）。時間は、ジョブが申告した上限で、実際もその時間かかるとします。</p>
+<div class="tbl-wrap"><table class="tbl">
+  <caption>架空の待ち行列（優先順位の高い順）</caption>
+  <thead><tr><th>順位</th><th>ジョブ</th><th>必要な GPU 数</th><th>時間（時間）</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">1</th><td>ジョブ A</td><td>8</td><td>10</td></tr>
+    <tr><th scope="row">2</th><td>ジョブ B</td><td>4</td><td>3</td></tr>
+    <tr><th scope="row">3</th><td>ジョブ C</td><td>2</td><td>12</td></tr>
+    <tr><th scope="row">4</th><td>ジョブ D</td><td>2</td><td>2</td></tr>
+  </tbody>
+</table></div>
+<p>いま、別のジョブ X が、GPU を 6 台使って動いており、あと 4 時間で終わります。空いている GPU は 2 台です。なお、バックフィルは、上のジョブの開始予定を遅らせない場合だけ、下のジョブを先に動かします。</p>
+<p><b>問い</b>：いま、バックフィルで先に動かせるジョブはどれですか。理由も答えてください。</p>
+<details><summary>答えを見る</summary>
+  <p><b>ジョブ D</b>だけです。</p>
+  <p>ジョブ A は、GPU 8 台が要るので、X が終わる 4 時間後に始まる予定です。4 時間後に A が 8 台すべてを使うので、それまでに終わるジョブだけが、A を遅らせずに、いま空いている 2 台を使えます。</p>
+  <p>ジョブ B は GPU 4 台が要り、いま空いているのは 2 台なので、動けません。ジョブ C は 2 台で足りますが、12 時間かかり、4 時間後に A が始まる時点でまだ使っているため、A を遅らせます。ジョブ D は、GPU 2 台で 2 時間なので、4 時間後より前に終わり、A の開始を遅らせません。したがって、先に動けるのは D です。</p></details>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>バックフィルは、時間の上限が正しく申告されていることが前提です。</b>上限を実際よりずっと長く申告すると、後ろのジョブが先に動ける機会が減ります。逆に、短く申告して超えると、時間切れで止められます（<code>TIMEOUT</code>）。</p>
+  <p>もう 1 つ。<b>フェアシェアは、上限ではなく、順位の調整です。</b>使いすぎた利用者のジョブも、資源が余っていれば動きます。</p></div>
+
+<div class="callout tip"><span class="ttl">現場でのつながり</span>
+  <p>AI クラスタの構成（第11章）で決めたネットワークの階層が、スケジューラのトポロジ設定の元になります。機器の立上げ（第28章）では、ノードを試験したうえで、スケジューラの対象に登録します。運用では、第23章の監視で故障したノードを見つけて、切り離します。電力に上限があるクラスタでは、ジョブの割当てが電力の制御（第24章）とつながります。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c22-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>公式文書</td><th scope="row"><a href="https://slurm.schedmd.com/overview.html">Slurm Workload Manager — Overview</a></th><td>Slurm 公式</td><td>確認時のページ</td><td>Slurm の 3 つの役割、slurmctld・slurmd・slurmdbd、パーティション。</td></tr>
+      <tr><td>公式文書</td><th scope="row"><a href="https://slurm.schedmd.com/job_state_codes.html">Job State Codes</a></th><td>Slurm 公式</td><td>確認時のページ</td><td>ジョブの状態の名前と意味。</td></tr>
+      <tr><td>公式文書</td><th scope="row"><a href="https://slurm.schedmd.com/sched_config.html">Scheduling Configuration Guide</a></th><td>Slurm 公式</td><td>確認時のページ</td><td>バックフィル、時間の上限、組込みのスケジューラの動き。</td></tr>
+      <tr><td>公式文書</td><th scope="row"><a href="https://slurm.schedmd.com/priority_multifactor.html">Multifactor Priority Plugin</a></th><td>Slurm 公式</td><td>確認時のページ</td><td>優先度の 9 つの要素、フェアシェアの考え方。</td></tr>
+      <tr><td>公式文書</td><th scope="row"><a href="https://slurm.schedmd.com/topology.html">Topology Guide</a></th><td>Slurm 公式</td><td>確認時のページ</td><td>トポロジを考えた配置（tree と block の方式）。</td></tr>
+      <tr><td>発表資料</td><th scope="row"><a href="https://blogs.nvidia.com/blog/nvidia-acquires-schedmd">NVIDIA Acquires Open-Source Workload Management Provider SchedMD</a></th><td>NVIDIA</td><td>2025 年 12 月 15 日</td><td>Slurm の開発元の買収と、オープンソース・ベンダー中立の継続の表明。</td></tr>
+      <tr><td>企業の公開資料</td><th scope="row"><a href="https://investor.nvidia.com/governance/contact-the-board/default.aspx">Contact the Board（NVIDIA）</a></th><td>NVIDIA</td><td>確認時のページ</td><td>本社の所在地（初出の国の表記）。</td></tr>
+      <tr><td>公式文書</td><th scope="row"><a href="https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/device-plugins/">Device Plugins</a></th><td>Kubernetes プロジェクト</td><td>確認時のページ（変更日 2026-07-27）</td><td>デバイスプラグインが、ベンダー固有の設定が要る装置（GPU など）を使えるようにすること。ページの一部だけ確認。</td></tr>
+      <tr><td>公式文書</td><th scope="row"><a href="https://v1-36.docs.kubernetes.io/docs/concepts/scheduling-eviction/dynamic-resource-allocation/">Dynamic Resource Allocation（v1.36 版の文書）</a></th><td>Kubernetes プロジェクト</td><td>v1.36 版の文書</td><td>DRA の目的と、v1.35 で stable になったこと。ページの一部だけ確認。</td></tr>
+      <tr><td>一般知識</td><th scope="row">チェックポイント、GPU の丸ごと・分割・時分割、バッチ型とコンテナ基盤の違い</th><td>—</td><td>—</td><td>一般的な説明（数値なし）。GPU の分割機能の名前は書いていません。</td></tr>
+    </tbody>
+  </table></div>
+</section>

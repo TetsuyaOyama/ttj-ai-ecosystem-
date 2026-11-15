@@ -1,0 +1,18 @@
+/* 第20章 事実確認表（担当 E、確認 2026-11-14）
+| # | 区分 | 事実（本文での書き方） | 数値・単位 | 時点 | 出典（発行者『資料名』） | URL（個別ページ） | 一次 | 確認日 | 使った箇所 |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | 規格 | UEFI は OS とプラットフォームのファームウェアの間の標準インターフェース。ファームウェアが渡す情報の表と、起動・実行時のサービスの呼び出しからなる。標準 OS が機器ごとの手直しなしに起動できることを狙い、従来の PC-AT 型の起動環境から移ることを目指す | 2.11 | 2024 | UEFI Forum『UEFI Specification 2.11』§1 Introduction | https://uefi.org/specs/UEFI/2.11/01_Introduction.html | ○ | 2026-11-14 | 本文「UEFI と ACPI」 |
+| 2 | 発表 | UEFI 2.11 と PI 1.9 は 2024 年 12 月に公開（UEFI Forum の press room は 12 月 16 日、Business Wire の URL は 12 月 17 日で、日が揺れるため月のみ記載）。UEFI 2.11 に HTTP Boot のプロキシホスト URI への対応が入った | 2.11／1.9 | 2024-12 | UEFI Forum『UEFI Forum Releases UEFI 2.11 and PI 1.9 Specifications』 | https://www.businesswire.com/news/home/20241217759265/en | △ | 2026-11-14 | 本文「UEFI と ACPI」、c20-boot |
+| 3 | 規格 | UEFI Forum の仕様一覧：ACPI 6.6（2025 年 5 月）、UEFI 2.11（2024 年 12 月）、PI 1.10（2026 年 7 月）。TCG EFI Platform / Protocol Specification へのリンクが載る（本章では TCG は使わない） | 6.6／2.11／1.10 | 確認時 | UEFI Forum『Specifications』 | https://uefi.org/specifications | ○ | 2026-11-14 | 本文「UEFI と ACPI」、c20-fw 以外の mapping |
+| 4 | 規格 | ACPI はハードウェアとソフトウェアのインターフェースとデータ構造を定め、OS が機器を設定し電力を管理できるようにする。ファームウェアが記述の表を渡す。著作権は UEFI Forum | 6.6 | 2025 | UEFI Forum『ACPI Specification 6.6』§1 | https://uefi.org/specs/ACPI/6.6/01_Introduction.html | ○ | 2026-11-14 | 本文、c20 の用語集・mapping |
+| 5 | 発表 | ACPI 6.6 の公開（ページに日付の記載なし。仕様一覧の「2025 年 5 月」に合わせた） | 6.6 | 2025-05（一覧） | UEFI Forum『UEFI ACPI 6.6 Specification Available』 | https://uefi.org/node/5172 | ○ | 2026-11-14 | 本文 |
+| 6 | 規格 | PI 仕様：PEI はメモリを使える状態にして DXE へ引き継ぐ。DXE は初期化の大部分を行う。BDS は DXE の後、コンソールと起動機器を準備して OS を起動できる状態にする。SEC は章題のみ確認 | 1.8 | 1.8 版 | UEFI Forum『UEFI PI Specification 1.8』Volume 2 Overview | https://uefi.org/specs/PI/1.8/V2_Overview.html | ○ | 2026-11-14 | 本文「電源投入から OS まで」、c20-seq |
+| 7 | 規格 | UEFI 2.11 §24「Network Protocols — SNP, PXE, BIS and HTTP Boot」：§24.3 PXE Base Code（Dhcp()、Discover()、Mtftp()、Netboot6）、§24.7 HTTP Boot（Boot from URL、DHCP、DNS、HTTP でのダウンロード）。§3 Boot Manager、§32 Secure Boot and Driver Signing の章がある | 2.11 | 2.11 版 | UEFI Forum『UEFI Specification 2.11』§24、目次 | https://uefi.org/specs/UEFI/2.11/24_Network_Protocols_SNP_PXE_BIS.html 、https://uefi.org/specs/UEFI/2.11/index.html | ○ | 2026-11-14 | 本文「ネットワークで起動する」、c20-boot、c20-seq |
+| 8 | 発表 | HTTP ブートは UEFI 2.5 で導入。講演「Goodbye PXE, Hello HTTP Boot」（2015-10-07、LinuxCon Europe の UEFI ミニサミット、講演者は HP の所属）は、TFTP の暗号化・認証の欠如、遅さ、損失への弱さを挙げ、HTTP ブートは HTTPS・TCP を使えると説明（講演者の表現として書く） | UEFI 2.5 | 2015-10-07 | UEFI Forum 公開の講演資料『Goodbye PXE, Hello HTTP Boot』 | https://uefi.org/sites/default/files/resources/FINAL%20Pres4%20UEFI%20HTTP%20Boot.pdf | ○ | 2026-11-14 | 本文、c20-boot |
+| 9 | 規格 | Redfish Firmware Update White Paper 1.2.0（2026-04-03）：UpdateService、FirmwareInventory（OS の外で動くファームウェア）と SoftwareInventory、SimpleUpdate（pull）、MultipartHttpPushUri（推奨）と HttpPushUri（非推奨）、順序はサービスが決め StepOrder は任意で詳細な依存モデルは定義しない、Stage と @Redfish.OperationApplyTime（Immediate など 5 値） | 1.2.0 | 2026-04-03 | DMTF『Redfish Firmware Update White Paper DSP2062 1.2.0』 | https://www.dmtf.org/sites/default/files/standards/documents/DSP2062_1.2.0.html | ○ | 2026-11-14 | 本文「一括で更新する」、c20-fw、c20-flow、クイズ 2 |
+| 10 | 一般知識 | POST は電源投入時の自己診断。ブートローダが OS カーネルを読み込む。ファームウェア領域の二重化とロールバック（有無と戻し方は製品で違う）。段階的に更新する考え方。更新の経路と失敗時の影響の表（一般論） | — | — | 一般的な説明（数値なし）。製品で違う旨を本文・表に注記 | —（教科書的な説明） | × | 2026-11-14 | 本文、c20-fw、c20-flow、クイズ 3、演習 |
+確認できず書かなかった：
+- 各社サーバーの UEFI 設定項目の名称と、BMC 経由の BIOS 設定の API（Redfish の BIOS リソース）：公開資料で個別に確認していないため、一般的な説明にとどめた。
+- 二重化された領域をもつ具体的な製品・版の数：公開資料で確認できず書かなかった。
+- NIST SP 800-193（ファームウェアの保護・検知・回復）の版：検索の上限に達して確認できず、第25章と同様、書かなかった。（第4部の検証で 2018 年 5 月・Final を確認し、第25章の本文に補った。この章は第25章へ送る形のまま）
+*/

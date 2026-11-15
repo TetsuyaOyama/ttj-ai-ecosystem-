@@ -1,0 +1,125 @@
+<!--
+num: 14
+part: 3
+title: ラックへの配電と高電圧直流
+track: 電源
+time: 35
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>電気室からラックまでの配電（<b>分電盤・バスウェイ・ラック PDU</b>）と、<b>三相交流の相のバランス</b>を説明できる。</li>
+    <li>電源ユニット（PSU）の効率の等級（<b>80 PLUS</b>）が何を測るかと、<b>直流給電</b>（48 V 級・HVDC）が検討される理由を説明できる。</li>
+    <li>各社・団体の公開発表（出典と日付つき）と、直流の安全の論点（アーク、遮断の難しさ）を言える。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch12">第12章</a>（受電から機器までの電力の流れ）。<a href="#ch03">第03章</a>（ラック）と<a href="#ch13">第13章</a>（UPS と蓄電）を読んでいると、分かりやすくなります。</p>
+</section>
+
+<div class="callout warn"><span class="ttl">この章の扱い（電気の安全）</span><p>この章は、電気設備の仕組みと注意点の説明です。作業の手順書の代わりにはなりません。受変電設備・UPS・配電・直流給電の操作や作業は、感電やアークによる重大な事故のおそれがあります。実際の作業は、法令で定められた有資格者が、設備の保安規程と現場の手順（作業計画・作業許可）に従って行ってください。</p></div>
+
+<h3>まず全体像：変換の段数を数える</h3>
+<p>電力は、チップに届くまでに、何度も形を変えます。交流を直流に、高い電圧を低い電圧に変えます。変換のたびに、一部の電力が熱になります。そこで、変換の段数を減らす方法として、<b>直流給電</b>が検討されています。</p>
+<p>下の図は、3 つの方式で、変換の段を比べます。上のタブで切り替えて、「交流 ↔ 直流」の変換が何回あるかを数えてください。図は模式で、実在の施設や製品の構成ではありません。</p>
+<div data-widget="arch" data-src="c14-chain"></div>
+
+<h3>ラックまでの配電：分電盤・バスウェイ・RPP</h3>
+<p>電気室で整えた電力は、ラックの列の近くまで運ばれ、そこで分けられます。主な設備は 3 つです。</p>
+<ul>
+  <li><b>分電盤</b>：電気室やホールに置き、電力を各列へ分け、遮断器で保護する盤です。</li>
+  <li><b>バスウェイ</b>（busway）：導体を金属の筐体に収めた、電力を配るための部材です。ケーブルの代わりに、ラックの列に沿って電力を運びます。ラックの位置が変わっても、取り出し口を付け替えられます。</li>
+  <li><b>RPP</b>：列ごとなどに置く分電盤の呼び名です。呼び方と構成は、事業者によって違います（一般知識）。</li>
+</ul>
+<p>ラックの手前までの設備は施設側（DC 事業者）が、ラックの中の機器は利用者側が持つことが多いのですが、境目は契約で決まります（第12章の図）。</p>
+
+<h3>三相交流と、相のバランス</h3>
+<p><b>三相交流</b>（three-phase AC）は、位相が少しずつずれた 3 つの交流を組み合わせた方式です。大きな電力を、少ない導体で運べるので、施設の配電に広く使われます。3 つの線を<b>相</b>と呼びます。</p>
+<p>負荷を、3 つの相へ<b>なるべく均等に</b>分けることを、<b>相のバランス</b>を取る、と言います。特定の相だけに電流が偏ると、その相の遮断器や配線が先に上限に達します。ほかの相に余裕があっても、その分は使えません。均等に分けるほど、設備の容量を使い切れます。ラックの電力の割当ては、相ごとの負荷を見て決めます。</p>
+
+<h3>ラック PDU：計測・スイッチ・監視</h3>
+<p><b>ラック PDU</b>（rack Power Distribution Unit）は、ラックに付けて、サーバーなどへ電気を分ける配電機器です。分けるだけのものから、次の機能を持つものまであります（一般知識）。</p>
+<ul>
+  <li><b>計測</b>：電力や電流を測ります。相ごとの偏りを見つける材料になります。</li>
+  <li><b>スイッチ</b>：出力口ごとに、入り切りできます。</li>
+  <li><b>監視</b>：ネットワークで、値と警報を知らせます（第24章）。</li>
+</ul>
+<p>銘板（製品に貼るラベル）には、入力の相・電圧・電流、出力口の数、機能が書かれます。表記の形式は製造者ごとに違います。下は<b>架空の型番</b>で、読み方を練習します。</p>
+<div data-widget="ident" data-src="c14-pdu"></div>
+
+<h3>電源ユニットの効率と 80 PLUS</h3>
+<p>サーバーの電源ユニット（Power Supply Unit, <b>PSU</b>）は、交流を直流に変えます（第06章）。変換のとき、一部が熱になるので、PSU の<b>変換効率</b>が、消費電力と発熱を左右します。</p>
+<p><b>80 PLUS</b> は、電源ユニットの効率を測って、等級に分ける認証の制度です。運営元の公開ページは、等級を Standard、Bronze、Silver、Gold、Platinum、Titanium、Ruby の 7 つ挙げ、10%・20%・50%・100% の負荷率で効率を測ると説明しています。入力の電圧と構成ごとの区分があり、データセンター向けの冗長電源の区分（交流 230 V・277 V・480 V、直流 380 V など）も挙がります（出典：CLEAResult の 80 PLUS 公開ページ、2026 年 11 月に確認）。最上位の Ruby は、同ページの FAQ が、AI 向けのデータセンターと高性能計算の用途を想定した等級と説明しています（効率の基準値は書きません。運営元の資料で確認してください）。</p>
+<p>等級が高いほど効率が高い、という順序は成り立ちます。ただし、<b>等級は、決まった条件での測定結果</b>です。実際の運転での効率は、負荷率と入力の条件で変わります。</p>
+
+<h3>直流給電が検討される理由</h3>
+<p>交流の配電では、UPS と PSU で、変換を重ねます（図の「交流配電」）。直流で配れば、その一部をなくせます。検討される理由は、次の 3 つです。</p>
+<ul>
+  <li><b>変換の段数</b>：交流 ↔ 直流の変換を減らせる可能性があります。</li>
+  <li><b>損失</b>：変換が減ると、変換で出る熱も減る、という考え方です。</li>
+  <li><b>配線</b>：同じ電力なら、電圧が高いほど電流が小さく、導体を細くできます（一般知識）。ラックの電力が大きくなると、低い電圧の配線は、大きな電流と太い導体を要します。</li>
+</ul>
+<p>ただし、直流にすれば必ず得になる、とは言えません。電圧、設備の構成、既存の設備との接続で、条件が変わります。以下は、公開された発表と仕様の例です。企業の数値の主張は、その企業の説明として読みます。</p>
+<div data-widget="table" data-src="c14-methods"></div>
+<h4>48 V 級バスバー</h4>
+<p>Open Compute Project（OCP）の Open Rack V3 の基本仕様は、ラックの中の給電として、バスバーの形状（「48V Busbar」の節）と、電源シェルフの出力の公称値（51 V または 54 V の選択肢）を定めています（出典：OCP『Open Rack V3 Base Specification』Rev 1.0、2022 年 9 月公開の表示）。「48 V」は呼び名で、仕様の公称値は別に書かれています。</p>
+<h4>±400 V 級と 800 V</h4>
+<p>Google（米国）は、2025 年 4 月 29 日の OCP EMEA Summit に関するブログで、IT ラックの電力を 1 MW 級へ広げる方法として、±400 V 級の直流と、電源部をラックの外の「サイドカー」に出す構成を説明しました（出典：Google Cloud ブログ、2025 年 4 月 29 日）。OCP の仕様には、±400 V 級を受ける電源シェルフと PSU があります（出典：OCP『ORV3 HVDC-LVDC 100kW Power Shelf』v1.0.0、『Open Rack ±400V to 50V 18kW PSU』v1.0.0、いずれも 2026 年 2 月 20 日）。</p>
+<p>NVIDIA（米国）は、2025 年 5 月 20 日の技術ブログで、800 V の直流の構成を示しました。施設の境界で交流を 800 V の直流に変え、中間の変換段を減らす構成です。ブログは、従来の 54 V 直流のラック内配電は、ラックの電力が大きくなると限界に近づく、と説明しています。また、2027 年に 1 MW 級の IT ラックへ対応する計画を述べています（出典：NVIDIA 技術ブログ、2025 年 5 月 20 日）。これらは各社の説明で、どの方式が標準になるかは、この章では評価しません。</p>
+<p>ITU-T の勧告 L.1200 は、通信・ICT 機器の入力で、直流 400 V までの給電インタフェースを扱います（承認は 2012 年 5 月 29 日、出典：ITU-T 勧告のページ）。IEC には、データセンターや通信局の ICT 機器向けの<b>直流のプラグ・ソケット</b>の技術仕様（Technical Specification）があります。IEC TS 62735-1（2015 年 8 月 28 日、2.6 kW の系）と IEC TS 62735-2（2016 年 12 月 14 日、5.2 kW の系）は、直流 294〜400 V の範囲のプラグとソケットを、IEC TS 63236-1（2021 年 6 月 25 日、2.6 kW の系）は、同じ範囲のアプライアンスカプラ（機器側の接続口）を扱います（出典：IEC の販売ページ。本文は読んでいません）。これらは接続口の仕様で、給電のインタフェース全体を決める国際規格ではありません。現在の状況と最新の版は、IEC で確認してください。</p>
+<p>日本の例では、NTT コミュニケーションズ（日本。2025 年 7 月 1 日に NTT ドコモビジネスへ社名変更）が、2019 年 11 月 27 日の大阪第7データセンターの提供開始の発表で、HVDC システムの導入も予定している、と記しました（出典：同社のニュースリリース、2019 年 11 月 27 日）。この記述は、当時の予定です。</p>
+
+<h3>直流の安全：アークと遮断</h3>
+<p><b>アーク</b>（electric arc）は、離れた導体の間を、空気などを通って流れる、強い光と熱を伴う放電です。電気設備の事故でも、スイッチを開くときにも起きます。</p>
+<p>交流は、電流が周期的に 0 を横切るので、開いた接点の間のアークが消えやすい性質があります。直流には、その瞬間がありません。そのため、直流は<b>遮断が難しく</b>、遮断器に工夫が要ります（一般知識）。電圧が高いほど、アークは続きやすくなります。直流給電の機器の操作や点検は、感電とアークの危険が大きいので、有資格者が、設備の手順に従って行います。</p>
+
+<h3>演習：相の偏りを見つける</h3>
+<p>次の表は、<b>架空</b>のラックの、出力口グループごとの負荷と、つながる相です（出典：架空、見本のため）。</p>
+<div class="tbl-wrap"><table class="tbl">
+  <caption>架空のラックの出力口グループ</caption>
+  <thead><tr><th>グループ</th><th>負荷（kW）</th><th>つながる相</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">G1</th><td>3.0</td><td>L1</td></tr>
+    <tr><th scope="row">G2</th><td>2.0</td><td>L1</td></tr>
+    <tr><th scope="row">G3</th><td>1.0</td><td>L2</td></tr>
+    <tr><th scope="row">G4</th><td>1.5</td><td>L2</td></tr>
+    <tr><th scope="row">G5</th><td>0.5</td><td>L3</td></tr>
+    <tr><th scope="row">G6</th><td>0.5</td><td>L3</td></tr>
+  </tbody>
+</table></div>
+<p><b>問い</b>：相ごとの合計を求め、偏りを減らすために、どのグループを、どの相へつなぎ替えるのがよいですか。つなぎ替えの案は、<b>G1 を L3 へ</b>、<b>G2 を L3 へ</b>、<b>G2 を L2 へ</b>の 3 つから選びます。考えてから、答えを開きます。</p>
+<details><summary>答えを見る</summary>
+  <p>いまの合計は、<b>L1 が 5.0 kW、L2 が 2.5 kW、L3 が 1.0 kW</b> で、L1 に偏っています。</p>
+  <p>案ごとの合計は次のとおりです。「G1 を L3 へ」は L1 2.0・L2 2.5・L3 4.0 で、偏りが L3 へ移るだけです。「G2 を L2 へ」は L1 3.0・L2 4.5・L3 1.0 で、L2 が大きくなります。<b>「G2 を L3 へ」</b>は L1 3.0・L2 2.5・L3 3.0 で、最も均等です。</p>
+  <p>これは考え方の演習で、数値は架空です。実際のつなぎ替えは、電源を切る手順と有資格者の作業計画が必要で、この演習は手順の代わりになりません。</p></details>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>「48 V」「±400 V」「800 V」は、同じものではありません</b>。電圧が違えば、電源シェルフ、バスバー、遮断器、安全の考え方が違います。公開された発表は、方式の候補であり、どれかに決まったという意味ではありません。</p>
+  <p>もう一つ。<b>80 PLUS の等級は、実運転の効率を保証しません</b>。決まった条件で測った結果です。</p></div>
+
+<div class="callout tip"><span class="ttl">現場でのつながり</span>
+  <p>機器の選定では、PSU の等級と、入力の電圧（交流か直流か）を確かめます。施設の設計では、ラックの電力と、相ごとの割当て、ラック PDU の入力の仕様が、配電の設備の容量に直結します。直流給電の話が出たら、「どの電圧の話か」「どの発表・仕様の話か」を最初に確かめます。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c14-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（アクセス日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>運営元の公開ページ</td><th scope="row"><a href="https://clearesult.com/80plus/program-details">What is 80 PLUS® certification program?</a></th><td>CLEAResult（80 PLUS の運営元）</td><td>日付の記載なし。2026 年 11 月に確認</td><td>等級の名前、測る負荷率、入力電圧と構成の区分。効率の基準値は読んでいません。</td></tr>
+      <tr><td>運営元の公開ページ</td><th scope="row"><a href="https://www.clearesult.com/80plus/frequently-asked-questions">80 PLUS® Certification Program FAQs</a></th><td>CLEAResult</td><td>日付の記載なし。2026 年 11 月に確認</td><td>各等級の位置づけ（Ruby が AI データセンター・高性能計算向けの最上位）。</td></tr>
+      <tr><td>仕様書</td><th scope="row"><a href="https://opencompute.org/documents/open-rack-base-specification-version-3-pdf">Open Rack V3 Base Specification</a></th><td>Open Compute Project</td><td>Rev 1.0、2022 年 9 月 22 日公開の表示</td><td>バスバーの節、電源シェルフの出力の公称値の選択肢。仕様本文の全体は読んでいません。</td></tr>
+      <tr><td>仕様書</td><th scope="row"><a href="https://www.opencompute.org/documents/orv3-hvdc-lvdc-100kw-power-shelf-spec-1-0-0-pdf">ORV3 HVDC-LVDC 100kW Power Shelf Design Specification</a></th><td>Open Compute Project</td><td>v1.0.0、2026 年 2 月 20 日</td><td>入力 ±400〜±410 V の直流、出力 48 V 系、100 kW。</td></tr>
+      <tr><td>仕様書</td><th scope="row"><a href="https://www.opencompute.org/documents/hvdc-lvdc-psu-18kw-spec-1-0-0-pdf">Open Rack ±400V to 50V 18kW PSU Design Specification</a></th><td>Open Compute Project</td><td>v1.0.0、2026 年 2 月 20 日</td><td>入力の公称 ±400 V と動作範囲。</td></tr>
+      <tr><td>企業の発表</td><th scope="row"><a href="https://cloud.google.com/blog/topics/systems/enabling-1-mw-it-racks-and-liquid-cooling-at-ocp-emea-summit">Enabling 1 MW IT racks and liquid cooling at OCP EMEA Summit</a></th><td>Google（米国）</td><td>2025 年 4 月 29 日</td><td>±400 V 級の直流と、電源部をラックの外へ出す構成の説明。</td></tr>
+      <tr><td>企業の発表</td><th scope="row"><a href="https://developer.nvidia.com/blog/nvidia-800-v-hvdc-architecture-will-power-the-next-Generation-of-ai-factories">NVIDIA 800 V HVDC Architecture Will Power the Next Generation of AI Factories</a></th><td>NVIDIA（米国）技術ブログ</td><td>2025 年 5 月 20 日</td><td>800 V の直流の構成、54 V 直流の限界の説明、2027 年の計画。</td></tr>
+      <tr><td>企業の発表</td><th scope="row"><a href="https://www.ntt.com/about-us/press-releases/news/article/2019/1127.html">京阪神エリアからアクセスしやすい関西最大級の「大阪第7データセンター」を提供開始</a></th><td>NTT コミュニケーションズ（日本。現 NTT ドコモビジネス）</td><td>2019 年 11 月 27 日</td><td>HVDC システムの導入予定の記述（日本の例）。</td></tr>
+      <tr><td>規格・仕様</td><th scope="row"><a href="https://webstore.iec.ch/en/publication/23188">IEC TS 62735-1:2015（直流のプラグ・ソケット、2.6 kW の系）</a></th><td>IEC</td><td>2015 年 8 月 28 日（第 1 版）</td><td>ICT 機器向けの直流 294〜400 V のプラグ・ソケットがあること。本文は読んでいません。</td></tr>
+      <tr><td>規格・仕様</td><th scope="row"><a href="https://webstore.iec.ch/en/publication/27246">IEC TS 62735-2:2016（直流のプラグ・ソケット、5.2 kW の系）</a></th><td>IEC</td><td>2016 年 12 月 14 日（第 1 版）</td><td>同上（5.2 kW の系）。</td></tr>
+      <tr><td>規格・仕様</td><th scope="row"><a href="https://webstore.iec.ch/en/publication/63765">IEC TS 63236-1:2021（直流のアプライアンスカプラ、2.6 kW の系）</a></th><td>IEC</td><td>2021 年 6 月 25 日（第 1 版）</td><td>機器側の接続口の仕様があること。</td></tr>
+      <tr><td>勧告</td><th scope="row"><a href="https://www.itu.int/rec/T-REC-L.1200-201205-I">ITU-T L.1200 Direct current power feeding interface up to 400 V at the input to telecommunication and ICT equipment</a></th><td>ITU-T</td><td>2012 年 5 月 29 日承認</td><td>直流 400 V までの給電インタフェースの勧告の存在。勧告本文は読んでいません。</td></tr>
+      <tr><td>一般知識</td><th scope="row">電気設備・電気工学の教科書的な内容</th><td>—</td><td>—</td><td>三相交流と相のバランス、ラック PDU の機能、バスウェイ、直流の遮断の難しさ。数値は使っていません。</td></tr>
+    </tbody>
+  </table></div>
+</section>

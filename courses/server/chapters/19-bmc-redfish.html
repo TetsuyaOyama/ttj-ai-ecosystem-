@@ -1,0 +1,139 @@
+<!--
+num: 19
+part: 4
+title: 基板管理コントローラと管理インターフェース：IPMI と Redfish
+track: 管理
+time: 35
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li><b>基板管理コントローラ</b>（Baseboard Management Controller, BMC）が何をするかと、<b>帯域外管理</b>が「本体の OS と別の経路で管理する」ことだと説明できる。</li>
+    <li><b>IPMI</b>（Intelligent Platform Management Interface）と <b>Redfish</b>（DMTF が定めた管理の規格）の違いを、何を決めた規格かで言い分けられる。</li>
+    <li>Redfish の URI（Uniform Resource Identifier、リソースの住所）とリソース（Systems・Chassis・Managers・UpdateService など）を読み、電源状態と温度の警告を取り出せる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch06">第06章</a>（CPU サーバーの中身）。<a href="#ch02">第02章</a>（主要部品）を読んでいると、NIC（Network Interface Card、ネットワークカード）やストレージの話が分かりやすくなります。</p>
+</section>
+
+<div class="callout note"><span class="ttl">この章で「公開情報で確認できた範囲」</span>
+  <p>規格の名称・版・公開日は、DMTF（Distributed Management Task Force、標準化団体。Redfish を定めた）と、IPMI の仕様書の公開版で確認した範囲だけを書きました。Redfish のリソースの意味と電源状態の値は、DMTF の『Redfish Resource and Schema Guide』（2022.3 版）で確認しました。各社の BMC の機能は、製品と版で違います。この章は規格の考え方の説明で、特定の製品の設定手順ではありません。</p></div>
+
+<h3>BMC は、サーバーの中の「留守番係」</h3>
+<p><b>基板管理コントローラ</b>（Baseboard Management Controller, BMC）は、サーバーの基板に載る小さなコントローラです。温度や電圧などの状態を見張り、出来事を記録し、遠くからの操作に応じます（出典：Linux Foundation の発表、2018 年 3 月）。</p>
+<p>IPMI の仕様書は、この仕組みが扱う範囲を次のように示しています。温度・電圧・ファンの監視、復旧の動作、出来事の記録（イベントログ）、警報の通知、機器の在庫情報です（出典：IPMI v2.0 仕様書、第 1 章、Rev 1.1、2013 年 10 月）。まとめると、BMC の主な仕事は次の 5 つです。</p>
+<ul>
+  <li><b>電源の操作</b>：電源を入れる、切る、再起動する。</li>
+  <li><b>センサーの監視</b>：温度、電圧、ファンの回転、電源ユニットの状態を読む。</li>
+  <li><b>ログの記録</b>：異常や操作の履歴を残す。IPMI では<b>システムイベントログ</b>（System Event Log, SEL）と呼ぶ。</li>
+  <li><b>リモートコンソール</b>（remote console）：離れた場所から、画面やキーボードの代わりに操作する。画面を扱うものは「仮想 KVM」とも呼ぶ。機能の有無と呼び名は製品で違う。</li>
+  <li><b>ファームウェアの更新</b>：BMC 自身や、機器のファームウェアを入れ替える（第20章）。</li>
+</ul>
+<p>BMC が役に立つのは、ホストの CPU や OS が動いていないときです。電源が切れた状態でも、一部の部品には補助の電力が残ります（出典：DMTF『Redfish Resource and Schema Guide』DSP2046 の電源状態の説明、2022.3 版）。多くの BMC は、この待機の電力で動き、本体が止まっていても応じます（一般的な設計の説明です。製品の詳細は各社の資料を確認してください）。</p>
+
+<h3>帯域外管理：データの道とは別の道で管理する</h3>
+<p>サーバーが利用者のために通信するネットワークを、ここでは「データの道」と呼びます。管理の操作を、この道と OS の中で行うと、OS が止まったときに手が届きません。そこで、BMC に専用のネットワーク口をつけ、別の道から操作します。これが<b>帯域外管理</b>（out-of-band management）です。管理用の道を<b>管理ネットワーク</b>と呼びます。</p>
+<p>Redfish の仕様書も、範囲を「複数のメーカーにまたがり、遠隔から使え、帯域外にも対応できるインターフェース」と書いています（出典：DMTF『Redfish Specification』DSP0266 1.23.0、2025 年 9 月 5 日）。IPMI の仕様書は、実行中のソフトウェアの助けなしに警報を出せることと、LAN・シリアル・PCI Management Bus から常に管理できることを目標に挙げています（出典：IPMI v2.0 仕様書、第 1 章）。</p>
+<p>下の図で、3 つの見方を切り替えてください。「管理」では運用者の操作がどこを通るか、「データ・信号」では BMC とホストの関係、「電力」では待機の電力の流れを示します。</p>
+<div data-widget="arch" data-src="c19-bmc"></div>
+<p>管理ネットワークは、データのネットワークと分けて作るのが基本です。BMC には電源操作やファームウェア更新の権限があるからです。分け方と認証の考え方は第25章で扱います。</p>
+
+<h3>IPMI：命令と記録の形を決めた規格</h3>
+<p><b>IPMI</b>（Intelligent Platform Management Interface）は、サーバーの管理の仕組みを標準にした規格です。バージョン 2.0 は、4 社が 2004 年 2 月 18 日に発表しました。認証と暗号化の強化、LAN 越しにシリアル端末を使う Serial over LAN（SOL）などが加わりました（出典：Intel の発表資料、2004 年 2 月）。現在読める仕様書は、v2.0 の Rev 1.1（2013 年 10 月 1 日）と、訂正をまとめた補遺（E6、2014 年 2 月 11 日）です（出典：Intel の公開資料）。</p>
+<p>IPMI が決めているのは、共通の命令、イベントの形式、データの記録（センサーの記録、機器の在庫情報など）です。仕様書の目次には、SEL の命令と記録形式、SDR（Sensor Data Record、センサーの記録）、FRU の在庫情報、SOL、RMCP+（LAN 越しの認証つき通信）が並んでいます（出典：IPMI v2.0 仕様書、目次）。</p>
+<p>IPMI は長く使われてきたので、いまも多くの機器で出会います。一方で、命令と記録の形式を一つずつ決める作りです。これに対して Redfish は、Web の一般的な道具の上で、機器の状態を「リソース」として決めています。次の節で見ます。IPMI を使えるかどうかは、機器と BMC の版で違います。各社の資料で確認してください。</p>
+
+<h3>Redfish：Web の作りで、管理を表す規格</h3>
+<p><b>Redfish</b>は、DMTF（Distributed Management Task Force）が策定した管理の規格です。仕様書 DSP0266 の 1.0.0 は 2015 年 8 月 4 日の公開で、この章の執筆時に確認できた版は 1.23.0（2025 年 9 月 5 日）です（出典：DMTF の DSP0266 の版の一覧と仕様書）。機器の状態を表す「スキーマ」の束（DSP8010）は、2026.1 版が 2026 年 4 月 2 日に公開されています（出典：DMTF『Redfish Schema Bundle Readme』DSP8010、2026.1）。2026 年 11 月 14 日に DMTF の版の一覧を見直すと、DSP0266 は 1.24.0（一覧の日付は 2026 年 5 月 17 日。仕様書の表紙の日付は 2026-04-02）まで公開されています。この章の記述（HTTP/1.1・JSON・必須の操作など）は 1.23.0 に基づき、1.24.0 での変更点は確認していません。スキーマの束にも、新しい版が出ていることがあります。DMTF の公開ページで確認してください。</p>
+<p>Redfish の作りは、次の 4 点です（出典：DSP0266 1.23.0）。</p>
+<ul>
+  <li><b>通信</b>：HTTP（Hypertext Transfer Protocol、ウェブの通信の約束）のバージョン 1.1 の上で動く。暗号化は TLS（Transport Layer Security、通信を暗号化する仕組み）で行う。</li>
+  <li><b>データの形</b>：JSON（JavaScript Object Notation、項目と値の組を文字で表す形式）で表す。すべてのリソースは JSON で取れる。</li>
+  <li><b>約束事</b>：URL の作り方や共通の項目に、OData の考え方を取り入れている。</li>
+  <li><b>操作</b>：GET（読む）、POST（作る・操作を実行する。HTTP の操作の名前で、第20章の電源投入時の自己診断「POST」とは別の意味）、PATCH（一部を変える）、DELETE（消す）は必須。PUT・HEAD・OPTIONS は任意。</li>
+</ul>
+<p>入口は <code>/redfish/v1/</code> です。URI の「v1」はプロトコルのメジャーバージョンを表します。ここから、リンクをたどって他のリソースへ進めます。サービスルートと <code>/redfish</code> の資源は、認証なしで読める決まりです。そのほかは、セッションの認証（<code>X-Auth-Token</code>）などで守ります（出典：DSP0266 1.23.0）。</p>
+<p>IPMI と Redfish の違いを、表で並べます。どちらが優れるかではなく、何を決めた規格かを見てください。</p>
+<div data-widget="compare" data-src="c19-cmp"></div>
+
+<h3>Redfish のリソースを読む</h3>
+<p>Redfish のリソースは、URI で表します。下の図で、URI の部分を押してください。コレクション（同じ種類の集まり）と、その中の 1 つのリソースに分けて読みます。</p>
+<div data-widget="ident" data-src="c19-uri"></div>
+<p>サーバーの管理でよく見るリソースは、次の 5 つです。</p>
+<div class="tbl-wrap"><table class="tbl">
+  <caption>Redfish の主なリソース（出典：DMTF『Redfish Resource and Schema Guide』DSP2046 2022.3、『Redfish Firmware Update White Paper』DSP2062 1.2.0）</caption>
+  <thead><tr><th>リソース</th><th>URI の例</th><th>表すもの</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">Systems</th><td><code>/redfish/v1/Systems/{ComputerSystemId}</code></td><td>計算機としてのシステム。メモリ、プロセッサなど、使える資源へのリンクを持つ。電源状態（<code>PowerState</code>）と電源の操作（<code>Reset</code>）もここにある。</td></tr>
+    <tr><th scope="row">Chassis</th><td><code>/redfish/v1/Chassis/{ChassisId}</code></td><td>筐体、ラックなど、物としての入れ物。センサーなど、データの通り道の外にある部品も、ここにつながる。</td></tr>
+    <tr><th scope="row">Managers</th><td><code>/redfish/v1/Managers/{ManagerId}</code></td><td>Redfish のサービスを動かす、または入口になる管理の主体。BMC や、筐体の管理モジュールが当たる。</td></tr>
+    <tr><th scope="row">UpdateService</th><td><code>/redfish/v1/UpdateService</code></td><td>ファームウェアとソフトウェアの更新の入口。ファームウェアの一覧（FirmwareInventory）へのリンクと、更新の方法を持つ（第20章）。</td></tr>
+    <tr><th scope="row">EventService</th><td><code>/redfish/v1/EventService</code></td><td>出来事の通知の入口。通知の申込み先（Subscriptions）と、Server-Sent Events の受け口を持つ（第23章）。</td></tr>
+  </tbody>
+</table></div>
+<p>Chassis の下には、センサーのリソースがあります。センサーは、読み値（<code>Reading</code>）、種類（<code>ReadingType</code>。温度、電圧、電力など）、単位（<code>ReadingUnits</code>）、状態（<code>Status</code>）、しきい値（<code>Thresholds</code>）を持ちます。しきい値には、注意の上限（<code>UpperCaution</code>）と、危険の上限（<code>UpperCritical</code>）があります（出典：DSP2046 2022.3）。この章の演習は、この形を読む練習です。</p>
+
+<h3>電源状態：Redfish が決めた値</h3>
+<p>電源を入れる操作は、いきなり完了しません。切れた状態から、動いている状態になるまでに、移行の途中があります。Redfish の <code>PowerState</code> は、この途中も値として持ちます。2022.3 版の説明では、値は <code>Off</code>、<code>On</code>、<code>Paused</code>、<code>PoweringOn</code>、<code>PoweringOff</code> の 5 つです。<code>PoweringOn</code> と <code>PoweringOff</code> は、切替えの途中の一時的な状態です（出典：DSP2046 2022.3）。その後の版で、<code>Sleeping</code> と <code>Hibernating</code> が足されています（出典：DMTF DSP8010 2026.1 の変更履歴。Resource スキーマ 1.24.0）。</p>
+<div data-widget="state" data-src="c19-power"></div>
+<p>電源の操作は、<code>Reset</code> のアクションに、<code>ResetType</code> を渡して行います。値には、すぐ切る <code>ForceOff</code>、OS に終了を頼んでから切る <code>GracefulShutdown</code>、OS に終了を頼んで再起動する <code>GracefulRestart</code>、すぐ再起動する <code>ForceRestart</code>、電源を入れる <code>On</code> などがあります（出典：DSP2046 2022.3）。「すぐ切る」と「OS に頼んで切る」は、結果が違います。前者は、OS が書き込み中のデータを守れません。</p>
+
+<h3>Redfish で電源を入れる 1 回</h3>
+<p>運用者が管理ツールを使って、電源を入れる流れを追います。HTTP の動きと、BMC の中の動きを、順に見てください。値はこの章の説明用の例です。</p>
+<div data-widget="seq" data-src="c19-seq"></div>
+
+<h3>BMC の種類と OpenBMC</h3>
+<p>BMC は、サーバーメーカーが自社の製品に合わせて作るのが一般的です。Dell Technologies（米国）は iDRAC（Integrated Dell Remote Access Controller）を、Hewlett Packard Enterprise（HPE、米国）は iLO を、それぞれの BMC の呼称として使っています。どちらも Redfish の API を公開しています（出典：Dell Technologies『iDRAC: Redfish API with Dell integrated Remote Access Controller』、HPE の iLO の Redfish 資料）。名前と機能は製品で違うので、ここでは例として挙げるだけで、比べません。</p>
+<p>一方、BMC のファームウェアを共通の部品で作る動きもあります。<b>OpenBMC</b> は、BMC のファームウェアのオープンソースの共通基盤です。Linux Foundation が 2018 年 3 月 19 日に、IBM が提供したコードを土台にして発足を発表しました。機器が違っても使える、共通の BMC ファームウェアを作る狙いです（出典：Linux Foundation の発表、2018 年 3 月 19 日）。</p>
+
+<h3>演習：Redfish の応答から、警告の出ている部品を読み取る</h3>
+<p>次は、架空のサーバー（<b>顧客 C 社</b>の機器）の応答の一部です。値はすべて架空です（出典：架空、見本のため）。項目の名前は、Redfish のセンサーのリソース（Reading、ReadingType、Status、Thresholds）に合わせています。読みやすくするため、しきい値の入れ子は簡略にしてあります。単位も省いています。</p>
+<pre><code>GET /redfish/v1/Chassis/1U/Sensors/Inlet
+{ "Name": "吸気温度", "ReadingType": "Temperature", "Reading": 24,
+  "Status": { "State": "Enabled", "Health": "OK" } }
+
+GET /redfish/v1/Chassis/1U/Sensors/CPU1
+{ "Name": "CPU1 温度", "ReadingType": "Temperature", "Reading": 91,
+  "Thresholds": { "UpperCaution": 85, "UpperCritical": 95 },
+  "Status": { "State": "Enabled", "Health": "Warning" } }
+
+GET /redfish/v1/Chassis/1U/Sensors/DIMM3
+{ "Name": "DIMM3 温度", "ReadingType": "Temperature", "Reading": 62,
+  "Thresholds": { "UpperCaution": 85, "UpperCritical": 95 },
+  "Status": { "State": "Enabled", "Health": "OK" } }</code></pre>
+<p><b>問い</b>：警告が出ているのはどのセンサーですか。その値は、注意と危険の上限に対してどの位置ですか。吸気温度が正常なことは、何を示しますか。</p>
+<details><summary>答えを見る</summary>
+  <p>警告は CPU1 のセンサーです。<code>Health</code> が <code>Warning</code> で、読み値 91 は、注意の上限 85 を超え、危険の上限 95 には届いていません。</p>
+  <p>吸気温度は 24 で正常です。部屋から入る空気は問題なく、CPU1 だけが熱いことを示します。原因は、機器の中の風の通り道（ファン、エアシュラウド）や、CPU のヒートシンクの接触などを疑います（第06章）。DIMM3 は正常です。次に、同じ筐体のファンのセンサーの値を調べます。</p></details>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>帯域外管理は、ネットワークをつなぐだけでは安全になりません。</b>BMC は、電源の操作やファームウェアの更新ができる強い権限を持ちます。初期の認証情報のまま使う、データのネットワークと同じ道に置く、といった使い方は避けます。分離と認証の考え方は第25章です。</p>
+  <p>もう 1 つ。<b>Redfish を使える機器でも、すべてのリソースを持つとは限りません。</b>規格は「必須の部分」と「任意の部分」を分けています。実際に使えるリソースは、その機器の応答（サービスルートからたどった結果）で確かめます。</p></div>
+
+<div class="callout tip"><span class="ttl">現場でのつながり</span>
+  <p>機器を選ぶとき、BMC が対応する管理インターフェース（IPMI、Redfish）の版を、仕様書で確認します。運用では、第21章の構成管理が Redfish で機器を登録・更新し、第23章の監視が BMC のセンサーとログを集めます。商談では「帯域外の管理ネットワークは顧客側が用意するか」が、設置前の取り合いになります（第31章）。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c19-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>規格</td><th scope="row"><a href="https://www.dmtf.org/sites/default/files/standards/documents/DSP0266_1.23.0.pdf">Redfish Specification（DSP0266）1.23.0</a></th><td>DMTF</td><td>2025 年 9 月 5 日</td><td>範囲、HTTP/1.1・JSON・OData、必須の操作、サービスルート、認証、イベント（SSE・購読）。全文は読んでいません（一部を確認）。</td></tr>
+      <tr><td>規格の版の一覧</td><th scope="row"><a href="https://dmtf.org/dsp/DSP0266">All Published Versions of DSP0266</a></th><td>DMTF</td><td>確認時の一覧</td><td>1.0.0 の公開日（2015 年 8 月 4 日）。</td></tr>
+      <tr><td>規格</td><th scope="row"><a href="https://redfish.dmtf.org/schemas/v1/DSP8010_2026.1.pdf">Redfish Schema Bundle Readme（DSP8010）2026.1</a></th><td>DMTF</td><td>2026 年 4 月 2 日</td><td>スキーマ束の最新版の確認。変更履歴（PowerState に Sleeping と Hibernating）。</td></tr>
+      <tr><td>規格の解説書</td><th scope="row"><a href="https://www.dmtf.org/sites/default/files/standards/documents/DSP2046_2022.3.pdf">Redfish Resource and Schema Guide（DSP2046）2022.3</a></th><td>DMTF</td><td>2022.3 版</td><td>ComputerSystem（URI、PowerState の値、Reset と ResetType）、Chassis、Manager、EventService、UpdateService、Sensor の説明。同じ解説書の新しい版が公開されています。</td></tr>
+      <tr><td>白書</td><th scope="row"><a href="https://www.dmtf.org/sites/default/files/standards/documents/DSP2062_1.2.0.html">Redfish Firmware Update White Paper（DSP2062）1.2.0</a></th><td>DMTF</td><td>2026 年 4 月 3 日</td><td>UpdateService と FirmwareInventory の位置づけ（詳細は第20章）。</td></tr>
+      <tr><td>規格</td><th scope="row"><a href="https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-intelligent-platform-mgt-interface-spec-2nd-gen-v2-0-spec-update.pdf">IPMI Specification, Second Generation, v2.0（Rev 1.1）</a></th><td>Intel ほか 4 社（仕様書の記載）</td><td>2013 年 10 月 1 日（E7 の更新記載は 2015 年 4 月 21 日）</td><td>IPMI の範囲、SEL・SDR・FRU・SOL・RMCP+ の位置づけ。全文は読んでいません（冒頭と目次を確認）。</td></tr>
+      <tr><td>規格の補遺</td><th scope="row"><a href="https://www.intel.com/content/dam/www/public/us/en/documents/product-specifications/ipmi-v2-rev1-1-spec-rev-6-addendum.pdf">IPMI Addenda, Errata, and Clarifications E6</a></th><td>Intel（公開）</td><td>2014 年 2 月 11 日</td><td>IPMI の訂正の補遺があること。</td></tr>
+      <tr><td>発表資料</td><th scope="row"><a href="https://intel.com/pressroom/archive/releases/2004/20040218corp_a.htm">IPMI v2.0 の発表（Intel Developer Forum）</a></th><td>Intel</td><td>2004 年 2 月 18 日</td><td>v2.0 の発表日と追加された機能。</td></tr>
+      <tr><td>発表資料</td><th scope="row"><a href="https://www.linuxfoundation.org/blog/blog/openbmc-project-community-comes-together-at-the-linux-foundation-to-define-open-source-implementation-of-bmc-firmware-stack">OpenBMC Project Community Comes Together at The Linux Foundation</a></th><td>Linux Foundation</td><td>2018 年 3 月 19 日</td><td>OpenBMC の発足と、BMC の役割の説明。</td></tr>
+      <tr><td>製品の公開資料</td><th scope="row"><a href="https://www.dell.com/support/kbdoc/en-us/000178045">iDRAC: Redfish API with Dell integrated Remote Access Controller</a></th><td>Dell Technologies</td><td>確認時のページ</td><td>iDRAC が Redfish を扱うこと。</td></tr>
+      <tr><td>製品の公開資料</td><th scope="row"><a href="https://servermanagementportal.ext.hpe.com/docs/redfishservices/ilos/ilo6">HPE iLO 6 Redfish service</a></th><td>Hewlett Packard Enterprise</td><td>確認時のページ</td><td>iLO が Redfish のサービスを持つこと。</td></tr>
+      <tr><td>企業の公開資料</td><th scope="row"><a href="https://investors.delltechnologies.com/company-information/faq">FAQ（Dell Technologies）</a>、<a href="https://investors.hpe.com/contact-us">Contact Us（HPE）</a></th><td>Dell Technologies、HPE</td><td>確認時のページ</td><td>本社の所在地（初出の国の表記）。</td></tr>
+      <tr><td>一般知識</td><th scope="row">帯域外管理と管理ネットワークの分離の考え方</th><td>—</td><td>—</td><td>データのネットワークと分ける理由（権限が強いため）。数値は使っていません。第25章で詳しく扱います。</td></tr>
+    </tbody>
+  </table></div>
+</section>

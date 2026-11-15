@@ -1,0 +1,86 @@
+<!--
+num: 12
+part: 2
+title: 配線と平坦化：銅配線と CMP
+track: 前工程
+time: 40
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>多層配線の構造（コンタクト・ビア・配線層）と、<b>ローカル・中間・グローバル</b>の配線の役割の違いを説明できる。</li>
+    <li>銅の配線に、エッチングでなく<b>ダマシン</b>を使う理由と、<b>デュアルダマシン</b>の手順を言える。</li>
+    <li><b>CMP</b> の原理と、平坦化が多層配線の前提になる理由、<b>ディッシングとエロージョン</b>という副作用を説明できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch06">第06章</a>（工程の全体像と BEOL）、<a href="#ch07">第07章</a>（成膜）、<a href="#ch10">第10章</a>（エッチング）。</p>
+</section>
+
+<h3>多層配線：配線を何層にも重ねる</h3>
+<p>チップの中には、数多くのトランジスタがあります。それらを回路としてつなぐのが、金属の<b>配線</b>です。平面に 1 層だけでは配線が収まらないので、絶縁膜をはさんで何層にも重ねます。これを<b>多層配線</b>（multilevel interconnect）と呼びます。</p>
+<p>層の間は、縦の導体でつなぎます。トランジスタの端子と最初の配線層をつなぐのが<b>コンタクト</b>、配線層どうしをつなぐのが<b>ビア</b>（via）です。層数の公開例として、Intel（米国）は Intel 4 の配線を 18 層の構成と説明しています（出典：Intel『Intel 4』技術資料、Intel Tech Tour 2023）。</p>
+<p>配線は、下の層ほど細かく短く、上の層ほど太く長くなります。近くの素子を結ぶ<b>ローカル配線</b>、ブロックの中を結ぶ<b>中間配線</b>、チップ全体に渡り電源も運ぶ<b>グローバル配線</b>です。図のノードを押して、役割を確かめてください。</p>
+<div data-widget="keys" data-src="c12-hier"></div>
+
+<h3>アルミから銅へ、エッチングからダマシンへ</h3>
+<p>配線は、はじめアルミでした。アルミは、膜をつけて、レジストで覆い、エッチングで不要な部分を除いて作ります。ところが、銅はエッチングで彫りにくい金属です。そこで考え出されたのが、<b>ダマシン</b>（damascene）です。先に絶縁膜に溝を彫り、そこへ銅を埋め、余分な銅を削って配線にします。名前は、金属を埋め込むダマスカスの象眼細工にちなみます。</p>
+<p>IBM（米国）は 1997 年に銅配線の半導体を発表し、1998 年から銅を使ったマイクロプロセッサの出荷を始めたと説明しています。銅は、アルミより電気抵抗が約 40% 低いとされ、速度の向上につながりました。IBM は、デュアルダマシンの方式で、銅の配線とビアを作ったと述べています（出典：IBM 社史ページ『Copper interconnects』、2026 年 11 月閲覧）。</p>
+
+<h3>デュアルダマシンを一手ずつ見る</h3>
+<p>溝（配線）とビア（上下のつなぎ）を一度に埋める方式を、<b>デュアルダマシン</b>と呼びます。次の図は、ビアを先に彫る例です。絶縁膜をつけ、溝とビアを彫り、バリアメタルとシード層をつけ、電解めっきで銅を埋め、CMP で余分を削ります。</p>
+<ul>
+  <li><b>バリアメタル</b>（barrier metal）：銅が絶縁膜へ拡散して、素子を傷めるのを防ぐ薄い金属膜です。</li>
+  <li><b>シード層</b>：めっきの電極になる、薄い銅の膜です。</li>
+  <li><b>電解めっき</b>（electroplating）：シード層に電気を流して、銅を溝とビアの底から埋めます。</li>
+</ul>
+<div data-widget="xsec" data-src="c12-dd"></div>
+<div class="callout tip"><span class="ttl">演習：手順の誤りを見つける</span>
+  <p>この図の順序を覚えたら、確認問題の 4 問目で、<b>手順の誤りを 1 つ</b>見つけてください。</p></div>
+
+<h3>Low-k 膜：配線の間の容量を減らす</h3>
+<p>配線が細く、近くなるほど、隣り合う配線の間に電気がたまります（容量）。容量が大きいと、信号が遅れ、電力も増えます。そこで、層間絶縁膜に、比誘電率 k の低い材料を使います。これが <b>Low-k 膜</b>（low-k dielectric）です。</p>
+<p>ところが、k の低い膜は、機械的に弱く、剥がれやすくなります。IRDS（International Roadmap for Devices and Systems、国際的な技術ロードマップ。<a href="#ch04">第04章</a>）は、k を下げる進め方が、強度と接着の問題で遅くなっていると述べています。k が 2 以下の超低 k 膜は集積が難しく、代わりにエアギャップが挙げられています（出典：IRDS『2024 Update More Moore』、2024 年）。弱い膜を傷めずに削ることも、CMP の課題です。</p>
+
+<h3>CMP：削って平らにする</h3>
+<p>多層配線では、層を重ねるたびに、表面に凹凸が積み重なります。表面が平らでないと、次の層の露光で焦点が合いません（<a href="#ch08">第08章</a>）。そこで、各層で表面を平らに戻します。この方法が <b>CMP</b>（Chemical Mechanical Polishing、化学機械研磨）です。</p>
+<p>回転するパッドに、ウェーハを研磨ヘッドで押し付け、<b>スラリー</b>（slurry）を流しながら削ります。スラリーは、細かな砥粒（研磨剤の粒）と薬液を混ぜた液です。薬液が表面を変質させ、砥粒とパッドがこすり取ります。化学と機械の作用を合わせるので、この名前です。パッドは使うと表面が変わるので、<b>コンディショナー</b>で整えます。</p>
+<p>荏原製作所（日本）は、CMP が表面の粗さを約 10〜20 nm まで平らにし、10 層を超える積層を可能にすると説明しています（出典：荏原製作所技術解説ページ、2026 年 11 月閲覧）。図の部品を押して、各部の役割を確かめてください。</p>
+<div data-widget="arch" data-src="c12-cmp"></div>
+<p>研磨のあとのウェーハには、砥粒や金属が残ります。洗浄・乾燥まで装置の中で行い、きれいにして次へ渡します（<a href="#ch13">第13章</a>）。</p>
+
+<h3>ディッシングとエロージョン</h3>
+<p>CMP は、削りすぎると副作用が出ます。広い銅の配線では、中央が皿のようにへこみます（<b>ディッシング</b>）。細い配線が密に並ぶ領域では、絶縁膜も含めて全体が薄くなります（<b>エロージョン</b>）。どちらも、材料によって削れる速さが違うために起きます。</p>
+<div data-widget="xsec" data-src="c12-dish"></div>
+<p>設計の側でも、金属の密度をそろえるために、ダミーのパターンを入れます。設計と製造が協力して、平らさを保っています。</p>
+
+<h3>配線の課題と新しい材料</h3>
+<p>配線が細くなると、銅の抵抗が急に上がります。IRDS は、配線の抵抗が「指数的に増える領域」に入ったと述べています。理由は、バリアが薄くしにくく銅の断面が減ること、表面と結晶の境での電子の散乱が増えることです。Applied Materials（米国）も、バリアやライナーが配線の体積に占める割合が増え、すき間なく銅を埋めるのが難しくなると述べています（出典：IRDS『2024 Update More Moore』、2024 年。Applied Materials プレスリリース、2024 年 7 月 8 日）。</p>
+<p>対策として、ルテニウム（Ru）やコバルト（Co）の利用、バリアの薄膜化、エアギャップなどが検討されています。表は、公開資料にある状況を整理したものです。採用の状況は変わりやすいので、断定ではありません。次の節目は、<a href="#ch29">第29章</a>で扱います。</p>
+<div data-widget="table" data-src="c12-materials"></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>ダマシンは「銅を削る」方法ではなく、「溝に銅を埋める」方法</b>です。銅を削るのは、最後の CMP だけです。順序は、<b>バリア・シード → めっき → CMP</b> です。</p>
+  <p><b>CMP は、平らにするためだけではありません。</b>ダマシンでは、余分な銅を除いて、配線を<b>切り離す</b>役割もあります。</p>
+  <p><b>ディッシングとエロージョンは別の現象</b>です。前者は広い配線の中央、後者は密な領域全体の高さの低下です。</p></div>
+
+<div class="callout note"><span class="ttl">現場でのつながり</span>
+  <p>CMP 装置は、研磨・洗浄・乾燥が一体になった装置で、スラリーと排液（<a href="#ch18">第18章</a>）のための用役を使います。めっき装置と CMP 装置は、薬液の取扱いと廃液の処理が必要な装置です（<a href="#ch17">第17章</a>）。消耗品（パッド、コンディショナー、スラリー）の交換が保守の中心になります（<a href="#ch16">第16章</a>）。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c12-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（アクセス日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>業界のロードマップ</td><th scope="row"><a href="https://irds.ieee.org/images/files/pdf/2024/2024IRDS_MM.pdf">International Roadmap for Devices and Systems: 2024 Update, More Moore</a>（4.5 Interconnect Technology Requirements）</th><td>IEEE IRDS</td><td>2024 年</td><td>配線の抵抗の増加、Co・Ru、バリアの薄膜化、Low-k の課題、Cu が主な金属として残る見通し。</td></tr>
+      <tr><td>企業の公開資料</td><th scope="row"><a href="https://www.ibm.com/history/copper-interconnects">Copper interconnects</a></th><td>IBM</td><td>2026 年 11 月閲覧（内容は 1997〜1998 年）</td><td>銅配線の導入、アルミとの抵抗の比較、デュアルダマシン。</td></tr>
+      <tr><td>企業のプレスリリース</td><th scope="row"><a href="https://ir.appliedmaterials.com/news-releases/news-release-details/applied-materials-unveils-chip-wiring-innovations-more-energy">Applied Materials Unveils Chip Wiring Innovations for More Energy-Efficient Computing</a></th><td>Applied Materials（米国）</td><td>2024 年 7 月 8 日</td><td>配線の微細化の課題（抵抗、容量、強度、すき間のない埋め込み）、Ru と Co のライナー。数値は同社の主張。</td></tr>
+      <tr><td>信頼できる解説</td><th scope="row"><a href="https://semiengineering.com/ruthenium-interconnects-on-tap">Ruthenium Interconnects On Tap</a></th><td>Semiconductor Engineering</td><td>2024 年 6 月 20 日</td><td>Ru がバリアなしで使えるとされる点、エッチングで形をつくる方式。研究段階の状況。</td></tr>
+      <tr><td>企業の技術資料</td><th scope="row"><a href="https://cdrdv2-public.intel.com/788849/Intel%204.pdf">Intel 4</a></th><td>Intel（米国）</td><td>2023 年（Intel Tech Tour）</td><td>配線層数の公開例（18 層）。</td></tr>
+      <tr><td>企業の技術解説</td><th scope="row"><a href="https://ebara.com/global-en/technology/information/polishing-technology-ex/">Nano-level polishing technique that supports semiconductor</a></th><td>荏原製作所（日本）</td><td>2026 年 11 月閲覧</td><td>CMP の原理（スラリー、パッド）、平坦度、研磨後の洗浄。</td></tr>
+      <tr><td>教科書的な一般知識</td><th scope="row">半導体プロセスの教科書（配線、ダマシン、バリア・シード、めっき、Low-k、CMP）</th><td>—</td><td>—</td><td>ダマシンの手順、ディッシングとエロージョン、Low-k の目的。数値は使っていません。</td></tr>
+    </tbody>
+  </table></div>
+</section>

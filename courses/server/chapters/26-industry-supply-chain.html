@@ -1,0 +1,107 @@
+<!--
+num: 26
+part: 5
+title: 産業の構造と供給網
+track: 産業
+time: 35
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>計算サーバーを<b>作り・届け・置く</b>側の役割（チップ、部品、ODM・OEM、インテグレータ、クラウド事業者、DC 事業者、設備メーカー、建設）を、商流と責任の違いで説明できる。</li>
+    <li><b>ODM と OEM の違い</b>、ハイパースケーラが ODM から直接調達する形、<b>コロケーションとクラウド</b>の違いを言える。</li>
+    <li>供給網の層と、制約になりやすい部品・設備を、出典つきの範囲で説明できる。市場の数字を読むとき、何を確認するかが分かる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch01">第01章</a>（計算サーバーとは何か）。<a href="#ch08">第08章</a>（アクセラレータ搭載サーバー）と<a href="#ch11">第11章</a>（ラック単位の設計）を読んでいると、ラック統合の話が分かりやすくなります。</p>
+</section>
+
+<div class="callout warn"><span class="ttl">この章の扱い</span>
+  <p>この章は産業と制度・費用の仕組みの説明で、投資の推奨や、特定の企業・銘柄・製品の評価ではありません。</p></div>
+
+<div class="callout note"><span class="ttl">この章で「公開情報で確認できた範囲」</span>
+  <p>企業の事業と本社の国・地域は、各社の公式資料（10-K、会社の公式ページ）で確認できたものだけを書いています。確認できていない企業は、表に載せていません。載せていないのは、評価ではなく、確認が済んでいないためです。</p>
+  <p>サーバー市場の規模や出荷台数の統計、変圧器などのリードタイムの数字は、無償で公表された個別ページを確認できなかったため、書いていません。数字は変わりやすいものです。実務では、最新の資料で確認してください。</p></div>
+
+<h3>誰が何をするか：役割の地図</h3>
+<p>計算サーバーが顧客の手元で動くまでには、多くの会社が関わります。大きく分けると、<b>機器を作る側</b>、<b>買う・借りる・運営する側</b>、<b>設備を作る・施工する側</b>の 3 つです。下の図で、役割と契約の関係を見てください。箱を押すと説明が出ます。</p>
+<div data-widget="arch" data-src="c26-arch"></div>
+<p>この図は、一般的な形の例です。実際の商流は、案件と契約で変わります。たとえば、同じ会社が ODM と OEM の両方の役割を持つこともあります。</p>
+
+<h3>ODM と OEM</h3>
+<p>この講座では、<b>OEM</b>（Original Equipment Manufacturer）を、自社ブランドで機器を売るメーカーとして使います。<b>ODM</b>（Original Design Manufacturer）は、設計から製造までを受託して、顧客の仕様やブランドで納めるメーカーです。OEM が、製造を ODM に委ねることもあります。言葉の使い方は会社や文脈で幅があるので、契約で役割を確かめます（出典：教科書的な一般知識）。</p>
+<p>チップ企業の側から見た例があります。NVIDIA（米国）は、自社の 10-K で、パートナー網を通じて販売すると説明しています。パートナーには、クラウド事業者、OEM、ODM、システムインテグレータ、販売店などが入ります。直接の顧客には、OEM、ODM、システムインテグレータ、販売店も含まれます。また、最終製品の組立・試験・パッケージを行う会社として、Foxconn（同社の資料での表記は Hon Hai Precision Industry）、Wistron などの名を挙げています（出典：NVIDIA『Form 10-K』会計年度 2026）。これは NVIDIA 自身の説明です。ほかの会社の取引の形に広げて読まないでください。</p>
+<p>もう 1 つの形が、<b>ハイパースケーラ</b>（hyperscaler）の直接調達です。非常に大きな規模でデータセンターを運営するクラウド事業者が、仕様を自社で決め、ODM に製造を委ねます。OEM を通さないので、契約の本数が少なく、仕様の相談が直接できます。どの会社がこの形を使うかは、公開資料で確認できなかったため、本章では扱いません。</p>
+
+<h3>コロケーションとクラウド</h3>
+<p>機器を置く場所を借りる形が<b>コロケーション</b>（colocation）です。DC 事業者が、場所・電力・冷却・回線を貸し、利用者が機器を持ち込みます。小さな単位（ラックやケージ）で貸す形を<b>リテール</b>、大きな単位（ホール、建物、電力の大きな枠）で貸す形を<b>ホールセール</b>と呼びます（出典：一般知識）。</p>
+<p><b>クラウド事業者</b>（cloud service provider）は、計算資源をサービスとして貸します。利用者は機器を持たずに使います。自社の施設に置く<b>オンプレミス</b>、コロケーション、クラウドの比べ方は<a href="#ch29">第29章</a>で扱います。</p>
+
+<h3>ラック統合の段階</h3>
+<p>サーバーは、チップや部品から、一歩ずつ組み上がります。<b>部品 → 基板 → サーバー → ラック</b>の順です。ラックの段階で、サーバー、スイッチ、配電をラックに載せて配線し、ラックのまま試験する工程を<b>ラック統合</b>（rack integration）と呼びます。設置先での作業と試験を減らせます。ラックのまま出荷する利点と注意は<a href="#ch28">第28章</a>で扱います。</p>
+<p>施設の設備は、別の枝です。変圧器、UPS、冷却設備は、IT 機器とは別の会社が作り、別の工程で据え付けられ、データセンターで合流します。下の図で、層を確かめてください。</p>
+<div data-widget="tree" data-src="c26-tree"></div>
+
+<h3>半導体講義への案内</h3>
+<p>チップの業態（ファブレス、ファウンドリなど）と、半導体の製造装置・材料の供給網は、この講座では書きません。『半導体講義』の<a href="../semi/#ch19">半導体講義 第19章</a>（産業構造）と、<a href="../semi/#ch20">半導体講義 第20章</a>（供給網）を見てください。</p>
+
+<h3>主な企業の早見表</h3>
+<p>次の表は、公式資料で本社の国・地域を確認できた企業の例です。順位でも、網羅でもありません。確認できていない企業は載せていません。行を押すと、補足が出ます。</p>
+<div data-widget="table" data-src="c26-companies"></div>
+<p>表の本社の国・地域は、ほかの章が企業を初めて書くときの基準です。ほかの章は、この表と食い違う書き方をしません。</p>
+
+<h3>供給網の層と、制約になりやすい部品・設備</h3>
+<p>供給の制約は、部品ごと、時期ごとに変わります。ここでは、確認できた根拠だけを挙げます。<b>誰の説明か</b>を必ず見てください。</p>
+<div data-widget="table" data-src="c26-constraints"></div>
+<p>NVIDIA は、製造のリードタイムが一部の製品で 12 か月を超えたことがあると書いています（出典：NVIDIA『Form 10-K』会計年度 2026、MD&amp;A）。IEA（国際エネルギー機関）は、変圧器とガスタービンの供給網が過去 1 年で逼迫したと書いています（出典：IEA、2026 年公表）。どちらも、リードタイムの一般的な値ではありません。設備の納期は、データセンターの立ち上がりの時期に直結するので、計画の早い段階で、メーカーに直接確認します。</p>
+
+<h3>地域の分布</h3>
+<p>設計・製造・組立の地域は、会社ごとに違います。確認できたのは、NVIDIA の説明だけです。同社は、供給網が現在は主にアジアに集中していて、米国とラテンアメリカへ拡大していると書いています（出典：NVIDIA『Form 10-K』会計年度 2026）。リスク要因の項では、製造部品と最終組立が、中国・香港・イスラエル・韓国・台湾に集中していると書いています。産業全体の国別の割合は、一次資料で確認できなかったため、書いていません。</p>
+
+<h3>市場の数字の読み方</h3>
+<p>「サーバー市場は◯◯億米ドル」のような数字は、何を数えたかで変わります。比べる前に、5 つを確かめます。</p>
+<ul>
+  <li><b>範囲</b>：サーバー機器だけか、ストレージやネットワークを含むか。出荷台数か、売上か。</li>
+  <li><b>期間</b>：暦年か、会計年度か、四半期か。</li>
+  <li><b>通貨</b>：米ドルか、円か。換算の時点は何か。</li>
+  <li><b>発行元</b>：誰が、どの方法で集計したか。有料レポートの非公開部分は使いません。</li>
+  <li><b>時点</b>：いつ公表され、改訂されたか。予測か、実績か。</li>
+</ul>
+<p>同じ考え方は、半導体製造装置の統計でも使います（半導体講義の第19章に例があります）。</p>
+
+<h3>演習：ODM の A 社の受注から出荷まで（架空）</h3>
+<p>次の表は、ODM の A 社が、顧客 C 社の注文を受けるときの流れを、直接取引と、OEM の B 社を通す形で比べたものです。会社と内容はすべて架空です。表を見て、次の 2 つを考えてみましょう。(1) 受入の条件を、OEM 経由の場合に 2 本の契約でそろえる必要があるのはなぜか。(2) 輸出の手続きの主体を、契約で決めておく理由は何か（制度の仕組みは<a href="#ch30">第30章</a>）。答えは、表の「考え方」の列にあります。</p>
+<div data-widget="compare" data-src="c26-direct"></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>企業の一つの説明を、産業全体の事実と読まない</b>こと。この章の供給の制約の表は、NVIDIA と IEA の説明です。ほかの会社・ほかの部品にそのまま当てはまるとは限りません。</p>
+  <p>もう一つ。<b>OEM と ODM の呼び方は、会社や文脈で変わります</b>。名前で判断せず、誰が設計し、誰が製造し、誰が顧客に責任を負うかを、契約で確かめます。</p></div>
+
+<div class="callout tip"><span class="ttl">現場でのつながり</span>
+  <p>引合いの段階で、直接取引か、OEM やインテグレータ経由かが分かると、窓口、契約の本数、保守の相手が決まります。設備（変圧器・UPS・冷却）の納期も、案件の最初に確認します（<a href="#ch31">第31章</a>）。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c26-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（アクセス日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>企業の年次報告</td><th scope="row"><a href="https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm">NVIDIA Form 10-K（会計年度 2026）</a></th><td>NVIDIA</td><td>会計年度 2026（2026 年 1 月 25 日終了）</td><td>本社の所在地、販売のパートナー網、製造の形、組立・試験を行う会社、供給網の地域、リードタイムの説明。</td></tr>
+      <tr><td>企業の年次報告</td><th scope="row"><a href="https://ir.amd.com/financial-information/sec-filings/content/0000002488-26-000021/amd-20251227.htm">AMD Form 10-K/A（会計年度 2025）</a></th><td>AMD</td><td>会計年度 2025（2025 年 12 月 27 日終了）</td><td>本社の所在地と、報告セグメント。事業の説明（Item 1）は含まれない。</td></tr>
+      <tr><td>企業の公式ページ</td><th scope="row"><a href="https://www.intel.com/content/www/us/en/corporate-responsibility/intel-in-california.html">Intel in California</a></th><td>Intel</td><td>ページの最終更新 2026 年 6 月 26 日</td><td>本社の所在地だけ。</td></tr>
+      <tr><td>企業の公式ページ</td><th scope="row"><a href="https://www.arm.com/company/contact-us">Contact us</a></th><td>Arm</td><td>2026 年 11 月に確認</td><td>本社の所在地だけ。</td></tr>
+      <tr><td>企業の公式ページ</td><th scope="row"><a href="https://www.foxconn.com/en-us/about/group-profile">About Hon Hai</a></th><td>Hon Hai Technology Group（Foxconn）</td><td>2026 年 11 月に確認（日付の記載なし）</td><td>所在地（ページ下部の住所表示。台湾・新北市）。</td></tr>
+      <tr><td>企業の公式ページ</td><th scope="row"><a href="https://www.wistron.com/en/AboutWistron/CompanyProfile">Company Profile</a></th><td>Wistron</td><td>2026 年 11 月に確認（日付の記載なし）</td><td>本社の国（「Headquarters in Taiwan」）。</td></tr>
+      <tr><td>企業の年次報告</td><th scope="row"><a href="https://investor.tsmc.com/sites/ir/sec-filings/2025_20F%20Report.pdf">TSMC Form 20-F（2025 年 12 月 31 日終了の会計年度）</a></th><td>TSMC</td><td>会計年度 2025</td><td>主たる事務所の所在地（台湾・新竹）。</td></tr>
+      <tr><td>企業の年次報告</td><th scope="row"><a href="https://images.samsung.com/is/content/samsung/assets/global/ir/docs/2025_4Q_Interim_Report.pdf">Samsung Electronics Business Report（2025 年 12 月 31 日終了の年度）</a></th><td>Samsung Electronics</td><td>2025 年 12 月 31 日終了の年度</td><td>本社の所在地（韓国・京畿道水原市）。</td></tr>
+      <tr><td>企業の公式ページ</td><th scope="row"><a href="https://www.skhynix.com/company/UI-FR-CP02/">About Us</a></th><td>SK hynix</td><td>2026 年 11 月に確認（日付の記載なし）</td><td>本社の住所（韓国・京畿道利川市）。</td></tr>
+      <tr><td>企業の年次報告</td><th scope="row"><a href="https://www.sec.gov/Archives/edgar/data/723125/000072312525000040/202510karscopy.pdf">Micron Form 10-K（2025 年 8 月 28 日終了の会計年度）</a></th><td>Micron Technology</td><td>会計年度 2025</td><td>主たる事務所の所在地（米国・アイダホ州ボイシ）。</td></tr>
+      <tr><td>国際機関の公開資料</td><th scope="row"><a href="https://www.iea.org/news/data-centre-electricity-use-surged-in-2025-even-with-tightening-bottlenecks-driving-a-scramble-for-solutions">Data centre electricity use surged in 2025, even with tightening bottlenecks driving a scramble for solutions</a></th><td>IEA</td><td>2026 年公表（ページに公表日の表示なし）</td><td>変圧器とガスタービンの供給網の逼迫、系統接続・承認の遅れ。数値のリードタイムは書かれていない。</td></tr>
+      <tr><td>国際機関の公開資料</td><th scope="row"><a href="https://www.iea.org/reports/key-questions-on-energy-and-ai/executive-summary">Key Questions on Energy and AI — Executive summary</a></th><td>IEA</td><td>2026 年公表（ページに公表日の表示なし）</td><td>2025 年のガスタービンの受注の増加。</td></tr>
+      <tr><td>教科書的な一般知識</td><th scope="row">OEM・ODM・コロケーション・ラック統合の定義</th><td>—</td><td>—</td><td>用語の定義（数値は使っていません）。</td></tr>
+      <tr><td>本講座の他の章</td><th scope="row">半導体講義 第19章、第20章（半導体講義 3 部の産業構造と供給網の章）</th><td>TTJ</td><td>—</td><td>チップの業態と、製造装置・材料の供給網（この章では書かない）。</td></tr>
+    </tbody>
+  </table></div>
+</section>

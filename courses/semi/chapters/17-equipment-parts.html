@@ -1,0 +1,99 @@
+<!--
+num: 17
+part: 3
+title: 装置の主要部品：真空・プラズマ・ガス・搬送・温調
+track: 装置
+time: 40
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>装置が「装置 → モジュール → サブシステム → 部品」の階層でできていることを説明し、部品を<b>真空・プラズマ・ガス・薬液・搬送・温調・制御</b>の系統に分けられる。</li>
+    <li>真空系（<b>ドライポンプ</b>と<b>ターボ分子ポンプ</b>の直列）、ガス系（<b>MFC</b>）、プラズマ系（<b>RF 電源</b>と<b>整合器</b>）、温調系（<b>静電チャック</b>と<b>チラー</b>）の役割を言える。</li>
+    <li>「プロセスが不安定」という症状から、疑う系統と、最初に見る記録を選べる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch16">第16章</a>（クラスタツールの形）、<a href="#ch10">第10章</a>（エッチングとプラズマ）。</p>
+</section>
+
+<h3>装置は、階層でできている</h3>
+<p>第16章では、装置の外から見た形を学びました。この章では、中を開けて、部品を見ます。部品は数が多いので、<b>系統</b>（どんな仕事をする部品の集まりか）で整理します。</p>
+<p>装置は、次の階層に分けて考えると整理しやすくなります。<b>装置</b>（tool）の中に<b>モジュール</b>（処理室、EFEM など）があり、その中に<b>サブシステム</b>（真空系、ガス供給系など）があり、その中に<b>部品</b>（ポンプ、MFC など）があります。下の図で、エッチング装置を例に、上位までたどってみましょう。タブで、3 つの系統の組に切り替えられます。</p>
+<div data-widget="tree" data-src="c17-hier"></div>
+<p class="note">図の配置は、本講座の模式です。実際の装置は、メーカーや機種で構成が違います。</p>
+
+<h3>真空系：ポンプを 2 段でつなぐ</h3>
+<p>処理室を真空にするのは、空気中の粒子や水分の影響を減らし、プラズマを安定してつくるためです。真空を作るポンプには、役割の違う 2 種類があります。</p>
+<ul>
+  <li><b>ドライポンプ</b>（dry pump）：油を使わないポンプです。荏原製作所（日本）は、無給油で、大気圧から高真空まで動くドライ真空ポンプと説明しています。大気から減圧する<b>粗引き</b>（roughing）に使います。ただし、処理室をさらに低い圧力まで下げる仕事は、次の TMP が受け持ちます。</li>
+  <li><b>ターボ分子ポンプ</b>（Turbo Molecular Pump、TMP）：高速に回る翼で、気体の分子を押し出して、高い真空を作ります。Leybold（ドイツ）は、TMP は大気圧へ向けては排気できず、背圧用のポンプが必要だと説明しています。</li>
+</ul>
+<p>そこで、処理室 → TMP → ドライポンプの順に<b>直列</b>につなぎます。ドライポンプが、TMP の出口を引く役目です。排気は、そのあと除害装置へ向かいます（<a href="#ch18">第18章</a>）。</p>
+<p>圧力は、<b>真空計</b>で測ります。MKS（米国）は、1 種類の真空計では全範囲を測れず、方式によって、測れる範囲と、ガスの種類への感度が違うと説明しています。処理室の圧力は、ガスの流量と排気の量のつり合いで決まるので、圧力を保つには、圧力制御バルブで排気の量を調整します。</p>
+
+<h3>ガス供給系：量を質量で決める</h3>
+<p>処理のガスは、<b>ガスボックス</b>の中で、種類ごとに流れが組み立てられます。フジキン（日本）は、ベースブロックの上に弁などをまとめる一体型のガスシステムを、小型化と保守のしやすさを特長に載せています。</p>
+<p>流す量を決めるのが、<b>MFC</b>（Mass Flow Controller、質量流量制御器）です。MKS は、熱式と圧力式の MFC を説明しています。HORIBA（日本）は、流量を測る部分と弁を組み合わせて、流量を設定値に保つ仕組みを説明しています。<b>質量</b>で決めるのは、体積は温度や圧力で変わるからです。</p>
+<div data-widget="arch" data-src="c17-vac"></div>
+<p class="note">図の「ガスボックスの中」タブの部品の並びは、一般的な例です。装置ごとに違います。</p>
+
+<h3>プラズマ系：電力を、反射させずに届ける</h3>
+<p>エッチングやプラズマを使う CVD では、処理室の中でプラズマをつくります（<a href="#ch07">第07章</a>・<a href="#ch10">第10章</a>）。そのための高周波の電力を出すのが<b>RF 電源</b>（RF generator）です。電源とプラズマの間には、<b>整合器</b>（matching network）が入ります。電力が反射せずに届くよう、調整する装置です。ずれると、<b>反射電力</b>（reflected power）が増え、警報が出て、プラズマが不安定になります。</p>
+<p>Advanced Energy（米国）の整合器 NavX は、反射電力を減らし、パルス運転に対応すると説明されています。周波数範囲は 1〜60 MHz です。RF 電源の eVerest と組み合わせ、製品ページは、用途にエッチング、PECVD、PVD、PEALD、ALE を挙げています（同社の製品ページ）。</p>
+
+<h3>温調系：ウェーハの温度を決める</h3>
+<p><b>静電チャック</b>（Electrostatic Chuck、ESC）は、静電気の力でウェーハを吸着して保持する台です。真空の中では、ウェーハを機械的に押さえるより、均一に保持できます（米国特許 US 5,777,838 の背景の説明）。ウェーハの裏面にガス（ヘリウムなど）を流して、チャックとの熱の伝わりを良くし、温度を調整します。</p>
+<p>チャックの温度を決めるのが<b>チラー</b>（chiller）です。温度を決めた液体を循環させます。LAUDA（ドイツ）は、プラズマエッチング用の恒温装置 Semistat を、−20〜90 °C で、温度の安定性 ±0.1 K と説明しています（同社のカタログ。製品の一例です）。</p>
+
+<h3>搬送系・薬液・制御・消耗部品</h3>
+<ul>
+  <li><b>搬送ロボット</b>：大気側のロボットは、粒子を出しにくい作りが要点です。安川電機（日本）は、クリーンルーム向けの材料と駆動で、粒子を抑えたロボットを説明しています。真空側のロボットは、腕が真空の中にあるので、真空に使える部品でできています。Brooks Automation（米国）は、真空ロボットと、高温の工程向けの構成を載せています。<b>アライナ</b>は、ウェーハの向きと中心を合わせます。</li>
+  <li><b>薬液供給</b>：湿式の洗浄などでは、薬液を装置へ送ります。Merck KGaA（ドイツ）の CHEMGUARD は、1 つの大きな容器から、ファブ全体へ薬液を送る自動の供給システムです。排液の扱いは第18章で扱います。</li>
+  <li><b>制御・ソフトウェア</b>：コントローラがレシピを実行し、センサーの値を集めます。SEMI E30（GEM）は、装置と工場の情報システムの通信の基本の振る舞いを定めています。SEMI E187 は、装置のサイバーセキュリティの要件を定めています。</li>
+  <li><b>消耗部品</b>：処理室の中で、プラズマや熱に触れる部品です。フェローテック（日本）は石英とCVD-SiC の部品、CoorsTek（米国）はアルミナの部品や SiC のエッジリングを載せています。減ったり汚れたりするので、状態に応じて交換や清掃をします。交換周期の数値は、一般化できる公開資料を確認できなかったため、書いていません。</li>
+</ul>
+
+<h3>主要部品の早見表</h3>
+<p>系統の列で絞り込めます。行を押すと、補足が出ます。</p>
+<div data-widget="table" data-src="c17-parts"></div>
+
+<h3>演習：「プロセスが不安定」を切り分ける</h3>
+<p>現場では、「プロセスが不安定」と言われて、まずどの系統かを絞ります。症状と記録から、疑う系統を選びます。</p>
+<div data-widget="drill" data-src="c17-drill"></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>TMP が高い真空を作れても、1 台では動きません。</b>大気圧への排気は、ドライポンプの仕事です。</p>
+  <p><b>MFC の表示は、気体の種類に依存します。</b>校正した気体と違う気体では、読みを補正します。</p>
+  <p><b>プラズマの不調は、電源だけの問題とは限りません。</b>整合器・ガス・圧力・処理室の状態が、すべて効きます。</p>
+  <p><b>ゆっくり変わる症状は、消耗部品を疑います。</b>各系統の記録が正常なのに、ロットごとに少しずつ変わるときです。</p></div>
+
+<div class="callout note"><span class="ttl">現場でのつながり</span>
+  <p>据付では、真空の配管とポンプの置き場、ガスと冷却水の接続、排気の除害装置が、部品の系統ごとに必要になります（<a href="#ch18">第18章</a>、<a href="#ch24">第24章</a>）。立上げ（<a href="#ch25">第25章</a>）では、リーク（漏れ）の確認、ガスの流量の確認、温調の確認、搬送の確認が、系統ごとに進みます。保守では、保守部品と消耗部品の在庫が、稼働率（第16章）に響きます。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c17-quiz"></div></section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（アクセス日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://ebara.com/global-en/precision/dry-vacuum-pump/">dry vacuum pump</a></th><td>荏原製作所（日本）</td><td>2026 年 11 月閲覧（日付の記載なし）</td><td>無給油、大気圧から高真空まで、反応生成物向けの機種。</td></tr>
+      <tr><td>企業の技術解説</td><th scope="row"><a href="https://www.leybold.com/en/knowledge/vacuum-fundamentals/vacuum-generation/how-does-a-turbomolecular-pump-work">How does a turbomolecular pump work?</a></th><td>Leybold（ドイツ）</td><td>2026 年 11 月閲覧（日付の記載なし）</td><td>TMP の仕組み、背圧用ポンプが要ること。</td></tr>
+      <tr><td>企業の技術解説</td><th scope="row"><a href="https://www.mks.com/n/vacuum-measurement">Vacuum Measurement Principles</a>、<a href="https://www.mks.com/n/creating-a-vacuum/">Creating a Vacuum</a></th><td>MKS（米国）</td><td>2026 年 11 月閲覧（日付の記載なし）</td><td>真空計の方式と範囲。</td></tr>
+      <tr><td>企業の技術解説</td><th scope="row"><a href="https://www.mks.com/mass-flow-technology-technote">Mass Flow Technology</a></th><td>MKS</td><td>2026 年 11 月閲覧（日付の記載なし）</td><td>熱式・圧力式の MFC。</td></tr>
+      <tr><td>企業の技術解説</td><th scope="row"><a href="https://www-origin.horiba.com/at/semiconductor/technical-resource-center/what-is-a-mass-flow-controller/">What is a mass flow controller</a></th><td>HORIBA（日本）</td><td>2026 年 11 月閲覧（日付の記載なし）</td><td>MFC の仕組み。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://pr.mono.ipros.com/en/fujikin/product/detail/2000387945">Integrated Gas System IGS</a></th><td>フジキン（日本。製品情報サイト イプロスの同社ページ）</td><td>2026 年 11 月閲覧（日付の記載なし）</td><td>ガスボックスの一体型構成。</td></tr>
+      <tr><td>企業のカタログ</td><th scope="row"><a href="https://www.advancedenergy.com/en-us/products/plasma-power-products/rf-match-networks/navx/">NavX Matching Network</a>（製品ページ）、<a href="https://www.advancedenergy.com/getmedia/7ba17fcb-8d83-487b-a7f4-b37efe804a22/ENG-NavX-Matching-Network-Brochure.pdf">カタログ</a></th><td>Advanced Energy（米国）</td><td>2026 年 11 月閲覧（日付の記載なし）</td><td>周波数範囲、反射電力、パルス運転、用途。</td></tr>
+      <tr><td>特許</td><th scope="row"><a href="https://image-ppubs.uspto.gov/dirsearch-public/print/downloadPdf/5777838">US 5,777,838（静電チャックの背景説明）</a></th><td>米国特許商標庁（USPTO）</td><td>優先日 1995 年 12 月 19 日（付与日は取得した文面に記載がなく、未確認）</td><td>静電チャックの背景の説明。</td></tr>
+      <tr><td>企業のカタログ</td><th scope="row"><a href="https://www.lauda.de/en/constant-temperature-equipment/thermostats/umwaelz-prozessthermostate/semistat">Semistat（製品ページ）</a>、半導体向け温調のカタログ</th><td>LAUDA（ドイツ）</td><td>2025 年 2 月版と推定（日付の記載なし）</td><td>Semistat の温度範囲と安定性。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.brooks.com/solutions/vacuum-automation/">Vacuum Automation</a></th><td>Brooks Automation（米国）</td><td>2026 年 11 月閲覧（日付の記載なし）</td><td>真空ロボットの構成。</td></tr>
+      <tr><td>企業の技術ブログ</td><th scope="row"><a href="https://yaskawa.co.il/en/news/choosing-the-right-wafer-handling-solution">Choosing the right wafer handling solution</a></th><td>Yaskawa Europe Technology（安川電機のグループ会社）</td><td>2022 年 10 月 6 日</td><td>大気側ロボットと粒子の抑制。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://product.ferrotec.co.jp/en/product/semiconductor_equipment/quartz/">Quartz Products</a>、<a href="https://product.ferrotec.co.jp/en/product/semiconductor_equipment/cvd_sic/silicon_carbide/">CVD-SiC</a></th><td>フェローテック（日本）</td><td>2026 年 11 月閲覧（日付の記載なし）</td><td>消耗部品の材料の例。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://coorstek.com/en/industries/semiconductor/etch/">Etch（半導体のエッチング向け）</a></th><td>CoorsTek（米国）</td><td>2026 年 11 月閲覧（日付の記載なし）</td><td>アルミナ・SiC 部品の例。</td></tr>
+      <tr><td>解説記事</td><th scope="row"><a href="https://www.semicorex.com/news-show-12030.html">Silicon Components for Dry Etching</a></th><td>Semicorex</td><td>2025 年 10 月 24 日</td><td>シリコン部品が消耗部品であること。</td></tr>
+      <tr><td>企業の製品ページ</td><th scope="row"><a href="https://www.emdgroup.com/en/expertise/semiconductors/offering/chemguard-1000-2000.html">CHEMGUARD 1000-2000 Automated Chemical Refill Systems</a></th><td>Merck KGaA（ドイツ）</td><td>2026 年 11 月閲覧（日付の記載なし）</td><td>薬液供給システムの例。</td></tr>
+      <tr><td>規格情報</td><th scope="row"><a href="https://www.semi.org/en/node/128986">SECS/GEM Tutorial Seminar Overview</a>（E30 の目的）、<a href="https://store-us.semi.org/products/e18700-semi-e187-specification-for-cybersecurity-of-fab-equipment">SEMI E187</a>（規格ページ）、<a href="https://www.semi.org/en/products-services/standards/top-10-standards">Top 10 Standards</a></th><td>SEMI</td><td>2026 年 11 月閲覧（日付の記載なし）</td><td>E30、E187 の内容。本文は有料のため参照していません。</td></tr>
+      <tr><td>教科書的な一般知識</td><th scope="row">真空・ガス・プラズマの教科書（ガスボックスの内部部品、粗引きの配管）</th><td>—</td><td>—</td><td>系統の一般的な説明。数値は使っていません。</td></tr>
+    </tbody>
+  </table></div>
+</section>

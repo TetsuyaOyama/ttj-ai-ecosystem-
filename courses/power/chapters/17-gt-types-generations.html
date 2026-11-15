@@ -1,0 +1,120 @@
+<!--
+num: 17
+part: 3
+title: ガスタービンの形式と機種の世代の考え方
+track: ガスタービン
+time: 35
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li><b>大型の発電用</b>と<b>航空機転用型</b>、<b>一軸</b>と<b>二軸</b>のガスタービンの違いを、メーカーの公表の言葉で説明できる。</li>
+    <li><b>50 Hz 機</b>と <b>60 Hz 機</b>で回転数が違う理由と、発電所の「一軸式・多軸式」との違いを説明できる。</li>
+    <li>メーカーの機種名・系列・世代（クラス）の公表値を、<b>条件をそろえて</b>読み、そのまま比べてはいけない値を見分けられる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch11">第11章</a>（ガスタービンの全体の構成）、<a href="#ch16">第16章</a>（大気条件と性能）。あるとよい：<a href="#ch02">第02章</a>（周波数と回転数）。</p>
+</section>
+
+<div class="callout note"><span class="ttl">この章の約束</span>
+  <p>この章は、機種の公表値（出力・熱効率など）を載せる唯一の章です。値は、各社の製品ページ・ブローシャの表記のまま写し、値の名前と条件を添えます。<b>比較や順位は付けません</b>。他の章は、機種の数字を書かずに、この章の表へリンクします。</p></div>
+
+<h3>形式の分け方</h3>
+<p>発電用のガスタービンは、大きさと出どころで、大きく 3 つに分けて説明されることが多いです。Siemens Energy（ドイツ）は、自社の製品ページを、heavy-duty（大型）・industrial（産業用）・aeroderivative（航空機転用型）の 3 つに分けて載せています（出典：Siemens Energy『Aeroderivative, Industrial and Heavy-Duty Gas Turbines』、確認 2026 年 11 月）。この区分の言葉は、同社の言葉です。<b>規格の区分ではありません</b>。他社は別の言葉や境で分けることがあります。</p>
+<div data-widget="tree" data-src="c17-family"></div>
+<p>図は、上から下へ、大きさと出どころ、軸の構成、使われ方の順に分けています。箱を押すと、特徴と、出典の言い方が出ます。出力の大小の境の数字は、出典ごとに違うので、この講座は決めません。</p>
+
+<h3>大型の発電用と航空機転用型</h3>
+<p><b>大型の発電用ガスタービン</b>（heavy-duty gas turbine）は、発電用に設計された、頑丈で重い機械です。大きな出力を出し、複合サイクルの主機として使われることが多いです（出典：一般知識）。</p>
+<p><b>航空機転用型ガスタービン</b>（aeroderivative gas turbine）は、航空機用のエンジンを基にしたガスタービンです。Siemens Energy は、これを「compact, lightweight, and flexible」と説明し、速い起動の能力を分散発電と結びつけています（出典：同上）。</p>
+<div data-widget="compare" data-src="c17-hd-aero"></div>
+<p>表の「起動の速さ」と「保守の形」の行は、メーカーの説明です。GE Vernova（米国）は、LM6000VELOX の起動を約 5 分（起動から全出力まで）と説明しています（出典：GE Vernova『LM6000』、確認 2026 年 11 月）。同社は、保守のページで、新品・整備済み・部分寿命のエンジンを現地で入れ替えられ、停止は 2〜3 日と説明しています（出典：GE Vernova『Aeroderivative gas turbine repair and maintenance』、確認 2026 年 11 月）。どちらも、起動の種類や、機種と契約の条件が、資料に書かれていません。条件の違う時間を、他の機種と比べないでください。</p>
+
+<h3>一軸と二軸のガスタービン</h3>
+<p><b>一軸のガスタービン</b>は、圧縮機・タービン・発電機が 1 本の軸につながります。<b>二軸のガスタービン</b>（two-shaft gas turbine）は、圧縮機を回すタービンを含む<b>ガスジェネレータ</b>と、出力を取り出す<b>出力タービン</b>が、別の軸に付きます。出力タービンは発電機の回転数で回り、ガスジェネレータは別の回転数で運転できます（出典：一般知識）。</p>
+<p>Siemens Energy の SGT-A35 のページは、2 軸（2-spool）のガスジェネレータが、自由出力タービン（free power turbine）と空力的につながる構成と書いています（出典：Siemens Energy『SGT-A35』、確認 2026 年 11 月）。</p>
+<div class="callout note"><span class="ttl">混ぜやすい 2 つの話</span>
+  <p><b>ガスタービンの「一軸・二軸」</b>は、ガスタービンの中の軸の話です。発電所の<b>「一軸式・多軸式」</b>は、ガスタービンと蒸気タービンと発電機の並べ方の話で、<a href="#ch18">第18章</a>が扱います。別の話です。</p>
+  <p>航空機用エンジンの資料にある<b>「2 軸（スプール、spool）」</b>は、圧縮機とタービンの組が 2 組あるという意味です。出力タービンが別の軸かどうかとは、別の話です。GE Vernova の LM6000VELOX のページも「two-spool design」と書きますが、出力タービンが別の軸かどうかは、ページに書かれていません。</p></div>
+
+<h3>50 Hz 機と 60 Hz 機</h3>
+<p>発電機と直結する機種は、ガスタービンの回転数が、系統の周波数で決まります。回転数は、次の式で表されます（式の持ち主は<a href="#ch02">第02章</a>）。</p>
+<div class="callout std"><span class="ttl">回転数の式</span>
+  <p><b>回転数（rpm）＝ 120 × 周波数（Hz）÷ 極数</b>（同期発電機）</p></div>
+<p>極数が 2 のとき、50 Hz なら 3,000 rpm、60 Hz なら 3,600 rpm です。そのため、同じ機種でも、50 Hz の系統用と 60 Hz の系統用で、回転数が違い、機種が分かれます。これが <b>50 Hz 機</b>と <b>60 Hz 機</b>です。日本は東日本が 50 Hz、西日本が 60 Hz です（<a href="#ch01">第01章</a>）。</p>
+<p>回転数の高い小型の機種は、減速機で、発電機の回転数に合わせる構成があります（出典：一般知識）。Siemens Energy の SGT-A35 のページは、周波数を 50/60 Hz と書き、直結の型式は 60 Hz のみと説明しています。GE Vernova の LM6000VELOX のページは、50 Hz と 60 Hz の両方向けと書いています（出典：各社の製品ページ、確認 2026 年 11 月）。</p>
+
+<h3>機種の名前と、系列・世代の考え方</h3>
+<p>メーカーは、機種に名前を付け、同じ設計の考え方でまとめた<b>系列</b>（model series）と、世代の呼称（F 級・H 級・J 級など）で、機種を整理します。呼称は、<b>メーカーの呼び方</b>で、規格の区分ではありません（クラスの扱いは<a href="#ch11">第11章</a>）。機種名の読み方を、架空の例で確かめます。</p>
+<div data-widget="ident" data-src="c17-name"></div>
+<p>実在の機種名の規則は、各社が公式に説明しているときだけ、出典つきで確かめます。確認できた範囲では、規則を説明した公式のページが見つからなかったので、実在の規則は載せません。</p>
+<h4>世代が進むときに変わるもの</h4>
+<p>世代が進むとき、タービン入口温度・圧力比・冷却・材料・燃焼器などが変わります（第12〜14章が扱います）。出典では、次のように書かれています。</p>
+<ul>
+  <li>三菱重工業（日本）は、M501J のページで、J シリーズのタービン入口温度が G シリーズより 100 ℃ 高いと書いています。温度の名前は同社の表記（turbine inlet temperature）で、定義の場所は、ページに書かれていません（出典：三菱重工業『M501J Series』、確認 2026 年 11 月）。</li>
+  <li>GE Vernova は、2025 年 4 月 2 日付の記事で、HA の歩みを書いています。9HA.01（2014 年）は、蒸気冷却の 7H・9H 由来の 4 段のタービンと、7F.05 由来の 14 段の圧縮機を組み合わせたと書きます。9HA.02（2018 年）は、3D プリントの低 NOx 燃焼器（窒素酸化物〔NOx〕を抑える燃焼器。同社の呼称は DLN 2.6e）を採用したと書きます。7HA.03（2019 年）は、単純サイクルの出力 430 MW で登場したと書きます（出典：GE Vernova『The evolution of the HA gas turbines』）。</li>
+</ul>
+<p>この 2 つは、別々のメーカーの別々の資料です。温度や出力の数字どうしを、並べて比べるための材料ではありません。</p>
+
+<h3>機種の公表値の例</h3>
+<p>次の表は、機種の公表値の例です。値の名前と条件が、行ごとに違います。まず列「熱効率の公表値」の中の、発熱量の基準・端・範囲を読み、次に出力の条件を確かめてください。</p>
+<div data-widget="table" data-src="c17-models"></div>
+<p>表の読み方の要点は 4 つです。</p>
+<ul>
+  <li><b>発熱量の基準</b>：低位発熱量基準か高位発熱量基準か。資料が書かないときは、書かれていないと表に書いています。</li>
+  <li><b>端</b>：発電端か送電端か。資料の表記は「gross」「net」などです。語の定義も資料ごとなので、そのまま写しています。</li>
+  <li><b>範囲</b>：単純サイクルか複合サイクルか。複合サイクルは、構成（1 on 1・2 on 1 など）も付きます。</li>
+  <li><b>大気条件</b>：ISO 条件か、現地の条件か（<a href="#ch16">第16章</a>）。</li>
+</ul>
+<p>熱効率の公表値の読み方と、高い熱効率の公表例は、<a href="#ch09">第09章</a>が扱います。</p>
+
+<h3>単純サイクルの用途</h3>
+<p>ガスタービンだけで発電する<b>単純サイクル</b>は、ピーク（需要の多い時間帯の電源）、非常用、分散の発電に使われます。起動の速さが求められる用途です（出典：一般知識。メーカーの説明は上の表）。Siemens Energy は、速い起動を分散発電と結びつけて説明しています。ピークの役割は<a href="#ch03">第03章</a>が扱います。</p>
+
+<h3>演習：そのまま比べてよい公表値を選ぶ</h3>
+<p>次の表は、<b>架空の</b>公表値 4 件です。発熱量の基準・端・範囲・大気条件・値の種類が、行ごとに違います。</p>
+<div data-widget="table" data-src="c17-claims"></div>
+<p>問い：そのまま比べてよい組を 1 つ選び、他の値が比べられない理由を答えてください。</p>
+<details><summary>答えを見る</summary>
+  <p>比べてよい組は <b>A と C</b> です。熱効率の発熱量の基準（低位発熱量基準）、端（発電端）、範囲（複合サイクル 1 on 1）、大気条件（ISO 条件）、値の種類（保証値）が、すべて同じです。</p>
+  <ul>
+    <li><b>B</b>：発熱量の基準が高位発熱量基準で、A・C の低位発熱量基準と違います。同じ機械でも、基準が違うと数字が変わります（<a href="#ch09">第09章</a>）。</li>
+    <li><b>D</b>：範囲が単純サイクルで、複合サイクルの A・C と違います。大気条件が現地の条件（外気 35 ℃）で、ISO 条件と違います。値の種類も計画値で、保証値と違います。</li>
+  </ul>
+  <p>A と C の条件がそろっても、機種の優劣は決まりません。保証の範囲、燃料、構成、契約の条件も、確かめる必要があります。</p></details>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>ガスタービンの「二軸」と、発電所の「多軸式」は別の話です</b>。前者はガスタービンの中、後者は発電所の機器の並べ方です。</p>
+  <p><b>航空機用エンジンの「2 軸（スプール）」と、「二軸のガスタービン」は同じではありません</b>。出力タービンが別の軸かどうかを、資料で確かめます。</p>
+  <p><b>クラス・世代の呼称は、規格の区分ではありません</b>。同じ呼称でも、メーカーが違えば公表値の条件が違います。</p>
+  <p><b>公表値は、条件を確かめてから比べます</b>。発熱量の基準・端・範囲・大気条件が違う値を、並べて優劣を言わないでください。</p>
+  <p><b>50 Hz 機は 60 Hz の系統にそのままつなげません</b>。発電機と直結する機種の回転数は、周波数で決まります。</p></div>
+
+<div class="callout tip"><span class="ttl">実務でのつながり</span>
+  <p>案件の初期に、機種の候補の公表値を整理するときは、この章の表のように、値の名前と条件を列にして並べ、条件のそろわない値は比べません。保証値と条件は、メーカーへの問い合わせと契約で確かめます。周波数（50 Hz か 60 Hz）は、系統の側の条件で決まります（<a href="#ch01">第01章</a>・<a href="#ch22">第22章</a>）。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c17-quiz"></div></section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 14 日。製品ページの多くは日付の表示がありません）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://power.mhi.com/products/gasturbines/lineup/m501j">M501J Series</a></th><td>三菱重工業（製品ページの表記は Mitsubishi Power）</td><td>日付なし。「J Series as of December 2025」の表示</td><td>M501JAC の公表値、J シリーズのタービン入口温度の記述。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.gevernova.com/gas-power/products/gas-turbines/7ha">7HA gas turbine</a></th><td>GE Vernova</td><td>日付なし</td><td>7HA.03 の公表値と注記。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://gevernova.com/gas-power/products/gas-turbines/lm6000">LM6000</a></th><td>GE Vernova</td><td>日付なし</td><td>LM6000VELOX の公表値、起動の説明、2 軸（two-spool）の記述。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.gevernova.com/gas-power/services/gas-turbines/aeroderivative/repair-maintenance">Aeroderivative gas turbine repair and maintenance</a></th><td>GE Vernova</td><td>日付なし</td><td>エンジンの交換の説明。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.gevernova.com/gas-power/resources/articles/2025/the-evolution-of-the-ha-gas-turbines">The evolution of the HA gas turbines</a></th><td>GE Vernova</td><td>2025 年 4 月 2 日</td><td>HA の世代の歩み（9HA.01・9HA.02・7HA.03）。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://siemens-energy.com/global/en/home/products-services/product/sgt5-9000hl.html">SGT5-9000HL</a></th><td>Siemens Energy</td><td>ページ表示の日付 2026 年 8 月 5 日</td><td>SGT5-9000HL の公表値と注記。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.siemens-energy.com/global/en/home/products-services/product/sgt-a35.html">SGT-A35 aeroderivative gas turbine</a></th><td>Siemens Energy</td><td>ページ表示の日付 2026 年 9 月 21 日</td><td>SGT-A35 の公表値、自由出力タービンの構成、直結の型式の周波数。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.siemens-energy.com/global/en/home/products-services/product-offerings/gas-turbines.html">Aeroderivative, Industrial and Heavy-Duty Gas Turbines</a></th><td>Siemens Energy</td><td>日付なし</td><td>3 つの区分の言葉と、航空機転用型の説明。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.ansaldoenergia.com/fileadmin/Brochure/2025/GT36.pdf">THE GAS TURBINE: GT36</a></th><td>Ansaldo Energia</td><td>ブローシャ末尾の表示「202403」</td><td>GT36 の公表値と注記。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.ansaldoenergia.com/about-us/media-center/press-releases/detail-press-releases/ansaldo-energia-presents-the-new-gt36-gas-turbine">Ansaldo Energia presents the new GT36 Gas turbine</a></th><td>Ansaldo Energia</td><td>2020 年 11 月 17 日</td><td>本社の国（イタリア）の確認。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.mhi.com/company/overview/profile">Corporate Profile</a></th><td>三菱重工業</td><td>確認 2026 年 11 月</td><td>本社の国（日本）の確認。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.ge.com/news/press-releases/ge-board-of-directors-approves-spin-off-of-ge-vernova-ge-vernova-and-ge-aerospace-to">GE Board of Directors Approves Spin-Off of GE Vernova</a></th><td>GE</td><td>2024 年 2 月 29 日</td><td>GE Vernova の本社の国（米国）と、分離の日の決定。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.siemens-energy.com/global/en/home/press-releases/siemens-energys-debut-stock-market.html">Siemens Energy's debut on the stock market</a></th><td>Siemens Energy</td><td>2020 年 9 月 28 日</td><td>本社の国（ドイツ）と、Siemens からの分離の確認。</td></tr>
+      <tr><td>教科書・一般知識・他講座</td><th scope="row">ガスタービン・電気機械の教科書（大型の特徴、一軸と二軸、回転数と周波数、減速機）</th><td>—</td><td>—</td><td>数値を伴わない説明。式の持ち主は <a href="#ch02">第02章</a>。</td></tr>
+      <tr><td>架空（見本のため）</td><th scope="row">機種名の読み方の図の機種名と、演習の公表値</th><td>本講座</td><td>架空</td><td>機種名の読み方と、条件をそろえて比べる練習。</td></tr>
+    </tbody>
+  </table></div>
+</section>

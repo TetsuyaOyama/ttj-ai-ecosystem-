@@ -1,0 +1,112 @@
+<!--
+num: 02
+part: 1
+title: 主要部品の役割：CPU・メモリ・ストレージ・ネットワーク
+track: 基礎
+time: 35
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li><b>CPU・メモリ・ストレージ・ネットワーク</b>の 4 つの部品の役割と、性能の言葉（コア数、クロック、容量、帯域幅、遅延、IOPS）の違いを説明できる。</li>
+    <li><b>メモリ階層</b>（キャッシュ、メインメモリ、SSD、HDD）が、速さ・容量・電源を切ったときの扱いで分かれる理由が分かる。</li>
+    <li><b>帯域幅と遅延</b>を区別し、処理の待ちを作る部品（ボトルネック）の探し方を言える。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch01">第01章</a>（計算機の構成、データの流れ）。</p>
+</section>
+
+<h3>4 つの部品と、それぞれの問い</h3>
+<p>第01章の「1 件の要求の処理」で、データは、ネットワーク、メモリ、CPU、ストレージの順に動きました。この章は、その 4 つの部品を、それぞれの<b>性能の言葉</b>で見ていきます。部品ごとに、「どれだけ速く」「どれだけ多く」「どれだけ待たせないか」という問いが違います。言葉を取り違えると、機器の比較を誤ります。</p>
+
+<h3>CPU：命令を実行する部品</h3>
+<p><b>CPU</b>（Central Processing Unit、中央処理装置、プロセッサ）は、プログラムの命令を読んで実行する部品です。性能の言葉は、次のとおりです。</p>
+<ul>
+  <li><b>コア</b>（core）：命令を実行する単位です。コアが多いほど、同時に進められる仕事が増えます。</li>
+  <li><b>スレッド</b>（thread）：コアが受け持つ命令の流れです。1 つのコアが、複数のスレッドを同時に扱う方式（同時マルチスレッディング）もあります。その場合も、コアの演算器は、スレッドの間で分け合います。</li>
+  <li><b>クロック</b>（clock）：命令を進める拍の速さです。単位は Hz です。同じクロックでも、1 拍にこなせる仕事は、設計によって違います。</li>
+</ul>
+<p>コア数もクロックも、<b>大きいほど速いとは限りません</b>。仕事が並列に分けられなければ、コアを増やしても効果が出ません。また、CPU が待っていれば、クロックが高くても速くなりません。</p>
+<p>CPU は、決められた<b>命令セット</b>（Instruction Set Architecture, ISA）の命令を実行します。命令セットは、ソフトウェアとハードウェアの約束です。サーバー向けに広く使われるのは、<b>x86</b> と <b>Arm</b> です。</p>
+<ul>
+  <li>x86 の 64 ビット版は、Intel（米国）が「Intel 64」、AMD（米国）が「AMD64」の名前で、仕様を公開しています（出典：Intel『Software Developer Manuals for Intel 64 and IA-32 Architectures』のページ、AMD『AMD64 Architecture Programmer's Manual Volume 1』Rev. 3.25、2026 年 5 月）。AMD は、AMD64 を、従来の x86 を 64 ビットに拡張したもので、従来の x86 と下位互換がある、と説明しています（同出典）。</li>
+  <li>Arm（英国）は、命令セットなどの仕様を、パートナーにライセンスしています。パートナーは、その仕様に従うチップを作ります（出典：Arm『Arm Architecture』のページ、2026 年 11 月に確認）。</li>
+</ul>
+<p>命令セットが違うと、同じプログラムをそのまま動かせません。サーバーを選ぶときは、動かすソフトウェアがどの命令セットに対応しているかを確かめます。CPU 製品の仕様値は、第06章で扱います。</p>
+
+<h3>キャッシュとメモリ階層</h3>
+<p>CPU は速いのに、メモリは相対的に遅いので、CPU が待たされます。この差を埋めるのが<b>キャッシュ</b>（cache）です。キャッシュは、CPU の中や近くに置く、小さくて速い記憶です。よく使うデータの写しを置いておき、CPU はまずそこを見ます。見つかれば速く、見つからなければメモリへ取りに行きます。</p>
+<p>キャッシュが効くのは、プログラムが<b>同じデータや近くのデータを、続けて使う</b>傾向があるからです。この傾向があるので、小さな記憶でも、多くの読み出しを肩代わりできます（一般知識。教科書：Patterson・Hennessy 著『Computer Organization and Design』）。</p>
+<p>記憶の部品は、速いものほど容量が小さく、遅いものほど容量が大きくなります。この段の並びを<b>メモリ階層</b>と呼びます。下の図で、各層の速さ・容量・電源を切ったときの扱いを確かめてください。数値は書いていません。</p>
+<div data-widget="stack" data-src="c02-hier"></div>
+
+<h3>メインメモリ：作業台の広さ</h3>
+<p><b>メインメモリ</b>（main memory）は、CPU が処理中のプログラムとデータを置く場所です。サーバーでは、DRAM（Dynamic Random Access Memory）が使われます。DRAM は、電源を切ると中身が消える<b>揮発性</b>の記憶です。容量は「作業台の広さ」にあたり、足りないと、データをストレージへ追い出すので、急に遅くなります。</p>
+<p>DRAM の規格は、JEDEC（JEDEC Solid State Technology Association）が定めています。DDR5 SDRAM の規格の番号は JESD79-5 です（出典：JEDEC『JEDEC Publishes New DDR5 Standard…』、2020 年 7 月 14 日）。メモリの載せ方と世代ごとの速さは、第07章で扱います。</p>
+
+<h3>ストレージ：電源を切っても残る記憶</h3>
+<p><b>ストレージ</b>（storage）は、電源を切ってもデータが残る記憶です。主な種類は 2 つあります。</p>
+<ul>
+  <li><b>HDD</b>（Hard Disk Drive）：回転する円盤に、磁気でデータを書きます。容量あたりの費用を抑えやすく、読み書きは機械の動きを待ちます。</li>
+  <li><b>SSD</b>（Solid State Drive）：半導体のメモリ（フラッシュメモリ）にデータを書きます。機械の動きがないので、HDD より待ちが短くなります。</li>
+</ul>
+<p>ストレージの性能は、2 つの言葉で表します。<b>IOPS</b>（Input/Output Operations Per Second）は、1 秒に何回の読み書きをこなせるかです。<b>スループット</b>（throughput）は、1 秒にどれだけのデータ量を運べるかです。小さな読み書きが多い仕事（データベースなど）は IOPS が効き、大きなファイルを順に読む仕事は、スループットが効きます。</p>
+<p>SSD には、書き換えられる回数に限りがあります。これを<b>書き換え耐久性</b>と呼びます。使い方によって寿命が変わるので、機器の選定では、仕様の耐久性の指標を確認します（指標の見方は第09章）。SSD の接続に使う NVMe（Non-Volatile Memory Express）は、NVM Express, Inc. が定める仕様の群です（出典：NVM Express, Inc.、2024 年 8 月 6 日の発表）。SSD の形状と接続の規格は、第09章で扱います。</p>
+
+<h3>ネットワーク：外とつなぐ部品</h3>
+<p><b>NIC</b>（Network Interface Card）は、サーバーをネットワークにつなぐ部品です。カードの形でなくても、同じ役割の部品を NIC と呼びます。性能は、<b>帯域幅</b>と<b>遅延</b>で表します。</p>
+<p>サーバーのネットワークには、通常、イーサネット（Ethernet）が使われます。IEEE 802.3 は、イーサネットの規格で、IEEE の標準規格です（出典：IEEE SA『IEEE Standard for Ethernet（IEEE 802.3-2022）』のページ、2022 年 7 月 29 日発行、現行の表示）。速さの世代とトランシーバは、第10章で扱います。</p>
+
+<h3>帯域幅と遅延：同じ「速さ」でも別のもの</h3>
+<p><b>帯域幅</b>（bandwidth）は、単位時間に運べるデータ量です。<b>遅延</b>（latency）は、1 回の操作を始めてから結果が返るまでの時間です。道路にたとえると、帯域幅は道の車線数、遅延は端から端までの所要時間です。車線を増やしても、1 台が着くまでの時間は縮みません。</p>
+<div data-widget="compare" data-src="c02-bw-lat"></div>
+<p>混同しやすいのが単位です。通信の帯域幅は、bit を使って「Gb/s」と書きます。メモリやストレージの帯域幅は、byte を使って「GB/s」と書くことが多いです。<b>1 byte は 8 bit</b> なので、数値を比べるときは、8 倍か 8 分の 1 の換算が要ります（一般知識）。</p>
+
+<h3>性能の言葉の早見表</h3>
+<div data-widget="table" data-src="c02-terms"></div>
+
+<h3>ボトルネック：最も遅い部品が全体を決める</h3>
+<p>1 件の要求の処理は、4 つの部品を順に通ります。全体の速さは、<b>最も待たされる部品</b>で決まります。その部品を<b>ボトルネック</b>（bottleneck）と呼びます。ボトルネックでない部品を速くしても、全体はほとんど変わりません。</p>
+<p>探し方の手順は、次のとおりです。まず、各部品で、待ちの時間を測ります。次に、最も長い部品を見つけます。最後に、その部品の性能の言葉（IOPS、帯域幅、遅延、容量）のどれが足りないかを確かめます。</p>
+
+<h3>演習：待ち時間の内訳から、ボトルネックを選ぶ</h3>
+<p>次の表は、<b>架空の</b>処理 1 件の待ち時間の内訳です。ボトルネックの部品はどれで、その部品の何を見直しますか。考えてから、答えを開きます。</p>
+<div class="tbl-wrap"><table class="tbl">
+  <caption>架空の処理 1 件の待ち時間の内訳（出典：架空、見本のため）</caption>
+  <thead><tr><th>部品</th><th>待ち時間 (ms)</th><th>備考</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">ネットワーク</th><td>2</td><td>小さな要求と応答</td></tr>
+    <tr><th scope="row">CPU</th><td>5</td><td>計算</td></tr>
+    <tr><th scope="row">メインメモリ</th><td>1</td><td>作業データの読み書き</td></tr>
+    <tr><th scope="row">ストレージ</th><td>12</td><td>小さな読み出しを、何度も繰り返す</td></tr>
+  </tbody>
+</table></div>
+<details><summary>答えを見る</summary>
+  <p>ボトルネックは、待ち時間が最も長い<b>ストレージ</b>です。備考のとおり、小さな読み出しを何度も繰り返す仕事なので、見直すのは、スループットよりも <b>IOPS</b> と遅延です。たとえば、HDD から SSD への切替え、メモリの増設（キャッシュに残るデータを増やす）が選択肢になります。</p>
+  <p>CPU を速くしても、合計の待ち時間は大きく変わりません。ストレージの待ちが縮むと、次は CPU が最も長い部品になります。ボトルネックは、直すと次に移ります。</p></details>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>Gb/s と GB/s を混ぜない</b>こと。小文字の b は bit、大文字の B は byte です。同じ数字でも、byte は bit の 8 倍の量です。</p>
+  <p>もう一つ。<b>帯域幅が大きい＝遅延が小さい</b>とは限りません。大量に運ぶ力と、1 回の応答の速さは、別の性能です。</p></div>
+
+<div class="callout tip"><span class="ttl">現場でのつながり</span>
+  <p>機器の選定や商談では、「速い」という言葉を、部品ごとの性能の言葉に直して聞きます。「何の待ちが問題か」が分かれば、CPU を増やすのか、メモリを足すのか、ストレージかネットワークかが決まります。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c02-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（アクセス日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://intel.com/content/www/us/en/support/articles/000006715/processors.html">Software Developer Manuals for Intel 64 and IA-32 Architectures</a></th><td>Intel</td><td>ページの表示：Last Reviewed 2021 年 10 月 18 日</td><td>Intel が、x86 の 64 ビット版を「Intel 64」と呼び、仕様を公開していること。</td></tr>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://docs.amd.com/api/khub/documents/OdDzCKsU4uf~KbI1htdPvA/content">AMD64 Architecture Programmer's Manual, Volume 1: Application Programming（Publication No. 24592）</a></th><td>AMD</td><td>Rev. 3.25、2026 年 5 月</td><td>AMD64 が、x86 の 64 ビットへの下位互換の拡張であること。</td></tr>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://www.arm.com/architecture">Arm Architecture</a></th><td>Arm</td><td>2026 年 11 月に確認</td><td>Arm が、仕様をパートナーにライセンスし、パートナーが準拠するチップを作ること。</td></tr>
+      <tr><td>標準化団体の公開資料</td><th scope="row"><a href="https://www.jedec.org/news/pressreleases/jedec-publishes-new-ddr5-standard-advancing-next-generation-high-performance">JEDEC Publishes New DDR5 Standard for Advancing Next-Generation High Performance Computing Systems</a></th><td>JEDEC</td><td>2020 年 7 月 14 日</td><td>DDR5 SDRAM の規格番号 JESD79-5。世代ごとの速さは使っていません。</td></tr>
+      <tr><td>標準化団体の公開資料</td><th scope="row"><a href="https://standards.ieee.org/ieee/802.3/10422/">IEEE Standard for Ethernet（IEEE 802.3-2022）</a></th><td>IEEE SA</td><td>2022 年 7 月 29 日発行、Active Standard の表示</td><td>イーサネットの規格名と発行者。規格本文は読んでいません。</td></tr>
+      <tr><td>標準化団体の公開資料</td><th scope="row"><a href="https://nvmexpress.org/?p=19725">NVM Express Releases NVM Express Specifications to Unify AI, Cloud, Client, and Enterprise Storage</a></th><td>NVM Express, Inc.</td><td>2024 年 8 月 6 日</td><td>NVMe が、複数の仕様の群であること（名前の位置づけだけ。版と詳細は第09章）。URL は「?p=」形式の固定リンクで、発表の個別ページです。</td></tr>
+      <tr><td>教科書</td><th scope="row">Computer Organization and Design（Patterson・Hennessy 著）</th><td>Morgan Kaufmann</td><td>書籍（版・刊行年は確認していません。個別ページへのリンクはありません）</td><td>キャッシュとメモリ階層の考え方（一般知識。数値は使っていません）。</td></tr>
+    </tbody>
+  </table></div>
+</section>

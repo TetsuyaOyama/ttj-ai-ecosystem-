@@ -1,0 +1,45 @@
+{
+  "slug": "demo",
+  "title": "宅配便のしくみ（見本講座）",
+  "subtitle": "共通基盤の全部品を 1 回ずつ使う動作確認用の講座",
+  "description": "共通基盤の動作確認用の見本講座です。架空の宅配事業を題材に、構成図・工程フロー・シーケンス・断面図などの全部品を使います。内容はすべて架空です。",
+  "prefix": "demo.",
+  "out": "dist/index.html",
+  "accent": "#2FA39A",
+  "tracks": ["入門", "実務"],
+  "footer": { "home": { "label": "ポートフォリオへ戻る", "href": "../index.html" } },
+  "ogp": { "title": "宅配便のしくみ（見本講座）", "description": "共通基盤の動作確認用の見本講座。内容はすべて架空です。", "type": "website", "locale": "ja_JP" },
+  "hero": {
+    "eyebrow": "TTJ 教育資料 ・ 見本",
+    "lead": "講座の共通基盤を確かめるための見本です。架空の宅配事業を題材に、図・工程・断面・表・演習・テストの全部品を使います。書かれている会社名・数字・手順はすべて架空で、実際の事業とは関係ありません。",
+    "notice": "この見本の数字・名称・手順は、すべて見本のための架空の設定です。実在の事業者や制度とは関係ありません。",
+    "links": []
+  },
+  "kinds": { "ue": "人（依頼者・受取人）", "ran": "現場の拠点", "core": "仕分け・輸送の拠点", "db": "情報システム", "ext": "外部の輸送会社" },
+  "labels": {
+    "arch.plane.cp": "情報（スキャン記録）の流れ",
+    "arch.plane.up": "荷物の流れ（太線）",
+    "arch.plane.lg": "通知（間接的な伝わり方）",
+    "arch.f.proto": "手段",
+    "arch.f.carries": "運ぶもの",
+    "seq.ifLabel": "場所・手段",
+    "seq.ieLabel": "記録される項目",
+    "stack.role.app": "入れ物",
+    "stack.role.payload": "運ばれる中身（破線）",
+    "stack.role.transport": "運搬の単位",
+    "stack.role.net": "輸送手段",
+    "stack.role.link": "走る道",
+    "stack.role.sec": "封印・施錠",
+    "stack.legend": "凡例：枠の色が層の種類、破線は運ばれる中身です。層を押すと説明が出ます。",
+    "ident.where": "付け方と使われ方",
+    "drill.q1": "どの段階で止まっていますか。",
+    "drill.q2": "最初に調べる拠点・システムはどれですか。"
+  },
+  "mapping": { "title": "お急ぎ便 と 通常便 の対応", "colA": "お急ぎ便（架空）", "colB": "通常便（架空）", "cats": [{ "key": "step", "label": "工程" }, { "key": "info", "label": "情報" }], "note": "対応は「おおむね」です。分かれている・まとまっている場合は備考に書きます。" },
+  "exam": { "target": 6 },
+  "parts": [
+    { "id": "1", "name": "第1部 全体像", "short": "全体像" },
+    { "id": "2", "name": "第2部 部品", "short": "部品" },
+    { "id": "A", "name": "付録", "short": "演習・対比・用語・総合テスト", "appendix": true }
+  ]
+}

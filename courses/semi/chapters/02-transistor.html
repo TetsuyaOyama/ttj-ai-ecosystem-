@@ -1,0 +1,76 @@
+<!--
+num: 02
+part: 1
+title: トランジスタ：電気で電気を切り替える
+track: 基礎
+time: 35
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li><b>MOSFET</b> がゲート電圧でオン・オフする仕組みを、断面の変化で説明できる。</li>
+    <li>微細化でリークが増える理由と、構造が<b>プレーナ型 → FinFET → GAA</b> と変わった理由が分かる。</li>
+    <li>ロジック用のトランジスタと<b>パワー半導体</b>の違いを言える。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch01">第01章</a>（n 型・p 型、pn 接合、空乏層）。</p>
+</section>
+
+<h3>トランジスタは「電気で動くスイッチ」</h3>
+<p><b>トランジスタ</b>（transistor）は、電気信号で別の電流を入り切りする素子です。スイッチが「オン」なら 1、「オフ」なら 0 と見なすと、計算の最小部品になります。現在のチップに載るトランジスタの大半は、<b>MOSFET</b>（Metal-Oxide-Semiconductor Field-Effect Transistor）と呼ぶ種類です。</p>
+
+<h3>MOSFET の構造とオン・オフ</h3>
+<p>nMOS の構造は、p 型の基板に n 型の<b>ソース</b>と<b>ドレイン</b>を作り、その間の上に<b>ゲート絶縁膜</b>（gate dielectric）と<b>ゲート</b>を重ねたものです。ゲートに電圧をかけないとき、電流は流れません。電圧がある値（<b>しきい値電圧</b>、threshold voltage）を超えると、基板の表面に電子が集まって電流の通り道、<b>チャネル</b>（channel）ができます。</p>
+<div data-widget="xsec" data-src="c02-nmos"></div>
+<p>ゲートと基板の間は絶縁されているので、ゲートに電流は流れません。電界だけでチャネルを制御するので、「電界効果」トランジスタと呼ばれます。</p>
+
+<h3>しきい値電圧と、オフでも流れる電流</h3>
+<p>理想のスイッチは、オフなら電流が 0 です。しかし実際のトランジスタは、しきい値の手前でも少しだけ電流が流れます。下の図で、状態と条件を押して確かめてください。</p>
+<div data-widget="state" data-src="c02-mosfet"></div>
+
+<h3>微細化で起きる短チャネル効果とリーク</h3>
+<p>トランジスタを小さくするとチャネルが短くなります。すると、ドレインの電界がチャネルの奥まで及び、<b>ゲートの制御が弱く</b>なります。その結果、しきい値電圧が下がり、オフのはずでも電流が漏れる<b>リーク</b>が増えます。これを<b>短チャネル効果</b>（short-channel effect）と呼びます。</p>
+<p>リークは、何もしていなくても電力を使うことを意味します。そのため、微細化は「ゲートの制御力をどう保つか」との戦いでした。</p>
+
+<h3>プレーナ → FinFET → GAA：ゲートが囲む面を増やす</h3>
+<p>ゲートの制御力を高める方法は、ゲートがチャネルに接する<b>面を増やす</b>ことです。平らなチャネルに上から載せる<b>プレーナ型</b>は 1 面です。チャネルをヒレ状に立てた<b>FinFET</b>（Fin Field-Effect Transistor）は、ゲートが 3 面から囲みます。薄い板（ナノシート）を重ねた<b>GAA</b>（Gate-All-Around）は、全周の 4 面を囲みます。</p>
+<div data-widget="arch" data-src="c02-gate"></div>
+<div class="callout tip"><span class="ttl">演習</span>
+  <p>上の図のタブを切り替え、<b>ゲートの支配力が増す順</b>（弱い → 強い）に 3 つの構造を並べてください。ゲートが接する面の数が手がかりです。</p></div>
+
+<h3>各社はいつ導入したか</h3>
+<p>FinFET と GAA の導入は、企業ごとの公開資料に書かれています。表は、各社が公表した内容を、そのまま整理したものです。企業間で優劣や同等性を比べるものではありません。</p>
+<div data-widget="table" data-src="c02-adopt"></div>
+<p>Intel は 2011 年 5 月に、22 nm 世代（世代の呼称で、物理寸法ではない。第04章）で FinFET（同社の呼称は Tri-Gate）を高量産に使うと発表しました（出典：Intel ニュースリリース、2011 年 5 月 4 日）。Samsung は 2022 年 6 月に、3 nm 世代で GAA（同社の呼称は MBCFET）の初期生産を始めたと発表しました（出典：Samsung Newsroom、2022 年 6 月 30 日）。TSMC は N2 を「ナノシート・トランジスタ技術」と説明しています（出典：TSMC 技術ページ、2026 年 11 月に確認）。Intel は 2025 年 10 月、GAA の呼称 RibbonFET を使う 18A を、Arizona の工場で高量産に入ると発表しました（出典：Intel ニュースリリース、2025 年 10 月 9 日）。</p>
+
+<h3>ゲート絶縁膜と金属ゲートの工夫</h3>
+<p>微細化に合わせてゲート絶縁膜を薄くしすぎると、電子が膜を突き抜けてリークします。そこで、<b>誘電率の高い材料</b>（High-k）を使い、物理的には厚いまま同じ効果を得ます。ゲートには、多結晶シリコンの代わりに金属を使います。この組み合わせが<b>High-k メタルゲート</b>（High-k Metal Gate、HKMG）です。膜の作り方は第07章で扱います。</p>
+
+<h3>パワー半導体：電力を扱うトランジスタ</h3>
+<p>ロジックのトランジスタは、小さな電力で速く切り替わることが大切です。一方、<b>パワー半導体</b>（power semiconductor）は、電気自動車やインバータで電力を変換するために、高い電圧と大きな電流を扱います。MOSFET のほか、IGBT（Insulated Gate Bipolar Transistor、絶縁ゲート型バイポーラトランジスタ）が使われ、SiC や GaN（第01章）のパワー素子も増えています。パワー半導体は、素子を大量に集積するより、<b>耐圧と損失</b>を重視します。</p>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p>「ゲートに電流が流れてオンになる」わけではありません。ゲートは絶縁されていて、<b>電界</b>がチャネルを作ります。</p>
+  <p>また、FinFET と GAA の違いは「チャネルが 3 面か 4 面か」という<b>形</b>の違いで、「◯ nm」という世代名とは別の話です。世代名は第04章で扱います。</p></div>
+
+<div class="callout note"><span class="ttl">現場でのつながり</span>
+  <p>ゲート構造が変わるたびに、成膜（第07章：ALD）、エッチング（第10章：異方性エッチングや、特定の膜だけを除く選択エッチング）の装置と条件が変わります。第29章の CFET など次の構造も、同じ流れの延長です。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c02-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（アクセス日：2026 年 11 月 14 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://www.intc.com/news-events/press-releases/detail/655/intel-reinvents-transistors-using-new-3-d-structure">Intel Reinvents Transistors Using New 3-D Structure</a></th><td>Intel（投資家向けサイトのニュースリリース）</td><td>2011 年 5 月 4 日</td><td>22 nm 世代の Tri-Gate（3 面ゲート）の発表。</td></tr>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://news.samsung.com/global/samsung-begins-chip-production-using-3nm-process-technology-with-gaa-architecture">Samsung Begins Chip Production Using 3nm Process Technology With GAA Architecture</a></th><td>Samsung Electronics</td><td>2022 年 6 月 30 日</td><td>3 nm 世代の GAA（MBCFET）初期生産。</td></tr>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://www.tsmc.com/english/dedicatedFoundry/technology/platform_mobile_tech_advancedTech.htm">Optimized for Both Smartphones and HPC Applications（技術ページ）</a></th><td>TSMC</td><td>2026 年 11 月に確認</td><td>N2 を nanosheet transistor 技術と説明している点。</td></tr>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://www.tsmc.com/english/dedicatedFoundry/technology/logic/l_2nm">2nm Technology（N2 の技術ページ）</a></th><td>TSMC</td><td>2026 年 11 月に確認</td><td>N2 が 2025 年第 4 四半期に量産を開始したという記載（「started volume production in 4Q25 as planned」）。</td></tr>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-01/51d09df96cd89ac19d65af39032b038dc2896a24/TSMC%204Q25%20Transcript.pdf">TSMC 4Q25 決算説明会の書き起こし</a></th><td>TSMC</td><td>2026 年 1 月 15 日</td><td>N2 が 2025 年第 4 四半期に高量産（high volume manufacturing）に入ったという発言。</td></tr>
+      <tr><td>企業の一次資料</td><th scope="row"><a href="https://www.intc.com/news-events/press-releases/detail/1752/intel-unveils-panther-lake-architecture-first-ai-pc">Intel Unveils Panther Lake Architecture: First AI PC Platform Built on 18A</a></th><td>Intel（ニュースリリース）</td><td>2025 年 10 月 9 日</td><td>RibbonFET、PowerVia、18A の量産の発表。</td></tr>
+      <tr><td>教科書的な一般知識</td><th scope="row">デバイス物理の教科書（MOSFET、短チャネル効果、High-k）</th><td>—</td><td>—</td><td>動作原理、構造の違い。電圧・寸法の数値は使っていません。</td></tr>
+    </tbody>
+  </table></div>
+</section>
