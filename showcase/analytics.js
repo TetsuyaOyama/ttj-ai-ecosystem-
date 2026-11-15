@@ -23,7 +23,7 @@
       load: function (id) {
         // 公式の埋め込み（beacon.min.js と data-cf-beacon）。スクリプトで後から足すので、公式の案内どおり token は URL にも付ける
         var s = document.createElement('script');
-        s.defer = true;
+        s.type = 'module';
         s.src = 'https://static.cloudflareinsights.com/beacon.min.js?token=' + encodeURIComponent(id);
         s.setAttribute('data-cf-beacon', JSON.stringify({ token: id }));
         document.head.appendChild(s);
