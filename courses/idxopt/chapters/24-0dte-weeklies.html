@@ -1,0 +1,84 @@
+<!--
+num: 24
+part: 5
+title: 短い満期の拡大：0DTE とウィークリー・オプション
+track: 市場構造
+time: 35
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li><b>満期まで 0 日のオプション</b>（zero days to expiration）の意味と、それが成り立つ商品の条件（毎営業日の満期）を説明できる。</li>
+    <li>公表された売買高や割合を、<b>公表した主体の数字と定義のまま</b>読み、自分で割り算しない理由を説明できる。</li>
+    <li>満期の近いオプションで、評価の線が満期の線に近づき、ガンマが大きくなることを、実験台で確かめて説明できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch14">第14章</a>（デルタとガンマ）と<a href="#ch15">第15章</a>（セータとベガ）。商品の仕様は<a href="#ch03">第03章</a>・<a href="#ch04">第04章</a>で扱います。</p>
+</section>
+
+<div class="callout warn"><span class="ttl">この章の扱い（投資）</span><p>この章は教育目的の仕組みの説明で、投資助言ではありません。特定の金融商品・取引・戦略を勧めるものではなく、金利や相場の予測もしません。数値の例は、架空と明記したものだけです。実際の取引の判断は、取引の説明書と契約の条件を確かめ、ご自身の責任で行ってください。</p></div>
+<div class="callout warn"><span class="ttl">この章の扱い（損失のリスク）</span><p>先物とオプションは、少ない証拠金で大きな金額の取引ができる仕組みで、預けた証拠金を超える損失が出ることがあります。オプションの売りは、損失が限定されない場合があります。この章の損益図と数値は、仕組みを読むための架空の例です。</p></div>
+<div class="callout warn"><span class="ttl">この章の扱い（制度の時点）</span><p>この章の制度・規則・商品の仕様は、本文に明記した国・地域と時点のものです。金融政策の枠組み、取引所と清算機関の規則、商品の仕様は改定されます。最新の内容は、本文の参照資料に挙げた公式のページで確かめてください。</p></div>
+
+<h3>0DTE とは</h3>
+<p>0DTE（zero days to expiration）は、満期まで 0 日のオプション、つまり、その日に満期になるオプションを、その日に取引することです。SEC のスタッフの報告は、0DTE を「trading in contracts expiring on the same day」と書きます（『Roundtable on Options Market Structure: Supporting Data』。表紙の日付 2026 年 4 月 9 日）。ECB は、その日に満期になるオプションと説明します（『The risks from hidden leverage in short-term equity options』、2023 年 11 月）。</p>
+<p>0DTE が成り立つには、<b>毎営業日に満期の限月がある商品</b>が必要です。以下は、商品の側の変化です。</p>
+
+<h3>商品の側の変化</h3>
+<p>Cboe は、SPX Weeklys の満期の曜日を広げてきました。2016 年 2 月 1 日の発表は、水曜日に満期の SPX Weeklys を 2016 年 2 月 23 日から上場する予定と書き（それまでは金曜日）、2016 年 7 月 11 日の発表は、月曜日に満期のものを 2016 年 8 月 15 日から上場する予定と書きます（規制当局の承認が前提）。2022 年 4 月 13 日の発表は、火曜日と木曜日の満期を加える（火曜日は 4 月 18 日、木曜日は 5 月 11 日から）と書き、2022 年 9 月 19 日の発表は、SPX と XSP の毎日の満期を書きます。いずれも発表の文の日付で、実際の開始の日付は確かめていません。現在の仕様のページは、SPXW と XSP の満期を、月曜日から金曜日、第 3 金曜日、月末の取引日と書き、決済は PM、行使の型は European です（ページに更新日の記載なし。確認日 2026 年 11 月 18 日）。</p>
+<p>日本では、日経225ミニオプションに、金曜限月取引と、水曜限月取引（取引開始日 2025 年 5 月 26 日）があります（大阪取引所『制度概要』、ページ 2026 年 6 月 1 日更新）。2026 年 3 月 26 日の発表は、日経225ミニオプションの限月設定方法を、「2027年４月を目途に」変更し、「月曜日から金曜日までの毎日が満期日となります」と書き、パブリック・コメントを開始しました。「目途」の段階の発表で、「実施」とは書かれていません。確定の発表は、確認日までに見当たりません。</p>
+<div data-widget="route" data-src="c24-expiries"></div>
+
+<h3>公表された数字</h3>
+<p>0DTE の売買高や割合は、公表した主体の数字と定義のまま読みます。同じ「0DTE の割合」でも、期間・分母・範囲・集計が、主体ごとに違います。この講座は、割合を自分で計算せず、行どうしを比べません。たとえば、Cboe の 2026 年 10 月の公表は、SPX が月の 1 日平均で 5.5 million 枚、SPX の 0DTE が 3.58 million 枚（いずれも record）と書き、別の文で、SPX がフロアの ADV の 43.1％を占めると書きます。後者は<b>フロアの ADV の中の SPX の割合</b>で、0DTE の割合ではありません。</p>
+<div data-widget="table" data-src="c24-facts"></div>
+
+<h3>公開の研究が書くこと</h3>
+<p>0DTE の影響は、各主体が、自分の範囲で書いています。ECB のボックスは、S&P 500 のオプションで 0DTE が総売買高の 50％超と書き、0DTE の一部の特徴が景気循環増幅的な動きを強めるかもしれない（might）、エクスポージャーの積み上がりが無秩序な市場の動きを助長するかもしれない（might）、と書きます。BIS のボックスは、2023 年 8 月に SPX の 0DTE が SPX のオプションの売買高の 50％超だったと書きます。Cboe の調査記事は、マーケットメイカーの正味のガンマのヘッジが SPX の 1 日の流動性に占める割合は、多くても 0.2％、と書きます（Cboe の主張）。主体によって、結論と範囲が違うので、この章は、どれが正しいかを判定しません。</p>
+
+<h3>短い満期のリスク</h3>
+<p>満期の近いオプションでは、時間価値が小さく、評価の線（理論価格）が満期の線に近づきます。権利行使価格の近くで傾きが急に変わり、<b>ガンマ</b>が大きくなります（第14章）。指数が少し動くと、デルタが大きく変わり、損益が急に動きます。セータも大きく、指数が動かなくても、時間価値が速く減ります（第15章）。</p>
+<p>実験台の基準の例（架空）では、権利行使価格 1,000・指数 1,000・ボラティリティ 20％・残り 1 日のコールの理論価格は約 4.19、デルタは約 0.503、ガンマは指数 1 ポイントあたり約 0.0381、1 日のセータは約 −2.10（指数のポイント）です。残り 30 日では、ガンマは約 0.0070 です。指数が 1,010 になったとき、買いの損益は、満期の線で ＋5,810 円、残り 1 日の評価の線で約 ＋6,795 円です。</p>
+<div data-widget="lab" data-src="c24-short-risk"></div>
+<p>実験台で確かめる点は 4 つです。1 つ目は、残り日数を小さくすると、破線が実線に近づくことです。2 つ目は、権利行使価格の近くの傾きが、残りが短いほど急になることです。3 つ目は、買いの<b>損失</b>が、払った価格までで、売りの線は上下が反転すること（コールの売りは限定されない）です。4 つ目は、セータの円の値が、買いでは損失の側、売りでは利益の側であることです。</p>
+
+<h3>演習：短い満期の値</h3>
+<p>架空の条件（S0 ＝ K ＝ 1,000、σ ＝ 20％、年 1％、残り 1 日、コール、1 枚）で、実験台の値を確かめます。</p>
+<ul>
+  <li>理論価格は約 4.19、デルタは約 0.503、1 日のセータは約 −2.10 です。</li>
+  <li>指数 1,010 のとき、買いの満期の損益は (10 − 4.19) × 1,000 ＝ ＋5,810 円です。</li>
+  <li>残り 0.25 日（プリセット）では、価格は約 2.09、ガンマは約 0.0762 になり、残り 1 日の約 0.0381 の 2 倍です。</li>
+</ul>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>公表された割合を、自分で割り算しないでください</b>。Cboe の 43.1％は、フロアの ADV の中の SPX の割合で、0DTE の割合ではありません。Cboe と SEC のスタッフの割合は、期間と定義が違います。</p>
+  <p><b>「目途」「予定」の発表は、実施ではありません</b>。2026 年 3 月 26 日の大阪取引所の発表は、2027 年 4 月を目途とする段階です。</p>
+  <p><b>短い満期の買いの損失は、払った価格までですが、小さくはありません</b>。満期の近い買いは、指数が動かないと、払った価格の全額が失われやすい形です。</p>
+  <p><b>短い満期の売りは、損失が急に動きます</b>。コールの売りの損失は限定されません。</p>
+  <p><b>評価の線は、理論価格に基づく考え方の道具です</b>。実際の短い満期の価格は、この模型どおりには動きません。</p></div>
+
+<div class="callout tip"><span class="ttl">実務でのつながり</span>
+  <p>リスク管理では、満期の近い建玉のガンマとセータを、日中に確かめます。システムの開発では、毎営業日の満期に対応した満期の管理と、権利行使・失効の処理が必要です。事務と監査では、公表の数字を引くときに、主体・期間・定義を確かめ、記録します。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c24-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 18 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.cboe.com/insights/posts/market-metrics-that-matter-derivatives-october-2026-volume-highlights">Market Metrics That Matter: Derivatives October 2026 Volume Highlights</a></th><td>Cboe</td><td>2026-11-11</td><td>2026 年 10 月の 1 日平均の売買高、フロアの ADV の割合。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.cboe.com/insights/posts/state-of-the-options-industry-q-3-2026-volume-growth-concentrated-in-index-and-etf-options">State of the Options Industry Q3 2026</a></th><td>Cboe</td><td>2026-10-19</td><td>2026 年第 3 四半期の 0DTE の ADV と、Cboe の記述の割合。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.cboe.com/tradable_products/sp_500/spx_weekly_options/specifications/">S&amp;P 500 Weeklys Options（仕様）／Mini-SPX (XSP) Weeklys Options（仕様）</a></th><td>Cboe</td><td>ページに更新日の記載なし（確認日 2026-11-18）</td><td>SPXW・XSP の満期の曜日、決済、行使の型。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row">Cboe の発表（2016-02-01、2016-07-11、2022-04-13、2022-09-19）、調査記事（2023-09-08、2025-05-02）</th><td>Cboe</td><td>各発表の日付</td><td>満期の曜日の拡大の発表、Cboe の研究の記述（URL は事実確認表）。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/derivatives/products/domestic/225mini-options/01.html">日経225ミニオプション 制度概要</a></th><td>大阪取引所（日本取引所グループ）</td><td>ページ 2026/06/01 更新</td><td>金曜限月取引・水曜限月取引、取引開始日。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/news/2040/20260326-01.html">日経225ミニオプション取引における限月設定方法の変更について</a></th><td>大阪取引所（日本取引所グループ）</td><td>2026-03-26 発表</td><td>「2027年４月を目途に」の段階の変更。実施とは書かれていない。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.sec.gov/files/roundtable-options-market-structure.pdf">Roundtable on Options Market Structure: Supporting Data</a></th><td>米国 証券取引委員会（SEC）取引・市場部のスタッフ</td><td>表紙の日付 2026-04-09</td><td>0DTE の定義と割合（OPRA の取引データ）。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.ecb.europa.eu/press/financial-stability-publications/fsr/focus/2023/html/ecb.fsrbox202311_02~0cf2c71d00.en.html">The risks from hidden leverage in short-term equity options</a></th><td>欧州中央銀行（ECB）</td><td>Financial Stability Review、2023-11-22</td><td>S&amp;P 500 のオプションの 0DTE の割合と、影響についての記述。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.bis.org/publ/qtrpdf/r_qt2403x.htm">BIS Quarterly Review, March 2024（Box B）</a></th><td>国際決済銀行（BIS）</td><td>2024-03-04</td><td>2023 年 8 月の SPX の 0DTE の割合。</td></tr>
+      <tr><td>教科書・一般知識・他講座</td><th scope="row">第03章・第04章・第10章・第14章・第15章（この講座）</th><td>この講座</td><td>—</td><td>商品の仕様、理論価格、ガンマ、セータ。式の値は検算の行で計算し直した。</td></tr>
+      <tr><td>架空（見本のため）</td><th scope="row">架空の指数 X（乗数 1,000 円）、実験台・演習の権利行使価格・ボラティリティ・残りの日数</th><td>この講座</td><td>—</td><td>理解のための架空の例。実在の指数・価格・商品とは関係がありません。</td></tr>
+    </tbody>
+  </table></div>
+</section>

@@ -1,0 +1,80 @@
+<!--
+num: 04
+part: 1
+title: S&P 500 の指数オプション：SPX・SPXW・XSP
+track: 商品
+time: 35
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>Cboe の S&amp;P 500 の指数オプションの <b>3 つの商品</b>（標準・ウィークリーと月末・ミニ）の違い（満期の曜日・決済の時・大きさ）を、仕様のページの語で説明できる。</li>
+    <li>決済の値を満期の日の取引の始まりの値で決める商品と、そうでない商品で、<b>取引の終わり</b>が違うことを説明できる。</li>
+    <li>満期が毎営業日にある商品で、<b>満期の日を銘柄ごとに確かめる</b>必要があることを説明できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch02">第02章</a>（S&P 500 と指数の算出者）、<a href="#ch03">第03章</a>（日経225オプションの仕様の読み方）。</p>
+</section>
+
+<div class="callout warn"><span class="ttl">この章の扱い（投資）</span><p>この章は教育目的の仕組みの説明で、投資助言ではありません。特定の金融商品・取引・戦略を勧めるものではなく、金利や相場の予測もしません。数値の例は、架空と明記したものだけです。実際の取引の判断は、取引の説明書と契約の条件を確かめ、ご自身の責任で行ってください。</p></div>
+<div class="callout warn"><span class="ttl">この章の扱い（制度の時点）</span><p>この章の制度・規則・商品の仕様は、本文に明記した国・地域と時点のものです。金融政策の枠組み、取引所と清算機関の規則、商品の仕様は改定されます。最新の内容は、本文の参照資料に挙げた公式のページで確かめてください。</p></div>
+
+<h3>まず全体像：同じ S&P 500 に、満期と大きさの違う商品がある</h3>
+<p>米国では、Cboe Global Markets（Cboe）が、S&P 500 を原資産とする指数オプションを複数上場しています。指数の算出者は S&P ダウ・ジョーンズ・インデックス、取引所は Cboe で、別の主体です（<a href="#ch02">第02章</a>）。この章は、<b>SPX</b>（S&P 500 Index options。標準の商品）、<b>SPXW</b>（ウィークリーと月末）、<b>XSP</b>（ミニ。Mini-SPX）を扱います。</p>
+<p>Cboe の仕様のページには、更新日の表記がありません。SPX の仕様のページに「as of March 19, 2024」とありますが、これは Product Snapshot の時点で、ページの更新日とは書かれていません。この章の確認日は 2026 年 11 月 18 日です。表の「」は、ページの英語の原文です。</p>
+<div data-widget="table" data-src="c04-specs"></div>
+<p>3 つの商品は、どれも現金で決済するヨーロピアンのオプションです（Cboe の比較表）。違いは、満期の曜日、決済の時（AM か PM）、大きさです。ヨーロピアンと現金の決済の考え方は<a href="#ch05">第05章</a>で扱います。</p>
+
+<h3>SPX：標準の限月と AM の決済</h3>
+<p>SPX の満期は、比較表で「3rd Friday」です。決済の時は「AM」です。取引は、通常は満期の日の前の営業日（たいていは木曜日）の午後 5 時（米東部時間）に終わります（SPX の仕様のページの語「ordinarily cease」）。乗数は「100」と読み取れます（ページの並びからの読み取り）。</p>
+<p>日本の日経225オプションは、取引最終日の翌営業日の構成銘柄の始値から、特別清算数値（SQ）を算出します（<a href="#ch03">第03章</a>）。SPX の AM の決済の値の名前は、SPX の仕様のページでは確かめられませんでした。この章は、決済の値の決め方を、SPXO の資料にある語（後の節）だけで書きます。</p>
+
+<h3>SPXW：ウィークリーと月末、PM の決済</h3>
+<p>SPXW（Cboe の呼び名は「SPX Weekly and End of Month」）の満期は、比較表で「Mon., Tue., Wed., Th., Fri., 3rd Fri. and Last Trading Day of Month」です。月曜日から金曜日までの各営業日に、満期の日があります。決済の時は「PM」で、取引は、通常、満期の日の午後 4 時（米東部時間）に終わります（仕様のページの語「ordinarily cease」）。</p>
+<p>満期の日が休日のとき、満期の日は動きます。比較表の脚注は、1 営業日前に動く（例：金曜日から木曜日）と書き、月曜日のウィークリーだけは 1 営業日後ろ（月曜日から火曜日）に動くと書きます。標準の SPX や月末のオプションと満期の日が重なるウィークリーは、上場されません（同じ脚注）。</p>
+<p>満期が毎営業日にある商品では、「いつ満期の銘柄か」が、銘柄ごとに違います。取引の前に、銘柄の満期の日を仕様と取引所の一覧で確かめます。0DTE（zero days to expiration。満期まで 0 日のオプション）との関係は<a href="#ch24">第24章</a>で扱います。</p>
+
+<h3>XSP：SPX の 10 分の 1 の値を対象にしたミニ</h3>
+<p>XSP の対象は、Cboe の語で「The Mini-SPX Index, based on 1/10th the value of the Standard &amp; Poor's 500 Index (SPX).」です。乗数は「Multiplier $100.」で、SPX の乗数「100」と同じです。対象の指数の値が 10 分の 1 なので、同じ割合のオプションの受払額は 10 分の 1 になります。XSP は PM の決済で、取引最終日は満期の日です（XSP の仕様のページ）。</p>
+<p>下の実験台は、架空の指数の水準とオプション価格で、SPX 型と XSP 型の大きさを比べます。</p>
+<div data-widget="lab" data-src="c04-size"></div>
+<p>受払額が小さいことは、損失が小さいことを意味しません。オプションの売りは、損失が限定されない場合があります（<a href="#ch21">第21章</a>）。</p>
+
+<h3>AM の決済と PM の決済</h3>
+<p>AM の決済は、SPXO の資料の語では、決済の値を満期の日の取引の始まりの値から決める方式です。SPX の標準の限月と、新しい SPXO が AM の決済で、SPXW と XSP は PM の決済です（比較表の行「AM or PM Settlement」）。SPX の標準の限月が、SPXO と同じ決め方かは、この章では確かめていません。</p>
+<p>SPXO は、Cboe が 2026 年 11 月 9 日の記事で紹介した、AM の決済のウィークリーです。記事は、「SPXO options expire at the open of trading on their expiration date and settle to the SPX opening settlement price.」と書きます。最初の満期は 2026 年 11 月 18 日（水曜日）と 12 月 16 日（水曜日）で、追加の満期は「at a later date」に導入する予定と書かれています（予定の段階です）。SPXO の契約仕様は、決済の値を「the opening sales price in the primary market of each component security on the expiration date」から計算すると書き、取引は満期の日の前の営業日の午後 5 時（米東部時間）に終わります。</p>
+<div data-widget="compare" data-src="c04-am-pm"></div>
+
+<h3>取引時間と清算</h3>
+<p>通常の取引時間は、SPX・SPXW のページで「9:30 a.m. to 4:15 p.m. (ET)」、XSP のページで「8:30 a.m. to 3:15 p.m. (Chicago)」です。<b>Global Trading Hours</b>（GTH）は、比較表の脚注で、SPX・SPXO・SPXW・XSP とも、米東部時間の午後 8 時 15 分に始まり、午前 9 時 25 分に終わります。ページごとに時間帯の書き方が違うので、この章は換算せず、原文の時間帯で書いています。</p>
+<p>Cboe の指数オプションは、オプションズ・クリアリング・コーポレーション（Options Clearing Corporation, OCC）が清算します。Cboe は、「The Options Clearing Corporation® (OCC) issues substantially all Cboe options contracts.」と書きます。OCC の役割と証拠金は<a href="#ch22">第22章</a>で扱います。XSP が OCC の商品の一覧に名前で載っているかは、この章では確かめていません。</p>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>XSP が小さいのは、乗数ではなく、対象の指数の値が 10 分の 1 だからです</b>。乗数はどちらも 100 ドルです。</p>
+  <p><b>AM の決済と PM の決済では、取引が終わる日が違います</b>。SPX の標準の限月は満期の日の前の営業日に取引が終わり、SPXW と XSP は満期の日に取引が終わります。</p>
+  <p><b>SPXW は毎営業日が満期ではありません</b>。満期の曜日と、休日の動き（月曜日だけ後ろ）が、脚注に書かれています。曜日だけで満期の日を決めつけません。</p>
+  <p><b>受払額が小さいことは、損失が小さいことを意味しません</b>。オプションの売りは、損失が限定されない場合があります。</p>
+  <p><b>Cboe のページには更新日の表記がありません</b>。確認日は 2026 年 11 月 18 日です。SPXO は新しい商品で、仕様は変わりうるので、取引の前に仕様のページで確かめます。</p></div>
+
+<div class="callout tip"><span class="ttl">実務でのつながり</span>
+  <p>システムの開発では、商品ごとに、満期の曜日・決済の時（AM か PM）・取引の終わりの時刻・乗数を、設定の表として持ちます。事務では、休日で満期の日が動く週に、銘柄ごとの満期の日を確かめます。リスク管理では、SPX 型と XSP 型を合算するとき、対象の指数の値が 10 分の 1 であることまで含めて想定元本を比べます。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c04-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 18 日。Cboe のページには更新日の表記がありません）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://cboe.com/tradable_products/sp_500/spx_weekly_options/specifications/">S&amp;P 500 Weeklys Options（比較表）</a></th><td>Cboe</td><td>更新日の表記なし（確認 2026 年 11 月 18 日）</td><td>満期の曜日・AM と PM・行使の型・決済の種類・Global Trading Hours・休日の扱い。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.cboe.com/tradable_products/sp_500/spx_options/specifications/">S&amp;P 500® Index Options Product Specifications</a></th><td>Cboe</td><td>Product Snapshot as of March 19, 2024（ページの更新日の表記なし）</td><td>SPX・SPXW の乗数・取引時間・取引の終わり。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.cboe.com/tradable_products/sp_500/mini_spx_options/specifications">XSP Options Product Specification</a></th><td>Cboe</td><td>更新日の表記なし（確認 2026 年 11 月 18 日）</td><td>XSP の対象・乗数・行使の型・取引最終日・取引時間。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://cdn.cboe.com/resources/membership/SPXO-Options-Contract-Specifications.pdf">SPXO Options Contract Specifications</a></th><td>Cboe</td><td>版・更新日の記載なし（確認 2026 年 11 月 18 日）</td><td>AM の決済の決済の値と、取引の終わり。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.cboe.com/insights/posts/cboe-introduces-am-settled-weekly-options-on-the-s-p-500-index/">Cboe Introduces AM-Settled Weekly Options on the S&amp;P 500 Index</a></th><td>Cboe</td><td>2026 年 11 月 9 日</td><td>SPXO の紹介と、最初の満期。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.cboe.com/investor-protection/">OCC and Investor Protection</a></th><td>Cboe</td><td>更新日の表記なし（確認 2026 年 11 月 18 日）</td><td>OCC が Cboe のオプションを発行すること。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.theocc.com/clearance-and-settlement/clearing">Clearing</a></th><td>OCC</td><td>更新日の表記なし（確認 2026 年 11 月 18 日）</td><td>OCC の清算の役割（第22章で詳しく）。</td></tr>
+      <tr><td>教科書・一般知識・他講座</td><th scope="row"><a href="#ch03">第03章 日経225オプションと日経225ミニオプション</a></th><td>この講座</td><td>—</td><td>仕様のページの更新日と、発表の日・実施の日の区別。</td></tr>
+    </tbody>
+  </table></div>
+</section>

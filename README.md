@@ -138,8 +138,6 @@ PC が何の部品でできていて、部品どうしがどんな規格でつ�
 
 ### 7. 金融
 
-指数オプション取引の講義は準備中です。
-
 #### 金利と国債、中央銀行の資金供給
 
 金利の計算、国債の発行と流通、日銀と FRB の資金供給の仕組み、公表統計の読み方を、数値例と操作できる図で学ぶ講義です。序章2本と全30章をすべて公開しています。第04章には利回り曲線を動かす実験台があります。序章には利子と時間の関係と、桁違いの規模を並べて比べる図があります。価格と利回り、利回り曲線、デュレーションなどを動かせる部品と、確認問題・総合テストつき。公開情報だけを出典にした教育目的の講義で、投資助言ではありません。
@@ -157,6 +155,16 @@ PC が何の部品でできていて、部品どうしがどんな規格でつ�
 [講座を開く](https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/showcase/ird/)
 
 ![取引所の金利デリバティブの画面](docs/images/ird.png)
+
+#### 指数オプション取引
+
+日経225オプションと S&P 500 系のオプションを題材に、商品と決済、理論価格、インプライド・ボラティリティ、グリークス、損益図、証拠金と清算、市場の構造を学ぶ講義です。序章2本と全28章をすべて公開しています。価格・グリークス・損益図を動かして確かめる実験台つきで、確認問題・総合テストもあります。公開情報だけを出典にした教育目的の講義で、投資助言ではありません。
+
+[講座を開く](https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/showcase/idxopt/)
+
+![指数オプション取引の画面](docs/images/idxopt.png)
+
+この講座の元データ（章の HTML・図のデータ・検証記録）は `courses/idxopt/` にあり、これまでの講座と同じ基盤（`courses/_framework/`）で 1 枚の HTML に組み立てます（`courses/_framework/build.py` の `--publish courses/idxopt-publish.json` で公開範囲と出力先を指定）。検証の記録は `courses/idxopt/REVIEW-X*.md` です。第28章（付録）の道具と自己点検・正答の一覧は `courses/idxopt/tools/` にあります。
 
 この講座の元データ（章の HTML・図のデータ・検証記録）は `courses/ird/` にあり、金利と国債の講座と同じ基盤（`courses/_framework/`）で 1 枚の HTML に組み立てます（`courses/_framework/build.py` の `--publish courses/ird-publish.json` で公開範囲と出力先を指定）。検証の記録は `courses/ird/REVIEW-W*.md` と `REVIEW-ADD-16.md` です。付録の生成の道具と自己点検・正答の一覧の道具は `courses/ird/tools/` にあります。
 

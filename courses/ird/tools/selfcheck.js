@@ -72,10 +72,11 @@ if (has('--answers')) { const all = (n, q, i) => { console.log(`答 ${n} 問${i}
 // 4 線の種別を全部出力。arch の線は plane を持つ
 const linksOf = d => { const m = new Map(); for (const l of d.links || []) m.set(l.id || l.a + '>' + l.b, l); for (const v of d.views || []) for (const l of v.links || []) if (l && l.a) m.set(l.id || l.a + '>' + l.b, l); return [...m.values()]; };
 for (const [k, id, d] of reg) if (k === 'arch') for (const l of linksOf(d)) { console.log(`線  ${id} ${l.plane || '(省略)'} ${l.a}→${l.b} 「${l.label || ''}」 ${l.carries || ''}`); say(!!l.plane, `${id} の線 ${l.a}→${l.b} に plane がある`); }
-// 5 リンク: トップページでない。他講座への相互参照は spec §4.2 の一覧（この講座から講座 A へ）にある章だけ。講座 C（idxopt）へは張らない（公開の順 A→B→C）。第29章は講座 A の全章へ可。章への内部リンク #chNN は可
+// 5 リンク: トップページでない。他講座への相互参照は spec §4.2 の一覧（この講座から講座 A へ）にある章だけ。講座 C（idxopt）へは、spec §4.2 の「この講座から講座 C へ」の一覧にある章だけ（2026-11-18：公開の順 A→B→C が済み、16→C 20 を足した）。第29章は講座 A の全章へ可。章への内部リンク #chNN は可
+const XREFC = {}; { const line = (spec.match(/この講座から講座 C へ[^\n]*/) || [''])[0]; for (const m of line.matchAll(/(序\d+|\d\d)→C ([\d・\s]+)/g)) { const k = m[1].startsWith('序') ? 'I' + m[1].slice(1) : m[1]; XREFC[k] = m[2].split('・').map(x => x.trim()).filter(Boolean); } }
 const XREF = {}; { const line = (spec.match(/この講座から講座 A へ[^\n]*/) || [''])[0]; for (const m of line.matchAll(/(序\d+|\d\d)→A ([\d０-９・\s]+)/g)) { const k = m[1].startsWith('序') ? 'I' + m[1].slice(1) : m[1]; XREF[k] = m[2].split('・').map(x => x.trim()).filter(Boolean); } }
 for (const m of html.matchAll(/href="(https?:\/\/[^"]+)"/g)) { const u = new URL(m[1]); say(u.pathname.replace(/\/(index\.html?)?$/, '') !== '', `リンク ${m[1]}`); }
-for (const m of html.matchAll(/href="\.\.\/([a-z-]+)\/#ch(\w+)"/g)) { const ok = m[1] === 'rates' && (IS_APX || (XREF[pad] || []).includes(m[2].padStart(2, '0'))); say(ok, `他講座への相互参照 ../${m[1]}/#ch${m[2]}${ok ? '' : '（spec §4.2 の一覧にない。この章から張れるのは講座 A の ' + ((XREF[pad] || []).join('・') || 'なし') + ' だけ。講座 C へは張らない）'}`); }
+for (const m of html.matchAll(/href="\.\.\/([a-z-]+)\/#ch(\w+)"/g)) { const ok = (m[1] === 'rates' && (IS_APX || (XREF[pad] || []).includes(m[2].padStart(2, '0')))) || (m[1] === 'idxopt' && (XREFC[pad] || []).includes(m[2].padStart(2, '0'))); say(ok, `他講座への相互参照 ../${m[1]}/#ch${m[2]}${ok ? '' : '（spec §4.2 の一覧にない。この章から張れるのは講座 A の ' + ((XREF[pad] || []).join('・') || 'なし') + ' だけ。講座 C へは spec の「この講座から講座 C へ」の一覧の章だけ）'}`); }
 for (const m of html.matchAll(/href="#ch(\w+)"/g)) { const n = m[1]; say((course.chapters || []).some(c => c.num === n || c.num === n.padStart(2, '0')), `章リンク #ch${n} が course.json の章にある`); }
 // 6 略語の初出の候補（括弧が近くにないもの）
 const seen = new Set(['AI', 'ID', 'IT', 'bp']);
