@@ -1,0 +1,54 @@
+<!--
+num: I1
+part: 0
+title: この講座の使い方と、お断り
+track: 入口
+time: 15
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>この講座が<b>公式の資料ではなく</b>、学習用のまとめであることと、最新の情報の確かめ方を説明できる。</li>
+    <li>講座の<b>4 つの部</b>の流れと、動かして確かめられる 3 つの部品の場所を言える。</li>
+    <li>数字（料金・制限）と<b>確認日</b>の扱い方、コードの<b>確かめ方の範囲</b>を知っている。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：特にありません。プログラミングの経験が浅い人、「黒い画面」（ターミナル）に慣れていない人も読めるように書いています。</p>
+</section>
+
+<div class="callout warn"><span class="ttl">お断り：公式の資料ではありません</span>
+  <p>この講座は、Anthropic の公式の資料ではありません。公式ドキュメントを読んで書いた、<b>学習用のまとめ</b>です。モデルの名前、料金、制限、機能、コードの書き方は変わります。実際に使うときは、公式ドキュメント（platform.claude.com）で、最新で正確な情報を確かめてください。この講座は、Anthropic や Claude のロゴ・公式の図版を使わず、公式を装うこともしません。</p></div>
+
+<h3>この講座のゴール</h3>
+<p><b>Claude API</b>（クロード・エーピーアイ）は、自分のプログラムから Claude を呼び出すための入口です。チャットの画面で話しかける代わりに、プログラムが文章を送り、答えを受け取ります。この講座は、その最初の 1 回から、仕事の仕組みに組み込むところまでを順に学びます。</p>
+<p>全体の流れは、次の図のとおりです。工程を押すか「次へ」で進むと、各段階で何をするかが出ます。</p>
+<div data-widget="flow" data-src="cI1-flow"></div>
+
+<h3>4 つの部と、動かせる部品</h3>
+<p>講座は 4 つの部に分かれています。行を押すと、その部で何ができるようになるかが出ます。</p>
+<div data-widget="table" data-src="cI1-map"></div>
+<p>動かして確かめられる目玉の部品は 3 つです。第 04 章の「リクエストの組み立て」、第 05 章の「料金の見積もり」、第 09 章の「ツール利用の流れ」です。ほかの章にも、図や表や確認問題があります。</p>
+
+<h3>事実の扱い方：確認日と、数字の置き場所</h3>
+<p>この講座の事実は、<b>2026 年 11 月 18 日</b>に公式ドキュメントで確かめたものです。それぞれの章の「参照資料」の表に、資料の名前と、確認日が付いています。確かめられなかったことは、書いていません。</p>
+<p>料金とレート制限の<b>数字は、第 05 章の 1 か所だけ</b>に書きました。ほかの章は、そこを参照します。数字が変わったときに、直す場所を 1 つにするためです。</p>
+<p>コードの例は、公式ドキュメントの現行の書き方に合わせて、短く自分で書きました。構文の検査はしましたが、API を実際に呼んで確かめてはいません。実行すると、手元の環境や API の状態で、違う結果が出ることがあります。うまく動かないときは、第 07 章のエラーの表と、公式のクイックスタートを見てください。</p>
+<div class="callout tip"><span class="ttl">この講座の約束</span>
+  <p>API キーの実物や、実物に見える文字列は、どこにも書いていません。コードでは「環境変数から読む」書き方だけを使います。</p></div>
+
+<h3>つまずきやすい点</h3>
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p>1 つ目は、<b>チャットの画面の Claude と、API は別の入口</b>であることです。画面の使い方を知っていても、API には、キーの準備と支払いの設定が要ります（第 01〜02 章）。2 つ目は、モデルの名前や数字を<b>記憶で書かない</b>ことです。古い記事のコードは、今のモデルでエラーになることがあります（第 04 章、第 07 章）。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3><div data-widget="quiz" data-src="cI1-quiz"></div></section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 18 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/get-started" target="_blank" rel="noopener">Get started with Claude</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>入口は Claude Console で、API キーで認証できること。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/api/overview" target="_blank" rel="noopener">API overview</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>Claude API の位置づけ（base URL、SDK の一覧）。</td></tr>
+      <tr><td>この講座</td><th scope="row">4 つの部の流れ</th><td>この講座</td><td>—</td><td>講座の構成の説明。</td></tr>
+    </tbody>
+  </table></div>
+</section>

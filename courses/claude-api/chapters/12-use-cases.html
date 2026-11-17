@@ -1,0 +1,193 @@
+<!--
+num: 12
+part: 4
+title: 利用例 7 つ：入れるもの・返るもの・人の確認
+track: 実践
+time: 60
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>7 つの利用例について、<b>入れるもの・返るもの・人が確かめる場所</b>を言える。</li>
+    <li>共通の関数 <code>ask()</code> を土台に、短いコードの骨組みを読める。</li>
+    <li>自分の仕事で、<b>どこまで任せ、どこで人が見るか</b>を、図に描ける。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：第 08〜11 章（プロンプト、構造化した出力、ツール、画像・PDF、バッチ）。</p>
+</section>
+
+<div class="callout note"><span class="ttl">この章のコードについて</span>
+  <p>どの例も、<b>骨組み</b>です。構文の検査だけをして、API を呼んで動かしてはいません。入力の文面・ファイル・データは、すべて架空です。実際に使うときは、エラーへの備え（第 07 章）、入力の検査、記録、費用の見積もり（第 05 章）を足します。</p></div>
+
+<h3>共通の土台：ask() 関数</h3>
+<p>多くの例で使う、小さな関数です。答えが途中で切れたら、黙って使わず、エラーにします（第 07 章）。</p>
+<pre><code class="lang-python">import json
+import anthropic
+
+client = anthropic.Anthropic()
+
+
+def ask(system, user, max_tokens=1000, model="claude-haiku-5-5", **extra):
+    """どの例でも使う共通の関数。答えの文章を返す。"""
+    response = client.messages.create(
+        model=model,
+        max_tokens=max_tokens,
+        system=system,
+        messages=[{"role": "user", "content": user}],
+        **extra,
+    )
+    if response.stop_reason == "max_tokens":
+        raise RuntimeError("答えが途中で切れました。max_tokens を見直してください")
+    return next(b.text for b in response.content if b.type == "text")
+</code></pre>
+
+<h3>全体の見取り図：どこで人が確かめるか</h3>
+<div data-widget="table" data-src="c12-map"></div>
+
+<h3>利用例 1：問い合わせの返信の下書き</h3>
+<p>お客様の問い合わせを読み、返信の下書きを作ります。送るのは人です。</p>
+<div data-widget="flow" data-src="c12-uc1"></div>
+<p>基本の型です。system に役割と「分からないことは推測しない」を書き、入力をタグで囲みます（第 08 章）。</p>
+<pre><code class="lang-python">def draft_reply(inquiry_text):
+    system = "あなたは、お客様への返信の下書きを書く担当者です。事実が分からない点は、推測せず『確認します』と書く。"
+    return ask(system, "&lt;inquiry&gt;" + inquiry_text + "&lt;/inquiry&gt;\n3 段落以内で、返信の下書きを書いてください。")
+
+# 下書きは、人が読んで直してから送る。自動では送らない。
+</code></pre>
+<h3>利用例 2：議事録から、決定事項と宿題を抜き出す</h3>
+<p>議事録を、決定事項と、担当者つきの宿題に整理します。</p>
+<div data-widget="flow" data-src="c12-uc2"></div>
+<p>答えを JSON の形にそろえる、構造化した出力（第 08 章）を使います。</p>
+<pre><code class="lang-python">MINUTES_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "decisions": {"type": "array", "items": {"type": "string"}},
+        "todos": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {"owner": {"type": "string"}, "task": {"type": "string"}},
+                "required": ["owner", "task"],
+                "additionalProperties": False,
+            },
+        },
+    },
+    "required": ["decisions", "todos"],
+    "additionalProperties": False,
+}
+
+
+def summarize_minutes(minutes_text):
+    text = ask(
+        "議事録から、決定事項と宿題を抜き出す。議事録に書かれていないことは、足さない。",
+        "&lt;minutes&gt;" + minutes_text + "&lt;/minutes&gt;",
+        output_config={"format": {"type": "json_schema", "schema": MINUTES_SCHEMA}},
+    )
+    return json.loads(text)
+
+# 担当者の名前と期限は、出席者が読んで確かめてから、配る。
+</code></pre>
+<h3>利用例 3：請求書の PDF から、項目を抜き出す</h3>
+<p>PDF の請求書から、会社名・金額・支払期限を取り出します。</p>
+<div data-widget="flow" data-src="c12-uc3"></div>
+<p>PDF を document ブロックで渡します（第 10 章）。金額は、読み違いが起きうるので、別の経路で照合します。</p>
+<pre><code class="lang-python">def extract_invoice(pdf_base64):
+    response = client.messages.create(
+        model="claude-haiku-5-5",
+        max_tokens=1000,
+        messages=[{
+            "role": "user",
+            "content": [
+                {"type": "document", "source": {"type": "base64", "media_type": "application/pdf", "data": pdf_base64}},
+                {"type": "text", "text": "会社名、金額、支払期限を、JSON で抜き出してください。読み取れない項目は null にする。"},
+            ],
+        }],
+    )
+    return next(b.text for b in response.content if b.type == "text")
+
+# 金額は、別の経路の値（発注データなど）と照合し、合わないものは人が見る。
+</code></pre>
+<h3>利用例 4：社内資料への質問応答</h3>
+<p>複数の資料を渡して、資料だけを根拠に質問に答えさせます。</p>
+<div data-widget="flow" data-src="c12-uc4"></div>
+<p>資料を上に、質問を最後に置き、根拠の引用を求めます（第 08 章）。引用の実在は、コードや人で確かめます。</p>
+<pre><code class="lang-python">def answer_from_docs(question, docs):
+    parts = ['&lt;document index="%d"&gt;%s&lt;/document&gt;' % (i + 1, d) for i, d in enumerate(docs)]
+    user = "&lt;documents&gt;" + "".join(parts) + "&lt;/documents&gt;\n"
+    user += "上の資料だけを根拠に答えてください。根拠の文を引用し、資料にないことは『資料にありません』と答える。\n"
+    user += "&lt;question&gt;" + question + "&lt;/question&gt;"
+    return ask("あなたは、社内資料に基づいて答える担当者です。", user)
+
+# 引用が、資料に実在するかを確かめる。重要な回答は、人が原典を見る。
+</code></pre>
+<h3>利用例 5：文章の校正の補助</h3>
+<p>文章の誤字、表記ゆれ、分かりにくい文を、指摘させます。</p>
+<div data-widget="flow" data-src="c12-uc5"></div>
+<p>直すかどうかは、書き手が決めます。指摘は「提案」として見せます。</p>
+<pre><code class="lang-python">def proofread(text):
+    system = "あなたは、日本語の校正者です。誤字、表記ゆれ、分かりにくい文を指摘する。意味は変えない。"
+    return ask(system, "&lt;text&gt;" + text + "&lt;/text&gt;\n指摘を、箇条書きで出してください。直した文は、提案として添える。")
+
+# 指摘は『提案』として見せ、採用するかどうかは書き手が決める。
+</code></pre>
+<h3>利用例 6：大量の文面を、夜間にまとめて分類する</h3>
+<p>数千件の文面を、決まった種類に分けます。急ぎではない仕事です。</p>
+<div data-widget="flow" data-src="c12-uc6"></div>
+<p>バッチ処理（第 10 章）で、費用を抑えます。結果は custom_id で突き合わせます。</p>
+<pre><code class="lang-python">from anthropic.types.message_create_params import MessageCreateParamsNonStreaming
+from anthropic.types.messages.batch_create_params import Request
+
+
+def submit_classification(items):
+    """items: {id: 文面}。夜間に、まとめて分類を頼む。"""
+    requests = [
+        Request(
+            custom_id=item_id,
+            params=MessageCreateParamsNonStreaming(
+                model="claude-haiku-5-5",
+                max_tokens=50,
+                messages=[{"role": "user", "content": "次の文面を『要望』『不具合』『その他』のどれかで答えてください。\n" + body}],
+            ),
+        )
+        for item_id, body in items.items()
+    ]
+    return client.messages.batches.create(requests=requests).id
+
+# 一部を抜き取って、人が正しさを確かめる。誤りの割合を、記録する。
+</code></pre>
+<h3>利用例 7：在庫を調べて答える社内アシスタント</h3>
+<p>自社の在庫データを、道具として渡し、質問に答えさせます。</p>
+<div data-widget="flow" data-src="c12-uc7"></div>
+<p>ツールの利用（第 09 章）です。道具は読むだけにし、回数の上限を置きます（第 11 章）。</p>
+<pre><code class="lang-python">def stock_assistant(question, tools, run_tool):
+    messages = [{"role": "user", "content": question}]
+    for _ in range(5):
+        r = client.messages.create(model="claude-haiku-5-5", max_tokens=1000, tools=tools, messages=messages)
+        if r.stop_reason != "tool_use":
+            return next(b.text for b in r.content if b.type == "text")
+        messages.append({"role": "assistant", "content": r.content})
+        results = [
+            {"type": "tool_result", "tool_use_id": b.id, "content": run_tool(b.name, b.input)}
+            for b in r.content if b.type == "tool_use"
+        ]
+        messages.append({"role": "user", "content": results})
+    raise RuntimeError("回数の上限に達しました")
+
+# 道具は『読むだけ』にする。発注などの書き込みは、人の承認をはさむ。
+</code></pre>
+
+<h3>つまずきやすい点</h3>
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p>1 つ目は、<b>確認の場所を決めないまま作る</b>ことです。出力が、そのまま外へ出る形にしないでください。2 つ目は、<b>少数の例だけで、うまくいったと判断する</b>ことです。端の例を含む評価の組で確かめます（第 06 章）。3 つ目は、<b>入力を信用しすぎる</b>ことです。問い合わせや資料の中の文が、モデルへの指示のように働くことがあります（第 13 章）。4 つ目は、<b>個人情報を、無造作に送る</b>ことです（第 13 章）。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3><div data-widget="quiz" data-src="c12-quiz"></div></section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 18 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>この講座の第 04〜11 章</td><th scope="row">各章の公式資料</th><td>Anthropic（公式ドキュメント）</td><td>確認 2026 年 11 月 18 日</td><td>コードの書き方（Messages、構造化した出力、document ブロック、バッチ、ツールの利用）は、各章の参照資料にある公式ページに沿っています。</td></tr>
+      <tr><td>この講座の整理</td><th scope="row">7 つの利用例と、人の確認の位置</th><td>この講座</td><td>—</td><td>公式の事例ではなく、学習用に作った架空の例です。</td></tr>
+    </tbody>
+  </table></div>
+</section>

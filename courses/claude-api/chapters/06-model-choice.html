@@ -1,0 +1,52 @@
+<!--
+num: 06
+part: 2
+title: モデルの選び方
+track: 仕組み
+time: 30
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>4 つのモデルの<b>位置づけ</b>と、API で指定する ID を、表で確かめられる。</li>
+    <li>モデルを選ぶ<b>基準</b>（性能・速さ・費用・努力量）と、公式が示す 2 つの始め方を説明できる。</li>
+    <li>「軽い作業は軽いモデルで」という使い分けを、<b>評価</b>で確かめる考え方を説明できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch05">第 05 章</a>（料金の表）。料金の数字はこの章では繰り返さず、第 05 章を見ます。</p>
+</section>
+
+<h3>4 つのモデル</h3>
+<p>確認日の時点で、公式のモデル一覧は、4 つの最新モデルを挙げています。Claude Fable 5.2、Claude Opus 5.5、Claude Sonnet 5.5、Claude Haiku 5.5 です。API には、<b>モデル ID</b>（文字列）で指定します（出典：Models overview、2026 年 11 月 18 日確認）。</p>
+<div data-widget="table" data-src="c06-models"></div>
+<p>公式のモデル一覧は、多くの仕事の出発点として Opus 5.5 を勧め、要求の厳しい推論や長時間のエージェントの仕事には Fable 5.2 を挙げています。Haiku 5.5 は、最も低い遅延と価格が必要なときの選択肢です（出典：Choosing a model）。</p>
+<div class="callout note"><span class="ttl">モデル ID は「固定された版」</span>
+  <p>公式ドキュメントによると、4.6 世代以降の日付のないモデル ID は、<b>1 つの固定されたモデルを指します</b>。重みや設定は更新されず、更新版は新しい ID で出ます。ただし、各 ID には、それぞれの<b>廃止の日程</b>があります。古い記事の ID は、使えなくなっていることがあります（出典：Model IDs and versioning）。</p></div>
+
+<h3>選ぶ基準と、2 つの始め方</h3>
+<p>公式の「Choosing a model」は、最初に確かめる基準として、<b>性能</b>・<b>速さ</b>・<b>費用</b>・<b>努力量（effort）</b>を挙げています。effort は、同じモデルの中で、賢さと、速さ・費用のどちらを重くするかを調整するパラメータです（第 07 章）。公式は、「モデルを替えるより、effort の調整のほうが良い手段であることが多い」と書いています。</p>
+<p>始め方は 2 つです。<b>効率優先</b>は、Haiku 5.5 から始めて、足りないときだけ上げます。<b>性能優先</b>は、Opus 5.5 から始めて、余裕があれば下げます。どちらを選んでも、決め手は<b>自分の仕事での評価</b>です。次の図で、決め方の流れを追ってください。</p>
+<div data-widget="flow" data-src="c06-flow"></div>
+
+<h3>軽い作業は、軽いモデルで</h3>
+<p>文章の分類、短い下書き、項目の抜き出しのような、決まった形の大量の仕事は、軽いモデルで足りることがあります。難しい推論や、長い手順の仕事は、強いモデルが必要なことがあります。次の表は、この講座の見方です（公式の表ではありません）。</p>
+<div data-widget="compare" data-src="c06-pattern"></div>
+<p>公式は、複数のモデルを組み合わせる方法も紹介しています。安いモデルと強いモデルを組み合わせ、多くのトークンを安い単価で処理します（出典：Choosing a model）。組み合わせ方の詳しい説明は、公式の Choosing a model のページから案内されています。この講座では扱いません。</p>
+
+<h3>つまずきやすい点</h3>
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p>1 つ目は、<b>評価をせずに</b>、評判や名前で決めることです。公式も、自分の仕事に合った評価の組を作ることを、選ぶ手順の中で最も大事な段階としています。2 つ目は、<b>モデルの ID をコードに散らす</b>ことです。1 か所（設定）にまとめると、入れ替えが楽です。3 つ目は、モデルの入れ替えで、<b>トークンの数え方が変わる</b>ことです。世代によって、同じ文章でもトークン数が違うので、見積もりを取り直します（第 05 章）。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3><div data-widget="quiz" data-src="c06-quiz"></div></section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 18 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/about-claude/models/overview" target="_blank" rel="noopener">Models overview</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>4 つのモデルの名前・API ID・コンテキストウィンドウ・出力の上限（2 回の取得で突き合わせ）。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/about-claude/models/choosing-a-model" target="_blank" rel="noopener">Choosing a model</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>選ぶ基準、2 つの始め方、モデルの選択の表、評価の勧め、組み合わせ。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions" target="_blank" rel="noopener">Model IDs and versioning</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>日付のない ID は固定された版であること、ID ごとの廃止の日程。</td></tr>
+      <tr><td>この講座</td><th scope="row">軽い作業と重い作業の対比</th><td>この講座</td><td>—</td><td>この講座の見方（公式の表ではない）。</td></tr>
+    </tbody>
+  </table></div>
+</section>

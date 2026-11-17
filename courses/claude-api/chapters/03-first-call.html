@@ -1,0 +1,113 @@
+<!--
+num: 03
+part: 1
+title: 最初の 1 回：curl と Python で送る
+track: はじめる
+time: 40
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li><b>curl</b> と <b>Python</b> で、「こんにちは」を 1 回送り、返事を受け取る手順を言える。</li>
+    <li>リクエストを<b>部品ごと</b>（宛先・ヘッダー・本文）に読み、それぞれの役目を説明できる。</li>
+    <li>レスポンスの主な部品（<b>content、stop_reason、usage</b>）の意味を説明できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch02">第 02 章</a>で、環境変数 <code>ANTHROPIC_API_KEY</code> にキーを入れていること。</p>
+</section>
+
+<div class="callout note"><span class="ttl">この章のコードについて</span>
+  <p>コードは、公式のクイックスタートの書き方に合わせて、自分で短く書きました。構文の検査はしましたが、API を実際に呼んで確かめてはいません。最初の例は、軽くて費用の小さいモデル（<code>claude-haiku-5-5</code>）を使います。モデルの違いは第 06 章、料金は第 05 章です（出典：Models overview、2026 年 11 月 18 日確認）。</p></div>
+
+<h3>方法 1：curl で送る</h3>
+<p><b>curl</b>（カール）は、ターミナルから Web に要求を送るコマンドです。macOS と Linux には、たいてい入っています。次の例は、ターミナル（bash 系）の書き方です。行末の <code>\</code> は、「次の行に続く」という意味です。</p>
+<pre><code class="lang-bash">curl https://api.anthropic.com/v1/messages \
+  -H "content-type: application/json" \
+  -H "x-api-key: $ANTHROPIC_API_KEY" \
+  -H "anthropic-version: 2026-10-21" \
+  -d '{
+    "model": "claude-haiku-5-5",
+    "max_tokens": 1000,
+    "messages": [
+      {"role": "user", "content": "こんにちは。自己紹介を 1 文でお願いします。"}
+    ]
+  }'</code></pre>
+<p>この形は、公式のクイックスタートの curl の例と同じ構成です。宛先は <code>https://api.anthropic.com/v1/messages</code>、必須のヘッダーは 3 つ、本文は JSON です（出典：Get started with Claude、API overview）。ただし、キーを<b>ワークスペースに限定せずに作った</b>ときは、4 つ目のヘッダー <code>anthropic-workspace-id</code> も毎回必要です（第 02 章。出典：API overview、Authentication）。Windows の PowerShell では、行の続け方が違うので、次の Python の方法をおすすめします。</p>
+
+<h3>方法 2：Python で送る</h3>
+<p>Python では、公式の <b>SDK</b>（software development kit、開発用の部品集）を使うのが楽です。SDK は、認証のヘッダーや <code>anthropic-version</code> を自動で付けます。Python 3.10 以降が必要です（出典：Python SDK のページ）。準備は、次の 3 行です。</p>
+<pre><code class="lang-bash">python3 -m venv .venv
+source .venv/bin/activate
+pip install anthropic</code></pre>
+<p>1 行目は、このフォルダ専用の Python の環境（仮想環境）を作ります。2 行目で、その環境に入ります。Windows では、2 行目のコマンドが違います。3 行目で、公式の SDK をインストールします。次に、<code>first.py</code> というファイルを作って、次の内容を保存します。</p>
+<pre><code class="lang-python">import anthropic
+
+client = anthropic.Anthropic()  # 環境変数 ANTHROPIC_API_KEY を自動で読む
+
+message = client.messages.create(
+    model="claude-haiku-5-5",
+    max_tokens=1000,
+    messages=[
+        {"role": "user", "content": "こんにちは。自己紹介を 1 文でお願いします。"}
+    ],
+)
+
+for block in message.content:
+    if block.type == "text":
+        print(block.text)
+
+print("停止の理由:", message.stop_reason)
+print("使ったトークン（入力・出力）:", message.usage.input_tokens, message.usage.output_tokens)</code></pre>
+<p>実行は、<code>python first.py</code> です。答えの文章と、停止の理由と、使ったトークンの数が出ます。<code>message.content</code> は<b>ブロックの一覧</b>で、答えの文章は <code>type</code> が <code>text</code> のブロックにあります。公式のクイックスタートも、同じように、ブロックをたどって text だけを表示します。</p>
+<details><summary>参考：TypeScript の例</summary>
+<pre><code class="lang-typescript">import Anthropic from "@anthropic-ai/sdk";
+
+const client = new Anthropic();  // 環境変数 ANTHROPIC_API_KEY を自動で読む
+
+const message = await client.messages.create({
+  model: "claude-haiku-5-5",
+  max_tokens: 1000,
+  messages: [{ role: "user", content: "こんにちは。自己紹介を 1 文でお願いします。" }],
+});
+
+for (const block of message.content) {
+  if (block.type === "text") console.log(block.text);
+}</code></pre>
+<p>インストールは <code>npm install @anthropic-ai/sdk</code> です。この例は、ファイルの先頭の階層で <code>await</code> を使うので、公式のクイックスタートと同じく、<code>npm pkg set type=module</code> で設定し、<code>npx tsx first.ts</code> のように TypeScript を実行できる道具で動かします。公式は、Python と TypeScript のほかに、C#・Go・Java・PHP・Ruby の SDK も出しています（出典：Get started with Claude、API overview）。</p></details>
+
+<h3>リクエストを、部品ごとに読む</h3>
+<p>curl の例は、3 種類の部品でできています。<b>宛先</b>（どこへ）、<b>ヘッダー</b>（誰が、どの形式で）、<b>本文</b>（何を頼むか）です。部品を押すと、役目と例が出ます。</p>
+<div data-widget="ident" data-src="c03-req"></div>
+<p>ヘッダーの <code>anthropic-version</code> は、API のバージョンを指定します。公式は、新しい統合では最新のバージョンを使うよう勧めています（出典：API versions）。この講座の確認日の時点で、最新は <code>2026-10-21</code> です。バージョンによって、使えるパラメータが違います（第 07 章）。</p>
+
+<h3>レスポンスを、部品ごとに読む</h3>
+<p>返ってくる JSON も、部品に分けて読みます。<code>content</code>（答え）、<code>stop_reason</code>（止まった理由）、<code>usage</code>（使ったトークン数）が、特に大事です。</p>
+<div data-widget="ident" data-src="c03-res"></div>
+
+<h3>1 回の流れ</h3>
+<p>プログラムを動かしてから、答えが表示されるまでの流れを、一手ずつ見ます。ボタンで再生できます。</p>
+<div data-widget="seq" data-src="c03-seq"></div>
+
+<h3>うまくいかないとき</h3>
+<p>最初の 1 回は、よくつまずきます。次の表は、最初に見る点です。エラーの種類の全体は、第 07 章で学びます。</p>
+<div data-widget="table" data-src="c03-trouble"></div>
+
+<h3>つまずきやすい点</h3>
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p>1 つ目は、<code>max_tokens</code> が小さすぎて、答えが途中で切れることです。<code>stop_reason</code> が <code>max_tokens</code> なら、これです。2 つ目は、<code>message.content[0].text</code> のように<b>先頭のブロックだけ</b>を読む書き方で、先頭が text でないと失敗することです。type を確かめてから読みます。3 つ目は、インターネット上の古い記事のモデル名やヘッダーを、そのまま写すことです。公式ドキュメントで、今の書き方を確かめてください。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3><div data-widget="quiz" data-src="c03-quiz"></div></section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 18 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/get-started" target="_blank" rel="noopener">Get started with Claude</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>curl・Python・TypeScript の最初の呼び出し、必須のヘッダー、レスポンスの形。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/api/overview" target="_blank" rel="noopener">API overview</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>ヘッダーの一覧（anthropic-version は必須）、SDK が自動で付けること。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/api/versioning" target="_blank" rel="noopener">API versions</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>最新のバージョン 2026-10-21 を使う勧め。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/python" target="_blank" rel="noopener">Python SDK</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>Python 3.10 以降、pip install anthropic。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/about-claude/models/overview" target="_blank" rel="noopener">Models overview</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>モデルの API ID（claude-haiku-5-5）。</td></tr>
+      <tr><td>この講座</td><th scope="row">例の質問文、ファイル名 first.py</th><td>この講座</td><td>—</td><td>説明のための例（公式の例ではない）。</td></tr>
+    </tbody>
+  </table></div>
+</section>

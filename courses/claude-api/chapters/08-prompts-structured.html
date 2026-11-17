@@ -1,0 +1,100 @@
+<!--
+num: 08
+part: 3
+title: プロンプトの書き方と、構造化した出力
+track: 広げる
+time: 45
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>プロンプトの基本（<b>明確に、文脈を添え、例を示し、XML タグで区切る</b>）を、公式のガイドに沿って説明できる。</li>
+    <li>長い資料を入れるときの<b>置き場所</b>（資料は上、質問は最後）を言える。</li>
+    <li>答えを JSON の形にそろえる<b>構造化した出力</b>の書き方と、注意点を説明できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch04">第 04 章</a>（system と messages）。</p>
+</section>
+
+<h3>プロンプトの基本：新人に頼むつもりで書く</h3>
+<p><b>プロンプト</b>（prompt）は、モデルに渡す指示と材料の全体です。公式の「Prompting best practices」は、Claude を「優秀だが、あなたの職場の決まりを知らない新人」と考えるよう勧めています。確かめ方も具体的です。<b>文脈の少ない同僚に、そのプロンプトを見せて、従ってもらう。同僚が迷うなら、Claude も迷う</b>、というものです（出典：Prompting best practices、2026 年 11 月 18 日確認）。</p>
+<p>基本は 5 つです。次の表は、あいまいな依頼と、整えた依頼を並べたものです（例は架空）。</p>
+<div data-widget="compare" data-src="c08-prompt"></div>
+<ul>
+  <li><b>明確に、直接に書く</b>：順序や漏れが大事なときは、番号つきの手順にします。</li>
+  <li><b>理由を添える</b>：「省略記号を使わない」だけでなく、「音声で読み上げるので、省略記号は読めない」と書くと、モデルが意図を一般化できます。</li>
+  <li><b>例を示す</b>：公式は、<b>3〜5 個</b>の、関連があり、多様で、構造の見える例を勧め、<code>&lt;example&gt;</code> のタグで、指示と区別します。</li>
+  <li><b>XML タグで区切る</b>：指示・文脈・入力を、それぞれのタグで囲むと、取り違えが減ります。タグの名前は、一貫して、内容を表す名前にします。</li>
+  <li><b>役割を system に書く</b>：1 文でも効果があります。</li>
+</ul>
+
+<h3>プロンプトの層と、置き場所</h3>
+<p>次の図は、プロンプトの部品を、上から並べたものです。公式は、長い資料（目安で 2 万トークン以上）を使うときは、<b>資料を上に置き、指示と質問を最後に置く</b>と、質が上がると書いています。テストで、最大で 30% 上がった、とあります。部品を押すと、書き方の例が出ます。</p>
+<div data-widget="layers" data-src="c08-layers"></div>
+<pre><code class="lang-text">&lt;documents&gt;
+  &lt;document index="1"&gt;（ここに、長い資料を入れる）&lt;/document&gt;
+&lt;/documents&gt;
+
+&lt;instructions&gt;
+上の資料だけを根拠に、質問に答えてください。まず、根拠になる部分を引用してください。
+&lt;/instructions&gt;
+
+&lt;question&gt;（ここに、質問を書く）&lt;/question&gt;</code></pre>
+<p>「まず、関連する部分を引用させる」は、公式が長い資料で勧める方法です。答えの根拠を、確かめやすくなります。</p>
+
+<h3>出力の形を、指定する</h3>
+<p>公式は、「してはいけないこと」より、「してほしいこと」を書くよう勧めています。たとえば、「マークダウンを使わない」より、「滑らかな段落の文章で書く」です。形式を、タグで指定する方法もあります。</p>
+<div class="callout note"><span class="ttl">書き出しの指定（プレフィル）は使えません</span>
+  <p>Claude 4.6 以降では、assistant の書き出しを指定する方法が使えず、400 になります（第 04 章）。形をそろえたいときは、次の「構造化した出力」か、system への指示を使います。</p></div>
+
+<h3>構造化した出力：JSON の形をそろえる</h3>
+<p>プログラムで答えを使うには、答えが決まった形の JSON であってほしいものです。「JSON で答えて」と頼むだけでは、形が崩れることがあります。<b>構造化した出力</b>（structured outputs）は、<b>JSON Schema</b>（JSON の形を決める書き方）を渡して、答えをその形にそろえる機能です。公式ドキュメントでは、リクエストの <code>output_config.format</code> に、<code>type: "json_schema"</code> と schema を書きます（出典：Structured outputs）。</p>
+<pre><code class="lang-python">import json
+import anthropic
+
+client = anthropic.Anthropic()
+
+schema = {
+    "type": "object",
+    "properties": {
+        "company": {"type": "string"},
+        "amount": {"type": "number"},
+        "due_date": {"type": "string"},
+    },
+    "required": ["company", "amount", "due_date"],
+    "additionalProperties": False,
+}
+
+response = client.messages.create(
+    model="claude-haiku-5-5",
+    max_tokens=1000,
+    messages=[{"role": "user", "content": "次の請求書の文面から、会社名・金額・支払期限を抜き出してください。\n\n（ここに、架空の文面を入れる）"}],
+    output_config={"format": {"type": "json_schema", "schema": schema}},
+)
+
+if response.stop_reason == "end_turn":
+    text = next(b.text for b in response.content if b.type == "text")
+    data = json.loads(text)
+    print(data)
+else:
+    print("形が完成していない可能性：", response.stop_reason)</code></pre>
+<p>公式は、Pydantic のモデルを渡す <code>client.messages.parse()</code> を、推奨の方法としています。注意点も、公式に書かれています。</p>
+<div data-widget="table" data-src="c08-struct"></div>
+
+<h3>つまずきやすい点</h3>
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p>1 つ目は、<b>構造化した出力でも、中身の正しさは保証されない</b>ことです。形は schema どおりでも、金額の読み違いはありえます。人の確認や、コードでの検算を置きます（第 12 章）。2 つ目は、<b>stop_reason を見ずに JSON を読む</b>ことです。max_tokens で切れたり、refusal だったりすると、schema に合わないことがあります。3 つ目は、<b>プロンプトを直感だけで直す</b>ことです。直す前後を、同じ例で比べる評価（第 06 章）を、少しでも置きます。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3><div data-widget="quiz" data-src="c08-quiz"></div></section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 18 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices" target="_blank" rel="noopener">Prompting best practices</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>明確さ、文脈、例（3〜5 個）、XML タグ、役割、出力の形、長い資料の置き場所。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/build-with-claude/structured-outputs" target="_blank" rel="noopener">Structured outputs</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>output_config.format、制約、refusal と max_tokens の扱い。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/build-with-claude/working-with-messages" target="_blank" rel="noopener">Working with Messages</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>プレフィルが 4.6 以降で使えないこと。</td></tr>
+      <tr><td>架空（見本のため）</td><th scope="row">問い合わせの例文、請求書の項目</th><td>この講座</td><td>—</td><td>説明のための架空の例。</td></tr>
+    </tbody>
+  </table></div>
+</section>

@@ -1,0 +1,118 @@
+<!--
+num: 11
+part: 3
+title: エージェント：ツールを繰り返し使う仕組み
+track: 広げる
+time: 35
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li><b>エージェント</b>が、第 09 章のツール利用の繰り返しを土台にしたものだと説明できる。</li>
+    <li>自分で作る方法、Agent SDK、ホスト型、MCP の違いを、選ぶ観点で言える。</li>
+    <li>回数の上限と、人の確認という、エージェントの<b>歯止め</b>を、設計に入れられる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch09">第 09 章</a>（ツールの利用）。</p>
+</section>
+
+<h3>エージェントとは</h3>
+<p>公式の Agent SDK の説明では、<b>エージェント</b>は、自分で手順を計画し、ファイルを読む、コマンドを動かす、コードを直す、といった道具を呼びながら、仕事を終わらせるアプリケーションです（出典：Agent SDK overview、2026 年 11 月 18 日確認）。仕組みは、第 09 章の繰り返しです。違いは、<b>何回回すか、誰が止めるか</b>にあります。</p>
+<div data-widget="flow" data-src="c11-loop"></div>
+<div class="callout warn"><span class="ttl">繰り返しは、止まる設計が先です</span>
+  <p>モデルが道具を呼び続けると、時間も費用もかかります。回数の上限、使ってよい量の上限、書き換えや送信の前の人の確認を、先に決めます（第 12・13 章）。</p></div>
+
+<h3>自分で書く：歯止めつきの繰り返し</h3>
+<p>次の例は、第 09 章のコードに、<b>回数と使用量の上限</b>と、<b>読むだけの道具以外は人に確認する</b>仕組みを足したものです。道具の定義は省いています。<b>構文の検査だけをして、API を呼んで動かしてはいません。</b></p>
+<pre><code class="lang-python">import anthropic
+
+client = anthropic.Anthropic()
+
+SAFE_TOOLS = {"get_stock"}  # 確認なしで動かしてよい、読むだけの道具
+MAX_STEPS = 8  # 繰り返しの上限
+MAX_TOKENS_TOTAL = 20000  # 使ってよい出力トークンの合計の上限
+
+
+def run_tool(name, args):
+    if name == "get_stock":
+        return "12"  # 架空の結果
+    return "未対応の道具です"
+
+
+def ask_human(name, args):
+    answer = input(f"道具 {name} を {args} で実行してよいですか？ (y/n) ")
+    return answer.strip().lower() == "y"
+
+
+def run_agent(task, tools):
+    messages = [{"role": "user", "content": task}]
+    used = 0
+    for _ in range(MAX_STEPS):
+        response = client.messages.create(
+            model="claude-haiku-5-5", max_tokens=1000, tools=tools, messages=messages
+        )
+        used += response.usage.output_tokens
+        if response.stop_reason != "tool_use":
+            return response  # 終わり
+        if used &gt; MAX_TOKENS_TOTAL:
+            raise RuntimeError("使用量の上限に達したので、中断します")
+        messages.append({"role": "assistant", "content": response.content})
+        results = []
+        for block in response.content:
+            if block.type != "tool_use":
+                continue
+            if block.name in SAFE_TOOLS or ask_human(block.name, block.input):
+                results.append({"type": "tool_result", "tool_use_id": block.id, "content": run_tool(block.name, block.input)})
+            else:
+                results.append({"type": "tool_result", "tool_use_id": block.id, "content": "利用者が実行を断りました", "is_error": True})
+        messages.append({"role": "user", "content": results})
+    raise RuntimeError("回数の上限に達したので、中断します")
+</code></pre>
+
+<h3>どの方法で作るか</h3>
+<p>公式の Agent SDK のページには、作り方の違いを整理した表があります。次の表は、それをこの講座で言い直したものです。</p>
+<div data-widget="table" data-src="c11-ways"></div>
+
+<h3>MCP：外部の道具を、共通の決まりでつなぐ</h3>
+<p><b>MCP</b>（Model Context Protocol）は、外部の道具やデータを、共通の決まりでつなぐ仕組みです。Messages API には、<b>MCP コネクタ</b>があり、公開された MCP サーバーを、自分で MCP の部品を書かずに、リクエストに載せられます。公式の説明では、<b>ベータ機能</b>で、専用のヘッダー（betas）が要ります。対応は<b>ツールの呼び出しだけ</b>で、サーバーは https で公開されている必要があり、手元の標準入出力のサーバーは直接つなげません。API が、あなたに代わって MCP サーバーを呼びます（出典：MCP connector）。</p>
+<div data-widget="arch" data-src="c11-mcp"></div>
+<pre><code class="lang-python">import anthropic
+
+client = anthropic.Anthropic()
+
+response = client.beta.messages.create(
+    model="claude-haiku-5-5",
+    max_tokens=1000,
+    messages=[{"role": "user", "content": "使える道具を教えてください。"}],
+    mcp_servers=[
+        {
+            "type": "url",
+            "url": "https://example.com/mcp",  # 例。公開された https の MCP サーバーの URL
+            "name": "example-mcp",
+            "authorization_token": "YOUR_TOKEN",  # 必要なときだけ。実際の値はコードに書かない
+        }
+    ],
+    tools=[{"type": "mcp_toolset", "mcp_server_name": "example-mcp"}],
+    betas=["mcp-client-2025-11-20"],
+)
+print(response.content)
+</code></pre>
+<p>書き換えや削除ができる道具は、許可する道具の一覧から外す（denylist）か、最初は全部を無効にして必要なものだけ有効にする（allowlist）のが、公式の勧めです。</p>
+
+<h3>つまずきやすい点</h3>
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p>1 つ目は、<b>最初から強い権限を与える</b>ことです。読むだけの道具から始め、書く・送る・消す道具は、人の確認をはさみます。2 つ目は、<b>上限がない</b>ことです。回数・使用量・時間の上限を、コードに書きます。3 つ目は、<b>外部のサーバーを信用しすぎる</b>ことです。接続先の道具が返す文章にも、指示のような文が混ざりえます（第 13 章）。4 つ目は、<b>ベータ機能を、基盤にしてしまう</b>ことです。仕様が変わりうるので、公式の更新を確かめます。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3><div data-widget="quiz" data-src="c11-quiz"></div></section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 18 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://code.claude.com/docs/en/agent-sdk/overview" target="_blank" rel="noopener">Agent SDK overview</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>エージェントの定義、Agent SDK・Client SDK・ホスト型の違い。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/agents-and-tools/mcp-connector" target="_blank" rel="noopener">MCP connector</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>MCP コネクタの状態（ベータ）、対応範囲、設定の形、denylist と allowlist。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview" target="_blank" rel="noopener">Tool use overview</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>ツール利用の繰り返しと、実行する側の区別。</td></tr>
+      <tr><td>架空（見本のため）</td><th scope="row">道具の名前、結果、URL</th><td>この講座</td><td>—</td><td>説明のための架空の例。</td></tr>
+    </tbody>
+  </table></div>
+</section>

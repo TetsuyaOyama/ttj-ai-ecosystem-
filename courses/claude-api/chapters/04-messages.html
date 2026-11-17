@@ -1,0 +1,74 @@
+<!--
+num: 04
+part: 2
+title: メッセージの形と、会話の続け方
+track: 仕組み
+time: 40
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>リクエストの<b>メッセージの形</b>（system、user、assistant の置き場所）を説明できる。</li>
+    <li>API が<b>会話を覚えていない</b>こと、会話の続きは履歴を毎回送って作ることを、コードで確かめられる。</li>
+    <li>実験台で、部品（system、会話の長さ、ツール、構造化した出力、ストリーミング）を選び、<b>リクエストの JSON の形が変わる</b>ことを確かめられる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch03">第 03 章</a>。リクエストの本文（model、max_tokens、messages）を読めること。</p>
+</section>
+
+<h3>メッセージの 3 つの置き場所</h3>
+<p>リクエストの本文で、会話に関わる部品は 3 つです。<b>system</b>（役割や決まりを書く場所）、<b>user</b>（利用者の発言）、<b>assistant</b>（モデルの過去の答え）です。user と assistant は、<code>messages</code> の一覧の中に、<b>交互に</b>並べます。system は、<code>messages</code> の外の、本文のトップレベルに書きます（出典：Messages API reference、Working with Messages、2026 年 11 月 18 日確認）。</p>
+<p>補足：公式ドキュメントには、会話の<b>途中で</b>指示を足すために、<code>messages</code> の中に role が <code>system</code> の発言を置く方法もあります。置けるのは user の発言の直後だけで、<code>messages</code> の先頭には置けません。対応するモデルも決まっています（出典：Working with Messages）。最初から効かせたい指示は、これまでどおりトップレベルの <code>system</code> に書きます。この講座では、トップレベルの書き方だけを使います。</p>
+<div data-widget="table" data-src="c04-roles"></div>
+<p>1 つの発言の <code>content</code> は、ただの文章でも書け、ブロックの一覧でも書けます。画像や PDF を付けるときや、ツールの結果を返すときは、ブロックの一覧にします（第 09 章・第 10 章）。</p>
+
+<h3>API は、会話を覚えていない</h3>
+<p>公式ドキュメントは、Messages API を「ステートレス」と説明しています。<b>ステートレス</b>（stateless）とは、前のやり取りを覚えていない、という意味です。だから、会話の続きを話すには、<b>これまでの会話の全部を、毎回送ります</b>（出典：Working with Messages）。モデルの側では、前の呼び出しの内容は残っていません。公式ドキュメントには、API の側で会話を保持するベータ機能（message threads）も載っていますが、この講座は、履歴を毎回送る基本の形だけを扱います。</p>
+<p>次の Python は、会話の履歴を自分で持ち、毎回全部を送る、最小の例です。</p>
+<pre><code class="lang-python">import anthropic
+
+client = anthropic.Anthropic()
+history = []  # これまでの会話。毎回、全部を送る
+
+
+def ask(text):
+    history.append({"role": "user", "content": text})
+    message = client.messages.create(
+        model="claude-haiku-5-5",
+        max_tokens=1000,
+        system="あなたは、丁寧で簡潔に答える日本語のアシスタントです。",
+        messages=history,
+    )
+    answer = "".join(b.text for b in message.content if b.type == "text")
+    history.append({"role": "assistant", "content": answer})
+    return answer
+
+
+print(ask("パスタを茹でるとき、塩はなぜ入れますか。"))
+print(ask("入れすぎると、どうなりますか。"))  # 「入れすぎる」の対象を、履歴から読み取れる</code></pre>
+<p>2 回目の質問は「入れすぎると」としか書いていません。それでも答えられるのは、履歴に 1 回目の質問と答えが入っているからです。履歴が長くなるほど、毎回送る量が増えます。送る量は、費用にも関わります（第 05 章）。</p>
+
+<h3>実験台：リクエストの組み立て</h3>
+<p>部品を選ぶと、リクエストの JSON に何が加わるかが変わります。まず、ボタンで「最小の呼び出し」から順に押してみてください。下のつまみで、会話の長さや、1 つの発言の文字数も変えられます。右の図は、呼び出しのたびに、送る文字数が増えていく様子です。</p>
+<div data-widget="lab" data-src="c04-build"></div>
+<p>実験台で見る点は 3 つです。1 つ目は、<b>必須の 3 つ</b>（model、max_tokens、messages）は、どの組み合わせでも残ることです。2 つ目は、<b>system は messages の外</b>に出ることです。3 つ目は、会話が続くほど、<b>送る文字数が増える</b>ことです。文字数は架空の仮定の値です。</p>
+
+<h3>assistant の書き出しを指定する方法は、使えなくなった</h3>
+<p>古い記事には、最後の assistant の発言に、書き出しの文章を入れておき、続きを書かせる方法（プレフィル、prefill）が出てきます。公式ドキュメントによると、この方法は、<b>Claude 4.6 以降のモデルではサポートされず、使うと 400 エラーになります</b>。代わりに、構造化した出力（第 08 章）か、system プロンプトの指示を使うよう案内されています（出典：Working with Messages）。</p>
+
+<h3>つまずきやすい点</h3>
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p>1 つ目は、<b>user と assistant を交互に並べない</b>ことです。API リファレンスによると、モデルは user と assistant が交互に並ぶ会話で学習されていて、同じ役の発言が続くと、1 つの発言にまとめられます。エラーにはならなくても、意図と違う会話として読まれることがあるので、交互に並べます。2 つ目は、<b>最初からの指示を messages の先頭に、role を system として書く</b>ことです。トップレベルの <code>system</code> に書きます（role が system の発言は、先頭には置けません）。3 つ目は、<b>履歴を送り忘れて</b>、「前の話を覚えていない」と戸惑うことです。API の仕様どおりの動きです。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3><div data-widget="quiz" data-src="c04-quiz"></div></section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 18 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/build-with-claude/working-with-messages" target="_blank" rel="noopener">Working with Messages</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>ステートレスで履歴を毎回送ること、プレフィルが 4.6 以降で使えないこと。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/api/messages/create" target="_blank" rel="noopener">Messages API reference（Create a Message）</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>model・max_tokens・messages が必須、system・tools・stream・output_config などが任意。</td></tr>
+      <tr><td>架空（見本のため）</td><th scope="row">実験台の文字数、会話の例文</th><td>この講座</td><td>—</td><td>理解のための架空の値。実際の費用はトークン数で決まる。</td></tr>
+    </tbody>
+  </table></div>
+</section>

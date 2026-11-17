@@ -1,0 +1,118 @@
+<!--
+num: 10
+part: 3
+title: 画像・PDF・長い資料と、費用の工夫
+track: 広げる
+time: 45
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>画像と PDF を、リクエストの<b>ブロック</b>として渡す形を説明できる。</li>
+    <li><b>プロンプトキャッシュ</b>と<b>バッチ処理</b>が、どんな費用の工夫か、使い分けを言える。</li>
+    <li>キャッシュが効いたかどうかを、usage で確かめる方法を言える。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch05">第 05 章</a>（トークンと料金）、<a href="#ch08">第 08 章</a>（資料の置き場所）。</p>
+</section>
+
+<h3>画像と PDF を渡す</h3>
+<p>第 04 章で、user の content は「ブロックの一覧」にできると学びました。画像は <code>image</code> ブロック、PDF などの文書は <code>document</code> ブロックで渡します。渡し方は 3 通りで、<b>base64 で本文に埋める</b>、<b>URL で指す</b>、<b>Files API で先にアップロードして file_id で指す</b>です（出典：Vision、PDF support、2026 年 11 月 18 日確認）。公式は、<b>画像や PDF を、文章より先に置く</b>と、うまく働くとしています。</p>
+<div data-widget="table" data-src="c10-blocks"></div>
+<p>PDF は、各ページが画像に変換され、文字も取り出されて、両方がモデルに渡されます。そのため、図や表の読み取りもできます。そのぶん、<b>ページが多いと入力トークンが増え、費用も増えます</b>。サイズやページ数の上限は、変わりやすいので、公式の各ページで確かめてください（この講座には数字を書きません）。</p>
+<div class="callout warn"><span class="ttl">画像の読み取りには、限界があります</span>
+  <p>公式は、小さい・回転した・画質の低い画像では精度が落ちること、数や座標の出力はおおよそであること、画像から人の名前を特定しないことを挙げています。重要な用途では、出力を必ず確かめます（第 12・13 章）。</p></div>
+
+<h3>費用と時間の工夫：2 つの道具</h3>
+<p>同じ長い資料を何度も渡す、件数が多い、といった場面には、2 つの工夫があります。単価の数字は第 05 章の表にあります。ここでは、仕組みと使い分けだけを学びます。</p>
+<div data-widget="compare" data-src="c10-tools"></div>
+
+<h3>プロンプトキャッシュ：同じ前置きを再利用する</h3>
+<p>リクエストの先頭側（tools、system、messages の順）が、前回と<b>1 文字も違わず同じ</b>なら、その部分を再利用して、読み取りの料金を安くできます。<code>cache_control</code> の印を付けた場所までが、再利用の対象です。公式の説明では、既定の保存時間は 5 分で、1 時間にもできます。短すぎる入力は、エラーにならず、単に使われません（最小の長さはモデルごとに違います）。効いたかどうかは、<b>usage の <code>cache_creation_input_tokens</code>（書き込み）と <code>cache_read_input_tokens</code>（読み取り）</b>で確かめます。両方が 0 なら、使われていません。</p>
+<div data-widget="flow" data-src="c10-cache"></div>
+
+<h3>バッチ処理：急がない大量の仕事を、まとめて頼む</h3>
+<p><b>Message Batches API</b> は、たくさんのリクエストを、まとめて非同期で処理します。公式の説明では、費用が安くなる代わりに、結果はすぐには返りません。ほとんどは 1 時間以内に終わりますが、保証ではなく、24 時間で打ち切られます。結果は順番どおりとは限らないので、各リクエストにつけた <b>custom_id</b> で突き合わせます。ストリーミングは使えません。</p>
+
+<h3>コードの例</h3>
+<p>1 つ目は、PDF を渡し、PDF のブロックにキャッシュの印を付ける例（同じ PDF に、質問を変えて何度も聞く場面を想定。印より前の system と PDF が再利用の対象で、短い system だけに印を付けても、最小の長さに届かず使われません）、2 つ目は、バッチを作って結果を読む例です。<b>構文の検査だけをして、API を呼んで動かしてはいません。</b>ファイル名と文面は架空です。</p>
+<pre><code class="lang-python">import base64
+import anthropic
+
+client = anthropic.Anthropic()
+
+with open("report.pdf", "rb") as f:  # 手元の PDF（ファイル名は例）
+    pdf_data = base64.standard_b64encode(f.read()).decode("utf-8")
+
+response = client.messages.create(
+    model="claude-haiku-5-5",
+    max_tokens=1000,
+    system="あなたは、資料の内容だけを根拠に答える担当者です。",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {  # 資料を先に、質問を後に置く
+                    "type": "document",
+                    "source": {"type": "base64", "media_type": "application/pdf", "data": pdf_data},
+                    "cache_control": {"type": "ephemeral"},  # ここまで（system と PDF）を再利用する印
+                },
+                {"type": "text", "text": "この資料の要点を、3 つの箇条書きでまとめてください。"},
+            ],
+        }
+    ],
+)
+
+print("".join(b.text for b in response.content if b.type == "text"))
+print(response.usage)  # cache_creation_input_tokens と cache_read_input_tokens も、ここで確かめる
+</code></pre>
+<pre><code class="lang-python">import anthropic
+from anthropic.types.message_create_params import MessageCreateParamsNonStreaming
+from anthropic.types.messages.batch_create_params import Request
+
+client = anthropic.Anthropic()
+
+texts = {"item-001": "（架空の文面 1）", "item-002": "（架空の文面 2）"}
+
+batch = client.messages.batches.create(
+    requests=[
+        Request(
+            custom_id=cid,
+            params=MessageCreateParamsNonStreaming(
+                model="claude-haiku-5-5",
+                max_tokens=300,
+                messages=[{"role": "user", "content": "次の文面を、1 文に要約してください。\n" + body}],
+            ),
+        )
+        for cid, body in texts.items()
+    ]
+)
+print(batch.id, batch.processing_status)
+
+# しばらくしてから、processing_status が "ended" になったことを確かめて、結果を読む
+for item in client.messages.batches.results(batch.id):
+    if item.result.type == "succeeded":
+        text = "".join(b.text for b in item.result.message.content if b.type == "text")
+        print(item.custom_id, text)
+    else:
+        print(item.custom_id, item.result.type)  # errored・canceled・expired
+</code></pre>
+
+<h3>つまずきやすい点</h3>
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p>1 つ目は、<b>前置きに、毎回変わる値（時刻など）を入れる</b>ことです。1 文字でも違うと、キャッシュは使われません。2 つ目は、<b>道具の定義や system を途中で変える</b>ことです。変えた場所以降の再利用が無効になります。3 つ目は、<b>バッチの結果を、順番どおりだと思う</b>ことです。custom_id で突き合わせます。4 つ目は、<b>バッチの結果に保存期限がある</b>ことです。早めに取り出して、自分の側に保存します。5 つ目は、<b>急ぐ仕事にバッチを使う</b>ことです。時間の保証がありません。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3><div data-widget="quiz" data-src="c10-quiz"></div></section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 18 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/build-with-claude/vision" target="_blank" rel="noopener">Vision</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>画像の形式、渡し方、置く順番、限界。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/build-with-claude/pdf-support" target="_blank" rel="noopener">PDF support</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>PDF の処理のしくみ、渡し方、費用の考え方。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching" target="_blank" rel="noopener">Prompt caching</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>cache_control、保存時間、usage の項目、無効になる条件。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/build-with-claude/batch-processing" target="_blank" rel="noopener">Batch processing</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>バッチの流れ、custom_id、期限、使えない機能。</td></tr>
+      <tr><td>架空（見本のため）</td><th scope="row">ファイル名、文面</th><td>この講座</td><td>—</td><td>説明のための架空の例。</td></tr>
+    </tbody>
+  </table></div>
+</section>

@@ -1,0 +1,85 @@
+<!--
+num: 05
+part: 2
+title: トークンと料金：見積もりの実験台
+track: 仕組み
+time: 45
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li><b>トークン</b>が何か、入力と出力で数え方と単価が違うことを説明できる。</li>
+    <li>公式の料金表の読み方（100 万トークンあたり、キャッシュ、バッチ）を知り、<b>1 回の費用</b>を式で計算できる。</li>
+    <li>実験台で、文字数・回数・モデルを動かして、<b>月額の目安</b>を出し、上限（第 02 章）と比べられる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch03">第 03 章</a>（usage の読み方）と<a href="#ch04">第 04 章</a>（履歴を毎回送ること）。算数は、かけ算と割り算だけです。</p>
+</section>
+
+<div class="callout warn"><span class="ttl">料金の数字について（確認日 2026 年 11 月 18 日）</span>
+  <p>この章の数字は、<b>2026 年 11 月 18 日</b>に、公式の料金ページと、レート制限のページで確かめた値です。<b>この講座で、料金と制限の数字を書くのは、この章だけ</b>です。料金は変わります。最新の値は、公式の料金ページ（platform.claude.com の Pricing）で確かめてください。実験台の結果は目安で、請求額を保証しません。</p></div>
+
+<h3>トークンとは何か</h3>
+<p><b>トークン</b>（token）は、モデルが文章を読み書きするときの、文字の小さなかたまりです。単語・単語の一部・文字・バイトなどに対応します。公式の用語集によると、Claude では、1 トークンが何文字にあたるかは、モデルと言語によって違います（出典：Glossary、2026 年 11 月 18 日確認）。</p>
+<p>トークンは、<b>入力</b>と<b>出力</b>に分けて数えます。<b>入力トークン</b>は、送った内容（system、履歴、質問、資料）で、<b>出力トークン</b>は、モデルが作った答えです。第 03 章の <code>usage</code> に、2 つの数が出ていました。</p>
+<p>文字数からトークン数を求める換算は、正確にはできません。公式ドキュメントが示す目安は、次のとおりです。</p>
+<ul>
+  <li>以前のモデルでは、1 トークンは、<b>英語でおよそ 3.5 文字</b>です。</li>
+  <li><b>Claude 4.7 以降のモデル</b>（この講座で扱う 4 つのモデルを含む）は、新しいトークナイザー（文章をトークンに分ける仕組み）を使い、<b>同じ文章で、約 30% 多くのトークン</b>になります。</li>
+  <li><b>日本語の換算値</b>は、確認できた公式ドキュメントには書かれていません。</li>
+</ul>
+<p>日本語の文章のトークン数は、<b>自分の文章で測る</b>のが確実です。公式の「トークンカウント」の機能は、<b>無料</b>で、送る前にトークン数を数えられます。数えた値は推定値で、実際の入力トークン数と、わずかに違うことがあります（出典：Token counting）。</p>
+<pre><code class="lang-python">import anthropic
+
+client = anthropic.Anthropic()
+
+count = client.messages.count_tokens(
+    model="claude-sonnet-5-5",
+    system="あなたは、丁寧に要約する日本語のアシスタントです。",
+    messages=[{"role": "user", "content": "ここに、数えたい文章を入れます。"}],
+)
+print(count.input_tokens)  # 送ったとして、入力が何トークンになるかの推定</code></pre>
+
+<h3>料金表の読み方</h3>
+<p>料金は、<b>100 万トークン（MTok）あたりのドル</b>で表されます。たとえば、1 MTok あたり 2 ドルなら、100 万トークンの入力に 2 ドルかかります。1 回の費用は、次の式です。</p>
+<p class="formula">費用（ドル）＝（入力トークン数 × 入力の単価 ＋ 出力トークン数 × 出力の単価）÷ 1,000,000</p>
+<div data-widget="table" data-src="c05-price"></div>
+<p>表で気づく点は 3 つです。1 つ目は、<b>入力と出力で単価が違う</b>ことです。2 つ目は、<b>キャッシュの読み取り</b>が、入力の単価より安いことです（第 10 章）。3 つ目は、<b>バッチ処理</b>が、入力も出力も半額になることです（第 10 章）。Claude Haiku 5.5 は、<b>1 回のリクエストの入力が 100,000 トークンを超えると、高い単価</b>になります。公式の料金ページは、この区切りを、モデルの行を分けて示しています（出典：Pricing）。</p>
+<div class="callout note"><span class="ttl">コンテキストウィンドウ</span>
+  <p><b>コンテキストウィンドウ</b>（context window）は、1 回の呼び出しで、モデルが扱える量の上限です。入力と出力の両方が含まれます。この講座で扱う 4 つのモデルは、公式のモデル一覧によると、100 万トークンのコンテキストウィンドウと、128,000 トークンの出力の上限を持ちます。入力だけで上限を超えると、API は 400 エラー（prompt is too long）を返します（出典：Models overview、Context windows）。</p></div>
+
+<h3>実験台：月額の見積もり</h3>
+<p>つまみを動かすと、月額の目安が変わります。まず、ボタンで例の使い方を選んでください。<b>1 トークンあたりの文字の係数</b>は、日本語では公式の値がないので、仮定の値です。自分の文章で数えた値に置き換えると、見積もりが現実に近づきます。</p>
+<div data-widget="lab" data-src="c05-cost"></div>
+<p>見積もりを読むときの注意が 3 つあります。1 つ目は、<b>履歴を毎回送る</b>と、会話が進むほど、1 回の入力が増えることです（第 04 章）。2 つ目は、<b>キャッシュの書き込みなどの追加の費用</b>は、この実験台に含まれないことです。3 つ目は、為替は仮定で、実際の請求は、ドルで行われることです（出典：Pricing の請求の説明は「すべてドル」）。</p>
+
+<h3>月の上限と、レート制限の例</h3>
+<p>第 02 章の「利用の上限」には、段階（tier）ごとの上限があります。公式のレート制限のページが示す、月の上限は、次の表のとおりです。段階は、利用実績などから自動で決まり、時間とともに上がります。新しい組織は、この表より低い制限から始まることがあります（出典：Rate limits）。</p>
+<div data-widget="table" data-src="c05-tier"></div>
+<p>これとは別に、1 分あたりの<b>レート制限</b>があります。リクエストの数（RPM）、入力トークンの数（ITPM）、出力トークンの数（OTPM）の 3 つです。値は、段階とモデルごとに違います。次の表は、例として、Sonnet 5.5 の行だけを示します。レート制限の仕組みと、超えたときの動きは、第 07 章で学びます。</p>
+<div data-widget="table" data-src="c05-rate"></div>
+
+<h3>計算の演習</h3>
+<p>考えてから、行を押して答えを開いてください。単価は表の値、トークン数は架空です。</p>
+<div data-widget="table" data-src="c05-calc"></div>
+
+<h3>つまずきやすい点</h3>
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p>1 つ目は、<b>出力のトークンを忘れる</b>ことです。出力は、入力と別の単価で、たいてい高い単価がつきます。2 つ目は、<b>max_tokens が大きいから高くなる</b>と思い込むことです。費用は、実際に作られた出力トークンで決まり、上限の数字では決まりません。3 つ目は、<b>古いモデルの単価で見積もる</b>ことです。モデルごとに単価が違います（出典：Pricing）。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3><div data-widget="quiz" data-src="c05-quiz"></div></section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 18 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">Pricing</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>モデルごとの単価、キャッシュとバッチの単価、Haiku 5.5 の入力 100,000 トークンの区切り、新しいトークナイザーで約 30% 増。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/about-claude/models/overview" target="_blank" rel="noopener">Models overview</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>4 つのモデルの単価（別の表で突き合わせ）、コンテキストウィンドウ、出力の上限。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/about-claude/glossary" target="_blank" rel="noopener">Glossary</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>トークンの定義、英語で 1 トークンおよそ 3.5 文字（以前のモデル）。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/ja/build-with-claude/token-counting" target="_blank" rel="noopener">Token counting（日本語版）</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>無料で数えられること、推定値であること、count_tokens の使い方。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/api/rate-limits" target="_blank" rel="noopener">Rate limits</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>段階ごとの月の上限、Sonnet 5.5 の RPM・ITPM・OTPM。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/build-with-claude/context-windows" target="_blank" rel="noopener">Context windows</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>コンテキストウィンドウの上限と、超えたときの 400 エラー。</td></tr>
+      <tr><td>この講座の計算</td><th scope="row">文字あたりのトークンの係数の仮定、為替の仮定、実験台の式</th><td>この講座</td><td>—</td><td>仮定の値と、この講座の計算（公式の値ではない）。</td></tr>
+    </tbody>
+  </table></div>
+</section>

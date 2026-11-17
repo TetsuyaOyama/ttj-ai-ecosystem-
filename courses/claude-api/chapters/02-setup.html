@@ -1,0 +1,72 @@
+<!--
+num: 02
+part: 1
+title: 準備：アカウント・API キー・支払いと上限
+track: はじめる
+time: 35
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>アカウントの作成から API キーの発行までの<b>準備の流れ</b>を、順に言える。</li>
+    <li>API キーを<b>安全に扱う</b>方法（環境変数、公開の場所に置かない）と、漏れたときの対応を説明できる。</li>
+    <li>支払い（前払いのクレジット）と、<b>利用の上限</b>を設定する目的を説明できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch01">第 01 章</a>。この章の操作は、Web の画面（Claude Console）と、ターミナルの 1 行のコマンドだけです。</p>
+</section>
+
+<h3>全体の流れ：6 つの準備</h3>
+<p>最初の 1 回を送るまでに、6 つの準備があります。順番に意味があります。<b>お金の上限を決めてから、キーを作る</b>と、間違えて使いすぎる心配が小さくなります。工程を押すか「次へ」で進んでください。</p>
+<div data-widget="flow" data-src="c02-flow"></div>
+<p>アカウントは、Claude Console（platform.claude.com）で作ります。公式のクイックスタートは、最初に「Claude Console のアカウントを作るか、持っていればサインインする」ことを求めています。API キーは、Console の API キーのページで作ります（出典：Get started with Claude、2026 年 11 月 18 日確認）。</p>
+
+<h3>API キーとは何か</h3>
+<p><b>API キー</b>（API key）は、「このリクエストは、このアカウントからです」と示す、長い文字列です。パスワードに近いものです。キーを持っている人は、あなたの費用で API を使えます。だから、<b>他人に見せない</b>のが基本です。</p>
+<p>キーを作るときの要点は、公式ドキュメントの「Get your Claude API key」にあります。Console の「Create key」で、キーの名前を付け、有効期限を選び、「Linked account」（誰に結びつけるか）を選びます。同じ画面で、キーを使える<b>ワークスペース</b>（組織の中の作業領域）を 1 つ選んで、キーをそこに限定できます。公式ドキュメントによると、ワークスペースに限定しないキーでは、リクエストのたびに <code>anthropic-workspace-id</code> ヘッダー（ワークスペースの ID）も送る必要があります。この講座の第 03 章の例は、このヘッダーを付けていないので、はじめは<b>ワークスペースを 1 つ選んで作る</b>のが簡単です。完全なキーは、<b>作った時に 1 回だけ</b>表示されます。なくすと、もう見られず、新しく作り直します（出典：Get your Claude API key、Authentication）。</p>
+<p>なお、公式のクイックスタートは、自分のパソコンでの開発には、Anthropic のコマンドラインツールでサインインする方法を勧めています。この講座は、仕組みに組み込むときにも使う、API キーの方法で説明します（出典：Get started with Claude）。</p>
+<div class="callout warn"><span class="ttl">キーは 1 回しか見えません</span>
+  <p>作った画面を閉じる前に、安全な場所（秘密情報を管理する仕組み）に保存してください。この講座の例には、キーの実物は書きません。「YOUR_API_KEY」のような、仮の言葉を使います。</p></div>
+
+<h3>キーの安全な扱い</h3>
+<p>安全に扱う基本は、<b>キーをコードに書かず、環境変数から読む</b>ことです。<b>環境変数</b>（environment variable）は、パソコンの設定に名前をつけて値を入れておく仕組みで、プログラムから読めます。公式の SDK は、<code>ANTHROPIC_API_KEY</code> という名前の環境変数を自動で読みます（出典：Get started with Claude）。</p>
+<pre><code class="lang-text"># macOS / Linux のターミナル（この 1 回のウィンドウだけで有効）
+export ANTHROPIC_API_KEY="YOUR_API_KEY"
+
+# Windows の PowerShell（この 1 回のウィンドウだけで有効）
+$env:ANTHROPIC_API_KEY = "YOUR_API_KEY"</code></pre>
+<p>公式ドキュメントが示す書き方は、<code>export ANTHROPIC_API_KEY=…</code> の形です。PowerShell の書き方は、OS の一般的な方法で、公式の API ドキュメントの記載ではありません。ウィンドウを閉じると消えるので、毎回入れ直すか、OS の設定に保存します。保存の方法は、お使いの OS の説明を見てください。</p>
+<div data-widget="compare" data-src="c02-store"></div>
+<p>表の左が安全な扱い、右が避ける扱いです。特に、<b>Web ページの JavaScript にキーを入れない</b>ことが大事です。公式ドキュメントは、「Claude API は自分のバックエンドから呼ぶ。利用者のブラウザで動くコードから呼ばない。ページを使う人は誰でも、ページのコードの中のキーを読めるから」と説明しています（出典：Authentication）。</p>
+
+<h3>漏れたときの対応</h3>
+<p>キーが漏れた、または漏れたかもしれないときは、<b>先に止めて、あとで調べる</b>のが基本です。公式ドキュメントでは、キーの管理のページで「Disable」（無効にする。あとで戻せる）と「Delete」（削除する。戻せない）を選べます。疑いがあるキーは、無効にするか削除します（出典：Authentication）。</p>
+<div data-widget="flow" data-src="c02-leak"></div>
+
+<h3>支払いと利用の上限</h3>
+<p>API の利用料は、使った分だけかかります。支払いの方法は、公式のサポート記事によると、多くの組織で<b>前払いのクレジット</b>です。「Claude API とプレイグラウンドの利用は、前払いの利用クレジットで請求される」と書かれています。月ごとの後払いの契約もあります。クレジットは Console の「Billing」ページで買います。クレジットの残りが少なくなると自動で買い足す「自動リロード」も設定できます。クレジットは、購入から 1 年で期限が切れ、返金はされません（出典：サポート記事「How do I pay for my Claude API usage」、確認 2026 年 11 月 18 日）。</p>
+<p>新しいユーザーは、試すための無料のクレジットをもらえる、と公式の料金ページに書かれています（出典：Pricing の FAQ）。内容は変わることがあるので、Console で確かめてください。</p>
+<p>次に<b>利用の上限</b>（spend limit）です。公式ドキュメントによると、使える上限は 2 つの層があります。1 つは、利用の段階（tier）ごとに決まった月の上限です。もう 1 つは、<b>自分で、その下に決める上限</b>です。Console の「Spend limits」のページで、月の上限を設定できます。自分で決めた上限に達すると、API のリクエストは HTTP 400（invalid_request_error）で止まります。上限を上げるか外すと、再開できます（出典：Rate limits）。上限の金額の例は、第 05 章の 1 か所に書きました。</p>
+<div class="callout tip"><span class="ttl">最初の設定の目安（この講座の見方）</span>
+  <p>はじめは、「使ってもよい金額」を、小さく決めてください。プログラムの書き間違いで、同じリクエストを繰り返し送ってしまう失敗は、よくあります。上限は、そのときの損害を小さくするための安全装置です。</p></div>
+
+<h3>つまずきやすい点</h3>
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p>1 つ目は、キーを作ったのに<b>支払いの設定がまだ</b>で、リクエストが通らないことです。2 つ目は、環境変数を設定したウィンドウと<b>別のウィンドウ</b>でプログラムを動かして、キーが見つからないことです。3 つ目は、キーを書いたファイルを、<b>公開のリポジトリに置いてしまう</b>ことです。ファイルの名前を、公開しない設定の対象にしてください。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3><div data-widget="quiz" data-src="c02-quiz"></div></section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 18 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/get-started" target="_blank" rel="noopener">Get started with Claude</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>Console のアカウント、API キーの作成、環境変数 ANTHROPIC_API_KEY。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/get-api-key" target="_blank" rel="noopener">Get your Claude API key</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>キーの作成の手順、1 回だけ表示されること、保管の勧め。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/manage-claude/authentication" target="_blank" rel="noopener">Authentication</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>キーの種類、有効期限、無効化と削除、ブラウザから呼ばないこと、ワークスペースに限定しないキーでは anthropic-workspace-id ヘッダーが要ること。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/api/rate-limits" target="_blank" rel="noopener">Rate limits</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>自分で決める月の上限と、上限に達したときの動き。</td></tr>
+      <tr><td>公式のサポート記事</td><th scope="row"><a href="https://support.claude.com/en/articles/8977456-how-do-i-pay-for-my-claude-api-usage" target="_blank" rel="noopener">How do I pay for my Claude API usage</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日（更新日の記載は「2 週間以上前」）</td><td>前払いのクレジット、自動リロード、期限。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener">Pricing（FAQ）</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>新しいユーザーへの無料クレジットの記載。</td></tr>
+      <tr><td>一般知識</td><th scope="row">PowerShell の環境変数の書き方、キーのファイルを公開しない注意</th><td>—</td><td>—</td><td>OS と開発の一般的な方法。公式の API ドキュメントの記載ではない。</td></tr>
+    </tbody>
+  </table></div>
+</section>

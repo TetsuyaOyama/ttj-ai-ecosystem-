@@ -1,0 +1,52 @@
+<!--
+num: 01
+part: 1
+title: API とは何か：チャットの画面との違い
+track: はじめる
+time: 25
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li><b>API</b>（application programming interface）が何かを、「プログラムから使う入口」として説明できる。</li>
+    <li>チャットの画面で使う Claude と、<b>API で使う Claude</b> の違いを、操作する人・会話の記憶・料金・責任の 4 点で言える。</li>
+    <li>API を使うと<b>何ができるようになるか</b>と、この講座で扱う範囲を言える。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#chI1">序章</a>だけです。プログラミングの経験は要りません。</p>
+</section>
+
+<h3>API とは、プログラムから使う入口</h3>
+<p><b>API</b>（application programming interface）は、あるサービスの機能を、別のプログラムから使うための入口です。レストランに例えると、メニューと注文の決まりのようなものです。決まった形で注文を出せば、決まった形で料理が届きます。</p>
+<p><b>Claude API</b> は、Claude を自分のプログラムから使う入口です。公式ドキュメントは、Claude API を、<code>https://api.anthropic.com</code> にある REST 型の API と説明しています。文章を決まった形で送ると、Claude の答えが決まった形で返ります（出典：API overview、2026 年 11 月 18 日確認）。</p>
+<p>決まった形のやり取りを、<b>リクエスト</b>（request、送る側）と<b>レスポンス</b>（response、返る側）と呼びます。形式は <b>JSON</b>（JavaScript Object Notation）という、項目と値を波かっこで囲む書き方です。第 03 章で、実物を 1 つずつ読みます。</p>
+<div data-widget="arch" data-src="c01-arch"></div>
+<p>図の部品を押すと、役割が出ます。あなたのプログラムが、API にリクエストを送り、API がモデル（Claude）に処理を頼み、結果がレスポンスとして返ります。API キーと支払いは、<b>Claude Console</b>（Anthropic の管理画面）で管理します。</p>
+
+<h3>チャットの画面との違い</h3>
+<p>チャットの画面では、人が文章を入力し、画面に答えが出ます。API では、プログラムが文章を送り、プログラムが答えを受け取ります。人が見ていなくても動かせるので、仕事の仕組みに組み込めます。</p>
+<div data-widget="compare" data-src="c01-vs"></div>
+<p>表で大事なのは、右の列の「自分のプログラムが受け持つ」ことです。会話の記憶、入力の準備、答えの確認、エラーへの対応は、自分の仕組みで決めます。画面では、これらが画面の機能として用意されています。</p>
+
+<h3>API で何ができるようになるか</h3>
+<p>文章を入れて、文章が返る仕組みなので、文章に関する仕事の多くが対象になります。たとえば、下書きの作成、要約、書類からの項目の抜き出し、分類、翻訳、コードの説明です。第 12 章で、7 つの利用例を、人の確認の位置まで含めて学びます。</p>
+<p>公式ドキュメントの API の概要には、メッセージを送る Messages API のほかに、まとめて処理する Message Batches API、トークンを数える Token Counting API、モデルを一覧する Models API、ファイルを預ける Files API があります（出典：API overview）。この講座は、このうち、第 03 章から Messages API を中心に使い、第 05 章と第 10 章で、ほかの 3 つにも触れます。</p>
+<div class="callout note"><span class="ttl">この講座の範囲</span>
+  <p>Claude は、AWS・Google Cloud・Microsoft Azure のサービスからも使えます（出典：API overview）。この講座は、Anthropic が直接提供する Claude API だけを扱います。クラウド経由では、機能の提供の時期や料金の払い方が違うことがあります。</p></div>
+
+<h3>つまずきやすい点</h3>
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p>画面で Claude を使えている人でも、API は<b>別の入口</b>です。API には、Console でのキーの作成と、支払いの設定が要ります（第 02 章）。また、API は「前の会話を覚えている」前提で動きません。続きを話すには、これまでの会話を毎回送ります（第 04 章）。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3><div data-widget="quiz" data-src="c01-quiz"></div></section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 18 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/api/overview" target="_blank" rel="noopener">API overview</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>Claude API の位置づけ、利用できる API の一覧、クラウド経由の利用。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/get-started" target="_blank" rel="noopener">Get started with Claude</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>Claude Console のアカウントと API キーが入口であること。</td></tr>
+      <tr><td>この講座</td><th scope="row">画面と API の比較表</th><td>この講座</td><td>—</td><td>この講座の整理（公式の表ではない）。</td></tr>
+    </tbody>
+  </table></div>
+</section>

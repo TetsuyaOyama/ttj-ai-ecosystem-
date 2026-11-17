@@ -1,0 +1,103 @@
+<!--
+num: 09
+part: 3
+title: ツールの利用：関数呼び出しの流れ
+track: 広げる
+time: 45
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>ツールの利用で、<b>モデルが道具を実行するのではない</b>ことを説明できる。</li>
+    <li>tool_use と tool_result のやり取りを、順に言える。</li>
+    <li>自分で動かす道具（クライアントツール）と、Anthropic 側で動く道具（サーバーツール）を区別できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch04">第 04 章</a>（messages）、<a href="#ch07">第 07 章</a>（stop_reason）。</p>
+</section>
+
+<h3>ツールの利用とは</h3>
+<p>モデルは、文章を作ることは得意ですが、あなたの会社の在庫表を見に行くことはできません。そこで、<b>道具（ツール）</b>の名前と使い方を、リクエストに書いて渡します。モデルは、必要だと判断すると、「この道具を、この引数で使ってほしい」という依頼を返します。<b>道具を実際に動かすのは、あなたのプログラム</b>です。結果をモデルに返すと、モデルはそれを材料に、最後の答えを作ります（出典：Tool use overview、2026 年 11 月 18 日確認）。</p>
+<div class="callout note"><span class="ttl">一番大事な点</span>
+  <p>モデルは、道具を呼ぶ「依頼書」を書くだけです。実行するかどうか、何を許すかは、あなたのコードが決めます。第 13 章の安全の話は、ここが出発点です。</p></div>
+
+<h3>流れを、順に動かして確かめる</h3>
+<p>次の図は、在庫を調べる道具を使う 1 往復です（例は架空）。ステップを進めると、各段階でやり取りされる中身が見えます。</p>
+<div data-widget="seq" data-src="c09-seq"></div>
+
+<h3>道具の定義と、やり取りの部品</h3>
+<p>道具は、<code>tools</code> の配列に、<b>name</b>（名前）、<b>description</b>（説明）、<b>input_schema</b>（引数の形を表す JSON Schema）で書きます。description は、モデルが「いつ使うか」を決める手がかりなので、丁寧に書きます。<code>strict: true</code> を付けると、呼び出しの入力が schema に合うことを保証できます。</p>
+<div data-widget="table" data-src="c09-parts"></div>
+
+<h3>コードで書くと</h3>
+<p>次の例は、上の流れをそのままコードにしたものです。道具の本体（get_stock）は、あなたの側にあり、表は説明用の架空のものです。繰り返しには、回数の上限を置いています。<b>このコードは、構文の検査だけをして、API を呼んで動かしてはいません。</b></p>
+<pre><code class="lang-python">import anthropic
+
+client = anthropic.Anthropic()
+
+tools = [
+    {
+        "name": "get_stock",
+        "description": "商品コードを受け取り、在庫の数を返す。在庫の数だけを調べる道具で、注文はできない。",
+        "input_schema": {
+            "type": "object",
+            "properties": {"code": {"type": "string", "description": "商品コード（例：A-100）"}},
+            "required": ["code"],
+        },
+    }
+]
+
+
+def get_stock(code):
+    table = {"A-100": 12, "B-200": 0}  # 説明用の架空の在庫表
+    return str(table.get(code, "該当なし"))
+
+
+messages = [{"role": "user", "content": "A-100 と B-200 の在庫を教えてください。"}]
+
+for _ in range(5):  # 無限に回らないよう、回数に上限を置く
+    response = client.messages.create(
+        model="claude-haiku-5-5",
+        max_tokens=1000,
+        tools=tools,
+        messages=messages,
+    )
+    if response.stop_reason != "tool_use":
+        break
+    messages.append({"role": "assistant", "content": response.content})
+    results = []
+    for block in response.content:
+        if block.type == "tool_use":
+            results.append(
+                {"type": "tool_result", "tool_use_id": block.id, "content": get_stock(**block.input)}
+            )
+    messages.append({"role": "user", "content": results})
+
+print("".join(b.text for b in response.content if b.type == "text"))  # 文章のブロックだけをつなげて表示
+</code></pre>
+<p>SDK には、この繰り返しを代わりに行う<b>ツールランナー</b>もあります（公式の説明による。ベータ機能の場合があるので、公式で確かめてください）。まず、仕組みが分かるように、自分で書いた形で理解しておくと安心です。</p>
+
+<h3>自分で動かす道具と、Anthropic 側で動く道具</h3>
+<div data-widget="compare" data-src="c09-kinds"></div>
+
+<h3>tool_choice：使うかどうかを決める</h3>
+<p>道具を使うかどうかは、<code>tool_choice</code> で指定できます。注意が 1 つあります。「必ず呼ぶ」の指定（<code>any</code> と <code>tool</code>）は、確認日の時点で、Fable 5.2・Opus 5.5・Sonnet 5.5 などのモデルでは使えず、400 エラーになります。そのときは、既定の <code>auto</code> のままにして、<code>strict: true</code> や構造化した出力（第 08 章）を使うよう、公式は案内しています（出典：Define tools）。</p>
+<div data-widget="table" data-src="c09-choice"></div>
+
+<h3>つまずきやすい点</h3>
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p>1 つ目は、<b>tool_result の置き方</b>です。直前の assistant の発言の直後に、1 つの user メッセージとして置き、tool_result を先に並べます（文章は後）。2 つ目は、<b>失敗の返し方</b>です。実行に失敗したら、<code>is_error: true</code> と、何が起きて次に何を試すとよいかを書いて返します。3 つ目は、<b>繰り返しの上限がない</b>ことです。モデルが道具を呼び続けると、費用がかさむので、回数に上限を置きます（第 07 章）。4 つ目は、<b>道具に、強い権限を持たせる</b>ことです。まずは、読むだけの道具から始めます。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3><div data-widget="quiz" data-src="c09-quiz"></div></section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 18 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview" target="_blank" rel="noopener">Tool use overview</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>ツール利用の流れ、定義の項目、tool_choice、実行する側の区別。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools" target="_blank" rel="noopener">Define tools</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>tool_choice の 4 つの指定と、any・tool が使えないモデル。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls" target="_blank" rel="noopener">Handle tool calls</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>tool_result の置き方の決まり、is_error。</td></tr>
+      <tr><td>架空（見本のため）</td><th scope="row">在庫表、商品コード</th><td>この講座</td><td>—</td><td>説明のための架空の例。</td></tr>
+    </tbody>
+  </table></div>
+</section>

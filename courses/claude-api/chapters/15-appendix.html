@@ -1,0 +1,75 @@
+<!--
+num: 15
+part: A
+title: 用語集・資料の地図・総合テスト
+track: 付録
+time: 25
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>この講座の<b>用語</b>を、用語集で検索して引ける。</li>
+    <li>公式の資料の<b>地図</b>を使って、知りたいことを、公式のどのページで確かめるか分かる。</li>
+    <li>総合テストで、仕組みの理解と、使い分けの考え方を確かめられる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：どの章からでも使えます。</p>
+</section>
+
+<div class="callout std"><span class="ttl">お断り：公式の資料ではありません</span>
+  <p>この講座は、<b>公式の資料ではなく、学習用のまとめ</b>です。<b>最新で正確な情報は、公式ドキュメントで</b>確かめてください。Anthropic や Claude のロゴ・公式の図は使っていません。製品の情報は、確認日（2026 年 11 月 18 日）の時点のもので、変わります。コードは、構文の検査だけをして、API を呼んで動かしてはいません。</p></div>
+
+<h3>① 資料の地図：知りたいことは、どの公式ページで確かめるか</h3>
+<p>次の表は、この講座で使った公式のページを、<b>知りたいこと</b>から引けるようにしたものです。リンクは公式の場所で、新しいタブで開きます。数字（料金・上限）は変わるので、必ず、公式のページで確かめてください。</p>
+<div class="tbl-wrap"><table class="tbl">
+  <caption>知りたいことと、確かめる公式ページ（確認日 2026 年 11 月 18 日）</caption>
+  <thead><tr><th>知りたいこと</th><th>公式ページ</th><th>この講座の章</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">アカウント・キー・支払い・上限</th><td><a href="https://platform.claude.com/" target="_blank" rel="noopener noreferrer">Claude Console</a>（管理画面）と、公式の Get started のページ</td><td>第 02 章</td></tr>
+    <tr><th scope="row">リクエストの形・ヘッダー</th><td><a href="https://platform.claude.com/docs/en/build-with-claude/working-with-messages" target="_blank" rel="noopener noreferrer">Working with Messages</a> / <a href="https://platform.claude.com/docs/en/api/overview" target="_blank" rel="noopener noreferrer">API overview</a>（ヘッダーの一覧）</td><td>第 03・04 章</td></tr>
+    <tr><th scope="row">料金・モデルの一覧</th><td><a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener noreferrer">Pricing</a> / <a href="https://platform.claude.com/docs/en/about-claude/models/overview" target="_blank" rel="noopener noreferrer">Models overview</a></td><td>第 05・06 章</td></tr>
+    <tr><th scope="row">エラー・制限・再試行</th><td><a href="https://platform.claude.com/docs/en/api/errors" target="_blank" rel="noopener noreferrer">Errors</a> / <a href="https://platform.claude.com/docs/en/api/rate-limits" target="_blank" rel="noopener noreferrer">Rate limits</a></td><td>第 07 章</td></tr>
+    <tr><th scope="row">プロンプトの書き方</th><td><a href="https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices" target="_blank" rel="noopener noreferrer">Prompting best practices</a></td><td>第 08 章</td></tr>
+    <tr><th scope="row">構造化した出力</th><td><a href="https://platform.claude.com/docs/en/build-with-claude/structured-outputs" target="_blank" rel="noopener noreferrer">Structured outputs</a></td><td>第 08 章</td></tr>
+    <tr><th scope="row">ツールの利用</th><td><a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview" target="_blank" rel="noopener noreferrer">Tool use overview</a> / <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls" target="_blank" rel="noopener noreferrer">Handle tool calls</a></td><td>第 09 章</td></tr>
+    <tr><th scope="row">画像・PDF</th><td><a href="https://platform.claude.com/docs/en/build-with-claude/vision" target="_blank" rel="noopener noreferrer">Vision</a> / <a href="https://platform.claude.com/docs/en/build-with-claude/pdf-support" target="_blank" rel="noopener noreferrer">PDF support</a></td><td>第 10 章</td></tr>
+    <tr><th scope="row">キャッシュ・バッチ</th><td><a href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching" target="_blank" rel="noopener noreferrer">Prompt caching</a> / <a href="https://platform.claude.com/docs/en/build-with-claude/batch-processing" target="_blank" rel="noopener noreferrer">Batch processing</a></td><td>第 10 章</td></tr>
+    <tr><th scope="row">エージェント・MCP</th><td><a href="https://code.claude.com/docs/en/agent-sdk/overview" target="_blank" rel="noopener noreferrer">Agent SDK overview</a> / <a href="https://platform.claude.com/docs/en/agents-and-tools/mcp-connector" target="_blank" rel="noopener noreferrer">MCP connector</a></td><td>第 11 章</td></tr>
+    <tr><th scope="row">利用方針</th><td><a href="https://www.anthropic.com/legal/aup" target="_blank" rel="noopener noreferrer">Usage Policy</a></td><td>第 13 章</td></tr>
+    <tr><th scope="row">データの保持</th><td><a href="https://platform.claude.com/docs/en/manage-claude/api-and-data-retention" target="_blank" rel="noopener noreferrer">API and data retention</a></td><td>第 13 章</td></tr>
+  </tbody></table></div>
+<p>ページの場所は変わることがあります。リンクが開けないときは、公式ドキュメント（platform.claude.com/docs）の目次から探してください。</p>
+
+<h3>② 確認できなかったこと・書かなかったこと</h3>
+<ul>
+  <li><b>日本語の文字数とトークンの比率</b>：公式の資料に、決まった値が見つからなかったため、第 05 章では、仮の係数を、はっきり仮と示して使い、無料の count_tokens で測るよう案内しています。</li>
+  <li><b>通常の API データの保持期間</b>：公式のデータ保持のページは、通常の期間を、別の商用の方針のページに任せており、この講座には書いていません。</li>
+  <li><b>画像・PDF の大きさと枚数の上限</b>：変わりやすいので、数字を書かず、公式のページを案内しました。</li>
+  <li><b>ツールの名前が未知のときの動き</b>：公式のページに、決まった動作の記載がなかったため、書いていません。</li>
+</ul>
+
+<h3>③ 用語集</h3>
+<p>この講座の用語が、ここに集まります。検索すると、用語・英語・別名・説明から探せます。</p>
+<div data-widget="glossary"></div>
+
+<h3>④ 総合テスト</h3>
+<p>第 01〜14 章から 1 問ずつ、全 14 問です。モデルの名前や料金の数字のような、変わりやすい事実は問いません。仕組みの理解と、使い分けの考え方を問います。</p>
+<div data-widget="exam"></div>
+
+<h3>⑤ この講座が扱わないこと</h3>
+<div class="callout warn"><span class="ttl">この講座が扱わないこと</span>
+  <ul>
+    <li><b>公式であることの主張</b>：この講座は、学習用のまとめで、公式ではありません。</li>
+    <li><b>料金・請求額の保証</b>：料金の数字は目安で、請求額を保証しません。公式の料金表と、Console の表示で確かめてください。</li>
+    <li><b>法律・契約の助言</b>：利用方針、個人情報、業界の決まりは、公式の原文と、専門家に確かめてください。</li>
+    <li><b>公式の文章・コードの転載</b>：公式の長い引用は載せていません。要約と、リンクだけです。</li>
+  </ul></div>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 18 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>公式ドキュメント</td><th scope="row">上の「資料の地図」の各ページ</th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>各章の事実の出どころ。ページごとに、参照資料の表に載せています。</td></tr>
+    </tbody>
+  </table></div>
+</section>

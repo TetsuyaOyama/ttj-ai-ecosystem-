@@ -32,6 +32,16 @@ AI エージェント × 通信 × 半導体 × 計算サーバー × 発電 × 
 
 この講座の元データ（章の HTML・図のデータ・検証記録）は `courses/ai/` にあり、これまでの講座と同じ基盤（`courses/_framework/`）で 1 枚の HTML に組み立てます（`courses/_framework/build.py` の `--publish courses/ai-publish.json` で公開範囲と出力先を指定）。検証の記録は `courses/ai/REVIEW.md` です。教材の一覧（`courses/ai/tools/resources.json`）から章の表と付録を作る道具は `courses/ai/tools/` にあります。
 
+#### Claude API 入門
+
+はじめての 1 回の呼び出しから、料金の見積もり、ツールの利用、利用例、これからの広がりまでを、図と動かせる部品で学ぶ入門（序章＋全15章）。公式の資料ではなく学習用のまとめで、最新の情報は公式ドキュメントで確かめてください。
+
+[講座を開く](https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/showcase/claude-api/)
+
+![Claude API 入門の画面](docs/images/claude-api.png)
+
+この講座の元データは `courses/claude-api/` にあり、これまでの講座と同じ基盤（`courses/_framework/`）で 1 枚の HTML に組み立てます（`--publish courses/claude-api-publish.json` で公開範囲と出力先を指定）。検証の記録は `courses/claude-api/REVIEW.md` です。
+
 #### AI エコシステム図
 
 このリポジトリの Claude Code 構成（入口・ハーネス・振り分け・公開）をインタラクティブに図解します。

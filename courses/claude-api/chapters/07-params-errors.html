@@ -1,0 +1,103 @@
+<!--
+num: 07
+part: 2
+title: 主なパラメータ、エラーと制限
+track: 仕組み
+time: 45
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>主なパラメータ（<b>max_tokens、stop_sequences、stream、effort</b>）の役目と、<b>temperature が使えなくなった</b>ことを説明できる。</li>
+    <li><b>stop_reason</b> と、主な<b>エラー</b>の種類を読み分け、再試行してよいかを判断できる。</li>
+    <li><b>レート制限</b>の仕組み（RPM・ITPM・OTPM、429、retry-after）と、再試行の考え方を説明できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch03">第 03 章</a>（レスポンスの形）と<a href="#ch05">第 05 章</a>（制限の数字の表）。</p>
+</section>
+
+<h3>主なパラメータ</h3>
+<p>リクエストの本文には、model・max_tokens・messages のほかに、任意のパラメータがあります。次の表で、主なものを確かめます（出典：Messages API reference、2026 年 11 月 18 日確認）。</p>
+<div data-widget="table" data-src="c07-params"></div>
+<div class="callout warn"><span class="ttl">temperature は、新しいモデルでは使えません</span>
+  <p>古い記事によく出てくる <code>temperature</code>、<code>top_p</code>、<code>top_k</code> は、<b>Claude 4.7 以降のモデルではサポートされません</b>。API バージョン <code>2026-10-21</code> からは、<b>すべてのモデルで</b>、値を付けて送ると 400 エラーになります。公式は、これらをリクエストから外し、プロンプトで振る舞いを導くよう案内しています（出典：Working with Messages、API versions）。</p></div>
+
+<h3>ストリーミング：答えを少しずつ受け取る</h3>
+<p>長い答えは、完成を待つと、画面が止まって見えます。<code>stream</code> を有効にすると、答えが<b>イベントの列</b>として、少しずつ届きます。公式の Python SDK では、次のように書けます。</p>
+<pre><code class="lang-python">import anthropic
+
+client = anthropic.Anthropic()
+
+with client.messages.stream(
+    model="claude-haiku-5-5",
+    max_tokens=1000,
+    messages=[{"role": "user", "content": "短い自己紹介をしてください。"}],
+) as stream:
+    for text in stream.text_stream:
+        print(text, end="", flush=True)</code></pre>
+<p>流れは、次の図のとおりです。公式ドキュメントが示す順序で、<code>message_start</code> から <code>message_stop</code> まで、一手ずつ再生できます。</p>
+<div data-widget="seq" data-src="c07-stream"></div>
+
+<h3>stop_reason：なぜ止まったか</h3>
+<p>レスポンスの <code>stop_reason</code> は、モデルが答えを止めた理由です。<b>HTTP の状態は成功（200）でも、stop_reason が max_tokens や refusal のことがある</b>ので、必ず確かめます。</p>
+<div data-widget="table" data-src="c07-stop"></div>
+
+<h3>エラーの種類</h3>
+<p>リクエストが失敗すると、HTTP の状態コードと、次の形の JSON が返ります。<code>error.type</code> と、<code>request_id</code>（サポートに問い合わせるときに使う識別子）が入ります（出典：Errors）。</p>
+<pre><code class="lang-json">{
+  "type": "error",
+  "error": { "type": "not_found_error", "message": "…" },
+  "request_id": "req_…"
+}</code></pre>
+<div data-widget="table" data-src="c07-err"></div>
+
+<h3>レート制限と、再試行の考え方</h3>
+<p><b>レート制限</b>は、1 分あたりに使える量の上限です。Messages API では、<b>リクエスト数（RPM）</b>、<b>入力トークン数（ITPM）</b>、<b>出力トークン数（OTPM）</b>の 3 つが、モデルごとに決まっています（数字の例は第 05 章）。どれか 1 つでも超えると、429 が返ります。公式ドキュメントによると、次の点が大事です（出典：Rate limits）。</p>
+<ul>
+  <li>制限は、<b>トークンバケット方式</b>です。上限まで、容量が少しずつ回復し続けます。1 分ごとに、一斉にリセットされるのではありません。</li>
+  <li>短い時間の<b>バースト</b>でも、制限に触れることがあります。急に使用量を増やすと、<b>ランプ制限</b>で 429 になることもあります。</li>
+  <li>429 に <code>retry-after</code> ヘッダーがあるときは、<b>その秒数待って</b>から再試行します。</li>
+  <li>入力トークンのうち、<b>キャッシュから読んだ分は、ITPM に数えません</b>（第 10 章）。</li>
+  <li>月の上限に達した 429 には、<b>retry-after がなく</b>、再試行しても、上限が戻るまで失敗します。</li>
+</ul>
+<p>再試行してよいかどうかは、エラーの種類で決まります。次の図で、判断の順序を追ってください。公式の SDK は、接続のエラー・408・409・429・5xx を、<b>既定で 2 回</b>、短い間隔を倍々にしながら自動で再試行します。<code>max_retries</code> で変えられます（出典：Python SDK）。</p>
+<div data-widget="flow" data-src="c07-retry"></div>
+<pre><code class="lang-python">import anthropic
+
+client = anthropic.Anthropic(max_retries=3)  # 既定は 2 回。ここでは 3 回に増やす
+
+try:
+    message = client.messages.create(
+        model="claude-haiku-5-5",
+        max_tokens=1000,
+        messages=[{"role": "user", "content": "こんにちは。"}],
+    )
+except anthropic.RateLimitError:
+    print("429：待ってから、やり直す（月の上限なら、上限を確かめる）")
+except anthropic.APIConnectionError:
+    print("接続できませんでした")
+except anthropic.APIStatusError as e:
+    print("そのほかのエラー:", e.status_code)</code></pre>
+<p>公式の SDK は、状態コードごとの例外のクラスを用意しています。たとえば、400 は <code>BadRequestError</code>、401 は <code>AuthenticationError</code>、429 は <code>RateLimitError</code> です。文字列を照合するのではなく、クラスで受けます（出典：Python SDK、Errors）。</p>
+
+<h3>つまずきやすい点</h3>
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p>1 つ目は、<b>stop_reason を見ない</b>ことです。max_tokens で切れた答えを、完成した答えとして使ってしまいます。2 つ目は、<b>400 を再試行し続ける</b>ことです。400 は、リクエストの形や内容の問題なので、直さない限り、何度送っても失敗します。3 つ目は、<b>月の上限の 429 を、一時的な混雑と思う</b>ことです。メッセージと <code>error.details.error_code</code> で見分けます。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3><div data-widget="quiz" data-src="c07-quiz"></div></section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 18 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/api/messages/create" target="_blank" rel="noopener">Messages API reference</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>パラメータの一覧と説明（max_tokens、stop_sequences、stream、effort など）。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/build-with-claude/working-with-messages" target="_blank" rel="noopener">Working with Messages</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>temperature・top_p・top_k が 4.7 以降で使えないこと。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/api/versioning" target="_blank" rel="noopener">API versions</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>2026-10-21 で、3 つのパラメータが全モデルで削除されたこと。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/build-with-claude/streaming" target="_blank" rel="noopener">Streaming Messages</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>イベントの順序、Python の書き方、ストリームの途中のエラー。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/build-with-claude/handling-stop-reasons" target="_blank" rel="noopener">Handling stop reasons</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>stop_reason の値と、扱い方。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/api/errors" target="_blank" rel="noopener">Errors</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>エラーの種類、エラーの本文、request-id、再試行、タイムアウト。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/api/rate-limits" target="_blank" rel="noopener">Rate limits</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>RPM・ITPM・OTPM、トークンバケット、429、retry-after、月の上限の 429。</td></tr>
+      <tr><td>公式ドキュメント</td><th scope="row"><a href="https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/python" target="_blank" rel="noopener">Python SDK</a></th><td>Anthropic</td><td>確認 2026 年 11 月 18 日</td><td>例外のクラス、既定の再試行（2 回）、max_retries。</td></tr>
+    </tbody>
+  </table></div>
+</section>
