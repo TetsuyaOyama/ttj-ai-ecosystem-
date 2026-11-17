@@ -1,0 +1,78 @@
+<!--
+num: 20
+part: 4
+title: 相場配信：板情報と約定の配信の仕組み
+track: システム
+time: 35
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>取引所が配信する<b>相場情報の種類</b>と、配信の方式（ブロードキャストとマルチキャスト）を、大阪取引所の公表の範囲で説明できる。</li>
+    <li><b>マルチキャスト</b>が相場配信に向く理由と、<b>抜けたときの回復</b>の考え方を説明できる。</li>
+    <li>相場情報の<b>利用の契約</b>と、取引所が相場情報の配信を重く見る理由（価格形成）を、出典つきで言える。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch18">第18章</a>（取引システムの全体）と<a href="#ch19">第19章</a>（マッチングエンジン）。</p>
+</section>
+
+<div class="callout warn"><span class="ttl">この章の書き方</span>
+  <p>大阪取引所の J-GATE が、配信の抜けをどう回復するか、配信の遅延がどれだけか、気配を何段まで配るかは、確かめた資料に書かれていません。回復の流れの図は、<b>一般的な考え方</b>で、米国の CME グループ（CME Group）が公表している方式を参考にしています。J-GATE の方式の図ではありません。</p></div>
+
+<h3>配信する情報</h3>
+<p><b>相場情報</b>（market data）は、板の気配、約定、指数、取引の状態などを、取引所が利用者に配る情報です。第18章のとおり、大阪取引所では相場情報を API か ITCH で受け取ります。</p>
+<p>JPX の『リアルタイム相場情報（デリバティブ）』のページ（2026/01/09 更新）は、配信を「ブロードキャスト」と「マルチキャスト」の 2 つの列に分けた表で示します。</p>
+<ul>
+  <li><b>立会内取引情報</b>：ブロードキャストで配信されます。マルチキャストでも配信されますが、含まれる項目は別で、セッション情報、最良気配、複数気配などが挙げられています。</li>
+  <li><b>指数情報・J-NET 情報</b>：ブロードキャストのみです。</li>
+  <li><b>全注文情報</b>（注文情報の全気配値・数量等）：マルチキャストのみです。</li>
+</ul>
+<p>気配を何段まで配るか（<b>気配の深さ</b>）は、ページに書かれていません。「最良の気配だけ」か「板の全部」かは、配信の種類の項目の一覧で確かめます。ここでは、全注文情報が、全気配値・数量を含むとだけ言えます。</p>
+
+<h3>マルチキャストと 1 対 1 の接続</h3>
+<p>相場情報は、多くの受信者に同じ内容を配ります。<b>マルチキャスト</b>は、1 回の送信で同じ情報を多くの受信者へ届ける方式です（一般的な説明）。JPX は ITCH を、マルチキャストによる相場情報配信プロトコルと書き、CME は Market Data Platform（MDP）を「a dual-feed, User Datagram Protocol multicast architecture」と書きます。</p>
+<div data-widget="compare" data-src="c20-multicast-tcp"></div>
+
+<h3>抜けの回復</h3>
+<p>マルチキャストは、受信者ごとの確認の応答を前提にしません。そのため、パケットが届かない（抜ける）ことがあり、受信者の側で、番号の飛びに気づいて回復する必要があります。CME の『MDP 3.0 - Recovery Services』（「Updated Dec 26, 2024」）は、次のように書きます。</p>
+<ul>
+  <li>パケットのシーケンス番号で、抜けを検知します。</li>
+  <li>回復の方式は、スナップショットの繰り返し配信（Snapshot loop）、TCP による再送（TCP replay）、銘柄定義の繰り返し配信（instrument loop）です。</li>
+  <li>2 本の配信の両方で抜けることがあり、その場合は回復の手続きが要ります（「packets may be missed on both feeds, requiring a recovery process」）。</li>
+</ul>
+<p>下の図は、一般的な回復の流れです。<b>J-GATE の方式は公表されていません</b>。</p>
+<div data-widget="flow" data-src="c20-recover"></div>
+
+<h3>取引所が配信を重く見る理由</h3>
+<p>大阪取引所と東京商品取引所の『コンティンジェンシー・プラン』は、全面ダウン、または一般気配情報が配信されない場合等、市場の価格形成を歪めるおそれがある障害が発生した場合には、取引を停止すると書きます。理由として、市場情報が充分に伝達されない中で取引が行われると、市場の価格形成を歪めるおそれがあると書きます。引用は、JPX のページに載る現行の版（2013 年 10 月 18 日制定・2023 年 5 月 29 日改正。2026 年 11 月 18 日に確認）の文です。</p>
+
+<h3>情報の利用の契約</h3>
+<p>JPX の同じページによると、J-GATE から相場情報を得る方法には、<b>直結利用</b>と<b>再直結利用</b>があります。どちらも、大阪取引所（OSE）との契約が必要です。直結利用で得られるのはリアルタイムの情報のみで、再直結利用では、15 分遅れや終値の情報も得られます。情報を第三者へ提供するには、許可が必要です。</p>
+<p>『相場情報利用に関するポリシー』（2026 年 4 月 13 日）は、契約者の利用状況の監査の目的を、「契約者間の平等性を保つため」「契約者間の公正な競争環境を確保するため」と書き、料金の規則は全契約者に共通と書きます。配信される情報と、その利用の規則を、契約者に同じ条件で適用する考え方です。配信の遅延の数値は、書かれていません（第21章で、公表されている遅延の言い方を見ます）。</p>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>マルチキャストは、抜けない方式ではありません</b>。抜けは起きる前提で、受信者が番号で気づき、回復します。</p>
+  <p><b>回復の図は、J-GATE の方式ではありません</b>。CME が公表している方式を参考にした一般的な流れです。</p>
+  <p><b>配信の種類で、含まれる情報が違います</b>。立会内取引情報は、ブロードキャストとマルチキャストで、項目が別です。</p>
+  <p><b>直結と再直結は、どちらも契約が必要です</b>。再直結だから契約が要らない、ではありません。</p></div>
+
+<div class="callout tip"><span class="ttl">実務でのつながり</span>
+  <p>相場情報を受信するシステムの担当は、番号の飛びを検知したときの手順（再送の要求、板の作り直し、その間の注文の扱い）を、自社の設計として決めておきます。データの契約の担当は、利用の形（直結か再直結か、第三者への提供の有無）を、取引所の資料で確かめます。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c20-quiz"></div></section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 18 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/markets/paid-info-derivatives/realtime/index.html">リアルタイム相場情報（デリバティブ）</a></th><td>JPX</td><td>2026/01/09 更新</td><td>配信の種類、直結・再直結の利用。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/markets/paid-info-derivatives/realtime/tvdivq0000002nuz-att/Policies_J.pdf">相場情報利用に関するポリシー</a></th><td>JPX</td><td>2026 年 4 月 13 日</td><td>監査の目的、料金の規則。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/systems/derivatives-trading/01.html">デリバティブ取引 システム概要</a></th><td>JPX</td><td>2021/09/20 更新</td><td>ITCH、API。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/corporate/governance/risk/contingency/tvdivq0000007aep-att/nlsgeu000004tx5n.pdf">デリバティブ市場における取引に関するコンティンジェンシー・プラン</a></th><td>大阪取引所・東京商品取引所</td><td>2013 年 10 月 18 日制定・2023 年 5 月 29 日改正（JPX のページに載る版。2026 年 11 月 18 日に確認）</td><td>配信が止まった場合の取引停止の考え方。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://cmegroupclientsite.atlassian.net/wiki/spaces/EPICSANDBOX/pages/457325847/MDP+3.0+-+Recovery+Services">MDP 3.0 - Recovery Services</a></th><td>CME グループ（CME Group Client Systems Wiki）</td><td>「Updated Dec 26, 2024」</td><td>番号による抜けの検知、回復の方式。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.cmegroup.com/market-data/distributor/market-data-platform.html">Data Directly from the Market Data Platform</a></th><td>CME グループ</td><td>日付の記載なし（2026 年 11 月 18 日に確認）</td><td>MDP の配信方式。</td></tr>
+      <tr><td>教科書・一般知識・他講座</td><th scope="row">マルチキャストと 1 対 1 の接続の一般的な説明</th><td>—</td><td>—</td><td>1 対多と 1 対 1 の違い。一般知識と明記。</td></tr>
+    </tbody>
+  </table></div>
+</section>

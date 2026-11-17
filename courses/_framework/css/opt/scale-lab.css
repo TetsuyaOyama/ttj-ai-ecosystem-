@@ -92,6 +92,8 @@
 .lab-wave.c-ran { stroke: var(--k-ran-s); } .lab-wave.c-core { stroke: var(--k-core-s); } .lab-wave.c-pol { stroke: var(--k-pol-s); } .lab-wave.c-ims { stroke: var(--k-ims-s); }
 .lab-wave.sum { stroke: var(--text); stroke-width: 3.4; stroke-dasharray: 1 0; opacity: .9; }
 .lab-rms { stroke: var(--accent); stroke-width: 1.6; stroke-dasharray: 6 4; } .lab-rms-t { font-size: 11.5px; fill: var(--accent); font-weight: 700; }
+.lab-mark { stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: 5 4; } .lab-mark-t { font-size: 11.5px; fill: var(--accent); font-weight: 700; }
+.lab-dot { stroke: var(--bg); stroke-width: 2; fill: var(--k-ran-s); } .lab-dot.c-ran { fill: var(--k-ran-s); } .lab-dot.c-core { fill: var(--k-core-s); } .lab-dot.c-pol { fill: var(--k-pol-s); } .lab-dot.c-ims { fill: var(--k-ims-s); }
 .lab-track { fill: var(--surface); stroke: var(--line); }
 .lab-bar { fill: var(--k-ran-s); } .lab-bar.c-ran { fill: var(--k-ran-s); } .lab-bar.c-core { fill: var(--k-core-s); } .lab-bar.c-pol { fill: var(--k-pol-s); } .lab-bar.c-ims { fill: var(--k-ims-s); }
 .lab-bl { font-size: 12.5px; fill: var(--text); font-weight: 700; } .lab-bv { font-size: 12.5px; fill: var(--muted); font-family: var(--ttj-font-mono); }
@@ -105,6 +107,28 @@
 .lab-el { font-size: 12.5px; fill: var(--text); font-weight: 700; } .lab-cur { font-size: 13px; fill: var(--accent); font-weight: 700; }
 .lab-arrow { fill: var(--accent); stroke: none; }
 .lab-table summary, .sc-table summary { cursor: pointer; }
+/* ----- lab の追加（複数の入力をまとめて決めるプリセット・分類表・帯・正負の棒）。使わない実験には影響しない ----- */
+.lab-preset-bar { margin: 0 0 .7rem; padding: .5rem .7rem .55rem; border: 1px solid var(--line); border-radius: 10px; background: var(--surface2); }
+.lab-preset-h { font-size: .8rem; font-weight: 700; color: var(--muted); margin-bottom: .35rem; }
+.lab-preset-bar .lab-presets { margin-top: 0; }
+.lab-presets .btn[aria-pressed="true"] { background: var(--accent-fill); border-color: var(--accent-fill); color: var(--accent-ink); font-weight: 700; }
+.lab-preset-note { margin: .4rem 0 0; min-height: 1.4em; color: var(--text); }
+.lab-wave.faint { opacity: .5; stroke-width: 2; }
+.lab-fill { stroke: none; fill: var(--k-core-s); opacity: .22; }
+.lab-fill.c-ran { fill: var(--k-ran-s); } .lab-fill.c-core { fill: var(--k-core-s); } .lab-fill.c-pol { fill: var(--k-pol-s); } .lab-fill.c-ims { fill: var(--k-ims-s); }
+.lab-span { fill: var(--warn); opacity: .18; stroke: none; } .lab-span-t { font-size: 11.5px; fill: var(--warn); font-weight: 700; }
+.lab-res.word .lab-res-v b { font-size: 1.15rem; font-family: var(--ttj-font-sans); }
+.lab-fig-t { margin: .4rem .5rem .1rem; font-size: .84rem; color: var(--muted); font-family: var(--ttj-font-sans); }
+.lab-quad { border: 1px solid var(--line); border-radius: 10px; background: var(--surface); padding: .45rem .6rem .5rem; }
+.lab-quad h5 { margin: 0 0 .3rem; font-size: .86rem; font-family: var(--ttj-font-sans); color: var(--accent); }
+.lab-quad-t { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: .8rem; }
+.lab-quad-t th { font-weight: 700; color: var(--muted); font-size: .74rem; padding: .25rem .3rem; text-align: center; }
+.lab-quad-t tbody th { text-align: left; width: 5.2em; }
+.lab-quad-c { border: 1px solid var(--line2); padding: .35rem .4rem; vertical-align: top; text-align: center; line-height: 1.5; }
+.lab-quad-c b { display: block; font-size: .86rem; }
+.lab-quad-c span { display: block; color: var(--muted); font-size: .72rem; }
+.lab-quad-c.on { background: var(--accent-soft); box-shadow: inset 0 0 0 2px var(--accent-fill); }
+.lab-quad-c.on b::before { content: '● '; color: var(--accent); }
 @media print {
   .sc-ctl, .sc-sel .btn, .sc-probe, .lab-presets, .sc-keys { display: none !important; }
   .sc-grid, .lab-top { grid-template-columns: 1fr 1fr; }

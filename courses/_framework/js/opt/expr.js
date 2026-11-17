@@ -1,18 +1,44 @@
 /* 部品 lab / scale の共通：安全な式の評価器。eval・new Function は使わない。
    使える物：数値、名前（入力・計算結果・定数）、+ - * / ^（または **）、比較（< <= > >= == !=）、論理（&& || !）、条件（a ? b : c）、
-   かっこ、関数 sqrt abs sin cos tan asin acos atan atan2 exp ln log10 pow min max floor ceil round sign if(cond,a,b) clamp(x,lo,hi)、定数 pi。
+   かっこ、関数 sqrt abs sin cos tan asin acos atan atan2 exp ln log10 pow min max floor ceil round sign if(cond,a,b) clamp(x,lo,hi)、
+   ncdf(x)（標準正規分布の累積分布関数）・npdf(x)（同じ密度関数）、定数 pi。
+   ncdf は W. J. Hart の有理近似（West 2005 の倍精度版）。絶対誤差はおよそ 1e-15 以下（ブラウザとビルド検査で同じ式を使う）。
    ブラウザでは window.CNExpr、node（check-data.js）では module.exports。 */
 (function () {
   'use strict';
+  /* 標準正規分布の累積分布関数 N(x)。Hart の近似（Graeme West, "Better approximations to cumulative normal functions", 2005）。 */
+  function ncdf(x) {
+    if (x !== x) return NaN;
+    var xa = Math.abs(x), c, b;
+    if (xa > 37) c = 0;
+    else {
+      var e = Math.exp(-xa * xa / 2);
+      if (xa < 7.07106781186547) {
+        b = 3.52624965998911E-02 * xa + 0.700383064443688;
+        b = b * xa + 6.37396220353165; b = b * xa + 33.912866078383; b = b * xa + 112.079291497871; b = b * xa + 221.213596169931; b = b * xa + 220.206867912376;
+        c = e * b;
+        b = 8.83883476483184E-02 * xa + 1.75566716318264;
+        b = b * xa + 16.064177579207; b = b * xa + 86.7807322029461; b = b * xa + 296.564248779674; b = b * xa + 637.333633378831; b = b * xa + 793.826512519948; b = b * xa + 440.413735824752;
+        c = c / b;
+      } else {
+        b = xa + 0.65; b = xa + 4 / b; b = xa + 3 / b; b = xa + 2 / b; b = xa + 1 / b;
+        c = e / b / 2.506628274631;
+      }
+    }
+    return x > 0 ? 1 - c : c;
+  }
+  /* 標準正規分布の密度関数 */
+  function npdf(x) { return Math.exp(-x * x / 2) / 2.5066282746310002; }
   var FN = {
     sqrt: Math.sqrt, abs: Math.abs, sin: Math.sin, cos: Math.cos, tan: Math.tan, asin: Math.asin, acos: Math.acos, atan: Math.atan, atan2: Math.atan2,
     exp: Math.exp, ln: Math.log, log10: function (x) { return Math.log(x) / Math.LN10; }, pow: Math.pow, min: Math.min, max: Math.max,
     floor: Math.floor, ceil: Math.ceil, round: function (x, n) { var k = Math.pow(10, n || 0); return Math.round(x * k) / k; },
     sign: function (x) { return x > 0 ? 1 : x < 0 ? -1 : 0; }, 'if': function (c, a, b) { return c ? a : b; },
-    clamp: function (x, lo, hi) { return Math.min(hi, Math.max(lo, x)); }
+    clamp: function (x, lo, hi) { return Math.min(hi, Math.max(lo, x)); },
+    ncdf: ncdf, npdf: npdf
   };
   var CONST = { pi: Math.PI };
-  var NARGS = { sqrt: 1, abs: 1, sin: 1, cos: 1, tan: 1, asin: 1, acos: 1, atan: 1, atan2: 2, exp: 1, ln: 1, log10: 1, pow: 2, floor: 1, ceil: 1, sign: 1, 'if': 3, clamp: 3 };
+  var NARGS = { sqrt: 1, abs: 1, sin: 1, cos: 1, tan: 1, asin: 1, acos: 1, atan: 1, atan2: 2, exp: 1, ln: 1, log10: 1, pow: 2, floor: 1, ceil: 1, sign: 1, 'if': 3, clamp: 3, ncdf: 1, npdf: 1 };
 
   function tokenize(src) {
     var t = [], i = 0, m, s = String(src);

@@ -17,7 +17,7 @@
 | 01 | **年率**／**日数計算**→実日数/365・実日数/360／**ベーシスポイント**→bp・％ポイント／実効年率（effective annual rate）→名目の年率／連続複利（continuous compounding） |
 | 02 | **現在価値**／**割引係数**／利付債（coupon bond）→クーポン・利率／割引債（zero-coupon bond）→ゼロクーポン債／額面（face value）→償還／経過利子（accrued interest） |
 | 03 | **最終利回り**／直利（current yield）／スポットレート（spot rate）→ゼロクーポン利回り／フォワードレート（forward rate）→先渡しの金利／期間プレミアム（term premium） |
-| 04 | **イールドカーブ**／逆イールド（inverted yield curve）／スティープ化（steepening）→フラット化／パー利回り（par yield）→パー・イールド（2026-11-15 追加） |
+| 04 | **イールドカーブ**／逆イールド（inverted yield curve）／スティープ化（steepening）→フラット化／パー利回り（par yield）→パー・イールド（2026-11-15 追加）／ブル・スティープ（bull steepening）→ベア・スティープ・ブル・フラット・ベア・フラット／カーブのバタフライ（yield curve butterfly）→バタフライ（講座 C のオプションのバタフライと区別するため「カーブの」を付ける）／長短金利差（term spread）→長短スプレッド（2026-11-18 追加） |
 | 05 | **デュレーション**／コンベクシティ（convexity）／DV01（dollar value of one basis point）→BPV・金利感応度 |
 | 06 | **指標金利**／**無担保コールレート（オーバーナイト物）**／**SOFR**／フェデラル・ファンド実効金利（Effective Federal Funds Rate, EFFR）→フェデラル・ファンド金利／コール市場（call market）→短資会社／後決め複利（compounding in arrears）→参照期間／LIBOR（London Interbank Offered Rate）→TIBOR・指標の移行 |
 | 07 | **国債**→日本国債・米国債・JGB／国庫短期証券（Treasury Discount Bills）→T-Bill・短期国債／建設国債（construction bond）→特例国債・赤字国債／物価連動国債（inflation-indexed bond）→TIPS／個人向け国債（JGBs for retail investors） |

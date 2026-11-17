@@ -1,0 +1,87 @@
+<!--
+num: 19
+part: 4
+title: マッチングエンジン：板の持ち方と処理の順序
+track: システム
+time: 40
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>注文を<b>受け付けた順に 1 列にそろえて処理する</b>ことの意味（公平と再現性）を、決定性という言葉で説明できる。</li>
+    <li>板を<b>「価格の段と、各段の待ち行列」</b>と見る考え方で、先入れ先出しの配分を数量で計算できる。</li>
+    <li>障害のあとの取引再開について、大阪取引所と東京商品取引所のコンティンジェンシー・プランが書いていることと、<b>書かれていないこと</b>を区別できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch09">第09章</a>（価格優先・時間優先）と<a href="#ch18">第18章</a>（取引システムの全体）。</p>
+</section>
+
+<div class="callout warn"><span class="ttl">この章の書き方</span>
+  <p>J-GATE のマッチングエンジンの内部（受付の順序づけの方式、板のデータ構造、並列の度合い）は、JPX の確かめた資料に書かれていません。この章の前半は、取引システム一般の<b>考え方</b>の説明で、J-GATE や、米国の CME グループ（CME Group）の CME Globex の実装の説明ではありません。公表されている点だけを、出典と時点つきで引きます。</p></div>
+
+<h3>処理の順序と決定性</h3>
+<p><b>マッチングエンジン</b>（matching engine）は、注文を板と照らし、板への登録と約定を決める働きです（「マッチングエンジン」は講座の言い方です）。ここで大事なのは、<b>どの注文が先か</b>が 1 つに決まることです。同じ価格の注文が 2 本あるとき、先後が決まらなければ、時間優先（第09章）が成り立ちません。</p>
+<p>注文を受け付けた順に 1 列にそろえて処理すると、次の 2 つが得られます（取引システムの一般的な説明です）。</p>
+<ul>
+  <li><b>公平</b>：同じ条件の注文の先後が、受付の順で 1 つに決まります。</li>
+  <li><b>再現性</b>：記録した入力の列を同じ順で与えれば、同じ板の状態と同じ約定が出ます。この性質を<b>決定性</b>（determinism）と呼びます。障害の調査や検証に役立ちます。</li>
+</ul>
+<p>決定性は処理の<b>速さ</b>（遅延）とは別の性質です。速くても順序が不定なら、決定性はありません。</p>
+<p>公表されている例として、CME の『iLink Architecture』は、Market Segment Gateway（MSGW）がメッセージを「ゲートウェイに到着した順」に処理すると書きます（ページの更新の表示は「Updated Sep 28」で年がありません）。market segment は「a group of products on a given trading engine instance」と定義されています。一方、大阪取引所の J-GATE は、商品の管理区分を「パーティション」と呼びます（JPX『Order to Trade Ratio（OTR）』、2023/05/26 更新のページ）。パーティションと処理装置の対応は、書かれていません。</p>
+
+<h3>板のデータの持ち方</h3>
+<p>板は、<b>価格の段</b>と、各段の<b>待ち行列</b>（受付の順に並んだ注文）の組と見ることができます。これは考え方で、内部のデータ構造の説明ではありません。下の図で、段を押して待ち行列を見ます。</p>
+<div data-widget="layers" data-src="c19-book-data"></div>
+<p>CME の『CME Globex Matching Algorithm Steps』は、いくつかの配分の段階（steps）で、板の注文に約定を割り当てると説明します。主な点は次のとおりです（原文の語を引きます）。</p>
+<ul>
+  <li>FIFO：「During FIFO, resting orders are matched in timestamp order only.」</li>
+  <li>優先を失う変更：注文の変更のうち、数量の増加（Increase of working quantity）、価格の変更（Change of price）、口座番号の変更（Change of account number）では、timestamp の優先を失います。</li>
+  <li>配分の段階は、最後に「all quantity is allocated」となるよう並べられます。プロラタ（数量の割合で配る方式）は、端数の処理が必要なので、最後の段階には置かれず、あとに FIFO などが続きます。</li>
+</ul>
+<p>どの商品がどの方式を使うかは、商品ごとの規則で確かめます（第09章）。ページの更新の表示は「Updated Jun 02」で、年がありません。</p>
+
+<h3>1 つの例：FIFO の配分</h3>
+<p>次の図は、同じ価格 139.99 の買いが 2 本並んでいるところに、売りが入る例です。取引参加者 A 社・B 社・C 社、商品 X、価格と数量は<b>すべて架空</b>です。</p>
+<div data-widget="seq" data-src="c19-engine"></div>
+<p>計算は次のとおりです。売りは 250 枚で、先頭の A 社が 100 枚なので、A 社に 100 枚。残りは 250 − 100 ＝ 150 枚で、これが B 社に配られます。B 社の残りは 300 − 150 ＝ 150 枚で、待ち行列に残ります。約定の合計は 100 ＋ 150 ＝ 250 枚です。</p>
+
+<h3>障害と再起動</h3>
+<p>取引システムは、障害で止まることがあります。大阪取引所と東京商品取引所は、『デリバティブ市場における取引に関するコンティンジェンシー・プラン』を公表しています。JPX のコンティンジェンシー・プランのページ（2026/04/13 更新）に載る現行の版は、2013 年 10 月 18 日制定、<b>2023 年 5 月 29 日改正</b>です（2026 年 11 月 18 日に確認）。以下の引用は、この版の文です。</p>
+<p>取引再開の考え方として、次のように書かれています。</p>
+<ul>
+  <li>基本的な考え方は、被災・障害の状況を総合的に勘案し、<b>取引機会の確保と価格形成のバランス</b>に配慮した対応を採ることです。</li>
+  <li>「取引再開の判断に当たっては、取引再開後の価格形成が公正に行われるよう十分注意することとし、取引参加者に対し取引再開時間の周知を図ったうえ、再開後の注文受付時間・立会時間について、最低限それぞれ 15 分以上は確保するものとする。」</li>
+  <li>当日の日中立会中の再開が困難と見込まれる場合は、夜間立会以降の再開を検討します。</li>
+</ul>
+<p>このプランは、再開の判断の考え方を書いた文書です。再起動の技術的な手順（板の復元の方式など）は、書かれていません。</p>
+<p><b>参考：現物株式の例</b>（デリバティブではありません）。2020 年 10 月 1 日、東京証券取引所の現物株式の売買が終日停止しました。JPX の発表（第 5 報）は、ハードウェアの障害と、障害の起こった機器からバックアップへの切り替わりが正常に行われなかったことで、相場情報が配信できなくなったと書きます。2020 年 11 月 30 日の調査報告書は、NAS 上の制御機構の設定値の誤りにより、メモリカードの故障時に自動切替えが実行されなかったことを端緒と説明します（JPX と東証の見解としての記載）。また、東証の『売買システム再立ち上げによる売買再開』のページ（2021/05/24 更新）は、再立ち上げでは、受け付けた注文は取り消され、取引参加者が再発注するのが原則で、一部約定の残りも取り消されると書きます。これは現物株式の取扱いで、デリバティブにそのまま当てはまるとは書かれていません。</p>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>「受付の順」は、参加者が送った順とは限りません</b>。取引所が受け付けた順で決まります。回線や接続の違いで、参加者から見た先後と、受付の順が逆になることがあります。</p>
+  <p><b>決定性と速さは別です</b>。順序が 1 つに決まることと、処理が速いことは、別の性質です。</p>
+  <p><b>板の持ち方は考え方です</b>。「価格の段と待ち行列」は理解のための見方で、J-GATE や CME Globex の内部のデータ構造ではありません。</p>
+  <p><b>CME の 2 ページには年がありません</b>。更新の表示が「Sep 28」「Jun 02」で、年の表示がないので、版を確かめて使います。</p>
+  <p><b>現物株式の障害の例を、デリバティブの手順と読まない</b>でください。</p></div>
+
+<div class="callout tip"><span class="ttl">実務でのつながり</span>
+  <p>約定の数量が合わないとき、確認の担当は、同じ価格の注文の受付の順と、優先を失う変更（数量の増加・価格の変更など）があったかを見ます。システムの担当は、取引所の再開の連絡を受けて、再発注が必要か（注文が取り消されたか）を、取引所の案内で確かめます。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c19-quiz"></div></section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 15 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://cmegroupclientsite.atlassian.net/wiki/spaces/EPICSANDBOX/pages/457218521/CME+Globex+Matching+Algorithm+Steps">CME Globex Matching Algorithm Steps</a></th><td>CME グループ（CME Group Client Systems Wiki）</td><td>「Updated Jun 02」（年の表示なし）</td><td>FIFO、優先を失う変更、配分の段階。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://cmegroupclientsite.atlassian.net/wiki/spaces/EPICSANDBOX/pages/457220437/iLink+Architecture">iLink Architecture</a></th><td>CME グループ（CME Group Client Systems Wiki）</td><td>「Updated Sep 28」（年の表示なし）</td><td>MSGW の到着順の処理、market segment。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/derivatives/rules/others/02.html">Order to Trade Ratio（OTR）</a></th><td>JPX</td><td>2023/05/26 更新</td><td>パーティションの定義。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/corporate/governance/risk/contingency/tvdivq0000007aep-att/nlsgeu000004tx5n.pdf">デリバティブ市場における取引に関するコンティンジェンシー・プラン</a></th><td>大阪取引所・東京商品取引所</td><td>2013 年 10 月 18 日制定・2023 年 5 月 29 日改正（JPX のページに載る版。2026 年 11 月 18 日に確認）</td><td>取引再開の考え方。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/news/1030/20201001-06.html">障害に伴う売買の停止について【第5報】</a></th><td>JPX（東京証券取引所）</td><td>2020 年 10 月 1 日</td><td>現物株式の障害の例。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/corporate/news/news-releases/0020/nlsgeu00000553vh-att/nlsgeu00000553yv.pdf">調査報告書（システム障害に係る独立社外取締役による調査委員会）</a></th><td>JPX</td><td>2020 年 11 月 30 日</td><td>原因の記述（JPX と東証の見解として）。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/equities/trading/relaunch/index.html">売買システム再立ち上げによる売買再開</a></th><td>JPX（東京証券取引所）</td><td>2021/05/24 更新</td><td>現物株式の再立ち上げの取扱い。</td></tr>
+      <tr><td>教科書・一般知識・他講座</td><th scope="row">受付の順・決定性・待ち行列の一般的な説明</th><td>—</td><td>—</td><td>公平と再現性の考え方。J-GATE の実装の説明ではない。</td></tr>
+      <tr><td>架空（見本のため）</td><th scope="row">c19-engine の A 社・B 社・C 社、商品 X、価格と数量</th><td>この講座</td><td>—</td><td>FIFO の配分の例（実在の取引ではない）。</td></tr>
+    </tbody>
+  </table></div>
+</section>

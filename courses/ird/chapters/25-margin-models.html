@@ -1,0 +1,92 @@
+<!--
+num: 25
+part: 5
+title: 証拠金の計算方式：SPAN・VaR・期待ショートフォール
+track: 清算
+time: 45
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>証拠金の計算方式（シナリオ表の方式、バリュー・アット・リスク、期待ショートフォール）の考え方の違いを、架空のシナリオの損益で計算して説明できる。</li>
+    <li>日本証券クリアリング機構が、先物・オプション取引の当初証拠金の方式を、資料によって違う語で書いていること、方式の名前だけでなく信頼水準・保有期間・参照期間を見る必要があることを説明できる。</li>
+    <li>米国の大手の取引所グループが進める、新しい方式への移行の状態を、確かめた公式ページの範囲で説明できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch24">第24章</a>（証拠金：当初証拠金と変動証拠金、値洗い）。</p>
+</section>
+
+<div class="callout warn"><span class="ttl">この章の扱い（制度の時点）</span><p>この章の制度・規則・商品の仕様は、本文に明記した国・地域と時点のものです。金融政策の枠組み、取引所と清算機関の規則、商品の仕様は改定されます。最新の内容は、本文の参照資料に挙げた公式のページで確かめてください。</p></div>
+
+<h3>当初証拠金は、どう計算されるか</h3>
+<p>第24章のとおり、当初証拠金は、これから起こりうる損失に備える証拠金です。「起こりうる損失」をどう見積もるかが、計算方式です。この章では、3 つの名前を扱います。</p>
+<p>1 つ目は<b>SPAN</b>（Standard Portfolio Analysis of Risk）です。価格やボラティリティの動きを、あらかじめ決めたシナリオで当てはめて、建玉の損失を計算します。2 つ目は<b>バリュー・アット・リスク</b>（Value at Risk, VaR）です。ヒストリカル・シミュレーションなどで損益のシナリオを作り、一定の信頼水準の損失を求めます。3 つ目は<b>期待ショートフォール</b>（Expected Shortfall, ES）です。VaR を超える損失の平均を求めます。</p>
+<p>方式の名前は、同じ名前でも、信頼水準・保有期間・観測期間の値が違うと、結果が違います。そのため、名前だけでなく、値も一緒に書くのが、この講座の決まりです。</p>
+
+<h3>SPAN：シナリオの表で損失を求める</h3>
+<p>CME の SPAN の説明ページは、SPAN を、ほぼあらゆる市場シナリオの「もしも」を分析して、証拠金（performance bond）の所要額を計算する方式と説明します。契約ごとに、さまざまな条件のもとで価値がどう増減するかを示す数値の集合（risk array）を持ち、各条件をリスクシナリオと呼びます。シナリオの幅を決めるのは、価格の動きの大きさ（price scan range）と、ボラティリティの動きの大きさ（volatility scan range）です（出典：CME『CME SPAN Methodology Overview』、日付の記載なし）。</p>
+<p>組合せ商品ごとの計算は、スキャンリスク、限月間のスプレッド賦課（intra-commodity spread charge）、受渡しのリスクを足し、商品間のスプレッドのクレジット（inter-commodity spread credit）を差し引く、と同じページに書かれています。限月間と商品間の相殺は、ここで扱われます（第16章）。</p>
+<p>CME Clearing の開示（2025 年 12 月 12 日時点）は、SPAN を、適用するリスクの測定期間（margin period of risk）にわたってポートフォリオが被りうる最悪の損失を計算する方式で、99％の信頼区間を使う、と説明します。観測期間（lookback）の重みは、資産の種類によって違います（原文は “using a 99% confidence interval”、“varying weighted lookback periods dependent on the asset class”）。</p>
+
+<h3>VaR と期待ショートフォール：損失の分布の見方</h3>
+<p>VaR と期待ショートフォールは、シナリオごとの損益を、損失の大きい順に並べて考えます。次の実験台は、この講座の簡略の定義で、2 つを並べます。損失を大きい順に並べ、k ＝ (1 − 信頼水準) × N（N はシナリオの数）とします。VaR は k 番目の損失、期待ショートフォールは上位 k 個の損失の平均です。</p>
+<p>VaR の定義（何番目をとるか、補間するか）は、清算機関ごとに違います。この講座の定義は、2 つの違いを読むための単純化で、清算機関の方式ではありません。</p>
+<div data-widget="lab" data-src="c25-var"></div>
+<p>架空のシナリオは 10 本で、損益は −50・−30・−20・−10・−5・0・5・10・20・30 万円です。信頼水準 80％なら、k ＝ (1 − 0.8) × 10 ＝ 2 です。VaR は 2 番目に大きい損失の 30 万円、期待ショートフォールは上位 2 個の平均（50 ＋ 30）÷ 2 ＝ 40 万円です。最悪のシナリオの損失を大きくすると、VaR（k ≧ 2 のとき）は変わらず、期待ショートフォールは大きくなります。VaR は、k 番目より外側の損失の大きさを見ないからです。損失の側の大きさを見るのが、期待ショートフォールです。</p>
+<div data-widget="compare" data-src="c25-span-var"></div>
+
+<h3>JSCC：SPAN からの変更と、資料の語の食い違い</h3>
+<p>日本では、JSCC が、先物・オプション取引の証拠金の計算方式を、SPAN 方式から VaR 方式へ変更しました。JSCC は、2023 年 11 月 6 日付で変更が行われた、と書いています（出典：JSCC『FMI原則に基づく情報開示』、2024 年 3 月 31 日時点。2023 年 10 月の JSCC の資料は、同日の変更を「予定」と書いていました）。</p>
+<p>ここで、JSCC の資料の間で、先物・オプション取引の当初証拠金の方式の語が違います。確かめた資料を並べます。</p>
+<ul>
+  <li><b>『証拠金』（リスク管理のページ。2024 年 12 月 18 日現在の表示）</b>：先物・オプション取引のモデルタイプは「期待ショートフォール」、算出方法は「ヒストリカルシミュレーション」。注に、日経平均・配当指数先物取引と、上場商品デリバティブ取引（一部を除く）は VaR、とあります。</li>
+  <li><b>『FMI原則に基づく情報開示』（2024 年 3 月 31 日時点）</b>：上場デリバティブ取引の当初証拠金は「VaR 方式」で計算する。主な方式の HS-VaR 方式の信頼水準を、「97.5％を超える上位 2.5％の平均値（期待ショートフォール、カバー率は 99％VaR と同程度）」と説明しています（原文の数字は全角。半角に直しました）。新しい版（2026 年 3 月末時点、公表は 2026 年 4 月 1 日）も、本文は「VaR 方式（HS-VaR 方式又は AS-VaR 方式）」と同じ説明で、同じ文書の中の要約の表は、同じ区分を「期待ショートフォール」と書いています。</li>
+  <li><b>大阪取引所『証拠金』のページ（2023/11/02 更新）と、JSCC『証拠金及び決済制度の概要（OSE）』（2023 年 11 月 6 日現在）</b>：「VaR方式」と書いています。</li>
+  <li><b>JSCC のお知らせ（2025 年）</b>：題名に「VaR証拠金計算」や「AS-VaR」の語があります。</li>
+</ul>
+<p>この講座は、現行のリスク管理のページの語に合わせて、先物・オプション取引の当初証拠金を「期待ショートフォール」と書きます。他の資料が「VaR 方式」と書く先物・オプション取引の当初証拠金について、JSCC の『FMI原則に基づく情報開示』は、HS-VaR 方式の中身を、上位 2.5％の平均値（期待ショートフォール）と説明しています。導入のときの JSCC の英文の概要『Outlines of Margin Calculation Method (VaR Method) for Futures/Option Contracts』（2023 年 11 月）も、VaR 方式の中で、各シナリオの損失の上位 2.5％の平均（原文は “97.5% Expected Shortfall”）を使い、2 日の保有期間と 1,250 日の参照期間を置く、と書いています。導入のあとに方式が別のものに変わったのではなく、同じ計算を資料によって違う語で呼んでいる、と読めます。JSCC が語を切り替えた日と理由は、確かめられなかったので書きません。資料を引くときは、資料の語と日付を一緒に書きます。</p>
+<p>VaR 方式の特徴として、JSCC の 2023 年 10 月の資料は、限月別に証拠金を計算し、ヒストリカルデータによる損益計算の中で商品間のリスクも自然に相殺する、と書いています。ストレスのシナリオの追加により、アウトオブザマネーのオプションの証拠金は、SPAN に比べて増える傾向がある、とも書いています。相殺の計算の見直しは、2025 年 11 月 28 日の JSCC の資料が、2026 年 4 月 13 日の稼働予定として公表しています。JSCC のお知らせの一覧（2026 年）には、2026 年 4 月 12 日の題名「上場デリバティブ2026年4月稼働案件の本番稼働について」があります。お知らせの本文と、見直しの中身が予定どおりかは、この章では確かめていません。</p>
+<p>JSCC は、ストレス期間中の証拠金の急増が相場の変動を強めることを抑えるため、プロシクリカリティ抑制策を導入しています。内容は、追加のストレスシナリオ、ボラティリティ下限値、最低証拠金所要額の設定などです（出典：JSCC『証拠金』、2024 年 12 月 18 日現在の表示）。</p>
+
+<h3>清算機関ごとの方式の早見表</h3>
+<p>次の表は、確かめた公式ページの語だけを並べたものです。比較や順位ではありません。「参照期間」は JSCC の表の語で、この講座の「観測期間」にあたります。</p>
+<div data-widget="table" data-src="c25-ccp"></div>
+
+<h3>CME の SPAN 2：現在の状態</h3>
+<p>CME の公式ページ『Launching SPAN 2』（日付の記載なし。2026 年 11 月 15 日に閲覧）は、SPAN 2 の導入を、段階的に進める、と書いています。タイムラインには、2023 年のエネルギー商品の移行、2024 年後半の株式関連商品（Equity products live）、2026 年の金利と為替が並び、末尾に「Subject to any necessary regulatory reviews」（必要な規制当局の審査を条件とする）とあります。同じページは、エネルギーと株式の商品が SPAN 2 に移行済みであることを書いています。</p>
+<p>金利の商品が、2026 年 11 月 15 日の時点で SPAN 2 に移行したかは、確かめた公式ページに書かれていないので、この章は書きません。移行の状態は、CME の清算の通知で確かめます。CME Clearing の開示（2025 年 12 月 12 日時点）は、SPAN 2 の市場リスクの要素の 1 つ（filtered Historical Value-at-Risk）を、通常 75％の重みで使う、と書いています。</p>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>方式の名前だけで、証拠金の水準は比べられません</b>。信頼水準・保有期間・参照期間（観測期間）の値が違えば、同じ名前の方式でも結果が違います。</p>
+  <p><b>期待ショートフォールは、VaR より小さくなりません</b>。VaR を超える損失の平均なので、同じ信頼水準では VaR 以上になります。ただし、清算機関が使う信頼水準は方式ごとに違うので、名前だけで大小は決まりません。</p>
+  <p><b>講座の簡略の定義を、清算機関の方式と取り違えないでください</b>。何番目をとるか、補間するかは、清算機関ごとに違います。</p>
+  <p><b>資料によって語が違うときは、資料の語と日付を一緒に書きます</b>。JSCC の先物・オプション取引は、リスク管理のページが「期待ショートフォール」、他の資料が「VaR 方式」と書きます。語を切り替えた日は、この章では確かめられていません。</p></div>
+
+<div class="callout tip"><span class="ttl">実務でのつながり</span>
+  <p>リスク管理や事務では、証拠金の試算に使う方式の名前と版（VaR 証拠金計算ソフトウェアのバージョンなど）を、請求の記録と一緒に残します。開発では、清算機関が公表する計算のためのファイルやソフトウェアの版が、改定の日付で切り替わるので、日付ごとの版を持ちます。監査では、資料の語が日付で違うときに、どの日付の資料を根拠にしたかが残っているかを確かめます。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c25-quiz"></div></section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 15 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/jscc/risk/margin.html">証拠金</a></th><td>日本証券クリアリング機構（JSCC）</td><td>2024 年 12 月 18 日現在（ページの表示）</td><td>モデルタイプ・算出方法・参照期間・保有期間・目標信頼水準の表、注、プロシクリカリティ抑制策。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/jscc/kaisya/cimhll0000000osu-att/JSCC_PFMI_Disclosure_20240331_JP.pdf">FMI原則に基づく情報開示</a></th><td>日本証券クリアリング機構（JSCC）</td><td>2024 年 3 月 31 日時点（公表は 2024 年 4 月 1 日）</td><td>SPAN 方式から VaR 方式への変更の日付、HS-VaR 方式と AS-VaR 方式の説明。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/jscc/kaisya/cimhll0000000osu-att/JSCC_PFMI_Disclosure_20260331_JP.pdf">FMI原則に基づく情報開示（新しい版）</a></th><td>日本証券クリアリング機構（JSCC）</td><td>2026 年 3 月末時点（公表は 2026 年 4 月 1 日。2026 年 11 月 18 日に確認）</td><td>「VaR 方式（HS-VaR 方式又は AS-VaR 方式）」の語と、要約の表の「期待ショートフォール」の語。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/jscc/seisan/sakimono/shokokin_seido/u89at3000000i04f-att/varfeature_j.pdf">証拠金計算方式の変更（SPAN方式→VaR方式）に伴う証拠金水準の変化と特徴について</a></th><td>日本証券クリアリング機構（JSCC）</td><td>2023 年 10 月</td><td>変更の予定、限月別の計算、商品間の相殺、ストレスシナリオ。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/jscc/en/cash/futures/marginsystem/gjnthi000000049n-att/p8nu7200000006oj.pdf">Outlines of Margin Calculation Method (VaR Method) for Futures/Option Contracts</a></th><td>日本証券クリアリング機構（JSCC。日本語の資料の参考訳）</td><td>2023 年 11 月</td><td>導入のときの VaR 方式が 97.5％の期待ショートフォールを使うこと、保有期間と参照期間。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/jscc/seisan/sakimono/shokokin_seido/u89at3000000i04f-att/outline.pdf">上場デリバティブ2026年4月稼働案件に係る対応概要</a></th><td>日本証券クリアリング機構（JSCC）</td><td>2025 年 11 月 28 日</td><td>相殺の計算の見直しと稼働予定日。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/jscc/seisan/sakimono/shokokin_seido/cimhll0000000g03-att/cimhll0000001846.pdf">証拠金及び決済制度の概要（OSE）</a></th><td>日本証券クリアリング機構（JSCC）</td><td>2023 年 11 月 6 日現在</td><td>「VaR方式」の語。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/derivatives/rules/margin/index.html">証拠金（取引制度）</a></th><td>大阪取引所（日本取引所グループ）</td><td>2023/11/02 更新</td><td>「VaR方式により求めた金額」の文。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/jscc/information/news/2025.html">お知らせ（2025 年）</a></th><td>日本証券クリアリング機構（JSCC）</td><td>2025 年の掲載項目の題名</td><td>「VaR証拠金計算」「AS-VaR」の語が題名にあること。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/jscc/information/news/2026.html">お知らせ（2026 年）</a></th><td>日本証券クリアリング機構（JSCC）</td><td>2026 年の掲載項目の題名（2026 年 11 月 18 日に確認）</td><td>2026 年 4 月 12 日の「上場デリバティブ2026年4月稼働案件の本番稼働について」の題名。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://cmegroup.com/solutions/risk-management/performance-bonds-margins/span-methodology-overview.html">CME SPAN Methodology Overview</a></th><td>CME グループ</td><td>日付の記載なし（© 2026）</td><td>SPAN の説明、risk array、scan range、スプレッド賦課とクレジット。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.cmegroup.com/solutions/risk-management/performance-bonds-margins/span-methodology-overview/launching-span-2.html">Launching SPAN 2</a></th><td>CME グループ</td><td>日付の記載なし（© 2026）</td><td>SPAN 2 の導入のタイムライン。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.cmegroup.com/clearing/risk-management/files/cme-clearing-principles-for-financial-market-infrastructures-disclosure.pdf">CME Clearing: Principles for Financial Market Infrastructures Disclosure</a></th><td>CME Clearing（回答者は Chicago Mercantile Exchange Inc.）</td><td>2025 年 12 月 12 日時点</td><td>SPAN の 99％の信頼区間と観測期間の重み、SPAN 2 の要素。</td></tr>
+      <tr><td>教科書・一般知識・他講座</td><th scope="row">VaR と期待ショートフォールの一般的な説明</th><td>—</td><td>—</td><td>定義の補足。この講座の簡略の定義であることを本文に明記。</td></tr>
+      <tr><td>架空（見本のため）</td><th scope="row">c25-var の 10 本のシナリオの損益</th><td>この講座</td><td>—</td><td>シナリオの損益は架空。実在の商品の損益ではない。</td></tr>
+    </tbody>
+  </table></div>
+</section>

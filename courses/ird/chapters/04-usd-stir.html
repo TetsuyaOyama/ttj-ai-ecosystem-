@@ -1,0 +1,82 @@
+<!--
+num: 04
+part: 1
+title: 米ドルの短期金利先物：ユーロドルから SOFR へ
+track: 商品
+time: 35
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li><b>米ドルの短期金利先物</b>が、公表の停止が予定された金利を参照する商品から、担保付翌日物調達金利を参照する商品へ移った経緯を、発表の日と実施の日を分けて説明できる。</li>
+    <li><b>建玉の転換</b>が、どの日に、どの比率で、どの価格の決め方で行われる予定だったかを、取引所の通知と規則の語で説明できる。</li>
+    <li><b>3 か月と 1 か月の先物</b>で、参照する期間と最終決済の金利の計算が違うことを、表で区別できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch02">第02章</a>（短期金利先物の価格と最終決済）。金利の定義と、指標金利の公表停止の背景は、<a href="../rates/#ch06">金利と国債の講座 第06章</a>で扱っています。</p>
+</section>
+
+<div class="callout warn"><span class="ttl">この章の扱い（制度の時点）</span><p>この章の制度・規則・商品の仕様は、本文に明記した国・地域と時点のものです。金融政策の枠組み、取引所と清算機関の規則、商品の仕様は改定されます。最新の内容は、本文の参照資料に挙げた公式のページで確かめてください。</p></div>
+
+<h3>まず全体像：参照する金利を入れ替えた先物</h3>
+<p>米国の取引所 CME グループ（CME Group、以下 CME）は、長く、米ドルの 3 か月の LIBOR を参照するユーロドル先物を上場してきました。LIBOR の公表の停止が予定され、CME は、ユーロドル先物の建玉（まだ決済されていない契約）を、担保付翌日物調達金利（SOFR）を参照する先物の建玉へ転換する手続きを定めました。</p>
+<p>この章は、その経緯を日付で追い、3 か月と 1 か月の SOFR 先物の違いを確かめます。日付は、CME の通知・規則とニューヨーク連銀のサイトに載る代替参照金利委員会（Alternative Reference Rates Committee, ARRC）の発表で確かめたものだけを書きます。LIBOR の公表停止そのものの日付は、英国の当局の発表で確かめる必要があり、この章では CME の通知の語として書くにとどめます。LIBOR と SOFR の定義は、<a href="../rates/#ch06">金利と国債の講座 第06章</a>で扱っています。</p>
+
+<h3>移行の年表：発表の日と実施の日</h3>
+<p>次の帯図で、6 つの区間を順に開きます。色は、CME の対応の段階を表します。取引量や建玉の大きさは示しません。</p>
+<div data-widget="route" data-src="c04-transition"></div>
+<p>年表の読み方は 3 つです。1 つ目は、米国の代替参照金利委員会（ARRC）が、2017 年 6 月 22 日に、米国債を担保にした資金調達の取引に基づく金利を、代替の参照金利として選んだことです（この金利が SOFR です）。2 つ目は、CME が 2018 年 3 月 1 日に SOFR 先物の上場の予定を発表したことで、この日付は予定の発表の日です。3 つ目は、2022 年 12 月 22 日の規則の通知と、2023 年 3 月 15 日の転換の通知が別の日で、転換の実施の日（2023 年 4 月 14 日の営業終了の後）がさらに後ろにあることです。</p>
+
+<h3>なぜ転換したか：建玉の参照先を入れ替える</h3>
+<p>CME の通知 23-082 は、転換を、3 か月の米ドル LIBOR の最終公表の予定（2023 年 6 月 30 日）の前に行うと書きます。転換の規則（SER-9115）は、対象を 2023 年 6 月 30 日より後に期限が来る限月の建玉と定めています。期限が最終公表の後に来る限月は、最終決済の金利となる指標が、期限までに公表されなくなります。そこで、参照する金利を SOFR に入れ替えます。</p>
+<p>転換の内容は、規則と通知の語で、次のとおりです。</p>
+<ul>
+  <li><b>日</b>：2023 年 4 月 14 日（金）の営業終了の後（予定）。取引日は 2023 年 4 月 17 日（月）。</li>
+  <li><b>比率</b>：1 対 1（通知の語「at a ratio of 1:1」）。転換後の建玉は、同じ限月で、取引単位の数量と方向が同じです。</li>
+  <li><b>先物の価格</b>：ユーロドル先物の清算値段に、固定のスプレッドの調整を足し、小数点以下 4 桁に丸めます。</li>
+  <li><b>オプション</b>：プレミアムの差額を取引所が決めて反映します（値は書きません。第06章でオプションの仕組みを扱います）。</li>
+</ul>
+<p>ここまでは、転換の前に出た通知と規則の語で、「予定」の内容です。転換の後、CME は 2023 年 4 月 24 日の発表で、ユーロドル先物とオプションの建玉を 4 月に SOFR の建玉へ転換したと公表しました。同じ発表は、2023 年 5 月限と 6 月限は転換の対象外で、満期まで取引される、と書きます。この発表は転換の時期を「4 月」とだけ書くので、この章は、日付を通知の語（2023 年 4 月 14 日の営業終了の後）として書きます。</p>
+
+<h3>なぜスプレッドの調整が必要だったか</h3>
+<p>LIBOR は銀行が資金を借りる金利に基づく期間つきの指標で、SOFR は米国債を担保にした翌日物の取引に基づく指標です。金利の性質が違うので、参照する金利をそのまま入れ替えると、置き換えの前後で価格がずれます。そこで CME は、ユーロドル先物の清算値段に、固定のスプレッドの調整を足して、転換後の価格を決めました。</p>
+<p>調整の値は、規則が 0.26161％（26.161 bp）と書き、Bloomberg Index Services Limited が公表する固定の値としています（出典：CME『SER-9115』、2022 年 12 月 22 日の通知、条件：転換の日 2023 年 4 月 14 日の規則）。CME の転換の仕様の資料（2023 年 2 月 1 日付）の例では、清算値段が 99.45 の建玉は、99.45 に 0.26161 を足して小数点以下 4 桁に丸めた 99.7116 の SOFR 先物の建玉になります。この値は、この転換のために固定された値です。現在の市場の金利を表すものではありません。</p>
+<div data-widget="seq" data-src="c04-convert"></div>
+
+<h3>3 か月と 1 か月の SOFR 先物</h3>
+<p>CME の SOFR 先物には、3 か月 SOFR 先物（SR3）と 1 か月 SOFR 先物（SR1）があります。どちらも価格は「100 − 金利」ですが、最終決済の金利の求め方が違います（価格の表し方は<a href="#ch02">第02章</a>）。</p>
+<div data-widget="compare" data-src="c04-sr3-sr1"></div>
+<p>3 か月の先物は、参照四半期の日次の SOFR を複利でつなぎます。1 か月の先物は、受渡月の日次の SOFR の算術平均です。複利と平均は、考え方が違う計算です。1 bp の価値も、25 ドルと 41.67 ドルで違うので、2 つを混ぜて損益を考えません。値は CME の教育の資料の語で、仕様は改定されることがあるので、取引の前に CME の仕様のページで確かめます。</p>
+<p>SOFR 先物のオプションは、<a href="#ch06">第06章</a>で扱います。</p>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>転換は、取引ではなく、建玉の参照先の入れ替えです</b>。数量・方向・限月は同じで、参照する金利と価格の決め方が変わります。</p>
+  <p><b>転換の価格に足す調整値は、現在の金利ではありません</b>。この転換のために固定された値（0.26161）です。</p>
+  <p><b>通知は予定の公表です</b>。通知 23-082 は「転換する」と書き、転換が実行されたことの発表ではありません。転換を終えたことは、別の発表（CME、2023 年 4 月 24 日）で確かめます。</p>
+  <p><b>発表の日と実施の日を分けて読みます</b>。2022 年 12 月 22 日（規則）、2023 年 3 月 15 日（通知）、2023 年 4 月 14 日（転換）は、別の日付です。</p>
+  <p><b>3 か月と 1 か月の SOFR 先物を混ぜません</b>。前者は複利、後者は算術平均で、1 bp の価値も違います。</p></div>
+
+<div class="callout tip"><span class="ttl">実務でのつながり</span>
+  <p>システムの開発では、転換のように、建玉の参照先と価格の決め方が変わる手続きを、日付つきで管理します。事務では、取引所の通知の「通知の日」と「転換の日」を、台帳で分けて管理します。リスク管理では、複利型と平均型の商品を、別の商品として扱います。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c04-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 15 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://www.newyorkfed.org/medialibrary/microsites/arrc/files/2017/ARRC-press-release-Jun-22-2017.pdf">ARRC press release Jun 22 2017</a></th><td>代替参照金利委員会（ニューヨーク連銀のサイト）</td><td>2017-06-22</td><td>代替の参照金利の選定。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.cmegroup.com/media-room/press-releases/2018/3/01/cme_group_announcesnewsofrfutureslaunchdateandcontractspecificat.html">CME Group Announces New SOFR Futures Launch Date and Contract Specifications</a></th><td>CME グループ</td><td>2018-03-01</td><td>SOFR 先物の上場の予定。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.cmegroup.com/notices/ser/2022/12/SER-9115.pdf">SER-9115</a></th><td>CME グループ</td><td>2022-12-22（通知）</td><td>転換の規則（日・対象・価格・スプレッドの調整）。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.cmegroup.com/notices/clearing/2023/03/Chadv23-082.html">Notice 23-082 LIBOR Fallback; ED-to-SOFR Fallbacks Conversion Production Weekend</a></th><td>CME グループ</td><td>2023-03-15</td><td>転換の日・取引日・比率。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.cmegroup.com/media-room/press-releases/2023/4/24/cme_group_completeskeymilestonesinconversionofeurodollarfutureso.html">CME Group Completes Key Milestones in Conversion of Eurodollar Futures and Options</a></th><td>CME グループ</td><td>2023-04-24</td><td>転換を 4 月に終えたこと、2023 年 5 月限・6 月限が対象外であること。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.cmegroup.com/clearing/files/libor-fallback-ed-to-sofr-specs-20230201.pdf">LIBOR fallback ED to SOFR specs</a></th><td>CME グループ</td><td>資料の日付 2023-02-01（更新日の記載なし）</td><td>スプレッドの調整と転換の価格の例。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.cmegroup.com/education/articles-and-reports/understanding-sofr-futures.html">Understanding SOFR Futures</a></th><td>CME グループ</td><td>ページに日付の記載なし（記事のメタデータの日付 2026-06-25。確認日 2026-11-18）</td><td>3 か月と 1 か月の SOFR 先物の違い。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.cmegroup.com/content/dam/cmegroup/education/files/sofr-futures-contract-specifications.pdf">SOFR futures contract specifications</a></th><td>CME グループ</td><td>日付の記載なし（2018 年の著作権表示）</td><td>1 か月 SOFR 先物の最終決済の価格・最終取引日。現行の値は CME の仕様のページで確かめる。</td></tr>
+      <tr><td>教科書・一般知識・他講座</td><th scope="row"><a href="../rates/#ch06">金利と国債の講座 第06章</a></th><td>この講座群（講座 A）</td><td>確認 2026 年 11 月 15 日</td><td>LIBOR・SOFR の定義と、指標金利の移行の背景。</td></tr>
+      <tr><td>教科書・一般知識・他講座</td><th scope="row">LIBOR と SOFR の性質の違い</th><td>—</td><td>—</td><td>期間つきの銀行の借入に基づく指標と、担保つきの翌日物の指標という一般知識。</td></tr>
+    </tbody>
+  </table></div>
+</section>

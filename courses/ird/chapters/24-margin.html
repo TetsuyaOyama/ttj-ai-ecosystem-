@@ -1,0 +1,81 @@
+<!--
+num: 24
+part: 5
+title: 証拠金：当初証拠金と変動証拠金、値洗い
+track: 清算
+time: 40
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>変動証拠金（毎日の値洗いの損益の受払い）と当初証拠金（破綻のあとの処理に備える証拠金）の違いを、日本証券クリアリング機構の説明の語で説明できる。</li>
+    <li>架空の先物の建玉で、毎日の値洗い差金（変動証拠金）を計算できる。</li>
+    <li>清算機関が参加者に求める証拠金と、証券会社が顧客に求める証拠金が、違うことがある理由を説明できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch23">第23章</a>（清算機関の役割）。先物の損益の式は<a href="#chI1">序章1</a>です。</p>
+</section>
+
+<div class="callout warn"><span class="ttl">この章の扱い（損失のリスク）</span><p>先物とオプションは、少ない証拠金で大きな金額の取引ができる仕組みで、預けた証拠金を超える損失が出ることがあります。オプションの売りは、損失が限定されない場合があります。この章の損益図と数値は、仕組みを読むための架空の例です。</p></div>
+<div class="callout warn"><span class="ttl">この章の扱い（制度の時点）</span><p>この章の制度・規則・商品の仕様は、本文に明記した国・地域と時点のものです。金融政策の枠組み、取引所と清算機関の規則、商品の仕様は改定されます。最新の内容は、本文の参照資料に挙げた公式のページで確かめてください。</p></div>
+
+<h3>証拠金の 2 つの役割</h3>
+<p><b>証拠金</b>（margin）は、先物・オプションの取引の履行を確保するために預ける担保です。清算機関は、債務引受で相手方のリスクを集めるので（第23章）、そのリスクに備えて、清算参加者に証拠金を求めます。</p>
+<p>証拠金には、役割の違う 2 つがあります。<b>変動証拠金</b>（variation margin）は、建玉を毎日の価格で評価し直した損益を、清算機関を通じてやり取りするお金です。<b>当初証拠金</b>（initial margin）は、取引の相手が破綻したとき、残った建玉を処理するまでに起こりうる損失に備えて、前もって預ける証拠金です。この 2 つの定義は、3 つの講座で共通です。</p>
+<p>日本では、日本証券クリアリング機構（JSCC）が、上場デリバティブ取引・信用デフォルトスワップ（CDS）取引・金利スワップ取引・国債店頭取引について、次のように書いています。未決済の約定の直近価格への値洗いを、少なくとも 1 日 1 回実施します。変動証拠金（または値洗いに伴う差金および代金）を清算参加者との間で授受することで、現在のエクスポージャー（カレント・エクスポージャー）をタイムリーにカバーしています（出典：JSCC『証拠金』、2024 年 12 月 18 日現在の表示）。</p>
+
+<h3>値洗いと変動証拠金</h3>
+<p><b>値洗い</b>（mark-to-market）は、建玉を、その日の清算の価格で評価し直すことです。この価格を<b>清算値段</b>（settlement price）と呼びます。JSCC の『債務引受 先物・オプション取引の清算・決済制度』のページには、「先物・オプション取引に係る清算値段の決定方法等」の節があります。決め方の詳細は、この章では確かめていないので、JSCC のページで確かめてください。</p>
+<p>変動証拠金の金額は、序章1の式 1 を、1 日ごとに区切ったものです。買いの建玉なら、その日の清算値段から前の日の清算値段を引いた差に、取引単位（乗数）と枚数を掛けます。売りは符号が逆です。毎日の差金を足していくと、約定の価格から現在までの損益の合計（式 1）になります。</p>
+<p>JSCC は、先物・オプション取引の値洗い差金・代金は、日本円による手当が必要で、それ以外の証拠金は現金または代用有価証券で預託できる、と書いています（出典：JSCC『証拠金』、2024 年 12 月 18 日現在の表示）。次の実験台は、架空の商品 X で、毎日の差金を計算します。価格はすべて架空で、取引単位は額面 1 億円・価格は額面 100 円あたり（乗数 1,000,000 円）と置きます。</p>
+<div data-widget="lab" data-src="c24-vm"></div>
+<p>既定の入力では、0 日目に 140.00 で買った 2 枚が、1 日目に 139.90、2 日目に 140.15 になります。1 日目の差金は −200,000 円で、買い手が払います。2 日目は ＋500,000 円で、買い手が受け取ります。2 日の合計は ＋300,000 円で、約定の価格 140.00 から 140.15 までの損益と同じです。価格が逆に動くと、受取りと支払いも逆になり、損失の側の受払いが続くことがあります。</p>
+
+<h3>当初証拠金：破綻のあとの処理に備える</h3>
+<p>変動証拠金は、すでに生じた損益を毎日精算します。それだけでは、参加者が破綻した日から建玉を処理し終えるまでの間に、価格が動いて生じる損失には備えられません。この将来の損失に備えるのが、当初証拠金です。</p>
+<p>JSCC は、各清算業務で、通常の市場環境におけるポテンシャル・フューチャー・エクスポージャー（Potential Future Exposure, PFE）を、最低でも信頼水準 99％以上でカバーするように設計された証拠金を、清算参加者から預かる、と書いています。清算対象の商品ごとに、特性に応じた証拠金の算出方法を採用しています（出典：JSCC『証拠金』、2024 年 12 月 18 日現在の表示）。計算方式の名前と、信頼水準・保有期間・観測期間は、第25章で扱います。</p>
+<p>米国の CME Clearing の開示は、証拠金を、定めた margin period of risk（リスクの測定期間）にわたって 99％の水準をカバーする設計と書き（原文は “designed to meet a 99% coverage standard over the defined margin period of risk on an ex post basis”）、デフォルトした清算会員のポートフォリオを処分するのに必要な時間の見積もり（“the estimated time needed to liquidate a defaulting Clearing Member's portfolio”）にも触れています（出典：CME Clearing『Principles for Financial Market Infrastructures Disclosure』、2025 年 12 月 12 日時点）。CME は、証拠金を performance bond（履行のための担保）とも呼びます。SPAN の説明ページが、SPAN は performance bond requirements を計算する、と書いています（出典：CME『CME SPAN Methodology Overview』、日付の記載なし）。</p>
+
+<p>ここまでの 2 つの証拠金を、次の表で並べます。</p>
+<div data-widget="compare" data-src="c24-im-vm"></div>
+
+<h3>1 日の流れ</h3>
+<p>次の図は、1 日の証拠金の流れを整理したものです。手順の名前と順序は、この講座の整理で、JSCC の規則の用語ではありません。JSCC の『証拠金』のページは、先物・オプション取引のパラメータとシナリオの更新を日次と書きます（一部の商品は更新の頻度が違うと脚注にあります）。</p>
+<div data-widget="flow" data-src="c24-day"></div>
+
+<h3>清算機関が求める額と、証券会社が顧客に求める額</h3>
+<p>JSCC の資料は、次のように書いています。投資家の証拠金額は、JSCC が証券会社等に通知する証拠金所要額を踏まえ、証券会社等が個別に扱いを定めます。JSCC が証券会社等に求める証拠金所要額と、証券会社等が投資家に求める証拠金額は、異なる場合があります（出典：JSCC『証拠金計算方式の変更（SPAN方式→VaR方式）に伴う証拠金水準の変化と特徴について』、2023 年 10 月）。顧客が差し入れる証拠金の額と時限は、取引する証券会社の説明で確かめます。</p>
+
+<h3>日中の追加の証拠金と、担保の掛目</h3>
+<p>JSCC の『証拠金及び決済制度の概要（OSE）』（2023 年 11 月 6 日現在）には、日中取引証拠金と緊急取引証拠金の語があり、それぞれに預託の時限が定められていました。『証拠金』のページ（2024 年 12 月 18 日現在の表示）は、金利スワップ取引について、市場の混乱で通常の証拠金だけではリスクをカバーできないと JSCC が判断した場合に、臨時に算出・配信を行う、と書いています。発動の条件と時限は、改定されるので、現行の JSCC の規則で確かめます。</p>
+<p>代用有価証券を担保にするときの掛目は、JSCC が見直しを公表しています（JSCC のお知らせ『代用有価証券等の掛目の見直しについて』。2025 年 8 月 12 日、2026 年 5 月 18 日などに、同じ題名で掲載されています）。掛目の値は、この章では書きません。</p>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>変動証拠金と当初証拠金は、別のものです</b>。変動証拠金は、すでに生じた値洗いの損益の受払いです。当初証拠金は、これから起こりうる損失への備えで、預けたままになります。</p>
+  <p><b>変動証拠金は、損失の側にも続きます</b>。価格が不利な向きに動き続けると、毎日の支払いが続きます。預けた証拠金を超える損失が出ることもあります。</p>
+  <p><b>清算機関が求める額と、証券会社が顧客に求める額は、同じとは限りません</b>。顧客の額は、証券会社等が個別に定めます。</p>
+  <p><b>清算値段の決め方や、日中の証拠金の発動条件を、この章の記述から決めないでください</b>。時刻や条件は改定されます。JSCC の最新の規則で確かめます。</p></div>
+
+<div class="callout tip"><span class="ttl">実務でのつながり</span>
+  <p>システムの開発や事務では、建玉ごとの毎日の清算値段と値洗い差金を、日付つきで残します。リスク管理では、当初証拠金と変動証拠金を別の列に分けて集計し、請求の時限を確かめます。監査では、清算機関が求める額と、顧客に請求した額の違いが、取引参加者の規則で説明できるかを確かめます。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c24-quiz"></div></section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 15 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/jscc/risk/margin.html">証拠金</a></th><td>日本証券クリアリング機構（JSCC）</td><td>2024 年 12 月 18 日現在（ページの表示）</td><td>値洗いと変動証拠金、当初証拠金の考え方、日本円での手当、金利スワップの臨時の算出、パラメータの更新頻度。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/jscc/seisan/sakimono/shokokin_seido/u89at3000000i04f-att/varfeature_j.pdf">証拠金計算方式の変更（SPAN方式→VaR方式）に伴う証拠金水準の変化と特徴について</a></th><td>日本証券クリアリング機構（JSCC）</td><td>2023 年 10 月</td><td>JSCC が求める額と、証券会社が顧客に求める額の違い。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/jscc/seisan/sakimono/shokokin_seido/cimhll0000000g03-att/cimhll0000001846.pdf">証拠金及び決済制度の概要（OSE）</a></th><td>日本証券クリアリング機構（JSCC）</td><td>2023 年 11 月 6 日現在</td><td>日中取引証拠金・緊急取引証拠金の語。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/jscc/seisan/sakimono/acceptance_debt/seisan_kessai.html">債務引受 先物・オプション取引の清算・決済制度</a></th><td>日本証券クリアリング機構（JSCC）</td><td>日付の記載なし（2026 年 11 月 15 日に閲覧）</td><td>清算値段の決定方法等の節があること。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/jscc/information/news/2025.html">お知らせ（2025 年）</a></th><td>日本証券クリアリング機構（JSCC）</td><td>2025 年 8 月 12 日の掲載項目</td><td>代用有価証券等の掛目の見直しの公表があること（題名だけ）。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/jscc/information/news/2026.html">お知らせ（2026 年）</a></th><td>日本証券クリアリング機構（JSCC）</td><td>2026 年 5 月 18 日の掲載項目（2026 年 11 月 18 日に確認）</td><td>同じ題名の掛目の見直しのお知らせが、2026 年にもあること（題名だけ）。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.cmegroup.com/clearing/risk-management/files/cme-clearing-principles-for-financial-market-infrastructures-disclosure.pdf">CME Clearing: Principles for Financial Market Infrastructures Disclosure</a></th><td>CME Clearing（回答者は Chicago Mercantile Exchange Inc.）</td><td>2025 年 12 月 12 日時点</td><td>margin period of risk の説明。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://cmegroup.com/solutions/risk-management/performance-bonds-margins/span-methodology-overview.html">CME SPAN Methodology Overview</a></th><td>CME グループ</td><td>日付の記載なし（© 2026）</td><td>performance bond requirements の語。</td></tr>
+      <tr><td>教科書・一般知識・他講座</td><th scope="row"><a href="#chI1">この講座の序章1</a></th><td>この講座</td><td>—</td><td>先物の損益の式 1。</td></tr>
+      <tr><td>架空（見本のため）</td><th scope="row">c24-vm・c24-day の商品 X と価格</th><td>この講座</td><td>—</td><td>建玉・清算値段・受払いの額は架空。</td></tr>
+    </tbody>
+  </table></div>
+</section>

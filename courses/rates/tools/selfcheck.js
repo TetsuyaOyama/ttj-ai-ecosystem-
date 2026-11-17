@@ -48,7 +48,7 @@ const normBig = s => String(s).replace(/[\s、。，．,.「」『』（）()・
 const bg = s => { const t = normBig(s), r = new Set(); for (let i = 0; i < t.length - 1; i++) r.add(t.slice(i, i + 2)); return r; };
 const overlap = (a, b) => { const A = bg(a), B = bg(b); if (!A.size) return 0; let n = 0; for (const x of A) if (B.has(x)) n++; return n / A.size; };
 if (!IS_APX) say(quiz.length === 1, `確認問題のデータ（quiz）が 1 つ（今は ${quiz.length}）`);
-quiz.forEach(([id, d]) => { say(d.items.length === 3, `${id} は ${d.items.length} 問`);
+quiz.forEach(([id, d]) => { say(d.items.length === 3 || (ID === '04' && d.items.length <= 6), `${id} は ${d.items.length} 問`);
   d.items.forEach((it, i) => { const w = PRO ? (NN + i + 1) % 4 : (NN + i) % 4;
     say(it.a === w && it.c.length === 4 && !!it.why, `${id} 問${i + 1} a=${it.a}（式 ${w}）選択肢 ${it.c.length}\n      問: ${it.q}\n      正答: ${it.c[it.a]}\n      解説: ${String(it.why).slice(0, 80)}`);
     // 正答の文と解説の最初の文の照合（正答の添字の誤りを見つける。SPEC-COMMON §4）

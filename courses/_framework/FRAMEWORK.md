@@ -187,21 +187,69 @@ CN.add('route', 'c26-x', { title,
 
 - `sources`：`[{n, issuer, title, date, note?, url?}]`。出典の一覧として下に出る。`n` は項目の `src` が指す番号。
 - `groups`：`[{key, label}]`。項目の色分け（凡例）。
-- `items`：`[{id, name, short?, value+unit | range:[最小,最大]+unit | from:{energy, unit:'kWh'|'MWh'|'GWh'|'TWh', hours, formula}, unit, group, counter?, shown?, desc, cond, src:[n…], ch?}]`。単位は W・kW・MW・GW・TW・万kW・千kW・VA・kVA・MVA・GVA。`from` は電力量÷時間で W を出す（値を手で書かない）。`counter` は「何〇分」の数え方（軒・基・個）。`cond` に条件（定格か平均か、1 基か合計か、どの国か）を書く。
+- `items`：`[{id, name, short?, value+unit | range:[最小,最大]+unit | from:{energy, unit:'kWh'|'MWh'|'GWh'|'TWh', hours, formula}, unit, group, counter?, shown?, desc, cond, src:[n…], ch?}]`。単位は W・kW・MW・GW・TW・万kW・千kW・VA・kVA・MVA・GVA（電力の物差し）、または金額の単位（下の「金額の物差し」）。`from` は電力量÷時間で W を出す（値を手で書かない）。`counter` は「何〇分」の数え方（軒・基・個）。`cond` に条件（定格か平均か、1 基か合計か、どの国か）を書く。
 - `base`（基準の項目の id）、`initial`（最初に選ぶ項目の id）、`stages`（既定は全体・家庭・設備・国の 4 つのタブ）。
 - 操作：項目は Tab で選び、Enter で比べる項目に、`b` キーで基準に、矢印の上下で隣の項目へ。拡大・縮小・上下移動のボタン、探るつまみ（矢印キー）。同じ内容の表と出典を折りたたみ・下段に出す。
-- ビルド検査：項目の id 重複、`src` の番号が `sources` に実在、単位が既知、`group` が実在、`base`・`initial` が実在、8〜14 項目（目安）。
+- **金額の物差し**（円・ドル）：項目の `unit` に円の単位 `円・万円・億円・兆円`、またはドルの単位 `ドル・百万ドル・十億ドル・兆ドル` を書くと、物差しが金額になる（基準の単位は 円 または ドル。目盛り・探る値・計算の表示も円・ドルの単位に付け替わる）。**円とドルは別の物差し**で、1 つの `scale` に混ぜるとビルドがエラー（為替の換算はしない）。電力と金額も混ぜられない。`from`（電力量÷時間）は金額では使えない。
+  - `stages`（桁の範囲）の `lo`・`hi` は、基準の単位の 10 のべき乗の指数（円なら 1 円＝0、1 万円＝4、1 億円＝8、1 兆円＝12。上限は円が 16、ドルが 15、電力が 13）。省略時は 全体・個人企業の桁・国市場の桁 の 3 つ。講座で上書きするときは `stages:[{key,label,lo,hi}]`（幅 2 桁以上）。
+  - `counter`（倍率の数え方）は自由な語。金額では省略すると「倍」（「A は B の約 3.2 倍」）。「年分」「回分」のように末尾に「分」を付けてもよい（「約 3.2 年分」と出る。「分」は重ねない）。電力では従来どおり必須。
+  - 免責の既定は「学習用の模型です。実際の投資・取引・契約の判断には使えません。」。`disclaimer`・`caution` で講座の文言に変えられる。
+  ```js
+  CN.add('scale', 'c01-money', { title: '金額の大きさ', base: 'salary', initial: 'gdp',
+    sources: [{ n: 1, issuer: '発行元', title: '資料名', date: '2026-11' }], groups: [{ key: 'a', label: '個人' }, { key: 'b', label: '国' }],
+    stages: [{ key: 'all', label: '全体', lo: 0, hi: 16 }, { key: 'nation', label: '国の桁', lo: 8, hi: 16 }],      // 省略可
+    items: [
+      { id: 'salary', name: '年収', value: 480, unit: '万円', group: 'a', counter: '年分', desc: '…', cond: '1 年間・税込', src: [1] },
+      { id: 'gdp', name: '名目 GDP', value: 600, unit: '兆円', group: 'b', counter: '倍', desc: '…', cond: '1 年間・名目', src: [1] } ] });
+  ```
+- ビルド検査：項目の id 重複、`src` の番号が `sources` に実在、単位が既知、1 つの `scale` の単位が 1 種類（電力・円・ドル）、`group` が実在、`base`・`initial` が実在、8〜14 項目（目安）、`stages` が上限の範囲内。
 
 ### 4.11 `lab` 式を動かす実験台（任意の部品）
 
 スライダーを動かすと、式の結果と図が変わる。式は安全な式評価器（`CNExpr`。eval を使わない）で、ブラウザとビルド検査で同じものを使う。
 `CN.add('lab', id, {title, disclaimer?, experiments:[…]})`。実験ごとに：
 
-- `id`・`label`（タブ）・`intro`・`formula`（式の文言）・`consts:[{id,value,label?}]`・`inputs:[{id,label,unit,min,max,step,value,presets?,say?,hint?}]`・`calc:[{id,expr}]`（途中の計算）・`results:[{label,expr,unit,digits,auto,big,note}]`（`auto:'W'|'Wh'` で単位を自動で付け替える）・`reads:[{when,text}]`（「読み取れること」。`when` が真のものを出す）・`ch`。
-- `fig`：`{type:'bar', bars:[{label,expr,unit,digits,auto,color}], max?, log?, logMin?}`／`{type:'wave', waves:[{label,amp,freq,phase,color}], span, ymax, unit, yLabel, rms?, rmsLabel?, sum?:{label}}`／`{type:'circuit', elements:[{type:'source'|'resistor',label,val,unit,digits}], current, imax, currentLabel, currentUnit}`。いずれも `alt`・`caption` を持てる。
-- 式で使える：数・変数・`+ - * / ^`・比較・`&& || !`・`a ? b : c`・かっこ・関数 `sqrt abs sin cos tan asin acos atan atan2 exp ln log10 pow min max floor ceil round sign if(条件,a,b) clamp(x,lo,hi)`・定数 `pi`（詳しくは js/opt/expr.js 冒頭）。
+- `id`・`label`（タブ）・`intro`・`formula`（式の文言）・`consts:[{id,value,label?}]`・`inputs:[{id,label,unit,min,max,step,value,presets?,say?,hint?}]`・`calc:[{id,expr}]`（途中の計算）・`results:[{label,expr,unit,digits,auto,big,note}]`（`auto:'W'|'Wh'|'円'|'ドル'` で単位を自動で付け替える。金額は円なら 円・万円・億円・兆円、ドルならドル・百万ドル・十億ドル・兆ドル）・`reads:[{when,text}]`（「読み取れること」。`when` が真のものを出す）・`ch`。
+- `fig`：`{type:'curve', …}`（線グラフ。下の「線グラフ」）／`{type:'bar', bars:[{label,expr,unit,digits,auto,color}], max?, log?, logMin?}`／`{type:'wave', waves:[{label,amp,freq,phase,color}], span, ymax, unit, yLabel, rms?, rmsLabel?, sum?:{label}}`／`{type:'circuit', elements:[{type:'source'|'resistor',label,val,unit,digits}], current, imax, currentLabel, currentUnit}`。いずれも `alt`・`caption` を持てる。
+- 式で使える：数・変数・`+ - * / ^`・比較・`&& || !`・`a ? b : c`・かっこ・関数 `sqrt abs sin cos tan asin acos atan atan2 exp ln log10 pow min max floor ceil round sign if(条件,a,b) clamp(x,lo,hi) ncdf(x) npdf(x)`・定数 `pi`（詳しくは js/opt/expr.js 冒頭）。
+- **`ncdf(x)`・`npdf(x)`**：標準正規分布の累積分布関数 N(x) と密度関数 n(x)（ブラック–ショールズの計算用）。1 引数。ブラウザとビルド検査で同じ実装（js/opt/expr.js）。`ncdf` は Hart の有理近似（West 2005 の倍精度版）で、絶対誤差はおよそ 1e-15 以下（例：`ncdf(0)`＝0.5、`ncdf(1.96)`≒0.9750021、`npdf(0)`≒0.3989423）。式の例：`d1 = (ln(S/K) + (r + s*s/2)*T) / (s*sqrt(T))`、`C = S*ncdf(d1) - K*exp(-r*T)*ncdf(d1 - s*sqrt(T))`、`gamma = npdf(d1) / (S*s*sqrt(T))`。
+- **線グラフ `fig.type:'curve'`**：x の範囲で式を評価して折れ線を描く（損益図・利回りの曲線・グリークスなど。負の値も描く）。
+  ```js
+  fig: { type: 'curve',
+    x: { id: 'S', min: 70, max: 130, step: 1, label: '満期の価格', unit: '円' },          // id は式の中の変数名（入力・定数・calc と重ならない名前）。step は点の間隔（範囲を 2〜800 に分ける値）
+    unit: '円', yLabel: '損益', digits: 1,                                              // 縦軸の単位・名前、表と図の名前に出す小数の桁数（既定 2）
+    ymin: -20, ymax: 30,                                                               // 数か式（省略するとデータから決める）
+    series: [{ label: '買い手', expr: 'max(S - K, 0) - p', color: 'ran' },              // expr は x の変数と入力・定数・calc が使える。color は ran/core/pol/ims
+             { label: '売り手', expr: 'p - max(S - K, 0)', color: 'pol', dash: true }], // dash: true | 'dash' | 'dot' | false（省略時は 2 本目以降が自動で破線・点線）
+    marks: [{ x: 'K', label: '権利行使価格' }, { x: 'K + p', label: '損益ゼロ' }],       // 縦の目印（x は式。x の変数は使えない）。各線との交点に点を付ける
+    alt: '図の説明（必須）', caption: '図の下の説明（任意）' }
+  ```
+  - 0 の線は縦軸の範囲に 0 があれば自動で太く引く。`series` は 1〜6 本（凡例は折り返す）。値が数でない点では線が切れる（ビルド検査は有限の数にならない式をエラーにする）。
+  - 同じ内容の表（折りたたみ）は、x を最大 13 点とった表と、目印の x での値の行。図の名前（aria-label）には目印の値と各線の端・最小・最大が入る。
+  - ビルド検査：`x` の `id`・`min<max`・`step`・`label`、`series` の式が読める・未定義の名前がない・初期値で全点、入力の両端で両端と中央が有限、`ymin<ymax`、`marks` の `x` と `label`、`alt`。
+  - 満期前の理論価格を重ねる場合：入力 `S0`（今の価格）と x の変数 `S` を別の名前にし、`series` の式に `S` から `ncdf` までを 1 つの式で書く（`calc` は x を使えない）。
+- **lab の追加機能（2026-11-18。すべて任意・後方互換。使わない実験の出力は変わらない。見本：rates 第04章の c04-move・c04-price・c04-fwd・c04-real）**
+  - **実験の `presets`（複数の入力をまとめて決めるボタン）**：`presets:[{label, set:{入力の id: 値}, text?}]`、`presetLabel?`・`presetHint?`。押すと、つまみがまとめて動く。`set` と同じ値のときボタンが押された状態（`aria-pressed`）になり、`text` が下に出る（`presetHint` は、どれにも当てはまらないとき）。`set` の id は入力にあり、値は min〜max（ビルド検査）。プリセットの値でも式が有限になるか検査する。
+  - **`results[]` の追加**：`words:['…','…']`（値を 0 始まりの番号として、数でなく言葉で出す。状態の名前など）、`show:'式'`（偽のときこの結果を出さない）、`base:{expr, digits?, words?, label?}`（「元：…」の小さな行。変化前との比較）。
+  - **`quad`（分類表。2×2 など）**：`quad:{title?, corner?, cols:[…], rows:[…], cells:[[{title, sub?, when?}, …], …], caption?}`。実際の表（`table`）で、`when` が真のマスに ● と `aria-current` が付く。
+  - **`figs:[fig, fig]`（1 つの実験に複数の図）**：`fig` の代わりに配列で。各 fig に `title?`。同じ内容の表は図ごとに出る。`fig` と `figs` は同時に持てない。
+  - **`fig.type:'bar'` に `signed:true`（正負の棒）**：0 の線から左右に伸びる。`max`（絶対値の上限。数か式）、`negLabel`・`posLabel`・`axisDigits`。値は棒のない側に出る。`log` とは併用不可。
+  - **`fig.type:'curve'` の追加**：`x.scale:'log'`（対数の横軸。`x.min>0`。点は `x.n` 個〔既定 160〕を等比に取る。`step` の代わり）、`x.ticks:[{v,label}]`（任意の目盛り。重なるときは 2 段にずらす。同じ内容の表もこの目盛りの行になる）、`series[].faint:true`（薄い線）、`series[].when:'式'`（偽の間はその系列を出さない）、`series[].data:[{x,y,l?}]`（`expr` の代わりに公表値などの点を直線でつなぎ、点に丸を付ける。`l` は表の行名）、`series[].nodot:true`（marks の交点の丸を付けない）、`fills:[{a,b,label?,color?,when?}]`（系列 a と b の間を色で塗る。`expr` の系列どうし）、`spans:[{from,to,label?,when?}]`（横軸の範囲を帯で示す。`from`・`to` は数か式）。
+  ```js
+  experiments: [{ id: 'move', label: '…', presets: [{ label: 'ブル・スティープ', set: { L: -70, S: 60, C: 0 }, text: '…' }],
+    inputs: [{ id: 'L', … }, { id: 'S', … }, { id: 'C', … }],
+    results: [{ label: '状態', expr: 'st', words: ['順イールド', 'ほぼ平ら', '逆イールド'], base: { expr: 'st0', words: ['順イールド', 'ほぼ平ら', '逆イールド'] }, big: true }],
+    quad: { cols: ['スティープ', 'フラット'], rows: ['ブル', 'ベア'], cells: [[{ title: 'ブル・スティープ', when: 'nm == 3' }, { title: 'ブル・フラット', when: 'nm == 4' }], [{ title: 'ベア・スティープ', when: 'nm == 5' }, { title: 'ベア・フラット', when: 'nm == 6' }]] },
+    figs: [{ type: 'curve', x: { id: 'T', min: 0.25, max: 30, n: 160, scale: 'log', label: '残存期間', ticks: [{ v: 0.25, label: '3M' }, { v: 2, label: '2Y' }, { v: 10, label: '10Y' }, { v: 30, label: '30Y' }] },
+             series: [{ label: '元', expr: '…', color: 'ran', faint: true }, { label: '後', expr: '…', color: 'core' }], fills: [{ a: 0, b: 1, label: '変化' }], spans: [{ from: '2', to: '10', when: 'sp < 0', label: '逆転' }], alt: '…' },
+           { type: 'bar', signed: true, max: 300, bars: [{ label: '2 年', expr: 'd2', unit: 'bp', digits: 0 }], alt: '…' }] }]
+  ```
 - 図の同じ内容の表を折りたたみで出す（読み上げ・印刷用）。動き（流れる点）は `prefers-reduced-motion` で止める。免責「学習用の模型」を出す。
 - ビルド検査：式が構文として読める、使う変数が定義済み、入力の `min ≤ value ≤ max`、`step` が正。
+
+### 4.11b `strip` 限月の階段（任意の部品）
+
+連続する限月の先物の価格と金利を階段で並べる実験台。書き方は `STRIP-LAB.md`（`mode`: stairs / combo / pnl）。
 
 ### 4.9 付録のデータ関数
 

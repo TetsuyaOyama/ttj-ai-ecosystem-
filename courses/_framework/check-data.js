@@ -134,34 +134,65 @@ const V = {
     (d.layers || []).forEach((l, li) => { const ps = l.parts && l.parts.length ? l.parts : [l]; ps.forEach((p, pi) => { if (p.gap) return; const k = p.id || ((l.id || 'l' + li) + (l.parts ? '-' + pi : '')); if (seen[k]) prob('layers ' + id + ' の部位 id "' + k + '" が重複しています'); seen[k] = 1; }); });
   }
 };
+/* ---- strip（js/opt/strip-lab.js）：限月の階段の実験台 ---- */
+V.strip = function (d, id) {
+  const W = 'strip ' + id, n = (d.base || []).length;
+  if (!['stairs', 'combo', 'pnl'].includes(d.mode)) prob(W + ' の mode は stairs / combo / pnl のどれか');
+  if (!Array.isArray(d.base) || n < 4 || n > 8 || d.base.some(v => !(typeof v === 'number' && v > 0 && v < 20))) prob(W + ' の base は 4〜8 個の金利（％。0 より大きく 20 未満の数）');
+  const sp = d.spec || {};
+  if (!sp.name || !(sp.tick > 0) || !(sp.tickYen > 0) || !sp.cur) prob(W + ' の spec は name（商品名）・tick（呼値の単位。価格の単位）・tickYen（1 ティックの価値）・cur（通貨の語）が必要です');
+  if (d.names && d.names.length !== n) prob(W + ' の names は base と同じ個数');
+  const rg = d.ranges;
+  if (rg) ['L', 'S', 'K', 'e'].forEach(k => { const r = rg[k]; if (!r || r.length !== 3 || !(r[0] < 0 && r[1] > 0 && r[2] > 0)) prob(W + ' の ranges.' + k + ' は [最小（負）, 最大（正）, 刻み（正）]'); });
+  const ini = d.initial || {};
+  if (ini.kind && !['spread', 'fly', 'condor'].includes(ini.kind)) prob(W + ' の initial.kind は spread / fly / condor');
+  if (ini.dir != null && ![1, -1].includes(ini.dir)) prob(W + ' の initial.dir は 1（買い）か −1（売り）');
+  if (ini.p != null && !(ini.p >= 1 && ini.p <= n)) prob(W + ' の initial.p は 1〜' + n);
+  if (ini.fx && !['L', 'S', 'K'].includes(ini.fx)) prob(W + ' の initial.fx は L / S / K');
+  (d.presets || []).forEach(p => {
+    if (!p.label || !p.set || typeof p.set !== 'object') { prob(W + ' の presets は label と set が必要です'); return; }
+    Object.keys(p.set).forEach(k => {
+      if (!/^(L|S|K|e[1-9])$/.test(k) || (k[0] === 'e' && parseInt(k.slice(1), 10) > n)) prob(W + ' の presets「' + p.label + '」の set のキー ' + k + ' は L / S / K / e1〜e' + n);
+      else { const r = (rg || { L: [-30, 30], S: [-6, 6], K: [-10, 10], e: [-5, 5] })[k[0] === 'e' ? 'e' : k]; if (!(p.set[k] >= r[0] && p.set[k] <= r[1])) prob(W + ' の presets「' + p.label + '」の ' + k + ' が範囲外です'); }
+    });
+  });
+  if (!d.alt) prob(W + ' に alt（図の説明）がありません');
+};
 /* ---- scale・lab（js/opt）：式は同じ評価器（js/opt/expr.js）で検査する ---- */
 const EX = require(path.join(__dirname, 'js', 'opt', 'expr.js'));
 const SC_UNITS = ['W', 'kW', 'MW', 'GW', 'TW', '万kW', '千kW', 'VA', 'kVA', 'MVA', 'GVA'], SC_EUNITS = ['Wh', 'kWh', 'MWh', 'GWh', 'TWh'];
-const FIG_TYPES = ['bar', 'wave', 'circuit'];
+const SC_JPY = ['円', '万円', '億円', '兆円'], SC_USD = ['ドル', '百万ドル', '十億ドル', '兆ドル'];
+const FIG_TYPES = ['bar', 'wave', 'circuit', 'curve'], CURVE_COLORS = ['ran', 'core', 'pol', 'ims'];
 V.scale = function (d, id) {
   const W = 'scale ' + id;
   if (!d.items || d.items.length < 2) { prob(W + ' は項目が 2 つ以上必要です'); return; }
   const gk = (d.groups || []).map(g => g.key), sn = {};
   (d.sources || []).forEach(x => { if (sn[x.n]) prob(W + ' の出典の番号 ' + x.n + ' が重複しています'); sn[x.n] = 1; if (!x.title) prob(W + ' の出典 ' + x.n + ' に title がありません'); });
   const im = ids(d.items, W + ' の項目');
+  /* 物差しの種類：電力（W 系）・円・ドル。1 つの scale には 1 種だけ（円とドルは別の物差し。為替の換算はしない） */
+  const kindOf = it => it.from ? 'power' : SC_JPY.includes(it.unit) ? 'jpy' : SC_USD.includes(it.unit) ? 'usd' : 'power';
+  const kinds = [...new Set(d.items.map(kindOf))], fam = kinds[0], MAXD = fam === 'power' ? 13 : fam === 'jpy' ? 16 : 15;
+  if (kinds.length > 1) prob(W + ' に違う種類の単位が混ざっています（' + kinds.join('・') + '）。電力・円・ドルは別の物差しです。1 つの scale には 1 種類だけ置いてください');
+  const UN = kinds.length > 1 ? SC_UNITS.concat(SC_JPY, SC_USD) : fam === 'jpy' ? SC_JPY : fam === 'usd' ? SC_USD : SC_UNITS;
   d.items.forEach(it => {
     const w = W + ' の「' + (it.name || it.id) + '」';
     if (!it.name) prob(w + ' に name がありません');
-    if (!it.counter) prob(w + ' に counter（「軒」「基」など、倍率の数え方）がありません');
+    if (!it.counter && fam === 'power') prob(w + ' に counter（「軒」「基」など、倍率の数え方）がありません');
     if (it.group != null && !gk.includes(it.group)) prob(w + ' の group "' + it.group + '" が groups にありません');
-    if (it.from) {
+    if (it.from && fam !== 'power') prob(w + ' の from（電力量÷時間）は電力の scale だけで使えます');
+    else if (it.from) {
       const f = it.from;
       if (!(f.energy > 0) || !(f.hours > 0) || !SC_EUNITS.includes(f.unit || 'kWh')) prob(w + ' の from は {energy>0, unit(' + SC_EUNITS.join('/') + '), hours>0}');
     } else if (it.range) {
-      if (!Array.isArray(it.range) || it.range.length !== 2 || !(it.range[0] > 0) || !(it.range[1] > it.range[0]) || !SC_UNITS.includes(it.unit)) prob(w + ' の range は [下限, 上限] と単位（' + SC_UNITS.join('/') + '）');
-    } else if (!(it.value > 0) || !SC_UNITS.includes(it.unit)) prob(w + ' の value（正の数）と unit（' + SC_UNITS.join('/') + '）が必要です');
+      if (!Array.isArray(it.range) || it.range.length !== 2 || !(it.range[0] > 0) || !(it.range[1] > it.range[0]) || !UN.includes(it.unit)) prob(w + ' の range は [下限, 上限] と単位（' + UN.join('/') + '）');
+    } else if (!(it.value > 0) || !UN.includes(it.unit)) prob(w + ' の value（正の数）と unit（' + UN.join('/') + '）が必要です');
     if (!it.src || !it.src.length) prob(w + ' に出典の番号（src）がありません。値は出典つきでだけ載せます');
     (it.src || []).forEach(n => { if (!sn[n]) prob(w + ' の src ' + n + ' が sources にありません'); });
     if (!it.cond) prob(w + ' に cond（条件：定格か平均か、単体か複合か、どの国の話か）がありません');
   });
   if (d.base != null && !im[d.base]) prob(W + ' の base "' + d.base + '" が項目にありません');
   if (d.initial != null && !im[d.initial]) prob(W + ' の initial "' + d.initial + '" が項目にありません');
-  (d.stages || []).forEach(s => { if (!(s.lo >= 0 && s.hi <= 13 && s.hi - s.lo >= 2)) prob(W + ' の stages ' + s.key + ' は 0 ≦ lo、hi ≦ 13、幅 2 桁以上（10 のべき乗の W の指数）'); });
+  (d.stages || []).forEach(s => { if (!(s.lo >= 0 && s.hi <= MAXD && s.hi - s.lo >= 2)) prob(W + ' の stages ' + s.key + ' は 0 ≦ lo、hi ≦ ' + MAXD + '、幅 2 桁以上（10 のべき乗の指数。基準の単位は ' + (fam === 'jpy' ? '円' : fam === 'usd' ? 'ドル' : 'W') + '）'); });
 };
 V.lab = function (d, id) {
   const W = 'lab ' + id;
@@ -190,15 +221,59 @@ V.lab = function (d, id) {
     if (!(x.results || []).length) prob(w + ' に results がありません');
     (x.reads || []).forEach(r => { if (r.when) comp(r.when, 'reads の when', scope); if (!r.text) prob(w + ' の reads に text がありません'); });
     x.inputs.forEach(i => (i.say || []).forEach(r => { if (r.when) comp(r.when, i.id + ' の say の when', scope); if (!r.text) prob(w + ' の say に text がありません'); }));
-    const f = x.fig;
-    if (!f || !FIG_TYPES.includes(f.type)) prob(w + ' の fig.type は ' + FIG_TYPES.join('/') + ' のどれか');
+    const figList = x.figs || (x.fig ? [x.fig] : []), curveSeries = [], curveFigs = [];
+    if (!figList.length) prob(w + ' に fig（または figs）がありません');
+    if (x.figs && x.fig) prob(w + ' は fig と figs の両方を持てません');
+    /* 追加の機能（任意）：presets（複数の入力をまとめて決める）・quad（分類表）・results の show と words */
+    (x.presets || []).forEach(p => {
+      if (!p.label || !p.set || typeof p.set !== 'object') prob(w + ' の presets は label と set（{入力の id: 値}）が必要です');
+      else Object.keys(p.set).forEach(k => { const i = x.inputs.find(z => z.id === k); if (!i) prob(w + ' の presets「' + p.label + '」の set の ' + k + ' が入力にありません'); else if (!(p.set[k] >= i.min && p.set[k] <= i.max)) prob(w + ' の presets「' + p.label + '」の ' + k + ' の値 ' + p.set[k] + ' が入力の範囲外です'); });
+    });
+    (x.results || []).forEach(r => { if (r.show) all.push(comp(r.show, 'results show ' + r.label, scope)); if (r.base) all.push(comp(r.base.expr, 'results base ' + r.label, scope)); if (r.words && !(Array.isArray(r.words) && r.words.length >= 2)) prob(w + ' の results「' + r.label + '」の words は 2 つ以上の文字列の配列'); });
+    if (x.quad) {
+      const q = x.quad;
+      if (!(q.cols || []).length || !(q.rows || []).length || !Array.isArray(q.cells) || q.cells.length !== q.rows.length || q.cells.some(r => r.length !== q.cols.length)) prob(w + ' の quad は cols・rows・cells（行数×列数）がそろっていません');
+      (q.cells || []).forEach(r => r.forEach(c => { if (!c.title) prob(w + ' の quad のマスに title がありません'); if (c.when) all.push(comp(c.when, 'quad when', scope)); }));
+    }
+    figList.forEach(f => {
+    if (!FIG_TYPES.includes(f.type)) prob(w + ' の fig.type は ' + FIG_TYPES.join('/') + ' のどれか');
     else {
       const num = (v, what) => { if (v == null) return; if (typeof v === 'string') all.push(comp(v, what, scope)); };
-      if (f.type === 'bar') { if (!(f.bars || []).length) prob(w + ' の bar に bars がありません'); (f.bars || []).forEach(b => { if (!b.label) prob(w + ' の bars に label がありません'); all.push(comp(b.expr, 'bar ' + b.label, scope)); }); num(f.max, 'bar max'); }
+      if (f.type === 'bar') { if (!(f.bars || []).length) prob(w + ' の bar に bars がありません'); (f.bars || []).forEach(b => { if (!b.label) prob(w + ' の bars に label がありません'); all.push(comp(b.expr, 'bar ' + b.label, scope)); }); num(f.max, 'bar max'); if (f.signed && f.log) prob(w + ' の bar は signed と log を同時に使えません'); }
       if (f.type === 'wave') {
         if (!(f.waves || []).length || f.waves.length > 4) prob(w + ' の wave の waves は 1〜4 本');
         (f.waves || []).forEach(b => { if (!b.label) prob(w + ' の waves に label がありません'); ['amp', 'freq', 'phase'].forEach(k => num(b[k] != null ? String(b[k]) : '0', 'wave ' + k)); });
         num(f.span == null ? undefined : String(f.span), 'wave span'); num(f.ymax == null ? undefined : String(f.ymax), 'wave ymax'); if (f.ymax == null) prob(w + ' の wave に ymax（縦軸の最大。数か式）が必要です'); if (f.rms) num(String(f.rms), 'wave rms');
+      }
+      if (f.type === 'curve') {
+        const xd = f.x || {}, ser = f.series || [];
+        if (!xd.id || !/^[A-Za-z_][A-Za-z0-9_]*$/.test(xd.id)) prob(w + ' の curve の x.id は英数字の名前（式の中で使う変数）');
+        else if (scope[xd.id]) prob(w + ' の curve の x.id "' + xd.id + '" が入力・定数・calc の名前と重複しています');
+        if (!(typeof xd.min === 'number' && typeof xd.max === 'number' && xd.max > xd.min)) prob(w + ' の curve の x は min < max（数）');
+        if (xd.scale != null && xd.scale !== 'log' && xd.scale !== 'linear') prob(w + ' の curve の x.scale は "log" か "linear"');
+        if (xd.scale === 'log' && !(xd.min > 0)) prob(w + ' の curve の x.scale が log のとき、x.min は 0 より大きい数');
+        if (xd.step != null && !(xd.step > 0 && (xd.max - xd.min) / xd.step <= 800 && (xd.max - xd.min) / xd.step >= 2)) prob(w + ' の curve の x.step は 0 より大きく、範囲を 2〜800 に分ける値');
+        (xd.ticks || []).forEach(t => { if (!(typeof t.v === 'number') || !t.label) prob(w + ' の curve の x.ticks は {v（数）, label} の配列'); });
+        if (!xd.label) prob(w + ' の curve の x に label（横軸の名前）がありません');
+        if (!ser.length || ser.length > 6) prob(w + ' の curve の series は 1〜6 本');
+        const sc2 = Object.assign({}, scope); if (xd.id) sc2[xd.id] = 1;
+        ser.forEach(z => {
+          if (!z.label) prob(w + ' の curve の series に label がありません');
+          if (z.color && !CURVE_COLORS.includes(z.color)) prob(w + ' の curve の series "' + z.label + '" の color は ' + CURVE_COLORS.join('/') + ' のどれか');
+          if (z.dash != null && !(typeof z.dash === 'boolean' || typeof z.dash === 'string')) prob(w + ' の curve の series "' + z.label + '" の dash は true/false か "dash"/"dot"');
+          if (z.when) all.push(comp(z.when, 'curve series when ' + z.label, scope));
+          if (z.data) {
+            if (z.expr != null) prob(w + ' の curve の series "' + z.label + '" は expr と data の両方を持てません');
+            if (!Array.isArray(z.data) || z.data.length < 2 || z.data.some(q => !(Number.isFinite(q.x) && Number.isFinite(q.y)))) prob(w + ' の curve の series "' + z.label + '" の data は {x, y} の数の配列（2 点以上）');
+            else if (z.data.some(q => q.x < xd.min - 1e-9 || q.x > xd.max + 1e-9)) prob(w + ' の curve の series "' + z.label + '" の data に x の範囲外の点があります');
+          } else { const c = comp(z.expr, 'curve series ' + z.label, sc2); curveSeries.push([c, xd, z.label]); }
+        });
+        (f.fills || []).forEach(z => { if (!(ser[z.a] && ser[z.b]) || ser[z.a].data || ser[z.b].data) prob(w + ' の curve の fills は expr の系列の番号 a・b が必要です'); if (z.when) all.push(comp(z.when, 'curve fills when', scope)); });
+        (f.spans || []).forEach(z => { num(String(z.from), 'curve spans from'); num(String(z.to), 'curve spans to'); if (z.when) all.push(comp(z.when, 'curve spans when', scope)); });
+        num(f.ymin == null ? undefined : String(f.ymin), 'curve ymin'); num(f.ymax == null ? undefined : String(f.ymax), 'curve ymax');
+        (f.marks || []).forEach(m => { if (m.x == null) prob(w + ' の curve の marks に x（数か式）がありません'); else num(String(m.x), 'curve marks x'); if (!m.label) prob(w + ' の curve の marks に label がありません'); });
+        if (!f.alt) prob(w + ' の curve に alt（図の説明）がありません');
+        curveFigs.push(f);
       }
       if (f.type === 'circuit') {
         const els = f.elements || [];
@@ -206,12 +281,27 @@ V.lab = function (d, id) {
         els.forEach(e => num(String(e.val), 'circuit ' + e.label)); num(String(f.current), 'circuit current'); num(String(f.imax), 'circuit imax');
       }
     }
+    });
     /* 初期値・各入力の両端で、計算結果が有限の数か */
-    const cases = [{}]; x.inputs.forEach(i => { cases.push({ [i.id]: i.min }); cases.push({ [i.id]: i.max }); });
+    const cases = [{}]; x.inputs.forEach(i => { cases.push({ [i.id]: i.min }); cases.push({ [i.id]: i.max }); }); (x.presets || []).forEach(p => cases.push(Object.assign({}, p.set)));
     cases.forEach(ov => {
       const e = {}; x.inputs.forEach(i => { e[i.id] = ov[i.id] != null ? ov[i.id] : i.value; }); (x.consts || []).forEach(c => { e[c.id] = c.value; });
       try { calc.forEach(([k, c]) => { if (c) e[k] = c.run(e); }); all.forEach(c => { if (c) { const v = c.run(e); if (!Number.isFinite(v)) prob(w + ' の式 "' + c.src + '" が入力 ' + JSON.stringify(ov) + ' で有限の数にならない（' + v + '）'); } }); }
       catch (er) { prob(w + ' の評価エラー: ' + er.message); }
+      /* 線グラフ：初期値では横軸の全点、入力の両端では両端と中央で、有限の数になるか。縦軸の範囲が逆でないか */
+      const first = Object.keys(ov).length === 0;
+      curveSeries.forEach(([c, xd, lab]) => {
+        if (!c || !(xd.max > xd.min)) return;
+        const lg = xd.scale === 'log', n = lg ? Math.max(2, Math.min(800, Math.round(xd.n || 160))) : Math.max(2, Math.min(800, Math.round((xd.max - xd.min) / (xd.step || (xd.max - xd.min) / 120)))), pts = first ? n : 2;
+        for (let i = 0; i <= pts; i++) {
+          const fr = first ? i / pts : i / 2, xv = lg ? xd.min * Math.pow(xd.max / xd.min, fr) : xd.min + (xd.max - xd.min) * fr, e2 = Object.assign({}, e, { [xd.id]: xv });
+          let v; try { v = c.run(e2); } catch (er) { prob(w + ' の curve「' + lab + '」の評価エラー: ' + er.message); return; }
+          if (!Number.isFinite(v)) { prob(w + ' の curve「' + lab + '」が ' + xd.id + '=' + xv + '・入力 ' + JSON.stringify(ov) + ' で有限の数にならない（' + v + '）'); return; }
+        }
+      });
+      curveFigs.forEach(f => { if (f.ymin != null && f.ymax != null) {
+        try { const a1 = typeof f.ymin === 'number' ? f.ymin : EX.compile(f.ymin).run(e), a2 = typeof f.ymax === 'number' ? f.ymax : EX.compile(f.ymax).run(e); if (!(a2 > a1)) prob(w + ' の curve の ymax が ymin 以下になる入力があります（' + JSON.stringify(ov) + '）'); } catch (er) { /* 式の誤りは上で報告済み */ }
+      } });
     });
   });
 };

@@ -1,0 +1,75 @@
+<!--
+num: 22
+part: 4
+title: 取引の安全装置：事前のリスクの確認・注文の上限・取消の規制
+track: システム
+time: 35
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li>大阪取引所の<b>事前のリスクの確認</b>（TradeGuard）と<b>ハードブロック機能</b>の役割の違いを説明できる。</li>
+    <li><b>注文と約定の比率</b>（Order to Trade Ratio）と<b>ノンキャンセル・ピリオド</b>の目的を、取引所のページの書き方で言える。</li>
+    <li>取引所の機能と、<b>参加者自身の管理</b>が別であることを、ガイドラインの趣旨で説明できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch18">第18章</a>（取引システムの全体）と<a href="#ch19">第19章</a>（マッチングエンジン）。</p>
+</section>
+
+<div class="callout warn"><span class="ttl">この章の扱い（制度の時点）</span><p>この章の制度・規則・商品の仕様は、本文に明記した国・地域と時点のものです。金融政策の枠組み、取引所と清算機関の規則、商品の仕様は改定されます。最新の内容は、本文の参照資料に挙げた公式のページで確かめてください。</p></div>
+
+<div class="callout warn"><span class="ttl">この章の書き方</span>
+  <p>上限や閾値の<b>値</b>は、この章に書きません。値は、改定されるため、各ページの最新の版で確かめます。確認の実際の順序は公表されておらず、図の並びは講座の模式です。「価格の乖離の確認」や「建玉の上限の確認」は、大阪取引所のシステム（J-GATE）について公表されていることを確かめられなかったので、扱いません。</p></div>
+
+<h3>受付の前の確認</h3>
+<p>誤った注文や大きすぎる注文は、板に載って約定してしまってからでは、取り戻しにくくなります（一般的な説明）。そこで、取引所は、注文を<b>受け付ける前</b>に確認する仕組みを置いています。大阪取引所（日本取引所グループ、JPX）の公表では、次の 2 つが基本です。</p>
+<ul>
+  <li><b>TradeGuard</b>（事前のリスクの確認）：全ての取引参加者による利用が必須です。取引参加者の注文を取引所が受け付ける前にリスクチェックにかけ、一定の閾値を越えていれば、発注を自動的に止めることができます（『システム概要』、2021/09/20 更新）。閾値は、参加者が設定します。JPX の FAQ は、注文の頻度の上限（Order Rate Limit。1/10 秒の単位で計測）や、手動の Block（リスク管理グループの下のログイン ID の新規注文・訂正注文を抑止し、板の注文の削除はできる）などを挙げます。</li>
+  <li><b>ハードブロック機能</b>：「取引所が定める１注文あたりの最大発注可能数量をJ-GATEに設定し、当該設定値を超えた注文を受け付けない機能」で、目的は誤発注防止、全取引参加者に適用されます（2026/04/13 更新）。参加者が TradeGuard で設定する Max Size（ハードリミット）とは別のものです（JPX の FAQ）。</li>
+</ul>
+<div data-widget="flow" data-src="c22-checks"></div>
+
+<h3>注文と約定の比率（OTR）</h3>
+<p>JPX の『Order to Trade Ratio（OTR）』のページ（2023/05/26 更新）は、目的を「取引参加者の効率的な注文を促し、J-GATEのキャパシティ保全を図るため」と書きます。計測は、サブ参加者コード単位かつパーティション単位で行われ、確認の①と②は日次、③は月次です。閾値はページの画像でのみ示されていて、この講座は書きません。ページは、相場を操作する取引については書いていません。</p>
+
+<h3>ノンキャンセル・ピリオド</h3>
+<p>JPX のページ（2026/10/26 更新の表示）は、<b>ノンキャンセル・ピリオド</b>を、「板寄せ直前の注文訂正・取消しによる過度の価格変動を防止する観点から、一部商品の寄付き及び引けに係る板寄せの直前に、訂正・取消し注文を原則受け付けない時間帯」と定義します。期間中も、新規の注文は受け付けます。日中立会の引けには導入せず、「板寄せ直前の注文取消し等の一部禁止措置」を実施しています。対象の商品に挙がっているのは、指数先物、貴金属、農産物、エネルギー、電力、液化天然ガス（LNG）などで、<b>国債先物と TONA 先物は、一覧にありません</b>。</p>
+<p>これより古い『板寄せ直前における大口注文取消等の一部禁止について』（当時の大阪証券取引所の資料。2011 年 12 月 12 日から日経 225 先物に適用）という資料もありますが、古いので、時間や数量の閾値は引きません。現行の版を確かめてください。</p>
+
+<h3>キルスイッチと、参加者の側の管理</h3>
+<p>JPX の『別紙1：リスク管理機能』（日付の記載なし）は、キャンセル・オン・ディスコネクト、注文抑止・取消（キルスイッチ）、ユーザ設定型ハードリミット、テスト用銘柄（ダミーシンボル）を挙げています。日付がなく、現在の Max Size との関係は確かめていません。</p>
+<p>『注文管理に関するガイドライン』（制定 2018-03-02、改訂 2021-01-04。東京証券取引所・大阪取引所・日本取引所自主規制法人）は、1 注文あたりの上限や発注抑止措置などを扱います。参加者が、取引所のリスク管理機能で足りると判断すれば、代わりに使えます。ただし、その利用は参加者の責任です。</p>
+<p>米国の CME は、『Pre-Trade Risk Management』のページ（© 2026）で、管理者が設定する限度、cancel on disconnect、同一の所有者の注文同士が約定しないようにする self-match prevention などを挙げます。CME の Kill Switch のヘルプは、管理者が有効にすると、日付つきの注文と期限なしの注文が取り消され、新規の注文の入力が禁止される（Mass Quote は取り消されない）と書きます。</p>
+<div data-widget="table" data-src="c22-controls"></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>ハードブロックと Max Size は別です</b>。前者は取引所が定める最大数量、後者は参加者が設定する上限です。</p>
+  <p><b>確認の順序は公表されていません</b>。図の並びは、講座の模式です。</p>
+  <p><b>OTR の目的は、キャパシティ保全です</b>。ページは、相場操縦の検出とは書いていません。</p>
+  <p><b>ノンキャンセル・ピリオドでも、新規の注文は受け付けます</b>。訂正と取消しが、原則受け付けられません。</p>
+  <p><b>別紙1 は日付がありません</b>。現在の機能との関係を、確かめて使います。</p></div>
+
+<div class="callout tip"><span class="ttl">実務でのつながり</span>
+  <p>システムの担当は、取引所の機能が止めた注文の扱い（再発注か、設定の見直しか）を、運用の手順に入れます。リスク管理の担当は、取引所の機能で足りるかの判断と責任を、社内で明確にします。値は、取引所の最新のページで確かめます。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c22-quiz"></div></section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 18 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/systems/derivatives-trading/01.html">デリバティブ取引 システム概要</a></th><td>JPX</td><td>2021/09/20 更新</td><td>TradeGuard。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/derivatives/rules/others/03.html">ハードブロック機能</a></th><td>JPX</td><td>2026/04/13 更新</td><td>1 注文あたりの最大発注可能数量。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/derivatives/rules/others/02.html">Order to Trade Ratio（OTR）</a></th><td>JPX</td><td>2023/05/26 更新</td><td>OTR の目的と計測の単位。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/derivatives/rules/others/01.html">ノンキャンセル・ピリオド</a></th><td>JPX</td><td>2026/10/26 更新の表示</td><td>定義と対象の商品。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://faqsd.jpx.co.jp/faq/show/16196">TradeGuard に関する FAQ</a></th><td>JPX</td><td>ページごとに更新日が違う</td><td>Order Rate Limit、手動の Block、Max Size。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/corporate/news-releases/0060/nlsgeu0000016z4h-att/01.pdf">別紙1：リスク管理機能</a></th><td>JPX</td><td>日付の記載なし</td><td>キルスイッチ等の機能の名前。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/rules-participants/public-comment/detail/d8/nlsgeu000004is7s-att/nlsgeu000004iuum.pdf">注文管理に関するガイドライン</a></th><td>東京証券取引所・大阪取引所・日本取引所自主規制法人</td><td>制定 2018-03-02、改訂 2021-01-04</td><td>取引所の機能の代用と参加者の責任。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.jpx.co.jp/news/detail/nlsgeu0000003mtc-att/news24880.pdf">板寄せ直前における大口注文取消等の一部禁止について</a></th><td>大阪証券取引所（当時。2014 年 3 月 24 日から大阪取引所）</td><td>2011 年（適用開始 2011-12-12）</td><td>過去の措置の存在（値は引かない）。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.cmegroup.com/solutions/market-access/globex/trade-on-globex/pre-trade-risk-management.html">Pre-Trade Risk Management</a></th><td>CME グループ</td><td>© 2026</td><td>限度、cancel on disconnect、self-match prevention。</td></tr>
+      <tr><td>取引所・清算機関の資料</td><th scope="row"><a href="https://www.cmegroup.com/tools-information/webhelp/globex-credit-controls/Content/Kill-Switch.html">Kill Switch</a></th><td>CME グループ</td><td>日付の記載なし（2026 年 11 月 18 日に確認）</td><td>キルスイッチの働き。</td></tr>
+      <tr><td>教科書・一般知識・他講座</td><th scope="row">受付の前に確認する理由の一般的な説明</th><td>—</td><td>—</td><td>一般知識と明記。</td></tr>
+    </tbody>
+  </table></div>
+</section>

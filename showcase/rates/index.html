@@ -673,6 +673,28 @@ table.qos tbody tr[aria-selected="true"] td:first-child, table.qos tbody tr[aria
 .lab-el { font-size: 12.5px; fill: var(--text); font-weight: 700; } .lab-cur { font-size: 13px; fill: var(--accent); font-weight: 700; }
 .lab-arrow { fill: var(--accent); stroke: none; }
 .lab-table summary, .sc-table summary { cursor: pointer; }
+/* ----- lab の追加（複数の入力をまとめて決めるプリセット・分類表・帯・正負の棒）。使わない実験には影響しない ----- */
+.lab-preset-bar { margin: 0 0 .7rem; padding: .5rem .7rem .55rem; border: 1px solid var(--line); border-radius: 10px; background: var(--surface2); }
+.lab-preset-h { font-size: .8rem; font-weight: 700; color: var(--muted); margin-bottom: .35rem; }
+.lab-preset-bar .lab-presets { margin-top: 0; }
+.lab-presets .btn[aria-pressed="true"] { background: var(--accent-fill); border-color: var(--accent-fill); color: var(--accent-ink); font-weight: 700; }
+.lab-preset-note { margin: .4rem 0 0; min-height: 1.4em; color: var(--text); }
+.lab-wave.faint { opacity: .5; stroke-width: 2; }
+.lab-fill { stroke: none; fill: var(--k-core-s); opacity: .22; }
+.lab-fill.c-ran { fill: var(--k-ran-s); } .lab-fill.c-core { fill: var(--k-core-s); } .lab-fill.c-pol { fill: var(--k-pol-s); } .lab-fill.c-ims { fill: var(--k-ims-s); }
+.lab-span { fill: var(--warn); opacity: .18; stroke: none; } .lab-span-t { font-size: 11.5px; fill: var(--warn); font-weight: 700; }
+.lab-res.word .lab-res-v b { font-size: 1.15rem; font-family: var(--ttj-font-sans); }
+.lab-fig-t { margin: .4rem .5rem .1rem; font-size: .84rem; color: var(--muted); font-family: var(--ttj-font-sans); }
+.lab-quad { border: 1px solid var(--line); border-radius: 10px; background: var(--surface); padding: .45rem .6rem .5rem; }
+.lab-quad h5 { margin: 0 0 .3rem; font-size: .86rem; font-family: var(--ttj-font-sans); color: var(--accent); }
+.lab-quad-t { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: .8rem; }
+.lab-quad-t th { font-weight: 700; color: var(--muted); font-size: .74rem; padding: .25rem .3rem; text-align: center; }
+.lab-quad-t tbody th { text-align: left; width: 5.2em; }
+.lab-quad-c { border: 1px solid var(--line2); padding: .35rem .4rem; vertical-align: top; text-align: center; line-height: 1.5; }
+.lab-quad-c b { display: block; font-size: .86rem; }
+.lab-quad-c span { display: block; color: var(--muted); font-size: .72rem; }
+.lab-quad-c.on { background: var(--accent-soft); box-shadow: inset 0 0 0 2px var(--accent-fill); }
+.lab-quad-c.on b::before { content: '● '; color: var(--accent); }
 @media print {
   .sc-ctl, .sc-sel .btn, .sc-probe, .lab-presets, .sc-keys { display: none !important; }
   .sc-grid, .lab-top { grid-template-columns: 1fr 1fr; }
@@ -1269,20 +1291,23 @@ body { line-height: 2.0; }
 </article>
 
 <article id="ch04" class="view chapter" data-ch="04" aria-labelledby="ch04-title">
-<header class="ch-head"><p class="ch-kicker">第1部 金利の基礎 ・ 第04章</p><h2 class="ch-title" id="ch04-title">イールドカーブ：形と読み方</h2><p class="ch-meta"><span class="chip tk1">金利</span><span class="chip">所要 約35分</span></p></header>
+<header class="ch-head"><p class="ch-kicker">第1部 金利の基礎 ・ 第04章</p><h2 class="ch-title" id="ch04-title">イールドカーブ：形と読み方</h2><p class="ch-meta"><span class="chip tk1">金利</span><span class="chip">所要 約75分</span></p></header>
 <section class="learn">
   <h3 id="ch04-s1">この章で分かること</h3>
   <ol>
     <li>イールドカーブが何を表す線かと、形の言葉（右上がり・平ら・右下がり）、動きの言葉（スティープ化・フラット化）を、長短金利差（bp）で説明できる。</li>
     <li>カーブの形を説明する 3 つの考え方（期待・期間プレミアム・需給）を挙げ、「どれか 1 つで決まるとは言えない」ことを説明できる。</li>
     <li>日本と米国の国債のイールドカーブの公表元と、利回りの種類・時刻・年限の違いを、一次資料の言葉で説明できる。</li>
+    <li>カーブの動きを、水準・傾き・曲率に分けて説明し、ブル・スティープなど 4 つの名前と、逆転（逆イールド）の読み方を、手で動かして確かめられる。</li>
+    <li>カーブの変化で、2 年債と 10 年債の価格がどう動くかを、デュレーションの近似で説明できる（上がる側も下がる側も）。</li>
+    <li>2 つのスポットレートから先渡しの金利を計算し、その読み方の限界を説明できる。公表元の表から、実際の曲線の形を読む手順を言える。</li>
   </ol>
   <p class="prereq"><b>前提</b>：<a href="#ch03">第03章</a>（利回りの種類）。</p>
 </section>
 
 <h3 id="ch04-s2">まず全体像：満期ごとの利回りを並べた線</h3>
 <p><b>イールドカーブ</b>（yield curve）は、満期までの期間と利回りの関係を、期間の短いものから長いものへ並べて描いた線です。横軸が満期までの年数、縦軸が利回りです。第03章のスポットレートや最終利回りを、満期の順に並べると描けます。</p>
-<p>この章の図の数値は、すべて<b>架空</b>です。この講座は、実在のカーブの現在の形・水準を書きません（公表元は後の節で示します）。下の実験台で、短期と長期の利回りを動かして、形を作ります。</p>
+<p>この章の図の数値は、すべて<b>架空</b>です。この講座は、実在のカーブの現在の形・水準を書きません（公表元は後の節で示します。「実際の曲線で見る」の節だけは、日付と出典を付けた過去の公表値を写します）。下の実験台で、短期と長期の利回りを動かして、形を作ります。</p>
 <div data-widget="lab" data-src="c04-curve"></div>
 
 <h3 id="ch04-s3">形の言葉</h3>
@@ -1308,13 +1333,47 @@ body { line-height: 2.0; }
 <div data-widget="compare" data-src="c04-steep-flat"></div>
 <p>実験台の「短期の利回りの変化」「長期の利回りの変化」を動かすと、破線のカーブが動き、長短金利差の変化が出ます。短期と長期が同じだけ動く（平行移動）と、差は変わりません。</p>
 
-<h3 id="ch04-s6">国債のイールドカーブの公表</h3>
+<h3 id="ch04-s6">曲線を手で動かす：水準・傾き・曲率</h3>
+<p>カーブの動きは、<b>水準</b>（全体の上下。平行移動）、<b>傾き</b>（長短金利差の変化）、<b>曲率</b>（中期のふくらみ）の 3 つに分けて言うと、整理しやすくなります（出典：一般知識。動きを言葉で整理するための見方で、実際の動きがこの 3 つだけで決まるという意味ではありません）。次の実験台は、<b>架空のカーブ</b>（元は 3 か月 1.80％・2 年 2.00％・10 年 3.00％を通る右上がり）を、3 本のつまみで動かします。薄い線が元、濃い線が動かした後で、2 本の間は色で塗られます。横軸は残存期間（3 か月から 30 年）を<b>対数の目盛り</b>にしてあります。短い年限も、長い年限も、同じように見えるようにするためです。</p>
+<div data-widget="lab" data-src="c04-move"></div>
+<p>読み取り値は 4 つです。<b>2 年と 10 年の利回り</b>、<b>長短金利差</b>（10 年 − 2 年。bp）、<b>バタフライ</b>（2 × 5 年 − 2 年 − 10 年。bp。中期が 2 年と 10 年の平均より高いほど大きい）、<b>曲線の状態の名前</b>です。差がマイナスになると「逆転」と出て、図に 2 年から 10 年の色の帯が付きます。状態の名前の境目（差が 10 bp 以下を「ほぼ平ら」）は、この実験台だけの目安で、公的な定義ではありません。</p>
+
+<h3 id="ch04-s7">4 つの名前：ブル・スティープ、ベア・スティープ、ブル・フラット、ベア・フラット</h3>
+<p>カーブの動きは、2 つの軸で呼び分けます（出典：一般知識。細かい決め方は使う人や場面で違います）。</p>
+<ul>
+  <li><b>ブル</b>（bull）は、債券の価格が上がる動き＝<b>利回りが下がる</b>。<b>ベア</b>（bear）は、価格が下がる動き＝<b>利回りが上がる</b>。</li>
+  <li><b>スティープ</b>は、長短金利差が<b>広がる</b>。<b>フラット</b>は、長短金利差が<b>縮む</b>。</li>
+</ul>
+<p>組み合わせると、ブル・スティープ（短期の方が大きく下がる）、ベア・スティープ（長期の方が大きく上がる）、ブル・フラット（長期の方が大きく下がる）、ベア・フラット（短期の方が大きく上がる）の 4 つです。上の実験台の 4 つのボタンと、表の ● で、動きとの対応を確かめられます。この講座は、2 年と 10 年の利回りの変化の<b>平均</b>が下がればブル、上がればベアと決めています（2 年と 10 年が逆向きに動くときのための、この講座の約束です。たとえば 2 年が上がり 10 年が下がる動きは、ツイストとも呼ばれ、この約束で決めた名前は、ほかの資料の呼び方と違うことがあります）。名前は、動きの向きと差の変化を言うだけで、動きの理由（景気・金融政策・需給）を言うものではありません。</p>
+
+<h3 id="ch04-s8">逆転（逆イールド）の読み方：どの 2 点で見るか</h3>
+<p>逆転は、<b>短期の利回りが長期より高い</b>こと、つまり長短金利差がマイナスのことです。ただし、「どの 2 点の差か」で、逆転かどうかが変わります。2 年と 10 年では右上がりでも、3 か月と 10 年では逆転、ということがあります（実験台で「逆転」のボタンの前後や、曲率を動かして確かめられます）。公表される形は、日付と、見る 2 点を添えて言います。</p>
+<p>逆転と景気後退の関係について、サンフランシスコ連邦準備銀行の Economic Letter（2018 年 8 月 27 日、2018-20）は、過去の米国で、逆転の後に景気後退が続くことが多く、逆転は景気後退の始まりの 1〜2 年ほど前に現れる傾向がある、と説明しています。一方で、この種の相関は原因と結果を特定しないこと、原因と結果が双方向だった可能性があること、解釈には大きな注意が必要であることも書いています（出典：同 Economic Letter。要約はこの講座）。<b>逆イールドは景気後退の前に観測されることが多いと言われますが、時期も因果も確定したものではありません</b>。この講座は、カーブの形から景気や金利を予測しません。</p>
+
+<h3 id="ch04-s9">曲線の変化と債券の価格</h3>
+<p>利回りが動くと、債券の価格が動きます（第02章。逆向き）。動き方は、第05章の<b>修正デュレーション</b>で近似できます（式 12：価格の変化率 ≈ − 修正デュレーション × Δy）。次の実験台は、<b>架空の 2 銘柄</b>（2 年債：利率 2.0％・残存 2 年、10 年債：利率 3.0％・残存 10 年。年 1 回の利払い、基準の利回りは利率と同じ）で、「この変化が起きたとき、価格はこう動く」を見ます。1 つ目のタブは、2 年と 10 年が同じだけ動く場合で、同じ利回りの変化でも長い債券ほど価格が大きく動くことが分かります。2 つ目のタブは、水準と傾きで 2 つの年限を別々に動かす場合です。</p>
+<div data-widget="lab" data-src="c04-price"></div>
+<p>利回りが上がる側では価格が下がり、下がる側では上がります。どちらも同じ式で、同じ重さで読みます。フラット化やスティープ化のときは、2 年と 10 年の利回りの変化の大きさが違い、デュレーションも違うので、2 銘柄の価格の変化の差は、動きの種類と大きさで変わります（たとえば、ベア・フラットでは、10 年の利回りの変化の方が小さくても、価格の変化は 10 年債の方が大きくなることがあります）。この模型は、<b>売買の損益ではありません</b>。クーポンの受取り、経過利子、保有や資金調達の費用、手数料を含みません。</p>
+
+<h3 id="ch04-s10">先渡しの金利を読む</h3>
+<p>第03章のフォワードレート（式 9）は、2 本のスポットレートから、将来の期間の金利を計算します。市場では<b>インプライド・フォワード</b>（今のスポットレートから導かれる先渡しの金利）とも呼びます。1 年先に始まる 1 年の先渡しの金利は、<b>(1 ＋ s2)^2 ÷ (1 ＋ s1) − 1</b> です。</p>
+<div data-widget="lab" data-src="c04-fwd"></div>
+<p>逆イールド（s2 が s1 より低い）では、先渡しの金利は s2 よりもさらに低くなります。市場が将来の政策金利の引き下げを見込んでいる、という読み方がされることがあります。ただし、期間に応じた上乗せ（期間プレミアム、タームプレミアム）も含まれるので、先渡しの金利は予想そのものではありません。また、2 つ目のタブのように、カーブ全体から T 年ごとの先渡しを並べると、右下がりの区間では先渡しがスポットより低く、右上がりの区間では高くなります。この計算は、今のスポットレートの組合せから導いた値で、将来の金利の予測ではありません（第03章）。</p>
+
+<h3 id="ch04-s11">国債のイールドカーブの公表</h3>
 <p><b>日本</b>では、財務省が『国債金利情報』を公表しています。財務省の FAQ（ページの日付 2023 年 3 月 29 日）の時点で、流通市場の実勢価格をもとに算出した、主要年限ごとの「半年複利金利（半年複利ベースの最終利回り）」で、基準日の翌営業日の午前 9 時 30 分頃の公表が予定されています（出典：財務省『公表している金利はどのようなものですか』『公表時刻はいつですか』）。2026 年 11 月分のデータ（英語版の CSV）は、1 年から 40 年の 15 の年限（1〜10 年の各年、15・20・25・30・40 年）で、単位は％でした（確認日に開いた版）。算出の方法は、提供開始時（2010 年 2 月 26 日）の発表が、個別銘柄の実勢金利を接点とした 3 次スプライン関数による補間と書いています。現行の算出方法の説明は、確かめていません。</p>
 <p><b>米国</b>では、米財務省が、Daily Treasury Par Yield Curve Rates（Treasury Par Yield Curve）を公表しています。米財務省の方法の説明（2025 年 2 月 18 日更新）の時点で、これは monotone convex 法で導いた<b>パー・イールド・カーブ</b>です。<b>パー利回り</b>（par yield）は、債券の価格が額面と等しくなる利率で、満期ごとに並べたものがパー・イールド・カーブです。入力は、ニューヨーク連銀が各取引日の午後 3 時 30 分頃に得る、直近に入札した証券の買い気配の参考価格（実際の取引ではありません）で、結果は通常、米東部時間の午後 6 時までに出ます（遅れることがあります）。monotone convex 法は 2021 年 12 月 6 日から使われ、それ以前は quasi-cubic hermite spline 法でした（出典：米財務省『Treasury Yield Curve Methodology』）。</p>
 <div data-widget="table" data-src="c04-sources"></div>
 <p>2 つのカーブは、利回りの種類（半年複利ベースの最終利回りと、パー利回り）も、入力の価格（実勢価格と、買い気配の参考価格）も違います。数字を並べて比べる前に、定義が同じかどうかを確かめます。</p>
 
-<h3 id="ch04-s7">演習：長短金利差とカーブの変化</h3>
+<h3 id="ch04-s12">実際の曲線で見る：公表元の表の値</h3>
+<p>ここまでの図は架空です。次の実験台は、公表元の表から、形の違いが分かる日付を 4 つ選んで写した値です。<b>どの値も、その日付の公表値（過去の値）で、現在の水準ではありません</b>。米国は、米財務省の Daily Treasury Par Yield Curve Rates（<b>パー利回り</b>）の表から、2025 年 4 月 4 日、2026 年 1 月 2 日、2026 年 11 月 16 日（2026 年 11 月 18 日にこの講座が取得した表の最後の日）の 3 日、日本は、財務省の国債金利情報（英語版 CSV、2026 年 11 月分。<b>半年複利ベースの最終利回り</b>、単位％）の 2026 年 11 月 16 日です。米国は 3 か月から 30 年の 10 点（1・1.5・2・4 か月は図に出しません）、日本は 1 年から 30 年の 14 点（40 年は図に出しません）です。点の間は直線でつないであります（公表元の補間ではありません）。</p>
+<div data-widget="lab" data-src="c04-real"></div>
+<div data-widget="table" data-src="c04-real-table"></div>
+<p>2025 年 4 月 4 日の米国の表では、3 か月が 10 年より高く、2 年と 10 年の差はプラスです（同じ日に、見る 2 点で、逆転かどうかが違う例）。日本と米国は、利回りの種類（半年複利ベースの最終利回りとパー利回り）・入力の価格・時刻が違うので、高さを並べて比べません。差の列は、この講座が表の値から計算した値です。</p>
+<p><b>自分で確かめる手順</b>：米国は、米財務省の Daily Treasury Par Yield Curve Rates のページで、年を選んだ表の行（Date）を見て、2 Yr と 10 Yr の列を読みます。2 Yr の列が 10 Yr の列より大きい行があるかを探すと、2 年と 10 年の逆転の日が見つかるかどうかが分かります（この講座は、そのような日を表の中で確かめていないので、日付を挙げません）。日本は、財務省の国債金利情報のページの CSV（年限別の利回りの表）で、日付の行を読みます。月ごとの CSV は、過去の日付の行を含むファイルを、同じページから開きます。</p>
+
+<h3 id="ch04-s13">演習：長短金利差とカーブの変化</h3>
 <p>次の 3 問は、<b>架空の値</b>です（出典：架空・見本のため）。考えてから、行を押して答えを開きます。</p>
 <div data-widget="table" data-src="c04-calc"></div>
 
@@ -1322,28 +1381,33 @@ body { line-height: 2.0; }
   <p><b>右下がりのカーブを見て、「将来の短期金利が下がる」と決めつけません</b>。期待のほかに、期間プレミアムと需給が混ざっています。</p>
   <p><b>差の変化は、「％」でなく「％ポイント」か bp で書きます</b>。「0.2％上がった」でなく「0.2％ポイント（20 bp）上がった」です。</p>
   <p><b>スティープ化は、金利が上がることではありません</b>。長短金利差が広がることです。短期と長期が同じだけ動くと、スティープ化でもフラット化でもありません。</p>
-  <p><b>日本と米国のカーブは、定義が違います</b>。数字を並べる前に、利回りの種類・時刻・入力の価格を確かめます。</p></div>
+  <p><b>日本と米国のカーブは、定義が違います</b>。数字を並べる前に、利回りの種類・時刻・入力の価格を確かめます。</p>
+  <p><b>ブル・ベアは利回りの向き、スティープ・フラットは差の変化です</b>。「ブル」は景気が良い、という意味ではありません。</p>
+  <p><b>先渡しの金利は予想そのものではありません</b>。期間プレミアムなども含みます。</p>
+  <p><b>利回りの変化の大きさと、価格の変化の大きさは、同じ順になるとは限りません</b>。デュレーションが違うためです。</p></div>
 
 <div class="callout tip"><span class="ttl">実務でのつながり</span>
   <p>債券の評価では、満期ごとに別々の利回り（スポットレート）で割り引くので、カーブのデータ（公表元の年限と時刻）が入力になります。システムの開発では、公表元のデータを取り込む処理が、年限の点・単位・時刻（日本と米国で違う）を、仕様として扱います。</p></div>
 
-<section class="quiz-sec"><h3 id="ch04-s8">確認問題</h3>
+<section class="quiz-sec"><h3 id="ch04-s14">確認問題</h3>
   <div data-widget="quiz" data-src="c04-quiz"></div>
 </section>
 
-<section class="refs"><h3 id="ch04-s9">参照資料</h3>
+<section class="refs"><h3 id="ch04-s15">参照資料</h3>
   <div class="tbl-wrap"><table class="tbl">
     <caption>この章で使った資料（確認日：2026 年 11 月 15 日）</caption>
     <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
     <tbody>
       <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.mof.go.jp/faq/jgbs/04ha.htm">公表している金利はどのようなものですか</a></th><td>財務省</td><td>ページの日付 2023 年 3 月 29 日</td><td>国債金利情報が半年複利金利であること。</td></tr>
       <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.mof.go.jp/faq/jgbs/04hf.htm">公表時刻はいつですか</a></th><td>財務省</td><td>ページの日付 2023 年 3 月 29 日</td><td>公表時刻（翌営業日午前 9 時 30 分頃の予定）。</td></tr>
-      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.mof.go.jp/english/policy/jgbs/reference/interest_rate/jgbcme.csv">JGBs Interest Rate（CSV、英語版）</a></th><td>財務省</td><td>2026 年 11 月分（確認 2026 年 11 月 15 日）</td><td>年限の点と単位（％）。値は書かない。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.mof.go.jp/english/policy/jgbs/reference/interest_rate/jgbcme.csv">JGBs Interest Rate（CSV、英語版）</a></th><td>財務省</td><td>2026 年 11 月分（確認 2026 年 11 月 15 日、値は 11 月 18 日）</td><td>年限の点と単位（％）。2026 年 11 月 16 日の行の値（実際の曲線の項）。</td></tr>
       <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.mof.go.jp/jgbs/reference/interest_rate/p220226.htm">国債金利情報の提供開始について</a></th><td>財務省</td><td>2010 年 2 月 26 日発表</td><td>提供開始時の算出方法（3 次スプライン補間）。</td></tr>
       <tr><td>当局・公的機関</td><th scope="row"><a href="https://home.treasury.gov/policy-issues/financing-the-government/interest-rate-statistics/treasury-yield-curve-methodology">Treasury Yield Curve Methodology</a></th><td>米財務省</td><td>2025 年 2 月 18 日更新</td><td>monotone convex 法、入力の価格と証券、公表の時刻、方法の変更日。</td></tr>
-      <tr><td>当局・公的機関</td><th scope="row"><a href="https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&amp;field_tdr_date_value=2026">Daily Treasury Par Yield Curve Rates（2026 年分）</a></th><td>米財務省</td><td>2026 年分の表（確認 2026 年 11 月 15 日）</td><td>データの列（年限の点）。値は書かない。</td></tr>
-      <tr><td>教科書・一般知識・他講座</td><th scope="row">イールドカーブの形の言葉、期待仮説・期間プレミアム・需給の考え方、長短金利差、パー利回り</th><td>—</td><td>—</td><td>債券・金利の教科書の基本の内容（一般知識）。第03章（フォワードレート・期間プレミアム）。</td></tr>
-      <tr><td>架空（見本のため）</td><th scope="row">実験台・演習のカーブと利回り</th><td>この講座</td><td>—</td><td>理解のための架空の値。実在のカーブではない。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&amp;field_tdr_date_value=2026">Daily Treasury Par Yield Curve Rates（2026 年分）</a></th><td>米財務省</td><td>2026 年分の表（確認 2026 年 11 月 15 日、値は 11 月 18 日）</td><td>データの列（年限の点）。2026 年 1 月 2 日と 11 月 16 日の行の値（実際の曲線の項）。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&amp;field_tdr_date_value=2025">Daily Treasury Par Yield Curve Rates（2025 年分）</a></th><td>米財務省</td><td>2025 年分の表（確認 2026 年 11 月 18 日）</td><td>2025 年 4 月 4 日の年限別の利回り（実際の曲線の項）。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.frbsf.org/research-and-insights/publications/economic-letter/2018/08/information-in-yield-curve-about-future-recessions/">Information in the Yield Curve about Future Recessions</a></th><td>サンフランシスコ連邦準備銀行（FRBSF Economic Letter 2018-20）</td><td>2018 年 8 月 27 日</td><td>逆転と景気後退の関係の説明と、その限界（相関で、因果は特定されない）。</td></tr>
+      <tr><td>教科書・一般知識・他講座</td><th scope="row">イールドカーブの形の言葉、期待仮説・期間プレミアム・需給の考え方、長短金利差、パー利回り</th><td>—</td><td>—</td><td>債券・金利の教科書の基本の内容（一般知識）。ブル・ベアの呼び方、バタフライ。第03章（フォワードレート・期間プレミアム）、第05章（デュレーション）。</td></tr>
+      <tr><td>架空（見本のため）</td><th scope="row">実験台・演習のカーブと利回り</th><td>この講座</td><td>—</td><td>理解のための架空の値。実在のカーブではない（実際の曲線の項を除く）。</td></tr>
     </tbody>
   </table></div>
 </section>
@@ -3677,7 +3741,7 @@ body { line-height: 2.0; }
 </footer>
 <script>
 window.CN_CFG = {"slug": "rates", "prefix": "rates.", "title": "金利と国債、中央銀行の資金供給", "subtitle": "金利の計算・国債の仕組み・日銀と FRB の資金供給と統計の見方", "docTitle": "金利と国債、中央銀行の資金供給 | TTJ", "glossaryCh": "30", "kinds": {"ue": "中央銀行", "ran": "政府・財政", "core": "金融機関", "db": "市場", "pol": "制度・統計・公表", "ext": "投資家・家計・企業", "ims": "決済と清算"}, "labels": {"arch.plane.up": "資金・債券・約定のデータ（太線）", "arch.plane.cp": "注文・指示・公表（実線）", "arch.plane.lg": "制度の根拠・参照（点線）", "drill.q1": "どの段階で止まっていますか。", "drill.q2": "最初に確かめる対象（統計・通知・記録）はどれですか。", "ident.where": "何を表すか・どこで見るか"}, "mapping": {"title": "統計・制度と公表者・資料の対応表", "colA": "統計・制度・仕組み", "colB": "公表者・資料", "colNote": "この講座での使いどころ", "cats": [{"key": "boj", "label": "日本銀行"}, {"key": "mof", "label": "財務省"}, {"key": "fed", "label": "FRB・NY 連銀"}, {"key": "ust", "label": "米財務省"}, {"key": "oth", "label": "その他"}], "note": "各章の参照資料の表から集めた対応です。URL と時点は各章の参照資料で確かめてください。"}, "exam": {"title": "総合テスト", "intro": "公開中の章から 35 問。部ごとの成績が出ます。"}, "publish": true, "themeColor": {"dark": "#151515", "light": "#FFFFFF"}};
-window.CN_CHAPTERS = [{"num": "I1", "part": "0", "title": "金利とは：お金の時間の値段", "track": "基礎", "time": 25, "ready": true, "label": "序章1", "front": true}, {"num": "I2", "part": "0", "title": "大きさをくらべる：国債と中央銀行の残高", "track": "基礎", "time": 20, "ready": true, "label": "序章2", "front": true}, {"num": "01", "part": "1", "title": "金利の表し方：年率・日数計算・単利と複利", "track": "金利", "time": 35, "ready": true}, {"num": "02", "part": "1", "title": "割引と現在価値：割引係数と債券の価格", "track": "金利", "time": 40, "ready": true}, {"num": "03", "part": "1", "title": "利回りの種類：最終利回り・スポットレート・フォワードレート", "track": "金利", "time": 40, "ready": true}, {"num": "04", "part": "1", "title": "イールドカーブ：形と読み方", "track": "金利", "time": 35, "ready": true}, {"num": "05", "part": "1", "title": "デュレーションとコンベクシティ：価格の金利への感応度", "track": "金利", "time": 40, "ready": true}, {"num": "06", "part": "1", "title": "短期金融市場と指標金利：コール・レポ・TONA・SOFR", "track": "短期市場", "time": 40, "ready": true}, {"num": "07", "part": "2", "title": "国債とは：種類・年限・発行の根拠", "track": "国債", "time": 35, "ready": true}, {"num": "08", "part": "2", "title": "国債の発行計画と入札：財務省の計画と入札の方式", "track": "国債", "time": 40, "ready": true}, {"num": "09", "part": "2", "title": "米国債の発行と入札：米財務省とプライマリー・ディーラー", "track": "国債", "time": 35, "ready": true}, {"num": "10", "part": "2", "title": "国債の流通市場：店頭の取引と価格の公表", "track": "国債", "time": 35, "ready": true}, {"num": "11", "part": "2", "title": "レポ取引：債券を担保にした資金の貸し借り", "track": "国債", "time": 40, "ready": true}, {"num": "12", "part": "2", "title": "国債の決済：日銀ネットと Fedwire、DVP", "track": "国債", "time": 30, "ready": true}, {"num": "13", "part": "3", "title": "中央銀行のバランスシート：資産と負債の読み方", "track": "中央銀行", "time": 40, "ready": true}, {"num": "14", "part": "3", "title": "準備預金と当座預金：準備預金制度と付利", "track": "中央銀行", "time": 40, "ready": true}, {"num": "15", "part": "3", "title": "公開市場操作：資金供給と資金吸収のオペ", "track": "中央銀行", "time": 40, "ready": true}, {"num": "16", "part": "3", "title": "短期金利の誘導：フロアとコリドー", "track": "中央銀行", "time": 45, "ready": true}, {"num": "17", "part": "3", "title": "量的緩和と保有資産の縮小：買入れ・再投資・減額", "track": "中央銀行", "time": 40, "ready": true}, {"num": "18", "part": "3", "title": "常設ファシリティと最後の貸し手", "track": "中央銀行", "time": 35, "ready": true}, {"num": "19", "part": "3", "title": "当座預金の増減要因：銀行券・財政・金融調節", "track": "中央銀行", "time": 40, "ready": true}, {"num": "20", "part": "4", "title": "日本銀行の枠組みの変遷：量的緩和から金利の引き上げまで", "track": "日本", "time": 40, "ready": true}, {"num": "21", "part": "4", "title": "日本銀行の現在の枠組み：政策金利・付利・国債買入れ", "track": "日本", "time": 40, "ready": true}, {"num": "22", "part": "4", "title": "FRB の枠組みの変遷：危機への対応から十分な準備の体制へ", "track": "米国", "time": 40, "ready": true}, {"num": "23", "part": "4", "title": "FRB の現在の枠組み：目標の範囲・IORB・ON RRP・国債の買入れ", "track": "米国", "time": 40, "ready": true}, {"num": "24", "part": "4", "title": "政府の口座と資金供給：政府預金と TGA", "track": "米国", "time": 35, "ready": true}, {"num": "25", "part": "5", "title": "日本銀行の統計を読む：営業毎旬報告・マネタリーベース・当座預金増減要因", "track": "統計", "time": 45, "ready": true}, {"num": "26", "part": "5", "title": "FRB の統計を読む：H.4.1", "track": "統計", "time": 40, "ready": true}, {"num": "27", "part": "5", "title": "銀行と短期金融市場の統計：H.8・SOFR・EFFR・ON RRP・TGA", "track": "統計", "time": 40, "ready": true}, {"num": "28", "part": "5", "title": "公表のカレンダーとウォッチの手順", "track": "統計", "time": 35, "ready": true}, {"num": "29", "part": "5", "title": "ウォッチの総合演習：架空の 1 か月を追う", "track": "演習", "time": 45, "ready": true}, {"num": "30", "part": "A", "title": "用語集・統計と資料の地図・総合テスト", "track": "付録", "time": 30, "ready": true}];
+window.CN_CHAPTERS = [{"num": "I1", "part": "0", "title": "金利とは：お金の時間の値段", "track": "基礎", "time": 25, "ready": true, "label": "序章1", "front": true}, {"num": "I2", "part": "0", "title": "大きさをくらべる：国債と中央銀行の残高", "track": "基礎", "time": 20, "ready": true, "label": "序章2", "front": true}, {"num": "01", "part": "1", "title": "金利の表し方：年率・日数計算・単利と複利", "track": "金利", "time": 35, "ready": true}, {"num": "02", "part": "1", "title": "割引と現在価値：割引係数と債券の価格", "track": "金利", "time": 40, "ready": true}, {"num": "03", "part": "1", "title": "利回りの種類：最終利回り・スポットレート・フォワードレート", "track": "金利", "time": 40, "ready": true}, {"num": "04", "part": "1", "title": "イールドカーブ：形と読み方", "track": "金利", "time": 75, "ready": true}, {"num": "05", "part": "1", "title": "デュレーションとコンベクシティ：価格の金利への感応度", "track": "金利", "time": 40, "ready": true}, {"num": "06", "part": "1", "title": "短期金融市場と指標金利：コール・レポ・TONA・SOFR", "track": "短期市場", "time": 40, "ready": true}, {"num": "07", "part": "2", "title": "国債とは：種類・年限・発行の根拠", "track": "国債", "time": 35, "ready": true}, {"num": "08", "part": "2", "title": "国債の発行計画と入札：財務省の計画と入札の方式", "track": "国債", "time": 40, "ready": true}, {"num": "09", "part": "2", "title": "米国債の発行と入札：米財務省とプライマリー・ディーラー", "track": "国債", "time": 35, "ready": true}, {"num": "10", "part": "2", "title": "国債の流通市場：店頭の取引と価格の公表", "track": "国債", "time": 35, "ready": true}, {"num": "11", "part": "2", "title": "レポ取引：債券を担保にした資金の貸し借り", "track": "国債", "time": 40, "ready": true}, {"num": "12", "part": "2", "title": "国債の決済：日銀ネットと Fedwire、DVP", "track": "国債", "time": 30, "ready": true}, {"num": "13", "part": "3", "title": "中央銀行のバランスシート：資産と負債の読み方", "track": "中央銀行", "time": 40, "ready": true}, {"num": "14", "part": "3", "title": "準備預金と当座預金：準備預金制度と付利", "track": "中央銀行", "time": 40, "ready": true}, {"num": "15", "part": "3", "title": "公開市場操作：資金供給と資金吸収のオペ", "track": "中央銀行", "time": 40, "ready": true}, {"num": "16", "part": "3", "title": "短期金利の誘導：フロアとコリドー", "track": "中央銀行", "time": 45, "ready": true}, {"num": "17", "part": "3", "title": "量的緩和と保有資産の縮小：買入れ・再投資・減額", "track": "中央銀行", "time": 40, "ready": true}, {"num": "18", "part": "3", "title": "常設ファシリティと最後の貸し手", "track": "中央銀行", "time": 35, "ready": true}, {"num": "19", "part": "3", "title": "当座預金の増減要因：銀行券・財政・金融調節", "track": "中央銀行", "time": 40, "ready": true}, {"num": "20", "part": "4", "title": "日本銀行の枠組みの変遷：量的緩和から金利の引き上げまで", "track": "日本", "time": 40, "ready": true}, {"num": "21", "part": "4", "title": "日本銀行の現在の枠組み：政策金利・付利・国債買入れ", "track": "日本", "time": 40, "ready": true}, {"num": "22", "part": "4", "title": "FRB の枠組みの変遷：危機への対応から十分な準備の体制へ", "track": "米国", "time": 40, "ready": true}, {"num": "23", "part": "4", "title": "FRB の現在の枠組み：目標の範囲・IORB・ON RRP・国債の買入れ", "track": "米国", "time": 40, "ready": true}, {"num": "24", "part": "4", "title": "政府の口座と資金供給：政府預金と TGA", "track": "米国", "time": 35, "ready": true}, {"num": "25", "part": "5", "title": "日本銀行の統計を読む：営業毎旬報告・マネタリーベース・当座預金増減要因", "track": "統計", "time": 45, "ready": true}, {"num": "26", "part": "5", "title": "FRB の統計を読む：H.4.1", "track": "統計", "time": 40, "ready": true}, {"num": "27", "part": "5", "title": "銀行と短期金融市場の統計：H.8・SOFR・EFFR・ON RRP・TGA", "track": "統計", "time": 40, "ready": true}, {"num": "28", "part": "5", "title": "公表のカレンダーとウォッチの手順", "track": "統計", "time": 35, "ready": true}, {"num": "29", "part": "5", "title": "ウォッチの総合演習：架空の 1 か月を追う", "track": "演習", "time": 45, "ready": true}, {"num": "30", "part": "A", "title": "用語集・統計と資料の地図・総合テスト", "track": "付録", "time": 30, "ready": true}];
 window.CN_PARTS = [{"key": "0", "name": "序章 金利と規模の入口", "short": "序章", "appendix": false, "front": true}, {"key": "1", "name": "第1部 金利の基礎", "short": "金利の基礎", "appendix": false}, {"key": "2", "name": "第2部 国債の仕組み", "short": "国債の仕組み", "appendix": false}, {"key": "3", "name": "第3部 中央銀行の資金供給の仕組み", "short": "中央銀行の資金供給", "appendix": false}, {"key": "4", "name": "第4部 日銀と FRB の枠組みの変遷と現在", "short": "日銀と FRB の枠組み", "appendix": false}, {"key": "5", "name": "第5部 統計の読み方とウォッチ", "short": "統計とウォッチ", "appendix": false}, {"key": "A", "name": "付録 用語集・統計と資料の地図・総合テスト", "short": "付録", "appendix": true}];
 </script>
 <script>
@@ -6243,11 +6307,12 @@ window.CN_PARTS = [{"key": "0", "name": "序章 金利と規模の入口", "shor
     CN.frame(el, '式を動かす実験台', d.title, tabs);
     var body = h('div', { 'class': 'wg-body lab-body' }); el.appendChild(body);
     if (d.disclaimer !== false) el.appendChild(h('p', { 'class': 'lab-disc' }, d.disclaimer || '学習用の模型です。実際の設計や工事の判断には使えません。'));
-    var figBox = null, resBox = null, readBox = null, sayBoxes = {}, tableBox = null, outEls = {}, constBox = null, lastEnv = null;
+    var figBox = null, resBox = null, readBox = null, sayBoxes = {}, tableBox = null, outEls = {}, constBox = null, lastEnv = null, sliders = {}, presetBtns = [], presetNote = null, quadCells = [];
 
     function compileExp(x) {
-      var c = { calc: (x.calc || []).map(function (k) { return { id: k.id, f: X.compile(k.expr) }; }), results: (x.results || []).map(function (r) { return { r: r, f: X.compile(r.expr) }; }),
-        reads: (x.reads || []).map(function (r) { return { r: r, f: r.when ? X.compile(r.when) : null }; }), says: {} };
+      var c = { calc: (x.calc || []).map(function (k) { return { id: k.id, f: X.compile(k.expr) }; }), results: (x.results || []).map(function (r) { return { r: r, f: X.compile(r.expr), sh: r.show ? X.compile(r.show) : null, bf: r.base ? X.compile(r.base.expr) : null }; }),
+        reads: (x.reads || []).map(function (r) { return { r: r, f: r.when ? X.compile(r.when) : null }; }), says: {}, quad: [] };
+      if (x.quad) (x.quad.cells || []).forEach(function (row, ri) { row.forEach(function (cell, ci) { c.quad.push({ ri: ri, ci: ci, f: cell.when ? X.compile(cell.when) : null }); }); });
       x.inputs.forEach(function (i) { c.says[i.id] = (i.say || []).map(function (r) { return { r: r, f: r.when ? X.compile(r.when) : null }; }); });
       return c;
     }
@@ -6268,22 +6333,58 @@ window.CN_PARTS = [{"key": "0", "name": "序章 金利と規模の入口", "shor
       return { num: fmtFixed(v, dg), unit: '' };
     }
 
+    /* プリセット：set は { 入力の id: 値 }。つまみの刻みに丸められた値が state に入る */
+    function setAll(set) {
+      var k; for (k in set) { var sl = sliders[k]; if (sl) { sl.r.value = set[k]; sl.sync(); } }
+      refresh();
+    }
+    /* 2×2 などの分類表（実際の表。いまの入力に当てはまるマスに印が付く）。x.quad = {title?, corner?, cols:[…], rows:[…], cells:[[{title, sub?, when?}, …], …], caption?} */
+    function buildQuad(q) {
+      var tb = h('tbody');
+      (q.rows || []).forEach(function (rh, ri) {
+        var tr = h('tr', null, h('th', { scope: 'row' }, rh));
+        (q.cells[ri] || []).forEach(function (cell) {
+          var td = h('td', { 'class': 'lab-quad-c' }, h('b', null, cell.title)); if (cell.sub) td.appendChild(h('span', null, cell.sub));
+          quadCells.push(td); tr.appendChild(td);
+        });
+        tb.appendChild(tr);
+      });
+      var tbl = h('table', { 'class': 'lab-quad-t' }, h('thead', null, h('tr', null, [h('th', { scope: 'col' }, q.corner || '')].concat((q.cols || []).map(function (c) { return h('th', { scope: 'col' }, c); })))), tb);
+      var box = h('div', { 'class': 'lab-quad' });
+      if (q.title) box.appendChild(h('h5', null, q.title));
+      box.appendChild(h('div', { 'class': 'tbl-wrap' }, tbl));
+      if (q.caption) box.appendChild(CN.richEl('p', 'lab-cap', q.caption));
+      return box;
+    }
+
     function build() {
       var x = exps[cur]; CN.clear(body);
       if (x.intro) body.appendChild(CN.richEl('p', 'lab-intro', x.intro));
+      sayBoxes = {}; outEls = {}; sliders = {}; presetBtns = []; presetNote = null; quadCells = [];
+      /* 実験の「プリセット」：複数の入力をまとめて決める（任意）。押すと下のつまみが動く */
+      if (x.presets && x.presets.length) {
+        var pbar = h('div', { 'class': 'lab-preset-bar' }), plabel = x.presetLabel || 'まとめて動かす（押すと、下のつまみが動きます）';
+        pbar.appendChild(h('div', { 'class': 'lab-preset-h' }, plabel));
+        var pgrp = h('div', { 'class': 'lab-presets', role: 'group', 'aria-label': plabel });
+        x.presets.forEach(function (p) { var b = h('button', { type: 'button', 'class': 'btn sm', 'aria-pressed': 'false' }, p.label); b.addEventListener('click', function () { setAll(p.set); }); presetBtns.push(b); pgrp.appendChild(b); });
+        pbar.appendChild(pgrp);
+        presetNote = h('p', { 'class': 'lab-say lab-preset-note', 'aria-live': 'polite' }); pbar.appendChild(presetNote);
+        body.appendChild(pbar);
+      }
       var top = h('div', { 'class': 'lab-top' }), inputs = h('div', { 'class': 'lab-inputs' }), right = h('div', { 'class': 'lab-right' });
       top.appendChild(inputs); top.appendChild(right); body.appendChild(top);
-      sayBoxes = {}; outEls = {};
       x.inputs.forEach(function (i) {
         var id = ctx.id + '-' + cur + '-' + i.id, dec = numSteps(i.step);
         var wrap = h('div', { 'class': 'lab-in' });
         var out = h('output', { 'for': id, 'class': 'lab-val' });
         wrap.appendChild(h('div', { 'class': 'lab-in-h' }, h('label', { 'for': id }, i.label + (i.unit ? '（' + i.unit + '）' : '')), out));
         var r = h('input', { type: 'range', id: id, min: i.min, max: i.max, step: i.step, value: state[cur][i.id] });
-        function upd() {
+        function sync() {
           state[cur][i.id] = parseFloat(r.value); out.textContent = fmtFixed(state[cur][i.id], dec) + (i.unit ? ' ' + i.unit : '');
-          r.setAttribute('aria-valuetext', out.textContent); refresh();
+          r.setAttribute('aria-valuetext', out.textContent);
         }
+        function upd() { sync(); refresh(); }
+        sliders[i.id] = { r: r, sync: sync };
         r.addEventListener('input', upd); wrap.appendChild(r);
         wrap.appendChild(h('div', { 'class': 'lab-minmax' }, h('span', null, fmtFixed(i.min, dec)), h('span', null, fmtFixed(i.max, dec))));
         if (i.presets && i.presets.length) {
@@ -6297,6 +6398,7 @@ window.CN_PARTS = [{"key": "0", "name": "序章 金利と規模の入口", "shor
       });
       figBox = h('div', { 'class': 'lab-fig' }); right.appendChild(figBox);
       resBox = h('div', { 'class': 'lab-results', 'aria-live': 'polite' }); right.appendChild(resBox);
+      if (x.quad) right.appendChild(buildQuad(x.quad));
       if (x.formula) body.appendChild(CN.richEl('p', 'lab-formula', '式：' + x.formula));
       readBox = h('div', { 'class': 'lab-read' }); body.appendChild(readBox);
       if (x.consts && x.consts.length) {
@@ -6314,9 +6416,14 @@ window.CN_PARTS = [{"key": "0", "name": "序章 金利と規模の入口", "shor
       var x = exps[cur], c = compiled[cur], e = env(cur); lastEnv = e;
       CN.clear(resBox);
       c.results.forEach(function (o) {
-        var v = ev(o.f, e), t = show(v, o.r.digits, o.r.auto), box = h('div', { 'class': 'lab-res' + (o.r.big ? ' big' : '') });
+        if (o.sh && !ev(o.sh, e)) return;      // show：式が偽のとき、この結果は出さない（任意）
+        var v = ev(o.f, e), t = o.r.words ? { num: (isFinite(v) && o.r.words[Math.round(v)] != null) ? o.r.words[Math.round(v)] : '—', unit: '' } : show(v, o.r.digits, o.r.auto), box = h('div', { 'class': 'lab-res' + (o.r.big ? ' big' : '') + (o.r.words ? ' word' : '') });
         box.appendChild(h('div', { 'class': 'lab-res-l' }, o.r.label));
         box.appendChild(h('div', { 'class': 'lab-res-v' }, h('b', null, t.num), ' ' + (t.unit || o.r.unit || '') + (t.lt ? ' 未満' : '')));
+        if (o.bf) {      // base：変化前などの比較の値（任意）。words があれば言葉で、なければ数で
+          var bv = ev(o.bf, e), bw = o.r.base.words, bt = bw ? ((isFinite(bv) && bw[Math.round(bv)] != null) ? bw[Math.round(bv)] : '—') : (function () { var q = show(bv, o.r.base.digits != null ? o.r.base.digits : o.r.digits, o.r.auto); return q.num + ((q.unit || o.r.unit) ? ' ' + (q.unit || o.r.unit) : ''); })();
+          box.appendChild(h('div', { 'class': 'lab-res-n' }, (o.r.base.label || '元') + '：' + bt));
+        }
         if (o.r.note) box.appendChild(h('div', { 'class': 'lab-res-n' }, o.r.note));
         resBox.appendChild(box);
       });
@@ -6324,6 +6431,14 @@ window.CN_PARTS = [{"key": "0", "name": "序章 金利と規模の入口", "shor
         var hit = null; c.says[i.id].forEach(function (z) { if (!hit && (!z.f || ev(z.f, e))) hit = z.r; });
         sayBoxes[i.id].textContent = hit ? hit.text : (i.hint || '');
       });
+      if (x.presets && presetBtns.length) {
+        var act = -1; x.presets.forEach(function (p, pi) {
+          var on = true, k; for (k in p.set) { if (Math.abs((state[cur][k] != null ? state[cur][k] : NaN) - p.set[k]) > 1e-9) on = false; }
+          presetBtns[pi].setAttribute('aria-pressed', String(on)); if (on && act < 0) act = pi;
+        });
+        presetNote.textContent = act >= 0 ? (x.presets[act].text || '') : (x.presetHint || '');
+      }
+      if (c.quad.length) c.quad.forEach(function (q) { var on = !!(q.f && ev(q.f, e)), td = quadCells[q.ri * (x.quad.cols || []).length + q.ci]; if (td) { td.className = 'lab-quad-c' + (on ? ' on' : ''); if (on) td.setAttribute('aria-current', 'true'); else td.removeAttribute('aria-current'); } });
       CN.clear(readBox);
       var rl = c.reads.filter(function (z) { return !z.f || ev(z.f, e); });
       if (rl.length) {
@@ -6336,25 +6451,28 @@ window.CN_PARTS = [{"key": "0", "name": "序章 金利と規模の入口", "shor
     /* ---- 図 ---- */
     function num(v, e, dflt) { if (v == null) return dflt; if (typeof v === 'number') return v; try { return X.compile(v).run(e); } catch (er) { return dflt; } }
     function drawFig() {
-      var x = exps[cur], f = x.fig, e = lastEnv; if (!f || !figBox || !e) return;
-      CN.clear(figBox);
-      var W = measure(figBox, 320), rows = [], svg;
-      if (f.type === 'bar') svg = figBar(f, e, W, rows);
-      else if (f.type === 'wave') svg = figWave(f, e, W, rows);
-      else if (f.type === 'curve') svg = figCurve(f, e, W, rows);
-      else svg = figCircuit(f, e, W, rows);
-      figBox.appendChild(svg);
-      if (f.caption) figBox.appendChild(CN.richEl('p', 'lab-cap', f.caption));
-      CN.clear(tableBox); tableBox.appendChild(h('summary', null, '図の数値（同じ内容の表。読み上げ・印刷用）'));
-      var tb = h('tbody');
-      if (rows.tbl) {
-        rows.tbl.body.forEach(function (r) { tb.appendChild(h('tr', null, r.map(function (c, ci) { return ci === 0 ? h('th', { scope: 'row' }, c) : h('td', null, c); }))); });
-        tableBox.appendChild(h('div', { 'class': 'tbl-wrap' }, h('table', { 'class': 'tbl' }, h('caption', null, x.label + '：線グラフの数値'), h('thead', null, h('tr', null, rows.tbl.head.map(function (c) { return h('th', { scope: 'col' }, c); }))), tb)));
-      } else {
-        rows.forEach(function (r) { tb.appendChild(h('tr', null, h('th', { scope: 'row' }, r[0]), h('td', null, r[1]))); });
-        tableBox.appendChild(h('div', { 'class': 'tbl-wrap' }, h('table', { 'class': 'tbl' }, h('caption', null, x.label + '：図の数値'), h('thead', null, h('tr', null, h('th', { scope: 'col' }, '項目'), h('th', { scope: 'col' }, '値'))), tb)));
-      }
-      svg.setAttribute('aria-label', (f.alt || x.label) + '。' + rows.map(function (r) { return r[0] + ' ' + r[1]; }).join('、'));
+      var x = exps[cur], list = x.figs || (x.fig ? [x.fig] : []), e = lastEnv; if (!list.length || !figBox || !e) return;
+      CN.clear(figBox); CN.clear(tableBox); tableBox.appendChild(h('summary', null, '図の数値（同じ内容の表。読み上げ・印刷用）'));
+      var W = measure(figBox, 320);
+      list.forEach(function (f, fi) {
+        var rows = [], svg, many = list.length > 1, nm = many ? x.label + '・' + (f.title || '図 ' + (fi + 1)) : x.label;
+        if (f.type === 'bar') svg = f.signed ? figBarS(f, e, W, rows) : figBar(f, e, W, rows);
+        else if (f.type === 'wave') svg = figWave(f, e, W, rows);
+        else if (f.type === 'curve') svg = figCurve(f, e, W, rows);
+        else svg = figCircuit(f, e, W, rows);
+        if (many && f.title) figBox.appendChild(h('h5', { 'class': 'lab-fig-t' }, f.title));
+        figBox.appendChild(svg);
+        if (f.caption) figBox.appendChild(CN.richEl('p', 'lab-cap', f.caption));
+        var tb = h('tbody');
+        if (rows.tbl) {
+          rows.tbl.body.forEach(function (r) { tb.appendChild(h('tr', null, r.map(function (c, ci) { return ci === 0 ? h('th', { scope: 'row' }, c) : h('td', null, c); }))); });
+          tableBox.appendChild(h('div', { 'class': 'tbl-wrap' }, h('table', { 'class': 'tbl' }, h('caption', null, nm + '：線グラフの数値'), h('thead', null, h('tr', null, rows.tbl.head.map(function (c) { return h('th', { scope: 'col' }, c); }))), tb)));
+        } else {
+          rows.forEach(function (r) { tb.appendChild(h('tr', null, h('th', { scope: 'row' }, r[0]), h('td', null, r[1]))); });
+          tableBox.appendChild(h('div', { 'class': 'tbl-wrap' }, h('table', { 'class': 'tbl' }, h('caption', null, nm + '：図の数値'), h('thead', null, h('tr', null, h('th', { scope: 'col' }, '項目'), h('th', { scope: 'col' }, '値'))), tb)));
+        }
+        svg.setAttribute('aria-label', (f.alt || x.label) + '。' + rows.map(function (r) { return r[0] + ' ' + r[1]; }).join('、'));
+      });
     }
     function vt(v, b) { var t = show(v, b.digits, b.auto); return t.num + (t.unit || b.unit ? ' ' + (t.unit || b.unit) : '') + (t.lt ? ' 未満' : ''); }
 
@@ -6419,6 +6537,30 @@ window.CN_PARTS = [{"key": "0", "name": "序章 金利と規模の入口", "shor
       return svg;
     }
 
+    /* ---- 正負の棒（fig.type 'bar'、signed:true）：0 の線から左右に伸びる。max は絶対値の上限（数か式。省略するとデータから） ---- */
+    function figBarS(f, e, W, rows) {
+      var bars = f.bars, vals = bars.map(function (b) { return num(b.expr, e, NaN); }), n = bars.length, rowH = 50, padL = 10, padR = 10, Hh = 24 + n * rowH + 8;
+      var mx = f.max != null ? num(f.max, e, NaN) : NaN; if (!isFinite(mx)) mx = Math.max.apply(null, vals.filter(isFinite).map(Math.abs)) * 1.1 || 1;
+      var svg = s('svg', { 'class': 'lab-svg', viewBox: '0 0 ' + W + ' ' + Hh, width: W, height: Hh, role: 'img' });
+      var x0 = padL, x1 = W - padR, zx = (x0 + x1) / 2, half = (x1 - x0) / 2, k = half / mx;
+      svg.appendChild(s('rect', { 'class': 'lab-plot', x: x0, y: 16, width: x1 - x0, height: n * rowH + 4 }));
+      [-1, 1].forEach(function (sg) { svg.appendChild(s('line', { 'class': 'lab-g v', x1: zx + sg * half / 2, y1: 16, x2: zx + sg * half / 2, y2: 16 + n * rowH + 4 })); });
+      svg.appendChild(s('line', { 'class': 'lab-g zero', x1: zx, y1: 12, x2: zx, y2: 16 + n * rowH + 4 }));
+      svg.appendChild(s('text', { 'class': 'lab-ax', x: zx, y: 10, 'text-anchor': 'middle' }, '0'));
+      var ud = f.unit ? '（' + f.unit + '）' : '';
+      svg.appendChild(s('text', { 'class': 'lab-ax', x: x0 + 2, y: 10 }, '← ' + (f.negLabel || '下がる') + ' ' + fmtFixed(mx, f.axisDigits != null ? f.axisDigits : 0)));
+      svg.appendChild(s('text', { 'class': 'lab-ax', x: x1 - 2, y: 10, 'text-anchor': 'end' }, (f.posLabel || '上がる') + ' ' + fmtFixed(mx, f.axisDigits != null ? f.axisDigits : 0) + ' →'));
+      bars.forEach(function (b, i) {
+        var y = 20 + i * rowH, v = vals[i], w = isFinite(v) ? Math.min(half, Math.abs(v) * k) : 0, neg = v < 0, lab = vt(v, b);
+        svg.appendChild(s('text', { 'class': 'lab-bl', x: x0 + 6, y: y + 12 }, b.label));
+        svg.appendChild(s('rect', { 'class': 'lab-bar c-' + (b.color || COLORS[i % COLORS.length]) + (neg ? ' neg' : ''), x: neg ? zx - w : zx, y: y + 18, width: Math.max(0, w), height: 18, rx: 3 }));
+        /* 値は、棒のない側（0 の線の反対側）に出す。棒と重ならない */
+        svg.appendChild(s('text', { 'class': 'lab-bv', x: neg ? zx + 6 : zx - 6, y: y + 31, 'text-anchor': neg ? 'start' : 'end' }, lab));
+        rows.push([b.label, lab]);
+      });
+      return svg;
+    }
+
     /* ---- 線グラフ（fig.type 'curve'）：x の範囲で式を評価して折れ線を描く。負の値・0 の線・縦の目印つき ---- */
     function niceStep(range, n) {
       var raw = range / n, mag = Math.pow(10, Math.floor(Math.log(raw) / Math.LN10 + 1e-12)), r = raw / mag;
@@ -6426,14 +6568,26 @@ window.CN_PARTS = [{"key": "0", "name": "序章 金利と規模の入口", "shor
     }
     function decOf(step) { var m = /e-(\d+)/.exec(String(step)), d = numSteps(step); return m ? parseInt(m[1], 10) : d; }
     function figCurve(f, e, W, rows) {
-      var xd = f.x, x0 = xd.min, x1 = xd.max, N = Math.max(2, Math.min(800, Math.round((x1 - x0) / (xd.step || (x1 - x0) / 120)))), ser = f.series, dg = f.digits != null ? f.digits : 2;
+      var xd = f.x, x0 = xd.min, x1 = xd.max, logx = xd.scale === 'log', ser = f.series, dg = f.digits != null ? f.digits : 2;
+      var N = logx ? Math.max(2, Math.min(800, Math.round(xd.n || 160))) : Math.max(2, Math.min(800, Math.round((x1 - x0) / (xd.step || (x1 - x0) / 120))));
       var xdec = xd.digits != null ? xd.digits : Math.min(4, decOf(xd.step || 1));
-      var fs = ser.map(function (z) { return X.compile(z.expr); });
+      var fs = ser.map(function (z) { return z.expr != null ? X.compile(z.expr) : null; });
+      var vis = ser.map(function (z) { return !z.when || !!ev(X.compile(z.when), e); });
       var ev0 = function (k, xv) { var env2 = {}, key; for (key in e) env2[key] = e[key]; env2[xd.id] = xv; return ev(fs[k], env2); };
+      /* data：公表値などの点（{x, y, l?}）を直線でつなぐ系列。expr の代わりに使う（任意） */
+      var pts = ser.map(function (z) { return z.data ? z.data.filter(function (q) { return isFinite(q.x) && isFinite(q.y); }) : null; });
+      var tPos = function (v) { return logx ? Math.log(v / x0) / Math.log(x1 / x0) : (v - x0) / (x1 - x0); };
+      var valAt = function (k, xv) {
+        if (!pts[k]) return ev0(k, xv);
+        var a = pts[k], i2;
+        for (i2 = 0; i2 < a.length; i2++) if (Math.abs(tPos(a[i2].x) - tPos(xv)) < 1e-9) return a[i2].y;
+        for (i2 = 0; i2 + 1 < a.length; i2++) if (xv > a[i2].x && xv < a[i2 + 1].x) return a[i2].y + (a[i2 + 1].y - a[i2].y) * (tPos(xv) - tPos(a[i2].x)) / (tPos(a[i2 + 1].x) - tPos(a[i2].x));
+        return NaN;
+      };
       var data = ser.map(function () { return []; }), xs = [], i, k;
-      for (i = 0; i <= N; i++) { var xv = x0 + (x1 - x0) * i / N; xs.push(xv); for (k = 0; k < ser.length; k++) data[k].push(ev0(k, xv)); }
+      for (i = 0; i <= N; i++) { var xv = logx ? x0 * Math.pow(x1 / x0, i / N) : x0 + (x1 - x0) * i / N; xs.push(xv); for (k = 0; k < ser.length; k++) data[k].push(fs[k] ? ev0(k, xv) : NaN); }
       /* 縦軸の範囲：ymin・ymax（数か式）。無ければデータから決める */
-      var fin = []; data.forEach(function (a) { a.forEach(function (v) { if (isFinite(v)) fin.push(v); }); });
+      var fin = []; data.forEach(function (a, kk) { if (vis[kk]) a.forEach(function (v) { if (isFinite(v)) fin.push(v); }); }); pts.forEach(function (a, kk) { if (a && vis[kk]) a.forEach(function (q) { fin.push(q.y); }); });
       var dmin = fin.length ? Math.min.apply(null, fin) : 0, dmax = fin.length ? Math.max.apply(null, fin) : 1;
       var ymin = f.ymin != null ? num(f.ymin, e, NaN) : NaN, ymax = f.ymax != null ? num(f.ymax, e, NaN) : NaN;
       if (!isFinite(ymin) || !isFinite(ymax)) {
@@ -6442,15 +6596,36 @@ window.CN_PARTS = [{"key": "0", "name": "序章 金利と規模の入口", "shor
       }
       if (!(ymax > ymin)) ymax = ymin + 1;
       var ystep = niceStep(ymax - ymin, 4), ydec = Math.max(0, Math.min(6, decOf(ystep)));
-      /* 凡例（折り返す）。上の余白は凡例の行数で決める */
-      var lgRows = [[]], lx = 0, LW = W - 12, widths = ser.map(function (z) { return 34 + z.label.length * 12; });
+      /* 凡例（折り返す）：見えている系列と、帯（fills）。上の余白は凡例の行数で決める */
+      var fills = (f.fills || []).filter(function (z) { return !z.when || !!ev(X.compile(z.when), e); });
+      var lgItems = []; ser.forEach(function (z, j) { if (vis[j]) lgItems.push({ k: 'l', j: j, label: z.label }); }); fills.forEach(function (z, j) { if (z.label) lgItems.push({ k: 'f', j: j, label: z.label }); });
+      var lgRows = [[]], lx = 0, LW = W - 12, widths = lgItems.map(function (z) { return 34 + z.label.length * 12; });
       widths.forEach(function (w, j) { if (lx + w > LW && lgRows[lgRows.length - 1].length) { lgRows.push([]); lx = 0; } lgRows[lgRows.length - 1].push(j); lx += w; });
-      var mL = Math.min(56, 36 + 7 * Math.max(String(Math.round(Math.abs(ymax))).length, String(Math.round(Math.abs(ymin))).length) + (ydec ? 6 * ydec : 0)), mR = 14, mT = 22 + lgRows.length * 18 + (f.yLabel ? 16 : 0), mB = 40 + (xd.label ? 14 : 0);
-      var Hh = Math.max(250, Math.min(320, W * 0.62 + 60)) + lgRows.length * 18, pw = W - mL - mR, ph = Hh - mT - mB;
+      var mL = Math.min(56, 36 + 7 * Math.max(String(Math.round(Math.abs(ymax))).length, String(Math.round(Math.abs(ymin))).length) + (ydec ? 6 * ydec : 0)), mR = 14, mT = 22 + lgRows.length * 18 + (f.yLabel ? 16 : 0), pw = W - mL - mR;
+      var X0 = function (v) { return mL + tPos(v) * pw; };
+      /* 横軸の目盛り：ticks（{v, label}）があればそれを使う。ラベルが重なるときは 2 段にずらす */
+      var ticks = (xd.ticks || []).filter(function (t) { return t.v >= x0 - 1e-9 && t.v <= x1 + 1e-9; }), tickRow = [], needRow2 = false;
+      if (ticks.length) {
+        var lastR = [-1e9, -1e9]; ticks.forEach(function (t, ti) {
+          var wd = 6.7 * String(t.label).length + 4, cx = X0(t.v), lo = cx - wd / 2, hi = cx + wd / 2, r0 = 0;
+          if (lo < lastR[0] + 2) { r0 = 1; if (lo < lastR[1] + 2) r0 = 0; }
+          lastR[r0] = hi; tickRow.push(r0); if (r0) needRow2 = true;
+        });
+      }
+      var mB = 40 + (xd.label ? 14 : 0) + (needRow2 ? 13 : 0);
+      var Hh = Math.max(250, Math.min(320, W * 0.62 + 60)) + lgRows.length * 18, ph = Hh - mT - mB;
       var svg = s('svg', { 'class': 'lab-svg', viewBox: '0 0 ' + W + ' ' + Hh, width: W, height: Hh, role: 'img' });
-      var X0 = function (v) { return mL + (v - x0) / (x1 - x0) * pw; }, Y0 = function (v) { return mT + (ymax - v) / (ymax - ymin) * ph; };
+      var Y0 = function (v) { return mT + (ymax - v) / (ymax - ymin) * ph; };
       var clipId = ctx.id + '-clip-' + cur;
       svg.appendChild(s('rect', { 'class': 'lab-plot', x: mL, y: mT, width: pw, height: ph }));
+      /* 帯（spans）：横軸の範囲を色で示す（例：逆転している区間）。条件 when が真のときだけ */
+      (f.spans || []).forEach(function (sp) {
+        if (sp.when && !ev(X.compile(sp.when), e)) return;
+        var a1 = num(sp.from, e, NaN), a2 = num(sp.to, e, NaN); if (!isFinite(a1) || !isFinite(a2)) return;
+        var xa = X0(Math.max(x0, Math.min(a1, a2))), xb = X0(Math.min(x1, Math.max(a1, a2)));
+        svg.appendChild(s('rect', { 'class': 'lab-span', x: xa, y: mT, width: Math.max(0, xb - xa), height: ph }));
+        if (sp.label) svg.appendChild(s('text', { 'class': 'lab-span-t', x: (xa + xb) / 2, y: mT + ph - 7, 'text-anchor': 'middle' }, sp.label));
+      });
       /* 目盛り */
       var ty;
       for (ty = Math.ceil(ymin / ystep - 1e-9) * ystep; ty <= ymax + ystep * 1e-9; ty += ystep) {
@@ -6458,56 +6633,96 @@ window.CN_PARTS = [{"key": "0", "name": "序章 金利と規模の入口", "shor
         svg.appendChild(s('line', { 'class': 'lab-g' + (isZ ? ' zero' : ''), x1: mL, y1: Y0(ty), x2: mL + pw, y2: Y0(ty) }));
         svg.appendChild(s('text', { 'class': 'lab-ax', x: mL - 6, y: Y0(ty) + 4, 'text-anchor': 'end' }, fmtFixed(isZ ? 0 : ty, ydec)));
       }
-      var xstep = niceStep(x1 - x0, W < 420 ? 4 : 6), xd2 = Math.max(0, Math.min(6, decOf(xstep))), tx;
-      for (tx = Math.ceil(x0 / xstep - 1e-9) * xstep; tx <= x1 + xstep * 1e-9; tx += xstep) {
-        svg.appendChild(s('line', { 'class': 'lab-g v', x1: X0(tx), y1: mT, x2: X0(tx), y2: mT + ph }));
-        svg.appendChild(s('text', { 'class': 'lab-ax', x: X0(tx), y: mT + ph + 15, 'text-anchor': tx - x0 < xstep * 0.01 ? 'start' : x1 - tx < xstep * 0.01 ? 'end' : 'middle' }, fmtFixed(tx, xd2)));
+      if (ticks.length) {
+        ticks.forEach(function (t, ti) {
+          svg.appendChild(s('line', { 'class': 'lab-g v', x1: X0(t.v), y1: mT, x2: X0(t.v), y2: mT + ph }));
+          svg.appendChild(s('text', { 'class': 'lab-ax', x: X0(t.v), y: mT + ph + 15 + tickRow[ti] * 13, 'text-anchor': 'middle' }, t.label));
+        });
+      } else {
+        var xstep = niceStep(x1 - x0, W < 420 ? 4 : 6), xd2 = Math.max(0, Math.min(6, decOf(xstep))), tx;
+        for (tx = Math.ceil(x0 / xstep - 1e-9) * xstep; tx <= x1 + xstep * 1e-9; tx += xstep) {
+          svg.appendChild(s('line', { 'class': 'lab-g v', x1: X0(tx), y1: mT, x2: X0(tx), y2: mT + ph }));
+          svg.appendChild(s('text', { 'class': 'lab-ax', x: X0(tx), y: mT + ph + 15, 'text-anchor': tx - x0 < xstep * 0.01 ? 'start' : x1 - tx < xstep * 0.01 ? 'end' : 'middle' }, fmtFixed(tx, xd2)));
+        }
       }
       if (xd.label) svg.appendChild(s('text', { 'class': 'lab-ax', x: mL + pw / 2, y: Hh - 8, 'text-anchor': 'middle' }, xd.label + (xd.unit ? '（' + xd.unit + '）' : '')));
       if (f.yLabel) svg.appendChild(s('text', { 'class': 'lab-ax', x: 4, y: mT - 8 }, '縦軸：' + f.yLabel + (f.unit ? '（' + f.unit + '）' : '')));
       /* 凡例 */
       lgRows.forEach(function (r, ri) {
         var ox = mL;
-        r.forEach(function (j) {
-          var dsh = dashOf(ser[j], j);
-          svg.appendChild(s('line', { 'class': 'lab-wave c-' + (ser[j].color || COLORS[j % COLORS.length]), x1: ox, y1: 14 + ri * 18, x2: ox + 22, y2: 14 + ri * 18, 'stroke-dasharray': dsh }));
-          svg.appendChild(s('text', { 'class': 'lab-lg', x: ox + 26, y: 18 + ri * 18 }, ser[j].label)); ox += widths[j];
+        r.forEach(function (li) {
+          var it = lgItems[li];
+          if (it.k === 'l') {
+            var dsh = dashOf(ser[it.j], it.j);
+            svg.appendChild(s('line', { 'class': 'lab-wave c-' + (ser[it.j].color || COLORS[it.j % COLORS.length]) + (ser[it.j].faint ? ' faint' : ''), x1: ox, y1: 14 + ri * 18, x2: ox + 22, y2: 14 + ri * 18, 'stroke-dasharray': dsh }));
+          } else svg.appendChild(s('rect', { 'class': 'lab-fill c-' + (fills[it.j].color || 'core'), x: ox, y: 8 + ri * 18, width: 22, height: 12 }));
+          svg.appendChild(s('text', { 'class': 'lab-lg', x: ox + 26, y: 18 + ri * 18 }, it.label)); ox += widths[li];
         });
       });
-      /* 折れ線（値が数でない所では線を切る） */
+      var defs = s('defs', null, s('clipPath', { id: clipId }, s('rect', { x: mL, y: mT, width: pw, height: ph })));
+      svg.insertBefore(defs, svg.firstChild);
+      /* 2 本の系列の間の帯（fills：変化の大きさを色で見せる）。expr の系列どうしだけ */
+      fills.forEach(function (z) {
+        var top = [], bot = [], ia = z.a, ib = z.b;
+        if (!data[ia] || !data[ib] || pts[ia] || pts[ib]) return;
+        for (i = 0; i <= N; i++) { var va = data[ia][i], vb = data[ib][i]; if (isFinite(va) && isFinite(vb)) { top.push(X0(xs[i]).toFixed(1) + ',' + Y0(va).toFixed(1)); bot.unshift(X0(xs[i]).toFixed(1) + ',' + Y0(vb).toFixed(1)); } }
+        if (top.length > 1) svg.appendChild(s('polygon', { 'class': 'lab-fill c-' + (z.color || 'core'), points: top.concat(bot).join(' '), 'clip-path': 'url(#' + clipId + ')' }));
+      });
+      /* 折れ線（値が数でない所では線を切る）。data の系列は点を直線でつなぎ、点に丸を付ける */
       ser.forEach(function (z, j) {
+        if (!vis[j]) return;
+        var cls = 'lab-wave lab-curve c-' + (z.color || COLORS[j % COLORS.length]) + (z.faint ? ' faint' : '');
+        if (pts[j]) {
+          if (pts[j].length > 1) svg.appendChild(s('polyline', { 'class': cls, points: pts[j].map(function (q) { return X0(q.x).toFixed(1) + ',' + Y0(q.y).toFixed(1); }).join(' '), 'stroke-dasharray': dashOf(z, j), 'clip-path': 'url(#' + clipId + ')' }));
+          pts[j].forEach(function (q) { svg.appendChild(s('circle', { 'class': 'lab-dot c-' + (z.color || COLORS[j % COLORS.length]), cx: X0(q.x), cy: Y0(q.y), r: 3.6 })); });
+          return;
+        }
         var seg = [], segs = [seg];
         data[j].forEach(function (v, ii) {
           if (!isFinite(v)) { if (seg.length) { seg = []; segs.push(seg); } return; }
           seg.push(X0(xs[ii]).toFixed(1) + ',' + Math.max(mT - 40, Math.min(mT + ph + 40, Y0(v))).toFixed(1));
         });
-        segs.forEach(function (sg) { if (sg.length > 1) svg.appendChild(s('polyline', { 'class': 'lab-wave lab-curve c-' + (z.color || COLORS[j % COLORS.length]), points: sg.join(' '), 'stroke-dasharray': dashOf(z, j), 'clip-path': 'url(#' + clipId + ')' })); });
+        segs.forEach(function (sg) { if (sg.length > 1) svg.appendChild(s('polyline', { 'class': cls, points: sg.join(' '), 'stroke-dasharray': dashOf(z, j), 'clip-path': 'url(#' + clipId + ')' })); });
       });
-      var defs = s('defs', null, s('clipPath', { id: clipId }, s('rect', { x: mL, y: mT, width: pw, height: ph })));
-      svg.insertBefore(defs, svg.firstChild);
       /* 縦の目印 */
       var marks = (f.marks || []).map(function (m) { return { m: m, v: num(m.x, e, NaN) }; }), shown = 0;
       marks.forEach(function (o) {
         if (!isFinite(o.v) || o.v < x0 - 1e-9 || o.v > x1 + 1e-9) return;
         var mx = X0(o.v), lab = o.m.label || '';
         svg.appendChild(s('line', { 'class': 'lab-mark', x1: mx, y1: mT, x2: mx, y2: mT + ph }));
-        ser.forEach(function (z, j) { var yv = ev0(j, o.v); if (isFinite(yv) && yv >= ymin && yv <= ymax) svg.appendChild(s('circle', { 'class': 'lab-dot c-' + (z.color || COLORS[j % COLORS.length]), cx: mx, cy: Y0(yv), r: 4.5 })); });
+        ser.forEach(function (z, j) { if (!vis[j] || z.nodot) return; var yv = valAt(j, o.v); if (isFinite(yv) && yv >= ymin && yv <= ymax) svg.appendChild(s('circle', { 'class': 'lab-dot c-' + (z.color || COLORS[j % COLORS.length]), cx: mx, cy: Y0(yv), r: 4.5 })); });
         if (lab) svg.appendChild(s('text', { 'class': 'lab-mark-t halo', x: mx + (mx > mL + pw * 0.62 ? -5 : 5), y: mT + 13 + (shown % 2) * 14, 'text-anchor': mx > mL + pw * 0.62 ? 'end' : 'start' }, lab));
         shown++;
       });
       /* 同じ内容の表と、図の名前に入れる要約 */
-      var cols = [(xd.label || xd.id) + (xd.unit ? '（' + xd.unit + '）' : '')].concat(ser.map(function (z) { return z.label + (f.unit ? '（' + f.unit + '）' : ''); }));
-      var body = [], nt = Math.min(N, 12), picked = {};
-      for (i = 0; i <= nt; i++) { var ix = Math.round(N * i / nt); if (picked[ix]) continue; picked[ix] = 1; body.push([fmtFixed(xs[ix], xdec)].concat(ser.map(function (z, j) { return fmtFixed(data[j][ix], dg); }))); }
+      var vser = ser.map(function (z, j) { return j; }).filter(function (j) { return vis[j]; });
+      var cols = [(xd.label || xd.id) + (xd.unit ? '（' + xd.unit + '）' : '')].concat(vser.map(function (j) { return ser[j].label + (f.unit ? '（' + f.unit + '）' : ''); }));
+      var xlab = function (v) {
+        var j2, i3; for (i3 = 0; i3 < ticks.length; i3++) if (Math.abs(tPos(ticks[i3].v) - tPos(v)) < 1e-9) return ticks[i3].label;
+        for (j2 = 0; j2 < vser.length; j2++) if (pts[vser[j2]]) { var q = pts[vser[j2]].filter(function (r) { return Math.abs(tPos(r.x) - tPos(v)) < 1e-9; })[0]; if (q && q.l) return q.l; }
+        return fmtFixed(v, xdec);
+      };
+      var body = [], picked = {}, allData = vser.length && vser.every(function (j) { return pts[j]; });
+      if (allData) {
+        var ux = []; vser.forEach(function (j) { pts[j].forEach(function (q) { if (ux.indexOf(q.x) < 0) ux.push(q.x); }); }); ux.sort(function (p1, p2) { return p1 - p2; });
+        ux.forEach(function (v) { body.push([xlab(v)].concat(vser.map(function (j) { var y = valAt(j, v), ex = pts[j].some(function (q) { return q.x === v; }); return ex && isFinite(y) ? fmtFixed(y, dg) : '—'; }))); });
+      } else if (ticks.length) {
+        ticks.forEach(function (t) { body.push([t.label].concat(vser.map(function (j) { var y = valAt(j, t.v); return isFinite(y) ? fmtFixed(y, dg) : '—'; }))); });
+      } else {
+        var nt = Math.min(N, 12);
+        for (i = 0; i <= nt; i++) { var ix = Math.round(N * i / nt); if (picked[ix]) continue; picked[ix] = 1; body.push([fmtFixed(xs[ix], xdec)].concat(vser.map(function (j) { return fmtFixed(data[j][ix], dg); }))); }
+      }
       marks.forEach(function (o) {
         if (!isFinite(o.v)) return;
-        body.push([(o.m.label || '目印') + '（' + fmtFixed(o.v, xdec) + '）'].concat(ser.map(function (z, j) { return fmtFixed(ev0(j, o.v), dg); })));
-        rows.push([(o.m.label || '目印') + '（' + (xd.label || xd.id) + ' ' + fmtFixed(o.v, xdec) + '）', ser.map(function (z, j) { return z.label + ' ' + fmtFixed(ev0(j, o.v), dg); }).join('、')]);
+        body.push([(o.m.label || '目印') + '（' + xlab(o.v) + '）'].concat(vser.map(function (j) { return fmtFixed(valAt(j, o.v), dg); })));
+        rows.push([(o.m.label || '目印') + '（' + (xd.label || xd.id) + ' ' + xlab(o.v) + '）', vser.map(function (j) { return ser[j].label + ' ' + fmtFixed(valAt(j, o.v), dg); }).join('、')]);
       });
-      ser.forEach(function (z, j) {
-        var a = data[j].filter(isFinite);
+      vser.forEach(function (j) {
+        var z = ser[j], a = data[j].filter(isFinite);
+        if (pts[j]) { rows.push([z.label + '（点の値）', pts[j].map(function (q) { return (q.l || fmtFixed(q.x, xdec)) + ' ' + fmtFixed(q.y, dg); }).join('、') + (f.unit ? ' ' + f.unit : '')]); return; }
         rows.push([z.label + '（範囲の端・最小・最大）', a.length ? fmtFixed(data[j][0], dg) + '・' + fmtFixed(data[j][N], dg) + '・' + fmtFixed(Math.min.apply(null, a), dg) + '・' + fmtFixed(Math.max.apply(null, a), dg) + (f.unit ? ' ' + f.unit : '') : '値なし']);
       });
+      (f.spans || []).forEach(function (sp) { if (sp.label && !(sp.when && !ev(X.compile(sp.when), e))) rows.push(['帯：' + sp.label, '表示中']); });
       rows.tbl = { head: cols, body: body };
       return svg;
     }
@@ -6561,7 +6776,9 @@ window.CN_PARTS = [{"key": "0", "name": "序章 金利と規模の入口", "shor
     var out = [d.title]; d.experiments.forEach(function (x) {
       out.push(x.label, x.intro, x.formula); x.inputs.forEach(function (i) { out.push(i.label, i.hint); (i.say || []).forEach(function (z) { out.push(z.text); }); });
       (x.results || []).forEach(function (r) { out.push(r.label); });
-      if (x.fig && x.fig.type === 'curve') { (x.fig.series || []).forEach(function (z) { out.push(z.label); }); (x.fig.marks || []).forEach(function (z) { out.push(z.label); }); }
+      (x.figs || (x.fig ? [x.fig] : [])).forEach(function (f) { if (f.type === 'curve') { (f.series || []).forEach(function (z) { out.push(z.label); }); (f.marks || []).forEach(function (z) { out.push(z.label); }); } });
+      (x.presets || []).forEach(function (z) { out.push(z.label, z.text); });
+      if (x.quad) (x.quad.cells || []).forEach(function (r) { r.forEach(function (c) { out.push(c.title, c.sub); }); });
       (x.reads || []).forEach(function (z) { out.push(z.text); });
     });
     return out.filter(Boolean).join(' ');
@@ -7192,6 +7409,7 @@ CN.exam([
 検算 差: 150 = (2.5 - 1.0) * 100
 検算 変化後の差: 120 = (2.7 - 1.5) * 100
 検算 変化: -30 = (2.7 - 1.5) * 100 - (2.5 - 1.0) * 100
+追加分（曲線を動かす・価格・先渡し・実際の曲線）の事実確認表・演習の照合・検算の行は facts/04-yield-curve.md。
 */
 
 CN.add('lab', 'c04-curve', {
@@ -7285,14 +7503,20 @@ CN.add('table', 'c04-calc', {
 CN.add('quiz', 'c04-quiz', { items: [
   { q: 'イールドカーブが右下がりのとき、「将来の短期金利が下がると市場が見ている」とだけは言えない理由として、最も適切なものはどれですか。', c: ['長期の利回りには、将来の短期金利の予想のほかに、期間プレミアムや期間ごとの需給も含まれ、形だけからは、どれが効いているか分からないから', '右下がりのカーブは、長期の利回りを中央銀行が直接決めた結果だから', 'イールドカーブは、短期の利回りだけを並べた線で、期間の長い利回りを含まないから', '右下がりのカーブは、国債の発行額が減った印だと決まっているから'], a: 0, why: '正答は「長期の利回りには、将来の短期金利の予想のほかに、期間プレミアムや期間ごとの需給も含まれ、形だけからは、どれが効いているか分からないから」です。期待仮説・期間プレミアム・需給の考え方は、どれか 1 つで形が決まるとは言えません。', ch: [4, 3] },
   { q: '「イールドカーブがスティープ化した」の意味として、最も適切なものはどれですか。', c: ['すべての期間の利回りが、同じだけ上がった', '長期と短期の利回りの差（長短金利差）が広がり、カーブの傾きが急になった', '短期の利回りが長期より大きく上がり、長短金利差が縮んだ', '国債の発行額が増えた'], a: 1, why: '正答は「長期と短期の利回りの差（長短金利差）が広がり、カーブの傾きが急になった」です。すべての期間が同じだけ動いたのは平行移動で、差は変わりません。短期の方が大きく動いて差が縮む場合はフラット化の例です。', ch: [4] },
-  { q: '国債のイールドカーブを公表している当局の組み合わせとして、正しいものはどれですか。', c: ['日本は日本銀行の TONA、米国は NY 連銀の SOFR', '日本は日本証券業協会の発表だけ、米国は FRB の H.4.1', '日本は財務省の国債金利情報、米国は米財務省の Daily Treasury Par Yield Curve Rates', '日本は大阪取引所、米国は CME'], a: 2, why: '正答は「日本は財務省の国債金利情報、米国は米財務省の Daily Treasury Par Yield Curve Rates」です。TONA と SOFR は翌日物の指標金利（第06章）で、イールドカーブではありません。H.4.1 は FRB のバランスシートの統計です（第26章）。', ch: [4] }
+  { q: '国債のイールドカーブを公表している当局の組み合わせとして、正しいものはどれですか。', c: ['日本は日本銀行の TONA、米国は NY 連銀の SOFR', '日本は日本証券業協会の発表だけ、米国は FRB の H.4.1', '日本は財務省の国債金利情報、米国は米財務省の Daily Treasury Par Yield Curve Rates', '日本は大阪取引所、米国は CME'], a: 2, why: '正答は「日本は財務省の国債金利情報、米国は米財務省の Daily Treasury Par Yield Curve Rates」です。TONA と SOFR は翌日物の指標金利（第06章）で、イールドカーブではありません。H.4.1 は FRB のバランスシートの統計です（第26章）。', ch: [4] },
+  { q: '2 年の利回りが大きく下がり、10 年の利回りも下がったが 2 年ほどではなかった。長短金利差（10 年 − 2 年）は広がった。この動きの呼び名として、最も適切なものはどれですか（値は架空）。', c: ['ベア・フラット', 'ベア・スティープ', 'ブル・フラット', 'ブル・スティープ'], a: 3, why: '正答は「ブル・スティープ」です。利回りが下がる動きはブル（債券の価格が上がる）、長短金利差が広がる動きはスティープで、短期の方が大きく下がると、この組合せになります。ベアは利回りが上がる動き、フラットは差が縮む動きです。', ch: [4] },
+  { q: '2 年の利回りが 4.0％、10 年の利回りが 3.6％のカーブ（どちらも架空）の読み方として、最も適切なものはどれですか。', c: ['10 年 − 2 年は −40 bp（−0.4％ポイント）で、2 年と 10 年で見ると逆転（逆イールド）している', '10 年 − 2 年は +40 bp で、右上がりである', '10 年 − 2 年は −0.4％で、長期の利回りが下がった量を表す', '逆転しているので、近く景気後退になると決まっている'], a: 0, why: '正答は「10 年 − 2 年は −40 bp（−0.4％ポイント）で、2 年と 10 年で見ると逆転（逆イールド）している」です。3.6 − 4.0 ＝ −0.4％ポイントで、これは差の大きさで、利回りが動いた量ではありません。逆転と景気後退の関係は、時期も因果も確定したものではありません。', ch: [4] },
+  { q: '1 年のスポットレートが 4.0％、2 年のスポットレートが 3.5％のとき（架空）、1 年後から 1 年間の先渡しの金利（式 9）に最も近いものはどれですか。', c: ['約 3.50％', '約 3.00％', '約 3.75％', '約 2.50％'], a: 1, why: '正答は「約 3.00％」です。式 9 より、1.035 の 2 乗 ÷ 1.04 − 1 ＝ 約 3.0024％で、スポットより低くなります。先渡しの金利は、将来の金利の予想そのものではありません。', ch: [4, 3] }
 ]});
 
 CN.glossary([
   { t: 'イールドカーブ', en: 'yield curve', alias: '利回り曲線', d: '満期までの期間と利回りの関係を、期間の短いものから長いものへ並べて描いた線です。', ch: [4] },
   { t: '逆イールド', en: 'inverted yield curve', d: '短期の利回りが長期の利回りより高く、イールドカーブが右下がりになっている状態です。', ch: [4] },
   { t: 'スティープ化', en: 'steepening', alias: 'フラット化', d: '長期と短期の利回りの差が広がり、イールドカーブの傾きが急になることです。反対に差が縮むことをフラット化といいます。', ch: [4] },
-  { t: 'パー利回り', en: 'par yield', alias: 'パー・イールド', d: '債券の価格が額面と等しくなるような利率のことです。満期ごとにこの値を並べた線をパー・イールド・カーブといいます。', ch: [4] }
+  { t: 'パー利回り', en: 'par yield', alias: 'パー・イールド', d: '債券の価格が額面と等しくなるような利率のことです。満期ごとにこの値を並べた線をパー・イールド・カーブといいます。', ch: [4] },
+  { t: 'ブル・スティープ', en: 'bull steepening', alias: 'ベア・スティープ、ブル・フラット、ベア・フラット', d: '利回りが下がる動き（ブル）で、長短金利差が広がること（スティープ）です。利回りが上がる動きをベア、差が縮むことをフラットといい、組み合わせて 4 つの名前で呼びます。', ch: [4] },
+  { t: 'カーブのバタフライ', en: 'yield curve butterfly', alias: 'バタフライ', d: 'イールドカーブの中期の利回りが、短期と長期の利回りの平均に比べて、高いか低いかを表す値です。中期のふくらみの大きさを見ます。', ch: [4] },
+  { t: '長短金利差', en: 'term spread', alias: '長短スプレッド', d: 'イールドカーブ上の長期の利回りと短期の利回りの差です。％ポイントか bp で表します。', ch: [4] }
 ]);
 
 CN.mapping('mof', [
@@ -7306,6 +7530,272 @@ CN.mapping('ust', [
 CN.exam([
   { part: 1, q: '財務省の国債金利情報が公表している金利の種類は、次のどれですか。', c: ['単利の利回り（直利）', '無担保コールレート（オーバーナイト物）', '半年複利金利（半年複利ベースの最終利回り）', 'フェデラル・ファンド実効金利'], a: 2, why: '正答は「半年複利金利（半年複利ベースの最終利回り）」です。財務省の FAQ は、流通市場の実勢価格をもとに算出した主要年限ごとの半年複利金利と説明しています。直利と単利の利回りは第03章で扱った別の表し方で、無担保コールレートとフェデラル・ファンド実効金利は翌日物の指標金利（第06章）です。', ch: [4, 3] }
 ]);
+
+/* ====================== 追加（曲線を動かす・価格・先渡し・実際の曲線） ======================
+   以下の実験台の式は、下の関数が文字列で組み立てる（式の正は facts/04-yield-curve.md の「定義」の行）。
+   ベースのカーブ（架空）：利回り(T) ＝ b0 ＋ b1 × A(T) ＋ b2 ×（A(T) − exp(−T ÷ 1.5)）、A(T) ＝（1 − exp(−T ÷ 1.5)）÷（T ÷ 1.5）。T は年。
+   係数は、3 か月＝1.80％・2 年＝2.00％・10 年＝3.00％を通るように解いた値。
+   動かした後の利回り(T) ＝ ベース(T) ＋（水準 ＋ 傾き × g(T) ＋ 曲率 × h(T)）÷ 100。水準・傾き・曲率の単位は bp。
+   w(T) ＝ 2 × ln(T ÷ √20) ÷ ln 5（2 年で −1、10 年で +1）、g(T) ＝ 0.5 × atan(1.5 × w) ÷ atan(1.5)（2 年で −0.5、10 年で +0.5）、h(T) ＝ (1 − w²)²（|w| < 1 のとき。それ以外は 0。2 年と 10 年で 0）。 */
+var B0 = 3.573733739796677, B1 = -1.7562109299723494, B2 = -2.091320400637096;
+function eA(t) { return '((1 - exp(-(' + t + ') / 1.5)) / ((' + t + ') / 1.5))'; }
+function eBase(t) { return '(' + B0 + ' + ' + B1 + ' * ' + eA(t) + ' + ' + B2 + ' * (' + eA(t) + ' - exp(-(' + t + ') / 1.5)))'; }
+function eW(t) { return '(2 * ln((' + t + ') / sqrt(20)) / ln(5))'; }
+function eShift(t, c) { return '((L + S * 0.5 * atan(1.5 * ' + eW(t) + ') / atan(1.5)' + (c === false ? '' : ' + C * if(abs(' + eW(t) + ') < 1, pow(1 - ' + eW(t) + ' * ' + eW(t) + ', 2), 0)') + ') / 100)'; }
+function eNew(t, c) { return '(' + eBase(t) + ' + ' + eShift(t, c) + ')'; }
+var TEN = [{ v: 0.25, label: '3M' }, { v: 1, label: '1Y' }, { v: 2, label: '2Y' }, { v: 5, label: '5Y' }, { v: 10, label: '10Y' }, { v: 20, label: '20Y' }, { v: 30, label: '30Y' }];
+var PRE = [
+  { label: 'ブル・スティープ', set: { L: -70, S: 60, C: 0 }, text: 'ブル・スティープ：利回りが下がり（ブル）、短期の方が大きく下がって差が広がる（スティープ）。ここでは 2 年が 100 bp、10 年が 40 bp 下がります（架空）。' },
+  { label: 'ベア・スティープ', set: { L: 40, S: 60, C: 0 }, text: 'ベア・スティープ：利回りが上がり（ベア）、長期の方が大きく上がって差が広がる（スティープ）。ここでは 2 年が 10 bp、10 年が 70 bp 上がります（架空）。' },
+  { label: 'ブル・フラット', set: { L: -50, S: -60, C: 0 }, text: 'ブル・フラット：利回りが下がり（ブル）、長期の方が大きく下がって差が縮む（フラット）。ここでは 2 年が 20 bp、10 年が 80 bp 下がります（架空）。' },
+  { label: 'ベア・フラット', set: { L: 50, S: -60, C: 0 }, text: 'ベア・フラット：利回りが上がり（ベア）、短期の方が大きく上がって差が縮む（フラット）。ここでは 2 年が 80 bp、10 年が 20 bp 上がります（架空）。' },
+  { label: '逆転', set: { L: 30, S: -140, C: 0 }, text: '逆転：短期が上がり、長期が下がって、差（10 年 − 2 年）がマイナスになる動き（架空）。ここでは 2 年が 100 bp 上がり、10 年が 40 bp 下がります。2 年と 10 年が逆向きに動くので、ブル・ベアは、この講座の約束（2 つの変化の平均。ここでは ＋30 bp）でベアになり、表ではベア・フラットのマスに入ります。' },
+  { label: '元に戻す', set: { L: 0, S: 0, C: 0 }, text: '元の曲線（薄い線）と同じ形に戻しました。' }
+];
+var PRE2 = PRE.map(function (p) { return { label: p.label, set: { L: p.set.L, S: p.set.S }, text: p.text }; });
+var STATE_WORDS = ['順イールド（右上がり）', 'ほぼ平ら（フラット）', '逆イールド（逆転）'];
+var NAME_WORDS = ['変化なし', '平行移動（全体が下がる）', '平行移動（全体が上がる）', 'ブル・スティープ', 'ブル・フラット', 'ベア・スティープ', 'ベア・フラット', 'ツイスト（2 年と 10 年が逆向きに同じだけ動く）'];
+
+CN.add('lab', 'c04-move', {
+  title: 'イールドカーブを動かす実験台（架空のカーブ。実在の水準ではない）',
+  disclaimer: '学習用の模型です。カーブの形・数値はすべて架空で、実在のイールドカーブではありません。将来の金利や景気の予測ではありません。実際の取引の判断には使えません。',
+  experiments: [
+    { id: 'move', label: '曲線を動かす', intro: '薄い線が元の曲線、濃い線が動かした後の曲線です。つまみは 3 本（水準・傾き・曲率）。上のボタンは、4 つの典型的な動きと、逆転、元に戻す、を一度に設定します。',
+      presetLabel: '典型的な動き（押すと、下の 3 本のつまみが動きます）',
+      presetHint: 'つまみを自分で動かすと、下の表の「いまの動き」の印が移ります。',
+      presets: PRE,
+      formula: '動かした後の利回り（T）＝ 元の利回り（T）＋（水準 ＋ 傾き × g（T）＋ 曲率 × h（T））÷ 100。単位は水準・傾き・曲率が bp、利回りが％。g は 2 年で −0.5、10 年で +0.5 になる、短期ほど下げ・長期ほど上げの形（両端でゆるやかに頭打ち）、h は 2 年と 10 年で 0、5 年付近で最大 1 になる山の形。元の曲線の形は事実確認表の定義（値は架空）',
+      inputs: [
+        { id: 'L', label: '水準（全体の上下）', unit: 'bp', min: -150, max: 150, step: 5, value: 0, hint: '全年限を同じだけ動かします（平行移動）。長短金利差は変わりません。',
+          say: [{ when: 'L > 0', text: '全体が上がる向き（ベア寄り）です。' }, { when: 'L < 0', text: '全体が下がる向き（ブル寄り）です。' }] },
+        { id: 'S', label: '傾き（長短金利差の変化）', unit: 'bp', min: -150, max: 150, step: 5, value: 0, hint: '10 年 − 2 年の差を、この値だけ広げます（マイナスは縮める）。短期は下がり・長期は上がる向きに回ります。',
+          say: [{ when: 'S > 0', text: '差が広がる向き（スティープ化）です。2 年は下向き、10 年は上向きに回ります。' }, { when: 'S < 0', text: '差が縮む向き（フラット化）です。2 年は上向き、10 年は下向きに回ります。' }] },
+        { id: 'C', label: '曲率（中期のふくらみ）', unit: 'bp', min: -60, max: 60, step: 5, value: 0, hint: '5 年付近を持ち上げます（マイナスはへこませる）。2 年と 10 年の利回りは動かしません。',
+          say: [{ when: 'C > 0', text: '5 年付近が持ち上がります。バタフライの値が大きくなります。' }, { when: 'C < 0', text: '5 年付近がへこみます。バタフライの値が小さくなります。' }] }
+      ],
+      calc: [
+        { id: 'y3b', expr: eBase('0.25') }, { id: 'y2b', expr: eBase('2') }, { id: 'y5b', expr: eBase('5') }, { id: 'y10b', expr: eBase('10') },
+        { id: 'y3', expr: eNew('0.25') }, { id: 'y2', expr: eNew('2') }, { id: 'y5', expr: eNew('5') }, { id: 'y10', expr: eNew('10') },
+        { id: 'sp0', expr: '(y10b - y2b) * 100' }, { id: 'sp1', expr: '(y10 - y2) * 100' },
+        { id: 'bf0', expr: '(2 * y5b - y2b - y10b) * 100' }, { id: 'bf1', expr: '(2 * y5 - y2 - y10) * 100' },
+        { id: 'd2', expr: '(y2 - y2b) * 100' }, { id: 'd10', expr: '(y10 - y10b) * 100' },
+        { id: 'av', expr: '(d2 + d10) / 2' }, { id: 'dsp', expr: 'sp1 - sp0' },
+        { id: 'st0', expr: 'sp0 < 0 ? 2 : (sp0 <= 10 ? 1 : 0)' }, { id: 'st1', expr: 'sp1 < 0 ? 2 : (sp1 <= 10 ? 1 : 0)' },
+        { id: 'nm', expr: 'abs(dsp) < 0.5 ? (abs(av) < 0.5 ? 0 : (av < 0 ? 1 : 2)) : (abs(av) < 0.5 ? 7 : (av < 0 ? (dsp > 0 ? 3 : 4) : (dsp > 0 ? 5 : 6)))' }
+      ],
+      results: [
+        { label: '曲線の状態（2 年と 10 年で見る）', expr: 'st1', words: STATE_WORDS, base: { expr: 'st0', words: STATE_WORDS }, big: true },
+        { label: '動きの名前', expr: 'nm', words: NAME_WORDS },
+        { label: '10 年 − 2 年（長短金利差）', expr: 'sp1', unit: 'bp', digits: 0, base: { expr: 'sp0', digits: 0 } },
+        { label: '2 年の利回り', expr: 'y2', unit: '％', digits: 2, base: { expr: 'y2b', digits: 2 } },
+        { label: '10 年の利回り', expr: 'y10', unit: '％', digits: 2, base: { expr: 'y10b', digits: 2 } },
+        { label: 'バタフライ（2 × 5 年 − 2 年 − 10 年）', expr: 'bf1', unit: 'bp', digits: 0, base: { expr: 'bf0', digits: 0 } }
+      ],
+      reads: [
+        { when: 'sp1 < 0', text: '2 年の利回りが 10 年より高く、10 年 − 2 年がマイナスです。2 年と 10 年で見て**逆転（逆イールド）**しています。図の色の帯が、逆転している区間（2 年から 10 年）です。' },
+        { when: 'sp1 >= 0 && sp1 <= 10', text: '10 年 − 2 年が 0〜10 bp で、ほぼ平らです（この実験台だけの目安。10 bp 以下を「ほぼ平ら」と呼んでいます）。' },
+        { when: 'sp1 > 10', text: '10 年の利回りが 2 年より高く、右上がり（順イールド）です。' },
+        { when: 'dsp > 0.5', text: '長短金利差が元より広がりました（スティープ化）。' },
+        { when: 'dsp < -0.5', text: '長短金利差が元より縮みました（フラット化）。' },
+        { when: 'abs(dsp) <= 0.5 && abs(av) > 0.5', text: '2 年と 10 年が同じだけ動いたので、長短金利差は変わりません（平行移動）。スティープ化でもフラット化でもありません。' },
+        { when: 'y3 > y10 && sp1 >= 0', text: '2 年と 10 年で見ると右上がりでも、3 か月の利回りが 10 年より高くなっています。3 か月と 10 年で見ると逆転です。**どの 2 点で見るかで、形の名前は変わります**。' },
+        { when: 'y3 < y10 && sp1 < 0', text: '2 年と 10 年で見ると逆転でも、3 か月の利回りは 10 年より低いままです。3 か月と 10 年で見ると右上がりです。' },
+        { when: 'bf1 - bf0 > 0.5', text: 'バタフライが元より大きくなりました。5 年が、2 年と 10 年の平均に比べて高くなっています（中期がふくらんだ形）。' },
+        { when: 'bf1 - bf0 < -0.5', text: 'バタフライが元より小さくなりました。5 年が、2 年と 10 年の平均に比べて低くなっています（中期がへこんだ形）。' },
+        { when: 'd2 * d10 < 0 && abs(av) >= 0.5', text: '2 年と 10 年が**逆向き**に動いています（ツイストとも呼ばれる動き）。ブル・ベアの名前は、2 年と 10 年の変化の平均で決める、この講座の約束で付けたものです。呼び方は使う人で違うので、2 年と 10 年の変化（bp）を添えて言います。' },
+        { when: 'abs(S) > 0.5 && abs(C) <= 0.5', text: '曲率を動かしていなくても、傾きを動かすとバタフライの値は変わります（元の曲線が直線ではないため）。' },
+        { text: '値はすべて架空です。ブル・ベアの分け方は、2 年と 10 年の変化の平均で決める、この講座の約束です（下の表）。' }
+      ],
+      quad: { title: '4 つの名前（いまの動きに当てはまるマスに ● が付きます）', corner: '', cols: ['スティープ（長短金利差が広がる）', 'フラット（長短金利差が縮む）'], rows: ['ブル（利回りが下がる）', 'ベア（利回りが上がる）'],
+        cells: [[{ title: 'ブル・スティープ', sub: '短期の方が大きく下がる', when: 'nm == 3' }, { title: 'ブル・フラット', sub: '長期の方が大きく下がる', when: 'nm == 4' }],
+                [{ title: 'ベア・スティープ', sub: '長期の方が大きく上がる', when: 'nm == 5' }, { title: 'ベア・フラット', sub: '短期の方が大きく上がる', when: 'nm == 6' }]],
+        caption: 'ブル（bull）は債券の価格が上がる、ベア（bear）は価格が下がる、の意味です。債券の価格は利回りと逆に動きます（第02章）。ここでは、2 年と 10 年の利回りの変化の平均が下がればブル、上がればベアとし、10 年 − 2 年が広がればスティープ、縮めばフラットとします。' },
+      figs: [
+        { type: 'curve', title: 'イールドカーブ（薄い線が元、濃い線が動かした後）', x: { id: 'T', min: 0.25, max: 30, n: 160, scale: 'log', label: '残存期間（対数の目盛り）', ticks: TEN }, unit: '％', yLabel: '利回り', digits: 2, ymin: -1, ymax: 7,
+          series: [{ label: '元の曲線', expr: eBase('T'), color: 'ran', faint: true, dash: false }, { label: '動かした後', expr: eNew('T'), color: 'core', dash: false }],
+          fills: [{ a: 0, b: 1, label: '変化の大きさ', color: 'core' }],
+          spans: [{ from: '2', to: '10', when: 'sp1 < 0', label: '逆転の区間（2 年 ＞ 10 年）' }],
+          marks: [{ x: '2', label: '2 年' }, { x: '5', label: '5 年' }, { x: '10', label: '10 年' }],
+          alt: '残存期間を対数の目盛りの横軸（3 か月から 30 年）、利回りを縦軸にした線グラフ。薄い線が元の曲線、濃い線が動かした後の曲線で、2 つの線の間が色で塗られる。2 年が 10 年より高いときは、2 年から 10 年の区間に色の帯が出る',
+          caption: '横軸は対数の目盛りです（3 か月から 1 年の間隔と、10 年から 30 年の間隔が、同じ幅になるように）。縦の破線は 2 年・5 年・10 年。値は架空。' },
+        { type: 'bar', signed: true, title: '年限ごとの利回りの変化（bp。左が下がる、右が上がる）', max: 320, axisDigits: 0, negLabel: '下がる', posLabel: '上がる',
+          bars: [{ label: '3 か月', expr: eShift('0.25') + ' * 100', unit: 'bp', digits: 0, color: 'ran' }, { label: '1 年', expr: eShift('1') + ' * 100', unit: 'bp', digits: 0, color: 'ran' },
+                 { label: '2 年', expr: eShift('2') + ' * 100', unit: 'bp', digits: 0, color: 'core' }, { label: '5 年', expr: eShift('5') + ' * 100', unit: 'bp', digits: 0, color: 'ran' },
+                 { label: '10 年', expr: eShift('10') + ' * 100', unit: 'bp', digits: 0, color: 'core' }, { label: '20 年', expr: eShift('20') + ' * 100', unit: 'bp', digits: 0, color: 'ran' }, { label: '30 年', expr: eShift('30') + ' * 100', unit: 'bp', digits: 0, color: 'ran' }],
+          alt: '3 か月から 30 年の 7 つの年限について、元の曲線からの利回りの変化を、0 の線から左右に伸びる棒で示した図。左が下がった変化、右が上がった変化',
+          caption: '元の曲線からの変化（動かした後 − 元）です。ブル・スティープなら、短期ほど大きく左へ伸びます。棒の色は、2 年と 10 年を目立たせるためのもので、上の図の「元の曲線」「動かした後」の色とは関係ありません。' }
+      ] }
+  ]
+});
+
+/* ---- 曲線の変化と債券の価格（架空の 2 銘柄。年 1 回の利払い。式 7・11・12 と第05章の閉じた式） ---- */
+function bondP(y, c, n) { return c * (1 - Math.pow(1 + y, -n)) / y + 100 * Math.pow(1 + y, -n); }
+function bondD(y, c, n) { var cc = c / 100; return ((1 + y) / y - (1 + y + n * (cc - y)) / (cc * (Math.pow(1 + y, n) - 1) + y)) / (1 + y); }
+var D2 = Math.round(bondD(0.02, 2, 2) * 1e4) / 1e4, D10 = Math.round(bondD(0.03, 3, 10) * 1e4) / 1e4;
+function ePrice(yv, c, n) { var y = '(if(abs(' + yv + ') < 0.000001, 0.000001, ' + yv + '))'; return '(' + c + ' * (1 - pow(1 + ' + y + ', -' + n + ')) / ' + y + ' + 100 * pow(1 + ' + y + ', -' + n + '))'; }
+var BOND_CONSTS = [
+  { id: 'D2', value: D2, digits: 4, label: '2 年債（利率 2.0％・残存 2 年・利回り 2.0％）の修正デュレーション', src: '架空。式 11 と第05章の閉じた式' },
+  { id: 'D10', value: D10, digits: 4, label: '10 年債（利率 3.0％・残存 10 年・利回り 3.0％）の修正デュレーション', src: '架空。同上' }
+];
+var PRICE_NOTE = '2 銘柄は架空です（年 1 回の利払い、額面 100 円、基準の利回りは利率と同じなので価格は 100 円）。クーポンの受取り・経過利子・保有の費用・売買の手数料は含みません。売買の損益ではなく、利回りが変わったときの価格の変化の仕組みを見る模型です。';
+
+CN.add('lab', 'c04-price', {
+  title: '曲線の変化と債券の価格（2 年債と 10 年債は架空。値は例示）',
+  disclaimer: '学習用の模型です。債券・カーブ・数値はすべて架空で、特定の債券の価格や将来の金利の予測ではありません。売買の判断には使えません。',
+  experiments: [
+    { id: 'par', label: '同じだけ動くと', intro: '2 年債と 10 年債の利回りを、同じだけ動かします。' + PRICE_NOTE,
+      formula: '価格の変化率 ≈ − 修正デュレーション × Δy（式 12。Δy は利回りの変化〔％ポイント〕）。厳密な値は、新しい利回りで式 7 から価格を計算し直したもの',
+      consts: BOND_CONSTS,
+      inputs: [{ id: 'dy', label: '2 年と 10 年の利回りの変化（同じだけ）', unit: 'bp', min: -150, max: 150, step: 5, value: 50, presets: [{ label: '−100 bp', value: -100 }, { label: '−50 bp', value: -50 }, { label: '+50 bp', value: 50 }, { label: '+100 bp', value: 100 }], hint: '利回りが上がる向きでは価格が下がり、下がる向きでは価格が上がります。' }],
+      calc: [{ id: 'a2', expr: '-D2 * dy / 100' }, { id: 'a10', expr: '-D10 * dy / 100' },
+        { id: 'p2', expr: ePrice('(0.02 + dy / 10000)', 2, 2) }, { id: 'p10', expr: ePrice('(0.03 + dy / 10000)', 3, 10) }],
+      results: [
+        { label: '2 年債の価格の変化（近似）', expr: 'a2', unit: '％', digits: 2, big: true }, { label: '10 年債の価格の変化（近似）', expr: 'a10', unit: '％', digits: 2, big: true },
+        { label: '2 年債の価格（厳密。100 円が元）', expr: 'p2', unit: '円', digits: 3 }, { label: '10 年債の価格（厳密。100 円が元）', expr: 'p10', unit: '円', digits: 3 },
+        { label: '10 年債の変化 ÷ 2 年債の変化', expr: 'D10 / D2', unit: '倍', digits: 2, note: '利回りの変化が同じなら、デュレーションの比' }],
+      reads: [
+        { when: 'dy > 0', text: '利回りが上がったので、どちらの債券も価格は下がります（価格が下がる側）。デュレーションが長い 10 年債の方が、下がる割合が大きくなります。' },
+        { when: 'dy < 0', text: '利回りが下がったので、どちらの債券も価格は上がります（価格が上がる側）。デュレーションが長い 10 年債の方が、上がる割合が大きくなります。' },
+        { when: 'dy == 0', text: '利回りが動かないので、価格も動きません。' },
+        { text: '上がる側も下がる側も、同じ式で、同じ大きさで出ます。長い債券ほど動きが大きいことは、利益の側にも損失の側にも同じように働きます。近似と厳密な値の差は、第05章のコンベクシティ（価格と利回りの曲がり）によります。' }],
+      fig: { type: 'bar', signed: true, max: 20, axisDigits: 0, negLabel: '価格が下がる', posLabel: '価格が上がる',
+        bars: [{ label: '2 年債の価格の変化（近似）', expr: 'a2', unit: '％', digits: 2, color: 'ran' }, { label: '10 年債の価格の変化（近似）', expr: 'a10', unit: '％', digits: 2, color: 'core' }],
+        alt: '2 年債と 10 年債の価格の変化率（デュレーションの近似）を、0 の線から左右に伸びる棒で示した図。右が価格が上がる、左が下がる', caption: '同じ利回りの変化でも、デュレーションが長い 10 年債の棒の方が長い。値は架空。' } },
+    { id: 'curve', label: 'カーブの変化で', intro: '水準と傾きを動かして、2 年と 10 年の利回りを別々に動かします（曲率は 2 年と 10 年を動かさないので、ここでは 0 に固定）。2 年債と 10 年債の価格の変化を見ます。' + PRICE_NOTE,
+      presetLabel: '典型的な動き（押すと、下の 2 本のつまみが動きます）', presetHint: '同じ名前の動きでも、2 銘柄の価格の変化の向き・大きさは、動きの大きさで変わります。',
+      presets: PRE2,
+      formula: '2 年の変化 ＝ 水準 − 傾き ÷ 2、10 年の変化 ＝ 水準 ＋ 傾き ÷ 2（bp）。価格の変化率 ≈ − 修正デュレーション × Δy（式 12）',
+      consts: [{ id: 'C', value: 0, label: '曲率（この実験台では 0 に固定）' }].concat(BOND_CONSTS),
+      inputs: [
+        { id: 'L', label: '水準（全体の上下）', unit: 'bp', min: -150, max: 150, step: 5, value: 0, hint: '2 年・10 年を同じだけ動かします。' },
+        { id: 'S', label: '傾き（長短金利差の変化）', unit: 'bp', min: -150, max: 150, step: 5, value: 0, hint: '10 年 − 2 年の差を広げます（マイナスは縮める）。' }],
+      calc: [{ id: 'dy2', expr: eShift('2') + ' * 100' }, { id: 'dy10', expr: eShift('10') + ' * 100' },
+        { id: 'a2', expr: '-D2 * dy2 / 100' }, { id: 'a10', expr: '-D10 * dy10 / 100' },
+        { id: 'p2', expr: ePrice('(0.02 + dy2 / 10000)', 2, 2) }, { id: 'p10', expr: ePrice('(0.03 + dy10 / 10000)', 3, 10) },
+        { id: 'e2', expr: '(p2 / 100 - 1) * 100' }, { id: 'e10', expr: '(p10 / 100 - 1) * 100' }, { id: 'dsp', expr: 'dy10 - dy2' }],
+      results: [
+        { label: '2 年の利回りの変化', expr: 'dy2', unit: 'bp', digits: 0 }, { label: '10 年の利回りの変化', expr: 'dy10', unit: 'bp', digits: 0 },
+        { label: '2 年債の価格の変化（近似）', expr: 'a2', unit: '％', digits: 2, big: true }, { label: '10 年債の価格の変化（近似）', expr: 'a10', unit: '％', digits: 2, big: true },
+        { label: '10 年債 − 2 年債（価格の変化の差）', expr: 'a10 - a2', unit: '％ポイント', digits: 2 },
+        { label: '2 年債の価格（厳密）', expr: 'p2', unit: '円', digits: 3 }, { label: '10 年債の価格（厳密）', expr: 'p10', unit: '円', digits: 3 }],
+      reads: [
+        { when: 'dy2 < 0 && dy10 < 0', text: '2 年も 10 年も利回りが下がったので、どちらの債券も価格が上がる側です。' },
+        { when: 'dy2 > 0 && dy10 > 0', text: '2 年も 10 年も利回りが上がったので、どちらの債券も価格が下がる側です。' },
+        { when: 'dy2 * dy10 < 0', text: '2 年と 10 年で利回りの動く向きが違うので、一方の債券は価格が上がり、他方は下がります。' },
+        { when: 'dsp > 0.5', text: '長短金利差が広がりました（スティープ化）。' },
+        { when: 'dsp < -0.5', text: '長短金利差が縮みました（フラット化）。' },
+        { when: 'abs(dy10) < abs(dy2) && abs(a10) > abs(a2)', text: '10 年の利回りの変化は 2 年より小さいのに、10 年債の価格の変化は 2 年債より大きくなっています。デュレーションの差（約 8.5 と約 1.9）が掛かるためです。**利回りの変化（bp）の大小と、価格の変化（％）の大小は、同じ順になるとは限りません**。' },
+        { when: 'a10 - a2 > 0.005', text: '10 年債の価格の変化は、2 年債より上向き（大きく上がるか、下がり方が小さい）です。' },
+        { when: 'a10 - a2 < -0.005', text: '10 年債の価格の変化は、2 年債より下向き（上がり方が小さいか、大きく下がる）です。' },
+        { text: '上がる側も下がる側も、同じ式で同じ重さで出ます。この図は「この変化が起きたとき、価格はこう動く」という仕組みの説明で、取引の勧めではありません。' }],
+      figs: [
+        { type: 'bar', signed: true, title: '利回りの変化（bp）', max: 225, axisDigits: 0, negLabel: '下がる', posLabel: '上がる',
+          bars: [{ label: '2 年', expr: 'dy2', unit: 'bp', digits: 0, color: 'ran' }, { label: '10 年', expr: 'dy10', unit: 'bp', digits: 0, color: 'core' }],
+          alt: '2 年と 10 年の利回りの変化（bp）を、0 の線から左右に伸びる棒で示した図' },
+        { type: 'bar', signed: true, title: '価格の変化率（％。デュレーションの近似）', max: 20, axisDigits: 0, negLabel: '価格が下がる', posLabel: '価格が上がる',
+          bars: [{ label: '2 年債', expr: 'a2', unit: '％', digits: 2, color: 'ran' }, { label: '10 年債', expr: 'a10', unit: '％', digits: 2, color: 'core' }],
+          alt: '2 年債と 10 年債の価格の変化率（近似）を、0 の線から左右に伸びる棒で示した図', caption: '2 銘柄は架空。右が価格が上がる、左が下がる。' }] }
+  ]
+});
+
+/* ---- 先渡しの金利（式 9 と、その年限ごとの並べ方） ---- */
+function eFwd(yt, yt1, t) { return '(pow(1 + ' + yt + ' / 100, ' + t + ') / pow(1 + ' + yt1 + ' / 100, ' + t + ' - 1) - 1) * 100'; }
+CN.add('lab', 'c04-fwd', {
+  title: '先渡しの金利（インプライド・フォワード）を読む実験台（値はすべて架空）',
+  disclaimer: '学習用の模型です。利回りはすべて架空で、将来の金利の予測ではありません。先渡しの金利は、今のスポットレートから計算した値で、予想そのものではありません。',
+  experiments: [
+    { id: 'f12', label: '1 年と 2 年から', intro: '1 年のスポットレートと 2 年のスポットレートから、1 年先に始まる 1 年の先渡しの金利（インプライド・フォワード、第03章のフォワードレート）を計算します。',
+      presetLabel: '形を選ぶ（押すと、2 本のつまみが動きます）', presetHint: '',
+      presets: [{ label: '右上がり', set: { s1: 1, s2: 1.5 }, text: '右上がり：2 年のスポットが 1 年より高いので、先渡しは 2 年のスポットよりさらに高くなります。' }, { label: '平ら', set: { s1: 2, s2: 2 }, text: '平ら：先渡しはスポットと同じ値になります。' },
+        { label: '逆イールド', set: { s1: 4, s2: 3.5 }, text: '逆イールド：2 年のスポットが 1 年より低いので、先渡しは 2 年のスポットよりさらに低くなります。' }, { label: '深い逆イールド', set: { s1: 5, s2: 4 }, text: '深い逆イールド：先渡しは、スポットよりずっと低くなります。' }],
+      formula: '1 年後の 1 年フォワード ＝ (1 ＋ s2)^2 ÷ (1 ＋ s1) − 1（式 9。s1・s2 は小数で計算し、％で表示）',
+      inputs: [{ id: 's1', label: '1 年のスポットレート s1', unit: '％', min: 0, max: 6, step: 0.1, value: 4 }, { id: 's2', label: '2 年のスポットレート s2', unit: '％', min: 0, max: 6, step: 0.1, value: 3.5 }],
+      calc: [{ id: 'f', expr: '(pow(1 + s2 / 100, 2) / (1 + s1 / 100) - 1) * 100' }, { id: 'g2', expr: 'pow(1 + s2 / 100, 2)' }, { id: 'g12', expr: '(1 + s1 / 100) * (1 + f / 100)' }],
+      results: [{ label: '1 年後の 1 年フォワード（先渡しの金利）', expr: 'f', unit: '％', digits: 4, big: true }, { label: '先渡し − 2 年のスポット', expr: '(f - s2) * 100', unit: 'bp', digits: 1 },
+        { label: '2 年のスポット − 1 年のスポット', expr: '(s2 - s1) * 100', unit: 'bp', digits: 1 },
+        { label: '2 年運用した元利合計（元本 1）', expr: 'g2', digits: 5 }, { label: '1 年運用して次の 1 年を先渡しで運用した元利合計', expr: 'g12', digits: 5, note: '上の行と同じ値になる' }],
+      reads: [
+        { when: 's2 < s1', text: '2 年のスポットが 1 年より低い（右下がり、逆イールド）ので、先渡しの金利は 2 年のスポットよりも、さらに低くなります。**スポットより低い先渡しの金利**を、確かめられます。' },
+        { when: 's2 > s1', text: '2 年のスポットが 1 年より高い（右上がり）ので、先渡しの金利は 2 年のスポットよりも、さらに高くなります。' },
+        { when: 's2 == s1', text: '1 年と 2 年のスポットが同じなので、先渡しの金利もその値です。' },
+        { text: '市場が将来の政策金利の引き下げを見込んでいる、という読み方がされることがあります。ただし、期間に応じた上乗せ（期間プレミアム、タームプレミアム）も含まれるので、先渡しの金利は予想そのものではありません。' }],
+      fig: { type: 'curve', x: { id: 'T', min: 0, max: 2, step: 0.01, label: '今からの年数', unit: '年' }, unit: '％', yLabel: '1 年ごとの金利', digits: 3, ymin: 'min(0, f, s1, s2) - 0.5', ymax: 'max(s1, s2, f) + 0.5',
+        series: [{ label: '1 年目は s1、2 年目は先渡し', expr: 'T <= 1 ? s1 : f', color: 'core', dash: false }, { label: '2 年のスポット s2（2 年間の平均的な年率）', expr: 's2', color: 'ran', dash: true }],
+        marks: [{ x: '1', label: '1 年後' }], alt: '横軸を今からの年数（0 から 2 年）、縦軸を年率にした線グラフ。実線は 1 年目が 1 年のスポット、2 年目が先渡しの金利の階段、破線は 2 年のスポットレート。逆イールドでは、実線の 2 年目が破線より低い',
+        caption: '実線：1 年目は s1、2 年目は先渡しの金利。破線：2 年のスポット s2。逆イールドでは、実線が 1 年後に下がり、破線はその間にあります。値は架空。' } },
+    { id: 'curve', label: 'カーブ全体から', intro: '前の実験台のカーブ（水準・傾き・曲率）を、年 1 回複利のスポットレートとみなして、T − 1 年先に始まる 1 年の先渡しの金利を T ごとに並べます。右下がりの区間では、先渡しの金利がスポットより低くなります。',
+      presetLabel: '典型的な動き（押すと、3 本のつまみが動きます）', presetHint: '', presets: PRE,
+      formula: 'T 年の 1 年の先渡し ＝ (1 ＋ y(T))^T ÷ (1 ＋ y(T − 1))^(T − 1) − 1（式 9 を T 年に広げた形。y は年 1 回複利のスポットとみなす。値は架空）',
+      inputs: [{ id: 'L', label: '水準', unit: 'bp', min: -150, max: 150, step: 5, value: 0 }, { id: 'S', label: '傾き', unit: 'bp', min: -150, max: 150, step: 5, value: 0 }, { id: 'C', label: '曲率', unit: 'bp', min: -60, max: 60, step: 5, value: 0 }],
+      calc: [{ id: 'y2', expr: eNew('2') }, { id: 'y1', expr: eNew('1') }, { id: 'y10', expr: eNew('10') }, { id: 'y9', expr: eNew('9') },
+        { id: 'f2', expr: eFwd('y2', 'y1', '2') }, { id: 'f10', expr: eFwd('y10', 'y9', '10') }],
+      results: [{ label: '2 年のスポット', expr: 'y2', unit: '％', digits: 3 }, { label: '1 年先スタートの 1 年の先渡し', expr: 'f2', unit: '％', digits: 3, big: true }, { label: '先渡し − スポット（2 年）', expr: '(f2 - y2) * 100', unit: 'bp', digits: 1 },
+        { label: '10 年のスポット', expr: 'y10', unit: '％', digits: 3 }, { label: '9 年先スタートの 1 年の先渡し', expr: 'f10', unit: '％', digits: 3, big: true }, { label: '先渡し − スポット（10 年）', expr: '(f10 - y10) * 100', unit: 'bp', digits: 1 }],
+      reads: [{ when: 'f2 < y2', text: '2 年では、先渡しの金利がスポットより低くなっています（1 年から 2 年の間で、カーブが右下がり）。' }, { when: 'f2 >= y2', text: '2 年では、先渡しの金利がスポットと同じか、高くなっています（カーブが右上がり）。' },
+        { when: 'f10 < y10', text: '10 年では、先渡しの金利がスポットより低くなっています。' }, { when: 'f10 >= y10', text: '10 年では、先渡しの金利がスポットと同じか、高くなっています。' },
+        { text: '先渡しの金利は、今のカーブから計算した値で、将来の金利の予想そのものではありません（期間プレミアムなども含みます）。' }],
+      fig: { type: 'curve', x: { id: 'T', min: 1.25, max: 30, n: 160, scale: 'log', label: '残存期間 T（対数の目盛り）', ticks: TEN.slice(2) }, unit: '％', yLabel: '利回り', digits: 2, ymin: -1, ymax: 9,
+        series: [{ label: '元のスポット', expr: eBase('T'), color: 'ran', faint: true, dash: false }, { label: 'スポット（動かした後）', expr: eNew('T'), color: 'core', dash: false },
+          { label: '1 年の先渡し（T − 1 年先から 1 年）', expr: eFwd(eNew('T'), eNew('(T - 1)'), 'T'), color: 'pol', dash: true }],
+        marks: [{ x: '2', label: '2 年' }, { x: '10', label: '10 年' }], alt: '残存期間を対数の目盛りの横軸（2 年から 30 年）、利回りを縦軸にした線グラフ。元のスポット（薄い線）、動かした後のスポット、1 年の先渡しの金利（破線）。右下がりの区間では、先渡しの金利の線がスポットの線の下に出る',
+        caption: 'スポットが右上がりの区間では先渡しがスポットより上、右下がりの区間では下になります。値は架空。' } }
+  ]
+});
+
+/* ---- 実際の曲線で見る：公表元の表の値（取得日 2026-11-18）。値は事実確認表 #9〜#12 ---- */
+var RT = [0.25, 0.5, 1, 2, 3, 5, 7, 10, 20, 30], RL = ['3M', '6M', '1Y', '2Y', '3Y', '5Y', '7Y', '10Y', '20Y', '30Y'];
+var RJ = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30], RJL = ['1Y', '2Y', '3Y', '4Y', '5Y', '6Y', '7Y', '8Y', '9Y', '10Y', '15Y', '20Y', '25Y', '30Y'];
+var REAL = [
+  { name: '米国 2025-04-04', t: RT, l: RL, y: [4.28, 4.14, 3.86, 3.68, 3.66, 3.72, 3.84, 4.01, 4.44, 4.41], jp: false },
+  { name: '米国 2026-01-02', t: RT, l: RL, y: [3.65, 3.58, 3.47, 3.47, 3.55, 3.74, 3.95, 4.19, 4.81, 4.86], jp: false },
+  { name: '米国 2026-11-16', t: RT, l: RL, y: [4.34, 4.42, 4.62, 4.83, 4.87, 4.93, 5.01, 5.12, 5.51, 5.46], jp: false },
+  { name: '日本 2026-11-16', t: RJ, l: RJL, y: [1.667, 1.878, 1.979, 2.147, 2.27, 2.368, 2.494, 2.641, 2.78, 2.927, 3.475, 3.779, 4.079, 4.062], jp: true }];
+function pick(f) { return REAL.map(function (r, i) { var a = r.t.indexOf(f); return a < 0 ? 0 : r.y[a]; }); }
+function pk(f, i) { return pick(f)[i]; }
+function sel(f) { var v = pick(f); return 'k == 1 ? ' + v[0] + ' : (k == 2 ? ' + v[1] + ' : (k == 3 ? ' + v[2] + ' : ' + v[3] + '))'; }
+var RPRE = REAL.map(function (r, i) { return { label: r.name, set: { k: i + 1 }, text: ['米国 2025-04-04：3 か月の利回りが 10 年より高い日。2 年と 10 年では右上がりです。', '米国 2026-01-02：2 年と 10 年では右上がりで、短い年限は少しへこんでいます。', '米国 2026-11-16：この講座が取得した表の最後の日。3 か月から 20 年まで右上がりです。', '日本 2026-11-16：財務省の国債金利情報（半年複利ベースの最終利回り）。米国の表とは利回りの種類が違います。'][i] }; });
+CN.add('lab', 'c04-real', {
+  title: '実際の曲線（公表元の表の値。過去の日付の値で、現在の水準ではない）',
+  disclaimer: '学習用の模型です。公表元（米財務省・財務省）の表から、日付を決めて写した値を使います。日付の過去の値で、現在の水準でも将来の予測でもありません。米国はパー利回り、日本は半年複利ベースの最終利回りで、定義が違うので、2 本の線の高さを比べません。点の間は、この講座が直線でつないだものです。',
+  experiments: [
+    { id: 'real', label: '日付を切り替える', intro: '日付のボタンを押すと、その日の年限別の利回りが点で描かれます。図の下に、その日付・出典・系列の定義が出ます。',
+      presetLabel: '日付を選ぶ（押すと切り替わります）', presetHint: '', presets: RPRE,
+      inputs: [{ id: 'k', label: '表示する日付', unit: '番目', min: 1, max: 4, step: 1, value: 3,
+        say: [{ when: 'k == 1', text: '1：米国 2025-04-04（米財務省 Daily Treasury Par Yield Curve Rates）' }, { when: 'k == 2', text: '2：米国 2026-01-02（同）' }, { when: 'k == 3', text: '3：米国 2026-11-16（同。取得した表の最後の日）' }, { when: 'k == 4', text: '4：日本 2026-11-16（財務省 国債金利情報）' }] }],
+      calc: [{ id: 'y2', expr: sel(2) }, { id: 'y10', expr: sel(10) }, { id: 'y3m', expr: 'k == 1 ? ' + pk(0.25, 0) + ' : (k == 2 ? ' + pk(0.25, 1) + ' : (k == 3 ? ' + pk(0.25, 2) + ' : 0))' }, { id: 'sp', expr: '(y10 - y2) * 100' }, { id: 'sp3', expr: '(y10 - y3m) * 100' }],
+      results: [{ label: '日付と系列', expr: 'k - 1', words: REAL.map(function (r) { return r.name; }), big: true },
+        { label: '系列の定義', expr: 'k == 4 ? 1 : 0', words: ['米財務省 パー利回り', '財務省 半年複利ベースの最終利回り'] },
+        { label: '2 年の利回り', expr: 'y2', unit: '％', digits: 3 }, { label: '10 年の利回り', expr: 'y10', unit: '％', digits: 3 },
+        { label: '10 年 − 2 年（この講座の計算）', expr: 'sp', unit: 'bp', digits: 0 },
+        { label: '10 年 − 3 か月（この講座の計算）', expr: 'sp3', unit: 'bp', digits: 0, show: 'k != 4' }],
+      reads: [{ when: 'k == 1', text: '3 か月（4.28）が 10 年（4.01）より高く、3 か月と 10 年で見ると逆転です。2 年（3.68）と 10 年では右上がりで、短い年限から 3 年（3.66）まで下がり、そこから 10 年へ上がる形です。どの 2 点で見るかで、逆転かどうかが変わります。' },
+        { when: 'k == 2', text: '2 年と 10 年では右上がりです。1 年と 2 年は同じ値で、3 か月から 1 年までは少し右下がりです。' },
+        { when: 'k == 3', text: '3 か月から 20 年まで右上がりです。この日付の 2 年と 10 年では、1 月 2 日の表より、差が小さくなっています。' },
+        { when: 'k == 4', text: '日本の表は 1 年から 30 年までを示します（40 年は図に出していません）。米国の表とは利回りの種類が違うので、高さを並べて比べません。' },
+        { text: '値は、公表元の表のその日付の値です。現在の水準ではなく、この形から将来の金利や景気を読むものでもありません。' }],
+      fig: { type: 'curve', x: { id: 'T', min: 0.25, max: 30, n: 120, scale: 'log', label: '残存期間（対数の目盛り）', ticks: TEN }, unit: '％', yLabel: '利回り', digits: 2, ymin: 0, ymax: 6,
+        series: REAL.map(function (r, i) { return { label: r.name + (r.jp ? '（半年複利ベースの最終利回り）' : '（パー利回り）'), data: r.t.map(function (t, j) { return { x: t, y: r.y[j], l: r.l[j] }; }), when: 'k == ' + (i + 1), color: r.jp ? 'pol' : 'core', dash: false }; }),
+        marks: [{ x: '2', label: '2 年' }, { x: '10', label: '10 年' }],
+        alt: '残存期間を対数の目盛りの横軸（3 か月から 30 年）、利回りを縦軸にした線グラフ。選んだ日付の公表値の点を直線でつないだもの', caption: '点は公表元の表の値。点の間の直線はこの講座が引いたものです。' } }
+  ]
+});
+
+CN.add('table', 'c04-real-table', {
+  title: '実際の曲線の値の一覧（公表元の表から写した値。取得日 2026 年 11 月 18 日）',
+  caption: '利回りの単位は％。米国は米財務省の列（Mo＝か月、Yr＝年）。日本は財務省の英語版 CSV。差の列は、この講座の計算（公表値ではありません）',
+  cols: ['日付・系列', '3 か月', '2 年', '10 年', '10 年 − 2 年', '10 年 − 3 か月', '出典'],
+  rows: [
+    ['米国 2025-04-04（パー利回り）', '4.28', '3.68', '4.01', '33 bp', '−27 bp', '米財務省 Daily Treasury Par Yield Curve Rates（2025 年分の表）'],
+    ['米国 2026-01-02（パー利回り）', '3.65', '3.47', '4.19', '72 bp', '54 bp', '同（2026 年分の表）'],
+    ['米国 2026-11-16（パー利回り）', '4.34', '4.83', '5.12', '29 bp', '78 bp', '同（2026 年分の表。取得した表の最後の日）'],
+    ['日本 2026-11-16（半年複利ベースの最終利回り）', '—（1 年が最短）', '1.878', '2.927', '105 bp', '—', '財務省 国債金利情報（英語版 CSV、2026 年 11 月分）']],
+  detail: [
+    '2025 年 4 月 4 日の表は、10 年が 3 か月より低い一方、10 年は 2 年より高い日です。',
+    '2026 年 1 月 2 日の表は、2 年と 10 年の差が 72 bp、3 か月は 1 年・2 年より高い日です。',
+    '2026 年 11 月 16 日（米国）の表は、3 か月から 20 年まで、値が年限の順に大きくなっています。',
+    '2026 年 11 月 16 日（日本）の表は、1 年が 1.667、30 年が 4.062 です。米国の表とは、利回りの種類・入力の価格・時刻が違います。'],
+  note: '値は、公表元の表のその日付の値で、現在の水準ではありません。日本の 10 年 − 2 年は 2.927 − 1.878 ＝ 1.049％ポイントを bp にして丸めた値です。'
+});
 
 })();
 </script>

@@ -1,0 +1,48 @@
+<!--
+num: 04
+part: 2
+title: 金額の物差しと損益図
+track: 実務
+time: 20
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li><b>金額</b>（円・ドル）を、桁の違いが分かる<b>対数の物差し</b>に並べて、何倍かを読むこと。</li>
+    <li><b>損益図</b>（線グラフ）で、価格が動いたときの損得を、マイナスも含めて読むこと。</li>
+    <li>式の中で<b>正規分布の累積分布関数</b>を使う計算を、入力を動かして確かめること。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#ch01">第01章</a>（全体像）。この章の金額・名称・数式の設定はすべて見本のための架空のものです。</p>
+</section>
+
+<h3>円の物差し</h3>
+<p>荷物 1 個の送料から、国全体の物流市場まで、金額は 10 億倍以上も違います。項目を押して「基準の項目の何倍か」を確かめます。円とドルは<b>別の物差し</b>で、同じ物差しに混ぜません。</p>
+<div data-widget="scale" data-src="c04-yen"></div>
+
+<h3>ドルの物差し</h3>
+<p>単位をドルにしても、同じ部品で書けます。為替の換算はしないので、上の円の物差しと数字を直接は比べられません。</p>
+<div data-widget="scale" data-src="c04-usd"></div>
+
+<h3>損益図（線グラフ）</h3>
+<p>満期の価格を横軸に、買い手と売り手の損益を線で描きます。0 の線より下はマイナス（損）です。縦の目印は、権利行使価格と、損益がゼロになる価格です。</p>
+<div data-widget="lab" data-src="c04-payoff"></div>
+
+<h3>正規分布を使う計算</h3>
+<p>式の中で <code>ncdf</code>（累積分布関数）と <code>npdf</code>（密度関数）が使えます。価格を動かすと、満期前の理論価格の線が満期の損益の線に近づきます。</p>
+<div data-widget="lab" data-src="c04-bs"></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="c04-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（見本のため、すべて架空）</caption>
+    <thead><tr><th>資料</th><th>時点</th><th>使ったところ</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">架空の「宅配事業の決算の抜粋」（見本用の創作）</th><td>2026-11</td><td>円の物差しの金額</td></tr>
+      <tr><th scope="row">架空の「海外事業の概況」（見本用の創作）</th><td>2026-11</td><td>ドルの物差しの金額</td></tr>
+      <tr><th scope="row">標準正規分布の累積分布関数（Hart の近似。West 2005）</th><td>2005</td><td>式の関数 ncdf（絶対誤差 1e-15 程度）</td></tr>
+    </tbody>
+  </table></div>
+</section>
