@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Showcase — AI エージェント × 通信 × 半導体 × 計算サーバー × 発電 × 金融</title>
-<meta name="description" content="作者のこれまでの経験を活かしつつ、Claude Code を軸にした AI 開発環境と、通信・半導体・計算サーバー・発電（コンバインドサイクル発電とガスタービン）を、学べる形にまとめた学習用作品です。講義は、検証の済んだ分から順に公開しています。一部の資料と講義は、公開資料を出典に企業名を挙げて整理しています。">
+<meta name="description" content="作者のこれまでの経験を活かしつつ、Claude Code を軸にした AI 開発環境と、通信・半導体・計算サーバー・発電・金融を、学べる形にまとめた学習用作品です。">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Showcase">
 <meta property="og:title" content="Showcase ― 学習全体マップ：通信の講義室とコア講義の89章を1枚で俯瞰">
-<meta property="og:description" content="作者のこれまでの経験を活かしつつ、Claude Code を軸にした AI 開発環境と、通信・半導体・計算サーバー・発電（コンバインドサイクル発電とガスタービン）を、学べる形にまとめた学習用作品です。講義は、検証の済んだ分から順に公開しています。一部の資料と講義は、公開資料を出典に企業名を挙げて整理しています。">
+<meta property="og:description" content="作者のこれまでの経験を活かしつつ、Claude Code を軸にした AI 開発環境と、通信・半導体・計算サーバー・発電・金融を、学べる形にまとめた学習用作品です。">
 <meta property="og:url" content="https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/showcase/">
 <meta property="og:image" content="https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/docs/images/learning-map.png">
 <meta property="og:image:width" content="1600">
@@ -119,6 +119,7 @@ a { color: var(--ttj-link); }
 .rule::after { content: ""; position: absolute; left: 0; top: -2px; width: 5px; height: 5px; background: var(--ttj-gold-500); transform: rotate(45deg); }
 .hero .sub { margin: 0; font-size: clamp(1.05rem, 3.6vw, 1.5rem); color: var(--ttj-gold-200); letter-spacing: 0.08em; }
 .hero .lead { margin: var(--ttj-space-5) 0 0; max-width: 34rem; color: var(--ttj-navy-100); font-size: var(--ttj-text-sm); }
+.hero .lead + .lead { margin-top: var(--ttj-space-3); }
 
 
 /* Hero sub: 区切りの × で折り返す */
@@ -346,7 +347,9 @@ footer a:hover { color: var(--ttj-gold-200); }
     <h1>Showcase</h1>
     <span class="rule" aria-hidden="true"></span>
     <p class="sub"><span>AI エージェント</span> × <span>通信</span> × <span>半導体</span> × <span>計算サーバー</span> × <span>発電</span> × <span>金融</span></p>
-    <p class="lead">作者のこれまでの経験を活かしつつ、Claude Code を軸にした AI 開発環境と、通信・半導体・計算サーバー・発電（コンバインドサイクル発電とガスタービン）を、学べる形にまとめた学習用作品です。講義は、検証の済んだ分から順に公開しています。一部の資料と講義は、公開資料を出典に企業名を挙げて整理しています。</p>
+    <p class="lead">作者のこれまでの経験を活かしつつ、Claude Code を軸にした AI 開発環境と、通信・半導体・計算サーバー・発電・金融を、学べる形にまとめた学習用作品です。</p>
+    <p class="lead">発電は、作者が発電所の現場にいた頃の実地の疑問を出発点に、家庭の電気 1 軒ぶんから発電所の 1 軸、発電所全体までを、図を動かしながら感覚でつかめる仕組みにしています。金融は、金利と国債、取引所の金利デリバティブ、指数オプションの 3 講座で、利回り曲線や損益図を自分の手で動かして確かめられます。通信は eSIM・IoT の実務と 4G・5G のコアネットワーク、半導体は基礎から製造装置と輸送まで、計算サーバーは機器と制御を扱い、AI は開発環境の実例に、Claude API の入門と学習ロードマップを加えました。</p>
+    <p class="lead">どの講義も、公開資料を出典に、数字には時点と条件を付けています。図は見るだけでなく、スライダーやボタンで動かして確かめられます。講義は、検証の済んだ分から順に公開しています。一部の資料と講義は、公開資料を出典に企業名を挙げて整理しています。</p>
   </div>
 </header>
 
@@ -726,14 +729,15 @@ footer a:hover { color: var(--ttj-gold-200); }
               </g>
               <circle cx="252" cy="106" r="16" fill="none" stroke="#EEDDA0" stroke-width="1.4"/>
               <path d="M252 106 v-12 M252 106 l10 6 M252 106 l-10 6" stroke="#EEDDA0" stroke-width="1.6" stroke-linecap="round"/>
-              <text x="296" y="152" fill="#EEDDA0" font-size="11" text-anchor="end" font-family="monospace">32 ch.</text>
+              <text x="296" y="152" fill="#EEDDA0" font-size="11" text-anchor="end" font-family="monospace">1 + 32 ch.</text>
             </svg>
           </div>
           <div class="card-body">
             <p class="field">計算サーバー</p>
             <h3>計算サーバー講義 ― 機器・電源と冷却・制御</h3>
-            <p class="progress"><span>全 32 章を公開中</span></p>
-            <p class="desc">全32章。サーバーの部品とラック、AI 向けの GPU サーバーとネットワーク、受電・UPS・直流給電、空冷・液冷・排熱、BMC から監視・スケジューラまでの制御、産業・立地・調達・政策までを扱います。図とクイズつきで、全章を公開中。公開情報だけを出典にしています。</p>
+            <p class="progress"><span>序章＋全32章</span></p>
+            <p class="desc">序章と全32章。家庭 1 軒からデータセンター、発電所の 1 軸までを、電力と熱で比べる特設ページ、サーバーの部品とラック、AI 向けの GPU サーバーとネットワーク、受電・UPS・直流給電、空冷・液冷・排熱、BMC から監視・スケジューラまでの制御、産業・立地・調達・政策までを扱います。図とクイズつきで、全章を公開中。公開情報だけを出典にしています。</p>
+            <p class="sub-link"><a href="server/#chI1" aria-label="特設ページ 家庭からデータセンターまでをくらべる（計算サーバー講義の序章1）を開く">特設: 家庭からデータセンターまでをくらべる →</a></p>
             <ul class="tags" aria-label="技術タグ"><li>計算サーバー</li><li>電源・冷却</li><li>運用・制御</li><li>図とクイズ</li><li>公開情報</li></ul>
             <a class="btn" href="server/" aria-label="計算サーバー講義を開く">開く
               <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
@@ -966,7 +970,7 @@ footer a:hover { color: var(--ttj-gold-200); }
           <li><strong>AI・開発環境</strong><span>Claude Code を軸にした環境づくりと、AI 学習ロードマップ</span></li>
           <li><strong>通信</strong><span>eSIM / eUICC・VoLTE / IMS・SMS・国際ローミング</span></li>
           <li><strong>半導体</strong><span>物性から製造装置・装置輸送まで（全32章）</span></li>
-          <li><strong>計算サーバー</strong><span>機器・電源と冷却・制御から産業・政策まで（全32章）</span></li>
+          <li><strong>計算サーバー</strong><span>機器・電源と冷却・制御から産業・政策まで（序章＋全32章）</span></li>
           <li><strong>自作PC</strong><span>部品選びから組み立て・調整・保守まで（全26章）</span></li>
           <li><strong>発電・ガスタービン</strong><span>電力系統・発電事業からガスタービンと発電所の設備・運転まで（序章3本＋全32章）</span></li>
           <li><strong>金融</strong><span>金利と国債、取引所の金利デリバティブ、指数オプション（3 講座）</span></li>

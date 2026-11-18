@@ -1,0 +1,195 @@
+<!--
+num: I1
+part: 0
+title: 家庭 1 軒から発電所の 1 軸まで：サーバーの電力と熱の規模をつかむ
+track: 基礎
+time: 35
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li><b>電力（kW、いまの大きさ）と電力量（kWh、ためた量）</b>の違いを、24 時間動き続けるサーバーで説明できる。</li>
+    <li>W から GW までの単位の階段に、<b>CPU（Central Processing Unit）・GPU（Graphics Processing Unit）・サーバー・ラック・データセンター・発電所の 1 軸</b>を置き、何桁違うかを言える。</li>
+    <li>サーバー 1 台の消費電力が何に分かれるか、そのうち<b>どこまでが公表仕様で、どこからが模型</b>かを区別できる。</li>
+    <li>サーバーの台数と PUE（Power Usage Effectiveness、電力使用効率）から、<b>施設の電力、家庭の軒数、発電所の 1 軸の本数</b>を見積もり、ラック 1 本の熱が暖房器具の何台ぶんかを言える。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：なし。掛け算と割り算ができれば足ります。発電側の話は<a href="../power/#chI3">発電講義 序章3</a>と対になっていますが、読んでいなくても読めます。</p>
+</section>
+
+<div class="callout note"><span class="ttl">この章の読み方</span>
+  <p>この章は、サーバーの電力と熱の大きさを、<b>家庭 1 軒</b>から<b>発電所の 1 軸</b>まで、図と動かせる部品で比べる章です。数字は 3 種類に分けて書きます。<b>公表資料の値</b>（出典・時点・条件つき）、そこから計算した<b>目安</b>、そして<b>模型の値</b>（仮定）です。模型の値には、必ず「模型」「仮定」と書きます。</p>
+  <p>家庭 1 軒は、発電講義 序章3 と同じ前提で、<b>平均 0.46 kW</b>（1 日 約 11 kWh、年 約 4,000 kWh）です。発電所の「1 軸」は、JERA の富津火力発電所の 1 号系列の第 7 軸（<b>16.5 万 kW ＝ 165 MW</b>）です。</p></div>
+
+<h3>「瞬間」と「量」：止めずに動かす機械</h3>
+<p>電気の大きさには 2 つの見方があります。<b>電力</b>（electric power）は「いま流れている大きさ」で、単位は W や kW です。<b>電力量</b>（electric energy）は「流れた量の合計」で、単位は Wh や kWh です。式は<b>電力量（kWh）＝ 電力（kW）× 時間（h）</b>です。水に例えると、電力は蛇口の太さ、電力量はバケツにたまった水です。</p>
+<p>家庭の機器とサーバーの違いは、<b>動かす時間</b>です。家庭では、ドライヤーのように電力が大きくても、使う時間が短い機器が多く、1 日の平均は 0.46 kW に収まります。サーバーは、止めずに動かすことが多い機器です（可用性は第05章）。電力が小さく見えても、24 時間 × 365 日で量は大きくなります。次の図で、時間のつまみを 24 時間まで動かして、家庭 1 日分のバケツと比べてください。</p>
+<div data-widget="bucket" data-src="cI1-bucket"></div>
+<p>確かめる点は 3 つです。1 つ目は、長方形の<b>面積</b>が電力量になることです。2 つ目は、ドライヤーのように電力が大きくても、時間が短ければ電力量は小さいことです。3 つ目は、サーバー（模型）を 24 時間動かすと、<b>バケツが家庭 1 日分を超える</b>ことです。サーバーの値は、第 3 節の模型の一例です。</p>
+
+<h4>家庭 1 軒とサーバー 1 台を、「瞬間」と「量」で並べる</h4>
+<div class="tbl-wrap"><table class="tbl">
+  <caption>家庭 1 軒と、サーバー 1 台の電力と電力量（24 時間 365 日動かした場合。サーバーの電力は模型または最大入力）</caption>
+  <thead><tr><th scope="col"></th><th scope="col">家庭 1 軒（モデル、平均）</th><th scope="col">汎用サーバー 1 台（模型）</th><th scope="col">GPU サーバー 1 台（DGX H100）</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">電力（瞬間）</th><td>0.46 kW</td><td>約 1.0 kW（CPU の電力が、熱設計の目安〔TDP、Thermal Design Power〕の 70% のとき）</td><td>10.2 kW（NVIDIA の公表する最大入力）</td></tr>
+    <tr><th scope="row">1 日の量</th><td>約 11 kWh</td><td>約 24 kWh</td><td>約 245 kWh</td></tr>
+    <tr><th scope="row">1 年の量</th><td>約 4,030 kWh</td><td>約 8,760 kWh</td><td>約 89,400 kWh</td></tr>
+    <tr><th scope="row">家庭の何軒ぶんか（瞬間）</th><td>—</td><td>約 2.2 軒ぶん</td><td>約 22 軒ぶん</td></tr>
+  </tbody></table></div>
+<p>注：サーバーの値は、電力をそのまま 24 時間・8,760 時間にかけた<b>計算</b>です（実際は負荷で変わります）。DGX H100 の 10.2 kW は、最大入力の公表値で、いつもの電力ではありません（出典：NVIDIA（米国）『DGX H100/H200 User Guide』、ページの更新 2026 年 10 月）。汎用サーバーは、第 3 節の<b>模型</b>の一例です。家庭の値は、発電講義 序章3 のモデル（0.46 kW）です。</p>
+
+<h3>単位の階段：W から GW まで</h3>
+<p>電力の単位は、<b>1,000 倍ごと</b>に名前が変わります。W（ワット）、kW（キロワット）、MW（メガワット）、GW（ギガワット）です。電力量も、Wh、kWh、MWh、GWh と同じ階段です。CPU 1 個は W の桁、サーバー 1 台は kW の桁、データセンター 1 棟は MW の桁、大規模な計画は GW の桁です。日本の発電所の資料は「万 kW」を使い、<b>1 万 kW ＝ 10 MW</b> です（1,000 倍ごとの区切りとずれます）。</p>
+<div data-widget="unitconv" data-src="cI1-units"></div>
+<p>確かめる点は 2 つです。1 つ目は、階段の 1 段が千倍の差であることです。2 つ目は、「万 kW」の印が MW と GW の間（10<sup>7</sup> W。1 MW の 10 倍の位置）にあることです。例のボタンで、サーバーやデータセンターの値を入れてください。</p>
+
+<h4>物差しの上に並べる</h4>
+<p>次の図は、CPU 1 個から発電所の 1 軸、国の最大需要までを、<b>1 本の対数の物差し</b>に並べたものです（10 倍ごとに同じ間隔）。項目を選ぶと、基準（家庭 1 軒）の何倍かが出ます。データセンターは、<b>何の容量か（IT 容量か受電容量か）</b>と、<b>公表された容量か計画か</b>を、必ず見てください。</p>
+<div data-widget="scale" data-src="cI1-scale"></div>
+<div class="tbl-wrap"><table class="tbl">
+  <caption>電力の階段の例（出典と時点つき。計算の目安は「計算」と明記）</caption>
+  <thead><tr><th scope="col">段</th><th scope="col">例</th><th scope="col">電力</th><th scope="col">出典・条件</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">数百 W</th><td>CPU 1 個（Intel〔米国〕の Xeon 6980P）</td><td>TDP 500 W</td><td>Intel。TDP は熱設計の目安で、消費電力そのものではない（第06章）</td></tr>
+    <tr><th scope="row">数百 W</th><td>GPU 1 枚（NVIDIA H100 SXM）</td><td>最大 TDP 700 W まで（設定可能）</td><td>NVIDIA。第08章と同じ</td></tr>
+    <tr><th scope="row">kW</th><td>サーバー 1 台（DGX H100）</td><td>最大入力 10.2 kW</td><td>NVIDIA。8U、GPU 8 個・CPU 2 個</td></tr>
+    <tr><th scope="row">kW〜百 kW</th><td>ラック 1 本</td><td>設計の目安 6 kVA（IIJ〔日本〕の白井）／約 120 kW（NVIDIA の GB200 NVL72）</td><td>前者は 2019 年の設計の目安、後者は AI 向けの例。ラックの電力は施設ごとに違う（第11章）</td></tr>
+    <tr><th scope="row">MW</th><td>データセンターの 1 区画（IIJ 白井のハウジングルーム）</td><td>約 1.8 MVA（計算：300 ラック × 6 kVA）</td><td>資料の「1 区画約 300 ラック」と「実効平均 6 kVA/ラック」からの<b>計算の目安</b>。資料に区画の電力は書かれていない</td></tr>
+    <tr><th scope="row">MW</th><td>データセンター 1 棟（NTT DATA〔日本〕の京阪奈）</td><td>IT 容量 30 MW</td><td>2026 年 4 月 9 日の開業の発表。IT 容量。受電容量は資料になし</td></tr>
+    <tr><th scope="row">数十 MW</th><td>データセンター 1 棟（IIJ 白井）</td><td>最大受電容量 50 MW</td><td>2019 年の資料。受電する側の容量。IT 容量ではない</td></tr>
+    <tr><th scope="row">100 MW 級</th><td>データセンターの計画（ソフトバンク〔日本〕の堺）</td><td>受電容量 約 150 MW 規模から（400 MW 超へ拡大の見込み）</td><td>2024 年 6 月 7 日の発表。<b>計画</b>。稼働の状況は確認していない</td></tr>
+    <tr><th scope="row">GW</th><td>AI データセンターの計画の合計（OpenAI の Stargate）</td><td>7 GW 弱（nearly 7 gigawatts of planned capacity）</td><td>2025 年 9 月 23 日の発表。複数の拠点の<b>計画の合計</b>。1 つの施設の値ではない。その後の 2026 年 4 月 29 日の発表は、米国で 10 GW を確保する目標をすでに超えたと述べる（確保の量。稼働の量ではない）</td></tr>
+    <tr><th scope="row">100 MW 超</th><td>発電所の 1 軸（JERA〔日本〕の富津・1 号系列の第 7 軸）</td><td>16.5 万 kW ＝ 165 MW</td><td>JERA。発電講義 序章3 と同じ</td></tr>
+  </tbody></table></div>
+<p>kVA（キロボルトアンペア）は皮相電力の単位です。この章では、出典の単位のまま書き、物差しでは電力（kW）と同じ軸に並べた目安として扱います（UPS・変圧器の容量は第13章）。「データセンター 1 室」と「1 棟」の定義は施設ごとに違い、資料に MW が書かれた 1 室の例は確認できませんでした。1 区画の値は、上の表のとおり計算の目安にとどめます。</p>
+
+<h4>計算の側の階段：演算性能と記憶容量</h4>
+<p>電力の階段と同じように、計算の側にも階段があります。演算性能は FLOPS（Floating-point Operations Per Second、1 秒あたりの浮動小数点演算の回数）、記憶容量は B（バイト）です。<b>演算性能は、精度と条件を必ず添えます</b>（FP64 と FP8 では桁が違います）。製品どうしを比べる表ではありません。</p>
+<div class="tbl-wrap"><table class="tbl">
+  <caption>計算の側の単位の階段（10 進。例は公表値で、条件つき）</caption>
+  <thead><tr><th scope="col">単位</th><th scope="col">大きさ</th><th scope="col">例（出典・条件）</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">TFLOPS</th><td>10<sup>12</sup> 回/秒</td><td>NVIDIA H100 SXM：FP64 が 34 TFLOPS、FP8 Tensor Core が 3,958 TFLOPS（疎行列〔with sparsity〕の条件つき）。同社のページ（確認 2026 年 11 月）</td></tr>
+    <tr><th scope="row">EFLOPS</th><td>10<sup>18</sup> 回/秒（1,000 PFLOPS）</td><td>TOP500（2026 年 6 月、第 67 回）の上位 3 件：1 位 LineShine が 2.198 EFLOPS（電力 42,220 kW）、2 位 El Capitan が 1.809 EFLOPS（29,685 kW）、3 位 Frontier が 1.353 EFLOPS（24,607 kW）。Rmax（HPL〔High-Performance Linpack、行列計算のベンチマーク〕の実測値）と、リストに載る電力</td></tr>
+    <tr><th scope="row">GB</th><td>10<sup>9</sup> B</td><td>H100 SXM の GPU メモリ 80 GB（NVIDIA）</td></tr>
+    <tr><th scope="row">TB</th><td>10<sup>12</sup> B（1,000 GB）</td><td>DGX H100 のシステムメモリ 2 TB（32 枚の DIMM）。データ用の NVMe（NVM Express）の SSD は 3.84 TB × 8 ＝ 約 30.7 TB（計算）（NVIDIA）</td></tr>
+    <tr><th scope="row">PB</th><td>10<sup>15</sup> B（1,000 TB）</td><td>Frontier の Orion ファイルシステム：容量の層（ハードディスク）が 679 PB（オークリッジ国立研究所のページ。2022 年に運用開始）</td></tr>
+    <tr><th scope="row">EB</th><td>10<sup>18</sup> B（1,000 PB）</td><td>公表値の例は、確かめられなかったので載せていません</td></tr>
+  </tbody></table></div>
+<p>電力との橋渡しとして、TOP500（2026 年 6 月）の 2 位の El Capitan の電力 29,685 kW（約 30 MW）は、富津の 1 軸（165 MW）の<b>約 0.18 倍</b>です（計算）。リストの電力は、ベンチマークを実行したときの値で、年間の使用電力ではありません。</p>
+
+<h3>サーバー 1 台の中身：消費電力の内訳</h3>
+<p>サーバー 1 台の消費電力は、CPU、GPU、メモリ、記憶装置、ネットワーク、ファン、電源ユニットの損失などの合計です。内訳を調べるときは、<b>どの数字が公表仕様で、どれが推定か</b>を分けて読みます。公表されているのは、多くの場合、CPU や GPU の TDP（Thermal Design Power、熱設計の目安）と、電源の定格、システム全体の最大入力などです。メモリやファンの電力は、製品ごとの公表がなく、この章では模型の値を使います。</p>
+<p>次の図は、2 つの例を切り替えて、棒を動かします。1 つ目は<b>汎用の 2 ソケットサーバー</b>で、公表仕様は CPU の TDP の上限だけです（Lenovo の ThinkSystem SR650 V3 の製品ガイド：第 4 世代の Intel Xeon で TDP が最大 350 W、メモリモジュール〔DIMM〕は最大 32 枚、電源は電源の認証制度 80 PLUS の Platinum または Titanium）。2 つ目は<b>GPU サーバー</b>で、NVIDIA の DGX H100 です（GPU 8 個の最大 TDP と、システムの最大入力 10.2 kW）。つまみは「CPU や GPU が、最大の TDP の何 % の電力で動くか」です。</p>
+<div data-widget="lab" data-src="cI1-parts"></div>
+<p>確かめる点は 3 つです。1 つ目は、<b>GPU サーバーでは GPU が合計の半分ほど</b>を占めることです（最大のとき）。2 つ目は、CPU や GPU の電力が下がっても、メモリ・ファン・電源の損失などが<b>すぐには下がらない</b>ことです（模型）。3 つ目は、ファンと電源ユニットの損失が、<b>電力が熱になる量にも含まれる</b>ことです。ASHRAE（American Society of Heating, Refrigerating and Air-Conditioning Engineers）の白書は、50 kW のラックでファンの電力が 5 kW 以上、密度の高いサーバーでは 10〜20% も珍しくないと述べています（第15章の参照資料と同じ白書）。この章の 10% は、その下限に合わせた模型の割合です。</p>
+<div class="tbl-wrap"><table class="tbl">
+  <caption>内訳の値の区分（何が公表で、何が模型か）</caption>
+  <thead><tr><th scope="col">部品</th><th scope="col">汎用サーバー（模型）</th><th scope="col">GPU サーバー（DGX H100）</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">CPU</th><td>公表：TDP の上限 350 W 級 × 2 ＝ 700 W（SR650 V3 の対応 CPU の上限。実際に載せる CPU は構成で違う）</td><td>参考：同じ世代の Intel Xeon Platinum 8480+ の TDP 350 W × 2。DGX H100 の CPU（Xeon 8480C）の TDP は確認できなかった</td></tr>
+    <tr><th scope="row">GPU</th><td>なし</td><td>公表：H100 SXM の最大 TDP 700 W × 8 ＝ 5,600 W（DGX での設定値は確認していない）</td></tr>
+    <tr><th scope="row">メモリ・記憶装置・ネットワーク・基板</th><td>模型：メモリ 32 枚 × 8 W、記憶装置 8 台 × 8 W、基板ほか 60 W</td><td>差し引き：最大入力 10.2 kW から、ほかの部分を引いた 2,472 W。内訳は分けられない</td></tr>
+    <tr><th scope="row">ファン</th><td>模型：合計の 10%</td><td>模型：合計の 10%</td></tr>
+    <tr><th scope="row">電源ユニットの損失</th><td>模型：合計の 4%（入力の 96% が出力に届くと仮定）</td><td>模型：合計の 4%</td></tr>
+    <tr><th scope="row">合計</th><td>模型：約 1.0 kW（CPU 70% のとき）、約 1.26 kW（100% のとき）</td><td>公表：最大入力 10.2 kW（100% のとき、差し引きで一致させた）</td></tr>
+  </tbody></table></div>
+<p>電源ユニットの変換について、80 PLUS の運営元の資料は、230 V の Titanium 認証（750 W を超える電源）で、負荷 50% のとき、入力の 96% を出力として取り出せる水準と書きます。この章の 96% は、その値に合わせた模型の仮定で、実機の電源の値ではありません（電源の等級は第14章）。DGX H100 の資料には、熱の出力 38,557 BTU/hr（約 11.3 kW に相当する値）も書かれていますが、最大入力 10.2 kW との差の理由が書かれていないため、この章では使いません。</p>
+
+<h3>円の面積で比べる：家庭は点にもならない</h3>
+<p>桁がいくつも違う量は、円の<b>面積</b>で見ると、差を感じやすくなります。まず、家庭 1 軒、GPU サーバー 1 台、データセンター 1 棟（IT 容量 30 MW）を並べます。</p>
+<div data-widget="areacircle" data-src="cI1-circles-a"></div>
+<p>次に、家庭 1 軒、AI 向けラック 1 本（約 120 kW）、発電所の 1 軸（165 MW）を並べます。ラック 1 本は、GPU サーバー 1 台（10.2 kW）の約 12 倍ですが、1 軸の円に比べると、ごく小さな点です。</p>
+<div data-widget="areacircle" data-src="cI1-circles-b"></div>
+<p>確かめる点は 3 つです。1 つ目は、①で、データセンター 1 棟の円の面積が、GPU サーバー 1 台の約 3,000 倍であることです（30,000 ÷ 10.2）。2 つ目は、家庭 1 軒が点にもならず、吹き出しの拡大でしか見えないことです。3 つ目は、稼働の割合のつまみを下げると、塗りの円が点線の円（最大で 24 時間動いた場合）より小さくなることです。割合は仮定で、実際の稼働率ではありません。</p>
+
+<h3>束ねる：台数が増えると、何と釣り合うか</h3>
+<p>サーバーを<b>束ねる</b>と、ラックの本数、施設の電力、家庭の何軒ぶんか、発電所の 1 軸の何本ぶんか、が決まります。3 つのタブがあります。①は、台数・1 台の電力・1 ラックの台数・PUE から、施設の電力と、家庭・発電所の 1 軸との比を見ます。②は、1 日の流れで、データセンターの負荷が家庭の束と違うことを見ます。③は、ラック 1 本の熱を、暖房器具の台数と風量で見ます。</p>
+<p>PUE は、<b>施設全体のエネルギー ÷ IT 機器のエネルギー</b>です。1.0 が下限で、冷却や電力変換の損失が増えると大きくなります（定義と調査値は第17章）。代表的な値は次のとおりです。</p>
+<div class="tbl-wrap"><table class="tbl">
+  <caption>PUE の代表的な値（出典・時点・条件つき）</caption>
+  <thead><tr><th scope="col">値</th><th scope="col">何の値か</th><th scope="col">出典・時点</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">1.0</th><td>下限（定義。IT 機器以外の消費がゼロの場合）</td><td>The Green Grid の白書 WP#49（第17章）</td></tr>
+    <tr><th scope="row">1.09</th><td>Google（米国）の大規模データセンター全体の年平均（2025 年）。2026 年第 2 四半期時点の直近 12 か月も 1.09</td><td>Google『Data Center Efficiency』（確認 2026 年 11 月）。1 社の自社施設の値</td></tr>
+    <tr><th scope="row">1.36</th><td>業界の年平均（大きな施設を、容量に比例して重くみる別の計算）</td><td>Uptime Institute の 2026 年の調査（UII Update 518、2026 年 8 月。第17章）</td></tr>
+    <tr><th scope="row">1.52</th><td>業界全体の年平均</td><td>同上</td></tr>
+  </tbody></table></div>
+<div data-widget="lab" data-src="cI1-bundle"></div>
+<p>確かめる点は 5 つです。</p>
+<ol>
+  <li>①で、「GPU サーバー 1 万台」のボタンを押すと、施設の電力は<b>発電所の 1 軸（165 MW）の約 0.84 本ぶん</b>になること（IT 機器 約 102 MW × PUE 1.36 ＝ 約 139 MW）。同じ台数でも、汎用サーバー（1 台 約 1 kW）なら、約 8% です。</li>
+  <li>①で、PUE のつまみを動かすと、<b>IT 機器の電力が同じでも、施設全体の電力が変わる</b>こと。1 台の電力と 1 ラックの台数は模型の仮定です。</li>
+  <li>①で、台数を約 50 万台まで増やすと、施設の電力は<b>富津火力発電所の全体（5,160 MW）を超える</b>こと。これは計算上の数字で、実在の施設ではありません。</li>
+  <li>②で、データセンターの振れ幅を小さくすると、<b>谷のない、ほぼ平らな需要</b>になり、家庭の束の山と谷（夕方〜夜に山、深夜に谷）と違うこと。発電所の側からは、深夜も昼も同じ大きさの需要が続く形です。</li>
+  <li>③で、ラックの電力を 120 kW にすると、暖房器具（電気カーペット）の<b>約 150 台ぶん</b>の熱になること。電力は、ほぼすべて熱になります（第15章）。</li>
+</ol>
+<p>③の風量は、出典が使う cfm（cubic feet per minute、立方フィート毎分）でも書きます（1 m³/s ≒ 2,119 cfm の換算は計算）。③の空冷と液冷の境目について、公表資料は 1 つの kW を決めていません。この章で使える目安は、4 つです。①床タイル 1 枚の風量（ASHRAE の白書が最良の例とする 1,900 cfm）が運べる熱は、第15章の式で、温度差 10 ℃のとき<b>約 11 kW</b>（計算）。②同じ白書は、40〜50 kW のラックの風量が最大 5,000 cfm になりうると述べる（温度差の前提は確認していない）。③Uptime Institute の 2026 年の調査では、最も多いラックの密度が「10 kW 未満」と答えた施設が 69%、「50 kW 以上」が 3%（第11章）。④NVIDIA の GB200 NVL72（約 120 kW）は、計算トレイを液冷、ネットワーク・ストレージ・電源棚を空冷とする（1 本のラックの中の併用）。</p>
+
+<h4>実在の施設の公表値を、どう読むか</h4>
+<div class="tbl-wrap"><table class="tbl">
+  <caption>データセンターの容量の公表例（容量の定義と、計画か稼働かを分けて読む）</caption>
+  <thead><tr><th scope="col">施設・計画</th><th scope="col">公表された容量</th><th scope="col">容量の定義</th><th scope="col">状態（時点）</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">NTT DATA 京阪奈データセンター（OSK11）</th><td>30 MW</td><td>IT 容量（IT load）</td><td>開業の発表（2026 年 4 月 9 日）</td></tr>
+    <tr><th scope="row">IIJ 白井データセンターキャンパス</th><td>最大 50 MW</td><td>最大受電容量。設備収容 6,000 ラック（実効平均 6 kVA/ラックの場合）</td><td>運用開始 2019 年 5 月 1 日（資料は 2019 年 12 月 19 日）</td></tr>
+    <tr><th scope="row">ソフトバンク 堺（シャープ堺工場跡地）</th><td>約 150 MW 規模から。400 MW 超へ拡大の見込み</td><td>受電容量（資料に定義の記載なし）</td><td><b>計画</b>。2025 年中の本格稼働を目指すと発表（2024 年 6 月 7 日）。稼働の状況は確認していない</td></tr>
+    <tr><th scope="row">OpenAI の Stargate（複数の拠点の合計）</th><td>7 GW 弱</td><td>planned capacity（計画の容量）</td><td><b>計画</b>の合計（2025 年 9 月 23 日）。この発表で稼働中と書かれているのは Abilene の旗艦拠点だけ。その後、2026 年 4 月 29 日の発表は、米国で 10 GW の AI インフラを確保する目標（2029 年まで）をすでに超えたと述べている（確保した量で、稼働している量は書かれていない）</td></tr>
+  </tbody></table></div>
+<p>同じ「MW」でも、<b>受電容量</b>と<b>IT 容量</b>は別のものです。IT 容量は、IT 機器に使える電力の容量で、受電容量から、冷却や電力変換の損失（PUE の差）を除いた側です。また、<b>契約や計画の容量</b>と、<b>実際に使われている電力</b>も違います。資源エネルギー庁の資料（2025 年 11 月 14 日）は、データセンターなどの大規模な需要が増えるなかで、電力を使わない状態のまま系統の容量を確保する「空押さえ」が起きている現状を挙げています。</p>
+
+<div class="callout warn"><span class="ttl">この装置の限界：規模の感覚をつかむための模型です</span>
+  <p>この章の計算は、<b>規模の感覚をつかむための模型</b>です。実際のデータセンターの電力は、機器の構成、稼働率、冷却方式、契約（受電の容量や時間帯）で大きく変わります。1 台の電力、1 ラックの台数、負荷の形、PUE の値は、この章では仮定または 1 つの公表例です。</p>
+  <p>計画の規模と、実際の稼働の規模は違います。上の計画の値（約 150 MW、7 GW など）は、<b>発表時点の計画</b>で、稼働中の値ではありません。また、「家庭の何軒ぶん」「発電所の何本ぶん」は、<b>同じ時刻に支えられる軒数や本数</b>ではありません。電力系統は、多くの発電所と送電網で需要をまかない、瞬間ごとに発電と消費を一致させています（第27章、発電講義 序章3）。</p>
+  <p>電気設備や冷却設備の作業の手順は、この章では扱いません。実際の作業は、有資格者が、設備の保安規程と現場の手順に従って行ってください。</p></div>
+
+<h3>まとめと、本編への道しるべ</h3>
+<ul>
+  <li><b>瞬間（kW）と量（kWh）は別のもの</b>です。サーバーは止めずに動かすことが多く、<b>量 ＝ 電力 × 24 時間 × 365 日</b>で大きくなります。</li>
+  <li>単位は 1,000 倍ごとの階段で、CPU は W、サーバーは kW、ラックは kW〜百 kW、データセンターは MW、大規模な計画は GW の桁です。<b>1 万 kW ＝ 10 MW</b> です。</li>
+  <li>サーバー 1 台の内訳は、<b>公表仕様（CPU・GPU の TDP、最大入力）</b>と<b>模型（メモリ・ファン・電源の損失）</b>を分けて読みます。</li>
+  <li>施設の電力 ＝ IT 機器の電力 × PUE です。GPU サーバー 1 万台（最大入力で計算）は、IT 機器で約 102 MW、PUE 1.36 で約 139 MW、<b>発電所の 1 軸の約 0.84 本ぶん</b>の規模です。</li>
+  <li>データセンターの負荷は、家庭の束と違い、24 時間ほぼ一定に近い形と考えられます（形は模型の仮定）。使った電力は、ほぼすべて熱になります。ラック 120 kW は、電気カーペットの約 150 台ぶんの熱です。</li>
+</ul>
+<p>次に読む所です。サーバーの CPU は<a href="#ch06">第06章</a>、GPU は<a href="#ch08">第08章</a>、ラックの電力密度は<a href="#ch11">第11章</a>、受電から機器までは<a href="#ch12">第12章</a>、熱の計算と空冷は<a href="#ch15">第15章</a>、液冷は<a href="#ch16">第16章</a>、PUE と熱の捨て方は<a href="#ch17">第17章</a>、立地と電力は<a href="#ch27">第27章</a>で扱います。発電側から同じ比較をした章は、<a href="../power/#chI3">発電講義 序章3</a>です。</p>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>TDP は、消費電力そのものではありません</b>。熱設計の目安で、負荷で下回ることも、一時的に上回ることもあります（第06章）。公表の TDP を足した値を、サーバーの消費電力として使わないでください。</p>
+  <p><b>「受電容量」と「IT 容量」は別</b>です。データセンターの MW の値は、どちらの容量か、計画か稼働かを必ず確かめてください。</p>
+  <p><b>PUE は、IT 機器の電力ではなく、施設全体の電力を決める倍率</b>です。IT 機器の電力 × PUE が施設の電力です。割り算を逆にしないでください。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="cI1-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 18 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://docs.nvidia.com/dgx/dgxh100-user-guide/introduction-to-dgxh100.html">Introduction to NVIDIA DGX H100/H200 Systems</a></th><td>NVIDIA（米国）</td><td>ページの更新 2026 年 10 月 17 日</td><td>DGX H100 の最大入力 10.2 kW、GPU 8 個、CPU 2 個、システムメモリ 2 TB、8U。熱の出力（BTU/hr）は使わなかった。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.nvidia.com/en-us/data-center/h100/">H100 GPU</a></th><td>NVIDIA（米国）</td><td>確認 2026 年 11 月（ページに日付なし）</td><td>H100 SXM の最大 TDP 700 W まで（設定可能）、FP64 34 TFLOPS、FP8 Tensor Core 3,958 TFLOPS（with sparsity）、GPU メモリ 80 GB。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://docs.nvidia.com/dgx/dgxgb200-user-guide/hardware.html">DGX GB200 User Guide「Hardware」</a></th><td>NVIDIA（米国）</td><td>ページの更新 2026 年 9 月 17 日</td><td>ラック 1 本の GPU 72 個・CPU 36 個、ラックの電力 約 120 kW、計算トレイは液冷でネットワーク・ストレージ・電源棚は空冷。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.intel.com/content/www/us/en/products/sku/231746/specifications.html">Intel Xeon Platinum 8480+ Processor Product Specifications</a></th><td>Intel（米国）</td><td>確認 2026 年 11 月（Q1'23 発売）</td><td>TDP 350 W（DGX H100 の CPU の参考）。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.intel.com/content/www/us/en/products/sku/240777/intel-xeon-6980p-processor-504m-cache-2-00-ghz/specifications.html">Intel Xeon 6980P Processor Product Specifications</a></th><td>Intel（米国）</td><td>確認 2026 年 11 月（第06章と同じ）</td><td>CPU 1 個の TDP 500 W。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://lenovopress.lenovo.com/lp1601-thinksystem-sr650-v3-server">Lenovo ThinkSystem SR650 V3 Server Product Guide</a></th><td>Lenovo（本社の国は確認できず、国を添えない）</td><td>ページの更新 2026 年 10 月 13 日</td><td>2U、最大 2 CPU（第 4 世代 Xeon で TDP 最大 350 W、第 5 世代で最大 385 W）、DIMM 最大 32 枚、電源 750〜2,600 W（80 PLUS Platinum または Titanium）、60 mm ファン 6 個。最大の消費電力は書かれていない。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.datacenters.google/efficiency">Data Center Efficiency</a></th><td>Google（米国）</td><td>確認 2026 年 11 月（2026 年第 2 四半期時点の直近 12 か月）</td><td>大規模データセンター全体の PUE 1.09（2025 年の年平均）。1 社の自社施設の値。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.nttdata.com/global/en/news/press-release/2026/april/040900">NTT DATA Opens Keihanna Data Center</a></th><td>NTT DATA（日本）</td><td>2026 年 4 月 9 日</td><td>京阪奈データセンターの IT 容量 30 MW。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www-e.iw.iij.ad.jp/ir/library/session/pdf/shiroiDC.pdf">白井データセンターキャンパスのご紹介</a></th><td>インターネットイニシアティブ（IIJ、日本）</td><td>2019 年 12 月 19 日</td><td>最大受電容量 50 MW、6,000 ラック（実効平均 6 kVA/ラック）、1 区画約 300 ラック、高負荷ラックは 20 kVA クラス。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.softbank.jp/corp/news/press/sbkk/2024/20240607_01">シャープ堺工場跡地でのデータセンターの発表（プレスリリース）</a></th><td>ソフトバンク（日本）</td><td>2024 年 6 月 7 日</td><td>受電容量 約 150 MW 規模から、400 MW 超へ拡大の見込み。2025 年中の本格稼働を目指す（計画）。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://openai.com/index/five-new-stargate-sites/">Five new Stargate sites</a></th><td>OpenAI（本社の国は確認せず、国を添えない）</td><td>2025 年 9 月 23 日（10 月 22 日に更新）</td><td>nearly 7 gigawatts of planned capacity（複数の拠点の計画の合計）。稼働中は Abilene の旗艦拠点だけ。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://openai.com/index/building-the-compute-infrastructure-for-the-intelligence-age/">Building the compute infrastructure for the Intelligence Age</a></th><td>OpenAI</td><td>2026 年 4 月 29 日</td><td>2029 年までに米国で 10 GW の AI インフラを確保する目標を、すでに超えたとする記述（確保の量。稼働の量は書かれていない）。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.meti.go.jp/shingikai/enecho/denryoku_gas/saisei_kano/smart_power_grid_wg/pdf/005_03_00.pdf">局地的な大規模需要に対する規律確保について（次世代電力系統ワーキンググループ 資料3）</a></th><td>資源エネルギー庁</td><td>2025 年 11 月 14 日</td><td>電力の使用を伴わない状態での系統容量の確保（空押さえ）が発生している現状（資料の「本日の御議論」）。</td></tr>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://www.ashrae.org/File%20Library/Technical%20Resources/Bookstore/Emergence-and-Expansion-of-Liquid-Cooling-in-Mainstream-Data-Centers_WP.pdf">Emergence and Expansion of Liquid Cooling in Mainstream Data Centers</a></th><td>ASHRAE TC 9.9</td><td>2021 年（第15章と同じ白書）</td><td>50 kW のラックのファンの電力が 5 kW 以上、40〜50 kW のラックの風量が最大 5,000 cfm、床タイル 1 枚 1,900 cfm。</td></tr>
+      <tr><td>団体の資料</td><th scope="row"><a href="https://top500.org/lists/2026/06">TOP500（2026 年 6 月、第 67 回）</a></th><td>TOP500</td><td>2026 年 6 月</td><td>上位 3 件の Rmax と電力。</td></tr>
+      <tr><td>公的機関の資料</td><th scope="row"><a href="https://www.olcf.ornl.gov/olcf-resources/data-visualization-resources/orion/">Orion</a></th><td>オークリッジ国立研究所（OLCF）</td><td>確認 2026 年 11 月（2022 年に運用開始）</td><td>Orion の容量の層 679 PB。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.clearesult.com/80plus/sites/80plus/files/news/230V%20ENTERPRISE%20PSU%20MARKET-READY%20EFFICIENCY%20STUDY_1.pdf">230V Enterprise PSU Market-Ready Efficiency Study</a></th><td>CLEAResult（80 PLUS の運営元）</td><td>確認 2026 年 11 月（日付の確認なし）</td><td>Titanium（750 W 超）の負荷 50% の効率 96%。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.env.go.jp/content/000323408.pdf">令和5年度 家庭部門のCO2排出実態統計調査 結果について（確報値）</a></th><td>環境省</td><td>令和 7 年 6 月（2023 年度）</td><td>家庭 1 世帯の年間の電気の消費量 3,911 kWh（発電講義 序章3 と同じ）。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.tepco.co.jp/ep/private/ampere2/ampere03.html">主な電気機器のアンペアの目安</a></th><td>東京電力エナジーパートナー</td><td>日付の記載なし（確認 2026 年 11 月）</td><td>電気カーペット（3 畳）の電流：半面 4 A、全面 8 A（100 V の機器で 1 A ＝ 100 W と換算した目安）。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.jera.co.jp/system/files/private/%E5%88%A5%E7%B4%99%EF%BC%9A%E5%AF%8C%E6%B4%A5%E7%81%AB%E5%8A%9B%E7%99%BA%E9%9B%BB%E6%89%80%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E3%82%AC%E3%82%B9%E3%82%BF%E3%83%BC%E3%83%93%E3%83%B3%E7%AD%89%E3%81%AE%E5%8F%96%E6%9B%BF%E5%B7%A5%E4%BA%8B%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6.pdf">＜別紙＞ 富津火力発電所におけるガスタービン等の取替工事について</a></th><td>JERA（日本）</td><td>日付の記載なし</td><td>1 号系列の第 7 軸の出力 16.5 万 kW。発電講義 序章3 と同じ。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.occto.or.jp/assets/news/juyousoutei/260121_juyousoutei_r1.pdf">全国及び供給区域ごとの需要想定（2026年度）</a></th><td>電力広域的運営推進機関</td><td>2026 年 1 月 21 日公表</td><td>2025 年度夏季の最大需要電力 158,815 千 kW（物差しの国の項目）。</td></tr>
+      <tr><td>他の章</td><th scope="row">第06・08・11・14・15・17 章の事実確認表</th><td>この講座</td><td>2026 年 11 月 14 日</td><td>CPU・GPU の TDP、ラック電力密度の調査値、PUE の定義と調査値、空気の比熱と密度。この章は同じ値を写している。</td></tr>
+      <tr><td>架空・模型</td><th scope="row">汎用サーバーの内訳、ファンと電源の損失の割合、1 台の電力と 1 ラックの台数、データセンターの負荷の形と振れ幅、稼働の割合、家庭の束の形</th><td>この講座</td><td>—</td><td>理解のための仮定（模型の値）。実際の値ではありません。</td></tr>
+    </tbody>
+  </table></div>
+</section>

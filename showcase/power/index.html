@@ -1326,6 +1326,7 @@ body { line-height: 2.0; }
   <li>平均で釣り合っても、<b>1 日の山と谷では合いません</b>。実際は、多くの発電所と送電網と調整の仕組みで、瞬間ごとに合わせています。</li>
 </ul>
 <p>次に読む所です。規模の比較の入口は<a href="#chI1">序章1</a>、電気の基本は<a href="#chI2">序章2</a>です。需要と供給の一致は<a href="#ch02">第02章</a>、ベース・ミドル・ピークは<a href="#ch03">第03章</a>、軸の構成は<a href="#ch18">第18章</a>、設備利用率と負荷追従は<a href="#ch24">第24章</a>で扱います。</p>
+<p>同じ見方で、計算サーバーの電力と熱（サーバー 1 台、ラック 1 本、データセンター 1 棟）を発電所の 1 軸と比べるには、<a href="../server/#chI1">計算サーバー講義の序章1</a>へ進んでください。</p>
 
 <div class="callout warn"><span class="ttl">つまずきやすい点</span>
   <p><b>「万」と「k・M・G」の区切りの違い</b>。「万」は 4 桁、k・M・G は 3 桁ごとです。16.5 万 kW は 16.5 MW ではなく、165 MW です。</p>
@@ -7072,6 +7073,9 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
     else window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(chk, 100); });
   }
   var DISC = '学習用の模型です。実際の設計や運用の判断には使えません。';
+  /* 文言の差し替え：data.labels の任意の項目（省いたときは、発電の序章3向けの既定の文言）。{名前} は fillL で置き換える */
+  function lb(d, k, def) { return d && d.labels && d.labels[k] != null ? String(d.labels[k]) : def; }
+  function fillL(t, m) { return t.replace(/\{(\w+)\}/g, function (a, k) { return m[k] != null ? m[k] : a; }); }
   /* つまみ：{id,label,unit,min,max,step,value,fmt,log,onInput}。log のときは、値は 10 の指数（表示は fmt で）。 */
   function slider(ctx, o) {
     var id = ctx.id + '-' + o.id, wrap = h('div', { 'class': 'hm-in' }), out = h('output', { 'for': id, 'class': 'hm-val' });
@@ -7093,7 +7097,7 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
   }
   function begin(el, d, label, ctx) {
     var tabsHolder = null;
-    CN.frame(el, label, d.title, tabsHolder);
+    CN.frame(el, lb(d, 'frame', label), d.title, tabsHolder);
     el.classList.add('hm');
     var body = h('div', { 'class': 'wg-body hm-body' }); el.appendChild(body);
     return body;
@@ -7117,7 +7121,7 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
 
   /* ================= bucket：電力（蛇口の太さ）と電力量（バケツにたまる水） ================= */
   CN.widgets.bucket = function (el, d, ctx) {
-    var P = d.power, T = d.hours, cap = d.capacityKwh;
+    var P = d.power, T = d.hours, cap = d.capacityKwh, capN = lb(d, 'capName', '家庭 1 日分');
     var st = { w: P.value, hrs: T.value, t: T.value, playing: false, raf: 0 };
     var body = begin(el, d, '電力と電力量の実験台', ctx);
     if (d.intro) body.appendChild(CN.richEl('p', 'hm-intro', d.intro));
@@ -7161,7 +7165,7 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
     function drawTap() {
       var W = Math.min(measure(tapBox, 240), 300), H = 236, kw = st.w / 1000, e = kw * st.t, eFull = kw * st.hrs;
       var level = clamp(e / cap, 0, 1), over = e > cap + 1e-9;
-      var svg = svgRoot(W, H, '蛇口とバケツの図。蛇口の太さが電力（いま ' + fmtFix(kw, 2) + ' kW）、バケツにたまった水が電力量（いま ' + fmtFix(e, 2) + ' kWh、家庭 1 日分 ' + cap + ' kWh の ' + fmtFix(e / cap * 100, 0) + ' %）。');
+      var svg = svgRoot(W, H, '蛇口とバケツの図。蛇口の太さが電力（いま ' + fmtFix(kw, 2) + ' kW）、バケツにたまった水が電力量（いま ' + fmtFix(e, 2) + ' kWh、' + capN + ' ' + cap + ' kWh の ' + fmtFix(e / cap * 100, 0) + ' %）。');
       var th = 5 + 30 * clamp(st.w / P.max, 0, 1), bx0 = W / 2 - 52, bx1 = W / 2 + 52, by0 = 118, by1 = H - 24, pipeY = 18, nozX = W / 2;
       var defs = s('defs', null, s('clipPath', { id: ctx.id + '-clip' }, pathEl('M' + (bx0 + 4) + ',' + by0 + ' L' + (bx0 + 12) + ',' + by1 + ' L' + (bx1 - 12) + ',' + by1 + ' L' + (bx1 - 4) + ',' + by0 + ' Z')));
       svg.appendChild(defs);
@@ -7177,7 +7181,7 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
       svg.appendChild(pathEl('M' + bx0 + ',' + by0 + ' L' + (bx0 + 8) + ',' + by1 + ' L' + (bx1 - 8) + ',' + by1 + ' L' + bx1 + ',' + by0, 'hm-bucket'));
       svg.appendChild(line(bx0 - 6, by0, bx1 + 6, by0, 'hm-capline'));
       svg.appendChild(txt(bx1 + 8, by0 + 4, '満杯 ＝', 'hm-t sm', 'start', { 'dominant-baseline': 'middle' }));
-      svg.appendChild(txt(bx1 + 8, by0 + 18, '家庭 1 日分', 'hm-t sm', 'start'));
+      svg.appendChild(txt(bx1 + 8, by0 + 18, capN, 'hm-t sm', 'start'));
       svg.appendChild(txt(bx1 + 8, by0 + 32, '約 ' + fmtSig(cap, 3) + ' kWh', 'hm-t sm', 'start'));
       svg.appendChild(txt(W / 2, H - 6, 'バケツの水 ＝ 電力量 ' + fmtFix(e, 2) + ' kWh' + (over ? '（あふれた）' : ''), 'hm-t b', 'middle'));
       CN.clear(tapBox).appendChild(svg);
@@ -7209,11 +7213,11 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
       results.appendChild(resBox('電力（いまの大きさ）', fmtFix(kw, 2), 'kW', fmtFix(st.w, 0) + ' W'));
       results.appendChild(resBox('時間', fmtFix(st.t, 2).replace(/0$/, ''), '時間', st.playing ? '進行中（全体は ' + fmtFix(st.hrs, 2).replace(/0$/, '') + ' 時間）' : null));
       results.appendChild(resBox('電力量（たまった量）', fmtFix(e1, 2), 'kWh', st.playing ? '全体では ' + fmtFix(e, 2) + ' kWh' : '＝ ' + fmtFix(kw, 2) + ' kW × ' + fmtFix(st.hrs, 2).replace(/0$/, '') + ' 時間', true));
-      results.appendChild(resBox('家庭 1 日分（約 ' + fmtSig(cap, 3) + ' kWh）に対して', fmtFix(e / cap * 100, 0), '%', e > cap ? '1 日分を超える量' : null));
+      results.appendChild(resBox(capN + '（約 ' + fmtSig(cap, 3) + ' kWh）に対して', fmtFix(e / cap * 100, 0), '%', e > cap ? '1 日分を超える量' : null));
       pbtns.forEach(function (q) { q[0].setAttribute('aria-pressed', String(Math.abs(q[1].w - st.w) < 1e-9)); });
       drawTap(); drawArea();
       CN.clear(tblBox).appendChild(details('図の数値（同じ内容の表。読み上げ・印刷用）', tableOf(['項目', '値'], [
-        ['電力', fmtFix(kw, 3) + ' kW（' + fmtFix(st.w, 0) + ' W）'], ['時間', fmtFix(st.hrs, 2) + ' 時間'], ['電力量', fmtFix(e, 3) + ' kWh'], ['家庭 1 日分（約 ' + fmtSig(cap, 3) + ' kWh）に対する割合', fmtFix(e / cap * 100, 1) + ' %']])));
+        ['電力', fmtFix(kw, 3) + ' kW（' + fmtFix(st.w, 0) + ' W）'], ['時間', fmtFix(st.hrs, 2) + ' 時間'], ['電力量', fmtFix(e, 3) + ' kWh'], [capN + '（約 ' + fmtSig(cap, 3) + ' kWh）に対する割合', fmtFix(e / cap * 100, 1) + ' %']])));
     }
     watchWidth(tapBox, function () { drawTap(); }); watchWidth(areaBox, function () { drawArea(); });
     draw();
@@ -7226,7 +7230,7 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
   CN.widgets.unitconv = function (el, d, ctx) {
     var st = { kind: d.initial.kind, value: d.initial.value, unit: d.initial.unit };
     var tabs = CN.tabs([{ key: 'power', label: '電力（W の仲間）' }, { key: 'energy', label: '電力量（Wh の仲間）' }], st.kind, function (k) { var df = (d.defaults && d.defaults[k]) || { value: 1, unit: k === 'power' ? 'kW' : 'kWh' }; st.kind = k; st.unit = df.unit; st.value = df.value; build(); }, '電力と電力量の切替');
-    CN.frame(el, '単位の階段と換算', d.title, tabs); el.classList.add('hm');
+    CN.frame(el, lb(d, 'frame', '単位の階段と換算'), d.title, tabs); el.classList.add('hm');
     var body = h('div', { 'class': 'wg-body hm-body' }); el.appendChild(body);
     endNote(el, d);
     var inBox, stairBox, outBox, exBox, numIn, selU, tblBox, say;
@@ -7412,7 +7416,7 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
         row.appendChild(h('span', { 'class': 'hm-trk-n' }, v.short || v.name)); row.appendChild(b);
         trackBox.appendChild(row);
       });
-      trackBox.appendChild(h('p', { 'class': 'hm-cap' }, '冷蔵庫・待機電力・通信機器・便座は、終日つながっている機器で、平均の電力で一定に動くものとして扱います（薄い帯）。他の機器は、使う時間帯を模型として決めた例です。'));
+      trackBox.appendChild(h('p', { 'class': 'hm-cap' }, lb(d, 'trackNote', '冷蔵庫・待機電力・通信機器・便座は、終日つながっている機器で、平均の電力で一定に動くものとして扱います（薄い帯）。他の機器は、使う時間帯を模型として決めた例です。')));
     }
     function drawChart() {
       var W = Math.min(measure(chartBox, 340), 640), H = 190, m = { l: 48, r: 10, t: 22, b: 30 }, pw = W - m.l - m.r, ph = H - m.t - m.b, N = 96;
@@ -7446,6 +7450,7 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
   /* ================= areacircle：円の面積で比べる ================= */
   CN.widgets.areacircle = function (el, d, ctx) {
     var st = { u: d.util.value };
+    var LH = lb(d, 'home', '家庭'), LU = lb(d, 'unit', '世帯'), LUT = lb(d, 'util', '利用率');
     var body = begin(el, d, '円の面積で比べる', ctx);
     if (d.intro) body.appendChild(CN.richEl('p', 'hm-intro', d.intro));
     var su = slider(ctx, { id: 'u', label: d.util.label, min: d.util.min, max: d.util.max, step: d.util.step, value: d.util.value, fmt: function (v) { return fmtFix(v * 100, 0) + ' %'; }, minmax: [fmtFix(d.util.min * 100, 0) + ' %', fmtFix(d.util.max * 100, 0) + ' %'], onInput: function (v) { st.u = v; draw(); } });
@@ -7459,12 +7464,42 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
     var C = d.circles;      // [{id, name, kw, cls, callout?}]  kw：瞬間の大きさ（kW）
     var house = C.filter(function (c) { return c.callout; })[0], big = C.reduce(function (a, c) { return c.kw > a.kw ? c : a; }, C[0]);
 
+    /* 文字の幅の見積り（全角は 1 em、半角は 0.62 em）で、maxW に収まるよう折り返す。区切りがなければ文字の途中でも折る */
+    function estW(str, size, bold) { var w = 0, i, c; for (i = 0; i < str.length; i++) { c = str.charAt(i); w += str.charCodeAt(i) > 255 ? size : size * (c === ' ' ? 0.3 : /[0-9]/.test(c) ? 0.58 : (bold ? 0.66 : 0.6)); } return w; }
+    function wrapText(str, maxW, wfn) {
+      var out = [], cur = '', i, ch;
+      for (i = 0; i < str.length; i++) {
+        ch = str.charAt(i);
+        if (cur && wfn(cur + ch) > maxW) {
+          var sp = cur.lastIndexOf(' ');
+          if (ch !== ' ' && sp > 0 && cur.charCodeAt(cur.length - 1) < 256 && ch.charCodeAt(0) < 256) { out.push(cur.slice(0, sp)); cur = cur.slice(sp + 1); } else { out.push(cur); cur = ''; }
+        }
+        if (!(cur === '' && ch === ' ')) cur += ch;
+      }
+      if (cur) out.push(cur);
+      return out;
+    }
     function panel(box, title, vals, unitText, ghost) {
+      function textW(t, cls, size, bold) {   // 描画済みの SVG で実測（表示されていないときは見積り）
+        var el = txt(0, 0, t, cls), w = 0;
+        svg.appendChild(el); try { w = el.getComputedTextLength(); } catch (e) { w = 0; } svg.removeChild(el);
+        return w > 0 ? w : estW(t, size, bold);
+      }
       var W = Math.min(measure(box, 340), 620), narrow = W < 460, R = narrow ? Math.min(W * 0.3, 120) : Math.min(W * 0.26, 130), H = narrow ? Math.round(R * 2 + 120) : Math.round(R * 2 + 70);
       var svg = svgRoot(W, H, title + '。円の面積が量に比例する。' + vals.map(function (v) { return v.c.name + ' ' + v.text; }).join('、') + '。');
-      svg.appendChild(txt(6, 16, title, 'hm-t b', 'start'));
+      CN.clear(box).appendChild(svg);
+      // 見出しが幅を超えるときは折り返し、図の本体を、増えた行の分だけ下げる
+      var root = svg, tl = [title], extra = 0;
+      (function () {
+        var t0 = txt(0, 0, title, 'hm-t b'), w0 = 0;
+        svg.appendChild(t0); try { w0 = t0.getComputedTextLength(); } catch (e) { w0 = 0; } svg.removeChild(t0);
+        if ((w0 || estW(title, 12.5, true)) > W - 14) tl = wrapText(title, W - 14, function (t) { var q = txt(0, 0, t, 'hm-t b'), w = 0; svg.appendChild(q); try { w = q.getComputedTextLength(); } catch (e) { w = 0; } svg.removeChild(q); return w || estW(t, 12.5, true); });
+      })();
+      tl.forEach(function (ln, i) { svg.appendChild(txt(6, 16 + i * 16, ln, 'hm-t b', 'start')); });
+      extra = (tl.length - 1) * 16;
+      svg = s('g', { transform: 'translate(0,' + extra + ')' }); root.appendChild(svg);
       var rad = function (v) { return R * Math.sqrt(v / big.kw); }, items = vals.filter(function (v) { return !v.c.callout; }).sort(function (a, b) { return b.c.kw - a.c.kw; });
-      var cx0 = narrow ? R + 8 : R + 14, cy0 = 30 + R, k = 0, pos = [];
+      var cx0 = narrow ? R + 8 : R + 14, cy0 = 30 + R, k = 0, pos = [], need = 0;
       // 大きい円を左、小さい円を右に並べる
       items.forEach(function (v, i) {
         var r = rad(v.v), cx = i === 0 ? cx0 : (narrow ? W - 8 - Math.max(40, rad(items[1] ? items[1].v : v.v)) - 8 : cx0 + R + 30 + 40 + (i - 1) * 90), cy = i === 0 ? cy0 : (narrow ? 30 + 24 + r : cy0);
@@ -7475,12 +7510,39 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
         if (ghost) { var gr = ghost(v.c); svg.appendChild(circle(cx, cy, gr, 'hm-ghost')); }
         svg.appendChild(circle(cx, cy, Math.max(r, 1.5), 'hm-circ ' + v.c.cls));
         var lx = cx, ly = i === 0 ? cy : cy + Math.max(r, 6) + 16;
-        if (i === 0) { svg.appendChild(txt(lx, ly - 6, v.c.name, 'hm-t b hm-on', 'middle')); svg.appendChild(txt(lx, ly + 11, v.text, 'hm-t hm-on', 'middle')); if (v.mult) svg.appendChild(txt(lx, ly + 28, v.mult, 'hm-t sm hm-on', 'middle')); }
+        if (i === 0) {
+          // 円の中のラベル：円の幅（弦）に収まらない名前は折り返す（収まるときは従来どおりの位置）
+          var inL = [], inW = Math.max(60, r * 1.8), yy0;
+          [[v.c.name, 'hm-t b hm-on', 12.5, true], [v.text, 'hm-t hm-on', 12.5, false], [v.mult, 'hm-t sm hm-on', 11, false]].forEach(function (q) {
+            if (q[0]) wrapText(q[0], inW, function (t) { return textW(t, q[1], q[2], q[3]); }).forEach(function (ln) { inL.push([ln, q[1]]); });
+          });
+          yy0 = ly - 6 - Math.max(0, inL.length - (v.mult ? 3 : 2)) * 8;
+          inL.forEach(function (q, j) { svg.appendChild(txt(lx, yy0 + j * 17, q[0], q[1], 'middle')); });
+        }
         else {
           var anchor = narrow ? 'end' : 'middle', tx = narrow ? W - 8 : lx;
-          svg.appendChild(txt(tx, ly, v.c.name, 'hm-t b', anchor)); svg.appendChild(txt(tx, ly + 16, v.text, 'hm-t', anchor)); if (v.mult) svg.appendChild(txt(tx, ly + 32, v.mult, 'hm-t sm', anchor));
+          if (!narrow) {
+            svg.appendChild(txt(tx, ly, v.c.name, 'hm-t b', anchor)); svg.appendChild(txt(tx, ly + 16, v.text, 'hm-t', anchor)); if (v.mult) svg.appendChild(txt(tx, ly + 32, v.mult, 'hm-t sm', anchor));
+          } else {
+            // 狭い幅：右端そろえのラベルが大きい円にかからないよう、大きい円の右端（ラベルの高さの範囲での最大）より右の幅に収めて折り返す。足りない高さは図の高さを伸ばす
+            var big0 = pos[0], tries = 0, extent = 44, lines, maxW;
+            function boundAt(y0, y1) { var bd = 8, yy; for (yy = y0; yy <= y1; yy += 3) { var dy = yy - big0[2]; if (Math.abs(dy) < big0[3]) bd = Math.max(bd, big0[1] + Math.sqrt(big0[3] * big0[3] - dy * dy) + 4); } return bd; }
+            function layout() {
+              maxW = Math.max(70, tx - boundAt(ly - 12, ly + extent)); lines = [];
+              [[v.c.name, 'hm-t b', 12.5, true], [v.text, 'hm-t', 12.5, false], [v.mult, 'hm-t sm', 11, false]].forEach(function (q) {
+                if (q[0]) wrapText(q[0], maxW, function (t) { return textW(t, q[1], q[2], q[3]); }).forEach(function (ln) { lines.push([ln, q[1]]); });
+              });
+            }
+            layout();
+            while (tries++ < 3 && lines.length * 16 > extent + 4) { extent = lines.length * 16; layout(); }
+            var yL = ly;
+            lines.forEach(function (q) { svg.appendChild(txt(tx, yL, q[0], q[1], 'end')); yL += 16; });
+            need = Math.max(need, yL);
+          }
         }
       });
+      if (narrow && need + 54 > H) H = Math.round(need + 54);
+      if (H + extra !== Math.round(R * 2 + (narrow ? 120 : 70))) { root.setAttribute('viewBox', '0 0 ' + W + ' ' + (H + extra)); root.setAttribute('height', H + extra); }
       // 家庭 1 軒：点にしかならないので、拡大の吹き出し
       if (house) {
         var hv = vals.filter(function (v) { return v.c.callout; })[0], hr = rad(hv.v), a = pos[1] || pos[0], bx = narrow ? 50 : (a[1] + 70), by = narrow ? H - 44 : cy0 + R - 26, brr = 17;
@@ -7490,22 +7552,22 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
         svg.appendChild(circle(bx, by, brr + 4, 'hm-lens'));
         svg.appendChild(circle(bx, by, brr, 'hm-circ ' + house.cls));
         svg.appendChild(txt(bx + brr + 6, by - 3, house.name, 'hm-t b', 'start')); svg.appendChild(txt(bx + brr + 6, by + 13, hv.text, 'hm-t', 'start'));
-        svg.appendChild(txt(bx + brr + 6, by + 28, '（左の点の拡大図。同じ縮尺では点より小さい）', 'hm-t sm', 'start'));
+        svg.appendChild(txt(bx + brr + 6, by + 28, lb(d, 'callout', '（左の点の拡大図。同じ縮尺では点より小さい）'), 'hm-t sm', 'start'));
         void hr;
       }
-      CN.clear(box).appendChild(svg);
     }
     function draw() {
       var hh = house.kw;
-      var v1 = C.map(function (c) { return { c: c, v: c.kw, text: powTxt(c.kw * 1000, 3), mult: c.callout ? null : '家庭 1 軒の約 ' + ja(c.kw / hh, 2) + ' 倍' }; });
-      var v2 = C.map(function (c) { var n = c.kw * st.u / hh; return { c: c, v: c.kw * st.u, text: c.callout ? '1 軒' : '約 ' + ja(n, 2) + ' 世帯分', mult: null }; });
-      panel(box1, '① 瞬間の大きさ（出力）', v1, 'kW', null);
-      panel(box2, '② 1 日の量（家庭の何軒ぶんか。利用率 ' + fmtFix(st.u * 100, 0) + ' %）', v2, '世帯', function (c) { return Math.max(1.5, panelR(c)); });
+      var v1 = C.map(function (c) { return { c: c, v: c.kw, text: powTxt(c.kw * 1000, 3), mult: c.callout ? null : LH + ' 1 軒の約 ' + ja(c.kw / hh, 2) + ' 倍' }; });
+      var v2 = C.map(function (c) { var n = c.kw * st.u / hh; return { c: c, v: c.kw * st.u, text: c.callout ? '1 軒' : '約 ' + ja(n, 2) + ' ' + LU + '分', mult: null }; });
+      panel(box1, lb(d, 'instant', '① 瞬間の大きさ（出力）'), v1, 'kW', null);
+      panel(box2, fillL(lb(d, 'daily', '② 1 日の量（' + LH + 'の何軒ぶんか。{util} {u} %）'), { util: LUT, u: fmtFix(st.u * 100, 0) }), v2, LU, function (c) { return Math.max(1.5, panelR(c)); });
       CN.clear(sayBox);
       d.says.forEach(function (t) { sayBox.appendChild(CN.richEl('li', '', fillSay(t))); });
-      var rowsT = C.filter(function (c) { return !c.callout; }).map(function (c) { var inst = c.kw / hh, q = inst * st.u; return [c.name, powTxt(c.kw * 1000, 3), '約 ' + ja(inst, 2) + ' 世帯分（家庭の約 ' + ja(inst, 2) + ' 倍）', fmtFix(c.kw * 24 * st.u / 1000, 1) + ' MWh（利用率 ' + fmtFix(st.u * 100, 0) + ' %）', '約 ' + ja(q, 2) + ' 世帯分']; });
-      rowsT.unshift([house.name, powTxt(house.kw * 1000, 3), '1 世帯', fmtFix(house.kw * 24, 2) + ' kWh', '1 世帯']);
-      CN.clear(tblBox).appendChild(details('図の数値（同じ内容の表。読み上げ・印刷用）', tableOf(['', '出力', '瞬間（出力 ÷ 家庭の平均の電力）', '1 日の量', '量（1 日の量 ÷ 家庭の 1 日）'], rowsT)));
+      var AMT = lb(d, 'amountCol', '出力'), AUTOQ = lb(d, 'qtyFmt', '') === 'auto';
+      var rowsT = C.filter(function (c) { return !c.callout; }).map(function (c) { var inst = c.kw / hh, q = inst * st.u; return [c.name, powTxt(c.kw * 1000, 3), '約 ' + ja(inst, 2) + ' ' + LU + '分（' + LH + 'の約 ' + ja(inst, 2) + ' 倍）', (AUTOQ ? eneTxt(c.kw * 24 * st.u * 1000, 3) : fmtFix(c.kw * 24 * st.u / 1000, 1) + ' MWh') + '（' + LUT + ' ' + fmtFix(st.u * 100, 0) + ' %）', '約 ' + ja(q, 2) + ' ' + LU + '分']; });
+      rowsT.unshift([house.name, powTxt(house.kw * 1000, 3), '1 ' + LU, fmtFix(house.kw * 24, 2) + ' kWh', '1 ' + LU]);
+      CN.clear(tblBox).appendChild(details('図の数値（同じ内容の表。読み上げ・印刷用）', tableOf(['', AMT, lb(d, 'instCol', '瞬間（' + AMT + ' ÷ ' + LH + 'の平均の電力）'), lb(d, 'dayCol', '1 日の量'), lb(d, 'qtyCol', '量（1 日の量 ÷ ' + LH + 'の 1 日）')], rowsT)));
     }
     function panelR(c) { var R = Math.min(measure(box1, 340), 620) < 460 ? Math.min(Math.min(measure(box1, 340), 620) * 0.3, 120) : Math.min(Math.min(measure(box1, 340), 620) * 0.26, 130); return R * Math.sqrt(c.kw / big.kw); }
     function fillSay(t) {
@@ -7519,12 +7581,13 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
 
   /* ================= bundle：家庭を束ねて、発電所と比べる ================= */
   CN.widgets.bundle = function (el, d, ctx) {
+    var LUT = lb(d, 'util', '利用率');
     var hh = d.house.kw, dayKwh = hh * 24, rawShape = d.house.shape, mean = rawShape.reduce(function (a, b) { return a + b; }, 0) / rawShape.length;
     var shape = rawShape.map(function (x) { return x / mean; }), peakF = Math.max.apply(null, shape);
     var plants = d.plants, minLoad = d.minLoad;
     var st = { tab: 'a', N: d.n.value, u: d.util.value, plant: d.plants[0].id, t: d.time.value, mode: 'const' };
     var tabs = CN.tabs([{ key: 'a', label: '① 何軒で届くか' }, { key: 'b', label: '② 1 日の流れ' }, { key: 'c', label: '③ 絵で見る' }], 'a', function (k) { st.tab = k; buildTab(); }, '見方の切替');
-    CN.frame(el, '家庭を束ねて、発電所と比べる', d.title, tabs); el.classList.add('hm');
+    CN.frame(el, lb(d, 'frame', '家庭を束ねて、発電所と比べる'), d.title, tabs); el.classList.add('hm');
     var body = h('div', { 'class': 'wg-body hm-body' }); el.appendChild(body);
     if (d.intro) body.appendChild(CN.richEl('p', 'hm-intro', d.intro));
     var common = h('div', { 'class': 'hm-common' }), tabBody = h('div', { 'class': 'hm-tabbody' });
@@ -7575,7 +7638,7 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
     function drawA() {
       var W = Math.min(measure(aState.svg, 340), 640), rowH = 118, H = rowH * 2 + 10, narrow = W < 480, x0 = 12, x1 = W - 14, pw = x1 - x0;
       var dK = demandKW(), dE = demandKWhDay();
-      var svg = svgRoot(W, H, '束ねた家庭の需要の棒（対数の目盛り）。' + nTxt(st.N) + ' で、瞬間の大きさは ' + kwTxt(dK) + '（1 軸の出力の ' + fmtSig(dK / plantKW(axis) * 100, 2) + ' %）、1 日の量は ' + kwhTxt(dE) + '（1 軸の 1 日の発電量の ' + fmtSig(dE / plantKWhDay(axis) * 100, 2) + ' %、利用率 ' + fmtFix(st.u * 100, 0) + ' % の仮定）。');
+      var svg = svgRoot(W, H, '束ねた家庭の需要の棒（対数の目盛り）。' + nTxt(st.N) + ' で、瞬間の大きさは ' + kwTxt(dK) + '（1 軸の出力の ' + fmtSig(dK / plantKW(axis) * 100, 2) + ' %）、1 日の量は ' + kwhTxt(dE) + '（1 軸の 1 日の発電量の ' + fmtSig(dE / plantKWhDay(axis) * 100, 2) + ' %、' + LUT + ' ' + fmtFix(st.u * 100, 0) + ' % の仮定）。');
       function one(y, ttl, lo, hi, val, refs, ticks, unitFn) {
         var X = function (v) { return x0 + pw * clamp((Math.log(v) / Math.LN10 - lo) / (hi - lo), 0, 1); };
         svg.appendChild(txt(x0, y + 14, ttl, 'hm-t b', 'start'));
@@ -7610,13 +7673,13 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
       CN.clear(aState.sent);
       [
         '**瞬間で見ると**：' + axis.name + ' の出力（' + fmtSig(axis.mw, 3) + ' MW）は、家庭の平均の電力の **約 ' + ja(ai, 2) + ' 世帯分**。' + whole.name + '（' + fmtSig(whole.mw, 3) + ' MW）は **約 ' + ja(wi, 2) + ' 世帯分**です（出力 ÷ 平均の電力）。',
-        '**量で見ると**（利用率 ' + fmtFix(st.u * 100, 0) + ' % の仮定のもと）：' + axis.short + ' の 1 日の発電量は **約 ' + ja(aq, 2) + ' 世帯分**、' + whole.short + ' は **約 ' + ja(wq, 2) + ' 世帯分**です（1 日の発電量 ÷ 家庭の 1 日の使用量）。',
-        '2 つの違い：瞬間は「出力と平均の電力の比」、量は「1 日の発電量と 1 日の使用量の比」です。量のほうは、利用率の仮定を掛けた分だけ小さくなります（' + fmtFix(st.u * 100, 0) + ' % ならば ' + fmtFix(st.u, 2) + ' 倍）。'
+        '**量で見ると**（' + LUT + ' ' + fmtFix(st.u * 100, 0) + ' % の仮定のもと）：' + axis.short + ' の 1 日の発電量は **約 ' + ja(aq, 2) + ' 世帯分**、' + whole.short + ' は **約 ' + ja(wq, 2) + ' 世帯分**です（1 日の発電量 ÷ 家庭の 1 日の使用量）。',
+        '2 つの違い：瞬間は「出力と平均の電力の比」、量は「1 日の発電量と 1 日の使用量の比」です。量のほうは、' + LUT + 'の仮定を掛けた分だけ小さくなります（' + fmtFix(st.u * 100, 0) + ' % ならば ' + fmtFix(st.u, 2) + ' 倍）。'
       ].forEach(function (t) { aState.sent.appendChild(CN.richEl('li', '', t)); });
       CN.clear(aState.tbl).appendChild(details('図の数値（同じ内容の表。読み上げ・印刷用）', tableOf(['', '瞬間（kW）', '1 日の量（kWh）'], [
         ['束ねた家庭（' + nTxtFull(st.N) + '）', kwTxt(dK), kwhTxt(dE)],
-        [axis.name, kwTxt(plantKW(axis)), kwhTxt(plantKWhDay(axis)) + '（利用率 ' + fmtFix(st.u * 100, 0) + ' %）'],
-        [whole.name, kwTxt(plantKW(whole)), kwhTxt(plantKWhDay(whole)) + '（利用率 ' + fmtFix(st.u * 100, 0) + ' %）'],
+        [axis.name, kwTxt(plantKW(axis)), kwhTxt(plantKWhDay(axis)) + '（' + LUT + ' ' + fmtFix(st.u * 100, 0) + ' %）'],
+        [whole.name, kwTxt(plantKW(whole)), kwhTxt(plantKWhDay(whole)) + '（' + LUT + ' ' + fmtFix(st.u * 100, 0) + ' %）'],
         ['1 軸ぶんの世帯数（瞬間／量）', '約 ' + ja(ai, 2) + ' 軒', '約 ' + ja(aq, 2) + ' 軒'],
         ['全体ぶんの世帯数（瞬間／量）', '約 ' + ja(wi, 2) + ' 軒', '約 ' + ja(wq, 2) + ' 軒']])));
     }
@@ -7718,7 +7781,7 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
       CN.clear(bState.legend);
       function sw(kind, label) { var q = svgRoot(34, 14, ''); q.setAttribute('aria-hidden', 'true'); q.removeAttribute('role'); q.removeAttribute('aria-label'); kind(q); return h('span', { 'class': 'hm-lg' }, q, label); }
       bState.legend.appendChild(sw(function (q) { q.appendChild(line(2, 7, 32, 7, 'hm-dem')); }, '家庭の束の需要'));
-      bState.legend.appendChild(sw(function (q) { q.appendChild(line(2, 7, 32, 7, 'hm-sup ' + pc + ' sel')); }, '一定の出力（利用率 ' + fmtFix(st.u * 100, 0) + ' %）'));
+      bState.legend.appendChild(sw(function (q) { q.appendChild(line(2, 7, 32, 7, 'hm-sup ' + pc + ' sel')); }, '一定の出力（' + LUT + ' ' + fmtFix(st.u * 100, 0) + ' %）'));
       bState.legend.appendChild(sw(function (q) { q.appendChild(pathEl('M2,10 L12,4 L22,10 L32,4', 'hm-sup follow ' + pc + ' sel')); }, '需要に合わせた出力（最低 ' + fmtFix(minLoad * 100, 0) + ' %〜定格）'));
       bState.legend.appendChild(sw(function (q) { q.appendChild(rect(2, 1, 30, 12, 'hm-short', { fill: 'currentColor', 'fill-opacity': '.35' })); q.appendChild(line(2, 13, 32, 1, 'hm-pat-ln-short')); }, '足りない分（需要が出力より大きい）'));
       bState.legend.appendChild(sw(function (q) { q.appendChild(rect(2, 1, 30, 12, 'hm-sur', { fill: 'currentColor', 'fill-opacity': '.2' })); q.appendChild(line(2, 1, 32, 13, 'hm-pat-ln-sur')); }, '余る分（出力が需要より大きい）'));
@@ -7742,7 +7805,7 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
       ].forEach(function (x) { bState.sum.appendChild(CN.richEl('li', '', x)); });
       var rowsT = [], hr;
       for (hr = 0; hr < 24; hr++) { var tt2 = hr + 0.5; rowsT.push([hr + ' 時台', kwTxt(c.D(tt2)), kwTxt(c.S(tt2, 'const')), kwTxt(c.S(tt2, 'follow'))]); }
-      CN.clear(bState.tbl).appendChild(details('図の数値（同じ内容の表。読み上げ・印刷用）', tableOf(['時刻', '束ねた家庭の需要', '一定の出力', '需要に合わせた出力'], rowsT, nTxt(st.N) + '・' + c.p.name + '・利用率 ' + fmtFix(st.u * 100, 0) + ' %')));
+      CN.clear(bState.tbl).appendChild(details('図の数値（同じ内容の表。読み上げ・印刷用）', tableOf(['時刻', '束ねた家庭の需要', '一定の出力', '需要に合わせた出力'], rowsT, nTxt(st.N) + '・' + c.p.name + '・' + LUT + ' ' + fmtFix(st.u * 100, 0) + ' %')));
     }
 
     /* ---- ③ 絵で見る ---- */
