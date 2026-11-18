@@ -1,7 +1,7 @@
 {
-  "chapters": "I1,I2,01-32",
+  "chapters": "I1,I2,I3,01-32",
   "out": "/home/claude/ttj-ai-ecosystem/showcase/power/index.html",
-  "hero_status": "序章2本と全32章を公開中です。",
+  "hero_status": "序章3本と全32章を公開中です。",
   "analytics": "../analytics.js",
   "pending_text": "この章は検証が済み次第、公開します。"
 }

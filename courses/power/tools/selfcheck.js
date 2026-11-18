@@ -59,7 +59,12 @@ let n10 = 0; for (const s of sentences) if (/\d[\d,.]*\s?(MW|kW|GW|MPa|kPa|℃|K
 // 11 定型の注意書き（spec §9.3 の文言と一字一句同じ。指定外を置かない）
 const FIXED = {}; for (const m of spec.matchAll(/`(<div class="callout warn"><span class="ttl">この(?:章|節)の扱い（([^）]+)）<\/span>[\s\S]*?<\/div>)`/g)) FIXED[m[2]] = m[1];
 for (const w of warn) say(!!FIXED[w] && html.includes(FIXED[w]), `定型の注意書き「${w}」が spec §9.3 の文言のまま${FIXED[w] ? '' : '（spec に無い名前）'}`);
-for (const m of html.matchAll(/<span class="ttl">この(?:章|節)の扱い（([^）]+)）<\/span>/g)) say(warn.includes(m[1]), `注意書き「${m[1]}」は --warn の指定にある（spec §3 の指定どおり）`);
+// 序章（spec §3 に章の指定が無い）で --warn を省いたときは、spec §9.3 の定型の注意書きの文言のままなら可とする
+const WARN_ANY = PRO && !opt('--warn');
+for (const m of html.matchAll(/<span class="ttl">この(?:章|節)の扱い（([^）]+)）<\/span>/g)) {
+  if (WARN_ANY) say(!!FIXED[m[1]] && html.includes(FIXED[m[1]]), `注意書き「${m[1]}」は spec §9.3 の定型の文言のまま（序章は --warn を省いてよい）`);
+  else say(warn.includes(m[1]), `注意書き「${m[1]}」は --warn の指定にある（spec §3 の指定どおり）`);
+}
 // 12 事実確認表: 高リスクは一次 ○・△、制度は【国】、企業は社名変更の確認、仕様値は条件、確認日
 const rows = (src.match(/\/\*[\s\S]*?\*\//g) || []).join('\n') + '\n' + facts;
 let nf = 0; for (const line of rows.split('\n')) { const c = line.split('|').slice(1, -1).map(x => x.trim()); if (c.length < 10 || !/^\d+$/.test(c[0])) continue; nf++;

@@ -158,6 +158,60 @@ V.strip = function (d, id) {
   });
   if (!d.alt) prob(W + ' に alt（図の説明）がありません');
 };
+/* ---- bucket・unitconv・appmix・areacircle・bundle（js/opt/home-lab.js）：家庭の電気と発電所の規模 ---- */
+const HM_PU = ['W', 'kW', 'MW', 'GW', 'TW', '万kW'], HM_EU = ['Wh', 'kWh', 'MWh', 'GWh', 'TWh', '万kWh', '億kWh'];
+function hmRange(W, o, name) { if (!o || !(o.min < o.max) || !(o.step > 0) || !(o.value >= o.min && o.value <= o.max)) { prob(W + ' の ' + name + ' は min < max・step > 0・min ≤ value ≤ max（数）'); return false; } return true; }
+V.bucket = function (d, id) {
+  const W = 'bucket ' + id;
+  if (!d.title) prob(W + ' に title がありません');
+  if (!(d.capacityKwh > 0)) prob(W + ' の capacityKwh（バケツの容量 kWh）は正の数');
+  if (hmRange(W, d.power, 'power') && (d.power.presets || []).forEach(p => { if (!p.label || !(p.w >= d.power.min && p.w <= d.power.max)) prob(W + ' の power.presets は {label, w（範囲内）}'); }));
+  hmRange(W, d.hours, 'hours');
+};
+V.unitconv = function (d, id) {
+  const W = 'unitconv ' + id, i = d.initial || {};
+  if (!d.title) prob(W + ' に title がありません');
+  const known = k => (k === 'power' ? HM_PU : k === 'energy' ? HM_EU : null);
+  if (!known(i.kind)) prob(W + ' の initial.kind は power か energy');
+  else { if (!known(i.kind).includes(i.unit)) prob(W + ' の initial.unit "' + i.unit + '" は ' + known(i.kind).join('/') + ' のどれか'); if (!(i.value > 0)) prob(W + ' の initial.value は正の数'); }
+  (d.examples || []).forEach(x => { const k = known(x.kind); if (!k || !k.includes(x.unit) || !(x.value > 0) || !x.label) prob(W + ' の examples は {label, kind, value（正）, unit（既知）}: ' + JSON.stringify(x).slice(0, 60)); });
+};
+V.appmix = function (d, id) {
+  const W = 'appmix ' + id, devs = d.devices || [], seen = {};
+  if (devs.length < 3) prob(W + ' の devices は 3 つ以上');
+  devs.forEach(v => {
+    if (!v.id || seen[v.id]) prob(W + ' の機器 id が無いか重複: ' + v.id); seen[v.id] = 1;
+    if (!v.name || !(v.runW > 0) || !(v.hours >= 0 && v.hours <= 24)) prob(W + ' の機器 ' + v.id + ' は name・runW（正）・hours（0〜24）が必要');
+    if (!v.flat) {
+      if (!Array.isArray(v.parts) || !v.parts.length) prob(W + ' の機器 ' + v.id + ' は parts（使う時間帯の中心 c と割合 f）か flat: true が必要');
+      else { let t = 0; v.parts.forEach(p => { if (!(p.c >= 0 && p.c <= 24) || !(p.f > 0)) prob(W + ' の機器 ' + v.id + ' の parts は c（0〜24）と f（正）'); t += p.f; }); if (Math.abs(t - 1) > 0.011) prob(W + ' の機器 ' + v.id + ' の parts の f の合計が 1 ではありません（' + t + '）'); }
+    }
+  });
+  (d.presets || []).forEach(p => { if (!p.label || !p.set) prob(W + ' の presets は {label, set}'); else Object.keys(p.set).forEach(k => { if (!seen[k]) prob(W + ' の presets「' + p.label + '」の set の ' + k + ' が機器にありません'); else if (p.set[k].hrs != null && !(p.set[k].hrs >= 0 && p.set[k].hrs <= 24)) prob(W + ' の presets「' + p.label + '」の ' + k + ' の hrs が 0〜24 の外'); }); });
+};
+V.areacircle = function (d, id) {
+  const W = 'areacircle ' + id, C = d.circles || [], ids2 = {};
+  if (C.length < 3) prob(W + ' の circles は 3 つ以上');
+  C.forEach(c => { if (!c.id || ids2[c.id]) prob(W + ' の円の id が無いか重複'); ids2[c.id] = 1; if (!c.name || !(c.kw > 0) || !['home', 'axis', 'all'].includes(c.cls)) prob(W + ' の円 ' + c.id + ' は name・kw（正）・cls（home/axis/all）が必要'); });
+  if (C.filter(c => c.callout).length !== 1) prob(W + ' の callout（拡大の吹き出しにする円）はちょうど 1 つ');
+  if (!ids2[d.axisId] || !ids2[d.wholeId]) prob(W + ' の axisId・wholeId が円にありません');
+  hmRange(W, d.util, 'util');
+  if (!Array.isArray(d.says) || !d.says.length) prob(W + ' の says（説明文。{axisInst} {wholeInst} {axisQty} {wholeQty} {u} が使える）がありません');
+};
+V.bundle = function (d, id) {
+  const W = 'bundle ' + id, pl = d.plants || [], ids2 = {};
+  if (!d.house || !(d.house.kw > 0) || !Array.isArray(d.house.shape) || d.house.shape.length !== 24 || d.house.shape.some(x => !(x > 0))) prob(W + ' の house は kw（正）と shape（24 個の正の数）が必要');
+  pl.forEach(p => { if (!p.id || ids2[p.id] || !p.name || !p.short || !(p.mw > 0)) prob(W + ' の plants は id（重複なし）・name・short・mw（正）'); ids2[p.id] = 1; });
+  if (!ids2[d.axisId] || !ids2[d.wholeId]) prob(W + ' の axisId・wholeId が plants にありません');
+  if (!(d.minLoad > 0 && d.minLoad < 1)) prob(W + ' の minLoad は 0〜1 の間');
+  const n = d.n || {};
+  if (!(n.min < n.max) || !(n.step > 0) || !(n.value >= Math.pow(10, n.min) && n.value <= Math.pow(10, n.max))) prob(W + ' の n は min < max（10 の指数）・step > 0・value（世帯数）が 10^min〜10^max');
+  (n.presets || []).forEach(p => { if (!p.label || !(p.n >= Math.pow(10, n.min) && p.n <= Math.pow(10, n.max))) prob(W + ' の n.presets は {label, n（範囲内の世帯数）}'); });
+  hmRange(W, d.util, 'util'); hmRange(W, d.time, 'time');
+  if (!d.texts || !d.texts.a || !d.texts.b || !d.texts.c) prob(W + ' の texts は a・b・c の説明文が必要');
+  if (!d.axisRange || !d.caution) prob(W + ' に axisRange（軸ごとの出力の幅の説明）と caution（模型の断り）が必要');
+  if (d.n && d.axisId && d.house && !(d.house.kw > 0)) prob(W + ' house.kw');
+};
 /* ---- scale・lab（js/opt）：式は同じ評価器（js/opt/expr.js）で検査する ---- */
 const EX = require(path.join(__dirname, 'js', 'opt', 'expr.js'));
 const SC_UNITS = ['W', 'kW', 'MW', 'GW', 'TW', '万kW', '千kW', 'VA', 'kVA', 'MVA', 'GVA'], SC_EUNITS = ['Wh', 'kWh', 'MWh', 'GWh', 'TWh'];

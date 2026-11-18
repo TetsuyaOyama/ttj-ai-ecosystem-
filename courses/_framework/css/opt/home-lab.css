@@ -1,0 +1,123 @@
+/* ===== 部品 bucket・unitconv・appmix・areacircle・bundle（家庭の電気と発電所の規模）。使う章があるときだけ build.py が埋め込む ===== */
+.hm { --hm-home: #F2A65A; --hm-axis: var(--k-ext-s); --hm-all: var(--k-ran-s); --hm-ink: #151515; --hm-short: var(--ng); --hm-sur: var(--k-db-s); }
+:root[data-theme="light"] .hm { --hm-home: #B45F06; --hm-ink: #FFFFFF; }
+.hm-body { padding: .7rem .9rem .9rem; }
+.hm-intro { margin: 0 0 .6rem; font-size: .93rem; }
+.hm-top { display: grid; grid-template-columns: minmax(240px, 340px) minmax(0, 1fr); gap: 1rem; align-items: start; }
+@media (max-width: 760px) { .hm-top { grid-template-columns: 1fr; } }
+.hm-ctl, .hm-common { display: grid; gap: .7rem; min-width: 0; }
+.hm-common { margin-bottom: .6rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); align-items: start; }
+.hm-common .hm-presets, .hm-common .hm-assume { grid-column: 1 / -1; }
+.hm-right { min-width: 0; display: grid; gap: .7rem; }
+.hm-in { border: 1px solid var(--line); border-radius: 10px; padding: .5rem .7rem .6rem; background: var(--surface); }
+.hm-in-h { display: flex; justify-content: space-between; align-items: baseline; gap: .6rem; flex-wrap: wrap; }
+.hm-in-h label { font-size: .86rem; font-weight: 700; color: var(--text); }
+.hm-val { font-family: var(--ttj-font-mono); font-weight: 700; color: var(--accent); font-size: 1.02rem; }
+.hm-val.sm { font-size: .84rem; white-space: nowrap; }
+.hm-in input[type=range], .hm-dev input[type=range] { width: 100%; min-height: 36px; margin: .2rem 0 0; accent-color: var(--accent-fill); background: transparent; }
+.hm-in input[type=range]:focus-visible, .hm-dev input[type=range]:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
+.hm-minmax { display: flex; justify-content: space-between; font-size: .72rem; color: var(--faint); font-family: var(--ttj-font-mono); }
+.hm-presets { display: flex; flex-wrap: wrap; gap: .3rem; align-items: center; }
+.hm-preset-h { flex: 0 0 100%; font-size: .8rem; font-weight: 700; color: var(--muted); }
+.hm-presets .btn[aria-pressed="true"] { background: var(--accent-fill); border-color: var(--accent-fill); color: var(--accent-ink); font-weight: 700; }
+.hm-say { margin: .2rem 0 0; font-size: .86rem; color: var(--muted); line-height: 1.7; min-height: 1.3em; }
+.hm-assume { margin: 0; font-size: .8rem; color: var(--warn); line-height: 1.65; }
+.hm-caution { margin: .7rem 0 0; padding: .5rem .8rem; border-left: 4px solid var(--warn); background: var(--warn-bg); border-radius: 0 8px 8px 0; font-size: .86rem; line-height: 1.8; }
+.hm-results { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .5rem; }
+.hm-res { border: 1px solid var(--line2); border-radius: 10px; padding: .45rem .7rem; background: var(--surface2); min-width: 0; }
+.hm-res.big { border-color: var(--accent); background: var(--accent-soft); }
+.hm-res-l { font-size: .76rem; color: var(--muted); font-weight: 700; }
+.hm-res-v { font-size: .95rem; color: var(--text); } .hm-res-v b { font-size: 1.4rem; font-family: var(--ttj-font-mono); }
+.hm-res-n { font-size: .74rem; color: var(--muted); line-height: 1.55; }
+.hm-figs { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: .6rem; }
+.hm-fig { min-width: 0; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); padding: .3rem; }
+.hm-svg { display: block; max-width: 100%; height: auto; margin: 0 auto; }
+.hm-formula { margin: .7rem 0 .2rem; padding: .4rem .8rem; border-left: 4px solid var(--accent-fill); background: var(--surface2); font-size: .93rem; border-radius: 0 8px 8px 0; }
+.hm-read { margin-top: .5rem; } .hm-read h5, .hm-h5 { margin: 0 0 .15rem; font-size: .9rem; font-family: var(--ttj-font-sans); color: var(--accent); }
+.hm-read ul, .hm-notes, .hm-sent { margin: 0 0 .3rem; padding-left: 1.3rem; font-size: .9rem; line-height: 1.8; }
+.hm-sent { margin-top: .6rem; } .hm-sent li, .hm-notes li { margin: .2rem 0; }
+.hm-disc { margin: 0; padding: .35rem 1rem .5rem; font-size: .76rem; color: var(--faint); border-top: 1px solid var(--line); }
+.hm-cap { margin: .3rem 0; font-size: .78rem; color: var(--muted); line-height: 1.7; }
+.hm-table summary { cursor: pointer; }
+.hm-table { margin-top: .6rem; }
+/* SVG の文字・線 */
+.hm-t { font-size: 12.5px; fill: var(--text); font-family: var(--ttj-font-sans); } .hm-t.b { font-weight: 700; } .hm-t.sm { font-size: 11px; fill: var(--muted); font-weight: 400; }
+.hm-t.sm.b { font-weight: 700; }
+.hm-ax { font-size: 11px; fill: var(--muted); font-family: var(--ttj-font-mono); }
+.hm-acc { fill: var(--accent) !important; } .hm-on { fill: var(--hm-ink) !important; }
+.hm-home { fill: var(--hm-home) !important; }
+.hm-plot { fill: var(--surface); stroke: var(--line2); stroke-width: 1; }
+.hm-g { stroke: var(--line); stroke-width: 1; } .hm-g.v { stroke-dasharray: 2 4; }
+/* bucket */
+.hm-pipe { fill: var(--k-ue-s); } .hm-stream { fill: var(--hm-all); opacity: .85; }
+.hm-stream.flow { animation: hm-pulse 0.7s linear infinite; }
+@keyframes hm-pulse { 50% { opacity: .5; } }
+.hm-water { fill: var(--hm-all); opacity: .85; } .hm-bucket { fill: none; stroke: var(--text); stroke-width: 3; stroke-linejoin: round; stroke-linecap: round; }
+.hm-capline { stroke: var(--accent); stroke-width: 1.6; stroke-dasharray: 5 4; }
+.hm-rect { fill: var(--hm-home); opacity: .9; } .hm-rect-rest { fill: var(--hm-home); opacity: .28; } .hm-dash { stroke: var(--hm-home); stroke-width: 2.4; stroke-dasharray: 6 4; }
+/* unitconv */
+.hm-numrow { display: flex; gap: .4rem; margin-top: .3rem; }
+.hm-num, .hm-sel { min-height: 42px; border-radius: 8px; border: 1px solid var(--line2); background: var(--surface2); color: var(--text); font: inherit; font-size: 1rem; padding: 0 .5rem; min-width: 0; }
+.hm-num { flex: 1 1 auto; width: 100%; font-family: var(--ttj-font-mono); } .hm-sel { flex: 0 0 auto; }
+.hm-num:focus-visible, .hm-sel:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.hm-step { fill: var(--surface2); stroke: var(--line2); stroke-width: 1.5; } .hm-step.on { fill: var(--accent-fill); stroke: var(--accent); }
+.hm-flag { fill: var(--accent); }
+.hm-conv .tbl .num { font-family: var(--ttj-font-mono); text-align: right; white-space: nowrap; }
+.hm-conv .tbl tr.on th, .hm-conv .tbl tr.on td { background: var(--accent-soft); font-weight: 700; }
+/* appmix */
+.hm-devs { list-style: none; margin: .5rem 0 0; padding: 0; display: grid; gap: .35rem; }
+.hm-dev { display: grid; grid-template-columns: minmax(9em, 1.1fr) minmax(130px, 1.2fr) minmax(150px, 1.5fr); gap: .3rem .7rem; align-items: center; border: 1px solid var(--line); border-radius: 8px; padding: .25rem .6rem; background: var(--surface); }
+.hm-dev.off { opacity: .55; }
+.hm-dev-n { display: flex; align-items: center; gap: .45rem; font-size: .88rem; font-weight: 700; } .hm-dev-n input { width: 20px; height: 20px; accent-color: var(--accent-fill); flex: 0 0 auto; }
+.hm-dev-n label { cursor: pointer; line-height: 1.5; }
+.hm-dev-s { display: flex; align-items: center; gap: .5rem; } .hm-dev-s input[type=range] { margin: 0; flex: 1 1 auto; min-width: 0; } .hm-dev-s output { flex: 0 0 4.4em; text-align: right; }
+.hm-dev-b { display: flex; align-items: center; gap: .5rem; min-width: 0; }
+.hm-bar { flex: 0 0 38%; height: 12px; border-radius: 6px; background: var(--surface2); border: 1px solid var(--line); overflow: hidden; } .hm-bar i { display: block; height: 100%; background: var(--hm-home); }
+.hm-bv { font-size: .76rem; color: var(--muted); font-family: var(--ttj-font-mono); line-height: 1.4; }
+@media (max-width: 760px) { .hm-dev { grid-template-columns: 1fr; gap: .1rem; } .hm-dev-b { padding-bottom: .2rem; } }
+.hm-tracks { margin-top: .8rem; }
+.hm-trk { display: flex; align-items: center; gap: .5rem; min-height: 22px; margin: 2px 0; font-size: .78rem; } .hm-trk.off { opacity: .45; }
+.hm-trk-n { flex: 0 0 8.2em; color: var(--text); line-height: 1.3; text-align: right; }
+.hm-trk-b { position: relative; flex: 1 1 auto; height: 16px; border-radius: 4px; background: var(--surface2); border: 1px solid var(--line); }
+.hm-trk-b i.seg { position: absolute; top: 0; bottom: 0; background: var(--hm-home); border-radius: 3px; }
+.hm-trk-b i.seg.flat { background: var(--hm-home); border-radius: 0; }
+.hm-trk-ax .hm-trk-b { background: transparent; border: 0; height: 14px; } .hm-trk-ax .hm-trk-b i { position: absolute; top: 0; transform: translateX(-50%); font-style: normal; font-size: .72rem; color: var(--muted); font-family: var(--ttj-font-mono); }
+.hm-trk-ax .hm-trk-n { color: var(--muted); }
+.hm-area { fill: var(--hm-home); fill-opacity: .55; stroke: var(--hm-home); stroke-width: 1.5; stroke-linejoin: round; }
+.hm-avgline { stroke: var(--accent); stroke-width: 2; stroke-dasharray: 6 4; } .hm-pk { fill: var(--text); stroke: var(--bg); stroke-width: 2; }
+/* areacircle */
+.hm-circles { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: .6rem; margin-top: .4rem; }
+.hm-circ { stroke: var(--bg); stroke-width: 2; } .hm-circ.home { fill: var(--hm-home); } .hm-circ.axis { fill: var(--hm-axis); } .hm-circ.all { fill: var(--hm-all); }
+.hm-ghost { fill: none; stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 4 4; } .hm-lead { stroke: var(--muted); stroke-width: 1.2; }
+/* bundle */
+.hm-track { fill: var(--surface); stroke: var(--line); } .hm-bar-home { fill: var(--hm-home); }
+.hm-tick { stroke: var(--line2); stroke-width: 1.5; }
+.hm-ref { stroke-width: 2.4; } .hm-ref.c-axis { stroke: var(--hm-axis); } .hm-ref.c-all { stroke: var(--hm-all); }
+.hm-t.c-axis { fill: var(--hm-axis); } .hm-t.c-all { fill: var(--hm-all); }
+.hm-hit { stroke: var(--bg); stroke-width: 2; } .hm-hit.c-axis { fill: var(--hm-axis); } .hm-hit.c-all { fill: var(--hm-all); }
+.hm-bctl { display: grid; gap: .6rem; margin: .4rem 0 .5rem; }
+.hm-radio { display: flex; flex-wrap: wrap; gap: .3rem; align-items: center; } .hm-radio-l { font-size: .8rem; font-weight: 700; color: var(--muted); flex: 0 0 100%; }
+.hm-radio .btn[aria-pressed="true"] { background: var(--accent-fill); border-color: var(--accent-fill); color: var(--accent-ink); font-weight: 700; }
+.hm-dem { fill: none; stroke: var(--hm-home); stroke-width: 3.2; stroke-linejoin: round; stroke-linecap: round; }
+.hm-sup { fill: none; stroke-width: 2.4; opacity: .5; } .hm-sup.sel { opacity: 1; stroke-width: 3; } .hm-sup.follow { stroke-dasharray: 7 4; }
+.hm-sup.c-axis { stroke: var(--hm-axis); } .hm-sup.c-all { stroke: var(--hm-all); }
+.hm-rating { stroke: var(--muted); stroke-width: 1.4; stroke-dasharray: 2 3; }
+.hm-cursor { stroke: var(--text); stroke-width: 1.2; stroke-dasharray: 3 3; opacity: .8; }
+.hm-dot-home { fill: var(--hm-home); stroke: var(--bg); stroke-width: 2; } .hm-dot-sup { stroke: var(--bg); stroke-width: 2; } .hm-dot-sup.c-axis { fill: var(--hm-axis); } .hm-dot-sup.c-all { fill: var(--hm-all); }
+.hm-short, .hm-sur { stroke: none; }
+.hm-pat-bg-short { fill: var(--hm-short); fill-opacity: .22; } .hm-pat-ln-short { stroke: var(--hm-short); stroke-width: 2; }
+.hm-pat-bg-sur { fill: var(--hm-sur); fill-opacity: .18; } .hm-pat-ln-sur { stroke: var(--hm-sur); stroke-width: 2; }
+.hm-legend { display: flex; flex-wrap: wrap; gap: .3rem 1rem; margin: .4rem 0; font-size: .8rem; color: var(--muted); }
+.hm-lg { display: inline-flex; align-items: center; gap: .35rem; } .hm-lg svg { flex: 0 0 auto; }
+.hm-lg .hm-short { color: var(--hm-short); } .hm-lg .hm-sur { color: var(--hm-sur); }
+.hm-house { fill: var(--hm-home); }
+.hm-bus { stroke: var(--line2); stroke-width: 4; stroke-linecap: round; } .hm-bus.thin { stroke-width: 2; stroke-dasharray: 2 4; }
+.hm-axis-box { fill: var(--surface); stroke: var(--hm-axis); stroke-width: 2; } .hm-axis-fill { fill: var(--hm-axis); opacity: .8; }
+.hm-bolt { fill: var(--muted); } .hm-bolt.on { fill: var(--hm-ink); }
+@media print { .hm-presets, .hm-in input, .hm-bctl, .hm-play { display: none !important; } .hm-table { display: block; } .hm-table > * { display: block; } }
+@media (prefers-reduced-motion: reduce) { .hm-stream.flow { animation: none !important; } }
+.hm-conv { overflow-x: auto; max-width: 100%; } .hm-fig { min-width: 0; max-width: 100%; }
+.hm-conv table.tbl { min-width: 0; } .hm-conv .tbl th, .hm-conv .tbl td { padding: .35rem .6rem; }
+.hm-halo { paint-order: stroke; stroke: var(--bg); stroke-width: 4px; stroke-linejoin: round; }
+.hm-trk-ax .hm-trk-b i { white-space: nowrap; } .hm-trk-ax .hm-trk-b i:last-child { transform: translateX(-100%); } .hm-trk-ax .hm-trk-b i:first-child { transform: none; }
+.hm-lens { fill: none; stroke: var(--muted); stroke-width: 1.2; }

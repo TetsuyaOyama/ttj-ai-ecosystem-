@@ -382,6 +382,58 @@ def widget_ops(page, ch, label):
             w.locator('.lab-table summary').click()
             ok(w.locator('.lab-table tbody tr').count() >= 1, '%s %s lab: 同じ内容の表' % (label, ch))
         ok('学習用の模型' in w.inner_text(), '%s %s lab: 免責の表示' % (label, ch))
+    # 家庭の電気の部品（bucket / unitconv / appmix / areacircle / bundle）
+    for kind in ('bucket', 'unitconv', 'appmix', 'areacircle', 'bundle'):
+        for w in root.locator('[data-widget=%s]' % kind).all():
+            ok('学習用の模型' in w.inner_text(), '%s %s %s: 免責の表示' % (label, ch, kind))
+            ok(w.locator('svg').count() >= 1 or kind == 'appmix', '%s %s %s: 図がある' % (label, ch, kind))
+    for w in root.locator('[data-widget=bucket]').all():
+        r = w.locator('input[type=range]').first
+        t0 = w.locator('.hm-results').inner_text()
+        r.focus(); r.press('ArrowRight'); r.press('ArrowRight'); r.press('ArrowRight')
+        ok(w.locator('.hm-results').inner_text() != t0, '%s %s bucket: つまみで結果が変わる' % (label, ch))
+        w.locator('details summary').first.click()
+        ok(w.locator('details tbody tr').count() >= 1, '%s %s bucket: 同じ内容の表' % (label, ch))
+    for w in root.locator('[data-widget=unitconv]').all():
+        n = w.locator('input[type=number]').first
+        n.fill('2')
+        ok('2' in w.locator('.hm-say').inner_text(), '%s %s unitconv: 入力が換算文に出る' % (label, ch))
+        tabs = w.locator('.wg-tabs button')
+        if tabs.count() >= 2:
+            tabs.nth(1).click(); tabs.first.click()
+        ok(w.locator('.hm-convt tbody tr').count() >= 5, '%s %s unitconv: 全単位の表' % (label, ch))
+    for w in root.locator('[data-widget=appmix]').all():
+        cb = w.locator('input[type=checkbox]').first
+        t0 = w.locator('.hm-results').inner_text()
+        cb.uncheck()
+        ok(w.locator('.hm-results').inner_text() != t0, '%s %s appmix: 機器を外すと合計が変わる' % (label, ch))
+        cb.check()
+        ok(w.locator('.hm-results').inner_text() == t0, '%s %s appmix: 戻すと元の値' % (label, ch))
+        ok(w.locator('.hm-track, .hm-trk').count() >= 1, '%s %s appmix: 時間帯の帯' % (label, ch))
+    for w in root.locator('[data-widget=areacircle]').all():
+        t0 = w.locator('svg').first.get_attribute('aria-label') or ''
+        r = w.locator('input[type=range]').first
+        r.focus(); r.press('ArrowLeft'); r.press('ArrowLeft')
+        ok(w.inner_text() != '' and w.locator('svg').count() >= 2, '%s %s areacircle: 2 つの図' % (label, ch))
+    for w in root.locator('[data-widget=bundle]').all():
+        tabs = w.locator('.wg-tabs button')
+        ok(tabs.count() == 3, '%s %s bundle: 3 つのタブ' % (label, ch))
+        n = w.locator('input[type=range]').first
+        t0 = w.locator('.hm-results').inner_text() if w.locator('.hm-results').count() else w.inner_text()
+        n.focus(); n.press('ArrowRight'); n.press('ArrowRight')
+        t1 = w.locator('.hm-results').inner_text() if w.locator('.hm-results').count() else w.inner_text()
+        ok(t1 != t0, '%s %s bundle: 世帯数のつまみで結果が変わる' % (label, ch))
+        for i in range(3):
+            tabs.nth(i).click()
+            ok(w.locator('svg').count() >= 1, '%s %s bundle: タブ %d に図' % (label, ch, i + 1))
+        tabs.nth(1).click()
+        tt = w.locator('input[type=range]').nth(2)
+        tt.focus(); tt.press('ArrowRight')
+        ok(w.locator('.hm-sur, .hm-short').count() >= 0, '%s %s bundle: 時刻のつまみ' % (label, ch))
+        w.locator('details summary').first.click()
+        ok(w.locator('details tbody tr').count() >= 3, '%s %s bundle: 同じ内容の表' % (label, ch))
+        tabs.first.click()
+        ok('模型' in w.inner_text(), '%s %s bundle: 模型の注意' % (label, ch))
     # 代替テキスト：図（svg）には名前がある
     bad = page.evaluate('''(id)=>[...document.querySelectorAll('#'+id+' .wg svg')].filter(s=>!s.getAttribute('aria-hidden')&&!s.getAttribute('aria-label')).length''', ch)
     ok(bad == 0, '%s %s: aria-label のない図（代替テキスト）が %d 個' % (label, ch, bad))

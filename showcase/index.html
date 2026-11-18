@@ -193,6 +193,8 @@ section { padding: var(--ttj-space-7) 0 0; }
 .card .progress { margin: var(--ttj-space-2) 0 0; }
 .card .progress span { display: inline-block; font-family: var(--ttj-font-mono); font-size: 0.75rem; line-height: 1.4; padding: 2px var(--ttj-space-3); border-radius: var(--ttj-radius-pill); border: 1px dashed var(--ttj-gold-500); color: var(--ttj-text); }
 .card .desc { margin: var(--ttj-space-2) 0 var(--ttj-space-3); font-size: var(--ttj-text-sm); color: var(--ttj-text-muted); flex: 1; }
+.card .sub-link { margin: 0 0 var(--ttj-space-3); font-size: var(--ttj-text-sm); }
+.card .sub-link a { display: inline-block; padding: var(--ttj-space-2) 0; font-weight: 700; }
 .tags { list-style: none; margin: 0 0 var(--ttj-space-4); padding: 0; display: flex; flex-wrap: wrap; gap: var(--ttj-space-2); }
 .tags li {
   font-family: var(--ttj-font-mono); font-size: 0.75rem; line-height: 1.4;
@@ -316,6 +318,7 @@ footer a:hover { color: var(--ttj-gold-200); }
   html[data-theme="dark"] .chips.gold li { background: rgba(201,162,39,.12); border-color: rgba(201,162,39,.55); color: var(--ttj-gold-200); }
   html[data-theme="dark"] .about code { background: var(--ttj-bg-subtle); color: var(--ttj-gold-200); padding: 0 .3em; border-radius: var(--ttj-radius-sm); }
   html[data-theme="dark"] .repo-link a { color: var(--ttj-link); }
+  html[data-theme="dark"] .card .sub-link a { color: var(--ttj-link); }
   html[data-theme="dark"] footer { background: var(--ttj-navy-900); }
 }
 </style>
@@ -818,14 +821,15 @@ footer a:hover { color: var(--ttj-gold-200); }
               <rect x="284" y="84" width="12" height="66" rx="2" fill="#14305A" stroke="#8CA3C4" stroke-width="1.2"/>
                             <path d="M214 78 H240 V40 H304" fill="none" stroke="#C9A227" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
               <g fill="none" stroke="#8CA3C4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M272 40 l-8 -16 M272 40 l8 -16 M264 24 h16 M266 31 h12 M272 24 v-6"/></g>
-              <text x="14" y="152" fill="#EEDDA0" font-size="11" font-family="monospace">2 + 32 ch.</text>
+              <text x="14" y="152" fill="#EEDDA0" font-size="11" font-family="monospace">3 + 32 ch.</text>
             </svg>
           </div>
           <div class="card-body">
             <p class="field">発電・ガスタービン</p>
             <h3>発電講義 ― 発電事業とコンバインドサイクル発電用ガスタービン</h3>
-            <p class="progress"><span>序章2本＋全32章</span></p>
-            <p class="desc">序章2本と全32章。電力の大きさの対話型の比較と式を動かす実験台、電力系統と発電事業、熱とサイクルの線図、ガスタービンの構造と燃焼調整、コンバインドサイクル発電所の設備、制御盤とインターロック、運転・保守、建設・環境・脱炭素までを扱います。確認問題 99 問・総合テスト 40 問・用語 224 語つきで、全章を公開中。公開情報だけを出典にし、企業や機種の優劣は評価しません。</p>
+            <p class="progress"><span>序章3本＋全32章</span></p>
+            <p class="desc">序章3本と全32章。電力の大きさの対話型の比較と式を動かす実験台、家庭の電気と発電所の規模を、円の面積と「束ねる」装置で比べる特設ページ、電力系統と発電事業、熱とサイクルの線図、ガスタービンの構造と燃焼調整、コンバインドサイクル発電所の設備、制御盤とインターロック、運転・保守、建設・環境・脱炭素までを扱います。確認問題 102 問・総合テスト 40 問・用語 227 語つきで、全章を公開中。公開情報だけを出典にし、企業や機種の優劣は評価しません。</p>
+            <p class="sub-link"><a href="power/#chI3" aria-label="特設ページ 家庭と発電所をくらべる（発電講義の序章3）を開く">特設: 家庭と発電所をくらべる →</a></p>
             <ul class="tags" aria-label="技術タグ"><li>発電事業</li><li>ガスタービン</li><li>コンバインドサイクル</li><li>図とクイズ</li><li>公開情報</li></ul>
             <a class="btn" href="power/" aria-label="発電講義を開く">開く
               <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
@@ -964,7 +968,7 @@ footer a:hover { color: var(--ttj-gold-200); }
           <li><strong>半導体</strong><span>物性から製造装置・装置輸送まで（全32章）</span></li>
           <li><strong>計算サーバー</strong><span>機器・電源と冷却・制御から産業・政策まで（全32章）</span></li>
           <li><strong>自作PC</strong><span>部品選びから組み立て・調整・保守まで（全26章）</span></li>
-          <li><strong>発電・ガスタービン</strong><span>電力系統・発電事業からガスタービンと発電所の設備・運転まで（序章2本＋全32章）</span></li>
+          <li><strong>発電・ガスタービン</strong><span>電力系統・発電事業からガスタービンと発電所の設備・運転まで（序章3本＋全32章）</span></li>
           <li><strong>金融</strong><span>金利と国債、取引所の金利デリバティブ、指数オプション（3 講座）</span></li>
         </ul>
       </div>

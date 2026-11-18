@@ -33,9 +33,10 @@ FW = Path(__file__).resolve().parent
 RESERVED_PREFIXES = ['cn.']          # コアネットワーク講義（既存）が使っている保存キーの接頭辞
 FORBIDDEN_TEXT = ['\u30d3\u30c3\u30b0\u30de\u30a6\u30f3\u30c6\u30f3', '\u30c6\u30c4\u30e4', '\u3066\u3063\u3061']   # 出力に作者名・ハンドルを入れない（ソースに名前を書かないため、エスケープで書く）
 VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'}
-KNOWN_WIDGETS = {'arch', 'seq', 'stack', 'ident', 'table', 'qos', 'tree', 'keys', 'state', 'drill', 'quiz', 'compare', 'flow', 'layers', 'xsec', 'route', 'glossary', 'mapping', 'exam', 'scale', 'lab', 'strip'}
+KNOWN_WIDGETS = {'arch', 'seq', 'stack', 'ident', 'table', 'qos', 'tree', 'keys', 'state', 'drill', 'quiz', 'compare', 'flow', 'layers', 'xsec', 'route', 'glossary', 'mapping', 'exam', 'scale', 'lab', 'strip', 'bucket', 'unitconv', 'appmix', 'areacircle', 'bundle'}
 NO_SRC = {'glossary', 'mapping', 'exam'}
-OPT_WIDGETS = {'scale', 'lab', 'strip'}        # js/opt・css/opt のエンジンが要る部品
+HOME_WIDGETS = {'bucket', 'unitconv', 'appmix', 'areacircle', 'bundle'}   # js/opt/home-lab.js・css/opt/home-lab.css（家庭の電気と発電所の規模の部品。FRAMEWORK.md §4.12）
+OPT_WIDGETS = {'scale', 'lab', 'strip'} | HOME_WIDGETS        # js/opt・css/opt のエンジンが要る部品
 DEMO_PART = {'id': 'S', 'name': '部品見本（--demo のときだけ）', 'short': '部品見本', 'appendix': True}
 errors, warns = [], []
 
@@ -637,7 +638,7 @@ def build(cdir, demo=False, check_only=False, publish=None, out_arg=None):
         node_check(f.name, code)
         eng.append('/* ==== %s ==== */\n%s' % (f.name, js_safe(f.name, code)))
     used_w = set(re.findall(r'data-widget="(\w+)"', ' '.join(m['body'] for m in chapters.values())))
-    opt_use = lambda name: ('strip' in used_w) if name.startswith('strip-') else bool(used_w & {'scale', 'lab'})   # strip は strip-*.js だけ。scale・lab は strip を使うだけの講座には入れない
+    opt_use = lambda name: ('strip' in used_w) if name.startswith('strip-') else (bool(used_w & HOME_WIDGETS) if name.startswith('home-') else bool(used_w & {'scale', 'lab'}))   # strip は strip-*.js だけ、home 系は home-*.js だけ。scale・lab は strip・home 系を使うだけの講座には入れない
     if used_w & OPT_WIDGETS:      # scale・lab・strip：使う章があるときだけ埋め込む（使わない講座の出力は変わらない）
         for f in sorted((FW / 'js' / 'opt').glob('*.js')):
             if not opt_use(f.name):
@@ -648,7 +649,7 @@ def build(cdir, demo=False, check_only=False, publish=None, out_arg=None):
     boot = read(FW / 'js' / 'boot.js')
     css = '\n'.join('/* ==== %s ==== */\n%s' % (f.name, read(f)) for f in sorted((FW / 'css').glob('*.css')))
     if used_w & OPT_WIDGETS:
-        css = css.replace('/* ==== 90-print.css ==== */', '\n'.join('/* ==== opt/%s ==== */\n%s' % (f.name, read(f)) for f in sorted((FW / 'css' / 'opt').glob('*.css')) if (('strip' in used_w) if f.name.startswith('strip-') else True)) + '\n/* ==== 90-print.css ==== */', 1)
+        css = css.replace('/* ==== 90-print.css ==== */', '\n'.join('/* ==== opt/%s ==== */\n%s' % (f.name, read(f)) for f in sorted((FW / 'css' / 'opt').glob('*.css')) if (('strip' in used_w) if f.name.startswith('strip-') else (bool(used_w & HOME_WIDGETS) if f.name.startswith('home-') else bool(used_w & {'scale', 'lab', 'strip'})))) + '\n/* ==== 90-print.css ==== */', 1)
     if accent:
         css += accent_css(accent)
     if theme_css:

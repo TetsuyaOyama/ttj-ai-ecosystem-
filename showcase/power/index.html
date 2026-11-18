@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>発電講義 | TTJ</title>
-<meta name="description" content="電力系統と発電事業の仕組みから、熱とサイクルの原理、ガスタービンと発電所の機器、起動・運転・保守、建設と試運転、産業の構造と脱炭素の技術までを、序章2本と全32章で一続きに学ぶ講座です。公開情報だけを使い、数字には出典と時点と条件を付けています。企業や機種の優劣の評価、投資の推奨はしません。">
+<meta name="description" content="電力系統と発電事業の仕組みから、熱とサイクルの原理、ガスタービンと発電所の機器、起動・運転・保守、建設と試運転、産業の構造と脱炭素の技術までを、序章3本と全32章で一続きに学ぶ講座です。公開情報だけを使い、数字には出典と時点と条件を付けています。企業や機種の優劣の評価、投資の推奨はしません。">
 <meta name="author" content="TTJ">
 <meta name="theme-color" content="#151515">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="TTJ">
 <meta property="og:locale" content="ja_JP">
 <meta property="og:title" content="発電講義：発電事業とコンバインドサイクル発電用ガスタービン">
-<meta property="og:description" content="電力系統と発電事業の仕組みから、熱とサイクルの原理、ガスタービンと発電所の機器、運転・保守、産業と脱炭素の技術までを、図を動かしながら学ぶ序章2本と全32章の講座。公開情報だけを使い、数字には出典と時点と条件を付けています。優劣の評価と投資の推奨はしません。">
+<meta property="og:description" content="電力系統と発電事業の仕組みから、熱とサイクルの原理、ガスタービンと発電所の機器、運転・保守、産業と脱炭素の技術までを、図を動かしながら学ぶ序章3本と全32章の講座。公開情報だけを使い、数字には出典と時点と条件を付けています。優劣の評価と投資の推奨はしません。">
 <meta name="twitter:card" content="summary">
 <script>try{if(JSON.parse(localStorage.getItem("power."+'theme'))==='light')document.documentElement.setAttribute('data-theme','light');}catch(e){}</script>
 <style>
@@ -563,6 +563,131 @@ table.qos tbody tr[aria-selected="true"] td:first-child, table.qos tbody tr[aria
 .legend i.pt-a { background: var(--pt-a); } .legend i.pt-b { background: var(--pt-b); } .legend i.pt-c { background: var(--pt-c); } .legend i.pt-d { background: var(--pt-d); }
 .rt-table table { min-width: 420px; }
 
+/* ==== opt/home-lab.css ==== */
+/* ===== 部品 bucket・unitconv・appmix・areacircle・bundle（家庭の電気と発電所の規模）。使う章があるときだけ build.py が埋め込む ===== */
+.hm { --hm-home: #F2A65A; --hm-axis: var(--k-ext-s); --hm-all: var(--k-ran-s); --hm-ink: #151515; --hm-short: var(--ng); --hm-sur: var(--k-db-s); }
+:root[data-theme="light"] .hm { --hm-home: #B45F06; --hm-ink: #FFFFFF; }
+.hm-body { padding: .7rem .9rem .9rem; }
+.hm-intro { margin: 0 0 .6rem; font-size: .93rem; }
+.hm-top { display: grid; grid-template-columns: minmax(240px, 340px) minmax(0, 1fr); gap: 1rem; align-items: start; }
+@media (max-width: 760px) { .hm-top { grid-template-columns: 1fr; } }
+.hm-ctl, .hm-common { display: grid; gap: .7rem; min-width: 0; }
+.hm-common { margin-bottom: .6rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); align-items: start; }
+.hm-common .hm-presets, .hm-common .hm-assume { grid-column: 1 / -1; }
+.hm-right { min-width: 0; display: grid; gap: .7rem; }
+.hm-in { border: 1px solid var(--line); border-radius: 10px; padding: .5rem .7rem .6rem; background: var(--surface); }
+.hm-in-h { display: flex; justify-content: space-between; align-items: baseline; gap: .6rem; flex-wrap: wrap; }
+.hm-in-h label { font-size: .86rem; font-weight: 700; color: var(--text); }
+.hm-val { font-family: var(--ttj-font-mono); font-weight: 700; color: var(--accent); font-size: 1.02rem; }
+.hm-val.sm { font-size: .84rem; white-space: nowrap; }
+.hm-in input[type=range], .hm-dev input[type=range] { width: 100%; min-height: 36px; margin: .2rem 0 0; accent-color: var(--accent-fill); background: transparent; }
+.hm-in input[type=range]:focus-visible, .hm-dev input[type=range]:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
+.hm-minmax { display: flex; justify-content: space-between; font-size: .72rem; color: var(--faint); font-family: var(--ttj-font-mono); }
+.hm-presets { display: flex; flex-wrap: wrap; gap: .3rem; align-items: center; }
+.hm-preset-h { flex: 0 0 100%; font-size: .8rem; font-weight: 700; color: var(--muted); }
+.hm-presets .btn[aria-pressed="true"] { background: var(--accent-fill); border-color: var(--accent-fill); color: var(--accent-ink); font-weight: 700; }
+.hm-say { margin: .2rem 0 0; font-size: .86rem; color: var(--muted); line-height: 1.7; min-height: 1.3em; }
+.hm-assume { margin: 0; font-size: .8rem; color: var(--warn); line-height: 1.65; }
+.hm-caution { margin: .7rem 0 0; padding: .5rem .8rem; border-left: 4px solid var(--warn); background: var(--warn-bg); border-radius: 0 8px 8px 0; font-size: .86rem; line-height: 1.8; }
+.hm-results { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .5rem; }
+.hm-res { border: 1px solid var(--line2); border-radius: 10px; padding: .45rem .7rem; background: var(--surface2); min-width: 0; }
+.hm-res.big { border-color: var(--accent); background: var(--accent-soft); }
+.hm-res-l { font-size: .76rem; color: var(--muted); font-weight: 700; }
+.hm-res-v { font-size: .95rem; color: var(--text); } .hm-res-v b { font-size: 1.4rem; font-family: var(--ttj-font-mono); }
+.hm-res-n { font-size: .74rem; color: var(--muted); line-height: 1.55; }
+.hm-figs { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: .6rem; }
+.hm-fig { min-width: 0; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); padding: .3rem; }
+.hm-svg { display: block; max-width: 100%; height: auto; margin: 0 auto; }
+.hm-formula { margin: .7rem 0 .2rem; padding: .4rem .8rem; border-left: 4px solid var(--accent-fill); background: var(--surface2); font-size: .93rem; border-radius: 0 8px 8px 0; }
+.hm-read { margin-top: .5rem; } .hm-read h5, .hm-h5 { margin: 0 0 .15rem; font-size: .9rem; font-family: var(--ttj-font-sans); color: var(--accent); }
+.hm-read ul, .hm-notes, .hm-sent { margin: 0 0 .3rem; padding-left: 1.3rem; font-size: .9rem; line-height: 1.8; }
+.hm-sent { margin-top: .6rem; } .hm-sent li, .hm-notes li { margin: .2rem 0; }
+.hm-disc { margin: 0; padding: .35rem 1rem .5rem; font-size: .76rem; color: var(--faint); border-top: 1px solid var(--line); }
+.hm-cap { margin: .3rem 0; font-size: .78rem; color: var(--muted); line-height: 1.7; }
+.hm-table summary { cursor: pointer; }
+.hm-table { margin-top: .6rem; }
+/* SVG の文字・線 */
+.hm-t { font-size: 12.5px; fill: var(--text); font-family: var(--ttj-font-sans); } .hm-t.b { font-weight: 700; } .hm-t.sm { font-size: 11px; fill: var(--muted); font-weight: 400; }
+.hm-t.sm.b { font-weight: 700; }
+.hm-ax { font-size: 11px; fill: var(--muted); font-family: var(--ttj-font-mono); }
+.hm-acc { fill: var(--accent) !important; } .hm-on { fill: var(--hm-ink) !important; }
+.hm-home { fill: var(--hm-home) !important; }
+.hm-plot { fill: var(--surface); stroke: var(--line2); stroke-width: 1; }
+.hm-g { stroke: var(--line); stroke-width: 1; } .hm-g.v { stroke-dasharray: 2 4; }
+/* bucket */
+.hm-pipe { fill: var(--k-ue-s); } .hm-stream { fill: var(--hm-all); opacity: .85; }
+.hm-stream.flow { animation: hm-pulse 0.7s linear infinite; }
+@keyframes hm-pulse { 50% { opacity: .5; } }
+.hm-water { fill: var(--hm-all); opacity: .85; } .hm-bucket { fill: none; stroke: var(--text); stroke-width: 3; stroke-linejoin: round; stroke-linecap: round; }
+.hm-capline { stroke: var(--accent); stroke-width: 1.6; stroke-dasharray: 5 4; }
+.hm-rect { fill: var(--hm-home); opacity: .9; } .hm-rect-rest { fill: var(--hm-home); opacity: .28; } .hm-dash { stroke: var(--hm-home); stroke-width: 2.4; stroke-dasharray: 6 4; }
+/* unitconv */
+.hm-numrow { display: flex; gap: .4rem; margin-top: .3rem; }
+.hm-num, .hm-sel { min-height: 42px; border-radius: 8px; border: 1px solid var(--line2); background: var(--surface2); color: var(--text); font: inherit; font-size: 1rem; padding: 0 .5rem; min-width: 0; }
+.hm-num { flex: 1 1 auto; width: 100%; font-family: var(--ttj-font-mono); } .hm-sel { flex: 0 0 auto; }
+.hm-num:focus-visible, .hm-sel:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.hm-step { fill: var(--surface2); stroke: var(--line2); stroke-width: 1.5; } .hm-step.on { fill: var(--accent-fill); stroke: var(--accent); }
+.hm-flag { fill: var(--accent); }
+.hm-conv .tbl .num { font-family: var(--ttj-font-mono); text-align: right; white-space: nowrap; }
+.hm-conv .tbl tr.on th, .hm-conv .tbl tr.on td { background: var(--accent-soft); font-weight: 700; }
+/* appmix */
+.hm-devs { list-style: none; margin: .5rem 0 0; padding: 0; display: grid; gap: .35rem; }
+.hm-dev { display: grid; grid-template-columns: minmax(9em, 1.1fr) minmax(130px, 1.2fr) minmax(150px, 1.5fr); gap: .3rem .7rem; align-items: center; border: 1px solid var(--line); border-radius: 8px; padding: .25rem .6rem; background: var(--surface); }
+.hm-dev.off { opacity: .55; }
+.hm-dev-n { display: flex; align-items: center; gap: .45rem; font-size: .88rem; font-weight: 700; } .hm-dev-n input { width: 20px; height: 20px; accent-color: var(--accent-fill); flex: 0 0 auto; }
+.hm-dev-n label { cursor: pointer; line-height: 1.5; }
+.hm-dev-s { display: flex; align-items: center; gap: .5rem; } .hm-dev-s input[type=range] { margin: 0; flex: 1 1 auto; min-width: 0; } .hm-dev-s output { flex: 0 0 4.4em; text-align: right; }
+.hm-dev-b { display: flex; align-items: center; gap: .5rem; min-width: 0; }
+.hm-bar { flex: 0 0 38%; height: 12px; border-radius: 6px; background: var(--surface2); border: 1px solid var(--line); overflow: hidden; } .hm-bar i { display: block; height: 100%; background: var(--hm-home); }
+.hm-bv { font-size: .76rem; color: var(--muted); font-family: var(--ttj-font-mono); line-height: 1.4; }
+@media (max-width: 760px) { .hm-dev { grid-template-columns: 1fr; gap: .1rem; } .hm-dev-b { padding-bottom: .2rem; } }
+.hm-tracks { margin-top: .8rem; }
+.hm-trk { display: flex; align-items: center; gap: .5rem; min-height: 22px; margin: 2px 0; font-size: .78rem; } .hm-trk.off { opacity: .45; }
+.hm-trk-n { flex: 0 0 8.2em; color: var(--text); line-height: 1.3; text-align: right; }
+.hm-trk-b { position: relative; flex: 1 1 auto; height: 16px; border-radius: 4px; background: var(--surface2); border: 1px solid var(--line); }
+.hm-trk-b i.seg { position: absolute; top: 0; bottom: 0; background: var(--hm-home); border-radius: 3px; }
+.hm-trk-b i.seg.flat { background: var(--hm-home); border-radius: 0; }
+.hm-trk-ax .hm-trk-b { background: transparent; border: 0; height: 14px; } .hm-trk-ax .hm-trk-b i { position: absolute; top: 0; transform: translateX(-50%); font-style: normal; font-size: .72rem; color: var(--muted); font-family: var(--ttj-font-mono); }
+.hm-trk-ax .hm-trk-n { color: var(--muted); }
+.hm-area { fill: var(--hm-home); fill-opacity: .55; stroke: var(--hm-home); stroke-width: 1.5; stroke-linejoin: round; }
+.hm-avgline { stroke: var(--accent); stroke-width: 2; stroke-dasharray: 6 4; } .hm-pk { fill: var(--text); stroke: var(--bg); stroke-width: 2; }
+/* areacircle */
+.hm-circles { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: .6rem; margin-top: .4rem; }
+.hm-circ { stroke: var(--bg); stroke-width: 2; } .hm-circ.home { fill: var(--hm-home); } .hm-circ.axis { fill: var(--hm-axis); } .hm-circ.all { fill: var(--hm-all); }
+.hm-ghost { fill: none; stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 4 4; } .hm-lead { stroke: var(--muted); stroke-width: 1.2; }
+/* bundle */
+.hm-track { fill: var(--surface); stroke: var(--line); } .hm-bar-home { fill: var(--hm-home); }
+.hm-tick { stroke: var(--line2); stroke-width: 1.5; }
+.hm-ref { stroke-width: 2.4; } .hm-ref.c-axis { stroke: var(--hm-axis); } .hm-ref.c-all { stroke: var(--hm-all); }
+.hm-t.c-axis { fill: var(--hm-axis); } .hm-t.c-all { fill: var(--hm-all); }
+.hm-hit { stroke: var(--bg); stroke-width: 2; } .hm-hit.c-axis { fill: var(--hm-axis); } .hm-hit.c-all { fill: var(--hm-all); }
+.hm-bctl { display: grid; gap: .6rem; margin: .4rem 0 .5rem; }
+.hm-radio { display: flex; flex-wrap: wrap; gap: .3rem; align-items: center; } .hm-radio-l { font-size: .8rem; font-weight: 700; color: var(--muted); flex: 0 0 100%; }
+.hm-radio .btn[aria-pressed="true"] { background: var(--accent-fill); border-color: var(--accent-fill); color: var(--accent-ink); font-weight: 700; }
+.hm-dem { fill: none; stroke: var(--hm-home); stroke-width: 3.2; stroke-linejoin: round; stroke-linecap: round; }
+.hm-sup { fill: none; stroke-width: 2.4; opacity: .5; } .hm-sup.sel { opacity: 1; stroke-width: 3; } .hm-sup.follow { stroke-dasharray: 7 4; }
+.hm-sup.c-axis { stroke: var(--hm-axis); } .hm-sup.c-all { stroke: var(--hm-all); }
+.hm-rating { stroke: var(--muted); stroke-width: 1.4; stroke-dasharray: 2 3; }
+.hm-cursor { stroke: var(--text); stroke-width: 1.2; stroke-dasharray: 3 3; opacity: .8; }
+.hm-dot-home { fill: var(--hm-home); stroke: var(--bg); stroke-width: 2; } .hm-dot-sup { stroke: var(--bg); stroke-width: 2; } .hm-dot-sup.c-axis { fill: var(--hm-axis); } .hm-dot-sup.c-all { fill: var(--hm-all); }
+.hm-short, .hm-sur { stroke: none; }
+.hm-pat-bg-short { fill: var(--hm-short); fill-opacity: .22; } .hm-pat-ln-short { stroke: var(--hm-short); stroke-width: 2; }
+.hm-pat-bg-sur { fill: var(--hm-sur); fill-opacity: .18; } .hm-pat-ln-sur { stroke: var(--hm-sur); stroke-width: 2; }
+.hm-legend { display: flex; flex-wrap: wrap; gap: .3rem 1rem; margin: .4rem 0; font-size: .8rem; color: var(--muted); }
+.hm-lg { display: inline-flex; align-items: center; gap: .35rem; } .hm-lg svg { flex: 0 0 auto; }
+.hm-lg .hm-short { color: var(--hm-short); } .hm-lg .hm-sur { color: var(--hm-sur); }
+.hm-house { fill: var(--hm-home); }
+.hm-bus { stroke: var(--line2); stroke-width: 4; stroke-linecap: round; } .hm-bus.thin { stroke-width: 2; stroke-dasharray: 2 4; }
+.hm-axis-box { fill: var(--surface); stroke: var(--hm-axis); stroke-width: 2; } .hm-axis-fill { fill: var(--hm-axis); opacity: .8; }
+.hm-bolt { fill: var(--muted); } .hm-bolt.on { fill: var(--hm-ink); }
+@media print { .hm-presets, .hm-in input, .hm-bctl, .hm-play { display: none !important; } .hm-table { display: block; } .hm-table > * { display: block; } }
+@media (prefers-reduced-motion: reduce) { .hm-stream.flow { animation: none !important; } }
+.hm-conv { overflow-x: auto; max-width: 100%; } .hm-fig { min-width: 0; max-width: 100%; }
+.hm-conv table.tbl { min-width: 0; } .hm-conv .tbl th, .hm-conv .tbl td { padding: .35rem .6rem; }
+.hm-halo { paint-order: stroke; stroke: var(--bg); stroke-width: 4px; stroke-linejoin: round; }
+.hm-trk-ax .hm-trk-b i { white-space: nowrap; } .hm-trk-ax .hm-trk-b i:last-child { transform: translateX(-100%); } .hm-trk-ax .hm-trk-b i:first-child { transform: none; }
+.hm-lens { fill: none; stroke: var(--muted); stroke-width: 1.2; }
+
 /* ==== opt/scale-lab.css ==== */
 /* ===== 部品 scale（大きさの比較）・lab（式を動かす実験台）。使う章があるときだけ build.py が埋め込む ===== */
 .sc-body { padding: .6rem .8rem .8rem; }
@@ -658,6 +783,8 @@ table.qos tbody tr[aria-selected="true"] td:first-child, table.qos tbody tr[aria
 .lab-wave.c-ran { stroke: var(--k-ran-s); } .lab-wave.c-core { stroke: var(--k-core-s); } .lab-wave.c-pol { stroke: var(--k-pol-s); } .lab-wave.c-ims { stroke: var(--k-ims-s); }
 .lab-wave.sum { stroke: var(--text); stroke-width: 3.4; stroke-dasharray: 1 0; opacity: .9; }
 .lab-rms { stroke: var(--accent); stroke-width: 1.6; stroke-dasharray: 6 4; } .lab-rms-t { font-size: 11.5px; fill: var(--accent); font-weight: 700; }
+.lab-mark { stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: 5 4; } .lab-mark-t { font-size: 11.5px; fill: var(--accent); font-weight: 700; }
+.lab-dot { stroke: var(--bg); stroke-width: 2; fill: var(--k-ran-s); } .lab-dot.c-ran { fill: var(--k-ran-s); } .lab-dot.c-core { fill: var(--k-core-s); } .lab-dot.c-pol { fill: var(--k-pol-s); } .lab-dot.c-ims { fill: var(--k-ims-s); }
 .lab-track { fill: var(--surface); stroke: var(--line); }
 .lab-bar { fill: var(--k-ran-s); } .lab-bar.c-ran { fill: var(--k-ran-s); } .lab-bar.c-core { fill: var(--k-core-s); } .lab-bar.c-pol { fill: var(--k-pol-s); } .lab-bar.c-ims { fill: var(--k-ims-s); }
 .lab-bl { font-size: 12.5px; fill: var(--text); font-weight: 700; } .lab-bv { font-size: 12.5px; fill: var(--muted); font-family: var(--ttj-font-mono); }
@@ -671,6 +798,28 @@ table.qos tbody tr[aria-selected="true"] td:first-child, table.qos tbody tr[aria
 .lab-el { font-size: 12.5px; fill: var(--text); font-weight: 700; } .lab-cur { font-size: 13px; fill: var(--accent); font-weight: 700; }
 .lab-arrow { fill: var(--accent); stroke: none; }
 .lab-table summary, .sc-table summary { cursor: pointer; }
+/* ----- lab の追加（複数の入力をまとめて決めるプリセット・分類表・帯・正負の棒）。使わない実験には影響しない ----- */
+.lab-preset-bar { margin: 0 0 .7rem; padding: .5rem .7rem .55rem; border: 1px solid var(--line); border-radius: 10px; background: var(--surface2); }
+.lab-preset-h { font-size: .8rem; font-weight: 700; color: var(--muted); margin-bottom: .35rem; }
+.lab-preset-bar .lab-presets { margin-top: 0; }
+.lab-presets .btn[aria-pressed="true"] { background: var(--accent-fill); border-color: var(--accent-fill); color: var(--accent-ink); font-weight: 700; }
+.lab-preset-note { margin: .4rem 0 0; min-height: 1.4em; color: var(--text); }
+.lab-wave.faint { opacity: .5; stroke-width: 2; }
+.lab-fill { stroke: none; fill: var(--k-core-s); opacity: .22; }
+.lab-fill.c-ran { fill: var(--k-ran-s); } .lab-fill.c-core { fill: var(--k-core-s); } .lab-fill.c-pol { fill: var(--k-pol-s); } .lab-fill.c-ims { fill: var(--k-ims-s); }
+.lab-span { fill: var(--warn); opacity: .18; stroke: none; } .lab-span-t { font-size: 11.5px; fill: var(--warn); font-weight: 700; }
+.lab-res.word .lab-res-v b { font-size: 1.15rem; font-family: var(--ttj-font-sans); }
+.lab-fig-t { margin: .4rem .5rem .1rem; font-size: .84rem; color: var(--muted); font-family: var(--ttj-font-sans); }
+.lab-quad { border: 1px solid var(--line); border-radius: 10px; background: var(--surface); padding: .45rem .6rem .5rem; }
+.lab-quad h5 { margin: 0 0 .3rem; font-size: .86rem; font-family: var(--ttj-font-sans); color: var(--accent); }
+.lab-quad-t { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: .8rem; }
+.lab-quad-t th { font-weight: 700; color: var(--muted); font-size: .74rem; padding: .25rem .3rem; text-align: center; }
+.lab-quad-t tbody th { text-align: left; width: 5.2em; }
+.lab-quad-c { border: 1px solid var(--line2); padding: .35rem .4rem; vertical-align: top; text-align: center; line-height: 1.5; }
+.lab-quad-c b { display: block; font-size: .86rem; }
+.lab-quad-c span { display: block; color: var(--muted); font-size: .72rem; }
+.lab-quad-c.on { background: var(--accent-soft); box-shadow: inset 0 0 0 2px var(--accent-fill); }
+.lab-quad-c.on b::before { content: '● '; color: var(--accent); }
 @media print {
   .sc-ctl, .sc-sel .btn, .sc-probe, .lab-presets, .sc-keys { display: none !important; }
   .sc-grid, .lab-top { grid-template-columns: 1fr 1fr; }
@@ -735,6 +884,7 @@ body { line-height: 2.0; }
 <h2>序章 電力と電気の入口</h2><ol>
 <li><a href="#chI1" data-ch="I1"><span class="n">序1</span><span class="t">電力の大きさをつかむ</span><span class="tr">系統</span></a></li>
 <li><a href="#chI2" data-ch="I2"><span class="n">序2</span><span class="t">電気とは</span><span class="tr">系統</span></a></li>
+<li><a href="#chI3" data-ch="I3"><span class="n">序3</span><span class="t">家庭の電気と、発電所の規模：瞬間と量をつなぐ</span><span class="tr">系統</span></a></li>
 </ol>
 <h2>第1部 電力と発電事業の基礎</h2><ol>
 <li><a href="#ch01" data-ch="01"><span class="n">01</span><span class="t">電力系統の全体像：発電・送電・配電・小売</span><span class="tr">系統</span></a></li>
@@ -791,7 +941,7 @@ body { line-height: 2.0; }
     <h1 id="home-title" class="ch-title">発電講義</h1>
     <p class="sub">発電事業とコンバインドサイクル発電用ガスタービン</p>
     <p class="lead">電気が「誰の、どの設備で作られ、どう電力系統で需要と釣り合わされ、どんな市場で売られるか」を土台に、コンバインドサイクル発電（ガスタービンと蒸気タービンの複合発電）の熱力学の原理、ガスタービンと発電所の機器、起動・運転・保守、建設と試運転、産業の構造と脱炭素の技術までを、一続きで説明できるようになる講座です。結論を覚えるのではなく、数字をどの条件で読み、どの資料のどこで確かめるかを身につけます。理工系の基礎（高校から大学初年の物理・化学・数学）はあるが、発電や電力事業は初めての社会人が対象です。電力会社・発電事業者・重電メーカー・プラント建設・商社・金融・コンサルティングで、発電の案件に関わり始めた人に向けて書いています。</p>
-    <p class="pub-status"><b>公開状況</b>序章2本と全32章を公開中です。</p>
+    <p class="pub-status"><b>公開状況</b>序章3本と全32章を公開中です。</p>
     <div class="hero-prog">
       <svg id="hero-ring" class="ring" viewBox="0 0 76 76" role="img" aria-label="読了率"><circle class="bg" cx="38" cy="38" r="32"></circle><circle class="fg" cx="38" cy="38" r="32" transform="rotate(-90 38 38)" stroke-dasharray="201" stroke-dashoffset="201"></circle><text x="38" y="38">0%</text></svg>
       <div class="stat"><div id="hero-stat">読了 0 章</div><ul id="hero-scores" class="score-list"></ul></div>
@@ -808,6 +958,7 @@ body { line-height: 2.0; }
     <div class="part-card"><h3><small>序章</small>序章</h3><ol>
       <li><span class="n">序1</span><a href="#chI1" data-ch="I1">電力の大きさをつかむ</a></li>
       <li><span class="n">序2</span><a href="#chI2" data-ch="I2">電気とは</a></li>
+      <li><span class="n">序3</span><a href="#chI3" data-ch="I3">家庭の電気と、発電所の規模：瞬間と量をつなぐ</a></li>
     </ol></div>
     <div class="part-card"><h3><small>第1部</small>電力と発電事業の基礎</h3><ol>
       <li><span class="n">01</span><a href="#ch01" data-ch="01">電力系統の全体像：発電・送電・配電・小売</a></li>
@@ -857,6 +1008,7 @@ body { line-height: 2.0; }
 
   <h2 class="home-h">学習の進め方</h2>
   <ol class="how">
+    <li><b>序章3「家庭の電気と、発電所の規模」（ルートには含めず、単独で読める入口）。</b>家庭 1 軒の電気と発電所 1 軸を、瞬間（kW）と量（kWh）、単位の階段、円の面積、「束ねる」装置で比べます。約 35 分。<a href="#chI1">序章1</a>の後ならどこからでも読め、数字の感覚をつかみたいときに戻れます。</li>
     <li><b>ルート A「最短」（営業・企画・金融・コンサルタント、発電の案件に入ったばかりの人向け）。</b>全体像を一周し、実務者と話が通じることを目指します。<a href="#chI1">序章1</a> → <a href="#chI2">序章2</a> → <a href="#ch01">第01章</a> → <a href="#ch02">02</a> → <a href="#ch03">03</a> → <a href="#ch04">04</a> → <a href="#ch05">05</a> → <a href="#ch06">06</a> → <a href="#ch07">07</a> → <a href="#ch08">08</a> → <a href="#ch09">09</a> → <a href="#ch11">11</a> → <a href="#ch18">18</a> → <a href="#ch22">22</a> → <a href="#ch27">27</a> → <a href="#ch30">30</a> → <a href="#ch31">31</a>。17 章（序章の 2 章を含む）、約 11 時間。事業と系統の話に必要な所を優先し、第3部は<a href="#ch11">第11章</a>だけ、第4部は<a href="#ch18">第18章</a>（全体）と<a href="#ch22">第22章</a>（系統連系）だけに絞っています。</li>
     <li><b>ルート B「標準」（電力会社・発電事業者・重電メーカー・プラント建設の新任の技術者向け）。</b>事業・原理・機器・運転・保守・制度を一通り一人で説明できることを目指します。<a href="#chI1">序章1</a> → <a href="#chI2">序章2</a> → <a href="#ch01">第01章</a> → <a href="#ch02">02</a> → <a href="#ch03">03</a> → <a href="#ch04">04</a> → <a href="#ch05">05</a> → <a href="#ch06">06</a> → <a href="#ch07">07</a> → <a href="#ch08">08</a> → <a href="#ch09">09</a> → <a href="#ch10">10</a> → <a href="#ch11">11</a> → <a href="#ch13">13</a> → <a href="#ch14">14</a> → <a href="#ch16">16</a> → <a href="#ch18">18</a> → <a href="#ch19">19</a> → <a href="#ch20">20</a> → <a href="#ch22">22</a> → <a href="#ch23">23</a> → <a href="#ch24">24</a> → <a href="#ch25">25</a> → <a href="#ch27">27</a> → <a href="#ch28">28</a> → <a href="#ch29">29</a> → <a href="#ch30">30</a> → <a href="#ch31">31</a>。28 章（序章の 2 章を含む）、約 18 時間。冷却の方式は<a href="#ch21">第21章</a>、建設は<a href="#ch26">第26章</a>を足してください。圧縮機・軸受と補機・機種の形式（第12・15・17章）はルート C で扱います。</li>
     <li><b>ルート C「ガスタービンを深める」（ルート A を終えた人向け。A の後に読みます）。</b>ガスタービンの中と運転・保守と脱炭素を、機器の言葉で話せることを目指します。ルート A を通らずに入る人は、先に序章1 → <a href="#chI2">序章2</a>（約 1 時間）を読んでください。<a href="#ch10">第10章</a> → <a href="#ch12">12</a> → <a href="#ch13">13</a> → <a href="#ch14">14</a> → <a href="#ch15">15</a> → <a href="#ch16">16</a> → <a href="#ch17">17</a> → <a href="#ch23">23</a> → <a href="#ch24">24</a> → <a href="#ch25">25</a> → <a href="#ch29">29</a> → <a href="#ch32">32</a>（規格・公的資料の地図）。12 章、約 7.5 時間。設計・保守・調達の担当や、メーカーと話す発電事業者の技術者に向きます。</li>
@@ -1059,7 +1211,158 @@ body { line-height: 2.0; }
     </tbody>
   </table></div>
 </section>
-<footer class="ch-foot"><div class="readrow"><button class="btn read" type="button" data-read="I2" aria-pressed="false">☐ この章を読了にする</button></div><nav class="pn" aria-label="前後の章"><a class="prev" href="#chI1"><small>← 前の章</small>序章1 電力の大きさをつかむ</a><a class="next" href="#ch01"><small>次の章 →</small>第01章 電力系統の全体像：発電・送電・配電・小売</a></nav></footer>
+<footer class="ch-foot"><div class="readrow"><button class="btn read" type="button" data-read="I2" aria-pressed="false">☐ この章を読了にする</button></div><nav class="pn" aria-label="前後の章"><a class="prev" href="#chI1"><small>← 前の章</small>序章1 電力の大きさをつかむ</a><a class="next" href="#chI3"><small>次の章 →</small>序章3 家庭の電気と、発電所の規模：瞬間と量をつなぐ</a></nav></footer>
+</article>
+
+<article id="chI3" class="view chapter" data-ch="I3" aria-labelledby="chI3-title">
+<header class="ch-head"><p class="ch-kicker">序章 電力と電気の入口 ・ 序章3</p><h2 class="ch-title" id="chI3-title">家庭の電気と、発電所の規模：瞬間と量をつなぐ</h2><p class="ch-meta"><span class="chip tk0">系統</span><span class="chip">所要 約35分</span></p></header>
+<section class="learn">
+  <h3 id="chI3-s1">この章で分かること</h3>
+  <ol>
+    <li><b>電力（kW、いまの大きさ）と電力量（kWh、ためた量）</b>の違いを、図とつまみで説明できる。</li>
+    <li><b>W から TW までの単位と、「万 kW」「億 kWh」</b>の関係を、換算して言える。</li>
+    <li><b>家庭 1 軒の平均の電力（約 0.46 kW）と 1 日の量（約 11 kWh）</b>が、機器ごとの使い方からできていることを説明できる。</li>
+    <li>発電所の 1 軸・全体が、<b>瞬間と量のそれぞれで、家庭の何世帯分か</b>を計算でき、1 日の山と谷で、発電と消費が合わなくなる様子を説明できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：序章1（電力と電力量の入口）。序章2を読んでいなくても読めます。掛け算と割り算ができれば足ります。</p>
+</section>
+
+<div class="callout note"><span class="ttl">この章の読み方</span>
+  <p>この章は、家庭の電気と発電所の大きさを、<b>図と、動かせる部品</b>でつなぐ章です。数字は、3 種類に分けて書きます。<b>公開資料の値</b>（出典・時点・条件つき）、そこから計算した<b>目安</b>、そして<b>模型の値</b>（仮定）です。模型の値は、利用率 70%、家庭の 1 日の形、機器の使う時間などで、必ず「仮定」「模型」と書きます。</p>
+  <p>発電所の例は、JERA の富津火力発電所です（LNG を燃料とするコンバインドサイクル。第18章）。<b>この章で「1 軸」と書くときは、1 号系列の第 7 軸（16.5 万 kW）</b>です。同じ発電所でも、軸ごとに出力が違います。</p></div>
+
+<h3 id="chI3-s2">「瞬間」と「量」：蛇口の太さと、バケツの水</h3>
+<p>電気の大きさには、2 つの見方があります。<b>電力</b>（electric power）は、「いま流れている大きさ」です。単位はワット（W）やキロワット（kW）です。<b>電力量</b>（electric energy）は、「流れた量の合計」です。単位はワット時（Wh）やキロワット時（kWh）です。</p>
+<p>水に例えると、電力は<b>蛇口の太さ</b>、電力量は<b>バケツにたまった水</b>です。蛇口が太いほど、同じ時間でたまる水が増えます。蛇口を開けている時間が長いほど、水が増えます。式は、<b>電力量（kWh）＝ 電力（kW）× 時間（h）</b>です。</p>
+<div data-widget="bucket" data-src="cI3-bucket"></div>
+<p>確かめる点は 3 つです。1 つ目は、電力と時間の図（横が時間、縦が電力）で、長方形の<b>面積</b>が電力量になることです。2 つ目は、電力を 2 倍にしても、時間を半分にすると、電力量は変わらないことです。3 つ目は、ドライヤーのように電力が大きい機器でも、使う時間が短ければ、電力量は小さいことです。機器の電力は、東京電力エナジーパートナーの表（電流の目安。100 V の機器で 1 A ＝ 100 W として換算）を元にした<b>目安</b>です。</p>
+
+<h4>家庭と富津火力を、「瞬間」と「量」で並べる</h4>
+<p>次の表は、家庭 1 世帯と、富津火力発電所の 1 軸・全体を、瞬間の大きさと、1 日・1 年の量で並べたものです。家庭の値は、この章のモデル（平均 0.46 kW）です。発電所の「量」は、<b>設備利用率 70% を仮定</b>した計算で、実際の発電量ではありません（計算：定格 × 24 時間 × 0.7）。</p>
+<div class="tbl-wrap"><table class="tbl">
+  <caption>「瞬間」と「量」の比較：家庭と富津火力（利用率 70% は仮定）</caption>
+  <thead><tr><th scope="col"></th><th scope="col">一般家庭（1 世帯、モデル）</th><th scope="col">富津・1 軸<br>（1 号系列の第 7 軸）</th><th scope="col">富津全体</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">瞬間の大きさ</th><td>平均 約 0.46 kW<br>（ピーク時 1〜3 kW は目安）</td><td>165 MW<br>（16.5 万 kW ＝ 0.165 GW）</td><td>5,160 MW ＝ 5.16 GW<br>（516 万 kW）</td></tr>
+    <tr><th scope="row">1 日の量</th><td>約 11 kWh</td><td>約 277 万 kWh ＝ 約 2.77 GWh（利用率 70%）<br>最大 約 396 万 kWh</td><td>約 8,670 万 kWh ＝ 約 86.7 GWh（利用率 70%）<br>最大 約 1.24 億 kWh</td></tr>
+    <tr><th scope="row">年間の量</th><td>約 4,000 kWh（4 MWh）</td><td>約 10 億 kWh ＝ 約 1 TWh（利用率 70%）</td><td>約 316 億 kWh ＝ 約 31.6 TWh（利用率 70%）</td></tr>
+    <tr><th scope="row">世帯換算</th><td>—</td><td>瞬間：約 36 万世帯分<br>量：約 25 万世帯分</td><td>瞬間：約 1,100 万世帯分<br>量：約 790 万世帯分</td></tr>
+  </tbody></table></div>
+<p>注：家庭は、年 約 4,000 kWh を前提としたモデルです（根拠は「家庭の電気の使いみち」の節）。「最大」は、定格で 24 時間出した場合（利用率 100%）です。富津の値は、JERA の公表値（1 軸 16.5 万 kW、全体 516 万 kW。2024 年 3 月 31 日時点）です。世帯換算は、瞬間が「出力 ÷ 平均の電力」、量が「1 日の発電量 ÷ 家庭の 1 日の使用量」で、条件がそろったときだけ目安になります（序章1）。</p>
+
+<h3 id="chI3-s3">単位の階段：W から TW まで、万 kW と億 kWh</h3>
+<p>電力の単位は、<b>1,000 倍ごと</b>に名前が変わります。W（ワット）、kW（キロワット）、MW（メガワット）、GW（ギガワット）、TW（テラワット）です。電力量も同じで、Wh、kWh、MWh、GWh、TWh です（出典：一般知識。単位の接頭辞。序章1）。</p>
+<p>日本の資料では、「<b>万 kW</b>」「<b>億 kWh</b>」の書き方も多く出てきます。「万」「億」は、<b>1 万（10⁴）ごと</b>の区切りです。1,000 倍ごとの区切りと、ずれています。1 万 kW ＝ 10 MW、1 億 kWh ＝ 100 GWh です。16.5 万 kW ＝ 165 MW、1 億 kWh ＝ 0.1 TWh です。</p>
+<div data-widget="unitconv" data-src="cI3-units"></div>
+<p>確かめる点は 3 つです。1 つ目は、階段の 1 段が、千倍の差であることです。2 つ目は、「万 kW」の印が MW と GW の間（10⁷ W。1 MW の 10 倍の位置）に、「億 kWh」の印が GWh と TWh の間にあることです。3 つ目は、表で、1 以上 1,000 未満で読める単位（● の行）に直すと、桁が読みやすいことです。</p>
+<p>次の図は、身近な機器から、家庭、発電所、国までを、<b>1 本の対数の物差し</b>に並べたものです。上ほど大きい値で、10 倍ごとに同じ間隔です。項目を選ぶと、「基準の何倍か」が出ます。機器の値は、電流の目安から換算した<b>目安</b>で、機種で大きく違います。</p>
+<div data-widget="scale" data-src="cI3-scale"></div>
+<p>確かめる点は 2 つです。1 つ目は、家庭 1 世帯の平均（0.46 kW）が、ドライヤーや電子レンジ（1 kW 級）より小さいことです。ずっと使い続けているわけではないからです。2 つ目は、富津の 1 軸（165 MW）が家庭の約 36 万倍で、全体（5,160 MW）が約 1,100 万倍であることです。同じ発電所の中でも、4 号系列の 1 軸（507 MW）は、1 号系列の第 7 軸の約 3 倍です。</p>
+
+<h3 id="chI3-s4">家庭の電気の使いみち：平均の電力と、瞬間の最大</h3>
+<p>家庭 1 世帯の電気の使用量は、環境省の統計で、<b>年間 3,911 kWh</b>（2023 年度、確報値。太陽光発電などの自家発電による電気を含まない。使用していない世帯を含む平均値）です。2025 年度の速報値は <b>4,008 kWh</b>（令和 8 年 10 月公表。使用していない世帯を含む平均値）です（出典：環境省『家庭部門のCO2排出実態統計調査』。令和 5 年度の確報値と、令和 7 年度の速報値）。年 4,000 kWh ならば、<b>4,000 kWh ÷ 8,760 時間 ＝ 約 0.46 kW</b>、1 日では <b>約 11 kWh</b> です（計算。目安）。</p>
+<p>序章1では、2023 年度の確報値（3,911 kWh）から、約 0.445 kW と計算しました。この章は、2025 年度の速報値に近い、丸めた<b>約 0.46 kW</b> を使います。差は約 3% で、桁は変わりません。</p>
+<p>この値には、<b>幅</b>があります。世帯人数が多いほど、電気の使用量は多くなります。資料は世帯人数別の値を電気由来の CO2 排出量で示していて、2025 年度の速報値では、1 人世帯で年 1.04 t-CO2、4 人世帯で 2.59 t-CO2、6 人以上の世帯で 3.64 t-CO2 です（速報値は、電気の CO2 排出係数に前年度の値を使う、と資料が注記）。地方でも違い、2023 年度の確報値では、電気の消費量が、関東甲信で 13.0 GJ、北陸で 19.1 GJ です（換算は約 3,600 kWh と約 5,300 kWh。1 kWh ＝ 3.6 MJ、目安）。</p>
+<p>次の図は、モデル家庭の電気の使いみちを、機器ごとに分けたものです。<b>平均の電力</b>は、1 日の電力量を 24 時間で割った値で、機器が動いているときの電力（瞬間）とは別です。チェックと時間のつまみを動かして、合計の平均の電力・1 日・1 年の量がどう変わるかを確かめてください。</p>
+<div data-widget="appmix" data-src="cI3-apps"></div>
+<p>確かめる点は 3 つです。1 つ目は、平均の電力が小さい機器でも、使うときは大きい機器がある（電子レンジ・ドライヤー・食洗機など）ことです。2 つ目は、使う時間帯が重なると、合計の瞬間の電力が、平均の数倍になることです。3 つ目は、「1 日の電力量」が、平均の電力 × 24 時間で決まり、年では 365 倍になることです。</p>
+<h4>公的な資料の内訳との違い</h4>
+<p>上のモデルは、<b>一例（モデル家庭の目安）</b>です。公的な資料の機器別の内訳とは、同じではありません。東京都の資料は、東京都内の家庭の電気の使用量を、機器別に次の割合で示しています（2021 年度の速報値）。全国の機器別の割合は、確認できた公的な資料の範囲では、見つかりませんでした。</p>
+<div class="tbl-wrap"><table class="tbl">
+  <caption>モデル家庭と、東京都の家庭の電気の機器別の割合</caption>
+  <thead><tr><th scope="col">機器</th><th scope="col">モデル家庭（この章の一例）</th><th scope="col">東京都（2021 年度）</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">エアコン</th><td>18%（年平均）</td><td>12.2%</td></tr>
+    <tr><th scope="row">冷蔵庫</th><td>14%</td><td>17.7%</td></tr>
+    <tr><th scope="row">照明</th><td>12%</td><td>18.6%（照明器具）</td></tr>
+    <tr><th scope="row">テレビ</th><td>9%</td><td>11.5%</td></tr>
+    <tr><th scope="row">温水洗浄便座</th><td>3%</td><td>4.9%</td></tr>
+    <tr><th scope="row">洗濯機・乾燥機</th><td>5%</td><td>2.4%（衣類乾燥機）</td></tr>
+    <tr><th scope="row">食洗機・浴室乾燥</th><td>4%</td><td>1.5%（食器洗浄乾燥機）</td></tr>
+    <tr><th scope="row">その他（給湯・調理・掃除機・ドライヤー・待機電力・パソコンなど）</th><td>34%</td><td>31.4%（その他家電）</td></tr>
+  </tbody></table></div>
+<p>機器の分け方が違うので、行を 1 対 1 で比べられるわけではありません（東京都の表に、給湯の項目はありません）。モデルは、エアコンが多く、照明が少ない一例です。実際の内訳は、世帯・地域・年で変わります。待機電力は、資源エネルギー庁の調査（平成 24 年度、資料が引用）で、年 228 kWh と、家庭 1 世帯の年間 4,432 kWh の約 5%（228 ÷ 4,432 ＝ 5.1%）とされ、モデルの 5%（25 W）と近い割合です。</p>
+<h4>1 日の中の形：朝と夜に山</h4>
+<p>家庭の電気は、1 日の中で一定ではありません。住環境計画研究所の実測調査（2013 年。首都圏と北海道の 56 世帯を 30 分ごとに計測）は、首都圏で、8 月が 20〜21 時ごろ、1 月が 6〜7 時ごろと 20〜21 時ごろに大きくなると報告しています。電力系統全体は、別の形で、夏の平日 13〜16 時が特に高く、8〜22 時が平均以上です（経済産業省の 2011 年の資料。電力会社 6 社の実績）。次の「束ねる」では、家庭の束について、<b>朝と夕方〜夜に山、深夜に谷がある形の模型</b>を使います。数値は実測そのものではなく、形を説明するための模型です。</p>
+
+<h3 id="chI3-s5">円の面積で比べる：家庭は点にもならない</h3>
+<p>桁がいくつも違う量は、円の<b>面積</b>で見ると、差を感じやすくなります。富津火力の 1 軸と全体を、家庭 1 軒と並べます。系列ごとの軸数と出力は、次の表のとおりです（JERA の資料）。</p>
+<div class="tbl-wrap"><table class="tbl">
+  <caption>富津火力発電所の系列（JERA の資料。LNG を燃料とするコンバインドサイクル）</caption>
+  <thead><tr><th scope="col">系列</th><th scope="col">軸数</th><th scope="col">1 軸の出力（定格）</th><th scope="col">系列の出力（資料の表記）</th><th scope="col">運転開始（全軸）</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">1 号系列</th><td>7</td><td>第 1〜6 軸 16.7 万 kW、<b>第 7 軸 16.5 万 kW</b></td><td>100.0 万 kW（認可出力）</td><td>1986 年 11 月</td></tr>
+    <tr><th scope="row">2 号系列</th><td>7</td><td>16.0 万 kW × 5 軸、16.2 万 kW × 2 軸</td><td>112.0 万 kW（届出出力）</td><td>1988 年 11 月</td></tr>
+    <tr><th scope="row">3 号系列</th><td>4</td><td>38 万 kW</td><td>152.0 万 kW</td><td>2003 年 11 月</td></tr>
+    <tr><th scope="row">4 号系列</th><td>3</td><td>50.7 万 kW</td><td>152.0 万 kW</td><td>2010 年 10 月</td></tr>
+    <tr><th scope="row">全体</th><td>21</td><td>—</td><td>516 万 kW（2024 年 3 月 31 日時点。英語ページは 5,160 MW）</td><td>—</td></tr>
+  </tbody></table></div>
+<p>1 号系列の「100.0 万 kW」は、7 軸の定格を足した 116.7 万 kW と合いません（2 号系列も 112.0 万 kW と 112.4 万 kW でわずかに違います）。資料は、系列の値に「認可出力」（1 号系列）、「届出出力」（2 号系列）と注記していて、軸の定格の合計とは別の値として書いています。差の理由は、資料に書かれていません。この章の全体の値は、JERA の会社案内の 516 万 kW で、系列の表記の合計（100.0 ＋ 112.0 ＋ 152.0 ＋ 152.0）と一致します。<b>この章の「1 軸」は、1 号系列の第 7 軸（16.5 万 kW）</b>です。4 号系列の値は、2023 年 8 月に完了したガスタービンの取り替え（GE Vernova の発表）の前の資料のものです。廃止・増設の発表は、確認した資料（2026 年 11 月 18 日）には見つかりませんでした。</p>
+<div data-widget="areacircle" data-src="cI3-circles"></div>
+<p>確かめる点は 3 つです。1 つ目は、①で、1 軸の円が全体の円の約 5.6 分の 1 の半径（面積では約 31 分の 1）であることです。2 つ目は、家庭 1 軒が点にもならず、吹き出しの拡大でしか見えないことです。3 つ目は、②で、利用率のつまみを下げると、塗りの円が点線の円（利用率 100%）より小さくなり、世帯分の数が減ることです。</p>
+
+<h3 id="chI3-s6">束ねる：何軒ぶんの使い方が、発電所と釣り合うか</h3>
+<p>家庭 1 軒の使い方が<b>何軒ぶん束になる</b>と、発電所の 1 軸、全体と釣り合うかを、動かして確かめます。3 つのタブがあります。①は、瞬間と量の 2 つの見方で、束ねた需要が設備に届く所を見ます。②は、1 日の時間の流れで、需要の山と谷に、一定の出力や需要に合わせた出力が合うかを見ます。③は、家のアイコンと、軸のアイコンの絵です。</p>
+<div data-widget="bundle" data-src="cI3-bundle"></div>
+<p>確かめる点は 5 つです。</p>
+<ol>
+  <li>①で、世帯数を増やすと、需要の棒が、1 軸の線（約 36 万軒）、全体の線（約 1,100 万軒）に届くこと。<b>瞬間の見方の約 36 万軒</b>と、<b>量の見方（利用率 70% の仮定）の約 25 万軒</b>は、別の数字であること。</li>
+  <li>量の見方は、瞬間の見方に利用率をかけた値になること（36 万 × 0.7 ＝ 約 25 万）。利用率のつまみで、軒数が変わること。</li>
+  <li>②で、約 25 万軒のとき、<b>1 日の量は釣り合って</b>いても、<b>夕方〜夜は出力が足りず、深夜は余る</b>こと（一定の出力のとき）。</li>
+  <li>②で「需要に合わせて増減させる」にすると、足りない分と余る分は小さくなるが、<b>定格を超える山</b>や、<b>最低出力を下回る谷</b>では、まだ合わないこと。</li>
+  <li>③で、世帯数が増えると、必要な軸が 1 本、2 本と増えること。全体は、実際には 21 軸で、軸ごとに出力が違うこと。</li>
+</ol>
+<div class="callout warn"><span class="ttl">この装置の限界：規模の感覚をつかむための模型です</span>
+  <p>実際の電力系統は、<b>多くの発電所と送電網で需要をまかなって</b>います。1 つの発電所が、特定の家庭に電気を送っているわけではありません。電気は、揚水や蓄電池でためられる量が需要に比べて限られ、<b>大量にはためておきにくい</b>ので、<b>瞬間ごとに、発電と消費を一致させる</b>必要があります（同時同量。第02章）。そのために、発電所の出力の増減、揚水や蓄電池、需要側の調整などを組み合わせます。</p>
+  <p>家庭以外（工場・業務・鉄道など）の需要のほうが大きいことにも、注意してください。最終エネルギー消費（電気だけではありません）の 2024 年度の部門別では、家庭部門は全体の 15.0%、企業・事業所他の部門は 60.7%、運輸部門は 24.3% でした（出典：資源エネルギー庁『エネルギー動向（2026 年版）』）。</p>
+  <p>この装置の家庭の 1 日の形、最低出力（定格の 30%）、設備利用率 70% は、すべて<b>模型の仮定</b>です。実際の発電所の運転計画や、系統の需給の予想には使えません。最低出力の 30% は、需要に合わせる様子を見やすくするための仮定です。<a href="#ch03">第03章</a>の資料（資源エネルギー庁、2021 年）は、コンバインドサイクル発電の最低出力を「約 50% の設備が多い。最新鋭機では 25% 程度での運用例もある」としています。富津の 1 号系列の第 7 軸の実際の値は、確かめていません。</p></div>
+
+<h3 id="chI3-s7">まとめと、本編への道しるべ</h3>
+<ul>
+  <li><b>瞬間（kW）と量（kWh）は別のもの</b>です。量 ＝ 瞬間 × 時間で、長方形の面積です。</li>
+  <li>単位は 1,000 倍ごと、日本の「万」「億」は 1 万倍ごとです。<b>1 万 kW ＝ 10 MW、1 億 kWh ＝ 100 GWh</b> です。</li>
+  <li>家庭 1 世帯は、平均 約 0.46 kW・1 日 約 11 kWh・年 約 4,000 kWh のモデルです（公的な統計の約 3,900〜4,000 kWh と同じ桁）。使うときの電力は、平均よりずっと大きくなります。</li>
+  <li>富津の 1 軸（165 MW）は、<b>瞬間で約 36 万世帯分、量（利用率 70% の仮定）で約 25 万世帯分</b>です。全体（5,160 MW）は、瞬間で約 1,100 万世帯分、量で約 790 万世帯分です。</li>
+  <li>平均で釣り合っても、<b>1 日の山と谷では合いません</b>。実際は、多くの発電所と送電網と調整の仕組みで、瞬間ごとに合わせています。</li>
+</ul>
+<p>次に読む所です。規模の比較の入口は<a href="#chI1">序章1</a>、電気の基本は<a href="#chI2">序章2</a>です。需要と供給の一致は<a href="#ch02">第02章</a>、ベース・ミドル・ピークは<a href="#ch03">第03章</a>、軸の構成は<a href="#ch18">第18章</a>、設備利用率と負荷追従は<a href="#ch24">第24章</a>で扱います。</p>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>「万」と「k・M・G」の区切りの違い</b>。「万」は 4 桁、k・M・G は 3 桁ごとです。16.5 万 kW は 16.5 MW ではなく、165 MW です。</p>
+  <p><b>「何世帯分」は、瞬間と量で別の数字</b>です。どちらの見方か、利用率の仮定を何にしたかを、必ず書いてください。</p>
+  <p><b>平均の電力で割った軒数は、同じ時刻に支えられる軒数ではありません</b>。夕方の山では、平均の 2 倍前後の電力になります（模型）。</p></div>
+
+<section class="quiz-sec"><h3 id="chI3-s8">確認問題</h3>
+  <div data-widget="quiz" data-src="cI3-quiz"></div>
+</section>
+
+<section class="refs"><h3 id="chI3-s9">参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 18 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.jera.co.jp/static/files/corporate/about/com_outline/pdf/%E6%A0%AA%E5%BC%8F%E4%BC%9A%E7%A4%BEJERA_%E4%BC%9A%E7%A4%BE%E6%A1%88%E5%86%85_%E4%B8%80%E9%83%A8%E6%94%B9%E8%A8%82%E7%89%88%EF%BC%882025%E5%B9%B47%E6%9C%88%E7%99%BA%E8%A1%8C%EF%BC%89.pdf">会社案内（2025 年 7 月発行）「国内の主な発電所」</a></th><td>JERA</td><td>2024 年 3 月 31 日時点</td><td>富津火力発電所の出力（516 万 kW）。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.jera.co.jp/en/corporate/business/thermal-power/list/futtsu">Futtsu Thermal Power Station</a></th><td>JERA</td><td>日付の記載なし（確認 2026 年 11 月）</td><td>最大出力 5,160 MW（英語ページ）。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.jera.co.jp/system/files/private/%E5%88%A5%E7%B4%99%EF%BC%9A%E5%AF%8C%E6%B4%A5%E7%81%AB%E5%8A%9B%E7%99%BA%E9%9B%BB%E6%89%80%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E3%82%AC%E3%82%B9%E3%82%BF%E3%83%BC%E3%83%93%E3%83%B3%E7%AD%89%E3%81%AE%E5%8F%96%E6%9B%BF%E5%B7%A5%E4%BA%8B%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6.pdf">＜別紙＞ 富津火力発電所におけるガスタービン等の取替工事について</a></th><td>JERA</td><td>日付の記載なし（取替の完了は 2019 年 8 月まで）</td><td>系列ごとの軸数と、1 軸の出力、運転開始。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.gevernova.com/news/press-releases/GE-Vernova-upgrades-JERAs-Futts-Power-Plant-with-latest-technology-and-announces-its-start-of-Commercial-Operation-jp">GE Vernova upgrades JERA's Futtsu Power Plant with latest technology and announces its start of Commercial Operation</a></th><td>GE Vernova</td><td>2023 年 8 月 28 日</td><td>4 号系列のガスタービン取り替えの完了と、4 号系列 1.5 GW・全体 5.16 GW。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.env.go.jp/content/000323408.pdf">令和5年度 家庭部門のCO2排出実態統計調査 結果について（確報値）</a></th><td>環境省</td><td>令和 7 年 6 月（確報値、2023 年度）</td><td>家庭 1 世帯の年間の電気の消費量（3,911 kWh）。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.env.go.jp/content/000437254.pdf">令和７年度 家庭部門の CO2排出実態統計調査 結果について（速報値）</a></th><td>環境省</td><td>令和 8 年 10 月（速報値、2025 年度）</td><td>家庭 1 世帯の年間の電気の消費量（4,008 kWh）、世帯人数別の電気の CO2 排出量。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.env.go.jp/content/000323452.pdf">家庭部門のCO2排出実態統計調査における主要項目の経年比較及びCO2排出量の変化要因分析（参考資料）</a></th><td>環境省</td><td>令和 7 年 6 月（2023 年度）</td><td>地方別の電気の消費量（GJ）。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.tokyo-co2down.jp/wp-content/uploads/2024/04/3_2024_handbook_p7_8.pdf">家庭の電気使用量の機器別割合（2024 年のハンドブック p.7〜8。出典は『都における最終エネルギー消費及び温室効果ガス排出量総合調査（2021 年度速報値）』）</a></th><td>東京都（東京都地球温暖化防止活動推進センターの資料）</td><td>2021 年度（速報値）</td><td>東京都内の家庭の機器別の電気の割合。対象世帯の条件は資料に記載なし。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.meti.go.jp/shingikai/enecho/shoene_shinene/sho_energy/kori_jigyosha/pdf/001_s04_00.pdf">総合資源エネルギー調査会 省エネルギー小委員会の資料（家庭の機器別の消費量の内訳の資料）</a></th><td>経済産業省</td><td>資料の日付は確認できず（確認 2026 年 11 月 18 日）</td><td>平成 24 年度の待機時消費電力調査の値（待機 228 kWh/年、家庭全体 4,432 kWh/年）。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.env.go.jp/content/900449221.pdf">平成25年度 家庭における電力消費量実測調査 報告書</a></th><td>株式会社住環境計画研究所（環境省のサイトに掲載）</td><td>平成 25 年 9 月（計測 2012 年 7 月〜2013 年 6 月、56 世帯、30 分間隔）</td><td>家庭の 1 日の電力の形（首都圏で 8 月は 20〜21 時ごろ、1 月は 6〜7 時ごろと 20〜21 時ごろが大きい）。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.meti.go.jp/shingikai/enecho/shoene_shinene/sho_energy/kojo_handan/pdf/2013_001_03_00.pdf">電気需要平準化時間帯について（案）</a></th><td>経済産業省 省エネルギー対策課</td><td>平成 23 年 8 月 27 日</td><td>電力系統全体の 1 日の形（夏の平日 13〜16 時が特に高い、8〜22 時が平均以上）。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.enecho.meti.go.jp/about/energytrends/2026/html/s-1-2.html">エネルギー動向（2026 年版）第 1 章第 2 節 部門別エネルギー消費の動向</a></th><td>資源エネルギー庁</td><td>2024 年度の実績</td><td>最終エネルギー消費の部門別の割合（家庭 15.0%、企業・事業所他 60.7%、運輸 24.3%）。電気だけの割合ではない。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.tepco.co.jp/ep/private/ampere2/ampere03.html">主な電気機器のアンペアの目安</a></th><td>東京電力エナジーパートナー</td><td>日付の記載なし（確認 2026 年 11 月）</td><td>機器の電流の目安（A）。100 V の機器で 1 A ＝ 100 W として換算した目安の電力（想定値）。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.pref.akita.lg.jp/uploads/public/archive_0000007451_00/2.%E6%B4%8B%E4%B8%8A%E9%A2%A8%E5%8A%9B%E7%99%BA%E9%9B%BB%E3%81%AE%E5%B0%8E%E5%85%A5%E7%8A%B6%E6%B3%81%EF%BC%88202510%EF%BC%89.pdf">洋上風力発電の導入状況</a></th><td>秋田県</td><td>2025 年 10 月 3 日現在</td><td>洋上風車 1 基の出力（4.2 MW）。序章1と同じ。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.gevernova.com/gas-power/products/gas-turbines/7ha">7HA gas turbine</a></th><td>GE Vernova</td><td>日付の記載なし（確認 2026 年 11 月）</td><td>大型ガスタービン 1 台の出力の例（430 MW）。序章1と同じ。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.occto.or.jp/assets/news/juyousoutei/260121_juyousoutei_r1.pdf">全国及び供給区域ごとの需要想定（2026年度）</a></th><td>電力広域的運営推進機関</td><td>2026 年 1 月 21 日公表</td><td>2025 年度夏季の最大需要電力（158,815 千 kW、送電端）。序章1と同じ。</td></tr>
+      <tr><td>教科書・一般知識・他講座</td><th scope="row">電力工学の教科書（一般知識）</th><td>この講座の説明</td><td>—</td><td>単位の接頭辞、電力量 ＝ 電力 × 時間。</td></tr>
+      <tr><td>架空・模型（見本のため）</td><th scope="row">設備利用率 70%、家庭の 1 日の形、機器の使う時間と時間帯、最低出力 30%、つまみの値</th><td>この講座</td><td>—</td><td>理解のための仮定（模型の値）。実際の値ではありません。</td></tr>
+    </tbody>
+  </table></div>
+</section>
+<footer class="ch-foot"><div class="readrow"><button class="btn read" type="button" data-read="I3" aria-pressed="false">☐ この章を読了にする</button></div><nav class="pn" aria-label="前後の章"><a class="prev" href="#chI2"><small>← 前の章</small>序章2 電気とは</a><a class="next" href="#ch01"><small>次の章 →</small>第01章 電力系統の全体像：発電・送電・配電・小売</a></nav></footer>
 </article>
 
 <article id="ch01" class="view chapter" data-ch="01" aria-labelledby="ch01-title">
@@ -1164,7 +1467,7 @@ body { line-height: 2.0; }
     </tbody>
   </table></div>
 </section>
-<footer class="ch-foot"><div class="readrow"><button class="btn read" type="button" data-read="01" aria-pressed="false">☐ この章を読了にする</button></div><nav class="pn" aria-label="前後の章"><a class="prev" href="#chI2"><small>← 前の章</small>序章2 電気とは</a><a class="next" href="#ch02"><small>次の章 →</small>第02章 需要と供給の一致と周波数</a></nav></footer>
+<footer class="ch-foot"><div class="readrow"><button class="btn read" type="button" data-read="01" aria-pressed="false">☐ この章を読了にする</button></div><nav class="pn" aria-label="前後の章"><a class="prev" href="#chI3"><small>← 前の章</small>序章3 家庭の電気と、発電所の規模：瞬間と量をつなぐ</a><a class="next" href="#ch02"><small>次の章 →</small>第02章 需要と供給の一致と周波数</a></nav></footer>
 </article>
 
 <article id="ch02" class="view chapter" data-ch="02" aria-labelledby="ch02-title">
@@ -4481,7 +4784,7 @@ body { line-height: 2.0; }
 </footer>
 <script>
 window.CN_CFG = {"slug": "power", "prefix": "power.", "title": "発電講義", "subtitle": "発電事業とコンバインドサイクル発電用ガスタービン", "docTitle": "発電講義 | TTJ", "glossaryCh": "32", "kinds": {"ue": "主機（電気を作る主な機器）", "ran": "系統と電気の設備", "core": "燃料と貯蔵", "db": "水・蒸気・冷却", "pol": "制御・保護・計測・記録・文書", "ext": "外部の主体", "ims": "環境と排出"}, "labels": {"arch.plane.up": "物とエネルギー（太線）", "arch.plane.cp": "信号・指令（実線）", "arch.plane.lg": "契約・制度・参照、比べる線（点線）", "drill.q1": "どの段階で止まっていますか。", "drill.q2": "最初に確かめる対象（設備・記録・担当）はどれですか。", "ident.where": "何を表すか・どこで見るか"}, "mapping": {"title": "設備・量と規格・法令の対応表", "colA": "対象（設備・量・仕組み）", "colB": "規格・法令・公的資料（発行者）", "colNote": "この講座での使いどころ", "cats": [{"key": "grid", "label": "系統と市場"}, {"key": "fuel", "label": "燃料"}, {"key": "thermo", "label": "熱とサイクル"}, {"key": "gt", "label": "ガスタービン"}, {"key": "steam", "label": "蒸気と水"}, {"key": "elec", "label": "電気"}, {"key": "om", "label": "制御と保守"}, {"key": "env", "label": "環境と制度"}], "note": "対応は「おおむね」です。規格の版と法令は改正されるので、使う前に、発行団体・e-Gov などの公式ページで現行を確かめてください。"}, "exam": {"title": "総合テスト", "intro": "公開中の章から 40 問。部ごとの成績が出ます。"}, "publish": true, "themeColor": {"dark": "#151515", "light": "#FFFFFF"}};
-window.CN_CHAPTERS = [{"num": "I1", "part": "0", "title": "電力の大きさをつかむ", "track": "系統", "time": 25, "ready": true, "label": "序章1", "front": true}, {"num": "I2", "part": "0", "title": "電気とは", "track": "系統", "time": 35, "ready": true, "label": "序章2", "front": true}, {"num": "01", "part": "1", "title": "電力系統の全体像：発電・送電・配電・小売", "track": "系統", "time": 30, "ready": true}, {"num": "02", "part": "1", "title": "需要と供給の一致と周波数", "track": "系統", "time": 40, "ready": true}, {"num": "03", "part": "1", "title": "電源の種類と役割：ベース・ミドル・ピークと調整力", "track": "系統", "time": 35, "ready": true}, {"num": "04", "part": "1", "title": "発電事業の仕組みと電力市場、発電の費用の考え方", "track": "事業", "time": 45, "ready": true}, {"num": "05", "part": "1", "title": "燃料：天然ガスと LNG の供給網", "track": "燃料", "time": 35, "ready": true}, {"num": "06", "part": "2", "title": "エネルギーと効率：熱効率・ヒートレート・発電端と送電端", "track": "熱", "time": 35, "ready": true}, {"num": "07", "part": "2", "title": "ブレイトンサイクル：ガスタービンの熱力学", "track": "熱", "time": 40, "ready": true}, {"num": "08", "part": "2", "title": "ランキンサイクル：蒸気の熱力学", "track": "熱", "time": 40, "ready": true}, {"num": "09", "part": "2", "title": "複合サイクルの原理と熱効率：低位発熱量と高位発熱量", "track": "熱", "time": 40, "ready": true}, {"num": "10", "part": "2", "title": "空気と燃焼、排出物の基礎：窒素酸化物と二酸化炭素", "track": "熱", "time": 40, "ready": true}, {"num": "11", "part": "3", "title": "ガスタービンの全体の構成", "track": "ガスタービン", "time": 35, "ready": true}, {"num": "12", "part": "3", "title": "圧縮機：段・サージ・入口案内翼", "track": "ガスタービン", "time": 35, "ready": true}, {"num": "13", "part": "3", "title": "燃焼器：低 NOx 燃焼の仕組み", "track": "ガスタービン", "time": 40, "ready": true}, {"num": "14", "part": "3", "title": "タービン：翼の冷却・耐熱材料・遮熱コーティング", "track": "ガスタービン", "time": 45, "ready": true}, {"num": "15", "part": "3", "title": "軸と軸受と補機：潤滑・起動の装置・ターニング", "track": "ガスタービン", "time": 40, "ready": true}, {"num": "16", "part": "3", "title": "吸気と排気、性能と大気条件", "track": "ガスタービン", "time": 35, "ready": true}, {"num": "17", "part": "3", "title": "ガスタービンの形式と機種の世代の考え方", "track": "ガスタービン", "time": 35, "ready": true}, {"num": "18", "part": "4", "title": "コンバインドサイクル発電所の全体と軸の構成：一軸式と多軸式", "track": "設備", "time": 40, "ready": true}, {"num": "19", "part": "4", "title": "排熱回収ボイラ：圧力の段・ピンチ・排煙脱硝", "track": "設備", "time": 45, "ready": true}, {"num": "20", "part": "4", "title": "蒸気タービン：車室・再熱・バイパス", "track": "設備", "time": 40, "ready": true}, {"num": "21", "part": "4", "title": "復水器と冷却：海水・冷却塔・空冷式", "track": "設備", "time": 40, "ready": true}, {"num": "22", "part": "4", "title": "発電機と変圧器と系統連系", "track": "設備", "time": 40, "ready": true}, {"num": "23", "part": "4", "title": "制御と保護", "track": "運転", "time": 50, "ready": true}, {"num": "24", "part": "4", "title": "運転：起動・停止・負荷追従と運転の指標", "track": "運転", "time": 45, "ready": true}, {"num": "25", "part": "4", "title": "保守：点検の周期の考え方と高温部品の検査・補修", "track": "保守", "time": 40, "ready": true}, {"num": "26", "part": "4", "title": "建設と試運転", "track": "建設", "time": 35, "ready": true}, {"num": "27", "part": "5", "title": "重電メーカーと保守事業、供給網と納期", "track": "産業", "time": 40, "ready": true}, {"num": "28", "part": "5", "title": "環境規制と許認可の枠組み", "track": "制度", "time": 45, "ready": true}, {"num": "29", "part": "5", "title": "脱炭素の技術：水素・アンモニアの混焼と専焼、CO2 回収", "track": "脱炭素", "time": 40, "ready": true}, {"num": "30", "part": "5", "title": "再生可能エネルギーとの関係と需要の動向：調整力・データセンター", "track": "系統", "time": 35, "ready": true}, {"num": "31", "part": "5", "title": "案件の進め方と総合演習", "track": "演習", "time": 45, "ready": true}, {"num": "32", "part": "A", "title": "用語集・規格と団体と公的資料の地図・総合テスト", "track": "付録", "time": 30, "ready": true}];
+window.CN_CHAPTERS = [{"num": "I1", "part": "0", "title": "電力の大きさをつかむ", "track": "系統", "time": 25, "ready": true, "label": "序章1", "front": true}, {"num": "I2", "part": "0", "title": "電気とは", "track": "系統", "time": 35, "ready": true, "label": "序章2", "front": true}, {"num": "I3", "part": "0", "title": "家庭の電気と、発電所の規模：瞬間と量をつなぐ", "track": "系統", "time": 35, "ready": true, "label": "序章3", "front": true}, {"num": "01", "part": "1", "title": "電力系統の全体像：発電・送電・配電・小売", "track": "系統", "time": 30, "ready": true}, {"num": "02", "part": "1", "title": "需要と供給の一致と周波数", "track": "系統", "time": 40, "ready": true}, {"num": "03", "part": "1", "title": "電源の種類と役割：ベース・ミドル・ピークと調整力", "track": "系統", "time": 35, "ready": true}, {"num": "04", "part": "1", "title": "発電事業の仕組みと電力市場、発電の費用の考え方", "track": "事業", "time": 45, "ready": true}, {"num": "05", "part": "1", "title": "燃料：天然ガスと LNG の供給網", "track": "燃料", "time": 35, "ready": true}, {"num": "06", "part": "2", "title": "エネルギーと効率：熱効率・ヒートレート・発電端と送電端", "track": "熱", "time": 35, "ready": true}, {"num": "07", "part": "2", "title": "ブレイトンサイクル：ガスタービンの熱力学", "track": "熱", "time": 40, "ready": true}, {"num": "08", "part": "2", "title": "ランキンサイクル：蒸気の熱力学", "track": "熱", "time": 40, "ready": true}, {"num": "09", "part": "2", "title": "複合サイクルの原理と熱効率：低位発熱量と高位発熱量", "track": "熱", "time": 40, "ready": true}, {"num": "10", "part": "2", "title": "空気と燃焼、排出物の基礎：窒素酸化物と二酸化炭素", "track": "熱", "time": 40, "ready": true}, {"num": "11", "part": "3", "title": "ガスタービンの全体の構成", "track": "ガスタービン", "time": 35, "ready": true}, {"num": "12", "part": "3", "title": "圧縮機：段・サージ・入口案内翼", "track": "ガスタービン", "time": 35, "ready": true}, {"num": "13", "part": "3", "title": "燃焼器：低 NOx 燃焼の仕組み", "track": "ガスタービン", "time": 40, "ready": true}, {"num": "14", "part": "3", "title": "タービン：翼の冷却・耐熱材料・遮熱コーティング", "track": "ガスタービン", "time": 45, "ready": true}, {"num": "15", "part": "3", "title": "軸と軸受と補機：潤滑・起動の装置・ターニング", "track": "ガスタービン", "time": 40, "ready": true}, {"num": "16", "part": "3", "title": "吸気と排気、性能と大気条件", "track": "ガスタービン", "time": 35, "ready": true}, {"num": "17", "part": "3", "title": "ガスタービンの形式と機種の世代の考え方", "track": "ガスタービン", "time": 35, "ready": true}, {"num": "18", "part": "4", "title": "コンバインドサイクル発電所の全体と軸の構成：一軸式と多軸式", "track": "設備", "time": 40, "ready": true}, {"num": "19", "part": "4", "title": "排熱回収ボイラ：圧力の段・ピンチ・排煙脱硝", "track": "設備", "time": 45, "ready": true}, {"num": "20", "part": "4", "title": "蒸気タービン：車室・再熱・バイパス", "track": "設備", "time": 40, "ready": true}, {"num": "21", "part": "4", "title": "復水器と冷却：海水・冷却塔・空冷式", "track": "設備", "time": 40, "ready": true}, {"num": "22", "part": "4", "title": "発電機と変圧器と系統連系", "track": "設備", "time": 40, "ready": true}, {"num": "23", "part": "4", "title": "制御と保護", "track": "運転", "time": 50, "ready": true}, {"num": "24", "part": "4", "title": "運転：起動・停止・負荷追従と運転の指標", "track": "運転", "time": 45, "ready": true}, {"num": "25", "part": "4", "title": "保守：点検の周期の考え方と高温部品の検査・補修", "track": "保守", "time": 40, "ready": true}, {"num": "26", "part": "4", "title": "建設と試運転", "track": "建設", "time": 35, "ready": true}, {"num": "27", "part": "5", "title": "重電メーカーと保守事業、供給網と納期", "track": "産業", "time": 40, "ready": true}, {"num": "28", "part": "5", "title": "環境規制と許認可の枠組み", "track": "制度", "time": 45, "ready": true}, {"num": "29", "part": "5", "title": "脱炭素の技術：水素・アンモニアの混焼と専焼、CO2 回収", "track": "脱炭素", "time": 40, "ready": true}, {"num": "30", "part": "5", "title": "再生可能エネルギーとの関係と需要の動向：調整力・データセンター", "track": "系統", "time": 35, "ready": true}, {"num": "31", "part": "5", "title": "案件の進め方と総合演習", "track": "演習", "time": 45, "ready": true}, {"num": "32", "part": "A", "title": "用語集・規格と団体と公的資料の地図・総合テスト", "track": "付録", "time": 30, "ready": true}];
 window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "short": "序章", "appendix": false, "front": true}, {"key": "1", "name": "第1部 電力と発電事業の基礎", "short": "電力と発電事業の基礎", "appendix": false}, {"key": "2", "name": "第2部 熱と流体の基礎とサイクル", "short": "熱とサイクル", "appendix": false}, {"key": "3", "name": "第3部 ガスタービン", "short": "ガスタービン", "appendix": false}, {"key": "4", "name": "第4部 コンバインドサイクルの設備と運転", "short": "設備と運転", "appendix": false}, {"key": "5", "name": "第5部 産業と今後", "short": "産業と今後", "appendix": false}, {"key": "A", "name": "付録", "short": "付録", "appendix": true}];
 </script>
 <script>
@@ -6562,19 +6865,45 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
 /* ==== opt/expr.js ==== */
 /* 部品 lab / scale の共通：安全な式の評価器。eval・new Function は使わない。
    使える物：数値、名前（入力・計算結果・定数）、+ - * / ^（または **）、比較（< <= > >= == !=）、論理（&& || !）、条件（a ? b : c）、
-   かっこ、関数 sqrt abs sin cos tan asin acos atan atan2 exp ln log10 pow min max floor ceil round sign if(cond,a,b) clamp(x,lo,hi)、定数 pi。
+   かっこ、関数 sqrt abs sin cos tan asin acos atan atan2 exp ln log10 pow min max floor ceil round sign if(cond,a,b) clamp(x,lo,hi)、
+   ncdf(x)（標準正規分布の累積分布関数）・npdf(x)（同じ密度関数）、定数 pi。
+   ncdf は W. J. Hart の有理近似（West 2005 の倍精度版）。絶対誤差はおよそ 1e-15 以下（ブラウザとビルド検査で同じ式を使う）。
    ブラウザでは window.CNExpr、node（check-data.js）では module.exports。 */
 (function () {
   'use strict';
+  /* 標準正規分布の累積分布関数 N(x)。Hart の近似（Graeme West, "Better approximations to cumulative normal functions", 2005）。 */
+  function ncdf(x) {
+    if (x !== x) return NaN;
+    var xa = Math.abs(x), c, b;
+    if (xa > 37) c = 0;
+    else {
+      var e = Math.exp(-xa * xa / 2);
+      if (xa < 7.07106781186547) {
+        b = 3.52624965998911E-02 * xa + 0.700383064443688;
+        b = b * xa + 6.37396220353165; b = b * xa + 33.912866078383; b = b * xa + 112.079291497871; b = b * xa + 221.213596169931; b = b * xa + 220.206867912376;
+        c = e * b;
+        b = 8.83883476483184E-02 * xa + 1.75566716318264;
+        b = b * xa + 16.064177579207; b = b * xa + 86.7807322029461; b = b * xa + 296.564248779674; b = b * xa + 637.333633378831; b = b * xa + 793.826512519948; b = b * xa + 440.413735824752;
+        c = c / b;
+      } else {
+        b = xa + 0.65; b = xa + 4 / b; b = xa + 3 / b; b = xa + 2 / b; b = xa + 1 / b;
+        c = e / b / 2.506628274631;
+      }
+    }
+    return x > 0 ? 1 - c : c;
+  }
+  /* 標準正規分布の密度関数 */
+  function npdf(x) { return Math.exp(-x * x / 2) / 2.5066282746310002; }
   var FN = {
     sqrt: Math.sqrt, abs: Math.abs, sin: Math.sin, cos: Math.cos, tan: Math.tan, asin: Math.asin, acos: Math.acos, atan: Math.atan, atan2: Math.atan2,
     exp: Math.exp, ln: Math.log, log10: function (x) { return Math.log(x) / Math.LN10; }, pow: Math.pow, min: Math.min, max: Math.max,
     floor: Math.floor, ceil: Math.ceil, round: function (x, n) { var k = Math.pow(10, n || 0); return Math.round(x * k) / k; },
     sign: function (x) { return x > 0 ? 1 : x < 0 ? -1 : 0; }, 'if': function (c, a, b) { return c ? a : b; },
-    clamp: function (x, lo, hi) { return Math.min(hi, Math.max(lo, x)); }
+    clamp: function (x, lo, hi) { return Math.min(hi, Math.max(lo, x)); },
+    ncdf: ncdf, npdf: npdf
   };
   var CONST = { pi: Math.PI };
-  var NARGS = { sqrt: 1, abs: 1, sin: 1, cos: 1, tan: 1, asin: 1, acos: 1, atan: 1, atan2: 2, exp: 1, ln: 1, log10: 1, pow: 2, floor: 1, ceil: 1, sign: 1, 'if': 3, clamp: 3 };
+  var NARGS = { sqrt: 1, abs: 1, sin: 1, cos: 1, tan: 1, asin: 1, acos: 1, atan: 1, atan2: 2, exp: 1, ln: 1, log10: 1, pow: 2, floor: 1, ceil: 1, sign: 1, 'if': 3, clamp: 3, ncdf: 1, npdf: 1 };
 
   function tokenize(src) {
     var t = [], i = 0, m, s = String(src);
@@ -6677,9 +7006,810 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else window.CNExpr = api;
 })();
 
+/* ==== opt/home-lab.js ==== */
+/* 部品：bucket（電力と電力量の実験台）／ unitconv（単位の階段と換算）／ appmix（家庭の電気の使いみち）／ areacircle（円の面積で比べる）／ bundle（家庭を束ねて発電所と比べる）。
+   使う章があるときだけ build.py が埋め込む（js/opt/home-lab.js・css/opt/home-lab.css）。データ形式は FRAMEWORK.md §4.12。
+   いずれも「規模の感覚をつかむための学習用の模型」。部品の中に事実の数値は持たない（値はすべてデータ側）。持つのは単位の定義（千倍ごと）と、描き方だけ。
+   自己完結（scale-lab.js・expr.js に依存しない）。 */
+(function () {
+  'use strict';
+  var h = CN.h, s = CN.s;
+
+  /* ================= 数の書き方 ================= */
+  function clamp(x, a, b) { return Math.max(a, Math.min(b, x)); }
+  function groupDigits(str) { return str.replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+  function sig(x, n) { if (!isFinite(x) || x === 0) return x; var e = Math.floor(Math.log(Math.abs(x)) / Math.LN10 + 1e-12), f = Math.pow(10, n - 1 - e); return Math.round(x * f) / f; }
+  function fmtSig(x, n) {
+    if (!isFinite(x)) return '—';
+    if (x === 0) return '0';
+    var v = sig(x, n), dec = Math.max(0, n - 1 - Math.floor(Math.log(Math.abs(v)) / Math.LN10 + 1e-12));
+    var str = Math.abs(v).toFixed(Math.min(dec, 14));
+    if (str.indexOf('.') >= 0) str = str.replace(/0+$/, '').replace(/\.$/, '');
+    var parts = str.split('.'); parts[0] = groupDigits(parts[0]);
+    return (v < 0 ? '−' : '') + parts.join('.');
+  }
+  function fmtFix(x, d) {
+    if (!isFinite(x)) return '—';
+    var str = Math.abs(x).toFixed(d), parts = str.split('.'); parts[0] = groupDigits(parts[0]);
+    return (x < 0 && /[1-9]/.test(str) ? '−' : '') + parts.join('.');
+  }
+  /* 日本語の大きな数：1 万以上は「万」、1 億以上は「億」（n は有効数字） */
+  function ja(x, n) {
+    if (!isFinite(x)) return '—';
+    n = n || 2;
+    if (x >= 1e8) return fmtSig(x / 1e8, n) + ' 億';
+    if (x >= 1e4) return fmtSig(x / 1e4, n) + ' 万';
+    return fmtSig(x, n);
+  }
+  var PU = [['TW', 1e12], ['GW', 1e9], ['MW', 1e6], ['kW', 1e3], ['W', 1]];
+  var EU = [['TWh', 1e12], ['GWh', 1e9], ['MWh', 1e6], ['kWh', 1e3], ['Wh', 1]];
+  function auto(v, units, n) {   // v（W か Wh）を、読みやすい単位で
+    var k = 0; n = n || 3;
+    for (k = 0; k < units.length - 1; k++) if (Math.abs(v) >= units[k][1]) break;
+    if (sig(v / units[k][1], n) >= 1000 && k > 0) k--;
+    return fmtSig(v / units[k][1], n) + ' ' + units[k][0];
+  }
+  function powTxt(w, n) { return auto(w, PU, n); }
+  function eneTxt(wh, n) { return auto(wh, EU, n); }
+  /* 単位を付けずに、そのままの数（指数表記にしない）で書く：9 桁の有効数字、末尾の 0 は消す、3 桁区切り */
+  function plain(x) {
+    if (!isFinite(x)) return '—';
+    if (x === 0) return '0';
+    var a = Math.abs(x);
+    if (a < 1e-9 || a >= 1e18) return x.toExponential(3);
+    var dec = clamp(9 - 1 - Math.floor(Math.log(a) / Math.LN10 + 1e-12), 0, 20), str = Math.abs(Number(x.toPrecision(9))).toFixed(dec);
+    if (str.indexOf('.') >= 0) str = str.replace(/0+$/, '').replace(/\.$/, '');
+    var parts = str.split('.'); parts[0] = groupDigits(parts[0]);
+    return (x < 0 ? '−' : '') + parts.join('.');
+  }
+
+  /* ================= 共通の部品（幅の測定・つまみ・結果の箱） ================= */
+  function measure(el, fallback) { var w = el.clientWidth; return w > 40 ? w : (fallback || 320); }
+  function watchWidth(el, fn) {
+    var last = 0, t = null;
+    function chk() { var w = el.clientWidth; if (w > 40 && Math.abs(w - last) > 2) { last = w; fn(); } }
+    if (window.ResizeObserver) { var ro = new ResizeObserver(function () { clearTimeout(t); t = setTimeout(chk, 60); }); ro.observe(el); }
+    else window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(chk, 100); });
+  }
+  var DISC = '学習用の模型です。実際の設計や運用の判断には使えません。';
+  /* つまみ：{id,label,unit,min,max,step,value,fmt,log,onInput}。log のときは、値は 10 の指数（表示は fmt で）。 */
+  function slider(ctx, o) {
+    var id = ctx.id + '-' + o.id, wrap = h('div', { 'class': 'hm-in' }), out = h('output', { 'for': id, 'class': 'hm-val' });
+    wrap.appendChild(h('div', { 'class': 'hm-in-h' }, h('label', { 'for': id }, o.label), out));
+    var r = h('input', { type: 'range', id: id, min: o.min, max: o.max, step: o.step, value: o.value });
+    function show() { var t = o.fmt ? o.fmt(parseFloat(r.value)) : r.value; out.textContent = t; r.setAttribute('aria-valuetext', t); }
+    r.addEventListener('input', function () { if (o.onInput) o.onInput(parseFloat(r.value)); show(); });
+    wrap.appendChild(r);
+    if (o.minmax) wrap.appendChild(h('div', { 'class': 'hm-minmax' }, h('span', null, o.minmax[0]), h('span', null, o.minmax[1])));
+    show();
+    return { el: wrap, r: r, set: function (v) { r.value = v; show(); }, get: function () { return parseFloat(r.value); }, show: show };
+  }
+  function resBox(label, value, unit, note, big) {
+    var b = h('div', { 'class': 'hm-res' + (big ? ' big' : '') });
+    b.appendChild(h('div', { 'class': 'hm-res-l' }, label));
+    b.appendChild(h('div', { 'class': 'hm-res-v' }, h('b', null, value), unit ? ' ' + unit : ''));
+    if (note) b.appendChild(h('div', { 'class': 'hm-res-n' }, note));
+    return b;
+  }
+  function begin(el, d, label, ctx) {
+    var tabsHolder = null;
+    CN.frame(el, label, d.title, tabsHolder);
+    el.classList.add('hm');
+    var body = h('div', { 'class': 'wg-body hm-body' }); el.appendChild(body);
+    return body;
+  }
+  function endNote(el, d) { el.appendChild(h('p', { 'class': 'hm-disc' }, d.disclaimer || DISC)); }
+  function svgRoot(w, hh, label) { return s('svg', { 'class': 'hm-svg', viewBox: '0 0 ' + w + ' ' + hh, width: w, height: hh, role: 'img', 'aria-label': label }); }
+  function txt(x, y, str, cls, anchor, extra) { var p = { x: x, y: y, 'class': cls || 'hm-t' }; if (anchor) p['text-anchor'] = anchor; if (extra) for (var k in extra) p[k] = extra[k]; return s('text', p, str); }
+  function line(x1, y1, x2, y2, cls) { return s('line', { x1: x1, y1: y1, x2: x2, y2: y2, 'class': cls }); }
+  function rect(x, y, w, hh, cls, extra) { var p = { x: x, y: y, width: Math.max(0, w), height: Math.max(0, hh), 'class': cls }; if (extra) for (var k in extra) p[k] = extra[k]; return s('rect', p); }
+  function pathEl(d, cls, extra) { var p = { d: d, 'class': cls }; if (extra) for (var k in extra) p[k] = extra[k]; return s('path', p); }
+  function circle(cx, cy, r, cls, extra) { var p = { cx: cx, cy: cy, r: r, 'class': cls }; if (extra) for (var k in extra) p[k] = extra[k]; return s('circle', p); }
+  function details(summary, table) { return h('details', { 'class': 'seq-list hm-table' }, h('summary', null, summary), h('div', { 'class': 'tbl-wrap' }, table)); }
+  function tableOf(cols, rows, cap) {
+    var tb = h('tbody');
+    rows.forEach(function (r) { var tr = h('tr'); r.forEach(function (c, i) { tr.appendChild(i === 0 ? h('th', { scope: 'row' }, c) : h('td', null, c)); }); tb.appendChild(tr); });
+    var t = h('table', { 'class': 'tbl' }, cap ? h('caption', null, cap) : null, h('thead', null, h('tr', null, cols.map(function (c) { return h('th', { scope: 'col' }, c); }))), tb);
+    return t;
+  }
+  var NICE = [1, 2, 5, 10];
+  function niceStep(range, n) { var raw = range / n, e = Math.pow(10, Math.floor(Math.log(raw) / Math.LN10)), f = raw / e, k = 0; while (k < NICE.length - 1 && NICE[k] < f - 1e-9) k++; return NICE[k] * e; }
+
+  /* ================= bucket：電力（蛇口の太さ）と電力量（バケツにたまる水） ================= */
+  CN.widgets.bucket = function (el, d, ctx) {
+    var P = d.power, T = d.hours, cap = d.capacityKwh;
+    var st = { w: P.value, hrs: T.value, t: T.value, playing: false, raf: 0 };
+    var body = begin(el, d, '電力と電力量の実験台', ctx);
+    if (d.intro) body.appendChild(CN.richEl('p', 'hm-intro', d.intro));
+    var top = h('div', { 'class': 'hm-top' }), left = h('div', { 'class': 'hm-ctl' }), right = h('div', { 'class': 'hm-right' });
+    top.appendChild(left); top.appendChild(right); body.appendChild(top);
+    var sw = slider(ctx, { id: 'w', label: P.label || '機器の電力', min: P.min, max: P.max, step: P.step, value: P.value, fmt: function (v) { return fmtFix(v, 0) + ' W'; }, minmax: [fmtFix(P.min, 0) + ' W', fmtFix(P.max, 0) + ' W'], onInput: function (v) { stop(); st.w = v; st.t = st.hrs; draw(); } });
+    var sh = slider(ctx, { id: 'hrs', label: T.label || '使う時間', min: T.min, max: T.max, step: T.step, value: T.value, fmt: function (v) { return fmtFix(v, 2).replace(/0$/, '') + ' 時間'; }, minmax: [T.min + ' 時間', T.max + ' 時間'], onInput: function (v) { stop(); st.hrs = v; st.t = v; draw(); } });
+    left.appendChild(sw.el); left.appendChild(sh.el);
+    var pbtns = [];
+    if (P.presets && P.presets.length) {
+      var pg = h('div', { 'class': 'hm-presets', role: 'group', 'aria-label': (P.label || '機器の電力') + 'の目安' });
+      pg.appendChild(h('div', { 'class': 'hm-preset-h' }, P.presetLabel || '目安の機器（押すと電力が動きます）'));
+      P.presets.forEach(function (p) { var b = h('button', { type: 'button', 'class': 'btn sm', 'aria-pressed': 'false' }, p.label); b.addEventListener('click', function () { stop(); st.w = p.w; sw.set(p.w); st.t = st.hrs; draw(); }); pbtns.push([b, p]); pg.appendChild(b); });
+      left.appendChild(pg);
+    }
+    var play = h('button', { type: 'button', 'class': 'btn sm hm-play' }, '▶ 時間を進める');
+    play.addEventListener('click', function () { if (st.playing) { stop(); st.t = st.hrs; draw(); } else start(); });
+    left.appendChild(play);
+    var results = h('div', { 'class': 'hm-results', 'aria-live': 'polite' }), figs = h('div', { 'class': 'hm-figs' });
+    right.appendChild(results); right.appendChild(figs);
+    var tapBox = h('div', { 'class': 'hm-fig' }), areaBox = h('div', { 'class': 'hm-fig' });
+    figs.appendChild(tapBox); figs.appendChild(areaBox);
+    var tblBox = h('div'); body.appendChild(tblBox);
+    if (d.formula) body.appendChild(CN.richEl('p', 'hm-formula', '式：' + d.formula));
+    if (d.reads && d.reads.length) { var rd = h('div', { 'class': 'hm-read' }, h('h5', null, '読み取れること')); var ul = h('ul'); d.reads.forEach(function (t) { ul.appendChild(CN.richEl('li', '', t)); }); rd.appendChild(ul); body.appendChild(rd); }
+    endNote(el, d);
+
+    function stop() { if (st.raf) cancelAnimationFrame(st.raf); st.raf = 0; st.playing = false; play.textContent = '▶ 時間を進める'; }
+    function start() {
+      if (CN.reduced()) { st.t = st.hrs; draw(); return; }
+      st.playing = true; st.t = 0; play.textContent = '■ 止める';
+      var t0 = null, dur = 3200;
+      function tick(ts) {
+        if (!st.playing) return;
+        if (t0 == null) t0 = ts;
+        var f = clamp((ts - t0) / dur, 0, 1); st.t = st.hrs * f; draw();
+        if (f < 1) st.raf = requestAnimationFrame(tick); else { stop(); st.t = st.hrs; draw(); }
+      }
+      st.raf = requestAnimationFrame(tick);
+    }
+    function drawTap() {
+      var W = Math.min(measure(tapBox, 240), 300), H = 236, kw = st.w / 1000, e = kw * st.t, eFull = kw * st.hrs;
+      var level = clamp(e / cap, 0, 1), over = e > cap + 1e-9;
+      var svg = svgRoot(W, H, '蛇口とバケツの図。蛇口の太さが電力（いま ' + fmtFix(kw, 2) + ' kW）、バケツにたまった水が電力量（いま ' + fmtFix(e, 2) + ' kWh、家庭 1 日分 ' + cap + ' kWh の ' + fmtFix(e / cap * 100, 0) + ' %）。');
+      var th = 5 + 30 * clamp(st.w / P.max, 0, 1), bx0 = W / 2 - 52, bx1 = W / 2 + 52, by0 = 118, by1 = H - 24, pipeY = 18, nozX = W / 2;
+      var defs = s('defs', null, s('clipPath', { id: ctx.id + '-clip' }, pathEl('M' + (bx0 + 4) + ',' + by0 + ' L' + (bx0 + 12) + ',' + by1 + ' L' + (bx1 - 12) + ',' + by1 + ' L' + (bx1 - 4) + ',' + by0 + ' Z')));
+      svg.appendChild(defs);
+      // 蛇口（管の太さ ＝ 電力）
+      svg.appendChild(rect(8, pipeY, nozX - 8, th, 'hm-pipe'));
+      svg.appendChild(rect(nozX - 10, pipeY - 4, 20, th + 8, 'hm-pipe'));
+      svg.appendChild(txt(10, pipeY - 6, '蛇口の太さ ＝ 電力 ' + fmtFix(kw, 2) + ' kW', 'hm-t b'));
+      // 水の筋
+      var sw0 = Math.max(2, th * 0.55), y0 = pipeY + th + 4, y1 = by0 + (by1 - by0) * (1 - level);
+      if (kw > 0 && st.t > 0) svg.appendChild(rect(nozX - sw0 / 2, y0, sw0, Math.max(0, y1 - y0), 'hm-stream' + (st.playing ? ' flow' : '')));
+      // バケツ
+      svg.appendChild(s('g', { 'clip-path': 'url(#' + ctx.id + '-clip)' }, rect(bx0, by1 - (by1 - by0) * level, bx1 - bx0, (by1 - by0) * level, 'hm-water')));
+      svg.appendChild(pathEl('M' + bx0 + ',' + by0 + ' L' + (bx0 + 8) + ',' + by1 + ' L' + (bx1 - 8) + ',' + by1 + ' L' + bx1 + ',' + by0, 'hm-bucket'));
+      svg.appendChild(line(bx0 - 6, by0, bx1 + 6, by0, 'hm-capline'));
+      svg.appendChild(txt(bx1 + 8, by0 + 4, '満杯 ＝', 'hm-t sm', 'start', { 'dominant-baseline': 'middle' }));
+      svg.appendChild(txt(bx1 + 8, by0 + 18, '家庭 1 日分', 'hm-t sm', 'start'));
+      svg.appendChild(txt(bx1 + 8, by0 + 32, '約 ' + fmtSig(cap, 3) + ' kWh', 'hm-t sm', 'start'));
+      svg.appendChild(txt(W / 2, H - 6, 'バケツの水 ＝ 電力量 ' + fmtFix(e, 2) + ' kWh' + (over ? '（あふれた）' : ''), 'hm-t b', 'middle'));
+      CN.clear(tapBox).appendChild(svg);
+    }
+    function drawArea() {
+      var W = Math.min(measure(areaBox, 300), 420), H = 236, kw = st.w / 1000, kwMax = P.max / 1000, hMax = T.max;
+      var m = { l: 46, r: 12, t: 22, b: 40 }, pw = W - m.l - m.r, ph = H - m.t - m.b;
+      var X = function (v) { return m.l + pw * v / hMax; }, Y = function (v) { return m.t + ph * (1 - v / kwMax); };
+      var svg = svgRoot(W, H, '電力と時間のグラフ。縦が電力（kW）、横が時間（時間）。長方形の面積が電力量。いま ' + fmtFix(kw, 2) + ' kW を ' + fmtFix(st.hrs, 2) + ' 時間使うと ' + fmtFix(kw * st.hrs, 2) + ' kWh。');
+      svg.appendChild(rect(m.l, m.t, pw, ph, 'hm-plot'));
+      var yt = [0, 1, 2, 3].filter(function (v) { return v <= kwMax + 1e-9; });
+      yt.forEach(function (v) { svg.appendChild(line(m.l, Y(v), m.l + pw, Y(v), 'hm-g')); svg.appendChild(txt(m.l - 6, Y(v) + 4, fmtFix(v, 0), 'hm-ax', 'end')); });
+      [0, 6, 12, 18, 24].filter(function (v) { return v <= hMax; }).forEach(function (v) { svg.appendChild(line(X(v), m.t, X(v), m.t + ph, 'hm-g v')); svg.appendChild(txt(X(v), m.t + ph + 14, fmtFix(v, 0), 'hm-ax', 'middle')); });
+      svg.appendChild(txt(4, m.t - 8, '電力（kW）', 'hm-ax', 'start'));
+      svg.appendChild(txt(m.l + pw, m.t + ph + 30, '時間（時間）', 'hm-ax', 'end'));
+      var tx = Math.min(st.t, st.hrs);
+      svg.appendChild(rect(X(0), Y(kw), X(st.hrs) - X(0), Y(0) - Y(kw), 'hm-rect-rest'));
+      svg.appendChild(rect(X(0), Y(kw), X(tx) - X(0), Y(0) - Y(kw), 'hm-rect'));
+      svg.appendChild(line(X(0), Y(kw), X(st.hrs), Y(kw), 'hm-dash'));
+      var cx = (X(0) + X(st.hrs)) / 2, cy = (Y(kw) + Y(0)) / 2;
+      var lab = '面積 ＝ ' + fmtFix(kw * st.hrs, 2) + ' kWh';
+      if (X(st.hrs) - X(0) > 120 && Y(0) - Y(kw) > 26) svg.appendChild(txt(cx, cy + 4, lab, 'hm-t b hm-on', 'middle'));
+      else svg.appendChild(txt(Math.min(X(st.hrs) + 6, m.l + pw), Math.max(m.t + 12, Y(kw) - 6), lab, 'hm-t b', X(st.hrs) + 6 > m.l + pw - 90 ? 'end' : 'start'));
+      CN.clear(areaBox).appendChild(svg);
+    }
+    function draw() {
+      var kw = st.w / 1000, e = kw * st.hrs, e1 = kw * st.t;
+      CN.clear(results);
+      results.appendChild(resBox('電力（いまの大きさ）', fmtFix(kw, 2), 'kW', fmtFix(st.w, 0) + ' W'));
+      results.appendChild(resBox('時間', fmtFix(st.t, 2).replace(/0$/, ''), '時間', st.playing ? '進行中（全体は ' + fmtFix(st.hrs, 2).replace(/0$/, '') + ' 時間）' : null));
+      results.appendChild(resBox('電力量（たまった量）', fmtFix(e1, 2), 'kWh', st.playing ? '全体では ' + fmtFix(e, 2) + ' kWh' : '＝ ' + fmtFix(kw, 2) + ' kW × ' + fmtFix(st.hrs, 2).replace(/0$/, '') + ' 時間', true));
+      results.appendChild(resBox('家庭 1 日分（約 ' + fmtSig(cap, 3) + ' kWh）に対して', fmtFix(e / cap * 100, 0), '%', e > cap ? '1 日分を超える量' : null));
+      pbtns.forEach(function (q) { q[0].setAttribute('aria-pressed', String(Math.abs(q[1].w - st.w) < 1e-9)); });
+      drawTap(); drawArea();
+      CN.clear(tblBox).appendChild(details('図の数値（同じ内容の表。読み上げ・印刷用）', tableOf(['項目', '値'], [
+        ['電力', fmtFix(kw, 3) + ' kW（' + fmtFix(st.w, 0) + ' W）'], ['時間', fmtFix(st.hrs, 2) + ' 時間'], ['電力量', fmtFix(e, 3) + ' kWh'], ['家庭 1 日分（約 ' + fmtSig(cap, 3) + ' kWh）に対する割合', fmtFix(e / cap * 100, 1) + ' %']])));
+    }
+    watchWidth(tapBox, function () { drawTap(); }); watchWidth(areaBox, function () { drawArea(); });
+    draw();
+  };
+  CN.searchText.bucket = function (d) { return [d.title, d.intro || '', d.formula || '', (d.reads || []).join(' ')].join(' '); };
+
+  /* ================= unitconv：単位の階段と、全部の単位への換算 ================= */
+  var PWR = [['W', 1], ['kW', 1e3], ['MW', 1e6], ['GW', 1e9], ['TW', 1e12], ['万kW', 1e7]];
+  var ENG = [['Wh', 1], ['kWh', 1e3], ['MWh', 1e6], ['GWh', 1e9], ['TWh', 1e12], ['万kWh', 1e7], ['億kWh', 1e11]];
+  CN.widgets.unitconv = function (el, d, ctx) {
+    var st = { kind: d.initial.kind, value: d.initial.value, unit: d.initial.unit };
+    var tabs = CN.tabs([{ key: 'power', label: '電力（W の仲間）' }, { key: 'energy', label: '電力量（Wh の仲間）' }], st.kind, function (k) { var df = (d.defaults && d.defaults[k]) || { value: 1, unit: k === 'power' ? 'kW' : 'kWh' }; st.kind = k; st.unit = df.unit; st.value = df.value; build(); }, '電力と電力量の切替');
+    CN.frame(el, '単位の階段と換算', d.title, tabs); el.classList.add('hm');
+    var body = h('div', { 'class': 'wg-body hm-body' }); el.appendChild(body);
+    endNote(el, d);
+    var inBox, stairBox, outBox, exBox, numIn, selU, tblBox, say;
+    function units() { return st.kind === 'power' ? PWR : ENG; }
+    function factor(u) { var us = units(), i; for (i = 0; i < us.length; i++) if (us[i][0] === u) return us[i][1]; return 1; }
+    function build() {
+      CN.clear(body);
+      if (d.intro) body.appendChild(CN.richEl('p', 'hm-intro', d.intro));
+      var top = h('div', { 'class': 'hm-top' }), left = h('div', { 'class': 'hm-ctl' }), right = h('div', { 'class': 'hm-right' }); top.appendChild(left); top.appendChild(right); body.appendChild(top);
+      var id = ctx.id + '-' + st.kind;
+      numIn = h('input', { type: 'number', id: id + '-v', 'class': 'hm-num', step: 'any', value: st.value, inputmode: 'decimal', min: 0 });
+      selU = h('select', { id: id + '-u', 'class': 'hm-sel', 'aria-label': '単位' });
+      units().forEach(function (u) { var o = h('option', { value: u[0] }, u[0]); if (u[0] === st.unit) o.selected = true; selU.appendChild(o); });
+      left.appendChild(h('div', { 'class': 'hm-in' }, h('div', { 'class': 'hm-in-h' }, h('label', { 'for': id + '-v' }, '換算したい値と単位')), h('div', { 'class': 'hm-numrow' }, numIn, selU)));
+      numIn.addEventListener('input', function () { var v = parseFloat(numIn.value); if (isFinite(v) && v >= 0) { st.value = v; draw(); } });
+      selU.addEventListener('change', function () { st.unit = selU.value; draw(); });
+      exBox = h('div', { 'class': 'hm-presets', role: 'group', 'aria-label': '例の値' });
+      exBox.appendChild(h('div', { 'class': 'hm-preset-h' }, '例の値（押すと入ります）'));
+      (d.examples || []).filter(function (x) { return x.kind === st.kind; }).forEach(function (x) {
+        var b = h('button', { type: 'button', 'class': 'btn sm' }, x.label); b.addEventListener('click', function () { st.value = x.value; st.unit = x.unit; numIn.value = x.value; selU.value = x.unit; draw(); }); exBox.appendChild(b);
+      });
+      left.appendChild(exBox);
+      say = h('p', { 'class': 'hm-say', 'aria-live': 'polite' }); left.appendChild(say);
+      stairBox = h('div', { 'class': 'hm-fig' }); right.appendChild(stairBox);
+      tblBox = h('div', { 'class': 'hm-conv' }); right.appendChild(tblBox);
+      if (d.notes && d.notes[st.kind]) { var ul = h('ul', { 'class': 'hm-notes' }); d.notes[st.kind].forEach(function (t) { ul.appendChild(CN.richEl('li', '', t)); }); body.appendChild(ul); }
+      draw();
+    }
+    function natural(base) {   // 1 以上 1000 未満になる SI の単位
+      var us = st.kind === 'power' ? PWR.slice(0, 5) : ENG.slice(0, 5), k = 0, i;
+      if (base <= 0) return 0;
+      for (i = us.length - 1; i >= 0; i--) if (base / us[i][1] >= 1) { k = i; break; }
+      return k;
+    }
+    function drawStairs(base) {
+      var W = Math.min(measure(stairBox, 340), 560), us = (st.kind === 'power' ? PWR : ENG).slice(0, 5), H = 188, n = us.length, gap = 4;
+      var bw = (W - 12 - gap * (n - 1)) / n, nat = natural(base);
+      var svg = svgRoot(W, H, '単位の階段。' + us.map(function (u) { return u[0]; }).join('、') + ' が、千倍ずつ大きくなる。' + (base > 0 ? 'いまの値は ' + (st.kind === 'power' ? powTxt(base, 3) : eneTxt(base, 3)) + '。' : ''));
+      var baseY = H - 40, x0 = 6;
+      us.forEach(function (u, i) {
+        var hh = 34 + i * 20, x = x0 + i * (bw + gap), on = i === nat && base > 0;
+        svg.appendChild(rect(x, baseY - hh, bw, hh, 'hm-step' + (on ? ' on' : '')));
+        svg.appendChild(txt(x + bw / 2, baseY - hh + 20, u[0], 'hm-t b' + (on ? ' hm-on' : ''), 'middle'));
+        svg.appendChild(txt(x + bw / 2, baseY + 14, '10' + sup(Math.round(Math.log(u[1]) / Math.LN10)), 'hm-ax', 'middle'));
+        if (i > 0) svg.appendChild(txt(x - gap / 2, baseY - hh - 4, '×1,000', 'hm-t sm hm-acc', 'middle'));
+      });
+      svg.appendChild(txt(x0, baseY + 14 + 16, st.kind === 'power' ? '各段の下は、1 の単位が何 W か（10 の何乗 W）' : '各段の下は、1 の単位が何 Wh か（10 の何乗 Wh）', 'hm-ax', 'start'));
+      // 日本の書き方の印（万・億）を、同じ指数の上に
+      var marks = st.kind === 'power' ? [[7, '1 万 kW ＝ 10 MW']] : [[7, '1 万 kWh ＝ 10 MWh'], [11, '1 億 kWh ＝ 100 GWh']];
+      var span = (bw + gap) / 3;      // 指数 1 つぶんの横の幅
+      marks.forEach(function (mk, j) {
+        var x = x0 + bw / 2 + mk[0] * span;
+        svg.appendChild(pathEl('M' + (x - 5) + ',' + (baseY + 2) + ' L' + x + ',' + (baseY - 7) + ' L' + (x + 5) + ',' + (baseY + 2) + ' Z', 'hm-flag'));
+        var anchor = x > W - 120 ? 'end' : 'start', tx = anchor === 'end' ? x + 4 : x - 4;
+        svg.appendChild(txt(tx, baseY - 12 - j * 16, mk[1], 'hm-t sm hm-acc hm-halo', anchor === 'end' ? 'end' : 'start'));
+      });
+      CN.clear(stairBox).appendChild(svg);
+    }
+    function sup(n) { var m = { '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹' }; return String(n).split('').map(function (c) { return m[c] || c; }).join(''); }
+    function draw() {
+      var base = st.value * factor(st.unit), us = units(), nat = natural(base), rows = [];
+      us.forEach(function (u, i) {
+        var isNat = base > 0 && ((st.kind === 'power' ? i : i) === nat && i < 5);
+        var tr = h('tr', isNat ? { 'class': 'on', 'aria-current': 'true' } : null);
+        tr.appendChild(h('th', { scope: 'row' }, u[0] + (isNat ? '  ●' : ''))); tr.appendChild(h('td', { 'class': 'num' }, plain(base / u[1]) + ' ' + u[0])); rows.push(tr);
+      });
+      var tb = h('tbody'); rows.forEach(function (r) { tb.appendChild(r); });
+      var t = h('table', { 'class': 'tbl hm-convt' }, h('caption', null, '同じ大きさを、全部の単位で（● は 1 以上 1,000 未満で読める単位）'), h('thead', null, h('tr', null, h('th', { scope: 'col' }, '単位'), h('th', { scope: 'col' }, '値'))), tb);
+      CN.clear(tblBox).appendChild(h('div', { 'class': 'tbl-wrap' }, t));
+      drawStairs(base);
+      say.textContent = base > 0 ? plain(st.value) + ' ' + st.unit + ' ＝ ' + (st.kind === 'power' ? powTxt(base, 4) : eneTxt(base, 4)) : '0 より大きい値を入れてください。';
+    }
+    build();
+    watchWidth(stairBox || body, function () { if (stairBox) draw(); });
+  };
+  CN.searchText.unitconv = function (d) { return [d.title, d.intro || ''].join(' '); };
+
+  /* ================= appmix：家庭の電気の使いみち（機器ごとの平均の電力と、使う時間帯） ================= */
+  CN.widgets.appmix = function (el, d, ctx) {
+    var days = d.days || 365, devs = d.devices, state = {};
+    devs.forEach(function (v) { state[v.id] = { on: true, hrs: v.hours }; });
+    var body = begin(el, d, '家庭の電気の使いみち', ctx);
+    if (d.intro) body.appendChild(CN.richEl('p', 'hm-intro', d.intro));
+    var pbox = h('div', { 'class': 'hm-presets', role: 'group', 'aria-label': 'まとめて動かす' }), pbtns = [];
+    pbox.appendChild(h('div', { 'class': 'hm-preset-h' }, 'まとめて動かす（押すと、下のつまみが動きます）'));
+    (d.presets || []).forEach(function (p) {
+      var b = h('button', { type: 'button', 'class': 'btn sm', 'aria-pressed': 'false' }, p.label);
+      b.addEventListener('click', function () { devs.forEach(function (v) { var o = p.set && p.set[v.id]; state[v.id].on = !(o && o.on === false); state[v.id].hrs = o && o.hrs != null ? o.hrs : v.hours; }); syncCtl(); update(p); }); pbox.appendChild(b); pbtns.push([b, p]);
+    });
+    body.appendChild(pbox);
+    var presetNote = h('p', { 'class': 'hm-say', 'aria-live': 'polite' }); body.appendChild(presetNote);
+    var resBoxEl = h('div', { 'class': 'hm-results', 'aria-live': 'polite' }); body.appendChild(resBoxEl);
+    var list = h('ul', { 'class': 'hm-devs' }), rows = {};
+    var maxAvg = Math.max.apply(null, devs.map(function (v) { return v.runW * v.hours / 24; })) * 1.15;
+    devs.forEach(function (v) {
+      var id = ctx.id + '-' + v.id, li = h('li', { 'class': 'hm-dev' });
+      var cb = h('input', { type: 'checkbox', id: id + '-on', checked: true });
+      var out = h('output', { 'for': id + '-h', 'class': 'hm-val sm' });
+      var r = h('input', { type: 'range', id: id + '-h', min: 0, max: 24, step: 0.1, value: v.hours, 'aria-label': v.name + 'を使う時間（1 日あたり）' });
+      var bar = h('span', { 'class': 'hm-bar' }, h('i')), bv = h('span', { 'class': 'hm-bv' });
+      li.appendChild(h('div', { 'class': 'hm-dev-n' }, cb, h('label', { 'for': id + '-on' }, v.name)));
+      li.appendChild(h('div', { 'class': 'hm-dev-s' }, r, out));
+      li.appendChild(h('div', { 'class': 'hm-dev-b' }, bar, bv));
+      cb.addEventListener('change', function () { state[v.id].on = cb.checked; update(); });
+      r.addEventListener('input', function () { state[v.id].hrs = parseFloat(r.value); update(); });
+      rows[v.id] = { cb: cb, r: r, out: out, bar: bar, bv: bv, li: li }; list.appendChild(li);
+    });
+    body.appendChild(list);
+    body.appendChild(CN.richEl('p', 'hm-cap', d.listNote || ''));
+    var trackBox = h('div', { 'class': 'hm-tracks' }); body.appendChild(trackBox);
+    var chartBox = h('div', { 'class': 'hm-fig' }); body.appendChild(chartBox);
+    var tblBox = h('div'); body.appendChild(tblBox);
+    if (d.reads && d.reads.length) { var rd = h('div', { 'class': 'hm-read' }, h('h5', null, '読み取れること')); var ul = h('ul'); d.reads.forEach(function (t) { ul.appendChild(CN.richEl('li', '', t)); }); rd.appendChild(ul); body.appendChild(rd); }
+    endNote(el, d);
+    var model = null;
+
+    function syncCtl() { devs.forEach(function (v) { rows[v.id].cb.checked = state[v.id].on; rows[v.id].r.value = state[v.id].hrs; }); }
+    /* 機器の使う時間帯：parts の中心の時刻の前後に、hrs × 割合 の長さの帯（0〜24 時を一周するものとして折り返す） */
+    function intervals(v, hrs) {
+      var out = [];
+      if (v.flat || hrs >= 23.95) return out;
+      v.parts.forEach(function (p) {
+        var len = hrs * p.f, a = p.c - len / 2, b = p.c + len / 2;
+        if (len <= 0) return;
+        if (a < 0) { out.push([a + 24, 24]); out.push([0, b]); }
+        else if (b > 24) { out.push([a, 24]); out.push([0, b - 24]); }
+        else out.push([a, b]);
+      });
+      return out;
+    }
+    function compute() {
+      var m = { avg: 0, bins: [], per: {} }, N = 96, i;
+      for (i = 0; i < N; i++) m.bins.push(0);
+      devs.forEach(function (v) {
+        var q = state[v.id], hrs = q.on ? q.hrs : 0, wh = v.runW * hrs, iv = intervals(v, hrs);
+        m.per[v.id] = { wh: wh, avg: wh / 24, iv: iv, hrs: hrs };
+        m.avg += wh / 24;
+        if (v.flat || hrs >= 23.95) { for (i = 0; i < N; i++) m.bins[i] += v.runW * hrs / 24; }
+        else for (i = 0; i < N; i++) {   // 区間（15 分）と使う時間帯の重なりの割合（図の面積が 1 日の電力量と一致する）
+          var b0 = i * 24 / N, b1 = (i + 1) * 24 / N, ov = 0;
+          iv.forEach(function (z) { ov += Math.max(0, Math.min(z[1], b1) - Math.max(z[0], b0)); });
+          m.bins[i] += v.runW * Math.min(1, ov / (b1 - b0));
+        }
+      });
+      m.kwh = m.avg * 24 / 1000; m.year = m.kwh * days; m.peak = Math.max.apply(null, m.bins);
+      m.peakAt = m.bins.indexOf(m.peak) * 24 / N;
+      return m;
+    }
+    function update(preset) {
+      model = compute();
+      devs.forEach(function (v) {
+        var r = rows[v.id], q = state[v.id], pm = model.per[v.id];
+        r.out.textContent = fmtFix(q.hrs, 1) + ' 時間'; r.r.setAttribute('aria-valuetext', r.out.textContent); r.r.disabled = !q.on;
+        r.bar.firstChild.style.width = clamp(pm.avg / maxAvg * 100, 0, 100) + '%';
+        r.bv.textContent = '平均 ' + fmtFix(pm.avg, 0) + ' W（使うとき ' + fmtFix(v.runW, 0) + ' W）';
+        r.li.classList.toggle('off', !q.on);
+      });
+      CN.clear(resBoxEl);
+      resBoxEl.appendChild(resBox('合計の平均の電力', fmtFix(model.avg, 0), 'W', '1 日の電力量 ÷ 24 時間', true));
+      resBoxEl.appendChild(resBox('1 日の電力量', fmtFix(model.kwh, 1), 'kWh', '＝ 平均 ' + fmtFix(model.avg, 0) + ' W × 24 時間'));
+      resBoxEl.appendChild(resBox('1 年の電力量', fmtFix(model.year, 0), 'kWh', '＝ 1 日 × ' + days + ' 日'));
+      resBoxEl.appendChild(resBox('同時に動いたときの最大', fmtFix(model.peak, 0), 'W', '模型の一例（約 ' + hourText(model.peakAt) + ' ごろ）。平均の ' + (model.avg > 0 ? fmtFix(model.peak / model.avg, 1) : '—') + ' 倍'));
+      pbtns.forEach(function (q) {
+        var same = devs.every(function (v) { var o = q[1].set && q[1].set[v.id], on = !(o && o.on === false), hrs = o && o.hrs != null ? o.hrs : v.hours; return state[v.id].on === on && Math.abs(state[v.id].hrs - hrs) < 1e-9; });
+        q[0].setAttribute('aria-pressed', String(same)); if (same) presetNote.textContent = q[1].text || '';
+      });
+      if (!pbtns.some(function (q) { return q[0].getAttribute('aria-pressed') === 'true'; })) presetNote.textContent = d.presetHint || '';
+      drawTracks(); drawChart(); drawTable();
+    }
+    function hourText(t) { var hh = Math.floor(t), mm = Math.round((t - hh) * 60); return hh + ' 時' + (mm ? ' ' + mm + ' 分' : ''); }
+    function drawTracks() {
+      CN.clear(trackBox);
+      trackBox.appendChild(h('h5', { 'class': 'hm-h5' }, '1 日の中で、いつ使うか（帯の長さ ＝ 使う時間）'));
+      var axis = h('div', { 'class': 'hm-trk hm-trk-ax' }, h('span', { 'class': 'hm-trk-n' }, '時刻'), h('span', { 'class': 'hm-trk-b' }, [0, 6, 12, 18, 24].map(function (t) { return h('i', { style: 'left:' + (t / 24 * 100) + '%' }, String(t)); })));
+      trackBox.appendChild(axis);
+      devs.forEach(function (v) {
+        var pm = model.per[v.id], q = state[v.id], row = h('div', { 'class': 'hm-trk' + (q.on ? '' : ' off') });
+        var b = h('span', { 'class': 'hm-trk-b', role: 'img', 'aria-label': v.name + '：' + (!q.on || pm.hrs <= 0 ? '使わない' : (v.flat || pm.hrs >= 23.95 ? '終日（平均の ' + fmtFix(v.runW * pm.hrs / 24, 0) + ' W で動き続ける）' : pm.iv.map(function (z) { return hourText(z[0]) + 'から' + hourText(z[1]); }).join('、'))) });
+        if (q.on && pm.hrs > 0) {
+          if (v.flat || pm.hrs >= 23.95) b.appendChild(h('i', { 'class': 'seg flat', style: 'left:0;width:100%;opacity:' + (0.25 + 0.5 * clamp(pm.hrs / 24, 0, 1)) }));
+          else pm.iv.forEach(function (z) { b.appendChild(h('i', { 'class': 'seg', style: 'left:' + (z[0] / 24 * 100) + '%;width:' + (Math.max(0.6, (z[1] - z[0]) / 24 * 100)) + '%' })); });
+        }
+        row.appendChild(h('span', { 'class': 'hm-trk-n' }, v.short || v.name)); row.appendChild(b);
+        trackBox.appendChild(row);
+      });
+      trackBox.appendChild(h('p', { 'class': 'hm-cap' }, '冷蔵庫・待機電力・通信機器・便座は、終日つながっている機器で、平均の電力で一定に動くものとして扱います（薄い帯）。他の機器は、使う時間帯を模型として決めた例です。'));
+    }
+    function drawChart() {
+      var W = Math.min(measure(chartBox, 340), 640), H = 190, m = { l: 48, r: 10, t: 22, b: 30 }, pw = W - m.l - m.r, ph = H - m.t - m.b, N = 96;
+      var ymax = Math.max(500, Math.ceil(model.peak * 1.1 / 500) * 500), X = function (t) { return m.l + pw * t / 24; }, Y = function (v) { return m.t + ph * (1 - v / ymax); };
+      var svg = svgRoot(W, H, '1 日の合計の電力の図（模型）。縦が電力（W）、横が時刻。平均は ' + fmtFix(model.avg, 0) + ' W、同時に動いたときの最大は ' + fmtFix(model.peak, 0) + ' W（約 ' + hourText(model.peakAt) + ' ごろ）。');
+      svg.appendChild(rect(m.l, m.t, pw, ph, 'hm-plot'));
+      var step = niceStep(ymax, 4), v;
+      for (v = 0; v <= ymax + 1e-6; v += step) { svg.appendChild(line(m.l, Y(v), m.l + pw, Y(v), 'hm-g')); svg.appendChild(txt(m.l - 6, Y(v) + 4, fmtFix(v, 0), 'hm-ax', 'end')); }
+      [0, 6, 12, 18, 24].forEach(function (t) { svg.appendChild(line(X(t), m.t, X(t), m.t + ph, 'hm-g v')); svg.appendChild(txt(X(t), m.t + ph + 14, String(t), 'hm-ax', 'middle')); });
+      svg.appendChild(txt(4, m.t - 8, '合計の電力（W）', 'hm-ax', 'start')); svg.appendChild(txt(m.l + pw, H - 4, '時刻（時）', 'hm-ax', 'end'));
+      var dd = 'M' + X(0) + ',' + Y(0), i;
+      for (i = 0; i < N; i++) dd += ' L' + X(i * 24 / N) + ',' + Y(model.bins[i]) + ' L' + X((i + 1) * 24 / N) + ',' + Y(model.bins[i]);
+      dd += ' L' + X(24) + ',' + Y(0) + ' Z';
+      svg.appendChild(pathEl(dd, 'hm-area'));
+      svg.appendChild(line(m.l, Y(model.avg), m.l + pw, Y(model.avg), 'hm-avgline'));
+      svg.appendChild(txt(m.l + pw - 4, Y(model.avg) - 5, '平均 ' + fmtFix(model.avg, 0) + ' W', 'hm-t b hm-acc hm-halo', 'end'));
+      svg.appendChild(circle(X(model.peakAt + 0.125), Y(model.peak), 4, 'hm-pk'));
+      svg.appendChild(txt(clamp(X(model.peakAt), m.l + 60, m.l + pw - 4), Math.max(m.t + 10, Y(model.peak) - 7), '最大 ' + fmtFix(model.peak, 0) + ' W', 'hm-t b', X(model.peakAt) > m.l + pw - 70 ? 'end' : 'start'));
+      CN.clear(chartBox).appendChild(svg);
+    }
+    function drawTable() {
+      var rowsT = devs.map(function (v) { var pm = model.per[v.id]; return [v.name, state[v.id].on ? fmtFix(v.runW, 0) + ' W' : '（切）', fmtFix(pm.hrs, 1) + ' 時間', fmtFix(pm.avg, 1) + ' W', fmtFix(pm.wh / 1000, 2) + ' kWh']; });
+      rowsT.push(['合計', '', '', fmtFix(model.avg, 1) + ' W', fmtFix(model.kwh, 2) + ' kWh']);
+      CN.clear(tblBox).appendChild(details('図の数値（同じ内容の表。読み上げ・印刷用）', tableOf(['機器', '使うときの電力（目安）', '1 日の使う時間', '平均の電力', '1 日の電力量'], rowsT)));
+    }
+    watchWidth(chartBox, function () { if (model) drawChart(); });
+    update();
+  };
+  CN.searchText.appmix = function (d) { return [d.title, d.intro || '', (d.devices || []).map(function (v) { return v.name; }).join(' ')].join(' '); };
+
+  /* ================= areacircle：円の面積で比べる ================= */
+  CN.widgets.areacircle = function (el, d, ctx) {
+    var st = { u: d.util.value };
+    var body = begin(el, d, '円の面積で比べる', ctx);
+    if (d.intro) body.appendChild(CN.richEl('p', 'hm-intro', d.intro));
+    var su = slider(ctx, { id: 'u', label: d.util.label, min: d.util.min, max: d.util.max, step: d.util.step, value: d.util.value, fmt: function (v) { return fmtFix(v * 100, 0) + ' %'; }, minmax: [fmtFix(d.util.min * 100, 0) + ' %', fmtFix(d.util.max * 100, 0) + ' %'], onInput: function (v) { st.u = v; draw(); } });
+    body.appendChild(su.el);
+    body.appendChild(CN.richEl('p', 'hm-assume', d.util.note || ''));
+    var grid = h('div', { 'class': 'hm-circles' }), box1 = h('div', { 'class': 'hm-fig' }), box2 = h('div', { 'class': 'hm-fig' });
+    grid.appendChild(box1); grid.appendChild(box2); body.appendChild(grid);
+    var sayBox = h('ul', { 'class': 'hm-notes', 'aria-live': 'polite' }); body.appendChild(sayBox);
+    var tblBox = h('div'); body.appendChild(tblBox);
+    endNote(el, d);
+    var C = d.circles;      // [{id, name, kw, cls, callout?}]  kw：瞬間の大きさ（kW）
+    var house = C.filter(function (c) { return c.callout; })[0], big = C.reduce(function (a, c) { return c.kw > a.kw ? c : a; }, C[0]);
+
+    function panel(box, title, vals, unitText, ghost) {
+      var W = Math.min(measure(box, 340), 620), narrow = W < 460, R = narrow ? Math.min(W * 0.3, 120) : Math.min(W * 0.26, 130), H = narrow ? Math.round(R * 2 + 120) : Math.round(R * 2 + 70);
+      var svg = svgRoot(W, H, title + '。円の面積が量に比例する。' + vals.map(function (v) { return v.c.name + ' ' + v.text; }).join('、') + '。');
+      svg.appendChild(txt(6, 16, title, 'hm-t b', 'start'));
+      var rad = function (v) { return R * Math.sqrt(v / big.kw); }, items = vals.filter(function (v) { return !v.c.callout; }).sort(function (a, b) { return b.c.kw - a.c.kw; });
+      var cx0 = narrow ? R + 8 : R + 14, cy0 = 30 + R, k = 0, pos = [];
+      // 大きい円を左、小さい円を右に並べる
+      items.forEach(function (v, i) {
+        var r = rad(v.v), cx = i === 0 ? cx0 : (narrow ? W - 8 - Math.max(40, rad(items[1] ? items[1].v : v.v)) - 8 : cx0 + R + 30 + 40 + (i - 1) * 90), cy = i === 0 ? cy0 : (narrow ? 30 + 24 + r : cy0);
+        pos.push([v, cx, cy, r]);
+      });
+      pos.forEach(function (p, i) {
+        var v = p[0], cx = p[1], cy = p[2], r = p[3];
+        if (ghost) { var gr = ghost(v.c); svg.appendChild(circle(cx, cy, gr, 'hm-ghost')); }
+        svg.appendChild(circle(cx, cy, Math.max(r, 1.5), 'hm-circ ' + v.c.cls));
+        var lx = cx, ly = i === 0 ? cy : cy + Math.max(r, 6) + 16;
+        if (i === 0) { svg.appendChild(txt(lx, ly - 6, v.c.name, 'hm-t b hm-on', 'middle')); svg.appendChild(txt(lx, ly + 11, v.text, 'hm-t hm-on', 'middle')); if (v.mult) svg.appendChild(txt(lx, ly + 28, v.mult, 'hm-t sm hm-on', 'middle')); }
+        else {
+          var anchor = narrow ? 'end' : 'middle', tx = narrow ? W - 8 : lx;
+          svg.appendChild(txt(tx, ly, v.c.name, 'hm-t b', anchor)); svg.appendChild(txt(tx, ly + 16, v.text, 'hm-t', anchor)); if (v.mult) svg.appendChild(txt(tx, ly + 32, v.mult, 'hm-t sm', anchor));
+        }
+      });
+      // 家庭 1 軒：点にしかならないので、拡大の吹き出し
+      if (house) {
+        var hv = vals.filter(function (v) { return v.c.callout; })[0], hr = rad(hv.v), a = pos[1] || pos[0], bx = narrow ? 50 : (a[1] + 70), by = narrow ? H - 44 : cy0 + R - 26, brr = 17;
+        var px = narrow ? 18 : bx - 70, py = by - (narrow ? 0 : 0);
+        svg.appendChild(circle(px, py, 1.4, 'hm-circ ' + house.cls));
+        svg.appendChild(line(px + 2, py, bx - brr, by, 'hm-lead'));
+        svg.appendChild(circle(bx, by, brr + 4, 'hm-lens'));
+        svg.appendChild(circle(bx, by, brr, 'hm-circ ' + house.cls));
+        svg.appendChild(txt(bx + brr + 6, by - 3, house.name, 'hm-t b', 'start')); svg.appendChild(txt(bx + brr + 6, by + 13, hv.text, 'hm-t', 'start'));
+        svg.appendChild(txt(bx + brr + 6, by + 28, '（左の点の拡大図。同じ縮尺では点より小さい）', 'hm-t sm', 'start'));
+        void hr;
+      }
+      CN.clear(box).appendChild(svg);
+    }
+    function draw() {
+      var hh = house.kw;
+      var v1 = C.map(function (c) { return { c: c, v: c.kw, text: powTxt(c.kw * 1000, 3), mult: c.callout ? null : '家庭 1 軒の約 ' + ja(c.kw / hh, 2) + ' 倍' }; });
+      var v2 = C.map(function (c) { var n = c.kw * st.u / hh; return { c: c, v: c.kw * st.u, text: c.callout ? '1 軒' : '約 ' + ja(n, 2) + ' 世帯分', mult: null }; });
+      panel(box1, '① 瞬間の大きさ（出力）', v1, 'kW', null);
+      panel(box2, '② 1 日の量（家庭の何軒ぶんか。利用率 ' + fmtFix(st.u * 100, 0) + ' %）', v2, '世帯', function (c) { return Math.max(1.5, panelR(c)); });
+      CN.clear(sayBox);
+      d.says.forEach(function (t) { sayBox.appendChild(CN.richEl('li', '', fillSay(t))); });
+      var rowsT = C.filter(function (c) { return !c.callout; }).map(function (c) { var inst = c.kw / hh, q = inst * st.u; return [c.name, powTxt(c.kw * 1000, 3), '約 ' + ja(inst, 2) + ' 世帯分（家庭の約 ' + ja(inst, 2) + ' 倍）', fmtFix(c.kw * 24 * st.u / 1000, 1) + ' MWh（利用率 ' + fmtFix(st.u * 100, 0) + ' %）', '約 ' + ja(q, 2) + ' 世帯分']; });
+      rowsT.unshift([house.name, powTxt(house.kw * 1000, 3), '1 世帯', fmtFix(house.kw * 24, 2) + ' kWh', '1 世帯']);
+      CN.clear(tblBox).appendChild(details('図の数値（同じ内容の表。読み上げ・印刷用）', tableOf(['', '出力', '瞬間（出力 ÷ 家庭の平均の電力）', '1 日の量', '量（1 日の量 ÷ 家庭の 1 日）'], rowsT)));
+    }
+    function panelR(c) { var R = Math.min(measure(box1, 340), 620) < 460 ? Math.min(Math.min(measure(box1, 340), 620) * 0.3, 120) : Math.min(Math.min(measure(box1, 340), 620) * 0.26, 130); return R * Math.sqrt(c.kw / big.kw); }
+    function fillSay(t) {
+      var hh = house.kw, a = C.filter(function (c) { return c.id === d.axisId; })[0], w = C.filter(function (c) { return c.id === d.wholeId; })[0];
+      return t.replace(/\{axisInst\}/g, ja(a.kw / hh, 2)).replace(/\{wholeInst\}/g, ja(w.kw / hh, 2)).replace(/\{axisQty\}/g, ja(a.kw * st.u / hh, 2)).replace(/\{wholeQty\}/g, ja(w.kw * st.u / hh, 2)).replace(/\{u\}/g, fmtFix(st.u * 100, 0));
+    }
+    watchWidth(box1, draw);
+    draw();
+  };
+  CN.searchText.areacircle = function (d) { return [d.title, d.intro || '', (d.says || []).join(' ')].join(' '); };
+
+  /* ================= bundle：家庭を束ねて、発電所と比べる ================= */
+  CN.widgets.bundle = function (el, d, ctx) {
+    var hh = d.house.kw, dayKwh = hh * 24, rawShape = d.house.shape, mean = rawShape.reduce(function (a, b) { return a + b; }, 0) / rawShape.length;
+    var shape = rawShape.map(function (x) { return x / mean; }), peakF = Math.max.apply(null, shape);
+    var plants = d.plants, minLoad = d.minLoad;
+    var st = { tab: 'a', N: d.n.value, u: d.util.value, plant: d.plants[0].id, t: d.time.value, mode: 'const' };
+    var tabs = CN.tabs([{ key: 'a', label: '① 何軒で届くか' }, { key: 'b', label: '② 1 日の流れ' }, { key: 'c', label: '③ 絵で見る' }], 'a', function (k) { st.tab = k; buildTab(); }, '見方の切替');
+    CN.frame(el, '家庭を束ねて、発電所と比べる', d.title, tabs); el.classList.add('hm');
+    var body = h('div', { 'class': 'wg-body hm-body' }); el.appendChild(body);
+    if (d.intro) body.appendChild(CN.richEl('p', 'hm-intro', d.intro));
+    var common = h('div', { 'class': 'hm-common' }), tabBody = h('div', { 'class': 'hm-tabbody' });
+    body.appendChild(common); body.appendChild(tabBody);
+    if (d.caution) body.appendChild(CN.richEl('p', 'hm-caution', d.caution));
+    endNote(el, d);
+    function getPlant(id) { return plants.filter(function (p) { return p.id === id; })[0]; }
+    var axis = getPlant(d.axisId), whole = getPlant(d.wholeId);
+
+    /* 共通のつまみ：世帯数（対数）と、設備利用率の仮定 */
+    var sN = slider(ctx, { id: 'n', label: d.n.label, min: d.n.min, max: d.n.max, step: d.n.step, value: Math.log(st.N) / Math.LN10, fmt: function (e) { return nTxt(Math.abs(e - Math.log(st.N) / Math.LN10) < 0.006 ? st.N : Math.max(1, Math.round(Math.pow(10, e)))); }, minmax: [nTxt(Math.round(Math.pow(10, d.n.min))), nTxt(Math.round(Math.pow(10, d.n.max)))], onInput: function (e) { st.N = Math.max(1, Math.round(Math.pow(10, e))); update(); } });
+    var sU = slider(ctx, { id: 'u', label: d.util.label, min: d.util.min, max: d.util.max, step: d.util.step, value: st.u, fmt: function (v) { return fmtFix(v * 100, 0) + ' %'; }, minmax: [fmtFix(d.util.min * 100, 0) + ' %', fmtFix(d.util.max * 100, 0) + ' %'], onInput: function (v) { st.u = v; update(); } });
+    common.appendChild(sN.el); common.appendChild(sU.el);
+    var nb = h('div', { 'class': 'hm-presets', role: 'group', 'aria-label': '世帯数の目安' }), nbtns = [];
+    nb.appendChild(h('div', { 'class': 'hm-preset-h' }, '世帯数をまとめて動かす'));
+    d.n.presets.forEach(function (p) { var b = h('button', { type: 'button', 'class': 'btn sm', 'aria-pressed': 'false' }, p.label); b.addEventListener('click', function () { setN(p.n); }); nb.appendChild(b); nbtns.push([b, p]); });
+    common.appendChild(nb);
+    var uNote = CN.richEl('p', 'hm-assume', d.util.note); common.appendChild(uNote);
+    function nTxt(n) { return n >= 1e4 ? '約 ' + ja(n, 3) + ' 軒' : fmtFix(n, 0) + ' 軒'; }
+    function setN(n) { st.N = n; sN.set(Math.log(n) / Math.LN10); update(); }
+    var dyn = h('div', { 'class': 'hm-dyn', 'aria-live': 'polite' });
+
+    /* ---- 計算（値はすべてデータから） ---- */
+    function demandKW() { return st.N * hh; }
+    function demandKWhDay() { return st.N * dayKwh; }
+    function plantKW(p) { return p.mw * 1000; }
+    function plantKWhDay(p) { return plantKW(p) * 24 * st.u; }
+    function shapeAt(t) {      // 時刻 t（0〜24）の形。各時間の値を、その時間の中央の値として、輪になるように線でつなぐ
+      var x = ((t - 0.5) % 24 + 24) % 24, i = Math.floor(x), f = x - i;
+      return shape[i] * (1 - f) + shape[(i + 1) % 24] * f;
+    }
+    function nTxtFull(n) { return n >= 1e4 ? '約 ' + ja(n, 2) + ' 軒' : fmtFix(n, 0) + ' 軒'; }
+    function kwTxt(kw) { return powTxt(kw * 1000, 3); }
+    function kwhTxt(kwh) { return eneTxt(kwh * 1000, 3); }
+
+    /* ---- ① 何軒で届くか ---- */
+    var aState = {};
+    function buildA() {
+      CN.clear(tabBody);
+      tabBody.appendChild(CN.richEl('p', 'hm-say', d.texts.a));
+      aState.svg = h('div', { 'class': 'hm-fig' }); tabBody.appendChild(aState.svg);
+      aState.cards = h('div', { 'class': 'hm-results' }); tabBody.appendChild(aState.cards);
+      aState.sent = h('ul', { 'class': 'hm-sent' }); tabBody.appendChild(aState.sent);
+      aState.tbl = h('div'); tabBody.appendChild(aState.tbl);
+      watchWidth(aState.svg, function () { if (st.tab === 'a') drawA(); });
+      drawA();
+    }
+    function drawA() {
+      var W = Math.min(measure(aState.svg, 340), 640), rowH = 118, H = rowH * 2 + 10, narrow = W < 480, x0 = 12, x1 = W - 14, pw = x1 - x0;
+      var dK = demandKW(), dE = demandKWhDay();
+      var svg = svgRoot(W, H, '束ねた家庭の需要の棒（対数の目盛り）。' + nTxt(st.N) + ' で、瞬間の大きさは ' + kwTxt(dK) + '（1 軸の出力の ' + fmtSig(dK / plantKW(axis) * 100, 2) + ' %）、1 日の量は ' + kwhTxt(dE) + '（1 軸の 1 日の発電量の ' + fmtSig(dE / plantKWhDay(axis) * 100, 2) + ' %、利用率 ' + fmtFix(st.u * 100, 0) + ' % の仮定）。');
+      function one(y, ttl, lo, hi, val, refs, ticks, unitFn) {
+        var X = function (v) { return x0 + pw * clamp((Math.log(v) / Math.LN10 - lo) / (hi - lo), 0, 1); };
+        svg.appendChild(txt(x0, y + 14, ttl, 'hm-t b', 'start'));
+        var by = y + 58, bh = 16;
+        svg.appendChild(rect(x0, by, pw, bh, 'hm-track'));
+        svg.appendChild(rect(x0, by, X(val) - x0, bh, 'hm-bar-home'));
+        ticks.forEach(function (tk) { var xx = X(tk[0]); svg.appendChild(line(xx, by + bh, xx, by + bh + 5, 'hm-tick')); svg.appendChild(txt(xx, by + bh + 17, tk[1], 'hm-ax', xx < x0 + 14 ? 'start' : (xx > x1 - 14 ? 'end' : 'middle'))); });
+        refs.forEach(function (r, i) {
+          var xx = X(r.v), hit = val >= r.v;
+          svg.appendChild(line(xx, by - 8 - (1 - i) * 0, xx, by + bh + 2, 'hm-ref ' + r.cls));
+          var anchor = xx > x1 - 70 ? 'end' : (xx < x0 + 70 ? 'start' : 'middle');
+          svg.appendChild(txt(xx, by - 12 - (i === 0 ? 14 : 0) + (i === 0 ? 0 : 0), r.label + (hit ? ' ✓届いた' : ''), 'hm-t sm b ' + r.cls, anchor));
+          if (hit) svg.appendChild(circle(xx, by + bh / 2, 5, 'hm-hit ' + r.cls));
+        });
+        var vx = X(val);
+        svg.appendChild(txt(clamp(vx, x0 + 4, x1 - 4), by + bh + 36, unitFn(val), 'hm-t b hm-home', vx > x1 - 90 ? 'end' : (vx < x0 + 60 ? 'start' : 'middle')));
+      }
+      var refsP = [{ v: plantKW(axis), label: axis.short, cls: 'c-axis' }, { v: plantKW(whole), label: whole.short, cls: 'c-all' }];
+      var refsE = [{ v: plantKWhDay(axis), label: axis.short, cls: 'c-axis' }, { v: plantKWhDay(whole), label: whole.short, cls: 'c-all' }];
+      one(2, narrow ? '瞬間：束ねた需要と設備の出力' : '瞬間の大きさ：束ねた需要（世帯数 × 平均の電力）と、設備の出力', -1, 7, dK, refsP, (narrow ? [] : [[0.1, '100 W']]).concat([[1, '1 kW'], [1e3, '1 MW'], [1e6, '1 GW']]).concat(narrow ? [] : [[1e7, '10 GW']]), function (v) { return '束ねた需要 ' + kwTxt(v); });
+      one(rowH + 6, narrow ? '1 日の量：束ねた使用量と設備の発電量' : '1 日の量：束ねた使用量（世帯数 × 1 日の量）と、設備の 1 日の発電量', 0, 9, dE, refsE, [[1, '1 kWh'], [1e3, '1 MWh'], [1e6, '1 GWh'], [1e9, '1 TWh']], function (v) { return '束ねた使用量 ' + kwhTxt(v); });
+      CN.clear(aState.svg).appendChild(svg);
+    }
+    function updateA() {
+      if (!aState.svg) return;
+      var dK = demandKW(), dE = demandKWhDay(), ai = plantKW(axis) / hh, wi = plantKW(whole) / hh, aq = ai * st.u, wq = wi * st.u;
+      drawA();
+      CN.clear(aState.cards);
+      aState.cards.appendChild(resBox('世帯数', nTxtFull(st.N).replace('約 ', '約 '), '', '平均の電力 ' + fmtFix(hh, 2) + ' kW／1 日 ' + fmtFix(dayKwh, 2) + ' kWh（1 軒）'));
+      aState.cards.appendChild(resBox('瞬間：束ねた需要', fmtSig(dK / 1000, 3), 'MW', axis.short + ' の出力の ' + fmtSig(dK / plantKW(axis) * 100, 3) + ' %／' + whole.short + ' の ' + fmtSig(dK / plantKW(whole) * 100, 3) + ' %', true));
+      aState.cards.appendChild(resBox('量：束ねた使用量（1 日）', fmtSig(dE / 1000, 3), 'MWh', axis.short + ' の 1 日の発電量の ' + fmtSig(dE / plantKWhDay(axis) * 100, 3) + ' %／' + whole.short + ' の ' + fmtSig(dE / plantKWhDay(whole) * 100, 3) + ' %', true));
+      CN.clear(aState.sent);
+      [
+        '**瞬間で見ると**：' + axis.name + ' の出力（' + fmtSig(axis.mw, 3) + ' MW）は、家庭の平均の電力の **約 ' + ja(ai, 2) + ' 世帯分**。' + whole.name + '（' + fmtSig(whole.mw, 3) + ' MW）は **約 ' + ja(wi, 2) + ' 世帯分**です（出力 ÷ 平均の電力）。',
+        '**量で見ると**（利用率 ' + fmtFix(st.u * 100, 0) + ' % の仮定のもと）：' + axis.short + ' の 1 日の発電量は **約 ' + ja(aq, 2) + ' 世帯分**、' + whole.short + ' は **約 ' + ja(wq, 2) + ' 世帯分**です（1 日の発電量 ÷ 家庭の 1 日の使用量）。',
+        '2 つの違い：瞬間は「出力と平均の電力の比」、量は「1 日の発電量と 1 日の使用量の比」です。量のほうは、利用率の仮定を掛けた分だけ小さくなります（' + fmtFix(st.u * 100, 0) + ' % ならば ' + fmtFix(st.u, 2) + ' 倍）。'
+      ].forEach(function (t) { aState.sent.appendChild(CN.richEl('li', '', t)); });
+      CN.clear(aState.tbl).appendChild(details('図の数値（同じ内容の表。読み上げ・印刷用）', tableOf(['', '瞬間（kW）', '1 日の量（kWh）'], [
+        ['束ねた家庭（' + nTxtFull(st.N) + '）', kwTxt(dK), kwhTxt(dE)],
+        [axis.name, kwTxt(plantKW(axis)), kwhTxt(plantKWhDay(axis)) + '（利用率 ' + fmtFix(st.u * 100, 0) + ' %）'],
+        [whole.name, kwTxt(plantKW(whole)), kwhTxt(plantKWhDay(whole)) + '（利用率 ' + fmtFix(st.u * 100, 0) + ' %）'],
+        ['1 軸ぶんの世帯数（瞬間／量）', '約 ' + ja(ai, 2) + ' 軒', '約 ' + ja(aq, 2) + ' 軒'],
+        ['全体ぶんの世帯数（瞬間／量）', '約 ' + ja(wi, 2) + ' 軒', '約 ' + ja(wq, 2) + ' 軒']])));
+    }
+
+    /* ---- ② 1 日の流れ ---- */
+    var bState = {};
+    function buildB() {
+      CN.clear(tabBody);
+      tabBody.appendChild(CN.richEl('p', 'hm-say', d.texts.b));
+      var ctl = h('div', { 'class': 'hm-bctl' });
+      var pr = h('div', { 'class': 'hm-radio', role: 'radiogroup', 'aria-label': '比べる発電設備' }); pr.appendChild(h('span', { 'class': 'hm-radio-l' }, '比べる設備'));
+      bState.pbtn = [];
+      [axis, whole].forEach(function (p) {
+        var b = h('button', { type: 'button', role: 'radio', 'class': 'btn sm', 'aria-checked': String(st.plant === p.id), 'aria-pressed': String(st.plant === p.id) }, p.name);
+        b.addEventListener('click', function () { st.plant = p.id; update(); }); pr.appendChild(b); bState.pbtn.push([b, p]);
+      });
+      ctl.appendChild(pr);
+      var mr = h('div', { 'class': 'hm-radio', role: 'radiogroup', 'aria-label': '発電設備の動かし方' }); mr.appendChild(h('span', { 'class': 'hm-radio-l' }, '色で示す動かし方'));
+      bState.mbtn = [];
+      [['const', '一定の出力で動かす'], ['follow', '需要に合わせて増減させる']].forEach(function (m) {
+        var b = h('button', { type: 'button', role: 'radio', 'class': 'btn sm', 'aria-checked': String(st.mode === m[0]), 'aria-pressed': String(st.mode === m[0]) }, m[1]);
+        b.addEventListener('click', function () { st.mode = m[0]; update(); }); mr.appendChild(b); bState.mbtn.push([b, m[0]]);
+      });
+      ctl.appendChild(mr);
+      bState.t = slider(ctx, { id: 't', label: '時刻', min: d.time.min, max: d.time.max, step: d.time.step, value: st.t, fmt: function (v) { return timeTxt(v); }, minmax: ['0 時', '23.5 時'], onInput: function (v) { st.t = v; updateB(); } });
+      ctl.appendChild(bState.t.el);
+      var jb = h('div', { 'class': 'hm-presets', role: 'group', 'aria-label': '世帯数を合わせる' });
+      var b1 = h('button', { type: 'button', 'class': 'btn sm' }, '1 日の量が釣り合う軒数にする'), b2 = h('button', { type: 'button', 'class': 'btn sm' }, '夕方のピークでも足りる軒数にする');
+      b1.addEventListener('click', function () { var p = getPlant(st.plant); setN(Math.max(1, Math.round(plantKW(p) * st.u / hh))); });
+      b2.addEventListener('click', function () { var p = getPlant(st.plant); setN(Math.max(1, Math.floor(plantKW(p) / (hh * peakF)))); });
+      jb.appendChild(b1); jb.appendChild(b2); ctl.appendChild(jb);
+      tabBody.appendChild(ctl);
+      bState.fig = h('div', { 'class': 'hm-fig' }); tabBody.appendChild(bState.fig);
+      bState.legend = h('div', { 'class': 'hm-legend' }); tabBody.appendChild(bState.legend);
+      bState.cards = h('div', { 'class': 'hm-results' }); tabBody.appendChild(bState.cards);
+      bState.sum = h('ul', { 'class': 'hm-sent' }); tabBody.appendChild(bState.sum);
+      bState.tbl = h('div'); tabBody.appendChild(bState.tbl);
+      watchWidth(bState.fig, function () { if (st.tab === 'b') drawB(); });
+      updateB(); updateButtonsB();
+    }
+    function updateButtonsB() {
+      bState.pbtn.forEach(function (q) { q[0].setAttribute('aria-checked', String(st.plant === q[1].id)); q[0].setAttribute('aria-pressed', String(st.plant === q[1].id)); });
+      bState.mbtn.forEach(function (q) { q[0].setAttribute('aria-checked', String(st.mode === q[1])); q[0].setAttribute('aria-pressed', String(st.mode === q[1])); });
+    }
+    function timeTxt(t) { var hh2 = Math.floor(t), mm = Math.round((t - hh2) * 60); return hh2 + ' 時' + (mm ? ' ' + mm + ' 分' : ''); }
+    function curves() {
+      var p = getPlant(st.plant), rating = plantKW(p), cst = rating * st.u, lo = rating * minLoad;
+      return {
+        p: p, rating: rating, cst: cst, lo: lo,
+        D: function (t) { return demandKW() * shapeAt(t); },
+        S: function (t, mode) { return mode === 'const' ? cst : clamp(demandKW() * shapeAt(t), lo, rating); }
+      };
+    }
+    function drawB() {
+      var c = curves(), W = Math.min(measure(bState.fig, 340), 700), H = 250, m = { l: 52, r: 10, t: 26, b: 34 }, pw = W - m.l - m.r, ph = H - m.t - m.b;
+      var dmax = 0, t, i; for (i = 0; i <= 96; i++) dmax = Math.max(dmax, c.D(i / 4));
+      var ymaxKW = Math.max(c.rating, dmax, c.cst) * 1.12, uk = ymaxKW >= 1e6 ? ['GW', 1e6] : ymaxKW >= 1e3 ? ['MW', 1e3] : ['kW', 1];
+      var X = function (tt) { return m.l + pw * tt / 24; }, Y = function (kw) { return m.t + ph * (1 - kw / ymaxKW); };
+      var svg = svgRoot(W, H, '1 日の需要と出力の図（模型）。' + nTxt(st.N) + ' の家庭の需要（曲線）と、' + c.p.name + 'の出力（' + (st.mode === 'const' ? '一定の出力 ' + kwTxt(c.cst) : '需要に合わせた出力') + '）。' + timeTxt(st.t) + ' の需要は ' + kwTxt(c.D(st.t)) + '、出力は ' + kwTxt(c.S(st.t, st.mode)) + '。');
+      var defs = s('defs', null,
+        s('pattern', { id: ctx.id + '-short', width: 6, height: 6, patternUnits: 'userSpaceOnUse', patternTransform: 'rotate(45)' }, rect(0, 0, 6, 6, 'hm-pat-bg-short'), line(0, 0, 0, 6, 'hm-pat-ln-short')),
+        s('pattern', { id: ctx.id + '-sur', width: 6, height: 6, patternUnits: 'userSpaceOnUse', patternTransform: 'rotate(-45)' }, rect(0, 0, 6, 6, 'hm-pat-bg-sur'), line(0, 0, 6, 0, 'hm-pat-ln-sur')));
+      svg.appendChild(defs);
+      svg.appendChild(rect(m.l, m.t, pw, ph, 'hm-plot'));
+      var step = niceStep(ymaxKW / uk[1], 4), v;
+      for (v = 0; v * uk[1] <= ymaxKW + 1e-9; v += step) { svg.appendChild(line(m.l, Y(v * uk[1]), m.l + pw, Y(v * uk[1]), 'hm-g')); svg.appendChild(txt(m.l - 6, Y(v * uk[1]) + 4, fmtSig(v, 4), 'hm-ax', 'end')); }
+      [0, 6, 12, 18, 24].forEach(function (tt) { svg.appendChild(line(X(tt), m.t, X(tt), m.t + ph, 'hm-g v')); svg.appendChild(txt(X(tt), m.t + ph + 14, String(tt), 'hm-ax', 'middle')); });
+      svg.appendChild(txt(4, m.t - 10, '電力（' + uk[0] + '）', 'hm-ax', 'start')); svg.appendChild(txt(m.l + pw, H - 6, '時刻（時）', 'hm-ax', 'end'));
+      // 足りない分・余る分（選んだ動かし方で）
+      var runs = [], cur = null, n = 480, prev = null;
+      for (i = 0; i <= n; i++) {
+        t = 24 * i / n; var dv = c.D(t), sv = c.S(t, st.mode), sg = dv > sv + 1e-9 ? 1 : (sv > dv + 1e-9 ? -1 : 0);
+        if (sg !== 0 && (!cur || cur.sg !== sg)) { cur = { sg: sg, pts: [] }; runs.push(cur); }
+        if (sg === 0) { cur = null; }
+        if (cur) cur.pts.push([t, dv, sv]);
+      }
+      runs.forEach(function (r) {
+        if (r.pts.length < 2) return;
+        var up = r.pts.map(function (q) { return X(q[0]) + ',' + Y(q[1]); }), dn = r.pts.slice().reverse().map(function (q) { return X(q[0]) + ',' + Y(q[2]); });
+        svg.appendChild(pathEl('M' + up.join(' L') + ' L' + dn.join(' L') + ' Z', r.sg > 0 ? 'hm-short' : 'hm-sur', { fill: 'url(#' + ctx.id + (r.sg > 0 ? '-short' : '-sur') + ')' }));
+      });
+      // 定格の線
+      svg.appendChild(line(m.l, Y(c.rating), m.l + pw, Y(c.rating), 'hm-rating'));
+      svg.appendChild(txt(m.l + 4, Y(c.rating) - 4, '定格 ' + kwTxt(c.rating), 'hm-t sm', 'start'));
+      // 出力の線（一定／需要に合わせる）
+      var pc = 'c-' + (c.p.id === d.wholeId ? 'all' : 'axis');
+      svg.appendChild(line(m.l, Y(c.cst), m.l + pw, Y(c.cst), 'hm-sup ' + pc + (st.mode === 'const' ? ' sel' : '')));
+      var fd = ''; for (i = 0; i <= 96; i++) fd += (i ? ' L' : 'M') + X(i / 4) + ',' + Y(c.S(i / 4, 'follow'));
+      svg.appendChild(pathEl(fd, 'hm-sup follow ' + pc + (st.mode === 'follow' ? ' sel' : '')));
+      // 需要の曲線
+      var dd = ''; for (i = 0; i <= 96; i++) dd += (i ? ' L' : 'M') + X(i / 4) + ',' + Y(c.D(i / 4));
+      svg.appendChild(pathEl(dd, 'hm-dem'));
+      // 時刻の印
+      var tx = X(st.t); svg.appendChild(line(tx, m.t, tx, m.t + ph, 'hm-cursor'));
+      svg.appendChild(circle(tx, Y(c.D(st.t)), 5, 'hm-dot-home')); svg.appendChild(circle(tx, Y(c.S(st.t, st.mode)), 5, 'hm-dot-sup ' + pc));
+      svg.appendChild(txt(clamp(tx, m.l + 24, m.l + pw - 24), m.t - 10, timeTxt(st.t), 'hm-t b', 'middle'));
+      CN.clear(bState.fig).appendChild(svg);
+      // 凡例（線の種類と帯の模様で区別。色だけに頼らない）
+      CN.clear(bState.legend);
+      function sw(kind, label) { var q = svgRoot(34, 14, ''); q.setAttribute('aria-hidden', 'true'); q.removeAttribute('role'); q.removeAttribute('aria-label'); kind(q); return h('span', { 'class': 'hm-lg' }, q, label); }
+      bState.legend.appendChild(sw(function (q) { q.appendChild(line(2, 7, 32, 7, 'hm-dem')); }, '家庭の束の需要'));
+      bState.legend.appendChild(sw(function (q) { q.appendChild(line(2, 7, 32, 7, 'hm-sup ' + pc + ' sel')); }, '一定の出力（利用率 ' + fmtFix(st.u * 100, 0) + ' %）'));
+      bState.legend.appendChild(sw(function (q) { q.appendChild(pathEl('M2,10 L12,4 L22,10 L32,4', 'hm-sup follow ' + pc + ' sel')); }, '需要に合わせた出力（最低 ' + fmtFix(minLoad * 100, 0) + ' %〜定格）'));
+      bState.legend.appendChild(sw(function (q) { q.appendChild(rect(2, 1, 30, 12, 'hm-short', { fill: 'currentColor', 'fill-opacity': '.35' })); q.appendChild(line(2, 13, 32, 1, 'hm-pat-ln-short')); }, '足りない分（需要が出力より大きい）'));
+      bState.legend.appendChild(sw(function (q) { q.appendChild(rect(2, 1, 30, 12, 'hm-sur', { fill: 'currentColor', 'fill-opacity': '.2' })); q.appendChild(line(2, 1, 32, 13, 'hm-pat-ln-sur')); }, '余る分（出力が需要より大きい）'));
+    }
+    function updateB() {
+      if (!bState.fig) return;
+      var c = curves(), t = st.t, dv = c.D(t), sv = c.S(t, st.mode), cover = dv > 0 ? Math.min(1, sv / dv) : 1;
+      drawB(); updateButtonsB();
+      // 1 日の収支
+      var eD = 0, eS = 0, eShort = 0, eSur = 0, i, n = 96, dt = 24 / n;
+      for (i = 0; i < n; i++) { var tt = (i + 0.5) * dt, a = c.D(tt), b = c.S(tt, st.mode); eD += a * dt; eS += b * dt; eShort += Math.max(0, a - b) * dt; eSur += Math.max(0, b - a) * dt; }
+      CN.clear(bState.cards);
+      bState.cards.appendChild(resBox(timeTxt(t) + ' の需要', fmtSig(dv / (dv >= 1e3 ? 1e3 : 1), 3), dv >= 1e3 ? 'MW' : 'kW', '形の倍率 ' + fmtFix(shapeAt(t), 2) + '（1 日の平均を 1 とする）'));
+      bState.cards.appendChild(resBox('そのときの出力', fmtSig(sv / (sv >= 1e3 ? 1e3 : 1), 3), sv >= 1e3 ? 'MW' : 'kW', st.mode === 'const' ? '一定の出力' : '需要に合わせた出力'));
+      bState.cards.appendChild(resBox('まかなえる割合', fmtFix(cover * 100, 0), '%', dv > sv + 1e-9 ? '足りない分 ' + kwTxt(dv - sv) : (sv > dv + 1e-9 ? '余る分 ' + kwTxt(sv - dv) : '釣り合っている'), true));
+      CN.clear(bState.sum);
+      [
+        '1 日で見ると：需要は **' + kwhTxt(eD) + '**、出力は **' + kwhTxt(eS) + '**。足りない時間帯の不足は合計 **' + kwhTxt(eShort) + '**、余る時間帯の余りは合計 **' + kwhTxt(eSur) + '** です（' + (st.mode === 'const' ? '一定の出力' : '需要に合わせた出力') + '）。',
+        (eShort > 1e-6 && eSur > 1e-6 ? '需要の山の時間帯では**出力が足りなくなり**、谷の時間帯では**出力が余ります**。' : eShort > 1e-6 ? '需要の山の時間帯では**出力が足りなくなります**（この設定では、余る時間帯はありません）。' : eSur > 1e-6 ? '**出力が余る**時間帯があります（この設定では、足りない時間帯はありません）。' : '1 日を通して、出力と需要が釣り合っています。') + '電気は大量にはためておきにくいので、実際の系統は、他の発電所・揚水・蓄電池・需要側の調整で、瞬間ごとに発電と消費を一致させています。',
+        'この形の模型では、**ピークの時刻でも定格で足りる軒数**は約 ' + ja(c.rating / (hh * peakF), 2) + ' 軒（定格 ÷（平均の電力 × 山の倍率 ' + fmtFix(peakF, 2) + '））。**1 日の量が釣り合う軒数**は約 ' + ja(c.cst / hh, 2) + ' 軒です。'
+      ].forEach(function (x) { bState.sum.appendChild(CN.richEl('li', '', x)); });
+      var rowsT = [], hr;
+      for (hr = 0; hr < 24; hr++) { var tt2 = hr + 0.5; rowsT.push([hr + ' 時台', kwTxt(c.D(tt2)), kwTxt(c.S(tt2, 'const')), kwTxt(c.S(tt2, 'follow'))]); }
+      CN.clear(bState.tbl).appendChild(details('図の数値（同じ内容の表。読み上げ・印刷用）', tableOf(['時刻', '束ねた家庭の需要', '一定の出力', '需要に合わせた出力'], rowsT, nTxt(st.N) + '・' + c.p.name + '・利用率 ' + fmtFix(st.u * 100, 0) + ' %')));
+    }
+
+    /* ---- ③ 絵で見る ---- */
+    var cState = {};
+    function buildC() {
+      CN.clear(tabBody);
+      tabBody.appendChild(CN.richEl('p', 'hm-say', d.texts.c));
+      cState.fig = h('div', { 'class': 'hm-fig' }); tabBody.appendChild(cState.fig);
+      cState.legend = h('div', { 'class': 'hm-legend' }); tabBody.appendChild(cState.legend);
+      cState.sent = h('ul', { 'class': 'hm-sent' }); tabBody.appendChild(cState.sent);
+      watchWidth(cState.fig, function () { if (st.tab === 'c') updateC(); });
+      updateC();
+    }
+    function updateC() {
+      if (!cState.fig) return;
+      var W = Math.min(measure(cState.fig, 340), 700), unit = 1, units = [1, 10, 100, 1000, 1e4, 1e5, 1e6], i;
+      for (i = 0; i < units.length; i++) { unit = units[i]; if (st.N / unit <= 72) break; }
+      var M = Math.max(1, Math.ceil(st.N / unit - 1e-9)), isz = 18, pitch = 23, cols = Math.max(6, Math.floor((W - 16) / pitch)), rowsH = Math.ceil(M / cols);
+      var nAx = Math.ceil(whole.mw / axis.mw - 1e-9), need = demandKW() / plantKW(axis), nUse = Math.ceil(need - 1e-9), acols = Math.max(6, Math.floor((W - 16) / 21)), rowsA = Math.ceil(nAx / acols);
+      var y0 = 34, hy = y0 + rowsH * pitch + 8, busY = hy + 16, ay = busY + 44, H = ay + rowsA * 34 + 56;
+      var svg = svgRoot(W, H, '家と発電設備の絵。家の絵 ' + M + ' 個（1 個 ＝ ' + ja(unit, 2) + ' 世帯）で ' + nTxt(st.N) + '。これに必要な ' + axis.name + 'の本数は、約 ' + fmtSig(need, 3) + ' 本分。');
+      svg.appendChild(txt(6, 18, '家（1 個 ＝ ' + (unit === 1 ? '1' : fmtFix(unit, 0)) + ' 世帯' + (unit >= 1e4 ? '＝ ' + ja(unit, 2) + ' 世帯' : '') + '）', 'hm-t b', 'start'));
+      for (i = 0; i < M; i++) {
+        var r = Math.floor(i / cols), cc = i % cols, x = 8 + cc * pitch, y = y0 + r * pitch, frac = (i === M - 1) ? clamp(st.N / unit - (M - 1), 0.12, 1) : 1;
+        svg.appendChild(pathEl('M' + (x + isz / 2) + ',' + y + ' L' + (x + isz) + ',' + (y + 8) + ' L' + (x + isz - 3) + ',' + (y + 8) + ' L' + (x + isz - 3) + ',' + (y + isz) + ' L' + (x + 3) + ',' + (y + isz) + ' L' + (x + 3) + ',' + (y + 8) + ' L' + x + ',' + (y + 8) + ' Z', 'hm-house', { 'fill-opacity': String(0.25 + 0.75 * frac) }));
+      }
+      // 送電網（家から発電設備へ、直接ではなく系統を通る）
+      svg.appendChild(line(8, busY, W - 8, busY, 'hm-bus'));
+      for (i = 0; i < 3; i++) { var bx = 30 + i * ((W - 60) / 2); svg.appendChild(line(bx, hy - 4, bx, busY, 'hm-bus thin')); svg.appendChild(line(bx, busY, bx, ay - 14, 'hm-bus thin')); }
+      svg.appendChild(txt(W / 2, busY - 5, W < 520 ? '電力系統（送電網）：他の発電所や需要もつながる' : '電力系統（送電網）— 実際は、多くの発電所と、家庭以外の需要もここにつながる', 'hm-t sm hm-halo', 'middle'));
+      svg.appendChild(txt(6, ay - 20, d.axisIconLabel || '発電設備の軸（1 個 ＝ 1 軸）', 'hm-t b', 'start'));
+      for (i = 0; i < nAx; i++) {
+        var r2 = Math.floor(i / acols), c2 = i % acols, x2 = 8 + c2 * 21, y2 = ay + r2 * 34, full = i < nUse - 1 || (i === nUse - 1 && need >= nUse - 1e-9), f2 = i < nUse - 1 ? 1 : (i === nUse - 1 ? clamp(need - (nUse - 1), 0, 1) : 0);
+        svg.appendChild(rect(x2, y2, 16, 26, 'hm-axis-box'));
+        if (f2 > 0) svg.appendChild(rect(x2, y2 + 26 * (1 - f2), 16, 26 * f2, 'hm-axis-fill'));
+        svg.appendChild(pathEl('M' + (x2 + 9) + ',' + (y2 + 4) + ' L' + (x2 + 4) + ',' + (y2 + 15) + ' L' + (x2 + 8) + ',' + (y2 + 15) + ' L' + (x2 + 7) + ',' + (y2 + 23) + ' L' + (x2 + 12) + ',' + (y2 + 11) + ' L' + (x2 + 8) + ',' + (y2 + 11) + ' Z', 'hm-bolt' + (f2 > 0.5 ? ' on' : '')));
+        void full;
+      }
+      svg.appendChild(txt(6, ay + rowsA * 34 + 14, '全 ' + nAx + ' 個 ＝ ' + whole.short + 'を ' + fmtFix(axis.mw, 0) + ' MW 級の軸に換算', 'hm-t sm', 'start'));
+      svg.appendChild(txt(6, ay + rowsA * 34 + 30, '（' + fmtFix(whole.mw, 0) + ' ÷ ' + fmtFix(axis.mw, 0) + ' ＝ ' + fmtFix(whole.mw / axis.mw, 1) + '）', 'hm-t sm', 'start'));
+      svg.appendChild(txt(6, ay + rowsA * 34 + 46, '塗りの高さ ＝ 必要な出力の割合（最後の 1 個は一部だけ）', 'hm-t sm', 'start'));
+      CN.clear(cState.fig).appendChild(svg);
+      CN.clear(cState.legend);
+      function lg(kind, label) { var q = svgRoot(22, 22, ''); q.setAttribute('aria-hidden', 'true'); q.removeAttribute('role'); q.removeAttribute('aria-label'); kind(q); return h('span', { 'class': 'hm-lg' }, q, label); }
+      cState.legend.appendChild(lg(function (q) { q.appendChild(pathEl('M11,2 L20,11 L17,11 L17,20 L5,20 L5,11 L2,11 Z', 'hm-house')); }, '家 ＝ ' + (unit === 1 ? '1 世帯' : fmtFix(unit, 0) + ' 世帯（' + ja(unit, 2) + '）')));
+      cState.legend.appendChild(lg(function (q) { q.appendChild(rect(3, 2, 16, 18, 'hm-axis-box')); q.appendChild(rect(3, 11, 16, 9, 'hm-axis-fill')); }, '軸 ＝ ' + fmtFix(axis.mw, 0) + ' MW（家庭の約 ' + ja(plantKW(axis) / hh, 2) + ' 世帯分）'));
+      CN.clear(cState.sent);
+      [
+        nTxtFull(st.N) + ' の平均の需要は **' + kwTxt(demandKW()) + '**。' + axis.name + '（' + fmtFix(axis.mw, 0) + ' MW）の **' + (need < 10 ? fmtFix(need, 3) : fmtFix(need, 1)) + ' 本分**で、軸が **' + nUse + ' 本**必要です（瞬間の比べ方。1 本分をわずかでも超えると、もう 1 本が要ります）。',
+        whole.name + 'は、実際には **' + whole.axes + ' 軸**です。軸ごとに出力が違い（' + d.axisRange + '）、この図のように同じ大きさの軸が ' + nAx + ' 本あるわけではありません。換算した本数です。'
+      ].forEach(function (x) { cState.sent.appendChild(CN.richEl('li', '', x)); });
+    }
+
+    function update() {
+      nbtns.forEach(function (q) { q[0].setAttribute('aria-pressed', String(q[1].n === st.N)); });
+      if (st.tab === 'a') updateA(); else if (st.tab === 'b') updateB(); else updateC();
+    }
+    function buildTab() { aState = {}; bState = {}; cState = {}; if (st.tab === 'a') buildA(); else if (st.tab === 'b') buildB(); else buildC(); update(); }
+    buildTab();
+  };
+  CN.searchText.bundle = function (d) { return [d.title, d.intro || '', d.caution || '', d.texts ? [d.texts.a, d.texts.b, d.texts.c].join(' ') : ''].join(' '); };
+})();
+
 /* ==== opt/scale-lab.js ==== */
 /* 部品：scale（大きさの比較）／ lab（式を動かす実験台）。使う章があるときだけ build.py が埋め込む（js/opt/）。
-   データ形式は FRAMEWORK.md の「scale」「lab」。どちらも学習用の模型で、実際の設計・工事の判断には使えない。 */
+   データ形式は FRAMEWORK.md の「scale」「lab」。どちらも学習用の模型で、実際の設計・工事・投資の判断には使えない。
+   scale の物差しは 3 種：電力（W 系。既定）・円（円〜兆円）・ドル（ドル〜兆ドル）。1 つの scale では 1 種だけ（為替の換算はしない）。 */
 (function () {
   'use strict';
   var h = CN.h, s = CN.s, X = window.CNExpr;
@@ -6720,7 +7850,17 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
     if (r >= 1e4) return fmtSig(r / 1e4, 2) + ' 万';
     return fmtSig(r, 2);
   }
-  CN.numfmt = { sig: sig, fmtSig: fmtSig, fmtFixed: fmtFixed, powText: powText, ratioText: ratioText };
+  /* 金額：円は 1 万ごと（円・万円・億円・兆円）、ドルは 1000 ごと（ドル・百万ドル・十億ドル・兆ドル）に単位を付け替える */
+  var YEN_LADDER = [['兆円', 1e12], ['億円', 1e8], ['万円', 1e4], ['円', 1]];
+  var USD_LADDER = [['兆ドル', 1e12], ['十億ドル', 1e9], ['百万ドル', 1e6], ['ドル', 1]];
+  function ladderText(v, n, units) {
+    var k = 0;
+    n = n || 3;
+    for (k = 0; k < units.length - 1; k++) if (v >= units[k][1]) break;
+    if (k > 0 && sig(v / units[k][1], n) >= units[k - 1][1] / units[k][1]) k--;
+    return fmtSig(v / units[k][1], n) + ' ' + units[k][0];
+  }
+  CN.numfmt = { sig: sig, fmtSig: fmtSig, fmtFixed: fmtFixed, powText: powText, ratioText: ratioText, ladderText: ladderText };
 
   function measure(el, fallback) { var w = el.clientWidth; return w > 40 ? w : (fallback || 320); }
   function watchWidth(el, fn) {
@@ -6741,12 +7881,38 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
     { key: 'plant', label: '設備・発電所の桁', lo: 3, hi: 10 },
     { key: 'nation', label: '国の桁', lo: 6, hi: 13 }
   ];
-  CN.SCALE_UNITS = UNIT; CN.SCALE_EUNITS = EUNIT;
+  var JUNIT = { '円': 1, '万円': 1e4, '億円': 1e8, '兆円': 1e12 };
+  var DUNIT = { 'ドル': 1, '百万ドル': 1e6, '十億ドル': 1e9, '兆ドル': 1e12 };
+  CN.SCALE_UNITS = UNIT; CN.SCALE_EUNITS = EUNIT; CN.SCALE_JUNITS = JUNIT; CN.SCALE_DUNITS = DUNIT;
+  /* 物差しの種類。base は基準の単位、max は物差しの最大の桁（10 のべき乗の指数）。 */
+  var FAMS = {
+    power: { id: 'power', units: UNIT, base: 'W', max: 13, counter: '個', stages: STAGES, text: function (w, n) { return powText(w, n); },
+      conv: 'W に直した値', cap: 'W 換算は有効数字 3 桁',
+      caution: '倍率は、値の大きさだけを比べた目安です。条件（定格・平均・総出力・見通しなど）が項目ごとに違うので、実際の「何軒分」とは限りません。',
+      disc: '学習用の模型です。実際の設計や工事の判断には使えません。' },
+    jpy: { id: 'jpy', units: JUNIT, base: '円', max: 16, counter: '倍', major: 4, ladder: YEN_LADDER, text: function (w, n) { return ladderText(w, n, YEN_LADDER); },
+      stages: [{ key: 'all', label: '全体（1 円 〜 1 京円）', lo: 0, hi: 16 }, { key: 'home', label: '個人・企業の桁', lo: 3, hi: 10 }, { key: 'nation', label: '国・市場の桁', lo: 8, hi: 16 }],
+      conv: '円に直した値', cap: '円換算は有効数字 3 桁',
+      caution: '倍率は、金額の大きさだけを比べた目安です。時点・範囲・名目か実質か・残高か年間の流れかが項目ごとに違うので、実際の関係とは限りません。円とドルの換算はしていません。',
+      disc: '学習用の模型です。実際の投資・取引・契約の判断には使えません。' },
+    usd: { id: 'usd', units: DUNIT, base: 'ドル', max: 15, counter: '倍', major: 3, ladder: USD_LADDER, text: function (w, n) { return ladderText(w, n, USD_LADDER); },
+      stages: [{ key: 'all', label: '全体（1 ドル 〜 1,000 兆ドル）', lo: 0, hi: 15 }, { key: 'home', label: '個人・企業の桁', lo: 0, hi: 9 }, { key: 'nation', label: '国・市場の桁', lo: 6, hi: 15 }],
+      conv: 'ドルに直した値', cap: 'ドル換算は有効数字 3 桁',
+      caution: '倍率は、金額の大きさだけを比べた目安です。時点・範囲・名目か実質か・残高か年間の流れかが項目ごとに違うので、実際の関係とは限りません。円とドルの換算はしていません。',
+      disc: '学習用の模型です。実際の投資・取引・契約の判断には使えません。' }
+  };
+  /* 項目の単位から物差しの種類を決める（from＝電力量÷時間は電力）。混ぜた場合はビルド検査が止める */
+  function famOf(d) {
+    var f = 'power';
+    (d.items || []).forEach(function (it) { if (!it.from && it.unit && JUNIT.hasOwnProperty(it.unit)) f = 'jpy'; else if (!it.from && it.unit && DUNIT.hasOwnProperty(it.unit)) f = 'usd'; });
+    return FAMS[f];
+  }
   var GCLS = ['ue', 'ran', 'core', 'db', 'pol', 'ext', 'ims'];
 
   /* 項目を W に正規化する。値は必ずデータから（value＋unit、from＝電力量÷時間、range）。 */
-  function normItem(it) {
-    var o = { it: it, id: it.id, name: it.name, short: it.short || it.name, counter: it.counter || '個' };
+  function normItem(it, fam) {
+    var UNIT = fam.units;
+    var o = { it: it, id: it.id, name: it.name, short: it.short || it.name, counter: (it.counter || fam.counter).replace(/分$/, '') || fam.counter };
     if (it.from) {
       var e = it.from.energy * (EUNIT[it.from.unit || 'kWh'] || 1);
       o.w = e / it.from.hours; o.derived = true;
@@ -6764,10 +7930,10 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
   }
 
   CN.widgets.scale = function (el, d, ctx) {
-    var items = d.items.map(normItem), byId = {}, groups = d.groups || [], gIdx = {}, sources = d.sources || [];
+    var fam = famOf(d), items = d.items.map(function (it) { return normItem(it, fam); }), byId = {}, groups = d.groups || [], gIdx = {}, sources = d.sources || [];
     items.forEach(function (o) { byId[o.id] = o; });
     groups.forEach(function (g, i) { gIdx[g.key] = i; });
-    var stages = d.stages || STAGES, st = stages[0], win = { lo: st.lo, hi: st.hi };
+    var stages = d.stages || fam.stages, st = stages[0], win = { lo: st.lo, hi: st.hi };
     var A = byId[d.initial || (d.items[0] || {}).id], B = byId[d.base] || items[0], probe = (d.probe != null ? d.probe : Math.log(B.w) / Math.LN10);
     var tabs = CN.tabs(stages.map(function (x) { return { key: x.key, label: x.label }; }), st.key, function (k) { setStage(k); }, '表示する桁の範囲');
     CN.frame(el, '大きさの比較', d.title, tabs);
@@ -6795,7 +7961,7 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
     var result = h('div', { 'class': 'sc-result', 'aria-live': 'polite' });
     panel.appendChild(result);
     var pr = h('div', { 'class': 'sc-probe' });
-    var rng = h('input', { type: 'range', id: ctx.id + '-p', min: 0, max: 13, step: 0.01, value: probe });
+    var rng = h('input', { type: 'range', id: ctx.id + '-p', min: 0, max: fam.max, step: 0.01, value: probe });
     pr.appendChild(h('label', { 'for': ctx.id + '-p' }, '好きな大きさを探る（つまみ。矢印キーで動かせます）'));
     pr.appendChild(rng);
     var probeOut = h('div', { 'class': 'sc-probe-out', 'aria-live': 'polite' });
@@ -6811,22 +7977,22 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
     var svg = null;
     function Hpx() { return measure(rulerBox, 340) < 420 ? 520 : 600; }
     function drawRuler() {
-      var W = measure(rulerBox, 340), Hh = Hpx(), top = 18, bot = 18, axisX = 66, lo = win.lo, hi = win.hi, span = hi - lo;
+      var W = measure(rulerBox, 340), Hh = Hpx(), top = 18, bot = 18, axisX = fam.id === 'power' ? 66 : 98, lo = win.lo, hi = win.hi, span = hi - lo;
       var yOf = function (w) { return top + (hi - Math.log(w) / Math.LN10) / span * (Hh - top - bot); };
       var out = [];
       var svg2 = s('svg', { 'class': 'sc-svg', viewBox: '0 0 ' + W + ' ' + Hh, width: W, height: Hh, role: 'group', 'aria-label': d.title + '（対数の物差し。' + items.length + ' 項目。同じ内容の表が下にあります）' });
       svg2.appendChild(s('line', { 'class': 'sc-axis', x1: axisX, y1: top, x2: axisX, y2: Hh - bot }));
       for (var e = Math.ceil(lo - 1e-9); e <= Math.floor(hi + 1e-9); e++) {
-        var y = yOf(Math.pow(10, e)), major = e % 3 === 0, u = e >= 12 ? 'TW' : e >= 9 ? 'GW' : e >= 6 ? 'MW' : e >= 3 ? 'kW' : 'W', m = Math.pow(10, e - (e >= 12 ? 12 : e >= 9 ? 9 : e >= 6 ? 6 : e >= 3 ? 3 : 0));
+        var y = yOf(Math.pow(10, e)), major = e % (fam.major || 3) === 0, u = e >= 12 ? 'TW' : e >= 9 ? 'GW' : e >= 6 ? 'MW' : e >= 3 ? 'kW' : 'W', m = Math.pow(10, e - (e >= 12 ? 12 : e >= 9 ? 9 : e >= 6 ? 6 : e >= 3 ? 3 : 0));
         svg2.appendChild(s('line', { 'class': 'sc-tick' + (major ? ' maj' : ''), x1: axisX - (major ? 14 : 8), y1: y, x2: axisX, y2: y }));
         if (major) svg2.appendChild(s('line', { 'class': 'sc-gl', x1: axisX, y1: y, x2: W - 4, y2: y }));
-        svg2.appendChild(s('text', { 'class': 'sc-tl' + (major ? ' maj' : ''), x: axisX - 18, y: y + 4, 'text-anchor': 'end' }, m + ' ' + u));
+        svg2.appendChild(s('text', { 'class': 'sc-tl' + (major ? ' maj' : ''), x: axisX - 18, y: y + 4, 'text-anchor': 'end' }, fam.id === 'power' ? m + ' ' + u : fam.text(Math.pow(10, e), 1)));
       }
       /* 探る値の線 */
       if (probe >= lo && probe <= hi) {
         var py = yOf(Math.pow(10, probe));
         svg2.appendChild(s('line', { 'class': 'sc-probe-ln', x1: axisX - 4, y1: py, x2: W - 4, y2: py }));
-        svg2.appendChild(s('text', { 'class': 'sc-probe-tx halo', x: W - 6, y: py - 5, 'text-anchor': 'end' }, '探る値 ' + powText(Math.pow(10, probe), 3)));
+        svg2.appendChild(s('text', { 'class': 'sc-probe-tx halo', x: W - 6, y: py - 5, 'text-anchor': 'end' }, '探る値 ' + fam.text(Math.pow(10, probe), 3)));
       }
       /* 窓の中の項目。ラベルは重ならないよう縦にずらす */
       var vis = items.filter(function (o) { return o.hi >= Math.pow(10, lo) * 0.9999 && o.lo <= Math.pow(10, hi) * 1.0001; });
@@ -6867,7 +8033,7 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
       var note = h('p', { 'class': 'sc-out' }, hid.length ? 'この範囲の外にある項目：' + hid.map(function (o) { return o.short; }).join('、') + '（「全体」か「縮小」で表示）' : 'すべての項目がこの範囲に入っています。');
       rulerBox.appendChild(note);
       rulerBox.appendChild(h('p', { 'class': 'sc-keys' }, '項目は Tab で選び、Enter で「比べる項目（A）」に、b キーで「基準」にします。矢印の上下で隣の項目へ移れます。'));
-      rangeNote.textContent = '表示中：' + powText(Math.pow(10, lo), 1) + ' 〜 ' + powText(Math.pow(10, hi), 1);
+      rangeNote.textContent = '表示中：' + fam.text(Math.pow(10, lo), 1) + ' 〜 ' + fam.text(Math.pow(10, hi), 1);
     }
 
     function setStage(k) {
@@ -6880,13 +8046,13 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
     }
     function zoom(f) {
       var c = (win.lo + win.hi) / 2, sp = (win.hi - win.lo) * f;
-      sp = Math.max(2, Math.min(13, sp)); win = { lo: c - sp / 2, hi: c + sp / 2 };
-      if (win.lo < 0) { win.hi -= win.lo; win.lo = 0; } if (win.hi > 13) { win.lo -= win.hi - 13; win.hi = 13; }
-      win.lo = Math.max(0, Math.round(win.lo)); win.hi = Math.min(13, Math.round(win.hi)); if (win.hi - win.lo < 2) win.hi = win.lo + 2;
+      sp = Math.max(2, Math.min(fam.max, sp)); win = { lo: c - sp / 2, hi: c + sp / 2 };
+      if (win.lo < 0) { win.hi -= win.lo; win.lo = 0; } if (win.hi > fam.max) { win.lo -= win.hi - fam.max; win.hi = fam.max; }
+      win.lo = Math.max(0, Math.round(win.lo)); win.hi = Math.min(fam.max, Math.round(win.hi)); if (win.hi - win.lo < 2) win.hi = win.lo + 2;
       syncTabs(null); drawRuler();
     }
     function shift(n) {
-      var sp = win.hi - win.lo, lo = Math.max(0, Math.min(13 - sp, win.lo + n)); win = { lo: lo, hi: lo + sp }; syncTabs(null); drawRuler();
+      var sp = win.hi - win.lo, lo = Math.max(0, Math.min(fam.max - sp, win.lo + n)); win = { lo: lo, hi: lo + sp }; syncTabs(null); drawRuler();
     }
     function inWin(o) { return o.hi >= Math.pow(10, win.lo) * 0.9999 && o.lo <= Math.pow(10, win.hi) * 1.0001; }
     function setA(id) { A = byId[id]; if (!inWin(A)) setStage(stages[0].key); refresh(); }
@@ -6908,22 +8074,25 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
     }
     function calcLine(a, b) {
       var one = !a.isRange && !b.isRange;
-      function wtxt(o) { return o.isRange ? fmtSig(o.lo, 3) + '〜' + fmtSig(o.hi, 3) + ' W' : fmtSig(o.w, 3) + ' W'; }
+      function wtxt(o) {
+        if (fam.id !== 'power') return o.isRange ? fam.text(o.lo, 3) + '〜' + fam.text(o.hi, 3) : fam.text(o.w, 3);
+        return o.isRange ? fmtSig(o.lo, 3) + '〜' + fmtSig(o.hi, 3) + ' W' : fmtSig(o.w, 3) + ' W';
+      }
       if (one && a.w < b.w) return '計算：' + wtxt(b) + ' ÷ ' + wtxt(a) + ' ＝ ' + fmtSig(b.w / a.w, 3) + '（B が A の何倍かを出し、有効数字 2 桁に丸めて「何分の 1」にしています）';
       if (one) return '計算：' + wtxt(a) + ' ÷ ' + wtxt(b) + ' ＝ ' + fmtSig(a.w / b.w, 3) + '（有効数字 2 桁に丸めて上の文にしています）';
       return '計算：（' + wtxt(a) + '）÷（' + wtxt(b) + '）。幅のある項目は、最小と最大の組み合わせで範囲を出しています。';
     }
     function refreshProbe() {
       var w = Math.pow(10, probe), r = w / B.w, near = items.slice().sort(function (p, q) { return Math.abs(Math.log(p.w / w)) - Math.abs(Math.log(q.w / w)); })[0];
-      var tx = '探る値：' + powText(w, 3) + '。' + B.name + 'の ' + (Math.abs(r - 1) < 0.05 ? 'ほぼ同じ大きさ（約 1 倍）' : r < 1 ? '約 ' + bunno(1 / r) : times(r, B.counter)) + '。いちばん近い項目は「' + near.short + '」（' + near.disp + '）。';
-      probeOut.textContent = tx; rng.setAttribute('aria-valuetext', powText(w, 3));
+      var tx = '探る値：' + fam.text(w, 3) + '。' + B.name + 'の ' + (Math.abs(r - 1) < 0.05 ? 'ほぼ同じ大きさ（約 1 倍）' : r < 1 ? '約 ' + bunno(1 / r) : times(r, B.counter)) + '。いちばん近い項目は「' + near.short + '」（' + near.disp + '）。';
+      probeOut.textContent = tx; rng.setAttribute('aria-valuetext', fam.text(w, 3));
     }
     function refresh() {
       selA.value = A.id; selB.value = B.id;
       CN.clear(result);
       result.appendChild(h('p', { 'class': 'sc-sent' }, ratioSentence(A, B)));
       result.appendChild(h('p', { 'class': 'sc-calc' }, calcLine(A, B)));
-      result.appendChild(h('p', { 'class': 'sc-caution' }, d.caution || '倍率は、値の大きさだけを比べた目安です。条件（定格・平均・総出力・見通しなど）が項目ごとに違うので、実際の「何軒分」とは限りません。'));
+      result.appendChild(h('p', { 'class': 'sc-caution' }, d.caution || fam.caution));
       CN.clear(detail);
       [A, B].forEach(function (o, k) {
         if (k === 1 && B === A) return;
@@ -6958,9 +8127,9 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
       var it = o.it, gname = (groups[gIdx[it.group]] || {}).label || '';
       tb.appendChild(h('tr', null, h('th', { scope: 'row' }, o.name), h('td', null, gname), h('td', null, o.disp), h('td', null, o.isRange ? fmtSig(o.lo, 3) + '〜' + fmtSig(o.hi, 3) : fmtSig(o.w, 3)), h('td', null, it.cond || ''), h('td', null, (it.src || []).map(function (n) { return '[' + n + ']'; }).join(' '))));
     });
-    det.appendChild(h('div', { 'class': 'tbl-wrap' }, h('table', { 'class': 'tbl' }, h('caption', null, d.title + '：小さい順（W 換算は有効数字 3 桁）'), h('thead', null, h('tr', null, ['項目', '区分', '公表値（出典の表記）', 'W に直した値', '条件', '出典'].map(function (c) { return h('th', { scope: 'col' }, c); }))), tb)));
+    det.appendChild(h('div', { 'class': 'tbl-wrap' }, h('table', { 'class': 'tbl' }, h('caption', null, d.title + '：小さい順（' + fam.cap + '）'), h('thead', null, h('tr', null, ['項目', '区分', '公表値（出典の表記）', fam.conv, '条件', '出典'].map(function (c) { return h('th', { scope: 'col' }, c); }))), tb)));
     el.appendChild(det);
-    if (d.disclaimer !== false) el.appendChild(h('p', { 'class': 'lab-disc' }, d.disclaimer || '学習用の模型です。実際の設計や工事の判断には使えません。'));
+    if (d.disclaimer !== false) el.appendChild(h('p', { 'class': 'lab-disc' }, d.disclaimer || fam.disc));
 
     refresh();
     watchWidth(rulerBox, drawRuler);
@@ -6981,11 +8150,12 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
     CN.frame(el, '式を動かす実験台', d.title, tabs);
     var body = h('div', { 'class': 'wg-body lab-body' }); el.appendChild(body);
     if (d.disclaimer !== false) el.appendChild(h('p', { 'class': 'lab-disc' }, d.disclaimer || '学習用の模型です。実際の設計や工事の判断には使えません。'));
-    var figBox = null, resBox = null, readBox = null, sayBoxes = {}, tableBox = null, outEls = {}, constBox = null, lastEnv = null;
+    var figBox = null, resBox = null, readBox = null, sayBoxes = {}, tableBox = null, outEls = {}, constBox = null, lastEnv = null, sliders = {}, presetBtns = [], presetNote = null, quadCells = [];
 
     function compileExp(x) {
-      var c = { calc: (x.calc || []).map(function (k) { return { id: k.id, f: X.compile(k.expr) }; }), results: (x.results || []).map(function (r) { return { r: r, f: X.compile(r.expr) }; }),
-        reads: (x.reads || []).map(function (r) { return { r: r, f: r.when ? X.compile(r.when) : null }; }), says: {} };
+      var c = { calc: (x.calc || []).map(function (k) { return { id: k.id, f: X.compile(k.expr) }; }), results: (x.results || []).map(function (r) { return { r: r, f: X.compile(r.expr), sh: r.show ? X.compile(r.show) : null, bf: r.base ? X.compile(r.base.expr) : null }; }),
+        reads: (x.reads || []).map(function (r) { return { r: r, f: r.when ? X.compile(r.when) : null }; }), says: {}, quad: [] };
+      if (x.quad) (x.quad.cells || []).forEach(function (row, ri) { row.forEach(function (cell, ci) { c.quad.push({ ri: ri, ci: ci, f: cell.when ? X.compile(cell.when) : null }); }); });
       x.inputs.forEach(function (i) { c.says[i.id] = (i.say || []).map(function (r) { return { r: r, f: r.when ? X.compile(r.when) : null }; }); });
       return c;
     }
@@ -6999,29 +8169,65 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
     function ev(f, e) { try { return f.run(e); } catch (er) { return NaN; } }
     function show(v, digits, auto) {
       if (!isFinite(v)) return { num: '—', unit: '' };
-      if (auto) { var t = powText(v, digits != null ? Math.max(2, digits) : 3, auto === 'Wh' ? 'Wh' : 'W'); var sp = t.lastIndexOf(' '); return { num: t.slice(0, sp), unit: t.slice(sp + 1) }; }
+      if (auto) { var t = auto === '円' ? ladderText(v, digits != null ? Math.max(2, digits) : 3, YEN_LADDER) : auto === 'ドル' ? ladderText(v, digits != null ? Math.max(2, digits) : 3, USD_LADDER) : powText(v, digits != null ? Math.max(2, digits) : 3, auto === 'Wh' ? 'Wh' : 'W'); var sp = t.lastIndexOf(' '); return { num: t.slice(0, sp), unit: t.slice(sp + 1) }; }
       var dg = digits != null ? digits : 2;
       /* 0 でないのに丸めると 0 になる値は「0.001 未満」と出す */
       if (v > 1e-9 && !/[1-9]/.test(Math.abs(v).toFixed(dg))) return { num: fmtFixed(Math.pow(10, -dg), dg), unit: '', lt: true };
       return { num: fmtFixed(v, dg), unit: '' };
     }
 
+    /* プリセット：set は { 入力の id: 値 }。つまみの刻みに丸められた値が state に入る */
+    function setAll(set) {
+      var k; for (k in set) { var sl = sliders[k]; if (sl) { sl.r.value = set[k]; sl.sync(); } }
+      refresh();
+    }
+    /* 2×2 などの分類表（実際の表。いまの入力に当てはまるマスに印が付く）。x.quad = {title?, corner?, cols:[…], rows:[…], cells:[[{title, sub?, when?}, …], …], caption?} */
+    function buildQuad(q) {
+      var tb = h('tbody');
+      (q.rows || []).forEach(function (rh, ri) {
+        var tr = h('tr', null, h('th', { scope: 'row' }, rh));
+        (q.cells[ri] || []).forEach(function (cell) {
+          var td = h('td', { 'class': 'lab-quad-c' }, h('b', null, cell.title)); if (cell.sub) td.appendChild(h('span', null, cell.sub));
+          quadCells.push(td); tr.appendChild(td);
+        });
+        tb.appendChild(tr);
+      });
+      var tbl = h('table', { 'class': 'lab-quad-t' }, h('thead', null, h('tr', null, [h('th', { scope: 'col' }, q.corner || '')].concat((q.cols || []).map(function (c) { return h('th', { scope: 'col' }, c); })))), tb);
+      var box = h('div', { 'class': 'lab-quad' });
+      if (q.title) box.appendChild(h('h5', null, q.title));
+      box.appendChild(h('div', { 'class': 'tbl-wrap' }, tbl));
+      if (q.caption) box.appendChild(CN.richEl('p', 'lab-cap', q.caption));
+      return box;
+    }
+
     function build() {
       var x = exps[cur]; CN.clear(body);
       if (x.intro) body.appendChild(CN.richEl('p', 'lab-intro', x.intro));
+      sayBoxes = {}; outEls = {}; sliders = {}; presetBtns = []; presetNote = null; quadCells = [];
+      /* 実験の「プリセット」：複数の入力をまとめて決める（任意）。押すと下のつまみが動く */
+      if (x.presets && x.presets.length) {
+        var pbar = h('div', { 'class': 'lab-preset-bar' }), plabel = x.presetLabel || 'まとめて動かす（押すと、下のつまみが動きます）';
+        pbar.appendChild(h('div', { 'class': 'lab-preset-h' }, plabel));
+        var pgrp = h('div', { 'class': 'lab-presets', role: 'group', 'aria-label': plabel });
+        x.presets.forEach(function (p) { var b = h('button', { type: 'button', 'class': 'btn sm', 'aria-pressed': 'false' }, p.label); b.addEventListener('click', function () { setAll(p.set); }); presetBtns.push(b); pgrp.appendChild(b); });
+        pbar.appendChild(pgrp);
+        presetNote = h('p', { 'class': 'lab-say lab-preset-note', 'aria-live': 'polite' }); pbar.appendChild(presetNote);
+        body.appendChild(pbar);
+      }
       var top = h('div', { 'class': 'lab-top' }), inputs = h('div', { 'class': 'lab-inputs' }), right = h('div', { 'class': 'lab-right' });
       top.appendChild(inputs); top.appendChild(right); body.appendChild(top);
-      sayBoxes = {}; outEls = {};
       x.inputs.forEach(function (i) {
         var id = ctx.id + '-' + cur + '-' + i.id, dec = numSteps(i.step);
         var wrap = h('div', { 'class': 'lab-in' });
         var out = h('output', { 'for': id, 'class': 'lab-val' });
         wrap.appendChild(h('div', { 'class': 'lab-in-h' }, h('label', { 'for': id }, i.label + (i.unit ? '（' + i.unit + '）' : '')), out));
         var r = h('input', { type: 'range', id: id, min: i.min, max: i.max, step: i.step, value: state[cur][i.id] });
-        function upd() {
+        function sync() {
           state[cur][i.id] = parseFloat(r.value); out.textContent = fmtFixed(state[cur][i.id], dec) + (i.unit ? ' ' + i.unit : '');
-          r.setAttribute('aria-valuetext', out.textContent); refresh();
+          r.setAttribute('aria-valuetext', out.textContent);
         }
+        function upd() { sync(); refresh(); }
+        sliders[i.id] = { r: r, sync: sync };
         r.addEventListener('input', upd); wrap.appendChild(r);
         wrap.appendChild(h('div', { 'class': 'lab-minmax' }, h('span', null, fmtFixed(i.min, dec)), h('span', null, fmtFixed(i.max, dec))));
         if (i.presets && i.presets.length) {
@@ -7035,6 +8241,7 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
       });
       figBox = h('div', { 'class': 'lab-fig' }); right.appendChild(figBox);
       resBox = h('div', { 'class': 'lab-results', 'aria-live': 'polite' }); right.appendChild(resBox);
+      if (x.quad) right.appendChild(buildQuad(x.quad));
       if (x.formula) body.appendChild(CN.richEl('p', 'lab-formula', '式：' + x.formula));
       readBox = h('div', { 'class': 'lab-read' }); body.appendChild(readBox);
       if (x.consts && x.consts.length) {
@@ -7052,9 +8259,14 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
       var x = exps[cur], c = compiled[cur], e = env(cur); lastEnv = e;
       CN.clear(resBox);
       c.results.forEach(function (o) {
-        var v = ev(o.f, e), t = show(v, o.r.digits, o.r.auto), box = h('div', { 'class': 'lab-res' + (o.r.big ? ' big' : '') });
+        if (o.sh && !ev(o.sh, e)) return;      // show：式が偽のとき、この結果は出さない（任意）
+        var v = ev(o.f, e), t = o.r.words ? { num: (isFinite(v) && o.r.words[Math.round(v)] != null) ? o.r.words[Math.round(v)] : '—', unit: '' } : show(v, o.r.digits, o.r.auto), box = h('div', { 'class': 'lab-res' + (o.r.big ? ' big' : '') + (o.r.words ? ' word' : '') });
         box.appendChild(h('div', { 'class': 'lab-res-l' }, o.r.label));
         box.appendChild(h('div', { 'class': 'lab-res-v' }, h('b', null, t.num), ' ' + (t.unit || o.r.unit || '') + (t.lt ? ' 未満' : '')));
+        if (o.bf) {      // base：変化前などの比較の値（任意）。words があれば言葉で、なければ数で
+          var bv = ev(o.bf, e), bw = o.r.base.words, bt = bw ? ((isFinite(bv) && bw[Math.round(bv)] != null) ? bw[Math.round(bv)] : '—') : (function () { var q = show(bv, o.r.base.digits != null ? o.r.base.digits : o.r.digits, o.r.auto); return q.num + ((q.unit || o.r.unit) ? ' ' + (q.unit || o.r.unit) : ''); })();
+          box.appendChild(h('div', { 'class': 'lab-res-n' }, (o.r.base.label || '元') + '：' + bt));
+        }
         if (o.r.note) box.appendChild(h('div', { 'class': 'lab-res-n' }, o.r.note));
         resBox.appendChild(box);
       });
@@ -7062,6 +8274,14 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
         var hit = null; c.says[i.id].forEach(function (z) { if (!hit && (!z.f || ev(z.f, e))) hit = z.r; });
         sayBoxes[i.id].textContent = hit ? hit.text : (i.hint || '');
       });
+      if (x.presets && presetBtns.length) {
+        var act = -1; x.presets.forEach(function (p, pi) {
+          var on = true, k; for (k in p.set) { if (Math.abs((state[cur][k] != null ? state[cur][k] : NaN) - p.set[k]) > 1e-9) on = false; }
+          presetBtns[pi].setAttribute('aria-pressed', String(on)); if (on && act < 0) act = pi;
+        });
+        presetNote.textContent = act >= 0 ? (x.presets[act].text || '') : (x.presetHint || '');
+      }
+      if (c.quad.length) c.quad.forEach(function (q) { var on = !!(q.f && ev(q.f, e)), td = quadCells[q.ri * (x.quad.cols || []).length + q.ci]; if (td) { td.className = 'lab-quad-c' + (on ? ' on' : ''); if (on) td.setAttribute('aria-current', 'true'); else td.removeAttribute('aria-current'); } });
       CN.clear(readBox);
       var rl = c.reads.filter(function (z) { return !z.f || ev(z.f, e); });
       if (rl.length) {
@@ -7074,18 +8294,28 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
     /* ---- 図 ---- */
     function num(v, e, dflt) { if (v == null) return dflt; if (typeof v === 'number') return v; try { return X.compile(v).run(e); } catch (er) { return dflt; } }
     function drawFig() {
-      var x = exps[cur], f = x.fig, e = lastEnv; if (!f || !figBox || !e) return;
-      CN.clear(figBox);
-      var W = measure(figBox, 320), rows = [], svg;
-      if (f.type === 'bar') svg = figBar(f, e, W, rows);
-      else if (f.type === 'wave') svg = figWave(f, e, W, rows);
-      else svg = figCircuit(f, e, W, rows);
-      figBox.appendChild(svg);
-      if (f.caption) figBox.appendChild(CN.richEl('p', 'lab-cap', f.caption));
-      CN.clear(tableBox); tableBox.appendChild(h('summary', null, '図の数値（同じ内容の表。読み上げ・印刷用）'));
-      var tb = h('tbody'); rows.forEach(function (r) { tb.appendChild(h('tr', null, h('th', { scope: 'row' }, r[0]), h('td', null, r[1]))); });
-      tableBox.appendChild(h('div', { 'class': 'tbl-wrap' }, h('table', { 'class': 'tbl' }, h('caption', null, x.label + '：図の数値'), h('thead', null, h('tr', null, h('th', { scope: 'col' }, '項目'), h('th', { scope: 'col' }, '値'))), tb)));
-      svg.setAttribute('aria-label', (f.alt || x.label) + '。' + rows.map(function (r) { return r[0] + ' ' + r[1]; }).join('、'));
+      var x = exps[cur], list = x.figs || (x.fig ? [x.fig] : []), e = lastEnv; if (!list.length || !figBox || !e) return;
+      CN.clear(figBox); CN.clear(tableBox); tableBox.appendChild(h('summary', null, '図の数値（同じ内容の表。読み上げ・印刷用）'));
+      var W = measure(figBox, 320);
+      list.forEach(function (f, fi) {
+        var rows = [], svg, many = list.length > 1, nm = many ? x.label + '・' + (f.title || '図 ' + (fi + 1)) : x.label;
+        if (f.type === 'bar') svg = f.signed ? figBarS(f, e, W, rows) : figBar(f, e, W, rows);
+        else if (f.type === 'wave') svg = figWave(f, e, W, rows);
+        else if (f.type === 'curve') svg = figCurve(f, e, W, rows);
+        else svg = figCircuit(f, e, W, rows);
+        if (many && f.title) figBox.appendChild(h('h5', { 'class': 'lab-fig-t' }, f.title));
+        figBox.appendChild(svg);
+        if (f.caption) figBox.appendChild(CN.richEl('p', 'lab-cap', f.caption));
+        var tb = h('tbody');
+        if (rows.tbl) {
+          rows.tbl.body.forEach(function (r) { tb.appendChild(h('tr', null, r.map(function (c, ci) { return ci === 0 ? h('th', { scope: 'row' }, c) : h('td', null, c); }))); });
+          tableBox.appendChild(h('div', { 'class': 'tbl-wrap' }, h('table', { 'class': 'tbl' }, h('caption', null, nm + '：線グラフの数値'), h('thead', null, h('tr', null, rows.tbl.head.map(function (c) { return h('th', { scope: 'col' }, c); }))), tb)));
+        } else {
+          rows.forEach(function (r) { tb.appendChild(h('tr', null, h('th', { scope: 'row' }, r[0]), h('td', null, r[1]))); });
+          tableBox.appendChild(h('div', { 'class': 'tbl-wrap' }, h('table', { 'class': 'tbl' }, h('caption', null, nm + '：図の数値'), h('thead', null, h('tr', null, h('th', { scope: 'col' }, '項目'), h('th', { scope: 'col' }, '値'))), tb)));
+        }
+        svg.setAttribute('aria-label', (f.alt || x.label) + '。' + rows.map(function (r) { return r[0] + ' ' + r[1]; }).join('、'));
+      });
     }
     function vt(v, b) { var t = show(v, b.digits, b.auto); return t.num + (t.unit || b.unit ? ' ' + (t.unit || b.unit) : '') + (t.lt ? ' 未満' : ''); }
 
@@ -7150,6 +8380,203 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
       return svg;
     }
 
+    /* ---- 正負の棒（fig.type 'bar'、signed:true）：0 の線から左右に伸びる。max は絶対値の上限（数か式。省略するとデータから） ---- */
+    function figBarS(f, e, W, rows) {
+      var bars = f.bars, vals = bars.map(function (b) { return num(b.expr, e, NaN); }), n = bars.length, rowH = 50, padL = 10, padR = 10, Hh = 24 + n * rowH + 8;
+      var mx = f.max != null ? num(f.max, e, NaN) : NaN; if (!isFinite(mx)) mx = Math.max.apply(null, vals.filter(isFinite).map(Math.abs)) * 1.1 || 1;
+      var svg = s('svg', { 'class': 'lab-svg', viewBox: '0 0 ' + W + ' ' + Hh, width: W, height: Hh, role: 'img' });
+      var x0 = padL, x1 = W - padR, zx = (x0 + x1) / 2, half = (x1 - x0) / 2, k = half / mx;
+      svg.appendChild(s('rect', { 'class': 'lab-plot', x: x0, y: 16, width: x1 - x0, height: n * rowH + 4 }));
+      [-1, 1].forEach(function (sg) { svg.appendChild(s('line', { 'class': 'lab-g v', x1: zx + sg * half / 2, y1: 16, x2: zx + sg * half / 2, y2: 16 + n * rowH + 4 })); });
+      svg.appendChild(s('line', { 'class': 'lab-g zero', x1: zx, y1: 12, x2: zx, y2: 16 + n * rowH + 4 }));
+      svg.appendChild(s('text', { 'class': 'lab-ax', x: zx, y: 10, 'text-anchor': 'middle' }, '0'));
+      var ud = f.unit ? '（' + f.unit + '）' : '';
+      svg.appendChild(s('text', { 'class': 'lab-ax', x: x0 + 2, y: 10 }, '← ' + (f.negLabel || '下がる') + ' ' + fmtFixed(mx, f.axisDigits != null ? f.axisDigits : 0)));
+      svg.appendChild(s('text', { 'class': 'lab-ax', x: x1 - 2, y: 10, 'text-anchor': 'end' }, (f.posLabel || '上がる') + ' ' + fmtFixed(mx, f.axisDigits != null ? f.axisDigits : 0) + ' →'));
+      bars.forEach(function (b, i) {
+        var y = 20 + i * rowH, v = vals[i], w = isFinite(v) ? Math.min(half, Math.abs(v) * k) : 0, neg = v < 0, lab = vt(v, b);
+        svg.appendChild(s('text', { 'class': 'lab-bl', x: x0 + 6, y: y + 12 }, b.label));
+        svg.appendChild(s('rect', { 'class': 'lab-bar c-' + (b.color || COLORS[i % COLORS.length]) + (neg ? ' neg' : ''), x: neg ? zx - w : zx, y: y + 18, width: Math.max(0, w), height: 18, rx: 3 }));
+        /* 値は、棒のない側（0 の線の反対側）に出す。棒と重ならない */
+        svg.appendChild(s('text', { 'class': 'lab-bv', x: neg ? zx + 6 : zx - 6, y: y + 31, 'text-anchor': neg ? 'start' : 'end' }, lab));
+        rows.push([b.label, lab]);
+      });
+      return svg;
+    }
+
+    /* ---- 線グラフ（fig.type 'curve'）：x の範囲で式を評価して折れ線を描く。負の値・0 の線・縦の目印つき ---- */
+    function niceStep(range, n) {
+      var raw = range / n, mag = Math.pow(10, Math.floor(Math.log(raw) / Math.LN10 + 1e-12)), r = raw / mag;
+      return (r <= 1 ? 1 : r <= 2 ? 2 : r <= 5 ? 5 : 10) * mag;
+    }
+    function decOf(step) { var m = /e-(\d+)/.exec(String(step)), d = numSteps(step); return m ? parseInt(m[1], 10) : d; }
+    function figCurve(f, e, W, rows) {
+      var xd = f.x, x0 = xd.min, x1 = xd.max, logx = xd.scale === 'log', ser = f.series, dg = f.digits != null ? f.digits : 2;
+      var N = logx ? Math.max(2, Math.min(800, Math.round(xd.n || 160))) : Math.max(2, Math.min(800, Math.round((x1 - x0) / (xd.step || (x1 - x0) / 120))));
+      var xdec = xd.digits != null ? xd.digits : Math.min(4, decOf(xd.step || 1));
+      var fs = ser.map(function (z) { return z.expr != null ? X.compile(z.expr) : null; });
+      var vis = ser.map(function (z) { return !z.when || !!ev(X.compile(z.when), e); });
+      var ev0 = function (k, xv) { var env2 = {}, key; for (key in e) env2[key] = e[key]; env2[xd.id] = xv; return ev(fs[k], env2); };
+      /* data：公表値などの点（{x, y, l?}）を直線でつなぐ系列。expr の代わりに使う（任意） */
+      var pts = ser.map(function (z) { return z.data ? z.data.filter(function (q) { return isFinite(q.x) && isFinite(q.y); }) : null; });
+      var tPos = function (v) { return logx ? Math.log(v / x0) / Math.log(x1 / x0) : (v - x0) / (x1 - x0); };
+      var valAt = function (k, xv) {
+        if (!pts[k]) return ev0(k, xv);
+        var a = pts[k], i2;
+        for (i2 = 0; i2 < a.length; i2++) if (Math.abs(tPos(a[i2].x) - tPos(xv)) < 1e-9) return a[i2].y;
+        for (i2 = 0; i2 + 1 < a.length; i2++) if (xv > a[i2].x && xv < a[i2 + 1].x) return a[i2].y + (a[i2 + 1].y - a[i2].y) * (tPos(xv) - tPos(a[i2].x)) / (tPos(a[i2 + 1].x) - tPos(a[i2].x));
+        return NaN;
+      };
+      var data = ser.map(function () { return []; }), xs = [], i, k;
+      for (i = 0; i <= N; i++) { var xv = logx ? x0 * Math.pow(x1 / x0, i / N) : x0 + (x1 - x0) * i / N; xs.push(xv); for (k = 0; k < ser.length; k++) data[k].push(fs[k] ? ev0(k, xv) : NaN); }
+      /* 縦軸の範囲：ymin・ymax（数か式）。無ければデータから決める */
+      var fin = []; data.forEach(function (a, kk) { if (vis[kk]) a.forEach(function (v) { if (isFinite(v)) fin.push(v); }); }); pts.forEach(function (a, kk) { if (a && vis[kk]) a.forEach(function (q) { fin.push(q.y); }); });
+      var dmin = fin.length ? Math.min.apply(null, fin) : 0, dmax = fin.length ? Math.max.apply(null, fin) : 1;
+      var ymin = f.ymin != null ? num(f.ymin, e, NaN) : NaN, ymax = f.ymax != null ? num(f.ymax, e, NaN) : NaN;
+      if (!isFinite(ymin) || !isFinite(ymax)) {
+        var pad = (dmax - dmin) * 0.08 || Math.abs(dmax) * 0.1 || 1;
+        if (!isFinite(ymin)) ymin = dmin - pad; if (!isFinite(ymax)) ymax = dmax + pad;
+      }
+      if (!(ymax > ymin)) ymax = ymin + 1;
+      var ystep = niceStep(ymax - ymin, 4), ydec = Math.max(0, Math.min(6, decOf(ystep)));
+      /* 凡例（折り返す）：見えている系列と、帯（fills）。上の余白は凡例の行数で決める */
+      var fills = (f.fills || []).filter(function (z) { return !z.when || !!ev(X.compile(z.when), e); });
+      var lgItems = []; ser.forEach(function (z, j) { if (vis[j]) lgItems.push({ k: 'l', j: j, label: z.label }); }); fills.forEach(function (z, j) { if (z.label) lgItems.push({ k: 'f', j: j, label: z.label }); });
+      var lgRows = [[]], lx = 0, LW = W - 12, widths = lgItems.map(function (z) { return 34 + z.label.length * 12; });
+      widths.forEach(function (w, j) { if (lx + w > LW && lgRows[lgRows.length - 1].length) { lgRows.push([]); lx = 0; } lgRows[lgRows.length - 1].push(j); lx += w; });
+      var mL = Math.min(56, 36 + 7 * Math.max(String(Math.round(Math.abs(ymax))).length, String(Math.round(Math.abs(ymin))).length) + (ydec ? 6 * ydec : 0)), mR = 14, mT = 22 + lgRows.length * 18 + (f.yLabel ? 16 : 0), pw = W - mL - mR;
+      var X0 = function (v) { return mL + tPos(v) * pw; };
+      /* 横軸の目盛り：ticks（{v, label}）があればそれを使う。ラベルが重なるときは 2 段にずらす */
+      var ticks = (xd.ticks || []).filter(function (t) { return t.v >= x0 - 1e-9 && t.v <= x1 + 1e-9; }), tickRow = [], needRow2 = false;
+      if (ticks.length) {
+        var lastR = [-1e9, -1e9]; ticks.forEach(function (t, ti) {
+          var wd = 6.7 * String(t.label).length + 4, cx = X0(t.v), lo = cx - wd / 2, hi = cx + wd / 2, r0 = 0;
+          if (lo < lastR[0] + 2) { r0 = 1; if (lo < lastR[1] + 2) r0 = 0; }
+          lastR[r0] = hi; tickRow.push(r0); if (r0) needRow2 = true;
+        });
+      }
+      var mB = 40 + (xd.label ? 14 : 0) + (needRow2 ? 13 : 0);
+      var Hh = Math.max(250, Math.min(320, W * 0.62 + 60)) + lgRows.length * 18, ph = Hh - mT - mB;
+      var svg = s('svg', { 'class': 'lab-svg', viewBox: '0 0 ' + W + ' ' + Hh, width: W, height: Hh, role: 'img' });
+      var Y0 = function (v) { return mT + (ymax - v) / (ymax - ymin) * ph; };
+      var clipId = ctx.id + '-clip-' + cur;
+      svg.appendChild(s('rect', { 'class': 'lab-plot', x: mL, y: mT, width: pw, height: ph }));
+      /* 帯（spans）：横軸の範囲を色で示す（例：逆転している区間）。条件 when が真のときだけ */
+      (f.spans || []).forEach(function (sp) {
+        if (sp.when && !ev(X.compile(sp.when), e)) return;
+        var a1 = num(sp.from, e, NaN), a2 = num(sp.to, e, NaN); if (!isFinite(a1) || !isFinite(a2)) return;
+        var xa = X0(Math.max(x0, Math.min(a1, a2))), xb = X0(Math.min(x1, Math.max(a1, a2)));
+        svg.appendChild(s('rect', { 'class': 'lab-span', x: xa, y: mT, width: Math.max(0, xb - xa), height: ph }));
+        if (sp.label) svg.appendChild(s('text', { 'class': 'lab-span-t', x: (xa + xb) / 2, y: mT + ph - 7, 'text-anchor': 'middle' }, sp.label));
+      });
+      /* 目盛り */
+      var ty;
+      for (ty = Math.ceil(ymin / ystep - 1e-9) * ystep; ty <= ymax + ystep * 1e-9; ty += ystep) {
+        var isZ = Math.abs(ty) < ystep * 1e-6;
+        svg.appendChild(s('line', { 'class': 'lab-g' + (isZ ? ' zero' : ''), x1: mL, y1: Y0(ty), x2: mL + pw, y2: Y0(ty) }));
+        svg.appendChild(s('text', { 'class': 'lab-ax', x: mL - 6, y: Y0(ty) + 4, 'text-anchor': 'end' }, fmtFixed(isZ ? 0 : ty, ydec)));
+      }
+      if (ticks.length) {
+        ticks.forEach(function (t, ti) {
+          svg.appendChild(s('line', { 'class': 'lab-g v', x1: X0(t.v), y1: mT, x2: X0(t.v), y2: mT + ph }));
+          svg.appendChild(s('text', { 'class': 'lab-ax', x: X0(t.v), y: mT + ph + 15 + tickRow[ti] * 13, 'text-anchor': 'middle' }, t.label));
+        });
+      } else {
+        var xstep = niceStep(x1 - x0, W < 420 ? 4 : 6), xd2 = Math.max(0, Math.min(6, decOf(xstep))), tx;
+        for (tx = Math.ceil(x0 / xstep - 1e-9) * xstep; tx <= x1 + xstep * 1e-9; tx += xstep) {
+          svg.appendChild(s('line', { 'class': 'lab-g v', x1: X0(tx), y1: mT, x2: X0(tx), y2: mT + ph }));
+          svg.appendChild(s('text', { 'class': 'lab-ax', x: X0(tx), y: mT + ph + 15, 'text-anchor': tx - x0 < xstep * 0.01 ? 'start' : x1 - tx < xstep * 0.01 ? 'end' : 'middle' }, fmtFixed(tx, xd2)));
+        }
+      }
+      if (xd.label) svg.appendChild(s('text', { 'class': 'lab-ax', x: mL + pw / 2, y: Hh - 8, 'text-anchor': 'middle' }, xd.label + (xd.unit ? '（' + xd.unit + '）' : '')));
+      if (f.yLabel) svg.appendChild(s('text', { 'class': 'lab-ax', x: 4, y: mT - 8 }, '縦軸：' + f.yLabel + (f.unit ? '（' + f.unit + '）' : '')));
+      /* 凡例 */
+      lgRows.forEach(function (r, ri) {
+        var ox = mL;
+        r.forEach(function (li) {
+          var it = lgItems[li];
+          if (it.k === 'l') {
+            var dsh = dashOf(ser[it.j], it.j);
+            svg.appendChild(s('line', { 'class': 'lab-wave c-' + (ser[it.j].color || COLORS[it.j % COLORS.length]) + (ser[it.j].faint ? ' faint' : ''), x1: ox, y1: 14 + ri * 18, x2: ox + 22, y2: 14 + ri * 18, 'stroke-dasharray': dsh }));
+          } else svg.appendChild(s('rect', { 'class': 'lab-fill c-' + (fills[it.j].color || 'core'), x: ox, y: 8 + ri * 18, width: 22, height: 12 }));
+          svg.appendChild(s('text', { 'class': 'lab-lg', x: ox + 26, y: 18 + ri * 18 }, it.label)); ox += widths[li];
+        });
+      });
+      var defs = s('defs', null, s('clipPath', { id: clipId }, s('rect', { x: mL, y: mT, width: pw, height: ph })));
+      svg.insertBefore(defs, svg.firstChild);
+      /* 2 本の系列の間の帯（fills：変化の大きさを色で見せる）。expr の系列どうしだけ */
+      fills.forEach(function (z) {
+        var top = [], bot = [], ia = z.a, ib = z.b;
+        if (!data[ia] || !data[ib] || pts[ia] || pts[ib]) return;
+        for (i = 0; i <= N; i++) { var va = data[ia][i], vb = data[ib][i]; if (isFinite(va) && isFinite(vb)) { top.push(X0(xs[i]).toFixed(1) + ',' + Y0(va).toFixed(1)); bot.unshift(X0(xs[i]).toFixed(1) + ',' + Y0(vb).toFixed(1)); } }
+        if (top.length > 1) svg.appendChild(s('polygon', { 'class': 'lab-fill c-' + (z.color || 'core'), points: top.concat(bot).join(' '), 'clip-path': 'url(#' + clipId + ')' }));
+      });
+      /* 折れ線（値が数でない所では線を切る）。data の系列は点を直線でつなぎ、点に丸を付ける */
+      ser.forEach(function (z, j) {
+        if (!vis[j]) return;
+        var cls = 'lab-wave lab-curve c-' + (z.color || COLORS[j % COLORS.length]) + (z.faint ? ' faint' : '');
+        if (pts[j]) {
+          if (pts[j].length > 1) svg.appendChild(s('polyline', { 'class': cls, points: pts[j].map(function (q) { return X0(q.x).toFixed(1) + ',' + Y0(q.y).toFixed(1); }).join(' '), 'stroke-dasharray': dashOf(z, j), 'clip-path': 'url(#' + clipId + ')' }));
+          pts[j].forEach(function (q) { svg.appendChild(s('circle', { 'class': 'lab-dot c-' + (z.color || COLORS[j % COLORS.length]), cx: X0(q.x), cy: Y0(q.y), r: 3.6 })); });
+          return;
+        }
+        var seg = [], segs = [seg];
+        data[j].forEach(function (v, ii) {
+          if (!isFinite(v)) { if (seg.length) { seg = []; segs.push(seg); } return; }
+          seg.push(X0(xs[ii]).toFixed(1) + ',' + Math.max(mT - 40, Math.min(mT + ph + 40, Y0(v))).toFixed(1));
+        });
+        segs.forEach(function (sg) { if (sg.length > 1) svg.appendChild(s('polyline', { 'class': cls, points: sg.join(' '), 'stroke-dasharray': dashOf(z, j), 'clip-path': 'url(#' + clipId + ')' })); });
+      });
+      /* 縦の目印 */
+      var marks = (f.marks || []).map(function (m) { return { m: m, v: num(m.x, e, NaN) }; }), shown = 0;
+      marks.forEach(function (o) {
+        if (!isFinite(o.v) || o.v < x0 - 1e-9 || o.v > x1 + 1e-9) return;
+        var mx = X0(o.v), lab = o.m.label || '';
+        svg.appendChild(s('line', { 'class': 'lab-mark', x1: mx, y1: mT, x2: mx, y2: mT + ph }));
+        ser.forEach(function (z, j) { if (!vis[j] || z.nodot) return; var yv = valAt(j, o.v); if (isFinite(yv) && yv >= ymin && yv <= ymax) svg.appendChild(s('circle', { 'class': 'lab-dot c-' + (z.color || COLORS[j % COLORS.length]), cx: mx, cy: Y0(yv), r: 4.5 })); });
+        if (lab) svg.appendChild(s('text', { 'class': 'lab-mark-t halo', x: mx + (mx > mL + pw * 0.62 ? -5 : 5), y: mT + 13 + (shown % 2) * 14, 'text-anchor': mx > mL + pw * 0.62 ? 'end' : 'start' }, lab));
+        shown++;
+      });
+      /* 同じ内容の表と、図の名前に入れる要約 */
+      var vser = ser.map(function (z, j) { return j; }).filter(function (j) { return vis[j]; });
+      var cols = [(xd.label || xd.id) + (xd.unit ? '（' + xd.unit + '）' : '')].concat(vser.map(function (j) { return ser[j].label + (f.unit ? '（' + f.unit + '）' : ''); }));
+      var xlab = function (v) {
+        var j2, i3; for (i3 = 0; i3 < ticks.length; i3++) if (Math.abs(tPos(ticks[i3].v) - tPos(v)) < 1e-9) return ticks[i3].label;
+        for (j2 = 0; j2 < vser.length; j2++) if (pts[vser[j2]]) { var q = pts[vser[j2]].filter(function (r) { return Math.abs(tPos(r.x) - tPos(v)) < 1e-9; })[0]; if (q && q.l) return q.l; }
+        return fmtFixed(v, xdec);
+      };
+      var body = [], picked = {}, allData = vser.length && vser.every(function (j) { return pts[j]; });
+      if (allData) {
+        var ux = []; vser.forEach(function (j) { pts[j].forEach(function (q) { if (ux.indexOf(q.x) < 0) ux.push(q.x); }); }); ux.sort(function (p1, p2) { return p1 - p2; });
+        ux.forEach(function (v) { body.push([xlab(v)].concat(vser.map(function (j) { var y = valAt(j, v), ex = pts[j].some(function (q) { return q.x === v; }); return ex && isFinite(y) ? fmtFixed(y, dg) : '—'; }))); });
+      } else if (ticks.length) {
+        ticks.forEach(function (t) { body.push([t.label].concat(vser.map(function (j) { var y = valAt(j, t.v); return isFinite(y) ? fmtFixed(y, dg) : '—'; }))); });
+      } else {
+        var nt = Math.min(N, 12);
+        for (i = 0; i <= nt; i++) { var ix = Math.round(N * i / nt); if (picked[ix]) continue; picked[ix] = 1; body.push([fmtFixed(xs[ix], xdec)].concat(vser.map(function (j) { return fmtFixed(data[j][ix], dg); }))); }
+      }
+      marks.forEach(function (o) {
+        if (!isFinite(o.v)) return;
+        body.push([(o.m.label || '目印') + '（' + xlab(o.v) + '）'].concat(vser.map(function (j) { return fmtFixed(valAt(j, o.v), dg); })));
+        rows.push([(o.m.label || '目印') + '（' + (xd.label || xd.id) + ' ' + xlab(o.v) + '）', vser.map(function (j) { return ser[j].label + ' ' + fmtFixed(valAt(j, o.v), dg); }).join('、')]);
+      });
+      vser.forEach(function (j) {
+        var z = ser[j], a = data[j].filter(isFinite);
+        if (pts[j]) { rows.push([z.label + '（点の値）', pts[j].map(function (q) { return (q.l || fmtFixed(q.x, xdec)) + ' ' + fmtFixed(q.y, dg); }).join('、') + (f.unit ? ' ' + f.unit : '')]); return; }
+        rows.push([z.label + '（範囲の端・最小・最大）', a.length ? fmtFixed(data[j][0], dg) + '・' + fmtFixed(data[j][N], dg) + '・' + fmtFixed(Math.min.apply(null, a), dg) + '・' + fmtFixed(Math.max.apply(null, a), dg) + (f.unit ? ' ' + f.unit : '') : '値なし']);
+      });
+      (f.spans || []).forEach(function (sp) { if (sp.label && !(sp.when && !ev(X.compile(sp.when), e))) rows.push(['帯：' + sp.label, '表示中']); });
+      rows.tbl = { head: cols, body: body };
+      return svg;
+    }
+    function dashOf(z, j) {
+      if (z.dash === false) return null;
+      if (z.dash === true || z.dash === 'dash') return '7 4';
+      if (z.dash === 'dot') return '2 4';
+      if (typeof z.dash === 'string') return z.dash;
+      return [null, '7 4', '2 4'][j % 3];
+    }
+
     function figCircuit(f, e, W, rows) {
       var els = f.elements, n = els.length, Hh = 210, x0 = 34, x1 = W - 34, y0 = 70, y1 = 170, I = num(f.current, e, 0), imax = num(f.imax, e, 1), frac = Math.max(0, Math.min(1, I / (imax || 1)));
       var svg = s('svg', { 'class': 'lab-svg', viewBox: '0 0 ' + W + ' ' + Hh, width: W, height: Hh, role: 'img' });
@@ -7191,7 +8618,11 @@ window.CN_PARTS = [{"key": "0", "name": "序章 電力と電気の入口", "shor
   CN.searchText.lab = function (d) {
     var out = [d.title]; d.experiments.forEach(function (x) {
       out.push(x.label, x.intro, x.formula); x.inputs.forEach(function (i) { out.push(i.label, i.hint); (i.say || []).forEach(function (z) { out.push(z.text); }); });
-      (x.results || []).forEach(function (r) { out.push(r.label); }); (x.reads || []).forEach(function (z) { out.push(z.text); });
+      (x.results || []).forEach(function (r) { out.push(r.label); });
+      (x.figs || (x.fig ? [x.fig] : [])).forEach(function (f) { if (f.type === 'curve') { (f.series || []).forEach(function (z) { out.push(z.label); }); (f.marks || []).forEach(function (z) { out.push(z.label); }); } });
+      (x.presets || []).forEach(function (z) { out.push(z.label, z.text); });
+      if (x.quad) (x.quad.cells || []).forEach(function (r) { r.forEach(function (c) { out.push(c.title, c.sub); }); });
+      (x.reads || []).forEach(function (z) { out.push(z.text); });
     });
     return out.filter(Boolean).join(' ');
   };
@@ -16115,6 +17546,231 @@ CN.glossary([
   { t: '三相交流', en: 'three-phase alternating current', alias: '三相', d: '位相が三分の一周期ずつずれた三つの交流を組にした電気。三つの合計がいつも零になる。', ch: ['I2'] },
   { t: '実効値', en: 'effective value', alias: 'RMS・二乗平均平方根', d: '交流の電圧や電流の大きさを、同じ働き（同じ熱）をする直流の大きさで表した値。正弦波では、最大値を二の平方根で割った値になる。', ch: ['I2'] },
   { t: '位相', en: 'phase', alias: '位相差', d: '周期的に変わる波が、周期の中のどの位置にあるかを表す量。二つの波のずれは、位相差で表す。', ch: ['I2'] }
+]);
+
+})();
+</script>
+<script>
+/* data: I3-home-and-plant.js */
+(function(){'use strict';
+/* 序章3のデータ。事実確認表：facts/I3-home-and-plant.md（確認 2026-11-18）
+   この章の値は、公開資料の値と、そこから計算した目安と、模型の値（仮定。利用率 70%、家庭の 1 日の形、機器の使う時間）だけ。
+   家庭 1 世帯のモデルは 0.46 kW（年 約 4,000 kWh に相当。環境省の 3,911 kWh〔2023 年度確報〕・4,008 kWh〔2025 年度速報〕と近い桁）。
+   発電所は富津火力発電所（JERA）。1 軸は 1 号系列の第 7 軸（16.5 万 kW）、全体は 516 万 kW（2024 年 3 月 31 日時点）。
+
+演習の照合（序章3）
+| 問・演習 | 正答（要点） | 照らした本文・図（節・データ id） | 本文・図の記述（要点を写す） | 一致 |
+|---|---|---|---|---|
+| cI3-quiz 問1 | 電力は 2 kW、電力量は 6 kWh | 本文「『瞬間』と『量』」、cI3-bucket | 電力量 ＝ 電力 × 時間。2 kW × 3 時間 ＝ 6 kWh | ○ |
+| cI3-quiz 問2 | 165 MW | 本文「単位の階段」、cI3-units | 1 万 kW ＝ 10 MW。16.5 万 kW ＝ 16.5 × 10 MW ＝ 165 MW | ○ |
+| cI3-quiz 問3 | 量は、出力 × 24 時間 × 利用率の仮定（70%）を、家庭の 1 日の使用量で割るので、瞬間より小さくなる | 本文「束ねる」、cI3-bundle の ① | 瞬間 ＝ 出力 ÷ 平均の電力。量 ＝ 1 日の発電量 ÷ 1 日の使用量。量は、瞬間に利用率を掛けた値 | ○ |
+
+定義と式の照合（序章3）
+| 量 | 本文の定義の文 | 式（ADDENDUM の番号） | 用語集の d | 演習・問の使い方 | 一致 |
+|---|---|---|---|---|---|
+| 電力量 | 電力量（kWh）＝ 電力（kW）× 時間（h） | 式 33 | 序章1の用語集と同じ（この章では登録しない） | 問1：2 kW × 3 h ＝ 6 kWh | ○ |
+| 平均の電力 | 電力量を時間で割った電力。家庭は年 約 4,000 kWh ÷ 8,760 時間 ＝ 約 0.46 kW | 式 33 の逆 | 平均の電力の d は式を含まない | cI3-bundle の家庭のモデル | ○ |
+| 世帯換算 | 瞬間 ＝ 出力 ÷ 家庭の平均の電力。量 ＝ 1 日の発電量 ÷ 家庭の 1 日の使用量 | 式 40（序章1）の 2 つの形 | 世帯換算の d | 問3、cI3-circles | ○ |
+
+検算 家庭の平均の電力（kW）: 0.4566 = 4000 / 8760
+検算 モデルの1日（kWh）: 11.04 = 0.46 * 24
+検算 モデルの1年（kWh）: 4029.6 = 0.46 * 8760
+検算 機器の平均の電力の合計（W）: 460 = 85 + 65 + 55 + 45 + 40 + 35 + 30 + 25 + 25 + 20 + 20 + 15
+検算 機器の1日の電力量の合計（Wh）: 11040 = 2040 + 1560 + 1320 + 1080 + 960 + 840 + 720 + 600 + 600 + 480 + 480 + 360
+検算 エアコン（Wh）: 2040 = 600 * 3.4
+検算 照明（Wh）: 1320 = 110 * 12
+検算 給湯（Wh）: 1080 = 900 * 1.2
+検算 テレビ（Wh）: 960 = 200 * 4.8
+検算 その他（Wh）: 840 = 1200 * 0.7
+検算 調理（Wh）: 720 = 1200 * 0.6
+検算 洗濯・乾燥（Wh）: 600 = 500 * 1.2
+検算 食洗機・浴室乾燥（Wh）: 480 = 1200 * 0.4
+検算 待機電力と年間の割合（%）: 5.14 = 228 / 4432 * 100
+検算 16.5万kW（MW）: 165 = 16.5 * 10
+検算 516万kW（GW）: 5.16 = 516 / 100
+検算 1億kWh（GWh）: 100 = 1 * 100
+検算 富津1軸の瞬間の世帯数: 358696 = 165000 / 0.46
+検算 富津全体の瞬間の世帯数: 11217391 = 5160000 / 0.46
+検算 富津1軸の1日の電力量（MWh、70%）: 2772 = 165 * 0.7 * 24
+検算 富津1軸の1日の最大（MWh）: 3960 = 165 * 24
+検算 富津全体の1日の電力量（MWh、70%）: 86688 = 5160 * 0.7 * 24
+検算 富津1軸の1年の電力量（GWh、70%）: 1011.78 = 165 * 0.7 * 8760 / 1000
+検算 富津全体の1年の電力量（GWh、70%）: 31641.12 = 5160 * 0.7 * 8760 / 1000
+検算 富津1軸の量の世帯数（70%）: 251087 = 2772000 / 11.04
+検算 富津全体の量の世帯数（70%）: 7852174 = 86688000 / 11.04
+検算 軸に換算した本数: 31.27 = 5160 / 165
+検算 円の面積の比（1軸÷家庭の半径比の2乗）: 358696 = 165000 / 0.46
+検算 家庭の年間4,008kWhの平均の電力（kW）: 0.4575 = 4008 / 8760
+検算 家庭の年間3,911kWhの平均の電力（kW）: 0.4452 = 3911 / 8784
+検算 夕方のピークでも足りる軒数（1軸、倍率1.96）: 183084 = 165000 / (0.46 * 1.96)
+*/
+
+/* ---- bucket：電力（蛇口の太さ）と電力量（バケツの水） ---- */
+CN.add('bucket', 'cI3-bucket', {
+  title: '電力（蛇口の太さ）と電力量（バケツにたまった水）',
+  intro: '**電力（kW）は「いま流れている大きさ」、電力量（kWh）は「ためた量」**です。蛇口を太くすると、同じ時間でたまる水が増えます。蛇口を開けている時間が長くても、水が増えます。下の 2 つのつまみで、機器の電力と使う時間を動かしてください。バケツの満杯は、家庭 1 日分の使用量（約 11 kWh）です。',
+  capacityKwh: 11.04,
+  power: { label: '機器の電力（いま流れている大きさ）', min: 50, max: 3000, step: 50, value: 600, presetLabel: '目安の機器（押すと電力が動きます）',
+    presets: [{ label: 'テレビ 約 200 W', w: 200 }, { label: 'エアコン 約 600 W', w: 600 }, { label: 'ヘアードライヤー 約 1,200 W', w: 1200 }, { label: '電子レンジ 約 1,500 W', w: 1500 }] },
+  hours: { label: '使う時間', min: 0.25, max: 24, step: 0.25, value: 3 },
+  formula: '電力量（kWh）＝ 電力（kW）× 時間（h）。1 kW を 1 時間使うと 1 kWh',
+  reads: [
+    '電力が同じなら、時間が 2 倍になると、電力量も 2 倍になります。電力と時間の図では、長方形の**横**が時間、**縦**が電力で、**面積が電力量**です。',
+    '電力が 2 倍でも、電力量は 2 倍になります。でも、時間が半分なら、電力量は同じです。「電力が大きい」ことと「電力量が大きい」ことは、別です。',
+    'ヘアードライヤー（約 1,200 W）は電力が大きくても、使う時間が短いので、電力量は小さくなります。テレビ（約 200 W）を長く使うと、電力量では並びます。'
+  ]
+});
+
+/* ---- unitconv：単位の階段と換算 ---- */
+CN.add('unitconv', 'cI3-units', {
+  title: '単位の階段：W → kW → MW → GW → TW と、万 kW・億 kWh',
+  intro: '電力の単位は、**1,000 倍ごと**に名前が変わります。日本の資料の「万」「億」は、**1 万（10⁴）ごと**です。区切りの桁が違うので、換算を間違えやすい所です。値と単位を入れると、全部の単位で同時に表示します。',
+  initial: { kind: 'power', value: 16.5, unit: '万kW' },
+  defaults: { power: { value: 165000, unit: 'kW' }, energy: { value: 4000, unit: 'kWh' } },
+  examples: [
+    { kind: 'power', label: '富津・1 軸 16.5 万 kW', value: 16.5, unit: '万kW' },
+    { kind: 'power', label: '富津全体 516 万 kW', value: 516, unit: '万kW' },
+    { kind: 'power', label: '家庭 1 軒の平均 0.46 kW', value: 0.46, unit: 'kW' },
+    { kind: 'power', label: '日本の最大需要 15,881.5 万 kW', value: 15881.5, unit: '万kW' },
+    { kind: 'energy', label: '家庭 1 軒の 1 年 約 4,000 kWh', value: 4000, unit: 'kWh' },
+    { kind: 'energy', label: '富津・1 軸の 1 日 2,772 MWh', value: 2772, unit: 'MWh' },
+    { kind: 'energy', label: '1 億 kWh', value: 1, unit: '億kWh' },
+    { kind: 'energy', label: '日本の 2024 年度の発電電力量 9,911 億 kWh', value: 9911, unit: '億kWh' }
+  ],
+  notes: {
+    power: ['**1 万 kW ＝ 10 MW**。16.5 万 kW ＝ 165 MW、516 万 kW ＝ 5,160 MW ＝ 5.16 GW です。', '日本の資料は「万 kW」、海外の資料や設備のカタログは「MW」で書くことが多いので、両方を読めるようにします。'],
+    energy: ['**1 億 kWh ＝ 100 GWh ＝ 0.1 TWh**。1 万 kWh ＝ 10 MWh です。', '日本の統計は「億 kWh」、海外の資料は「TWh」で書くことが多いです。1 TWh ＝ 10 億 kWh です。']
+  }
+});
+
+/* ---- scale：身近なものから発電所まで、1 本の物差しに ---- */
+CN.add('scale', 'cI3-scale', {
+  title: '家電・家庭・発電所の電力を、1 本の物差しに',
+  base: 'house',
+  initial: 'axis',
+  sources: [
+    { n: 1, issuer: '環境省', title: '令和5年度 家庭部門のCO2排出実態統計調査 結果について（確報値）', date: '令和 7 年 6 月', note: '全国の 1 世帯あたりの年間の電気の消費量 3,911 kWh（2023 年度）。令和7年度の速報値（令和 8 年 10 月）は 4,008 kWh', url: 'https://www.env.go.jp/content/000323408.pdf' },
+    { n: 2, issuer: '東京電力エナジーパートナー', title: '主な電気機器のアンペアの目安', date: '日付の記載なし（確認 2026 年 11 月）', note: '表は A（アンペア）で書かれ、「100 V 機器では 100 W で 1 A」と説明。ページは「想定値」と断っている', url: 'https://www.tepco.co.jp/ep/private/ampere2/ampere03.html' },
+    { n: 3, issuer: '秋田県', title: '洋上風力発電の導入状況', date: '2025 年 10 月 3 日現在', note: '洋上風車 1 基あたり 4.2 MW', url: 'https://www.pref.akita.lg.jp/uploads/public/archive_0000007451_00/2.%E6%B4%8B%E4%B8%8A%E9%A2%A8%E5%8A%9B%E7%99%BA%E9%9B%BB%E3%81%AE%E5%B0%8E%E5%85%A5%E7%8A%B6%E6%B3%81%EF%BC%88202510%EF%BC%89.pdf' },
+    { n: 4, issuer: 'JERA', title: '＜別紙＞ 富津火力発電所におけるガスタービン等の取替工事について', date: '日付の記載なし（取替の完了は 2019 年 8 月まで）', note: '系列ごとの軸数と 1 軸の出力。1 号系列の第 7 軸は 16.5 万 kW、4 号系列は 50.7 万 kW × 3 軸', url: 'https://www.jera.co.jp/system/files/private/%E5%88%A5%E7%B4%99%EF%BC%9A%E5%AF%8C%E6%B4%A5%E7%81%AB%E5%8A%9B%E7%99%BA%E9%9B%BB%E6%89%80%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E3%82%AC%E3%82%B9%E3%82%BF%E3%83%BC%E3%83%93%E3%83%B3%E7%AD%89%E3%81%AE%E5%8F%96%E6%9B%BF%E5%B7%A5%E4%BA%8B%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6.pdf' },
+    { n: 5, issuer: 'JERA', title: '会社案内（2025 年 7 月発行）の「国内の主な発電所」', date: '2024 年 3 月 31 日時点', note: '富津 516 万 kW（JERA の英語ページも最大出力 5,160 MW）', url: 'https://www.jera.co.jp/static/files/corporate/about/com_outline/pdf/%E6%A0%AA%E5%BC%8F%E4%BC%9A%E7%A4%BEJERA_%E4%BC%9A%E7%A4%BE%E6%A1%88%E5%86%85_%E4%B8%80%E9%83%A8%E6%94%B9%E8%A8%82%E7%89%88%EF%BC%882025%E5%B9%B47%E6%9C%88%E7%99%BA%E8%A1%8C%EF%BC%89.pdf' },
+    { n: 6, issuer: 'GE Vernova', title: '7HA gas turbine（製品ページ）', date: '日付の記載なし（確認 2026 年 11 月）', note: 'その会社の公開値の例。他社との優劣を示さない', url: 'https://www.gevernova.com/gas-power/products/gas-turbines/7ha' },
+    { n: 7, issuer: '電力広域的運営推進機関', title: '全国及び供給区域ごとの需要想定（2026年度）', date: '2026 年 1 月 21 日公表', note: '2025 年度夏季の最大需要電力（実績）', url: 'https://www.occto.or.jp/assets/news/juyousoutei/260121_juyousoutei_r1.pdf' }
+  ],
+  groups: [{ key: 'home', label: '家電・家庭' }, { key: 'plant', label: '設備・発電所' }, { key: 'nation', label: '国' }],
+  items: [
+    { id: 'tv', name: '液晶テレビ 42 型（目安）', short: 'テレビ（目安）', value: 210, unit: 'W', group: 'home', counter: '台',
+      desc: '東京電力エナジーパートナーの表は、液晶 42 型テレビを 2.1 A としています。100 V の機器で 1 A ＝ 100 W として換算した、**目安**の値です。', cond: '表の値は電流（2.1 A）。100 V 機器で 100 W ＝ 1 A（ページの説明）として換算。ページは「想定値」と断る。機種や使い方で大きく変わる。', src: [2] },
+    { id: 'dryer', name: 'ヘアードライヤー（目安）', short: 'ドライヤー（目安）', value: 1200, unit: 'W', group: 'home', counter: '台',
+      desc: '同じ表で 12 A。換算すると約 1,200 W です。電力は大きいのですが、使う時間が短いので、1 日の電力量は小さくなります。', cond: '表の値は 12 A。100 V 機器で 100 W ＝ 1 A として換算した目安。機種で変わる。', src: [2] },
+    { id: 'micro', name: '電子レンジ 30 L クラス（目安）', short: '電子レンジ（目安）', value: 1500, unit: 'W', group: 'home', counter: '台',
+      desc: '同じ表で 15 A。換算すると約 1,500 W です。', cond: '表の値は 15 A。100 V 機器で 100 W ＝ 1 A として換算した目安。加熱の設定や機種で変わる。', src: [2] },
+    { id: 'house', name: '家庭 1 世帯の平均（モデル）', short: '家庭 1 世帯（平均）', value: 0.46, unit: 'kW', group: 'home', counter: '軒',
+      desc: '家庭の年間の電気の消費量を、年の時間で割った**平均の電力**のモデル値です。実際の使い方は朝晩にかたよるので、ずっとこの大きさではありません。', cond: '年 約 4,000 kWh ÷ 8,760 時間 ＝ 約 0.457 kW を、0.46 kW に丸めたモデル値。環境省の統計は 3,911 kWh（2023 年度、確報）・4,008 kWh（2025 年度、速報）。世帯人数・地域・住宅で大きく違う。', src: [1] },
+    { id: 'wt', name: '洋上風車 1 基（秋田県の例）', short: '洋上風車 1 基', value: 4.2, unit: 'MW', group: 'plant', counter: '基',
+      desc: '秋田港と能代港の洋上風力発電所の風車は、1 基あたり 4.2 MW と書かれています。', cond: '県の資料の表記は「1 基あたり 4.2 MW」。定格か最大かは資料に書かれていない。風が弱いときの出力はこれより小さい（一般知識）。', src: [3] },
+    { id: 'axis', name: '富津火力・1 号系列の第 7 軸', short: '富津・1 軸', value: 16.5, unit: '万kW', shown: '16.5 万 kW（165 MW）', group: 'plant', counter: '軸', ch: [18],
+      desc: 'JERA の富津火力発電所のコンバインドサイクル（LNG）の、1 つの軸の出力です。同じ発電所でも、軸ごとに出力が違います（16.0 万〜50.7 万 kW）。この章で「1 軸」と書くときは、この軸です。', cond: '資料の表記は定格出力 16.5 万 kW（1 号系列の第 7 軸、ガスタービン等の取替の対象外の軸）。出力の端と大気条件は資料に記載なし。', src: [4] },
+    { id: 'axis4', name: '富津火力・4 号系列の 1 軸', short: '富津・4 号系列の 1 軸', value: 50.7, unit: '万kW', shown: '50.7 万 kW（507 MW）', group: 'plant', counter: '軸', ch: [18],
+      desc: '同じ発電所の、いちばん大きい軸です。4 号系列は 3 軸で、合わせて 152.0 万 kW と書かれています。', cond: '資料の表記は 50.7 万 kW × 3 軸。この資料は、4 号系列のガスタービン取替（2023 年 8 月に完了と GE Vernova が発表）の前のもの。取替後の 1 軸の値は確かめていない。', src: [4] },
+    { id: 'gt', name: '大型ガスタービン 1 台（GE Vernova の公開値の例）', short: '大型ガスタービン 1 台', value: 430, unit: 'MW', group: 'plant', counter: '台', ch: [17],
+      desc: '同社の 7HA.03（60 Hz 機）の、単純サイクル（ガスタービンだけで発電する形）の出力です。**その会社の公開値の例**で、機種の優劣を示すものではありません。', cond: '60 Hz 機、単純サイクル。ページの表記は net、ISO の標準の大気条件、天然ガス。実際の定格は案件ごとの条件や燃料で変わると、ページが断っている。', src: [6] },
+    { id: 'futtsu', name: '富津火力発電所 全体（JERA）', short: '富津全体', value: 516, unit: '万kW', shown: '516 万 kW（5,160 MW）', group: 'plant', counter: 'か所', ch: [18],
+      desc: '4 つの系列（21 軸）の合計の最大出力です。設備の出力で、いま発電している量ではありません。', cond: 'JERA の会社案内の表記は 516 万 kW（2024 年 3 月 31 日時点）。英語ページも最大出力 5,160 MW。設備の出力の合計で、運転中の出力ではない。', src: [5] },
+    { id: 'demand', name: '日本の最大需要電力（2025 年度夏季の実績）', short: '日本の最大需要', value: 158815, unit: '千kW', shown: '158,815 千 kW', group: 'nation', counter: '倍', ch: [2],
+      desc: '全国の 1 年で最も大きかった需要の大きさです。電気を使う全部（家庭・工場・ビル・鉄道など）の合計です。', cond: '2025 年度夏季の実績、送電端、全国合計。資料の定義は「ある月の 1 時間の最大需要電力を上位 3 日採って平均したもののうち、年間で最大となるもの」。', src: [7] }
+  ]
+});
+
+/* ---- appmix：家庭の電気の使いみち（モデル家庭） ---- */
+CN.add('appmix', 'cI3-apps', {
+  title: '家庭の電気の使いみち（モデル家庭の 1 日）',
+  intro: 'モデル家庭の機器ごとの**平均の電力**です。「使うとき」の電力が大きくても、使う時間が短い機器は、平均が小さくなります。**機器のチェックを外す**と、その機器を使わない家庭になります。**時間のつまみ**を動かすと、合計の平均の電力・1 日の電力量・1 年の電力量が変わります。',
+  days: 365,
+  listNote: '棒の長さは 1 日の平均の電力（1 日の電力量 ÷ 24 時間）です。「使うとき」は、動いているときの電力の目安で、東京電力エナジーパートナーの表（100 V 機器で 1 A ＝ 100 W）などから決めた、**模型の値**です。冷蔵庫・待機電力・通信機器・便座は、終日つながっている機器で、平均の電力を一定として扱います。',
+  presetHint: 'つまみを動かした状態です。',
+  presets: [
+    { label: '標準のモデル', set: {}, text: '標準のモデル：合計 460 W、1 日 約 11 kWh、1 年 約 4,000 kWh（模型の値）。' },
+    { label: '夏の在宅の日', set: { aircon: { hrs: 8 }, tv: { hrs: 7 }, light: { hrs: 14 }, cook: { hrs: 1 }, wash: { hrs: 1.6 } }, text: '夏の在宅の日（仮定）：エアコン・テレビ・照明・調理が長くなり、1 日の電力量が増えます。' },
+    { label: '機器を少なく', set: { tv: { on: false }, dish: { on: false }, hot: { on: false }, aircon: { hrs: 1.5 }, light: { hrs: 6 }, wash: { hrs: 0.6 } }, text: '機器を少なくした例（仮定）：テレビ・食洗機・電気式の給湯を使わず、エアコンと照明を短くしています。' }
+  ],
+  devices: [
+    { id: 'aircon', name: 'エアコン（冷暖房・年平均）', short: 'エアコン', runW: 600, hours: 3.4, parts: [{ c: 7.5, f: 0.15 }, { c: 13, f: 0.25 }, { c: 20.5, f: 0.6 }] },
+    { id: 'fridge', name: '冷蔵庫（24 時間稼働）', short: '冷蔵庫', runW: 65, hours: 24, flat: true },
+    { id: 'light', name: '照明', short: '照明', runW: 110, hours: 12, parts: [{ c: 6.5, f: 0.15 }, { c: 20.5, f: 0.65 }, { c: 1.4, f: 0.2 }] },
+    { id: 'hot', name: '給湯（電気式の場合）', short: '給湯（電気式）', runW: 900, hours: 1.2, parts: [{ c: 1.5, f: 1 }] },
+    { id: 'tv', name: 'テレビ', short: 'テレビ', runW: 200, hours: 4.8, parts: [{ c: 7, f: 0.1 }, { c: 20, f: 0.9 }] },
+    { id: 'misc', name: 'その他（掃除機・ドライヤー等）', short: '掃除機・ドライヤー', runW: 1200, hours: 0.7, parts: [{ c: 7.2, f: 0.35 }, { c: 10.5, f: 0.35 }, { c: 22, f: 0.3 }] },
+    { id: 'cook', name: '調理（炊飯器・電子レンジ等）', short: '調理', runW: 1200, hours: 0.6, parts: [{ c: 7, f: 0.25 }, { c: 12.3, f: 0.2 }, { c: 18.5, f: 0.55 }] },
+    { id: 'wash', name: '洗濯機・乾燥機', short: '洗濯・乾燥', runW: 500, hours: 1.2, parts: [{ c: 8.5, f: 1 }] },
+    { id: 'standby', name: '待機電力（家電全体）', short: '待機電力', runW: 25, hours: 24, flat: true },
+    { id: 'pc', name: 'パソコン・ルーター・通信機器', short: 'パソコン・通信', runW: 20, hours: 24, flat: true },
+    { id: 'dish', name: '食洗機・浴室乾燥', short: '食洗機・浴室乾燥', runW: 1200, hours: 0.4, parts: [{ c: 20.8, f: 1 }] },
+    { id: 'seat', name: '温水洗浄便座', short: '温水洗浄便座', runW: 15, hours: 24, flat: true }
+  ],
+  reads: [
+    '標準のモデルの合計は、**平均 460 W**（＝ 0.46 kW）で、**1 日 約 11 kWh、1 年 約 4,000 kWh** です。図の「平均」の線の高さです。',
+    '**同時に動いたときの最大**は、平均の数倍になります。電子レンジやドライヤーは、使うときは 1,000 W 級でも、1 日に使う時間が短いので、平均は小さいままです。ただし、夕方に重なると、瞬間の電力は大きくなります（模型の一例）。',
+    'エアコンのように、季節で使い方が大きく変わる機器は、**年平均**の値です。夏と冬は、この値より大きく、春と秋は小さくなります。'
+  ]
+});
+
+/* ---- areacircle：円の面積で比べる ---- */
+CN.add('areacircle', 'cI3-circles', {
+  title: '富津火力のスケールを「円の面積」で見る',
+  intro: '円の**面積**が、量に比例します。半径ではありません。半径で比べると、面積の比は 2 乗になり、大きさを小さく感じます。左の ① は**瞬間の大きさ（出力）**、右の ② は **1 日の量を、家庭の何軒ぶんか**に直したものです。',
+  circles: [
+    { id: 'house', name: '家庭 1 軒（平均）', kw: 0.46, cls: 'home', callout: true },
+    { id: 'axis', name: '富津・1 軸', kw: 165000, cls: 'axis' },
+    { id: 'all', name: '富津全体', kw: 5160000, cls: 'all' }
+  ],
+  axisId: 'axis', wholeId: 'all',
+  util: { label: '設備利用率（仮定）', min: 0.3, max: 1, step: 0.05, value: 0.7, note: '設備利用率 70% は、計算のための**仮定**です。実際の利用率は、設備・年・運転の状況で違い、この章では公表値を使っていません（利用率の定義は第24章）。' },
+  says: [
+    '**瞬間の大きさ**：富津の 1 軸（165 MW）は、家庭 1 軒の平均（0.46 kW）の **約 {axisInst} 倍**、富津全体（5,160 MW）は **約 {wholeInst} 倍**です。円の面積の比も、同じ倍率です。',
+    '**1 日の量**（利用率 {u} % の仮定）：1 軸は **約 {axisQty} 世帯分**、全体は **約 {wholeQty} 世帯分**です。点線の円は、定格で 24 時間出した場合（利用率 100%）で、塗りの円が、利用率を掛けた量です。',
+    '家庭 1 軒は、この縮尺では**点にもなりません**。吹き出しの円は、拡大した表示です。'
+  ]
+});
+
+/* ---- bundle：家庭を束ねて、発電所と比べる ---- */
+CN.add('bundle', 'cI3-bundle', {
+  title: '家庭 1 軒の使い方が、何軒ぶん束になると、発電所と釣り合うか',
+  intro: '世帯数のつまみは、**1 軒から 1,000 万軒まで、対数の目盛り**です（10 倍ごとに同じ間隔）。3 つの見方を、上のタブで切り替えます。つまみの値は、3 つの見方で共通です。',
+  house: { kw: 0.46, shape: [0.62, 0.55, 0.52, 0.50, 0.52, 0.62, 0.95, 1.35, 1.15, 0.90, 0.82, 0.80, 0.84, 0.82, 0.80, 0.84, 1.00, 1.30, 1.65, 1.95, 2.00, 1.80, 1.35, 0.85] },
+  plants: [
+    { id: 'axis', name: '富津・1 軸（1 号系列の第 7 軸）', short: '富津・1 軸', mw: 165, axes: 1 },
+    { id: 'all', name: '富津火力発電所 全体', short: '富津全体', mw: 5160, axes: 21 }
+  ],
+  axisId: 'axis', wholeId: 'all',
+  minLoad: 0.3,
+  n: { label: '家庭の世帯数（対数の目盛り）', min: 0, max: 7, step: 0.01, value: 250000,
+    presets: [{ label: '1 軒', n: 1 }, { label: '100 軒', n: 100 }, { label: '1 万軒', n: 10000 }, { label: '25 万軒', n: 250000 }, { label: '36 万軒', n: 360000 }, { label: '1,000 万軒', n: 10000000 }] },
+  util: { label: '設備利用率（仮定）', min: 0.3, max: 1, step: 0.05, value: 0.7, note: '設備利用率 70% は、1 日の量を比べるための**仮定**で、実際の値ではありません。②では、「一定の出力で動かす」ときの出力の高さ（定格 × 利用率）にもなります。' },
+  time: { min: 0, max: 23.5, step: 0.5, value: 20 },
+  texts: {
+    a: '束ねた家庭の需要（世帯数 × 平均の電力）の棒を、設備の出力の線と比べます。上は**瞬間の大きさ**、下は **1 日の量**です。棒が線に届くと、印が付きます。',
+    b: '横軸は 1 日（0〜24 時）です。橙の曲線は、家庭の束の需要です（朝と夕方〜夜に山があり、深夜に谷がある**形の模型**）。設備の出力は、**一定**で運転する場合と、**需要に合わせて増減**させる場合を重ねています。色の帯は、足りない分と余る分です。',
+    c: '家のアイコンの束が、電力系統を通って、設備の軸につながる絵です。世帯数が増えるほど、必要な軸が 1 本、2 本と増えます。'
+  },
+  axisRange: '16.0 万〜50.7 万 kW',
+  axisIconLabel: '軸（165 MW ＝ 16.5 万 kW の軸が何本ぶん必要か）',
+  caution: '**この装置は、規模の感覚をつかむための模型です。** 実際の電力系統は、多くの発電所と送電網で需要をまかなっていて、1 つの発電所が特定の家庭に電気を送っているわけではありません。家庭以外（工場・業務・鉄道など）の需要のほうが大きく、最終エネルギー消費（電気だけではありません）の部門別では、家庭部門は全体の 15.0%、企業・事業所他の部門は 60.7%、運輸部門は 24.3% です（2024 年度。資源エネルギー庁『エネルギー動向（2026 年版）』）。家庭の 1 日の形と、最低出力（定格の 30%）は、模型の仮定です（第03章の資料では、コンバインドサイクル発電の最低出力は約 50% の設備が多く、最新鋭機で 25% 程度の運用例もある）。'
+});
+
+CN.add('quiz', 'cI3-quiz', { items: [
+  { q: '電力 2 kW の機器を 3 時間使ったとき、電力と電力量の組み合わせで、正しいものはどれですか。', c: ['電力は 6 kW で、電力量は 2 kWh', '電力は 2 kW で、電力量は 3 kWh', '電力は 2 kW で、電力量は 6 kWh', '電力は 6 kWh で、電力量は 2 kW'], a: 2,
+    why: '正答は、電力は 2 kW、電力量は 6 kWh です。電力は「いま流れている大きさ」で、使う間は 2 kW のままです。電力量は、電力に時間をかけた「ためた量」で、2 kW × 3 時間 ＝ 6 kWh です。電力と電力量の単位（kW と kWh）を入れ替えた選択肢は、意味が合いません。', ch: ['I3'] },
+  { q: '日本の資料にある「16.5 万 kW」を、MW で書くと、どれですか。', c: ['1.65 MW', '16.5 MW', '16,500 MW', '165 MW'], a: 3,
+    why: '正答は 165 MW です。1 万 kW ＝ 10,000 kW ＝ 10 MW なので、16.5 万 kW ＝ 16.5 × 10 MW ＝ 165 MW です。「万」は 4 桁、「k から M」は 3 桁の区切りで、桁の区切りが違います。16.5 MW は「1 万 kW ＝ 1 MW」と考えた誤りです。', ch: ['I3'] },
+  { q: '発電所の 1 軸が「瞬間で約 36 万世帯分、量で約 25 万世帯分」と計算されるとき、量のほうが小さくなる理由は、どれですか。', c: ['量は、出力に 24 時間と利用率の仮定（70%）をかけた 1 日の発電量を、家庭の 1 日の使用量で割るので、瞬間の値に利用率をかけた値になるから', '家庭が、昼間に電気をたくさん使うから', '発電所の出力は、夜になると半分になるから', '量の計算では、送電の損失を引いているから'], a: 0,
+    why: '正答は、量は、出力 × 24 時間 × 利用率を、家庭の 1 日の使用量で割る計算で、瞬間の値（出力 ÷ 平均の電力）に利用率をかけた値になるから、です。36 万 × 0.7 ＝ 約 25 万です。利用率 70% は、計算のための仮定です。ほかの選択肢の理由は、この計算には入っていません。', ch: ['I3'] }
+]});
+
+CN.glossary([
+  { t: '世帯換算', en: 'household equivalent', alias: '何軒分・何世帯分', d: '設備の出力を家庭 1 世帯の平均の電力で割った値（瞬間）、または 1 日の発電量を家庭の 1 日の使用量で割った値（量）。割る 2 つの値の条件がそろったときだけ目安になる。', ch: ['I3'] },
+  { t: '平均の電力', en: 'average power', alias: '平均電力', d: '電力量を、その期間の時間で割った電力。家庭の年間の電力量を年の時間で割った値は、約 0.46 kW のモデルで、使う時間帯の電力とは別。', ch: ['I3'] },
+  { t: '日負荷曲線', en: 'daily load curve', alias: '需要の形', d: '1 日の中での需要（負荷）の大きさの変化を、時刻を横軸にして描いた曲線。朝と夕方〜夜に山、深夜に谷ができる。', ch: ['I3'] }
 ]);
 
 })();

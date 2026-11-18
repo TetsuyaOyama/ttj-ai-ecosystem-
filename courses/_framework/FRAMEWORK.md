@@ -85,6 +85,7 @@ time: 25
 | `layers` | **断面・構成の層図** | 新規 |
 | `xsec` | **工程断面ステッパー**（断面が手ごとに変わる） | 新規 |
 | `route` | **行程帯図**（区間ごとの負担者を条件で比べる） | 新規 |
+| `bucket` / `unitconv` / `appmix` / `areacircle` / `bundle` | **家庭の電気の部品 5 種**（任意。使った章がある講座にだけ `home-lab.js/css` が組み込まれる。§4.12） | 新規 |
 | `glossary` / `mapping` / `exam` | 用語集・対応表・総合テスト（付録） | 汎用化 |
 
 ### 4.1 `arch` 構成図
@@ -246,6 +247,20 @@ CN.add('route', 'c26-x', { title,
   ```
 - 図の同じ内容の表を折りたたみで出す（読み上げ・印刷用）。動き（流れる点）は `prefers-reduced-motion` で止める。免責「学習用の模型」を出す。
 - ビルド検査：式が構文として読める、使う変数が定義済み、入力の `min ≤ value ≤ max`、`step` が正。
+
+### 4.12 家庭の電気の部品（`bucket` / `unitconv` / `appmix` / `areacircle` / `bundle`。任意の部品）
+
+電力（瞬間）と電力量（量）、単位、家庭の使い方、発電所の規模を、つまみと図で結ぶ 5 種。`js/opt/home-lab.js` と `css/opt/home-lab.css` に自己完結（`scale-lab.js` や `expr.js` に依存しない）。使った章がある講座にだけ組み込まれ、使わない講座の出力は変わらない（ビルドは `HOME_WIDGETS` で判定）。検査は `check-data.js` の `V.bucket` ほか、動作は `test.py` の「家庭の電気の部品」。色は、家 ＝ `--hm-home`（橙）、1 軸 ＝ `--hm-axis`（緑）、全体 ＝ `--hm-all`（青）。色だけに意味を持たせず、線種・模様・文字を併記する。免責「学習用の模型です」を各部品が出す。
+
+| 種別 | 内容 | 主なデータ |
+|---|---|---|
+| `bucket` | 蛇口とバケツの図、電力 × 時間の長方形（面積 ＝ 電力量）、W と時間のつまみ、機器の例、再生（動きを減らす設定では省略）、表 | `title, intro, power{…}, hours{…}, capacityKwh, formula, reads[]` |
+| `unitconv` | W 〜 TW、Wh 〜 TWh の階段図（×1,000、万・億の印）と、全単位同時表示の換算 | `intro, initial, defaults{power,energy}, examples[], notes{power,energy}` |
+| `appmix` | 機器ごとの有無・使う時間・平均の電力の棒、時間帯の帯、合計の電力の 1 日の形（平均と最大） | `devices[{id,name,runW,hours,flat,parts[{c,f}]}], presets[], presetHint, days, listNote, reads[]` |
+| `areacircle` | 面積に比例する円（半径 ∝ √値）で、瞬間と 1 日の量（世帯換算）を並べる。家庭は点の拡大の吹き出し | `circles[], util{…,note}, axisId, says[]` |
+| `bundle` | 世帯数（対数のつまみ）を束ね、①瞬間と量の 2 つの見方、②0〜24 時の山と谷（一定の出力 / 需要に合わせた出力、不足と余りを模様で）、③家と軸のアイコンの絵 | `n{min,max,step,value,presets[]}, util, time, minLoad, house, plants[], axisId, axisIconLabel, axisRange, texts{a,b,c}, caution` |
+
+データ例は `power/data/I3-home-and-plant.js`。数値の根拠は、データファイル冒頭の `検算` 行と事実確認表に置く。
 
 ### 4.11b `strip` 限月の階段（任意の部品）
 
