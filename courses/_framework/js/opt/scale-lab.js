@@ -635,7 +635,7 @@
       var lgItems = []; ser.forEach(function (z, j) { if (vis[j]) lgItems.push({ k: 'l', j: j, label: z.label }); }); fills.forEach(function (z, j) { if (z.label) lgItems.push({ k: 'f', j: j, label: z.label }); });
       var lgRows = [[]], lx = 0, LW = W - 12, widths = lgItems.map(function (z) { return 34 + z.label.length * 12; });
       widths.forEach(function (w, j) { if (lx + w > LW && lgRows[lgRows.length - 1].length) { lgRows.push([]); lx = 0; } lgRows[lgRows.length - 1].push(j); lx += w; });
-      var mL = Math.min(56, 36 + 7 * Math.max(String(Math.round(Math.abs(ymax))).length, String(Math.round(Math.abs(ymin))).length) + (ydec ? 6 * ydec : 0)), mR = 14, mT = 22 + lgRows.length * 18 + (f.yLabel ? 16 : 0), pw = W - mL - mR;
+      var mL = Math.min(56, 36 + 7 * Math.max(String(Math.round(Math.abs(ymax))).length, String(Math.round(Math.abs(ymin))).length) + (ydec ? 6 * ydec : 0)), mR = 14, mT = 22 + lgRows.length * 18 + (f.yLabel ? 22 : 0), pw = W - mL - mR;
       var X0 = function (v) { return mL + tPos(v) * pw; };
       /* 横軸の目盛り：ticks（{v, label}）があればそれを使う。ラベルが重なるときは 2 段にずらす */
       var ticks = (xd.ticks || []).filter(function (t) { return t.v >= x0 - 1e-9 && t.v <= x1 + 1e-9; }), tickRow = [], needRow2 = false;
@@ -680,7 +680,7 @@
         }
       }
       if (xd.label) svg.appendChild(s('text', { 'class': 'lab-ax', x: mL + pw / 2, y: Hh - 8, 'text-anchor': 'middle' }, xd.label + (xd.unit ? '（' + xd.unit + '）' : '')));
-      if (f.yLabel) svg.appendChild(s('text', { 'class': 'lab-ax', x: 4, y: mT - 8 }, '縦軸：' + f.yLabel + (f.unit ? '（' + f.unit + '）' : '')));
+      if (f.yLabel) svg.appendChild(s('text', { 'class': 'lab-ax', x: 4, y: mT - 14 }, '縦軸：' + f.yLabel + (f.unit ? '（' + f.unit + '）' : '')));
       /* 凡例 */
       lgRows.forEach(function (r, ri) {
         var ox = mL;

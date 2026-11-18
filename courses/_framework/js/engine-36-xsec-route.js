@@ -55,11 +55,21 @@
     var stage = h('div', { 'class': 'scroll-x xs-stage', tabindex: 0, role: 'group', 'aria-label': '断面図。左右の矢印キーで手を進め、スペースで再生／一時停止します' });
     var svg = s('svg', { 'class': 'xs-svg', id: ctx.id, viewBox: '0 0 ' + vb[0] + ' ' + vb[1], role: 'img', style: 'max-width:' + Math.round(vb[0] * 1.4) + 'px;min-width:300px' });
     var layer = s('g'), fxl = s('g');
+    /* ラベルの文字：既定は 11（図の単位）。data に labelMinPx（例 9.5）を書くと、画面で見える大きさがその px を下回らないよう、狭い幅で図の単位の大きさを増やす */
+    var lbMin = d.labelMinPx > 0 ? d.labelMinPx : 0;
+    function lbSize() { if (!lbMin) return 0; var w = svg.getBoundingClientRect().width; if (!(w > 0)) return 0; var k = w / vb[0]; return k * 11 >= lbMin ? 0 : Math.round(lbMin / k * 10) / 10; }
+    function applyLb() { var fz = lbSize(); layer.querySelectorAll('.xs-lb').forEach(function (t) { if (fz) { t.style.fontSize = fz + 'px'; t.style.strokeWidth = Math.round(fz * 0.27 * 10) / 10 + 'px'; } else { t.style.fontSize = ''; t.style.strokeWidth = ''; } }); }
     svg.appendChild(layer); svg.appendChild(fxl); stage.appendChild(svg);
     var body = h('div', { 'class': 'wg-body' }); body.appendChild(stage);
     body.appendChild(h('p', { 'class': 'xs-note' }, T('xsec.note')));
     var lg = h('div', { 'class': 'legend xs-legend', role: 'group', 'aria-label': '材料の凡例（押すとその材料を強調）' });
-    mats.forEach(function (k) { lg.appendChild(h('button', { type: 'button', 'class': 'xs-lg', 'data-m': k, 'aria-pressed': 'false', on: { click: function () { hiM = hiM === k ? null : k; render(); } } }, h('i', { 'class': 'sw m-' + k }), MN(k)[0])); });
+    /* 凡例：既定は全手で使う材料をすべて並べる。data に legend: 'step' を書くと、いま見えている図形の材料だけを並べる（手ごとに作り直す） */
+    var legStep = d.legend === 'step', lgKey = null;
+    function buildLegend(list) {
+      var key = list.join(','); if (key === lgKey) return; lgKey = key; CN.clear(lg);
+      list.forEach(function (k) { lg.appendChild(h('button', { type: 'button', 'class': 'xs-lg', 'data-m': k, 'aria-pressed': 'false', on: { click: function () { hiM = hiM === k ? null : k; render(); } } }, h('i', { 'class': 'sw m-' + k }), MN(k)[0])); });
+    }
+    if (!legStep) buildLegend(mats);
     body.appendChild(lg);
     el.appendChild(body);
     var info = h('div', { 'class': 'wg-info xs-info', 'aria-live': 'polite' }); el.appendChild(info);
@@ -75,11 +85,13 @@
     function render() {
       var st = steps[cur], S = states[cur];
       CN.clear(layer); CN.clear(fxl);
+      if (legStep) { var inS = {}; S.shapes.forEach(function (sh) { inS[sh.m] = 1; }); buildLegend(mats.filter(function (k) { return inS[k]; })); if (hiM && !inS[hiM]) hiM = null; }
       S.shapes.forEach(function (sh) {
         var cls = (S.chg[sh.id] ? ' chg' : '') + (hiM ? (sh.m === hiM ? ' hi' : ' dim') : '');
         layer.appendChild(shapeEl(sh, cls));
       });
       S.shapes.forEach(function (sh) { if (sh.label) { var bx = sh.pts ? sh.pts.reduce(function (a, p) { return [a[0] + p[0] / sh.pts.length, a[1] + p[1] / sh.pts.length]; }, [0, 0]) : [sh.x + sh.w / 2, sh.y + sh.h / 2]; layer.appendChild(s('text', { 'class': 'xs-lb', x: bx[0], y: bx[1] + 4 }, sh.label)); } });
+      applyLb();
       if (st.fx && FX[st.fx]) {
         var a = st.fxArea || [0, 0, vb[0], vb[1]], gl = FX[st.fx][0], n = Math.max(2, Math.min(9, Math.floor(a[2] / 56)));
         for (var i = 0; i < n; i++) fxl.appendChild(s('text', { 'class': 'xs-fx', x: a[0] + (i + 0.5) * a[2] / n, y: a[1] + Math.min(a[3], 40) / 2 + 8 }, gl));
@@ -116,6 +128,7 @@
       else if (e.key === 'Home') { e.preventDefault(); go(0, true); } else if (e.key === 'End') { e.preventDefault(); go(N - 1, true); } else if (e.key === ' ') { e.preventDefault(); play(); }
     });
     render();
+    if (lbMin && typeof ResizeObserver === 'function') { var rw = 0; new ResizeObserver(function () { var w = Math.round(svg.getBoundingClientRect().width); if (w !== rw) { rw = w; applyLb(); } }).observe(svg); }
   };
   CN.searchText.xsec = function (d) { return d.title + ' ' + d.steps.map(function (st) { return [st.name, st.proc, st.equip, st.what, st.trap].filter(Boolean).join(' '); }).join(' '); };
 

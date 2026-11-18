@@ -158,6 +158,8 @@ CN.add('layers', 'c02-x', { title, width?: 420, ends?: ['外側（上）', '外�
 CN.add('xsec', 'c12-dd', { title, viewBox: [600, 260],      // 既定 [600,260]。左上原点
   base: [{ id: 'sub', m: 'si', x: 0, y: 180, w: 600, h: 80 }],          // 最初からある図形
   materials: { sio2: { name: '緩衝材', en: 'Cushion', role: '…' } },     // 省略可：材料の「名前」を図ごとに言い換える（色は固定）
+  legend: 'step',      // 省略可：凡例を、その手で見えている材料だけにする（既定は全手で使う材料をすべて並べる）
+  labelMinPx: 9.5,     // 省略可：ラベル（label）の文字が画面でこの px を下回らないよう、狭い幅で図の単位の大きさを増やす（既定は無効で 11 単位のまま。広い幅では変わらない）
   steps: [{ phase?, name, proc?, equip?, fx?, fxLabel?, fxArea?: [x,y,w,h],
     add?: [{ id, m, x, y, w, h, label? } | { id, m, pts: [[x,y],..] }], del?: ['id'], mod?: [{ id, y, h }], what?, trap?, ch? }] });
 ```

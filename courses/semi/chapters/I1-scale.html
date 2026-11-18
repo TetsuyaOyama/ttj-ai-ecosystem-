@@ -1,0 +1,156 @@
+<!--
+num: I1
+part: 0
+title: 髪の毛からトランジスタまで：小ささと数の多さをつかむ
+track: 基礎
+time: 40
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li><b>m・mm・μm・nm・Å の 1,000 倍ずつの階段</b>に、髪の毛・細胞・ウイルス・ウェーハ・ゲートの間隔・原子の間隔を並べ、<b>「◯ nm 世代」の数字が実際の寸法ではない</b>ことを、公表された寸法の表で言える。</li>
+    <li>倍率を 10 倍ずつ上げたとき、画面の幅が実物の何 mm・μm・nm に当たるかを計算し、<b>髪の毛 1 本の断面に入るトランジスタの数</b>を、面積と密度から求められる。</li>
+    <li>ウェーハ 1 枚から取れるチップの数、良品の数、<b>トランジスタの総数</b>を式で求め、世界人口 1 人あたりや 1 秒あたりに直して、数の多さを実感できる。</li>
+    <li>クリーンルームの ISO クラスと、重ね合わせの精度を、身近な量（1 リットルの空気の中の粒子、東京から数百 km の距離）に直して感じ取れる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：なし。掛け算・割り算と、10 の何乗かの数え方が分かれば足ります。本編の第04章（ゲートピッチとメタルピッチ）、第05章（ウェーハ）を読んでいなくても読めます。</p>
+</section>
+
+<div class="callout note"><span class="ttl">この章の読み方</span>
+  <p>この章は、半導体の<b>小ささ</b>と<b>数の多さ</b>を、図と、動かせる部品でつかむ章です。本編の章を読む前に、「どれくらい小さいのか」「どれくらい多いのか」の感覚を持つのが目的です。</p>
+  <p>数字は 4 種類に分けて書きます。<b>公表値</b>（出典・時点・条件つき）、<b>講座の既存の章で確かめた値</b>（章を示す）、そこから計算した<b>目安</b>、そして<b>模型の値</b>（仮定。歩留まり、欠陥の密度、月産の枚数、1 ロットの枚数など）です。仮定は、必ず「仮定」と書きます。</p>
+  <p><b>「◯ nm 世代」の数字は、実際の寸法ではありません。</b>世代の呼び名は企業やロードマップが決めた名前です（第04章）。この章では、名前と、発表された<b>実際の寸法（ピッチ）</b>を並べて示します。</p></div>
+
+<h3>長さの階段：m から Å まで、1,000 倍ずつ降りる</h3>
+<p>長さの単位は、<b>1,000 倍ごと</b>に名前が変わります。1 m の 1,000 分の 1 が 1 mm（ミリメートル）、その 1,000 分の 1 が 1 μm（マイクロメートル）、その 1,000 分の 1 が 1 nm（ナノメートル）です。Å（オングストローム）は、nm の 10 分の 1 で、原子の間隔を表すときによく使われます（1 Å ＝ 0.1 nm ＝ 10⁻¹⁰ m）。</p>
+<p>下の図は、身近なものと半導体のものを、大きい順に並べたものです。<b>1 段（1,000 倍）下がるごとに、行を右にずらして</b>あります。行を押すと、値の条件と出典が出ます。</p>
+<div data-widget="layers" data-src="cI1-stair"></div>
+<p>確かめる点は 3 つです。1 つ目は、ウェーハの直径（300 mm）と髪の毛の太さ（約 70 μm）の間に、<b>約 4,300 倍</b>の差があることです（300 mm ÷ 70 μm）。2 つ目は、髪の毛（約 70 μm）と、ゲートの間隔（54 nm）の間に、<b>約 1,300 倍</b>の差があることです（70,000 nm ÷ 54 nm）。3 つ目は、1971 年のチップの線幅（10 μm）が、Intel「10 nm」（2017 年）の配線の間隔（36 nm）の<b>約 280 倍</b>であることです（10,000 nm ÷ 36 nm。線幅と間隔〔ピッチ〕は別の量なので、桁の目安として比べています）。身近なものの大きさは、測り方で幅があるので、範囲や条件を行の説明に書いています。</p>
+
+<h4>入れた長さを、全部の単位で同時に見る</h4>
+<p>長さを「数 × 10 の何乗 m」で入れると、m・mm・μm・nm・Å の全部で同時に表示します。上の図の値は、下のボタンで入ります。</p>
+<div data-widget="lab" data-src="cI1-conv"></div>
+<p>確かめる点は 2 つです。1 つ目は、指数を 3 つ下げると、単位が 1 つ下がり、数字が 1,000 倍になることです。2 つ目は、図（対数の棒）で、ウェーハの直径とシリコンの格子の間に、<b>約 5.5 億倍（8 桁あまり）</b>の差があることです（3 億 nm ÷ 0.5431 nm）。</p>
+
+<h4>名前と実寸：「10 nm」の中に、10 nm はどこにもない</h4>
+<p>半導体の世代は、「3 nm 世代」「N2」「18A」のように、名前で呼ばれます。この数字は、<b>世代の呼び名</b>です。トランジスタや配線の実際の寸法は、<b>ゲートの間隔</b>（コンタクテッド・ゲート・ピッチ、CPP）、<b>配線の間隔</b>（メタルピッチ）、<b>フィンの間隔</b>などで表します（第04章）。次の表は、発表された実際の寸法を、名前の隣に並べたものです。</p>
+<div data-widget="table" data-src="cI1-nodes"></div>
+<p>確かめる点は 2 つです。1 つ目は、Intel が 2017 年に「10 nm」の世代として示した値が、ゲートの間隔 54 nm、配線の間隔 36 nm、フィンの間隔 34 nm で、<b>10 nm という寸法がどこにもない</b>ことです（Intel、2017 年）。2 つ目は、IRDS のロードマップ（2021 年版）で、ラベルが 7 から 5 に変わっても、配線の間隔が同じ 36 nm であることです。名前の数字で、企業どうしの世代を比べることはできません。</p>
+
+<h3>ズームする：ウェーハから、原子まで</h3>
+<p>倍率を 10 倍ずつ上げて、ウェーハの上を「ズーム」していくと、何が見えるでしょうか。ここでは、<b>倍率 1 倍のとき、画面の幅がウェーハの直径（300 mm）と同じ</b>と取り決めます。倍率が 10 倍になると、画面の幅は 30 mm、100 倍で 3 mm、…と、10 分の 1 ずつ狭くなります。</p>
+<p>下の絵は、各段階の<b>模式図</b>です。形・数・配置は実物ではありません（ゲートの間隔とゲート絶縁膜の厚さの 2 か所だけ、説明に書いた縮尺で描いています）。矢印キーやスライダーで、1 倍から 1 億倍まで、9 段を進めてください。</p>
+<div data-widget="xsec" data-src="cI1-zoomfig"></div>
+<p>1,000 万倍でも、見えるのは 1 個のトランジスタの断面までです。原子の並びがはっきり見える画面の幅（3 nm）には、<b>1 億倍</b>が要ります。そこで、段を 1 つ足して 9 段にしています。</p>
+<p>次の部品は、倍率のつまみを動かすと、画面の幅が実物の何 mm・μm・nm になるかと、その幅にゲートの間隔や配線の間隔、シリコンの格子が何個並ぶかを計算します。</p>
+<div data-widget="lab" data-src="cI1-zoom"></div>
+<p>確かめる点は 3 つです。1 つ目は、倍率を 10 倍上げるごとに、画面の幅が 10 分の 1 になることです。2 つ目は、1 万倍（30 μm）で赤血球が約 4 個、10 万倍（3 μm）で配線が約 83 本、100 万倍（300 nm）でゲートが約 5.6 個並ぶことです。3 つ目は、1 億倍（3 nm）で、シリコンの格子が約 5.5 個並ぶことです。</p>
+
+<h4>髪の毛 1 本の断面に、トランジスタは何個並ぶか</h4>
+<p>髪の毛の断面を円とみなして、その面積に、トランジスタの密度（1 mm² あたりの個数）をかけてみます。直径 70 μm の髪の毛の断面は、面積が約 0.0038 mm² です。密度が 100.8 MTr/mm²（Intel が 2017 年に論理回路で示した値。1 MTr ＝ 100 万個）なら、<b>約 39 万個</b>です。</p>
+<div data-widget="lab" data-src="cI1-hair"></div>
+<p>確かめる点は 3 つです。1 つ目は、個数が直径の<b>2 乗</b>で増えることです（髪の太さが 2 倍なら、個数は 4 倍）。2 つ目は、細い髪（17 μm）でも約 2.3 万個、太い髪（181 μm）で約 260 万個と、<b>数万〜数百万個</b>の範囲になることです。3 つ目は、密度の値でも変わることです。H100 のチップ全体の平均（約 98 MTr/mm²）と、Cerebras の WSE-3 の平均（約 87 MTr/mm²）は、公表された個数と面積からの<b>割り算</b>です。論理回路だけの密度より低くなるのは、メモリや配線の部分を含むからです。</p>
+
+<h3>円（面積）で比べる：となりの段との、面積の比</h3>
+<p>長さを比べると、差が大きく見えにくくなります。<b>面積</b>で比べると、直径の差が 2 乗で効きます。次の絵は、となり合う段の 2 つを、<b>面積に比例する円</b>で描いたものです（大きい方の半径を 100 としたとき、小さい方の半径を「100 × 面積の比の平方根」で決めています）。赤血球・大腸菌・ウイルスは、直径の目安から円に直した断面です。</p>
+<div data-widget="xsec" data-src="cI1-circles"></div>
+<p>最後の段が目玉です。密度 100.8 MTr/mm² のとき、<b>トランジスタ 1 個が占める平均の面積</b>（1 mm² を 1 億個で割った約 9,921 nm²）は、直径 100 nm のウイルスの断面（約 7,854 nm²）の約 1.26 倍です。ウイルス 1 個の断面に、トランジスタ 1 個ぶんの面積が、ほぼ重なります。</p>
+<div data-widget="lab" data-src="cI1-area"></div>
+<p>確かめる点は 3 つです。1 つ目は、髪の毛の断面が赤血球の約 83 倍、赤血球が大腸菌の断面の約 247 倍の面積であることです。2 つ目は、棒グラフが対数で、1 目盛り（10 倍）ごとの差が小さく見えても、実際は<b>5〜6 桁</b>の差があることです（髪の毛の断面 約 3,850 μm² と、トランジスタ 1 個 約 0.0099 μm²。約 39 万倍）。3 つ目は、ウイルスの直径を 60〜140 nm の間で動かすと、トランジスタ 1 個の面積との比が、およそ 0.64〜3.5 倍の間で動くことです。</p>
+<p>なお、「トランジスタ 1 個の面積」は、チップの面積を個数で割った<b>平均</b>で、トランジスタ 1 個の実際の形ではありません。配線やすきまを含みます。</p>
+
+<h3>数の階段と「束ねる」：トランジスタ 1 個から、工場の 1 か月まで</h3>
+<p>トランジスタは、数個で論理ゲート（たとえば NAND は CMOS で 4 個）になり、ゲートが集まって回路のブロックになり、ブロックが集まって<b>チップ</b>になります（第03章）。チップは、ウェーハの上に格子のように並べてつくり、ウェーハが複数枚（この章では 25 枚と仮定）で 1 ロットになり、ロットが工場を流れます（第06章）。それぞれの段で、数は何桁増えるのでしょうか。</p>
+<p>まず、公表された、チップ 1 個のトランジスタの数の例です。</p>
+<div data-widget="table" data-src="cI1-chips"></div>
+<p>1971 年の 2,300 個から、2022 年の 800 億個まで、約 <b>3,480 万倍</b>です（800 億 ÷ 2,300）。製品の優劣を示す表ではありません。公表値から平均の密度を割り算すると、H100 は約 98.3 MTr/mm²、WSE-3 は約 86.5 MTr/mm² です。</p>
+<p>次の部品は、<b>束ねる装置</b>です。チップの大きさ（1 辺）、ウェーハの直径、歩留まり、密度、工場の月産を動かすと、ウェーハ 1 枚から取れるチップの数、良品の数、トランジスタの総数、世界人口 1 人あたり、1 秒あたりが出ます。<b>歩留まりと月産は仮定</b>です。</p>
+<div data-widget="lab" data-src="cI1-bundle"></div>
+<p>確かめる点は 5 つです。</p>
+<ol>
+  <li>H100 級のボタンで、ウェーハ 1 枚（300 mm）から<b>約 63 個</b>のチップが取れ、歩留まり 70%（仮定）なら良品は約 44 個、トランジスタの総数は<b>約 3.5 兆個</b>（世界人口 82 億人で割ると<b>約 430 個/人</b>）になること。</li>
+  <li>1 辺を 12 mm にすると、取れる数が約 435 個に増えること。チップを小さくすると、1 枚から取れる数は、面積の逆数より少し多く増えます（縁で使えない分が減るため）。</li>
+  <li>ウェーハの直径を 200 mm に下げると、取れる数が大きく減ること（面積は直径の 2 乗）。</li>
+  <li>月産 5.5 万枚（仮定。例は、経済産業省が公表した JASM の熊本の工場の認定計画の生産能力〔12 インチ換算、計画の値、2022 年 6 月認定〕で、実績ではありません）の工場が、<b>全部を H100 級にした</b>と仮定すると、1 秒あたり約 750 億個、世界人口 1 人あたりで約 9 個/秒になること。実際の工場は、いろいろな製品をつくるので、この計算はそのままの実績ではありません。</li>
+  <li>図（棒）の長さは、個数を 10 の何乗かで表したものです。棒が 1 つ長くなるごとに、個数は 10 倍になります。</li>
+</ol>
+<p>次の実験は、歩留まりを、教科書にある簡単なモデル（欠陥がランダムに入るとして、<b>歩留まり ＝ exp(−欠陥の密度 × 面積)</b>）で出します。欠陥の密度は仮定です。チップを大きくすると、取れる数が減るうえに、歩留まりも下がるので、良品の数は急に減ります。</p>
+<div class="callout warn"><span class="ttl">この装置の限界：数の多さの感覚をつかむための模型です</span>
+  <p>ウェーハ 1 枚から取れるチップの数の式は、<b>近似</b>です。切りしろ（スクライブ線）や、縁の除外領域、チップの縦横比、ウェーハの位置合わせの余白は考えていません。実際の取れる数は、これより少なくなります。</p>
+  <p>歩留まり（70% など）、月産の枚数、1 ロットの枚数（25 枚）、1 か月の日数（30 日）は<b>仮定</b>です。実際の歩留まりは、多くが公表されず、製品や時期で大きく違います。欠陥の密度の値（0.02〜1 個/cm²）も、仮定です。歩留まりのモデルには、欠陥が固まって入ることを考えた別の式もあり、式の選び方でも値が変わります。</p>
+  <p>大きなチップでは、歩留まりを上げるために、予備の回路を持たせたり、チップを小さく分けたり（チップレット、第15章）する工夫があります。このモデルは、そうした工夫を含みません。</p></div>
+
+<h3>清浄さと精度：きれいな空気と、ずれの小ささ</h3>
+<h4>クリーンルーム：1 リットルの空気に、粒子は何個まで許されるか</h4>
+<p>クリーンルームの清浄度は、空気 1 m³ に含まれる粒子の数で表します（ISO 14644-1、第18章）。番号が小さいほど、許される粒子の数が少ない（きれい）です。0.5 μm 以上の粒子の上限は、ISO 3 で 35 個/m³、ISO 5 で 3,520 個/m³、ISO 7 で 352,000 個/m³、ISO 9 で 35,200,000 個/m³ です（第18章の表）。次の部品は、この上限を、1 リットルあたりと、粒子が 1 個入る空気の体積に直します。</p>
+<div data-widget="lab" data-src="cI1-clean"></div>
+<p>確かめる点は 3 つです。1 つ目は、番号が 1 つ変わると、上限が約 10 倍変わることです（ISO 5 と ISO 7 の比は 100 倍）。2 つ目は、ISO 5 の上限（3,520 個/m³）が、1 リットルあたり約 3.5 個で、粒子が 1 個入る空気の体積が約 0.28 L（284 mL、コップ 1 杯ぶん）であることです。3 つ目は、表で最も緩い ISO 9 の上限が、ISO 5 の<b>1 万倍</b>であることです。</p>
+<p>手術室の値は、フィンランドの手術室を運転中に調べた報告（VTT Technology 168、2014 年）で、ISO 7〜9 でした。これは、その調査の結果で、国や病院で違い、規格が手術室のクラスを定めているわけではありません。半導体工場の「ISO 3〜5」も、「よく指定される」と述べる記事（ASHRAE Journal、2021 年。第18章）の書き方で、規格が決めた値ではありません。</p>
+<div class="callout warn"><span class="ttl">この表が測っているのは、0.1 μm 以上の粒子です</span>
+  <p>ISO 14644-1 の分類は、0.1〜5 μm の粒子が対象です。一方、IRDS は、論理素子で致命的になる粒子の大きさを、回路の寸法のおよそ半分とし、もっとも厳しい場合は 3.0 nm と書いて、この大きさの粒子は現在の計測では検出できないと述べています（第13章、IRDS 2024 年版）。つまり、<b>清浄度クラスの数字は、致命的な粒子の数をそのまま表すものではありません</b>。装置の中の洗浄や、発生させない工夫と、あわせて考えます。</p></div>
+
+<h4>位置合わせの精度：ウェーハを数百 km に引き伸ばすと</h4>
+<p>回路は何十もの層を重ねてできていて、新しい層を下の層にぴったり重ねる精度を<b>重ね合わせ</b>（オーバーレイ）と呼びます（第08章）。ASML の 2023 年の発表資料（EUVL Conference 2023）は、NXE:3600D の matched machine overlay（2 台の装置で露光した層どうしのずれ）の仕様を 1.1 nm、NXE:3800E の受入試験の目標を 0.9 nm 以下としています。同じ資料は、製品のウェーハの上で測る重ね合わせ（on-product overlay）を、NXE:3600D で 1.7 nm と示していて、条件によって値が違います。ASML の 2021 年の解説は、最先端のシステムで 2 nm より良いと述べています（第08章）。</p>
+<p>1 nm は、どれくらいの精度でしょうか。ウェーハの直径 300 mm を、ある距離に引き伸ばすと、ずれは何 mm に当たるかを、次の部品で計算します。たとえば、直径 300 mm を 300 km に引き伸ばすと、拡大の倍率は 100 万倍で、1.1 nm は<b>1.1 mm</b>です。</p>
+<div data-widget="lab" data-src="cI1-overlay"></div>
+<p>確かめる点は 3 つです。1 つ目は、距離 300 km のとき、ずれ(nm) がそのまま mm の数字になることです。2 つ目は、同じ倍率で、配線の間隔（36 nm）が約 36 mm、シリコンの格子（0.5431 nm）が約 0.54 mm になることです。3 つ目は、1.1 nm のずれが、配線の間隔の約 3% に当たることです（1.1 ÷ 36）。</p>
+<p>重ね合わせの値は、装置の仕様や目標の値で、実際の製品のずれの実績ではありません。ずれが小さいほど、配線の間隔の中で、層どうしが重なる余裕が広がります。</p>
+
+<h3>まとめと、本編への道しるべ</h3>
+<ul>
+  <li>長さは、<b>m → mm → μm → nm → Å</b> と、1,000 倍ずつ降ります。髪の毛（約 70 μm）、赤血球（約 7.7 μm）、ウイルス（約 100 nm）、ゲートの間隔（54 nm の例）、シリコンの格子（0.5431 nm）が、階段のどこにあるかを、言えるようにします。</li>
+  <li><b>「◯ nm 世代」の数字は、実際の寸法ではありません</b>。Intel の「10 nm」の世代は、ゲートの間隔 54 nm・配線の間隔 36 nm・フィンの間隔 34 nm（Intel、2017 年）。</li>
+  <li>倍率を 1 億倍まで上げて、ウェーハ → チップ → ブロック → 配線 → トランジスタ → 原子の順に見ました。<b>髪の毛 1 本の断面（直径 70 μm）には、約 39 万個</b>のトランジスタが並ぶ密度です（100.8 MTr/mm² のとき）。</li>
+  <li>面積で比べると、トランジスタ 1 個が占める平均の面積は、ウイルス 1 個の断面とほぼ同じ桁です。</li>
+  <li>H100 級のチップ（約 800 億個）は、ウェーハ 1 枚から約 63 個取れ、仮定の歩留まり 70% で、トランジスタが約 3.5 兆個、世界人口 1 人あたり約 430 個です。</li>
+  <li>清浄度クラスの 1 つ違いは、粒子の上限の約 10 倍。重ね合わせの 1.1 nm は、ウェーハを 300 km に引き伸ばすと 1.1 mm です。</li>
+</ul>
+<p>次に読む所です。世代の名前と実寸（ゲートピッチ・メタルピッチ）は<a href="#ch04">第04章</a>、ウェーハの直径と厚さは<a href="#ch05">第05章</a>、歩留まりとロットは<a href="#ch06">第06章</a>、EUV と重ね合わせは<a href="#ch08">第08章</a>、配線は<a href="#ch12">第12章</a>、粒子と歩留まりは<a href="#ch13">第13章</a>、クリーンルームの ISO クラスは<a href="#ch18">第18章</a>で扱います。</p>
+
+<div class="callout note"><span class="ttl">現場でのつながり</span>
+  <p>商談や仕様書で「◯ nm 向けの装置」と聞いたとき、名前の話か、実寸（ピッチ・線幅・重ね合わせの精度）の話かを確かめる習慣が、この章の土台です。装置の輸送・据付では、清浄度クラスと、振動・温度の許容が、仕様書に載ります（第18章、第24章）。</p></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>「◯ nm」の数字は寸法ではありません</b>。ゲートの間隔や配線の間隔など、実際の寸法は、数十 nm です。</p>
+  <p><b>「1 mm² に 1 億個」と「1 個あたり平均 100 nm 角の面積」は、同じ内容です</b>（トランジスタ 1 個の形の大きさではありません）。1 mm ＝ 1,000,000 nm で、1 mm² ＝ 10¹² nm²。1 億個で割ると、1 個あたり 10⁴ nm²（100 nm 角）です。単位をそろえずに計算すると、桁を間違えます。</p>
+  <p><b>密度は、チップ全体の平均と、論理回路の最高値で違います</b>。出典に、どちらかが書いてあるかを確かめます。</p>
+  <p><b>歩留まり・月産・1 ロットの枚数は、この章では仮定</b>です。実績の値として読まないでください。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="cI1-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 18 日）。講座の既存の章の値は、章を示した</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>企業の発表資料</td><th scope="row"><a href="https://faculty-web.msoe.edu/johnsontimoj/EE4980/files4980/Kaizad-Mistry-2017-Manufacturing.pdf">Technology and Manufacturing Day 2017（Kaizad Mistry の資料）</a></th><td>Intel（大学の講義サイトに置かれた写し）</td><td>2017 年（日付の記載は 2017-03-28 の注意書きのみ）</td><td>「10 nm」のゲートの間隔 54 nm・最小メタルピッチ 36 nm・フィンピッチ 34 nm・フィンの高さ 53 nm・密度 100.8 MTr/mm²。「14 nm」の 70・52・42 nm と密度 37.5 MTr/mm²（図に添えられた数値）。Intel の公式サイト上の版は、この環境から開けなかった</td></tr>
+      <tr><td>専門誌の記事</td><th scope="row"><a href="https://spectrum.ieee.org/nanoclast/semiconductors/processors/intel-now-packs-100-million-transistors-in-each-square-millimeter">Intel Now Packs 100 Million Transistors in Each Square Millimeter</a></th><td>IEEE Spectrum（Rachel Courtland）</td><td>2017 年 3 月 30 日</td><td>Intel の密度 10 nm 100.8・14 nm 37.5 MTr/mm² の照合（上の Intel の資料の写しと一致）。</td></tr>
+      <tr><td>業界のロードマップ</td><th scope="row"><a href="https://irds.ieee.org/images/files/pdf/2021/2021IRDS_Litho.pdf">IRDS 2021 Edition, Lithography</a></th><td>IEEE IRDS</td><td>2021 年版（第04章で確認）</td><td>世代のラベルとゲートピッチ・メタルピッチ（予測）の表。</td></tr>
+      <tr><td>企業の会社史</td><th scope="row"><a href="https://www.intel.com/content/www/us/en/history/museum-story-of-intel-4004.html">Intel's First Microprocessor</a></th><td>Intel</td><td>1971 年の製品（ページの日付なし）</td><td>4004 の 2,300 個、回路の線幅 10 μm。</td></tr>
+      <tr><td>企業のプレスリリース</td><th scope="row"><a href="https://intel.com/pressroom/archive/releases/2007/20070128comp.htm">Intel's Transistor Technology Breakthrough Represents Biggest Change to Computer Chips in 40 Years</a></th><td>Intel</td><td>2007 年 1 月 27 日</td><td>65 nm 世代の二酸化シリコンのゲート絶縁膜が 1.2 nm（原子 5 層分）。</td></tr>
+      <tr><td>企業の技術ブログ</td><th scope="row"><a href="https://developer.nvidia.com/blog/nvidia-hopper-architecture-in-depth/">NVIDIA Hopper Architecture In-Depth</a></th><td>NVIDIA</td><td>2022 年 3 月 22 日（ページの更新 2025 年 7 月）</td><td>GH100 の 800 億個、ダイ面積 814 mm²、TSMC 4N。</td></tr>
+      <tr><td>企業のニュースリリース</td><th scope="row"><a href="https://www.apple.com/newsroom/2023/06/apple-introduces-m2-ultra/">Apple introduces M2 Ultra</a></th><td>Apple</td><td>2023 年 6 月 5 日</td><td>M2 Ultra の 1,340 億個（M1 Ultra より 200 億個多い）。2 つの M2 Max のダイを UltraFusion でつないだもの。第 2 世代の 5 nm プロセス（Apple の呼び方）。ダイ面積は書かれていない。</td></tr>
+      <tr><td>企業のプレスリリース・製品ページ</td><th scope="row"><a href="https://www.cerebras.ai/press-release/cerebras-announces-third-generation-wafer-scale-engine">Cerebras Announces Third Generation Wafer Scale Engine</a>、<a href="https://cerebras.ai/product-chip/">Product: Chip</a></th><td>Cerebras</td><td>2024 年 3 月 13 日（ページの日付は 3 月 11 日と 13 日で食い違う）／製品ページ（2026 年 11 月に更新。いまは WSE-3T〔Turbo〕の説明で、同じ 46,225 mm²・4 兆個）</td><td>WSE-3 の 4 兆個、TSMC の 5 nm、900,000 コア。面積 46,225 mm² は製品ページと IEEE Spectrum（2024 年 3 月 13 日）で照合。</td></tr>
+      <tr><td>企業の発表資料</td><th scope="row"><a href="https://euvlitho.com/2023/P62.pdf">EUV Industrialization（Raymond Maas）</a></th><td>ASML（EUVL Conference 2023）</td><td>2023 年（NXE:3800E の状況は 2023 年 6 月）</td><td>NXE:3600D の matched machine overlay の仕様 1.1 nm、NXE:3800E の受入試験の目標 0.9 nm 以下、NXE:3600D の on-product overlay 1.7 nm。</td></tr>
+      <tr><td>企業の解説</td><th scope="row"><a href="https://www.asml.com/company/stories/2021/fellow-simon-mathijssen-aligning-lithography-nanometer">Aligning lithography to the nanometer</a></th><td>ASML</td><td>2021 年 12 月 22 日（第08章で確認）</td><td>最先端の重ね合わせが 2 nm より良い。</td></tr>
+      <tr><td>公的機関の統計</td><th scope="row"><a href="https://population.un.org/WPP/Publications/Files/WPP2024_Key-Messages.pdf">World Population Prospects 2024: Key Messages</a></th><td>国連（UN DESA）</td><td>2024 年版（人口は 2024 年）</td><td>世界人口 82 億人（8.2 billion）。</td></tr>
+      <tr><td>公的機関の論文</td><th scope="row"><a href="https://wwwnc.cdc.gov/eid/article/27/4/20-4337">Bullock ら、Emerging Infectious Diseases 27(4)</a></th><td>米国 CDC</td><td>2021 年 4 月号（2021-02-18 公開）</td><td>コロナウイルスの粒子 60〜140 nm（スパイクを含めて約 100 nm）。電子顕微鏡の観察。</td></tr>
+      <tr><td>学術データベース</td><th scope="row"><a href="https://bionumbers.hms.harvard.edu/bionumber.aspx?s=n&amp;v=0&amp;id=108239">BNID 108239（赤血球の直径 7.7 μm）</a>、<a href="https://bionumbers.hms.harvard.edu/bionumber.aspx?id=100798&amp;ver=1">BNID 100798（8 μm）</a></th><td>ハーバード大学 BioNumbers</td><td>確認 2026 年 11 月</td><td>赤血球の直径。7.7 μm は Cell Size Database（Gregory）の平均、8 μm は Rosen（1967）。</td></tr>
+      <tr><td>学術データベース</td><th scope="row"><a href="https://bionumbers.hms.harvard.edu/bionumber.aspx?id=117344&amp;ver=3&amp;trm=&amp;org=">BNID 117344（大腸菌の大きさ）</a></th><td>ハーバード大学 BioNumbers（出典は Yamada ら、Microscopy 2017）</td><td>確認 2026 年 11 月</td><td>大腸菌の幅 0.49 ± 0.03 μm、長さ 1.78 ± 0.54 μm（電子顕微鏡）。</td></tr>
+      <tr><td>学術データベース</td><th scope="row"><a href="https://bionumbers.hms.harvard.edu/Includes/KeyNumbersLinks.pdf">BioNumbers Key Numbers</a></th><td>ハーバード大学 BioNumbers</td><td>確認 2026 年 11 月</td><td>DNA の二重らせんの直径 約 2 nm（塩基対の間隔 0.34 nm）。</td></tr>
+      <tr><td>教育資料</td><th scope="row"><a href="https://hypertextbook.com/facts/1999/BrianLey.shtml">Diameter of a Human Hair（The Physics Factbook）</a></th><td>Brian Ley（1999）、Glenn Elert 編（2011 年の補足）</td><td>1999 年・2011 年</td><td>髪の毛の直径 17〜181 μm。学生の電子顕微鏡の測定は 60〜77 μm。</td></tr>
+      <tr><td>企業の製品情報</td><th scope="row"><a href="https://www.fujifilm.com/fb/ja/support/supply/paper/w-paper">W-Paper（コピー/プリンター用紙）</a></th><td>富士フイルムビジネスイノベーション</td><td>確認 2026 年 11 月</td><td>坪量 64 g/m² の製品の紙厚 87 μm。本文の「約 90 μm」は、この例をもとにした目安（製品で違う）。</td></tr>
+      <tr><td>公的機関の標準値</td><th scope="row"><a href="https://pml.nist.gov/cuu/pdf/xray_2018.pdf">CODATA 2018: X-ray values（lattice parameter of silicon）</a></th><td>NIST</td><td>CODATA 2018</td><td>シリコンの格子定数 a ＝ 5.431 020 511 × 10⁻¹⁰ m（真空中、22.5 ℃）。</td></tr>
+      <tr><td>公的機関の報告</td><th scope="row"><a href="https://cris.vtt.fi/en/publications/cleanroom-classification-studies-and-airborne-bioburden-particles/">Cleanroom Classification Studies and Airborne Bioburden Particles in Operating Theatres</a></th><td>VTT フィンランド技術研究センター（Salmela ら、VTT Technology 168）</td><td>2014 年</td><td>手術室を運転中に調べた清浄度クラスが ISO 7〜9。抄録の記述。</td></tr>
+            <tr><td>規格・記事（第18章で確認）</td><th scope="row">ISO 14644-1:2015、ASHRAE Journal（2021 年 9 月）</th><td>ISO、ASHRAE</td><td>2015 年、2021 年</td><td>クラスの上限（表 1）と、ISO 3〜5 がよく指定されるという記述。第18章の表と記述を使用（第18章は、規格の販売サイトの見本ページと、転載された表〔cleanroom.net〕で確認。この章でも cleanroom.net の表で 0.5 μm の欄を照合）。</td></tr>
+      <tr><td>業界のロードマップ</td><th scope="row">IRDS 2024 Edition, Yield Enhancement</th><td>IEEE IRDS</td><td>2024 年版（第13章で確認）</td><td>致命的な粒子の大きさの目安（最も厳しい場合 3.0 nm）。</td></tr>
+      <tr><td>公的機関の資料</td><th scope="row"><a href="https://www.meti.go.jp/policy/mono_info_service/joho/laws/semiconductor/semiconductor_plan/nintei_tokuteihandoutai_keikaku01.pdf">特定半導体生産施設整備等計画の概要（JASM・TSMC、熊本県菊陽町）</a></th><td>経済産業省</td><td>認定 2022 年 6 月 17 日</td><td>生産能力 5.5 万枚/月（12 インチ換算）。認定された計画の値で、実績ではない。</td></tr>
+      <tr><td>講座の既存の章</td><th scope="row">第04章・第05章・第08章・第13章・第18章</th><td>この講座</td><td>2026 年 11 月 14 日までの確認</td><td>IRDS の表、ウェーハの直径と厚さ（775 μm）、EUV の波長 13.5 nm と重ね合わせ、致命的な粒子、ISO クラスの表。</td></tr>
+      <tr><td>教科書・一般知識</td><th scope="row">半導体・集積回路・計算機アーキテクチャの教科書（取れる数の近似式、ポアソンの歩留まりモデル、CMOS の NAND の素子数、シリコンのダイヤモンド構造）</th><td>この講座の説明</td><td>—</td><td>近似式と簡単なモデル。この環境では原典のページを開いていません。式と前提を本文に書き、模型として扱っています。</td></tr>
+      <tr><td>架空・模型</td><th scope="row">歩留まり、欠陥の密度、月産の枚数、1 ロット 25 枚、1 か月 30 日、倍率 1 倍の画面の幅 300 mm、髪の毛の代表値 70 μm</th><td>この講座</td><td>—</td><td>理解のための仮定（模型の値）。実際の値ではありません。</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">この章では、フィンの幅、世界全体の月産の枚数、都市間の距離、手術室の規格値は、確かめた資料がないため載せていません。</p>
+</section>

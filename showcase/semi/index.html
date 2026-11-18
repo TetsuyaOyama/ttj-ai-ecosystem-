@@ -563,6 +563,145 @@ table.qos tbody tr[aria-selected="true"] td:first-child, table.qos tbody tr[aria
 .legend i.pt-a { background: var(--pt-a); } .legend i.pt-b { background: var(--pt-b); } .legend i.pt-c { background: var(--pt-c); } .legend i.pt-d { background: var(--pt-d); }
 .rt-table table { min-width: 420px; }
 
+/* ==== opt/scale-lab.css ==== */
+/* ===== 部品 scale（大きさの比較）・lab（式を動かす実験台）。使う章があるときだけ build.py が埋め込む ===== */
+.sc-body { padding: .6rem .8rem .8rem; }
+.sc-ctl { display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; margin-bottom: .6rem; }
+.sc-range { margin-left: auto; font-size: .8rem; color: var(--muted); font-family: var(--ttj-font-mono); }
+.sc-grid { display: grid; grid-template-columns: minmax(300px, 400px) 1fr; gap: 1rem; align-items: start; }
+.sc-ruler { min-width: 0; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); padding: .3rem .2rem .5rem; }
+.sc-panel { min-width: 0; display: grid; gap: .7rem; }
+@media (max-width: 760px) {
+  .sc-range { margin-left: 0; width: 100%; }
+  /* 狭い画面：倍率の結果 → 物差し → 選択欄 → つまみ → 項目の説明 の順（物差しまでの距離を短くする） */
+  .sc-grid { display: flex; flex-direction: column; align-items: stretch; gap: .7rem; }
+  .sc-panel { display: contents; }
+  .sc-result { order: 1; } .sc-ruler { order: 2; } .sc-sel { order: 3; } .sc-probe { order: 4; } .sc-detail { order: 5; }
+}
+.sc-svg { display: block; max-width: 100%; height: auto; }
+.sc-axis { stroke: var(--line2); stroke-width: 2; }
+.sc-tick { stroke: var(--line2); stroke-width: 1.5; } .sc-tick.maj { stroke: var(--text); stroke-width: 2; }
+.sc-gl { stroke: var(--line); stroke-width: 1; stroke-dasharray: 3 5; }
+.sc-tl { font-size: 11px; fill: var(--faint); font-family: var(--ttj-font-mono); } .sc-tl.maj { font-size: 12px; fill: var(--text); font-weight: 700; }
+.sc-lead { fill: none; stroke: var(--line2); stroke-width: 1.2; }
+.sc-hit { fill: transparent; }
+.sc-it { cursor: pointer; outline: none; }
+.sc-it:hover .sc-hit { fill: var(--accent-soft); }
+.sc-it:focus-visible .sc-hit { stroke: var(--focus); stroke-width: 3; fill: var(--accent-soft); }
+.sc-mk { stroke: var(--bg); stroke-width: 2; fill: var(--k-ue-s); }
+.sc-mk.range { fill-opacity: .55; stroke: var(--k-ue-s); }
+.sc-it.g0 .sc-mk { fill: var(--k-ue-s); } .sc-it.g1 .sc-mk { fill: var(--k-ran-s); } .sc-it.g2 .sc-mk { fill: var(--k-core-s); } .sc-it.g3 .sc-mk { fill: var(--k-db-s); }
+.sc-it.g4 .sc-mk { fill: var(--k-pol-s); } .sc-it.g5 .sc-mk { fill: var(--k-ext-s); } .sc-it.g6 .sc-mk { fill: var(--k-ims-s); }
+.sc-it.g0 .sc-mk.range { stroke: var(--k-ue-s); } .sc-it.g1 .sc-mk.range { stroke: var(--k-ran-s); } .sc-it.g2 .sc-mk.range { stroke: var(--k-core-s); } .sc-it.g3 .sc-mk.range { stroke: var(--k-db-s); }
+.sc-it.g4 .sc-mk.range { stroke: var(--k-pol-s); } .sc-it.g5 .sc-mk.range { stroke: var(--k-ext-s); } .sc-it.g6 .sc-mk.range { stroke: var(--k-ims-s); }
+.sc-it.selA .sc-mk { stroke: var(--text); stroke-width: 3; } .sc-it.selB .sc-mk { stroke: var(--accent); stroke-width: 3; stroke-dasharray: 3 2; }
+.sc-it.selA .sc-hit, .sc-it.selB .sc-hit { fill: var(--accent-soft); }
+.sc-l1 { font-size: 13px; font-weight: 700; fill: var(--text); } .sc-l2 { font-size: 12px; fill: var(--muted); }
+.sc-tag { fill: var(--accent-fill); } .sc-tag-t { font-size: 10.5px; font-weight: 700; fill: var(--accent-ink); }
+.sc-probe-ln { stroke: var(--accent); stroke-width: 2; stroke-dasharray: 6 4; } .sc-probe-tx { font-size: 11.5px; fill: var(--accent); font-weight: 700; }
+.sc-out, .sc-keys { margin: .3rem .5rem 0; font-size: .78rem; color: var(--muted); line-height: 1.6; }
+.sc-sel { display: grid; gap: .3rem; }
+.sc-sel label { font-size: .8rem; color: var(--muted); font-weight: 700; margin-top: .2rem; }
+.sc-sel select, .sc-probe input[type=range] { width: 100%; min-height: 42px; border-radius: 8px; border: 1px solid var(--line2); background: var(--surface); color: var(--text); font: inherit; font-size: .9rem; padding: 0 .5rem; }
+.sc-probe input[type=range] { padding: 0; accent-color: var(--accent-fill); border: 0; background: transparent; }
+.sc-sel .btn { justify-self: start; margin-top: .3rem; }
+.sc-result { border: 1px solid var(--accent); border-radius: 10px; background: var(--accent-soft); padding: .6rem .8rem; }
+.sc-sent { margin: 0 0 .3rem; font-size: 1.05rem; font-weight: 700; line-height: 1.7; font-family: var(--ttj-font-sans); }
+.sc-calc, .sc-caution { margin: .2rem 0 0; font-size: .82rem; color: var(--muted); line-height: 1.7; }
+.sc-probe label { display: block; font-size: .8rem; color: var(--muted); font-weight: 700; }
+.sc-probe-out { font-size: .86rem; line-height: 1.7; margin-top: .2rem; }
+.sc-detail { display: grid; gap: .6rem; }
+.sc-card { border: 1px solid var(--line); border-radius: 10px; padding: .55rem .8rem; background: var(--surface); font-size: .9rem; line-height: 1.7; }
+.sc-card .kick { margin: 0; color: var(--accent); font-size: .74rem; font-weight: 700; letter-spacing: .04em; }
+.sc-card h5 { margin: .1rem 0 .1rem; font-size: 1rem; font-family: var(--ttj-font-sans); }
+.sc-card p { margin: .2rem 0; }
+.sc-val { font-weight: 700; font-family: var(--ttj-font-mono); font-size: .92rem; }
+.sc-cond, .sc-srcs { color: var(--muted); font-size: .82rem; }
+.sc-sources { border-top: 1px solid var(--line); padding: .5rem 1rem .6rem; font-size: .8rem; color: var(--muted); line-height: 1.7; }
+.sc-sources h5 { margin: 0 0 .2rem; font-size: .84rem; color: var(--text); font-family: var(--ttj-font-sans); }
+.sc-sources ol { margin: 0; padding-left: 1.8rem; } .sc-sources li { margin: .1rem 0; }
+.lab-disc { margin: 0; padding: .35rem 1rem .5rem; font-size: .76rem; color: var(--faint); border-top: 1px solid var(--line); }
+
+/* ----- lab ----- */
+.lab-body { padding: .7rem .9rem .9rem; }
+.lab-intro { margin: 0 0 .6rem; font-size: .93rem; }
+.lab-top { display: grid; grid-template-columns: minmax(240px, 340px) 1fr; gap: 1rem; align-items: start; }
+@media (max-width: 760px) { .lab-top { grid-template-columns: 1fr; } }
+.lab-inputs { display: grid; gap: .8rem; min-width: 0; }
+.lab-in { border: 1px solid var(--line); border-radius: 10px; padding: .5rem .7rem .6rem; background: var(--surface); }
+.lab-in-h { display: flex; justify-content: space-between; align-items: baseline; gap: .6rem; flex-wrap: wrap; }
+.lab-in-h label { font-size: .86rem; font-weight: 700; color: var(--text); }
+.lab-val { font-family: var(--ttj-font-mono); font-weight: 700; color: var(--accent); font-size: 1.02rem; }
+.lab-in input[type=range] { width: 100%; min-height: 36px; margin: .2rem 0 0; accent-color: var(--accent-fill); background: transparent; }
+.lab-in input[type=range]:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
+.lab-minmax { display: flex; justify-content: space-between; font-size: .72rem; color: var(--faint); font-family: var(--ttj-font-mono); }
+.lab-presets { display: flex; flex-wrap: wrap; gap: .3rem; margin-top: .3rem; }
+.lab-say { margin: .3rem 0 0; font-size: .82rem; color: var(--muted); line-height: 1.65; min-height: 1.3em; }
+.lab-right { min-width: 0; display: grid; gap: .7rem; }
+.lab-fig { min-width: 0; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); padding: .3rem; }
+.lab-svg { display: block; max-width: 100%; height: auto; }
+.lab-cap { margin: .2rem .5rem .3rem; font-size: .78rem; color: var(--muted); }
+.lab-results { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .5rem; }
+.lab-res { border: 1px solid var(--line2); border-radius: 10px; padding: .45rem .7rem; background: var(--surface2); }
+.lab-res.big { border-color: var(--accent); background: var(--accent-soft); }
+.lab-res-l { font-size: .76rem; color: var(--muted); font-weight: 700; }
+.lab-res-v { font-size: .95rem; color: var(--text); } .lab-res-v b { font-size: 1.45rem; font-family: var(--ttj-font-mono); }
+.lab-res-n { font-size: .74rem; color: var(--faint); }
+.lab-formula { margin: .7rem 0 .2rem; padding: .4rem .8rem; border-left: 4px solid var(--accent-fill); background: var(--surface2); font-size: .93rem; border-radius: 0 8px 8px 0; }
+.lab-read { margin-top: .5rem; } .lab-read h5, .lab-consts h5 { margin: 0 0 .15rem; font-size: .9rem; font-family: var(--ttj-font-sans); color: var(--accent); }
+.lab-read ul, .lab-consts ul { margin: 0 0 .3rem; padding-left: 1.3rem; font-size: .9rem; line-height: 1.75; }
+.lab-consts { margin-top: .4rem; font-size: .86rem; color: var(--muted); }
+.lab-plot { fill: var(--surface); stroke: var(--line2); stroke-width: 1; }
+.lab-g { stroke: var(--line); stroke-width: 1; } .lab-g.zero { stroke: var(--line2); stroke-width: 1.5; } .lab-g.v { stroke-dasharray: 2 4; }
+.lab-ax { font-size: 11px; fill: var(--muted); font-family: var(--ttj-font-mono); } .lab-lg { font-size: 12px; fill: var(--text); } .lab-note { font-size: 10.5px; fill: var(--faint); }
+.lab-wave { fill: none; stroke-width: 2.4; stroke-linejoin: round; }
+.lab-wave.c-ran { stroke: var(--k-ran-s); } .lab-wave.c-core { stroke: var(--k-core-s); } .lab-wave.c-pol { stroke: var(--k-pol-s); } .lab-wave.c-ims { stroke: var(--k-ims-s); }
+.lab-wave.sum { stroke: var(--text); stroke-width: 3.4; stroke-dasharray: 1 0; opacity: .9; }
+.lab-rms { stroke: var(--accent); stroke-width: 1.6; stroke-dasharray: 6 4; } .lab-rms-t { font-size: 11.5px; fill: var(--accent); font-weight: 700; }
+.lab-mark { stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: 5 4; } .lab-mark-t { font-size: 11.5px; fill: var(--accent); font-weight: 700; }
+.lab-dot { stroke: var(--bg); stroke-width: 2; fill: var(--k-ran-s); } .lab-dot.c-ran { fill: var(--k-ran-s); } .lab-dot.c-core { fill: var(--k-core-s); } .lab-dot.c-pol { fill: var(--k-pol-s); } .lab-dot.c-ims { fill: var(--k-ims-s); }
+.lab-track { fill: var(--surface); stroke: var(--line); }
+.lab-bar { fill: var(--k-ran-s); } .lab-bar.c-ran { fill: var(--k-ran-s); } .lab-bar.c-core { fill: var(--k-core-s); } .lab-bar.c-pol { fill: var(--k-pol-s); } .lab-bar.c-ims { fill: var(--k-ims-s); }
+.lab-bl { font-size: 12.5px; fill: var(--text); font-weight: 700; } .lab-bv { font-size: 12.5px; fill: var(--muted); font-family: var(--ttj-font-mono); }
+.lab-wire { fill: none; stroke: var(--line2); stroke-linejoin: round; stroke-linecap: round; }
+.lab-flow { fill: none; stroke: var(--accent); stroke-width: 6; stroke-linecap: round; stroke-dasharray: 0.1 18; animation: lab-flow 3s linear infinite; }
+.lab-flow.off { display: none; }
+@keyframes lab-flow { to { stroke-dashoffset: -18.1; } }
+@media (prefers-reduced-motion: reduce) { .lab-flow { animation: none !important; display: none; } }
+.lab-bat { stroke: var(--text); stroke-width: 3; } .lab-bat.s { stroke-width: 5; }
+.lab-res-sym { fill: none; stroke: var(--text); stroke-width: 2.4; stroke-linejoin: round; } .lab-gap { fill: var(--bg); stroke: none; }
+.lab-el { font-size: 12.5px; fill: var(--text); font-weight: 700; } .lab-cur { font-size: 13px; fill: var(--accent); font-weight: 700; }
+.lab-arrow { fill: var(--accent); stroke: none; }
+.lab-table summary, .sc-table summary { cursor: pointer; }
+/* ----- lab の追加（複数の入力をまとめて決めるプリセット・分類表・帯・正負の棒）。使わない実験には影響しない ----- */
+.lab-preset-bar { margin: 0 0 .7rem; padding: .5rem .7rem .55rem; border: 1px solid var(--line); border-radius: 10px; background: var(--surface2); }
+.lab-preset-h { font-size: .8rem; font-weight: 700; color: var(--muted); margin-bottom: .35rem; }
+.lab-preset-bar .lab-presets { margin-top: 0; }
+.lab-presets .btn[aria-pressed="true"] { background: var(--accent-fill); border-color: var(--accent-fill); color: var(--accent-ink); font-weight: 700; }
+.lab-preset-note { margin: .4rem 0 0; min-height: 1.4em; color: var(--text); }
+.lab-wave.faint { opacity: .5; stroke-width: 2; }
+.lab-fill { stroke: none; fill: var(--k-core-s); opacity: .22; }
+.lab-fill.c-ran { fill: var(--k-ran-s); } .lab-fill.c-core { fill: var(--k-core-s); } .lab-fill.c-pol { fill: var(--k-pol-s); } .lab-fill.c-ims { fill: var(--k-ims-s); }
+.lab-span { fill: var(--warn); opacity: .18; stroke: none; } .lab-span-t { font-size: 11.5px; fill: var(--warn); font-weight: 700; }
+.lab-res.word .lab-res-v b { font-size: 1.15rem; font-family: var(--ttj-font-sans); }
+.lab-fig-t { margin: .4rem .5rem .1rem; font-size: .84rem; color: var(--muted); font-family: var(--ttj-font-sans); }
+.lab-quad { border: 1px solid var(--line); border-radius: 10px; background: var(--surface); padding: .45rem .6rem .5rem; }
+.lab-quad h5 { margin: 0 0 .3rem; font-size: .86rem; font-family: var(--ttj-font-sans); color: var(--accent); }
+.lab-quad-t { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: .8rem; }
+.lab-quad-t th { font-weight: 700; color: var(--muted); font-size: .74rem; padding: .25rem .3rem; text-align: center; }
+.lab-quad-t tbody th { text-align: left; width: 5.2em; }
+.lab-quad-c { border: 1px solid var(--line2); padding: .35rem .4rem; vertical-align: top; text-align: center; line-height: 1.5; }
+.lab-quad-c b { display: block; font-size: .86rem; }
+.lab-quad-c span { display: block; color: var(--muted); font-size: .72rem; }
+.lab-quad-c.on { background: var(--accent-soft); box-shadow: inset 0 0 0 2px var(--accent-fill); }
+.lab-quad-c.on b::before { content: '● '; color: var(--accent); }
+@media print {
+  .sc-ctl, .sc-sel .btn, .sc-probe, .lab-presets, .sc-keys { display: none !important; }
+  .sc-grid, .lab-top { grid-template-columns: 1fr 1fr; }
+  .lab-flow { display: none; }
+  .sc-table, .lab-table { display: block; } .sc-table > *, .lab-table > * { display: block; }
+}
+
 /* ==== 90-print.css ==== */
 /* ===== 印刷：表示中の章だけを白地で ===== */
 @media print {
@@ -617,6 +756,9 @@ body { line-height: 2.0; }
 <div id="results" class="results" role="listbox" aria-label="検索結果" hidden></div>
 <nav id="side" class="side" aria-label="章ナビ">
 <a class="nav-home" href="#home">入口（はじめに）</a>
+<h2>序章 小ささと数の多さをつかむ</h2><ol>
+<li><a href="#chI1" data-ch="I1"><span class="n">序1</span><span class="t">髪の毛からトランジスタまで：小ささと数の多さをつかむ</span><span class="tr">基礎</span></a></li>
+</ol>
 <h2>第1部 半導体の基礎</h2><ol>
 <li><a href="#ch01" data-ch="01"><span class="n">01</span><span class="t">半導体とは何か：電気を「制御できる」材料</span><span class="tr">基礎</span></a></li>
 <li><a href="#ch02" data-ch="02"><span class="n">02</span><span class="t">トランジスタ：電気で電気を切り替える</span><span class="tr">基礎</span></a></li>
@@ -672,20 +814,23 @@ body { line-height: 2.0; }
     <h1 id="home-title" class="ch-title">半導体講義</h1>
     <p class="sub">基礎・製造装置・装置輸送</p>
     <p class="lead">半導体が「何でできていて、どう作られ、どの装置で作られ、その装置がどう運ばれて工場で動き出すか」を、一続きで説明できるようになる講座です。素子の物性から、前工程・後工程、製造装置と工場、装置の梱包・輸送・通関・据付・立上げまでを扱います。装置メーカー、商社、物流の実務者と同じ言葉で話せることが目標です。</p>
-    <p class="pub-status"><b>公開状況</b>全32章を公開中です。</p>
+    <p class="pub-status"><b>公開状況</b>序章と全32章を公開中です。</p>
     <div class="hero-prog">
       <svg id="hero-ring" class="ring" viewBox="0 0 76 76" role="img" aria-label="読了率"><circle class="bg" cx="38" cy="38" r="32"></circle><circle class="fg" cx="38" cy="38" r="32" transform="rotate(-90 38 38)" stroke-dasharray="201" stroke-dashoffset="201"></circle><text x="38" y="38">0%</text></svg>
       <div class="stat"><div id="hero-stat">読了 0 章</div><ul id="hero-scores" class="score-list"></ul></div>
       <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-left:auto">
-        <a class="btn pri" href="#ch01">第01章から始める</a>
+        <a class="btn pri" href="#chI1">第01章から始める</a>
         <a class="btn" id="resume" href="#home" hidden>続きから読む</a>
         <button class="btn sm" id="reset-progress" type="button">記録をリセット</button>
       </div>
     </div>
   </div>
 
-  <h2 class="home-h">この資料の構成（5部＋付録）</h2>
+  <h2 class="home-h">この資料の構成（序章＋5部＋付録）</h2>
   <div class="part-grid">
+    <div class="part-card"><h3><small>序章</small>序章</h3><ol>
+      <li><span class="n">序1</span><a href="#chI1" data-ch="I1">髪の毛からトランジスタまで：小ささと数の多さをつかむ</a></li>
+    </ol></div>
     <div class="part-card"><h3><small>第1部</small>半導体の基礎</h3><ol>
       <li><span class="n">01</span><a href="#ch01" data-ch="01">半導体とは何か：電気を「制御できる」材料</a></li>
       <li><span class="n">02</span><a href="#ch02" data-ch="02">トランジスタ：電気で電気を切り替える</a></li>
@@ -734,6 +879,7 @@ body { line-height: 2.0; }
 
   <h2 class="home-h">学習の進め方</h2>
   <ol class="how">
+    <li><b>序章1「髪の毛からトランジスタまで：小ささと数の多さをつかむ」（ルートには含めず、単独で読める入口）。</b>髪の毛・細胞・ウイルス・ウェーハ・ゲートの間隔・原子を、長さの階段、ズームする断面図、面積が比例する円、「束ねる」装置（ウェーハ 1 枚から取れるチップの数、トランジスタの総数）で比べます。クリーンルームの清浄度と、位置合わせの精度も扱います。約 40 分。どの章の前後でも読め、小ささと数の多さの感覚をつかみたいときに戻れます。</li>
     <li><b>ルート A「最短」（営業・企画・コンサルタント向け）。</b>全体像を一周し、商談で話が通じることを目指します。<a href="#ch03">第03章</a> → <a href="#ch04">04</a> → <a href="#ch06">06</a> → <a href="#ch08">08</a> → <a href="#ch14">14</a> → <a href="#ch16">16</a> → <a href="#ch18">18</a> → <a href="#ch19">19</a> → <a href="#ch21">21</a> → <a href="#ch23">23</a> → <a href="#ch26">26</a> → <a href="#ch31">31</a>。12 章、約 7 時間。</li>
     <li><b>ルート B「標準」（技術営業・調達・新任の担当者向け）。</b>工程と装置と輸送を、一人で説明できることを目指します。<a href="#ch01">第01章</a> → <a href="#ch02">02</a> → <a href="#ch03">03</a> → <a href="#ch04">04</a> → <a href="#ch05">05</a> → <a href="#ch06">06</a> → <a href="#ch07">07</a> → <a href="#ch08">08</a> → <a href="#ch10">10</a> → <a href="#ch12">12</a> → <a href="#ch13">13</a> → <a href="#ch14">14</a> → <a href="#ch15">15</a> → <a href="#ch16">16</a> → <a href="#ch18">18</a> → <a href="#ch19">19</a> → <a href="#ch20">20</a> → <a href="#ch21">21</a> → <a href="#ch22">22</a> → <a href="#ch23">23</a> → <a href="#ch24">24</a> → <a href="#ch26">26</a> → <a href="#ch27">27</a> → <a href="#ch30">30</a> → <a href="#ch31">31</a>。25 章、約 15 時間。</li>
     <li><b>ルート C「輸送実務を深める」（物流・商社・設置担当向け）。</b>装置を運び、据え、受け入れる実務を深めます。<a href="#ch05">第05章</a> → <a href="#ch06">06</a> → <a href="#ch14">14</a> → <a href="#ch16">16</a> → <a href="#ch17">17</a> → <a href="#ch18">18</a> → <a href="#ch21">21</a> → <a href="#ch22">22</a> → <a href="#ch23">23</a> → <a href="#ch24">24</a> → <a href="#ch25">25</a> → <a href="#ch26">26</a> → <a href="#ch27">27</a> → <a href="#ch28">28</a> → <a href="#ch31">31</a> → <a href="#ch32">32</a>。第2部は 06 と 14 だけに絞り、装置の構造と工場を必須にします。16 章、約 10 時間。</li>
@@ -748,6 +894,160 @@ body { line-height: 2.0; }
   </ul>
   <p style="color:var(--muted);font-size:.88rem;margin-top:1rem">使う情報は公開情報だけです。数字や制度には出典と時点を付け、各章の「参照資料」に一覧にしています。市場、規制、企業の状況は変わるため、実務に使う前に最新の一次資料を確認してください。輸出管理・関税・保険・投資については、制度や指標の仕組みを説明するもので、個別の判断や助言ではありません。演習に出る会社名は架空です。</p>
 </section>
+
+<article id="chI1" class="view chapter" data-ch="I1" aria-labelledby="chI1-title">
+<header class="ch-head"><p class="ch-kicker">序章 小ささと数の多さをつかむ ・ 序章1</p><h2 class="ch-title" id="chI1-title">髪の毛からトランジスタまで：小ささと数の多さをつかむ</h2><p class="ch-meta"><span class="chip tk0">基礎</span><span class="chip">所要 約40分</span></p></header>
+<section class="learn">
+  <h3 id="chI1-s1">この章で分かること</h3>
+  <ol>
+    <li><b>m・mm・μm・nm・Å の 1,000 倍ずつの階段</b>に、髪の毛・細胞・ウイルス・ウェーハ・ゲートの間隔・原子の間隔を並べ、<b>「◯ nm 世代」の数字が実際の寸法ではない</b>ことを、公表された寸法の表で言える。</li>
+    <li>倍率を 10 倍ずつ上げたとき、画面の幅が実物の何 mm・μm・nm に当たるかを計算し、<b>髪の毛 1 本の断面に入るトランジスタの数</b>を、面積と密度から求められる。</li>
+    <li>ウェーハ 1 枚から取れるチップの数、良品の数、<b>トランジスタの総数</b>を式で求め、世界人口 1 人あたりや 1 秒あたりに直して、数の多さを実感できる。</li>
+    <li>クリーンルームの ISO クラスと、重ね合わせの精度を、身近な量（1 リットルの空気の中の粒子、東京から数百 km の距離）に直して感じ取れる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：なし。掛け算・割り算と、10 の何乗かの数え方が分かれば足ります。本編の第04章（ゲートピッチとメタルピッチ）、第05章（ウェーハ）を読んでいなくても読めます。</p>
+</section>
+
+<div class="callout note"><span class="ttl">この章の読み方</span>
+  <p>この章は、半導体の<b>小ささ</b>と<b>数の多さ</b>を、図と、動かせる部品でつかむ章です。本編の章を読む前に、「どれくらい小さいのか」「どれくらい多いのか」の感覚を持つのが目的です。</p>
+  <p>数字は 4 種類に分けて書きます。<b>公表値</b>（出典・時点・条件つき）、<b>講座の既存の章で確かめた値</b>（章を示す）、そこから計算した<b>目安</b>、そして<b>模型の値</b>（仮定。歩留まり、欠陥の密度、月産の枚数、1 ロットの枚数など）です。仮定は、必ず「仮定」と書きます。</p>
+  <p><b>「◯ nm 世代」の数字は、実際の寸法ではありません。</b>世代の呼び名は企業やロードマップが決めた名前です（第04章）。この章では、名前と、発表された<b>実際の寸法（ピッチ）</b>を並べて示します。</p></div>
+
+<h3 id="chI1-s2">長さの階段：m から Å まで、1,000 倍ずつ降りる</h3>
+<p>長さの単位は、<b>1,000 倍ごと</b>に名前が変わります。1 m の 1,000 分の 1 が 1 mm（ミリメートル）、その 1,000 分の 1 が 1 μm（マイクロメートル）、その 1,000 分の 1 が 1 nm（ナノメートル）です。Å（オングストローム）は、nm の 10 分の 1 で、原子の間隔を表すときによく使われます（1 Å ＝ 0.1 nm ＝ 10⁻¹⁰ m）。</p>
+<p>下の図は、身近なものと半導体のものを、大きい順に並べたものです。<b>1 段（1,000 倍）下がるごとに、行を右にずらして</b>あります。行を押すと、値の条件と出典が出ます。</p>
+<div data-widget="layers" data-src="cI1-stair"></div>
+<p>確かめる点は 3 つです。1 つ目は、ウェーハの直径（300 mm）と髪の毛の太さ（約 70 μm）の間に、<b>約 4,300 倍</b>の差があることです（300 mm ÷ 70 μm）。2 つ目は、髪の毛（約 70 μm）と、ゲートの間隔（54 nm）の間に、<b>約 1,300 倍</b>の差があることです（70,000 nm ÷ 54 nm）。3 つ目は、1971 年のチップの線幅（10 μm）が、Intel「10 nm」（2017 年）の配線の間隔（36 nm）の<b>約 280 倍</b>であることです（10,000 nm ÷ 36 nm。線幅と間隔〔ピッチ〕は別の量なので、桁の目安として比べています）。身近なものの大きさは、測り方で幅があるので、範囲や条件を行の説明に書いています。</p>
+
+<h4>入れた長さを、全部の単位で同時に見る</h4>
+<p>長さを「数 × 10 の何乗 m」で入れると、m・mm・μm・nm・Å の全部で同時に表示します。上の図の値は、下のボタンで入ります。</p>
+<div data-widget="lab" data-src="cI1-conv"></div>
+<p>確かめる点は 2 つです。1 つ目は、指数を 3 つ下げると、単位が 1 つ下がり、数字が 1,000 倍になることです。2 つ目は、図（対数の棒）で、ウェーハの直径とシリコンの格子の間に、<b>約 5.5 億倍（8 桁あまり）</b>の差があることです（3 億 nm ÷ 0.5431 nm）。</p>
+
+<h4>名前と実寸：「10 nm」の中に、10 nm はどこにもない</h4>
+<p>半導体の世代は、「3 nm 世代」「N2」「18A」のように、名前で呼ばれます。この数字は、<b>世代の呼び名</b>です。トランジスタや配線の実際の寸法は、<b>ゲートの間隔</b>（コンタクテッド・ゲート・ピッチ、CPP）、<b>配線の間隔</b>（メタルピッチ）、<b>フィンの間隔</b>などで表します（第04章）。次の表は、発表された実際の寸法を、名前の隣に並べたものです。</p>
+<div data-widget="table" data-src="cI1-nodes"></div>
+<p>確かめる点は 2 つです。1 つ目は、Intel が 2017 年に「10 nm」の世代として示した値が、ゲートの間隔 54 nm、配線の間隔 36 nm、フィンの間隔 34 nm で、<b>10 nm という寸法がどこにもない</b>ことです（Intel、2017 年）。2 つ目は、IRDS のロードマップ（2021 年版）で、ラベルが 7 から 5 に変わっても、配線の間隔が同じ 36 nm であることです。名前の数字で、企業どうしの世代を比べることはできません。</p>
+
+<h3 id="chI1-s3">ズームする：ウェーハから、原子まで</h3>
+<p>倍率を 10 倍ずつ上げて、ウェーハの上を「ズーム」していくと、何が見えるでしょうか。ここでは、<b>倍率 1 倍のとき、画面の幅がウェーハの直径（300 mm）と同じ</b>と取り決めます。倍率が 10 倍になると、画面の幅は 30 mm、100 倍で 3 mm、…と、10 分の 1 ずつ狭くなります。</p>
+<p>下の絵は、各段階の<b>模式図</b>です。形・数・配置は実物ではありません（ゲートの間隔とゲート絶縁膜の厚さの 2 か所だけ、説明に書いた縮尺で描いています）。矢印キーやスライダーで、1 倍から 1 億倍まで、9 段を進めてください。</p>
+<div data-widget="xsec" data-src="cI1-zoomfig"></div>
+<p>1,000 万倍でも、見えるのは 1 個のトランジスタの断面までです。原子の並びがはっきり見える画面の幅（3 nm）には、<b>1 億倍</b>が要ります。そこで、段を 1 つ足して 9 段にしています。</p>
+<p>次の部品は、倍率のつまみを動かすと、画面の幅が実物の何 mm・μm・nm になるかと、その幅にゲートの間隔や配線の間隔、シリコンの格子が何個並ぶかを計算します。</p>
+<div data-widget="lab" data-src="cI1-zoom"></div>
+<p>確かめる点は 3 つです。1 つ目は、倍率を 10 倍上げるごとに、画面の幅が 10 分の 1 になることです。2 つ目は、1 万倍（30 μm）で赤血球が約 4 個、10 万倍（3 μm）で配線が約 83 本、100 万倍（300 nm）でゲートが約 5.6 個並ぶことです。3 つ目は、1 億倍（3 nm）で、シリコンの格子が約 5.5 個並ぶことです。</p>
+
+<h4>髪の毛 1 本の断面に、トランジスタは何個並ぶか</h4>
+<p>髪の毛の断面を円とみなして、その面積に、トランジスタの密度（1 mm² あたりの個数）をかけてみます。直径 70 μm の髪の毛の断面は、面積が約 0.0038 mm² です。密度が 100.8 MTr/mm²（Intel が 2017 年に論理回路で示した値。1 MTr ＝ 100 万個）なら、<b>約 39 万個</b>です。</p>
+<div data-widget="lab" data-src="cI1-hair"></div>
+<p>確かめる点は 3 つです。1 つ目は、個数が直径の<b>2 乗</b>で増えることです（髪の太さが 2 倍なら、個数は 4 倍）。2 つ目は、細い髪（17 μm）でも約 2.3 万個、太い髪（181 μm）で約 260 万個と、<b>数万〜数百万個</b>の範囲になることです。3 つ目は、密度の値でも変わることです。H100 のチップ全体の平均（約 98 MTr/mm²）と、Cerebras の WSE-3 の平均（約 87 MTr/mm²）は、公表された個数と面積からの<b>割り算</b>です。論理回路だけの密度より低くなるのは、メモリや配線の部分を含むからです。</p>
+
+<h3 id="chI1-s4">円（面積）で比べる：となりの段との、面積の比</h3>
+<p>長さを比べると、差が大きく見えにくくなります。<b>面積</b>で比べると、直径の差が 2 乗で効きます。次の絵は、となり合う段の 2 つを、<b>面積に比例する円</b>で描いたものです（大きい方の半径を 100 としたとき、小さい方の半径を「100 × 面積の比の平方根」で決めています）。赤血球・大腸菌・ウイルスは、直径の目安から円に直した断面です。</p>
+<div data-widget="xsec" data-src="cI1-circles"></div>
+<p>最後の段が目玉です。密度 100.8 MTr/mm² のとき、<b>トランジスタ 1 個が占める平均の面積</b>（1 mm² を 1 億個で割った約 9,921 nm²）は、直径 100 nm のウイルスの断面（約 7,854 nm²）の約 1.26 倍です。ウイルス 1 個の断面に、トランジスタ 1 個ぶんの面積が、ほぼ重なります。</p>
+<div data-widget="lab" data-src="cI1-area"></div>
+<p>確かめる点は 3 つです。1 つ目は、髪の毛の断面が赤血球の約 83 倍、赤血球が大腸菌の断面の約 247 倍の面積であることです。2 つ目は、棒グラフが対数で、1 目盛り（10 倍）ごとの差が小さく見えても、実際は<b>5〜6 桁</b>の差があることです（髪の毛の断面 約 3,850 μm² と、トランジスタ 1 個 約 0.0099 μm²。約 39 万倍）。3 つ目は、ウイルスの直径を 60〜140 nm の間で動かすと、トランジスタ 1 個の面積との比が、およそ 0.64〜3.5 倍の間で動くことです。</p>
+<p>なお、「トランジスタ 1 個の面積」は、チップの面積を個数で割った<b>平均</b>で、トランジスタ 1 個の実際の形ではありません。配線やすきまを含みます。</p>
+
+<h3 id="chI1-s5">数の階段と「束ねる」：トランジスタ 1 個から、工場の 1 か月まで</h3>
+<p>トランジスタは、数個で論理ゲート（たとえば NAND は CMOS で 4 個）になり、ゲートが集まって回路のブロックになり、ブロックが集まって<b>チップ</b>になります（第03章）。チップは、ウェーハの上に格子のように並べてつくり、ウェーハが複数枚（この章では 25 枚と仮定）で 1 ロットになり、ロットが工場を流れます（第06章）。それぞれの段で、数は何桁増えるのでしょうか。</p>
+<p>まず、公表された、チップ 1 個のトランジスタの数の例です。</p>
+<div data-widget="table" data-src="cI1-chips"></div>
+<p>1971 年の 2,300 個から、2022 年の 800 億個まで、約 <b>3,480 万倍</b>です（800 億 ÷ 2,300）。製品の優劣を示す表ではありません。公表値から平均の密度を割り算すると、H100 は約 98.3 MTr/mm²、WSE-3 は約 86.5 MTr/mm² です。</p>
+<p>次の部品は、<b>束ねる装置</b>です。チップの大きさ（1 辺）、ウェーハの直径、歩留まり、密度、工場の月産を動かすと、ウェーハ 1 枚から取れるチップの数、良品の数、トランジスタの総数、世界人口 1 人あたり、1 秒あたりが出ます。<b>歩留まりと月産は仮定</b>です。</p>
+<div data-widget="lab" data-src="cI1-bundle"></div>
+<p>確かめる点は 5 つです。</p>
+<ol>
+  <li>H100 級のボタンで、ウェーハ 1 枚（300 mm）から<b>約 63 個</b>のチップが取れ、歩留まり 70%（仮定）なら良品は約 44 個、トランジスタの総数は<b>約 3.5 兆個</b>（世界人口 82 億人で割ると<b>約 430 個/人</b>）になること。</li>
+  <li>1 辺を 12 mm にすると、取れる数が約 435 個に増えること。チップを小さくすると、1 枚から取れる数は、面積の逆数より少し多く増えます（縁で使えない分が減るため）。</li>
+  <li>ウェーハの直径を 200 mm に下げると、取れる数が大きく減ること（面積は直径の 2 乗）。</li>
+  <li>月産 5.5 万枚（仮定。例は、経済産業省が公表した JASM の熊本の工場の認定計画の生産能力〔12 インチ換算、計画の値、2022 年 6 月認定〕で、実績ではありません）の工場が、<b>全部を H100 級にした</b>と仮定すると、1 秒あたり約 750 億個、世界人口 1 人あたりで約 9 個/秒になること。実際の工場は、いろいろな製品をつくるので、この計算はそのままの実績ではありません。</li>
+  <li>図（棒）の長さは、個数を 10 の何乗かで表したものです。棒が 1 つ長くなるごとに、個数は 10 倍になります。</li>
+</ol>
+<p>次の実験は、歩留まりを、教科書にある簡単なモデル（欠陥がランダムに入るとして、<b>歩留まり ＝ exp(−欠陥の密度 × 面積)</b>）で出します。欠陥の密度は仮定です。チップを大きくすると、取れる数が減るうえに、歩留まりも下がるので、良品の数は急に減ります。</p>
+<div class="callout warn"><span class="ttl">この装置の限界：数の多さの感覚をつかむための模型です</span>
+  <p>ウェーハ 1 枚から取れるチップの数の式は、<b>近似</b>です。切りしろ（スクライブ線）や、縁の除外領域、チップの縦横比、ウェーハの位置合わせの余白は考えていません。実際の取れる数は、これより少なくなります。</p>
+  <p>歩留まり（70% など）、月産の枚数、1 ロットの枚数（25 枚）、1 か月の日数（30 日）は<b>仮定</b>です。実際の歩留まりは、多くが公表されず、製品や時期で大きく違います。欠陥の密度の値（0.02〜1 個/cm²）も、仮定です。歩留まりのモデルには、欠陥が固まって入ることを考えた別の式もあり、式の選び方でも値が変わります。</p>
+  <p>大きなチップでは、歩留まりを上げるために、予備の回路を持たせたり、チップを小さく分けたり（チップレット、第15章）する工夫があります。このモデルは、そうした工夫を含みません。</p></div>
+
+<h3 id="chI1-s6">清浄さと精度：きれいな空気と、ずれの小ささ</h3>
+<h4>クリーンルーム：1 リットルの空気に、粒子は何個まで許されるか</h4>
+<p>クリーンルームの清浄度は、空気 1 m³ に含まれる粒子の数で表します（ISO 14644-1、第18章）。番号が小さいほど、許される粒子の数が少ない（きれい）です。0.5 μm 以上の粒子の上限は、ISO 3 で 35 個/m³、ISO 5 で 3,520 個/m³、ISO 7 で 352,000 個/m³、ISO 9 で 35,200,000 個/m³ です（第18章の表）。次の部品は、この上限を、1 リットルあたりと、粒子が 1 個入る空気の体積に直します。</p>
+<div data-widget="lab" data-src="cI1-clean"></div>
+<p>確かめる点は 3 つです。1 つ目は、番号が 1 つ変わると、上限が約 10 倍変わることです（ISO 5 と ISO 7 の比は 100 倍）。2 つ目は、ISO 5 の上限（3,520 個/m³）が、1 リットルあたり約 3.5 個で、粒子が 1 個入る空気の体積が約 0.28 L（284 mL、コップ 1 杯ぶん）であることです。3 つ目は、表で最も緩い ISO 9 の上限が、ISO 5 の<b>1 万倍</b>であることです。</p>
+<p>手術室の値は、フィンランドの手術室を運転中に調べた報告（VTT Technology 168、2014 年）で、ISO 7〜9 でした。これは、その調査の結果で、国や病院で違い、規格が手術室のクラスを定めているわけではありません。半導体工場の「ISO 3〜5」も、「よく指定される」と述べる記事（ASHRAE Journal、2021 年。第18章）の書き方で、規格が決めた値ではありません。</p>
+<div class="callout warn"><span class="ttl">この表が測っているのは、0.1 μm 以上の粒子です</span>
+  <p>ISO 14644-1 の分類は、0.1〜5 μm の粒子が対象です。一方、IRDS は、論理素子で致命的になる粒子の大きさを、回路の寸法のおよそ半分とし、もっとも厳しい場合は 3.0 nm と書いて、この大きさの粒子は現在の計測では検出できないと述べています（第13章、IRDS 2024 年版）。つまり、<b>清浄度クラスの数字は、致命的な粒子の数をそのまま表すものではありません</b>。装置の中の洗浄や、発生させない工夫と、あわせて考えます。</p></div>
+
+<h4>位置合わせの精度：ウェーハを数百 km に引き伸ばすと</h4>
+<p>回路は何十もの層を重ねてできていて、新しい層を下の層にぴったり重ねる精度を<b>重ね合わせ</b>（オーバーレイ）と呼びます（第08章）。ASML の 2023 年の発表資料（EUVL Conference 2023）は、NXE:3600D の matched machine overlay（2 台の装置で露光した層どうしのずれ）の仕様を 1.1 nm、NXE:3800E の受入試験の目標を 0.9 nm 以下としています。同じ資料は、製品のウェーハの上で測る重ね合わせ（on-product overlay）を、NXE:3600D で 1.7 nm と示していて、条件によって値が違います。ASML の 2021 年の解説は、最先端のシステムで 2 nm より良いと述べています（第08章）。</p>
+<p>1 nm は、どれくらいの精度でしょうか。ウェーハの直径 300 mm を、ある距離に引き伸ばすと、ずれは何 mm に当たるかを、次の部品で計算します。たとえば、直径 300 mm を 300 km に引き伸ばすと、拡大の倍率は 100 万倍で、1.1 nm は<b>1.1 mm</b>です。</p>
+<div data-widget="lab" data-src="cI1-overlay"></div>
+<p>確かめる点は 3 つです。1 つ目は、距離 300 km のとき、ずれ(nm) がそのまま mm の数字になることです。2 つ目は、同じ倍率で、配線の間隔（36 nm）が約 36 mm、シリコンの格子（0.5431 nm）が約 0.54 mm になることです。3 つ目は、1.1 nm のずれが、配線の間隔の約 3% に当たることです（1.1 ÷ 36）。</p>
+<p>重ね合わせの値は、装置の仕様や目標の値で、実際の製品のずれの実績ではありません。ずれが小さいほど、配線の間隔の中で、層どうしが重なる余裕が広がります。</p>
+
+<h3 id="chI1-s7">まとめと、本編への道しるべ</h3>
+<ul>
+  <li>長さは、<b>m → mm → μm → nm → Å</b> と、1,000 倍ずつ降ります。髪の毛（約 70 μm）、赤血球（約 7.7 μm）、ウイルス（約 100 nm）、ゲートの間隔（54 nm の例）、シリコンの格子（0.5431 nm）が、階段のどこにあるかを、言えるようにします。</li>
+  <li><b>「◯ nm 世代」の数字は、実際の寸法ではありません</b>。Intel の「10 nm」の世代は、ゲートの間隔 54 nm・配線の間隔 36 nm・フィンの間隔 34 nm（Intel、2017 年）。</li>
+  <li>倍率を 1 億倍まで上げて、ウェーハ → チップ → ブロック → 配線 → トランジスタ → 原子の順に見ました。<b>髪の毛 1 本の断面（直径 70 μm）には、約 39 万個</b>のトランジスタが並ぶ密度です（100.8 MTr/mm² のとき）。</li>
+  <li>面積で比べると、トランジスタ 1 個が占める平均の面積は、ウイルス 1 個の断面とほぼ同じ桁です。</li>
+  <li>H100 級のチップ（約 800 億個）は、ウェーハ 1 枚から約 63 個取れ、仮定の歩留まり 70% で、トランジスタが約 3.5 兆個、世界人口 1 人あたり約 430 個です。</li>
+  <li>清浄度クラスの 1 つ違いは、粒子の上限の約 10 倍。重ね合わせの 1.1 nm は、ウェーハを 300 km に引き伸ばすと 1.1 mm です。</li>
+</ul>
+<p>次に読む所です。世代の名前と実寸（ゲートピッチ・メタルピッチ）は<a href="#ch04">第04章</a>、ウェーハの直径と厚さは<a href="#ch05">第05章</a>、歩留まりとロットは<a href="#ch06">第06章</a>、EUV と重ね合わせは<a href="#ch08">第08章</a>、配線は<a href="#ch12">第12章</a>、粒子と歩留まりは<a href="#ch13">第13章</a>、クリーンルームの ISO クラスは<a href="#ch18">第18章</a>で扱います。</p>
+
+<div class="callout note"><span class="ttl">現場でのつながり</span>
+  <p>商談や仕様書で「◯ nm 向けの装置」と聞いたとき、名前の話か、実寸（ピッチ・線幅・重ね合わせの精度）の話かを確かめる習慣が、この章の土台です。装置の輸送・据付では、清浄度クラスと、振動・温度の許容が、仕様書に載ります（第18章、第24章）。</p></div>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>「◯ nm」の数字は寸法ではありません</b>。ゲートの間隔や配線の間隔など、実際の寸法は、数十 nm です。</p>
+  <p><b>「1 mm² に 1 億個」と「1 個あたり平均 100 nm 角の面積」は、同じ内容です</b>（トランジスタ 1 個の形の大きさではありません）。1 mm ＝ 1,000,000 nm で、1 mm² ＝ 10¹² nm²。1 億個で割ると、1 個あたり 10⁴ nm²（100 nm 角）です。単位をそろえずに計算すると、桁を間違えます。</p>
+  <p><b>密度は、チップ全体の平均と、論理回路の最高値で違います</b>。出典に、どちらかが書いてあるかを確かめます。</p>
+  <p><b>歩留まり・月産・1 ロットの枚数は、この章では仮定</b>です。実績の値として読まないでください。</p></div>
+
+<section class="quiz-sec"><h3 id="chI1-s8">確認問題</h3>
+  <div data-widget="quiz" data-src="cI1-quiz"></div>
+</section>
+
+<section class="refs"><h3 id="chI1-s9">参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 18 日）。講座の既存の章の値は、章を示した</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>企業の発表資料</td><th scope="row"><a href="https://faculty-web.msoe.edu/johnsontimoj/EE4980/files4980/Kaizad-Mistry-2017-Manufacturing.pdf">Technology and Manufacturing Day 2017（Kaizad Mistry の資料）</a></th><td>Intel（大学の講義サイトに置かれた写し）</td><td>2017 年（日付の記載は 2017-03-28 の注意書きのみ）</td><td>「10 nm」のゲートの間隔 54 nm・最小メタルピッチ 36 nm・フィンピッチ 34 nm・フィンの高さ 53 nm・密度 100.8 MTr/mm²。「14 nm」の 70・52・42 nm と密度 37.5 MTr/mm²（図に添えられた数値）。Intel の公式サイト上の版は、この環境から開けなかった</td></tr>
+      <tr><td>専門誌の記事</td><th scope="row"><a href="https://spectrum.ieee.org/nanoclast/semiconductors/processors/intel-now-packs-100-million-transistors-in-each-square-millimeter">Intel Now Packs 100 Million Transistors in Each Square Millimeter</a></th><td>IEEE Spectrum（Rachel Courtland）</td><td>2017 年 3 月 30 日</td><td>Intel の密度 10 nm 100.8・14 nm 37.5 MTr/mm² の照合（上の Intel の資料の写しと一致）。</td></tr>
+      <tr><td>業界のロードマップ</td><th scope="row"><a href="https://irds.ieee.org/images/files/pdf/2021/2021IRDS_Litho.pdf">IRDS 2021 Edition, Lithography</a></th><td>IEEE IRDS</td><td>2021 年版（第04章で確認）</td><td>世代のラベルとゲートピッチ・メタルピッチ（予測）の表。</td></tr>
+      <tr><td>企業の会社史</td><th scope="row"><a href="https://www.intel.com/content/www/us/en/history/museum-story-of-intel-4004.html">Intel's First Microprocessor</a></th><td>Intel</td><td>1971 年の製品（ページの日付なし）</td><td>4004 の 2,300 個、回路の線幅 10 μm。</td></tr>
+      <tr><td>企業のプレスリリース</td><th scope="row"><a href="https://intel.com/pressroom/archive/releases/2007/20070128comp.htm">Intel's Transistor Technology Breakthrough Represents Biggest Change to Computer Chips in 40 Years</a></th><td>Intel</td><td>2007 年 1 月 27 日</td><td>65 nm 世代の二酸化シリコンのゲート絶縁膜が 1.2 nm（原子 5 層分）。</td></tr>
+      <tr><td>企業の技術ブログ</td><th scope="row"><a href="https://developer.nvidia.com/blog/nvidia-hopper-architecture-in-depth/">NVIDIA Hopper Architecture In-Depth</a></th><td>NVIDIA</td><td>2022 年 3 月 22 日（ページの更新 2025 年 7 月）</td><td>GH100 の 800 億個、ダイ面積 814 mm²、TSMC 4N。</td></tr>
+      <tr><td>企業のニュースリリース</td><th scope="row"><a href="https://www.apple.com/newsroom/2023/06/apple-introduces-m2-ultra/">Apple introduces M2 Ultra</a></th><td>Apple</td><td>2023 年 6 月 5 日</td><td>M2 Ultra の 1,340 億個（M1 Ultra より 200 億個多い）。2 つの M2 Max のダイを UltraFusion でつないだもの。第 2 世代の 5 nm プロセス（Apple の呼び方）。ダイ面積は書かれていない。</td></tr>
+      <tr><td>企業のプレスリリース・製品ページ</td><th scope="row"><a href="https://www.cerebras.ai/press-release/cerebras-announces-third-generation-wafer-scale-engine">Cerebras Announces Third Generation Wafer Scale Engine</a>、<a href="https://cerebras.ai/product-chip/">Product: Chip</a></th><td>Cerebras</td><td>2024 年 3 月 13 日（ページの日付は 3 月 11 日と 13 日で食い違う）／製品ページ（2026 年 11 月に更新。いまは WSE-3T〔Turbo〕の説明で、同じ 46,225 mm²・4 兆個）</td><td>WSE-3 の 4 兆個、TSMC の 5 nm、900,000 コア。面積 46,225 mm² は製品ページと IEEE Spectrum（2024 年 3 月 13 日）で照合。</td></tr>
+      <tr><td>企業の発表資料</td><th scope="row"><a href="https://euvlitho.com/2023/P62.pdf">EUV Industrialization（Raymond Maas）</a></th><td>ASML（EUVL Conference 2023）</td><td>2023 年（NXE:3800E の状況は 2023 年 6 月）</td><td>NXE:3600D の matched machine overlay の仕様 1.1 nm、NXE:3800E の受入試験の目標 0.9 nm 以下、NXE:3600D の on-product overlay 1.7 nm。</td></tr>
+      <tr><td>企業の解説</td><th scope="row"><a href="https://www.asml.com/company/stories/2021/fellow-simon-mathijssen-aligning-lithography-nanometer">Aligning lithography to the nanometer</a></th><td>ASML</td><td>2021 年 12 月 22 日（第08章で確認）</td><td>最先端の重ね合わせが 2 nm より良い。</td></tr>
+      <tr><td>公的機関の統計</td><th scope="row"><a href="https://population.un.org/WPP/Publications/Files/WPP2024_Key-Messages.pdf">World Population Prospects 2024: Key Messages</a></th><td>国連（UN DESA）</td><td>2024 年版（人口は 2024 年）</td><td>世界人口 82 億人（8.2 billion）。</td></tr>
+      <tr><td>公的機関の論文</td><th scope="row"><a href="https://wwwnc.cdc.gov/eid/article/27/4/20-4337">Bullock ら、Emerging Infectious Diseases 27(4)</a></th><td>米国 CDC</td><td>2021 年 4 月号（2021-02-18 公開）</td><td>コロナウイルスの粒子 60〜140 nm（スパイクを含めて約 100 nm）。電子顕微鏡の観察。</td></tr>
+      <tr><td>学術データベース</td><th scope="row"><a href="https://bionumbers.hms.harvard.edu/bionumber.aspx?s=n&amp;v=0&amp;id=108239">BNID 108239（赤血球の直径 7.7 μm）</a>、<a href="https://bionumbers.hms.harvard.edu/bionumber.aspx?id=100798&amp;ver=1">BNID 100798（8 μm）</a></th><td>ハーバード大学 BioNumbers</td><td>確認 2026 年 11 月</td><td>赤血球の直径。7.7 μm は Cell Size Database（Gregory）の平均、8 μm は Rosen（1967）。</td></tr>
+      <tr><td>学術データベース</td><th scope="row"><a href="https://bionumbers.hms.harvard.edu/bionumber.aspx?id=117344&amp;ver=3&amp;trm=&amp;org=">BNID 117344（大腸菌の大きさ）</a></th><td>ハーバード大学 BioNumbers（出典は Yamada ら、Microscopy 2017）</td><td>確認 2026 年 11 月</td><td>大腸菌の幅 0.49 ± 0.03 μm、長さ 1.78 ± 0.54 μm（電子顕微鏡）。</td></tr>
+      <tr><td>学術データベース</td><th scope="row"><a href="https://bionumbers.hms.harvard.edu/Includes/KeyNumbersLinks.pdf">BioNumbers Key Numbers</a></th><td>ハーバード大学 BioNumbers</td><td>確認 2026 年 11 月</td><td>DNA の二重らせんの直径 約 2 nm（塩基対の間隔 0.34 nm）。</td></tr>
+      <tr><td>教育資料</td><th scope="row"><a href="https://hypertextbook.com/facts/1999/BrianLey.shtml">Diameter of a Human Hair（The Physics Factbook）</a></th><td>Brian Ley（1999）、Glenn Elert 編（2011 年の補足）</td><td>1999 年・2011 年</td><td>髪の毛の直径 17〜181 μm。学生の電子顕微鏡の測定は 60〜77 μm。</td></tr>
+      <tr><td>企業の製品情報</td><th scope="row"><a href="https://www.fujifilm.com/fb/ja/support/supply/paper/w-paper">W-Paper（コピー/プリンター用紙）</a></th><td>富士フイルムビジネスイノベーション</td><td>確認 2026 年 11 月</td><td>坪量 64 g/m² の製品の紙厚 87 μm。本文の「約 90 μm」は、この例をもとにした目安（製品で違う）。</td></tr>
+      <tr><td>公的機関の標準値</td><th scope="row"><a href="https://pml.nist.gov/cuu/pdf/xray_2018.pdf">CODATA 2018: X-ray values（lattice parameter of silicon）</a></th><td>NIST</td><td>CODATA 2018</td><td>シリコンの格子定数 a ＝ 5.431 020 511 × 10⁻¹⁰ m（真空中、22.5 ℃）。</td></tr>
+      <tr><td>公的機関の報告</td><th scope="row"><a href="https://cris.vtt.fi/en/publications/cleanroom-classification-studies-and-airborne-bioburden-particles/">Cleanroom Classification Studies and Airborne Bioburden Particles in Operating Theatres</a></th><td>VTT フィンランド技術研究センター（Salmela ら、VTT Technology 168）</td><td>2014 年</td><td>手術室を運転中に調べた清浄度クラスが ISO 7〜9。抄録の記述。</td></tr>
+            <tr><td>規格・記事（第18章で確認）</td><th scope="row">ISO 14644-1:2015、ASHRAE Journal（2021 年 9 月）</th><td>ISO、ASHRAE</td><td>2015 年、2021 年</td><td>クラスの上限（表 1）と、ISO 3〜5 がよく指定されるという記述。第18章の表と記述を使用（第18章は、規格の販売サイトの見本ページと、転載された表〔cleanroom.net〕で確認。この章でも cleanroom.net の表で 0.5 μm の欄を照合）。</td></tr>
+      <tr><td>業界のロードマップ</td><th scope="row">IRDS 2024 Edition, Yield Enhancement</th><td>IEEE IRDS</td><td>2024 年版（第13章で確認）</td><td>致命的な粒子の大きさの目安（最も厳しい場合 3.0 nm）。</td></tr>
+      <tr><td>公的機関の資料</td><th scope="row"><a href="https://www.meti.go.jp/policy/mono_info_service/joho/laws/semiconductor/semiconductor_plan/nintei_tokuteihandoutai_keikaku01.pdf">特定半導体生産施設整備等計画の概要（JASM・TSMC、熊本県菊陽町）</a></th><td>経済産業省</td><td>認定 2022 年 6 月 17 日</td><td>生産能力 5.5 万枚/月（12 インチ換算）。認定された計画の値で、実績ではない。</td></tr>
+      <tr><td>講座の既存の章</td><th scope="row">第04章・第05章・第08章・第13章・第18章</th><td>この講座</td><td>2026 年 11 月 14 日までの確認</td><td>IRDS の表、ウェーハの直径と厚さ（775 μm）、EUV の波長 13.5 nm と重ね合わせ、致命的な粒子、ISO クラスの表。</td></tr>
+      <tr><td>教科書・一般知識</td><th scope="row">半導体・集積回路・計算機アーキテクチャの教科書（取れる数の近似式、ポアソンの歩留まりモデル、CMOS の NAND の素子数、シリコンのダイヤモンド構造）</th><td>この講座の説明</td><td>—</td><td>近似式と簡単なモデル。この環境では原典のページを開いていません。式と前提を本文に書き、模型として扱っています。</td></tr>
+      <tr><td>架空・模型</td><th scope="row">歩留まり、欠陥の密度、月産の枚数、1 ロット 25 枚、1 か月 30 日、倍率 1 倍の画面の幅 300 mm、髪の毛の代表値 70 μm</th><td>この講座</td><td>—</td><td>理解のための仮定（模型の値）。実際の値ではありません。</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">この章では、フィンの幅、世界全体の月産の枚数、都市間の距離、手術室の規格値は、確かめた資料がないため載せていません。</p>
+</section>
+<footer class="ch-foot"><div class="readrow"><button class="btn read" type="button" data-read="I1" aria-pressed="false">☐ この章を読了にする</button></div><nav class="pn" aria-label="前後の章"><a class="prev" href="#home"><small>← 入口</small>はじめに</a><a class="next" href="#ch01"><small>次の章 →</small>第01章 半導体とは何か：電気を「制御できる」材料</a></nav></footer>
+</article>
 
 <article id="ch01" class="view chapter" data-ch="01" aria-labelledby="ch01-title">
 <header class="ch-head"><p class="ch-kicker">第1部 半導体の基礎 ・ 第01章</p><h2 class="ch-title" id="ch01-title">半導体とは何か：電気を「制御できる」材料</h2><p class="ch-meta"><span class="chip tk0">基礎</span><span class="chip">所要 約30分</span></p></header>
@@ -823,7 +1123,7 @@ body { line-height: 2.0; }
     </tbody>
   </table></div>
 </section>
-<footer class="ch-foot"><div class="readrow"><button class="btn read" type="button" data-read="01" aria-pressed="false">☐ この章を読了にする</button></div><nav class="pn" aria-label="前後の章"><a class="prev" href="#home"><small>← 入口</small>はじめに</a><a class="next" href="#ch02"><small>次の章 →</small>第02章 トランジスタ：電気で電気を切り替える</a></nav></footer>
+<footer class="ch-foot"><div class="readrow"><button class="btn read" type="button" data-read="01" aria-pressed="false">☐ この章を読了にする</button></div><nav class="pn" aria-label="前後の章"><a class="prev" href="#chI1"><small>← 前の章</small>序章1 髪の毛からトランジスタまで：小ささと数の多さをつかむ</a><a class="next" href="#ch02"><small>次の章 →</small>第02章 トランジスタ：電気で電気を切り替える</a></nav></footer>
 </article>
 
 <article id="ch02" class="view chapter" data-ch="02" aria-labelledby="ch02-title">
@@ -4032,8 +4332,8 @@ body { line-height: 2.0; }
 </footer>
 <script>
 window.CN_CFG = {"slug": "semi", "prefix": "semi.", "title": "半導体講義", "subtitle": "基礎・製造装置・装置輸送", "docTitle": "半導体講義 | TTJ", "glossaryCh": "32", "kinds": {"ue": "運ばれる物・加工される物", "ran": "搬送・ハンドリング", "core": "処理・主工程", "db": "材料・用役の供給", "pol": "制御・計測・記録・書類", "ext": "外部の主体", "ims": "排気・排液・除害"}, "labels": {"arch.plane.up": "物の流れ（太線）", "arch.plane.cp": "信号・制御・情報（実線）", "arch.plane.lg": "契約・責任・論理的な関係（点線）", "arch.link": "接続", "arch.f.proto": "手段", "arch.f.carries": "運ぶもの", "arch.f.role": "役割", "seq.ifLabel": "手段・経路", "seq.ieLabel": "主な要素", "stack.role.app": "対象物", "stack.role.payload": "内容物（破線）", "stack.role.transport": "荷の単位", "stack.role.net": "処理・機能", "stack.role.link": "支持・固定", "stack.role.sec": "保護・封止", "ident.where": "何を表すか・使われ方", "drill.q1": "どの段階・区間の問題ですか。", "drill.q2": "最初に調べる対象・連絡する相手はどれですか。"}, "mapping": {"title": "工程と装置の対応表", "colA": "工程", "colB": "装置", "cats": [{"key": "dep", "label": "成膜・酸化"}, {"key": "litho", "label": "リソグラフィ"}, {"key": "etch", "label": "エッチング"}, {"key": "imp", "label": "注入・熱処理"}, {"key": "cmp", "label": "配線・平坦化"}, {"key": "clean", "label": "洗浄・計測検査"}, {"key": "bep", "label": "後工程・先端パッケージ"}], "note": "工程ごとに使う装置の種類を対応づけます。企業名や製品名は載せません（装置の種類だけ）。"}, "exam": {"title": "総合テスト", "intro": "公開中の章から 40 問。部ごとの成績が出ます。"}, "publish": true, "themeColor": {"dark": "#151515", "light": "#FFFFFF"}};
-window.CN_CHAPTERS = [{"num": "01", "part": "1", "title": "半導体とは何か：電気を「制御できる」材料", "track": "基礎", "time": 30, "ready": true}, {"num": "02", "part": "1", "title": "トランジスタ：電気で電気を切り替える", "track": "基礎", "time": 35, "ready": true}, {"num": "03", "part": "1", "title": "集積回路：CMOS からロジックとメモリへ", "track": "基礎", "time": 35, "ready": true}, {"num": "04", "part": "1", "title": "微細化と世代の呼び方", "track": "基礎", "time": 30, "ready": true}, {"num": "05", "part": "1", "title": "ウェーハ：砂から鏡面の円板へ", "track": "基礎", "time": 30, "ready": true}, {"num": "06", "part": "2", "title": "工程の全体像：何百もの工程は「同じループ」の繰り返し", "track": "前工程", "time": 40, "ready": true}, {"num": "07", "part": "2", "title": "酸化と成膜", "track": "前工程", "time": 35, "ready": true}, {"num": "08", "part": "2", "title": "リソグラフィ（1）露光", "track": "前工程", "time": 40, "ready": true}, {"num": "09", "part": "2", "title": "リソグラフィ（2）塗布・現像とマスク", "track": "前工程", "time": 35, "ready": true}, {"num": "10", "part": "2", "title": "エッチング", "track": "前工程", "time": 35, "ready": true}, {"num": "11", "part": "2", "title": "イオン注入と熱処理", "track": "前工程", "time": 35, "ready": true}, {"num": "12", "part": "2", "title": "配線と平坦化：銅配線と CMP", "track": "前工程", "time": 40, "ready": true}, {"num": "13", "part": "2", "title": "洗浄・計測・検査：歩留まりを守る工程", "track": "前工程", "time": 40, "ready": true}, {"num": "14", "part": "2", "title": "後工程：ダイシングから封止・テストまで", "track": "後工程", "time": 40, "ready": true}, {"num": "15", "part": "2", "title": "先端パッケージ：横に並べ、縦に積む", "track": "後工程", "time": 40, "ready": true}, {"num": "16", "part": "3", "title": "工程別の装置の仕組み", "track": "装置", "time": 40, "ready": true}, {"num": "17", "part": "3", "title": "装置の主要部品：真空・プラズマ・ガス・搬送・温調", "track": "装置", "time": 40, "ready": true}, {"num": "18", "part": "3", "title": "工場とクリーンルームと用役", "track": "装置", "time": 40, "ready": true}, {"num": "19", "part": "3", "title": "装置産業の構造と主要企業", "track": "産業", "time": 40, "ready": true}, {"num": "20", "part": "3", "title": "材料・部品の供給網", "track": "産業", "time": 35, "ready": true}, {"num": "21", "part": "4", "title": "装置の出荷形態と分割", "track": "輸送", "time": 35, "ready": true}, {"num": "22", "part": "4", "title": "梱包：クリーン・防湿・防振・記録", "track": "輸送", "time": 40, "ready": true}, {"num": "23", "part": "4", "title": "輸送モードの選び方：航空・海上・陸上", "track": "輸送", "time": 40, "ready": true}, {"num": "24", "part": "4", "title": "重量物の搬入と据付", "track": "輸送", "time": 40, "ready": true}, {"num": "25", "part": "4", "title": "立上げと受入検査", "track": "輸送", "time": 35, "ready": true}, {"num": "26", "part": "4", "title": "貿易実務：インコタームズ・保険・通関", "track": "制度", "time": 45, "ready": true}, {"num": "27", "part": "4", "title": "安全保障輸出管理の基礎", "track": "制度", "time": 40, "ready": true}, {"num": "28", "part": "4", "title": "事故と品質トラブルの型", "track": "輸送", "time": 40, "ready": true}, {"num": "29", "part": "5", "title": "技術の次の節目", "track": "産業", "time": 35, "ready": true}, {"num": "30", "part": "5", "title": "各国の産業政策と投資サイクル", "track": "産業", "time": 40, "ready": true}, {"num": "31", "part": "5", "title": "案件の進め方と総合演習", "track": "演習", "time": 45, "ready": true}, {"num": "32", "part": "A", "title": "用語集・規格と団体と公的資料の地図・総合テスト", "track": "付録", "time": 45, "ready": true}];
-window.CN_PARTS = [{"key": "1", "name": "第1部 半導体の基礎", "short": "半導体の基礎", "appendix": false}, {"key": "2", "name": "第2部 製造工程", "short": "製造工程", "appendix": false}, {"key": "3", "name": "第3部 製造装置と産業", "short": "製造装置と産業", "appendix": false}, {"key": "4", "name": "第4部 装置輸送と据付", "short": "装置輸送と据付", "appendix": false}, {"key": "5", "name": "第5部 動向と実務", "short": "動向と実務", "appendix": false}, {"key": "A", "name": "付録", "short": "用語集・規格と公的資料の地図・総合テスト", "appendix": true}];
+window.CN_CHAPTERS = [{"num": "I1", "part": "0", "title": "髪の毛からトランジスタまで：小ささと数の多さをつかむ", "track": "基礎", "time": 40, "ready": true, "label": "序章1", "front": true}, {"num": "01", "part": "1", "title": "半導体とは何か：電気を「制御できる」材料", "track": "基礎", "time": 30, "ready": true}, {"num": "02", "part": "1", "title": "トランジスタ：電気で電気を切り替える", "track": "基礎", "time": 35, "ready": true}, {"num": "03", "part": "1", "title": "集積回路：CMOS からロジックとメモリへ", "track": "基礎", "time": 35, "ready": true}, {"num": "04", "part": "1", "title": "微細化と世代の呼び方", "track": "基礎", "time": 30, "ready": true}, {"num": "05", "part": "1", "title": "ウェーハ：砂から鏡面の円板へ", "track": "基礎", "time": 30, "ready": true}, {"num": "06", "part": "2", "title": "工程の全体像：何百もの工程は「同じループ」の繰り返し", "track": "前工程", "time": 40, "ready": true}, {"num": "07", "part": "2", "title": "酸化と成膜", "track": "前工程", "time": 35, "ready": true}, {"num": "08", "part": "2", "title": "リソグラフィ（1）露光", "track": "前工程", "time": 40, "ready": true}, {"num": "09", "part": "2", "title": "リソグラフィ（2）塗布・現像とマスク", "track": "前工程", "time": 35, "ready": true}, {"num": "10", "part": "2", "title": "エッチング", "track": "前工程", "time": 35, "ready": true}, {"num": "11", "part": "2", "title": "イオン注入と熱処理", "track": "前工程", "time": 35, "ready": true}, {"num": "12", "part": "2", "title": "配線と平坦化：銅配線と CMP", "track": "前工程", "time": 40, "ready": true}, {"num": "13", "part": "2", "title": "洗浄・計測・検査：歩留まりを守る工程", "track": "前工程", "time": 40, "ready": true}, {"num": "14", "part": "2", "title": "後工程：ダイシングから封止・テストまで", "track": "後工程", "time": 40, "ready": true}, {"num": "15", "part": "2", "title": "先端パッケージ：横に並べ、縦に積む", "track": "後工程", "time": 40, "ready": true}, {"num": "16", "part": "3", "title": "工程別の装置の仕組み", "track": "装置", "time": 40, "ready": true}, {"num": "17", "part": "3", "title": "装置の主要部品：真空・プラズマ・ガス・搬送・温調", "track": "装置", "time": 40, "ready": true}, {"num": "18", "part": "3", "title": "工場とクリーンルームと用役", "track": "装置", "time": 40, "ready": true}, {"num": "19", "part": "3", "title": "装置産業の構造と主要企業", "track": "産業", "time": 40, "ready": true}, {"num": "20", "part": "3", "title": "材料・部品の供給網", "track": "産業", "time": 35, "ready": true}, {"num": "21", "part": "4", "title": "装置の出荷形態と分割", "track": "輸送", "time": 35, "ready": true}, {"num": "22", "part": "4", "title": "梱包：クリーン・防湿・防振・記録", "track": "輸送", "time": 40, "ready": true}, {"num": "23", "part": "4", "title": "輸送モードの選び方：航空・海上・陸上", "track": "輸送", "time": 40, "ready": true}, {"num": "24", "part": "4", "title": "重量物の搬入と据付", "track": "輸送", "time": 40, "ready": true}, {"num": "25", "part": "4", "title": "立上げと受入検査", "track": "輸送", "time": 35, "ready": true}, {"num": "26", "part": "4", "title": "貿易実務：インコタームズ・保険・通関", "track": "制度", "time": 45, "ready": true}, {"num": "27", "part": "4", "title": "安全保障輸出管理の基礎", "track": "制度", "time": 40, "ready": true}, {"num": "28", "part": "4", "title": "事故と品質トラブルの型", "track": "輸送", "time": 40, "ready": true}, {"num": "29", "part": "5", "title": "技術の次の節目", "track": "産業", "time": 35, "ready": true}, {"num": "30", "part": "5", "title": "各国の産業政策と投資サイクル", "track": "産業", "time": 40, "ready": true}, {"num": "31", "part": "5", "title": "案件の進め方と総合演習", "track": "演習", "time": 45, "ready": true}, {"num": "32", "part": "A", "title": "用語集・規格と団体と公的資料の地図・総合テスト", "track": "付録", "time": 45, "ready": true}];
+window.CN_PARTS = [{"key": "0", "name": "序章 小ささと数の多さをつかむ", "short": "序章", "appendix": false, "front": true}, {"key": "1", "name": "第1部 半導体の基礎", "short": "半導体の基礎", "appendix": false}, {"key": "2", "name": "第2部 製造工程", "short": "製造工程", "appendix": false}, {"key": "3", "name": "第3部 製造装置と産業", "short": "製造装置と産業", "appendix": false}, {"key": "4", "name": "第4部 装置輸送と据付", "short": "装置輸送と据付", "appendix": false}, {"key": "5", "name": "第5部 動向と実務", "short": "動向と実務", "appendix": false}, {"key": "A", "name": "付録", "short": "用語集・規格と公的資料の地図・総合テスト", "appendix": true}];
 </script>
 <script>
 /* ==== engine-00-core.js ==== */
@@ -5203,11 +5503,21 @@ window.CN_PARTS = [{"key": "1", "name": "第1部 半導体の基礎", "short": "
     var stage = h('div', { 'class': 'scroll-x xs-stage', tabindex: 0, role: 'group', 'aria-label': '断面図。左右の矢印キーで手を進め、スペースで再生／一時停止します' });
     var svg = s('svg', { 'class': 'xs-svg', id: ctx.id, viewBox: '0 0 ' + vb[0] + ' ' + vb[1], role: 'img', style: 'max-width:' + Math.round(vb[0] * 1.4) + 'px;min-width:300px' });
     var layer = s('g'), fxl = s('g');
+    /* ラベルの文字：既定は 11（図の単位）。data に labelMinPx（例 9.5）を書くと、画面で見える大きさがその px を下回らないよう、狭い幅で図の単位の大きさを増やす */
+    var lbMin = d.labelMinPx > 0 ? d.labelMinPx : 0;
+    function lbSize() { if (!lbMin) return 0; var w = svg.getBoundingClientRect().width; if (!(w > 0)) return 0; var k = w / vb[0]; return k * 11 >= lbMin ? 0 : Math.round(lbMin / k * 10) / 10; }
+    function applyLb() { var fz = lbSize(); layer.querySelectorAll('.xs-lb').forEach(function (t) { if (fz) { t.style.fontSize = fz + 'px'; t.style.strokeWidth = Math.round(fz * 0.27 * 10) / 10 + 'px'; } else { t.style.fontSize = ''; t.style.strokeWidth = ''; } }); }
     svg.appendChild(layer); svg.appendChild(fxl); stage.appendChild(svg);
     var body = h('div', { 'class': 'wg-body' }); body.appendChild(stage);
     body.appendChild(h('p', { 'class': 'xs-note' }, T('xsec.note')));
     var lg = h('div', { 'class': 'legend xs-legend', role: 'group', 'aria-label': '材料の凡例（押すとその材料を強調）' });
-    mats.forEach(function (k) { lg.appendChild(h('button', { type: 'button', 'class': 'xs-lg', 'data-m': k, 'aria-pressed': 'false', on: { click: function () { hiM = hiM === k ? null : k; render(); } } }, h('i', { 'class': 'sw m-' + k }), MN(k)[0])); });
+    /* 凡例：既定は全手で使う材料をすべて並べる。data に legend: 'step' を書くと、いま見えている図形の材料だけを並べる（手ごとに作り直す） */
+    var legStep = d.legend === 'step', lgKey = null;
+    function buildLegend(list) {
+      var key = list.join(','); if (key === lgKey) return; lgKey = key; CN.clear(lg);
+      list.forEach(function (k) { lg.appendChild(h('button', { type: 'button', 'class': 'xs-lg', 'data-m': k, 'aria-pressed': 'false', on: { click: function () { hiM = hiM === k ? null : k; render(); } } }, h('i', { 'class': 'sw m-' + k }), MN(k)[0])); });
+    }
+    if (!legStep) buildLegend(mats);
     body.appendChild(lg);
     el.appendChild(body);
     var info = h('div', { 'class': 'wg-info xs-info', 'aria-live': 'polite' }); el.appendChild(info);
@@ -5223,11 +5533,13 @@ window.CN_PARTS = [{"key": "1", "name": "第1部 半導体の基礎", "short": "
     function render() {
       var st = steps[cur], S = states[cur];
       CN.clear(layer); CN.clear(fxl);
+      if (legStep) { var inS = {}; S.shapes.forEach(function (sh) { inS[sh.m] = 1; }); buildLegend(mats.filter(function (k) { return inS[k]; })); if (hiM && !inS[hiM]) hiM = null; }
       S.shapes.forEach(function (sh) {
         var cls = (S.chg[sh.id] ? ' chg' : '') + (hiM ? (sh.m === hiM ? ' hi' : ' dim') : '');
         layer.appendChild(shapeEl(sh, cls));
       });
       S.shapes.forEach(function (sh) { if (sh.label) { var bx = sh.pts ? sh.pts.reduce(function (a, p) { return [a[0] + p[0] / sh.pts.length, a[1] + p[1] / sh.pts.length]; }, [0, 0]) : [sh.x + sh.w / 2, sh.y + sh.h / 2]; layer.appendChild(s('text', { 'class': 'xs-lb', x: bx[0], y: bx[1] + 4 }, sh.label)); } });
+      applyLb();
       if (st.fx && FX[st.fx]) {
         var a = st.fxArea || [0, 0, vb[0], vb[1]], gl = FX[st.fx][0], n = Math.max(2, Math.min(9, Math.floor(a[2] / 56)));
         for (var i = 0; i < n; i++) fxl.appendChild(s('text', { 'class': 'xs-fx', x: a[0] + (i + 0.5) * a[2] / n, y: a[1] + Math.min(a[3], 40) / 2 + 8 }, gl));
@@ -5264,6 +5576,7 @@ window.CN_PARTS = [{"key": "1", "name": "第1部 半導体の基礎", "short": "
       else if (e.key === 'Home') { e.preventDefault(); go(0, true); } else if (e.key === 'End') { e.preventDefault(); go(N - 1, true); } else if (e.key === ' ') { e.preventDefault(); play(); }
     });
     render();
+    if (lbMin && typeof ResizeObserver === 'function') { var rw = 0; new ResizeObserver(function () { var w = Math.round(svg.getBoundingClientRect().width); if (w !== rw) { rw = w; applyLb(); } }).observe(svg); }
   };
   CN.searchText.xsec = function (d) { return d.title + ' ' + d.steps.map(function (st) { return [st.name, st.proc, st.equip, st.what, st.trap].filter(Boolean).join(' '); }).join(' '); };
 
@@ -6107,6 +6420,972 @@ window.CN_PARTS = [{"key": "1", "name": "第1部 半導体の基礎", "short": "
     initSearch();
     updateProgress();
     route();
+  };
+})();
+
+/* ==== opt/expr.js ==== */
+/* 部品 lab / scale の共通：安全な式の評価器。eval・new Function は使わない。
+   使える物：数値、名前（入力・計算結果・定数）、+ - * / ^（または **）、比較（< <= > >= == !=）、論理（&& || !）、条件（a ? b : c）、
+   かっこ、関数 sqrt abs sin cos tan asin acos atan atan2 exp ln log10 pow min max floor ceil round sign if(cond,a,b) clamp(x,lo,hi)、
+   ncdf(x)（標準正規分布の累積分布関数）・npdf(x)（同じ密度関数）、定数 pi。
+   ncdf は W. J. Hart の有理近似（West 2005 の倍精度版）。絶対誤差はおよそ 1e-15 以下（ブラウザとビルド検査で同じ式を使う）。
+   ブラウザでは window.CNExpr、node（check-data.js）では module.exports。 */
+(function () {
+  'use strict';
+  /* 標準正規分布の累積分布関数 N(x)。Hart の近似（Graeme West, "Better approximations to cumulative normal functions", 2005）。 */
+  function ncdf(x) {
+    if (x !== x) return NaN;
+    var xa = Math.abs(x), c, b;
+    if (xa > 37) c = 0;
+    else {
+      var e = Math.exp(-xa * xa / 2);
+      if (xa < 7.07106781186547) {
+        b = 3.52624965998911E-02 * xa + 0.700383064443688;
+        b = b * xa + 6.37396220353165; b = b * xa + 33.912866078383; b = b * xa + 112.079291497871; b = b * xa + 221.213596169931; b = b * xa + 220.206867912376;
+        c = e * b;
+        b = 8.83883476483184E-02 * xa + 1.75566716318264;
+        b = b * xa + 16.064177579207; b = b * xa + 86.7807322029461; b = b * xa + 296.564248779674; b = b * xa + 637.333633378831; b = b * xa + 793.826512519948; b = b * xa + 440.413735824752;
+        c = c / b;
+      } else {
+        b = xa + 0.65; b = xa + 4 / b; b = xa + 3 / b; b = xa + 2 / b; b = xa + 1 / b;
+        c = e / b / 2.506628274631;
+      }
+    }
+    return x > 0 ? 1 - c : c;
+  }
+  /* 標準正規分布の密度関数 */
+  function npdf(x) { return Math.exp(-x * x / 2) / 2.5066282746310002; }
+  var FN = {
+    sqrt: Math.sqrt, abs: Math.abs, sin: Math.sin, cos: Math.cos, tan: Math.tan, asin: Math.asin, acos: Math.acos, atan: Math.atan, atan2: Math.atan2,
+    exp: Math.exp, ln: Math.log, log10: function (x) { return Math.log(x) / Math.LN10; }, pow: Math.pow, min: Math.min, max: Math.max,
+    floor: Math.floor, ceil: Math.ceil, round: function (x, n) { var k = Math.pow(10, n || 0); return Math.round(x * k) / k; },
+    sign: function (x) { return x > 0 ? 1 : x < 0 ? -1 : 0; }, 'if': function (c, a, b) { return c ? a : b; },
+    clamp: function (x, lo, hi) { return Math.min(hi, Math.max(lo, x)); },
+    ncdf: ncdf, npdf: npdf
+  };
+  var CONST = { pi: Math.PI };
+  var NARGS = { sqrt: 1, abs: 1, sin: 1, cos: 1, tan: 1, asin: 1, acos: 1, atan: 1, atan2: 2, exp: 1, ln: 1, log10: 1, pow: 2, floor: 1, ceil: 1, sign: 1, 'if': 3, clamp: 3, ncdf: 1, npdf: 1 };
+
+  function tokenize(src) {
+    var t = [], i = 0, m, s = String(src);
+    while (i < s.length) {
+      var c = s.charAt(i);
+      if (/\s/.test(c)) { i++; continue; }
+      if ((m = /^(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?/.exec(s.slice(i)))) { t.push({ k: 'n', v: parseFloat(m[0]) }); i += m[0].length; continue; }
+      if ((m = /^[A-Za-z_][A-Za-z0-9_]*/.exec(s.slice(i)))) { t.push({ k: 'id', v: m[0] }); i += m[0].length; continue; }
+      if ((m = /^(\*\*|<=|>=|==|!=|&&|\|\||[-+*\/^()<>!,?:])/.exec(s.slice(i)))) { t.push({ k: 'op', v: m[0] === '**' ? '^' : m[0] }); i += m[0].length; continue; }
+      throw new Error('式に使えない文字 "' + c + '"（位置 ' + (i + 1) + '）: ' + s);
+    }
+    return t;
+  }
+
+  /* 構文木を作る。{t:'n',v} {t:'v',name} {t:'u',op,a} {t:'b',op,a,b} {t:'f',name,args} {t:'c',c,a,b} */
+  function parse(src) {
+    var tk = tokenize(src), p = 0;
+    function peek() { return tk[p]; }
+    function isOp(v) { var x = tk[p]; return x && x.k === 'op' && x.v === v; }
+    function eat(v) { if (!isOp(v)) throw new Error('式の構文エラー: "' + v + '" が必要です: ' + src); p++; }
+    function ternary() {
+      var c = orx();
+      if (isOp('?')) { p++; var a = ternary(); eat(':'); var b = ternary(); return { t: 'c', c: c, a: a, b: b }; }
+      return c;
+    }
+    function orx() { var a = andx(); while (isOp('||')) { p++; a = { t: 'b', op: '||', a: a, b: andx() }; } return a; }
+    function andx() { var a = eq(); while (isOp('&&')) { p++; a = { t: 'b', op: '&&', a: a, b: eq() }; } return a; }
+    function eq() { var a = cmp(); while (isOp('==') || isOp('!=')) { var o = tk[p++].v; a = { t: 'b', op: o, a: a, b: cmp() }; } return a; }
+    function cmp() { var a = add(); while (isOp('<') || isOp('<=') || isOp('>') || isOp('>=')) { var o = tk[p++].v; a = { t: 'b', op: o, a: a, b: add() }; } return a; }
+    function add() { var a = mul(); while (isOp('+') || isOp('-')) { var o = tk[p++].v; a = { t: 'b', op: o, a: a, b: mul() }; } return a; }
+    function mul() { var a = unary(); while (isOp('*') || isOp('/')) { var o = tk[p++].v; a = { t: 'b', op: o, a: a, b: unary() }; } return a; }
+    function unary() {
+      if (isOp('-')) { p++; return { t: 'u', op: '-', a: unary() }; }
+      if (isOp('+')) { p++; return unary(); }
+      if (isOp('!')) { p++; return { t: 'u', op: '!', a: unary() }; }
+      return pow();
+    }
+    function pow() { var a = primary(); if (isOp('^')) { p++; return { t: 'b', op: '^', a: a, b: unary() }; } return a; }   // 右結合。-2^2 は -(2^2)
+    function primary() {
+      var x = peek();
+      if (!x) throw new Error('式が途中で終わっています: ' + src);
+      if (x.k === 'n') { p++; return { t: 'n', v: x.v }; }
+      if (x.k === 'id') {
+        p++;
+        if (isOp('(')) {
+          p++; var args = [];
+          if (!isOp(')')) { args.push(ternary()); while (isOp(',')) { p++; args.push(ternary()); } }
+          eat(')');
+          if (!Object.prototype.hasOwnProperty.call(FN, x.v)) throw new Error('使えない関数 "' + x.v + '": ' + src);
+          if (NARGS[x.v] != null && NARGS[x.v] !== args.length) throw new Error('関数 ' + x.v + ' の引数は ' + NARGS[x.v] + ' 個: ' + src);
+          if (!args.length) throw new Error('関数 ' + x.v + ' に引数がありません: ' + src);
+          return { t: 'f', name: x.v, args: args };
+        }
+        return { t: 'v', name: x.v };
+      }
+      if (isOp('(')) { p++; var e = ternary(); eat(')'); return e; }
+      throw new Error('式の構文エラー（"' + x.v + '" の位置）: ' + src);
+    }
+    var tree = ternary();
+    if (p < tk.length) throw new Error('式の構文エラー（余分な "' + tk[p].v + '"）: ' + src);
+    return tree;
+  }
+
+  function ev(n, env) {
+    switch (n.t) {
+      case 'n': return n.v;
+      case 'v':
+        if (Object.prototype.hasOwnProperty.call(env, n.name)) return env[n.name];
+        if (Object.prototype.hasOwnProperty.call(CONST, n.name)) return CONST[n.name];
+        throw new Error('未定義の名前 "' + n.name + '"');
+      case 'u': { var a = ev(n.a, env); return n.op === '-' ? -a : (a ? 0 : 1); }
+      case 'c': return ev(n.c, env) ? ev(n.a, env) : ev(n.b, env);
+      case 'f': return FN[n.name].apply(null, n.args.map(function (x) { return ev(x, env); }));
+      case 'b': {
+        if (n.op === '&&') return (ev(n.a, env) && ev(n.b, env)) ? 1 : 0;
+        if (n.op === '||') return (ev(n.a, env) || ev(n.b, env)) ? 1 : 0;
+        var x = ev(n.a, env), y = ev(n.b, env);
+        switch (n.op) {
+          case '+': return x + y; case '-': return x - y; case '*': return x * y; case '/': return x / y; case '^': return Math.pow(x, y);
+          case '<': return x < y ? 1 : 0; case '<=': return x <= y ? 1 : 0; case '>': return x > y ? 1 : 0; case '>=': return x >= y ? 1 : 0;
+          case '==': return Math.abs(x - y) < 1e-9 * Math.max(1, Math.abs(x), Math.abs(y)) ? 1 : 0; case '!=': return Math.abs(x - y) < 1e-9 * Math.max(1, Math.abs(x), Math.abs(y)) ? 0 : 1;
+        }
+      }
+    }
+    throw new Error('式の評価エラー');
+  }
+  function names(n, out) {
+    out = out || {};
+    if (n.t === 'v') out[n.name] = 1;
+    ['a', 'b', 'c'].forEach(function (k) { if (n[k] && typeof n[k] === 'object') names(n[k], out); });
+    (n.args || []).forEach(function (x) { names(x, out); });
+    return out;
+  }
+  /* compile(src) -> { run(env) -> number, names: [使っている名前] } */
+  function compile(src) {
+    var tree = parse(src);
+    return { src: String(src), tree: tree, names: Object.keys(names(tree)).filter(function (k) { return !Object.prototype.hasOwnProperty.call(CONST, k); }), run: function (env) { return ev(tree, env || {}); } };
+  }
+  var api = { compile: compile, FN: Object.keys(FN) };
+  if (typeof module !== 'undefined' && module.exports) module.exports = api; else window.CNExpr = api;
+})();
+
+/* ==== opt/scale-lab.js ==== */
+/* 部品：scale（大きさの比較）／ lab（式を動かす実験台）。使う章があるときだけ build.py が埋め込む（js/opt/）。
+   データ形式は FRAMEWORK.md の「scale」「lab」。どちらも学習用の模型で、実際の設計・工事・投資の判断には使えない。
+   scale の物差しは 3 種：電力（W 系。既定）・円（円〜兆円）・ドル（ドル〜兆ドル）。1 つの scale では 1 種だけ（為替の換算はしない）。 */
+(function () {
+  'use strict';
+  var h = CN.h, s = CN.s, X = window.CNExpr;
+
+  /* ================= 数の書き方（丸め方はここで決める） ================= */
+  function groupDigits(str) { return str.replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+  function sig(x, n) { if (!isFinite(x) || x === 0) return x; var e = Math.floor(Math.log(Math.abs(x)) / Math.LN10 + 1e-12), f = Math.pow(10, n - 1 - e); return Math.round(x * f) / f; }
+  /* 有効数字 n 桁。末尾の 0 は消し、3 桁ごとにカンマ */
+  function fmtSig(x, n) {
+    if (!isFinite(x)) return '—';
+    if (x === 0) return '0';
+    var v = sig(x, n), dec = Math.max(0, n - 1 - Math.floor(Math.log(Math.abs(v)) / Math.LN10 + 1e-12));
+    var str = Math.abs(v).toFixed(Math.min(dec, 12));
+    if (str.indexOf('.') >= 0) str = str.replace(/0+$/, '').replace(/\.$/, '');
+    var parts = str.split('.'); parts[0] = groupDigits(parts[0]);
+    return (v < 0 ? '−' : '') + parts.join('.');
+  }
+  /* 小数 d 桁に固定（lab の結果用） */
+  function fmtFixed(x, d) {
+    if (!isFinite(x)) return '—';
+    var str = Math.abs(x).toFixed(d), parts = str.split('.'); parts[0] = groupDigits(parts[0]);
+    var out = parts.join('.');
+    return (x < 0 && /[1-9]/.test(str) ? '−' : '') + out;
+  }
+  var PUNITS = [['TW', 1e12], ['GW', 1e9], ['MW', 1e6], ['kW', 1e3], ['W', 1]];
+  /* 電力 W を、W・kW・MW・GW・TW のうち読みやすいものに */
+  function powText(w, n, base) {
+    var units = base === 'Wh' ? PUNITS.map(function (u) { return [u[0].replace('W', 'Wh'), u[1]]; }) : PUNITS, k = 0;
+    n = n || 3;
+    for (k = 0; k < units.length - 1; k++) if (w >= units[k][1]) break;
+    if (sig(w / units[k][1], n) >= 1000 && k > 0) k--;
+    return fmtSig(w / units[k][1], n) + ' ' + units[k][0];
+  }
+  /* 倍率（何軒分など）：有効数字 2 桁。1 億以上は「億」、1 万以上は「万」 */
+  function ratioText(r) {
+    if (!isFinite(r) || r <= 0) return '—';
+    if (r >= 1e8) return fmtSig(r / 1e8, 2) + ' 億';
+    if (r >= 1e4) return fmtSig(r / 1e4, 2) + ' 万';
+    return fmtSig(r, 2);
+  }
+  /* 金額：円は 1 万ごと（円・万円・億円・兆円）、ドルは 1000 ごと（ドル・百万ドル・十億ドル・兆ドル）に単位を付け替える */
+  var YEN_LADDER = [['兆円', 1e12], ['億円', 1e8], ['万円', 1e4], ['円', 1]];
+  var USD_LADDER = [['兆ドル', 1e12], ['十億ドル', 1e9], ['百万ドル', 1e6], ['ドル', 1]];
+  function ladderText(v, n, units) {
+    var k = 0;
+    n = n || 3;
+    for (k = 0; k < units.length - 1; k++) if (v >= units[k][1]) break;
+    if (k > 0 && sig(v / units[k][1], n) >= units[k - 1][1] / units[k][1]) k--;
+    return fmtSig(v / units[k][1], n) + ' ' + units[k][0];
+  }
+  CN.numfmt = { sig: sig, fmtSig: fmtSig, fmtFixed: fmtFixed, powText: powText, ratioText: ratioText, ladderText: ladderText };
+
+  function measure(el, fallback) { var w = el.clientWidth; return w > 40 ? w : (fallback || 320); }
+  function watchWidth(el, fn) {
+    var last = 0, t = null;
+    function chk() { var w = el.clientWidth; if (w > 40 && Math.abs(w - last) > 2) { last = w; fn(); } }
+    if (window.ResizeObserver) { var ro = new ResizeObserver(function () { clearTimeout(t); t = setTimeout(chk, 60); }); ro.observe(el); }
+    else window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(chk, 120); });
+    setTimeout(chk, 0);
+  }
+  function enter(e) { return e.key === 'Enter' || e.key === ' '; }
+
+  /* ================= scale ================= */
+  var UNIT = { W: 1, kW: 1e3, MW: 1e6, GW: 1e9, TW: 1e12, '万kW': 1e7, '千kW': 1e6, VA: 1, kVA: 1e3, MVA: 1e6, GVA: 1e9 };
+  var EUNIT = { Wh: 1, kWh: 1e3, MWh: 1e6, GWh: 1e9, TWh: 1e12 };
+  var STAGES = [
+    { key: 'all', label: '全体（1 W 〜 10 TW）', lo: 0, hi: 13 },
+    { key: 'home', label: '家庭の桁', lo: 0, hi: 4 },
+    { key: 'plant', label: '設備・発電所の桁', lo: 3, hi: 10 },
+    { key: 'nation', label: '国の桁', lo: 6, hi: 13 }
+  ];
+  var JUNIT = { '円': 1, '万円': 1e4, '億円': 1e8, '兆円': 1e12 };
+  var DUNIT = { 'ドル': 1, '百万ドル': 1e6, '十億ドル': 1e9, '兆ドル': 1e12 };
+  CN.SCALE_UNITS = UNIT; CN.SCALE_EUNITS = EUNIT; CN.SCALE_JUNITS = JUNIT; CN.SCALE_DUNITS = DUNIT;
+  /* 物差しの種類。base は基準の単位、max は物差しの最大の桁（10 のべき乗の指数）。 */
+  var FAMS = {
+    power: { id: 'power', units: UNIT, base: 'W', max: 13, counter: '個', stages: STAGES, text: function (w, n) { return powText(w, n); },
+      conv: 'W に直した値', cap: 'W 換算は有効数字 3 桁',
+      caution: '倍率は、値の大きさだけを比べた目安です。条件（定格・平均・総出力・見通しなど）が項目ごとに違うので、実際の「何軒分」とは限りません。',
+      disc: '学習用の模型です。実際の設計や工事の判断には使えません。' },
+    jpy: { id: 'jpy', units: JUNIT, base: '円', max: 16, counter: '倍', major: 4, ladder: YEN_LADDER, text: function (w, n) { return ladderText(w, n, YEN_LADDER); },
+      stages: [{ key: 'all', label: '全体（1 円 〜 1 京円）', lo: 0, hi: 16 }, { key: 'home', label: '個人・企業の桁', lo: 3, hi: 10 }, { key: 'nation', label: '国・市場の桁', lo: 8, hi: 16 }],
+      conv: '円に直した値', cap: '円換算は有効数字 3 桁',
+      caution: '倍率は、金額の大きさだけを比べた目安です。時点・範囲・名目か実質か・残高か年間の流れかが項目ごとに違うので、実際の関係とは限りません。円とドルの換算はしていません。',
+      disc: '学習用の模型です。実際の投資・取引・契約の判断には使えません。' },
+    usd: { id: 'usd', units: DUNIT, base: 'ドル', max: 15, counter: '倍', major: 3, ladder: USD_LADDER, text: function (w, n) { return ladderText(w, n, USD_LADDER); },
+      stages: [{ key: 'all', label: '全体（1 ドル 〜 1,000 兆ドル）', lo: 0, hi: 15 }, { key: 'home', label: '個人・企業の桁', lo: 0, hi: 9 }, { key: 'nation', label: '国・市場の桁', lo: 6, hi: 15 }],
+      conv: 'ドルに直した値', cap: 'ドル換算は有効数字 3 桁',
+      caution: '倍率は、金額の大きさだけを比べた目安です。時点・範囲・名目か実質か・残高か年間の流れかが項目ごとに違うので、実際の関係とは限りません。円とドルの換算はしていません。',
+      disc: '学習用の模型です。実際の投資・取引・契約の判断には使えません。' }
+  };
+  /* 項目の単位から物差しの種類を決める（from＝電力量÷時間は電力）。混ぜた場合はビルド検査が止める */
+  function famOf(d) {
+    var f = 'power';
+    (d.items || []).forEach(function (it) { if (!it.from && it.unit && JUNIT.hasOwnProperty(it.unit)) f = 'jpy'; else if (!it.from && it.unit && DUNIT.hasOwnProperty(it.unit)) f = 'usd'; });
+    return FAMS[f];
+  }
+  var GCLS = ['ue', 'ran', 'core', 'db', 'pol', 'ext', 'ims'];
+
+  /* 項目を W に正規化する。値は必ずデータから（value＋unit、from＝電力量÷時間、range）。 */
+  function normItem(it, fam) {
+    var UNIT = fam.units;
+    var o = { it: it, id: it.id, name: it.name, short: it.short || it.name, counter: (it.counter || fam.counter).replace(/分$/, '') || fam.counter };
+    if (it.from) {
+      var e = it.from.energy * (EUNIT[it.from.unit || 'kWh'] || 1);
+      o.w = e / it.from.hours; o.derived = true;
+      o.disp = it.shown || (powText(o.w, 3));
+    } else if (it.range) {
+      var u = UNIT[it.unit] || 1;
+      o.lo = it.range[0] * u; o.hi = it.range[1] * u; o.w = Math.sqrt(o.lo * o.hi); o.isRange = true;
+      o.disp = it.shown || (groupDigits(String(it.range[0])) + '〜' + groupDigits(String(it.range[1])) + ' ' + it.unit);
+    } else {
+      o.w = it.value * (UNIT[it.unit] || 1);
+      o.disp = it.shown || (groupDigits(String(it.value)) + ' ' + it.unit);
+    }
+    if (!o.isRange) { o.lo = o.hi = o.w; }
+    return o;
+  }
+
+  CN.widgets.scale = function (el, d, ctx) {
+    var fam = famOf(d), items = d.items.map(function (it) { return normItem(it, fam); }), byId = {}, groups = d.groups || [], gIdx = {}, sources = d.sources || [];
+    items.forEach(function (o) { byId[o.id] = o; });
+    groups.forEach(function (g, i) { gIdx[g.key] = i; });
+    var stages = d.stages || fam.stages, st = stages[0], win = { lo: st.lo, hi: st.hi };
+    var A = byId[d.initial || (d.items[0] || {}).id], B = byId[d.base] || items[0], probe = (d.probe != null ? d.probe : Math.log(B.w) / Math.LN10);
+    var tabs = CN.tabs(stages.map(function (x) { return { key: x.key, label: x.label }; }), st.key, function (k) { setStage(k); }, '表示する桁の範囲');
+    CN.frame(el, '大きさの比較', d.title, tabs);
+    var body = h('div', { 'class': 'wg-body sc-body' });
+    var ctl = h('div', { 'class': 'sc-ctl' });
+    function cbtn(label, aria, fn) { var b = h('button', { type: 'button', 'class': 'btn sm', 'aria-label': aria }, label); b.addEventListener('click', fn); return b; }
+    ctl.appendChild(cbtn('＋ 拡大', '物差しを拡大（表示する桁を狭くする）', function () { zoom(0.5); }));
+    ctl.appendChild(cbtn('− 縮小', '物差しを縮小（表示する桁を広くする）', function () { zoom(2); }));
+    ctl.appendChild(cbtn('▲ 大きい方へ', '表示する範囲を大きい方へ 1 桁ずらす', function () { shift(1); }));
+    ctl.appendChild(cbtn('▼ 小さい方へ', '表示する範囲を小さい方へ 1 桁ずらす', function () { shift(-1); }));
+    var rangeNote = h('span', { 'class': 'sc-range', role: 'status' });
+    ctl.appendChild(rangeNote);
+    body.appendChild(ctl);
+    var grid = h('div', { 'class': 'sc-grid' }), rulerBox = h('div', { 'class': 'sc-ruler' }), panel = h('div', { 'class': 'sc-panel' });
+    grid.appendChild(panel); grid.appendChild(rulerBox); body.appendChild(grid);
+    el.appendChild(body);
+
+    /* ---- 右（スマホでは上）：選択と計算 ---- */
+    var selA = h('select', { id: ctx.id + '-a' }), selB = h('select', { id: ctx.id + '-b' });
+    items.forEach(function (o) { selA.appendChild(h('option', { value: o.id }, o.name)); selB.appendChild(h('option', { value: o.id }, o.name)); });
+    var swap = h('button', { type: 'button', 'class': 'btn sm' }, '⇄ 入れ替える');
+    panel.appendChild(h('div', { 'class': 'sc-sel' },
+      h('label', { 'for': ctx.id + '-a' }, '比べる項目（A）'), selA,
+      h('label', { 'for': ctx.id + '-b' }, '基準にする項目（B。「何軒分」「何基分」の単位）'), selB, swap));
+    var result = h('div', { 'class': 'sc-result', 'aria-live': 'polite' });
+    panel.appendChild(result);
+    var pr = h('div', { 'class': 'sc-probe' });
+    var rng = h('input', { type: 'range', id: ctx.id + '-p', min: 0, max: fam.max, step: 0.01, value: probe });
+    pr.appendChild(h('label', { 'for': ctx.id + '-p' }, '好きな大きさを探る（つまみ。矢印キーで動かせます）'));
+    pr.appendChild(rng);
+    var probeOut = h('div', { 'class': 'sc-probe-out', 'aria-live': 'polite' });
+    pr.appendChild(probeOut); panel.appendChild(pr);
+    var detail = h('div', { 'class': 'sc-detail' }); panel.appendChild(detail);
+
+    selA.addEventListener('change', function () { setA(selA.value); });
+    selB.addEventListener('change', function () { setB(selB.value); });
+    swap.addEventListener('click', function () { var t = A; A = B; B = t; refresh(); });
+    rng.addEventListener('input', function () { probe = parseFloat(rng.value); refreshProbe(); drawRuler(); });
+
+    /* ---- 左：対数の物差し（縦。上ほど大きい） ---- */
+    var svg = null;
+    function Hpx() { return measure(rulerBox, 340) < 420 ? 520 : 600; }
+    function drawRuler() {
+      var W = measure(rulerBox, 340), Hh = Hpx(), top = 18, bot = 18, axisX = fam.id === 'power' ? 66 : 98, lo = win.lo, hi = win.hi, span = hi - lo;
+      var yOf = function (w) { return top + (hi - Math.log(w) / Math.LN10) / span * (Hh - top - bot); };
+      var out = [];
+      var svg2 = s('svg', { 'class': 'sc-svg', viewBox: '0 0 ' + W + ' ' + Hh, width: W, height: Hh, role: 'group', 'aria-label': d.title + '（対数の物差し。' + items.length + ' 項目。同じ内容の表が下にあります）' });
+      svg2.appendChild(s('line', { 'class': 'sc-axis', x1: axisX, y1: top, x2: axisX, y2: Hh - bot }));
+      for (var e = Math.ceil(lo - 1e-9); e <= Math.floor(hi + 1e-9); e++) {
+        var y = yOf(Math.pow(10, e)), major = e % (fam.major || 3) === 0, u = e >= 12 ? 'TW' : e >= 9 ? 'GW' : e >= 6 ? 'MW' : e >= 3 ? 'kW' : 'W', m = Math.pow(10, e - (e >= 12 ? 12 : e >= 9 ? 9 : e >= 6 ? 6 : e >= 3 ? 3 : 0));
+        svg2.appendChild(s('line', { 'class': 'sc-tick' + (major ? ' maj' : ''), x1: axisX - (major ? 14 : 8), y1: y, x2: axisX, y2: y }));
+        if (major) svg2.appendChild(s('line', { 'class': 'sc-gl', x1: axisX, y1: y, x2: W - 4, y2: y }));
+        svg2.appendChild(s('text', { 'class': 'sc-tl' + (major ? ' maj' : ''), x: axisX - 18, y: y + 4, 'text-anchor': 'end' }, fam.id === 'power' ? m + ' ' + u : fam.text(Math.pow(10, e), 1)));
+      }
+      /* 探る値の線 */
+      if (probe >= lo && probe <= hi) {
+        var py = yOf(Math.pow(10, probe));
+        svg2.appendChild(s('line', { 'class': 'sc-probe-ln', x1: axisX - 4, y1: py, x2: W - 4, y2: py }));
+        svg2.appendChild(s('text', { 'class': 'sc-probe-tx halo', x: W - 6, y: py - 5, 'text-anchor': 'end' }, '探る値 ' + fam.text(Math.pow(10, probe), 3)));
+      }
+      /* 窓の中の項目。ラベルは重ならないよう縦にずらす */
+      var vis = items.filter(function (o) { return o.hi >= Math.pow(10, lo) * 0.9999 && o.lo <= Math.pow(10, hi) * 1.0001; });
+      var hid = items.filter(function (o) { return vis.indexOf(o) < 0; });
+      vis.sort(function (a, b) { return b.w - a.w; });
+      var LH = W < 420 ? 34 : 36, ly = vis.map(function (o) { return Math.min(Hh - bot, Math.max(top, yOf(o.w))); });
+      for (var i = 1; i < ly.length; i++) ly[i] = Math.max(ly[i], ly[i - 1] + LH);
+      for (i = ly.length - 2; i >= 0; i--) { if (ly[i + 1] > Hh - bot - 4) ly[i + 1] = Hh - bot - 4; ly[i] = Math.min(ly[i], ly[i + 1] - LH); }
+      var labX = axisX + 34;
+      vis.forEach(function (o, k) {
+        var cy = yOf(o.w), gi = gIdx[o.it.group] != null ? gIdx[o.it.group] : 0, isA = o === A, isB = o === B;
+        var g = s('g', { 'class': 'sc-it g' + (gi % GCLS.length) + (isA ? ' selA' : '') + (isB ? ' selB' : ''), tabindex: 0, role: 'button', 'aria-pressed': String(isA), 'aria-label': o.name + '、' + o.disp + (isA ? '（比べる項目に選択中）' : '') + (isB ? '（基準の項目）' : '') });
+        g.setAttribute('data-id', o.id);
+        g.appendChild(s('polyline', { 'class': 'sc-lead', points: (axisX + 10) + ',' + cy + ' ' + (labX - 10) + ',' + ly[k] + ' ' + (labX - 4) + ',' + ly[k] }));
+        g.appendChild(s('rect', { 'class': 'sc-hit', x: labX - 6, y: ly[k] - LH / 2 + 2, width: W - labX - 2, height: LH - 2, rx: 6 }));
+        if (o.isRange) {
+          var y1 = yOf(o.hi), y2 = yOf(o.lo);
+          g.appendChild(s('rect', { 'class': 'sc-mk range', x: axisX - 6, y: Math.max(top, y1), width: 12, height: Math.max(6, Math.min(Hh - bot, y2) - Math.max(top, y1)), rx: 5 }));
+        } else g.appendChild(s('circle', { 'class': 'sc-mk', cx: axisX, cy: cy, r: isA || isB ? 9 : 7 }));
+        var tag = isA && isB ? 'A・基準' : isA ? 'A' : isB ? '基準' : '';
+        var tx = labX;
+        if (tag) { var tw = tag.length * 11 + 10; g.appendChild(s('rect', { 'class': 'sc-tag', x: tx, y: ly[k] - 14, width: tw, height: 16, rx: 8 })); g.appendChild(s('text', { 'class': 'sc-tag-t', x: tx + tw / 2, y: ly[k] - 2, 'text-anchor': 'middle' }, tag)); tx += tw + 5; }
+        g.appendChild(s('text', { 'class': 'sc-l1', x: tx, y: ly[k] - 2 }, o.short));
+        g.appendChild(s('text', { 'class': 'sc-l2', x: labX, y: ly[k] + 14 }, o.disp));
+        g.addEventListener('click', function () { setA(o.id); });
+        g.addEventListener('keydown', function (ev) {
+          if (enter(ev)) { ev.preventDefault(); setA(o.id); }
+          else if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp') {
+            ev.preventDefault(); var all = svg2.querySelectorAll('.sc-it'), idx = Array.prototype.indexOf.call(all, g), nx = all[idx + (ev.key === 'ArrowDown' ? 1 : -1)]; if (nx) nx.focus();
+          } else if (ev.key === 'b' || ev.key === 'B') { ev.preventDefault(); setB(o.id); }
+        });
+        svg2.appendChild(g);
+      });
+      var ae = document.activeElement, keepId = ae && rulerBox.contains(ae) && ae.getAttribute ? ae.getAttribute('data-id') : null;
+      CN.clear(rulerBox);
+      rulerBox.appendChild(svg2); svg = svg2;
+      if (keepId) { var kf = svg2.querySelector('.sc-it[data-id="' + keepId + '"]'); if (kf) kf.focus(); }
+      var note = h('p', { 'class': 'sc-out' }, hid.length ? 'この範囲の外にある項目：' + hid.map(function (o) { return o.short; }).join('、') + '（「全体」か「縮小」で表示）' : 'すべての項目がこの範囲に入っています。');
+      rulerBox.appendChild(note);
+      rulerBox.appendChild(h('p', { 'class': 'sc-keys' }, '項目は Tab で選び、Enter で「比べる項目（A）」に、b キーで「基準」にします。矢印の上下で隣の項目へ移れます。'));
+      rangeNote.textContent = '表示中：' + fam.text(Math.pow(10, lo), 1) + ' 〜 ' + fam.text(Math.pow(10, hi), 1);
+    }
+
+    function setStage(k) {
+      var x = stages.filter(function (z) { return z.key === k; })[0]; if (!x) return;
+      win = { lo: x.lo, hi: x.hi }; syncTabs(k); drawRuler();
+    }
+    function syncTabs(k) {
+      var bs = el.querySelectorAll('.wg-tabs button');
+      Array.prototype.forEach.call(bs, function (b, i) { b.setAttribute('aria-pressed', String(k != null && stages[i] && stages[i].key === k)); });
+    }
+    function zoom(f) {
+      var c = (win.lo + win.hi) / 2, sp = (win.hi - win.lo) * f;
+      sp = Math.max(2, Math.min(fam.max, sp)); win = { lo: c - sp / 2, hi: c + sp / 2 };
+      if (win.lo < 0) { win.hi -= win.lo; win.lo = 0; } if (win.hi > fam.max) { win.lo -= win.hi - fam.max; win.hi = fam.max; }
+      win.lo = Math.max(0, Math.round(win.lo)); win.hi = Math.min(fam.max, Math.round(win.hi)); if (win.hi - win.lo < 2) win.hi = win.lo + 2;
+      syncTabs(null); drawRuler();
+    }
+    function shift(n) {
+      var sp = win.hi - win.lo, lo = Math.max(0, Math.min(fam.max - sp, win.lo + n)); win = { lo: lo, hi: lo + sp }; syncTabs(null); drawRuler();
+    }
+    function inWin(o) { return o.hi >= Math.pow(10, win.lo) * 0.9999 && o.lo <= Math.pow(10, win.hi) * 1.0001; }
+    function setA(id) { A = byId[id]; if (!inWin(A)) setStage(stages[0].key); refresh(); }
+    function setB(id) { B = byId[id]; refresh(); }
+
+    /* 数え方が「倍」のとき（国・世界など、「何軒分」と言えない基準）は「約 X 倍」と言う */
+    function times(r, c) { return c === '倍' ? '約 ' + ratioText(r) + ' 倍' : '約 ' + ratioText(r) + c + '分'; }
+    function bunno(x) { var t = ratioText(x); return t + (/[万億]$/.test(t) ? '' : ' ') + '分の 1'; }
+    function ratioSentence(a, b) {
+      var rl = a.lo / b.hi, rh = a.hi / b.lo, one = !a.isRange && !b.isRange, r = a.w / b.w, c = b.counter;
+      if (a === b) return '同じ項目です（1 倍）。';
+      if (one) {
+        if (Math.abs(r - 1) < 0.05) return a.name + 'は、' + b.name + 'とほぼ同じ大きさです（約 1 倍）。';
+        if (r < 1) return a.name + 'は、' + b.name + 'の約 ' + bunno(1 / r) + ' です。';
+        return a.name + 'は、' + b.name + 'の' + times(r, c) + 'です。';
+      }
+      if (rh < 1) return a.name + 'は、' + b.name + 'の約 ' + ratioText(1 / rh) + '〜' + bunno(1 / rl) + ' です。';
+      return a.name + 'は、' + b.name + 'の約 ' + ratioText(rl) + '〜' + ratioText(rh) + (c === '倍' ? ' 倍' : c + '分') + 'です。';
+    }
+    function calcLine(a, b) {
+      var one = !a.isRange && !b.isRange;
+      function wtxt(o) {
+        if (fam.id !== 'power') return o.isRange ? fam.text(o.lo, 3) + '〜' + fam.text(o.hi, 3) : fam.text(o.w, 3);
+        return o.isRange ? fmtSig(o.lo, 3) + '〜' + fmtSig(o.hi, 3) + ' W' : fmtSig(o.w, 3) + ' W';
+      }
+      if (one && a.w < b.w) return '計算：' + wtxt(b) + ' ÷ ' + wtxt(a) + ' ＝ ' + fmtSig(b.w / a.w, 3) + '（B が A の何倍かを出し、有効数字 2 桁に丸めて「何分の 1」にしています）';
+      if (one) return '計算：' + wtxt(a) + ' ÷ ' + wtxt(b) + ' ＝ ' + fmtSig(a.w / b.w, 3) + '（有効数字 2 桁に丸めて上の文にしています）';
+      return '計算：（' + wtxt(a) + '）÷（' + wtxt(b) + '）。幅のある項目は、最小と最大の組み合わせで範囲を出しています。';
+    }
+    function refreshProbe() {
+      var w = Math.pow(10, probe), r = w / B.w, near = items.slice().sort(function (p, q) { return Math.abs(Math.log(p.w / w)) - Math.abs(Math.log(q.w / w)); })[0];
+      var tx = '探る値：' + fam.text(w, 3) + '。' + B.name + 'の ' + (Math.abs(r - 1) < 0.05 ? 'ほぼ同じ大きさ（約 1 倍）' : r < 1 ? '約 ' + bunno(1 / r) : times(r, B.counter)) + '。いちばん近い項目は「' + near.short + '」（' + near.disp + '）。';
+      probeOut.textContent = tx; rng.setAttribute('aria-valuetext', fam.text(w, 3));
+    }
+    function refresh() {
+      selA.value = A.id; selB.value = B.id;
+      CN.clear(result);
+      result.appendChild(h('p', { 'class': 'sc-sent' }, ratioSentence(A, B)));
+      result.appendChild(h('p', { 'class': 'sc-calc' }, calcLine(A, B)));
+      result.appendChild(h('p', { 'class': 'sc-caution' }, d.caution || fam.caution));
+      CN.clear(detail);
+      [A, B].forEach(function (o, k) {
+        if (k === 1 && B === A) return;
+        var it = o.it, gname = (groups[gIdx[it.group]] || {}).label || '';
+        var box = h('div', { 'class': 'sc-card' });
+        box.appendChild(h('p', { 'class': 'kick' }, (k === 0 ? '比べる項目（A）' : '基準の項目（B）') + (gname ? ' ・ ' + gname : '')));
+        box.appendChild(h('h5', null, o.name));
+        box.appendChild(h('p', { 'class': 'sc-val' }, o.disp + (o.derived ? '（' + (it.from.formula || '') + '）' : '')));
+        if (it.desc) box.appendChild(CN.richEl('p', '', it.desc));
+        if (it.cond) box.appendChild(CN.richEl('p', 'sc-cond', '条件：' + it.cond));
+        box.appendChild(h('p', { 'class': 'sc-srcs' }, '出典：' + (it.src || []).map(function (n) { return '[' + n + ']'; }).join(' ') + '（下の出典の一覧）'));
+        if (it.ch && it.ch.length) box.appendChild(CN.chLinks(it.ch));
+        detail.appendChild(box);
+      });
+      refreshProbe();
+      if (svg) drawRuler();
+    }
+
+    /* ---- 下：出典の一覧と、同じ内容の表 ---- */
+    var srcBox = h('div', { 'class': 'sc-sources' });
+    srcBox.appendChild(h('h5', null, '出典の一覧'));
+    var ol = h('ol');
+    sources.forEach(function (x) {
+      var li = h('li', { value: x.n }, (x.issuer ? x.issuer + '『' : '『') + x.title + '』' + (x.date ? '、' + x.date : '') + (x.note ? '。' + x.note : '') + ' ');
+      if (x.url) li.appendChild(h('a', { href: x.url, target: '_blank', rel: 'noopener noreferrer' }, '個別ページ'));
+      ol.appendChild(li);
+    });
+    srcBox.appendChild(ol); el.appendChild(srcBox);
+    var det = h('details', { 'class': 'seq-list sc-table' }, h('summary', null, '項目の一覧（同じ内容の表。読み上げ・印刷用）'));
+    var tb = h('tbody');
+    items.slice().sort(function (p, q) { return p.w - q.w; }).forEach(function (o) {
+      var it = o.it, gname = (groups[gIdx[it.group]] || {}).label || '';
+      tb.appendChild(h('tr', null, h('th', { scope: 'row' }, o.name), h('td', null, gname), h('td', null, o.disp), h('td', null, o.isRange ? fmtSig(o.lo, 3) + '〜' + fmtSig(o.hi, 3) : fmtSig(o.w, 3)), h('td', null, it.cond || ''), h('td', null, (it.src || []).map(function (n) { return '[' + n + ']'; }).join(' '))));
+    });
+    det.appendChild(h('div', { 'class': 'tbl-wrap' }, h('table', { 'class': 'tbl' }, h('caption', null, d.title + '：小さい順（' + fam.cap + '）'), h('thead', null, h('tr', null, ['項目', '区分', '公表値（出典の表記）', fam.conv, '条件', '出典'].map(function (c) { return h('th', { scope: 'col' }, c); }))), tb)));
+    el.appendChild(det);
+    if (d.disclaimer !== false) el.appendChild(h('p', { 'class': 'lab-disc' }, d.disclaimer || fam.disc));
+
+    refresh();
+    watchWidth(rulerBox, drawRuler);
+  };
+  CN.searchText.scale = function (d) {
+    var out = [d.title]; d.items.forEach(function (x) { out.push(x.name, x.short, x.desc, x.cond); }); (d.sources || []).forEach(function (x) { out.push(x.issuer, x.title); });
+    return out.filter(Boolean).join(' ');
+  };
+
+  /* ================= lab ================= */
+  var COLORS = ['ran', 'core', 'pol', 'ims'];
+  function numSteps(step) { var m = /\.(\d+)/.exec(String(step)); return m ? m[1].length : 0; }
+
+  CN.widgets.lab = function (el, d, ctx) {
+    var exps = d.experiments, cur = 0, state = exps.map(function (x) { var v = {}; x.inputs.forEach(function (i) { v[i.id] = i.value; }); return v; });
+    var compiled = exps.map(function (x) { return compileExp(x); });
+    var tabs = exps.length > 1 ? CN.tabs(exps.map(function (x, i) { return { key: i, label: x.label }; }), 0, function (k) { cur = k; build(); }, '実験の切替') : null;
+    CN.frame(el, '式を動かす実験台', d.title, tabs);
+    var body = h('div', { 'class': 'wg-body lab-body' }); el.appendChild(body);
+    if (d.disclaimer !== false) el.appendChild(h('p', { 'class': 'lab-disc' }, d.disclaimer || '学習用の模型です。実際の設計や工事の判断には使えません。'));
+    var figBox = null, resBox = null, readBox = null, sayBoxes = {}, tableBox = null, outEls = {}, constBox = null, lastEnv = null, sliders = {}, presetBtns = [], presetNote = null, quadCells = [];
+
+    function compileExp(x) {
+      var c = { calc: (x.calc || []).map(function (k) { return { id: k.id, f: X.compile(k.expr) }; }), results: (x.results || []).map(function (r) { return { r: r, f: X.compile(r.expr), sh: r.show ? X.compile(r.show) : null, bf: r.base ? X.compile(r.base.expr) : null }; }),
+        reads: (x.reads || []).map(function (r) { return { r: r, f: r.when ? X.compile(r.when) : null }; }), says: {}, quad: [] };
+      if (x.quad) (x.quad.cells || []).forEach(function (row, ri) { row.forEach(function (cell, ci) { c.quad.push({ ri: ri, ci: ci, f: cell.when ? X.compile(cell.when) : null }); }); });
+      x.inputs.forEach(function (i) { c.says[i.id] = (i.say || []).map(function (r) { return { r: r, f: r.when ? X.compile(r.when) : null }; }); });
+      return c;
+    }
+    function env(k) {
+      var x = exps[k], e = {}, key;
+      (x.consts || []).forEach(function (c) { e[c.id] = c.value; });
+      for (key in state[k]) e[key] = state[k][key];
+      compiled[k].calc.forEach(function (c) { try { e[c.id] = c.f.run(e); } catch (er) { e[c.id] = NaN; } });
+      return e;
+    }
+    function ev(f, e) { try { return f.run(e); } catch (er) { return NaN; } }
+    function show(v, digits, auto) {
+      if (!isFinite(v)) return { num: '—', unit: '' };
+      if (auto) { var t = auto === '円' ? ladderText(v, digits != null ? Math.max(2, digits) : 3, YEN_LADDER) : auto === 'ドル' ? ladderText(v, digits != null ? Math.max(2, digits) : 3, USD_LADDER) : powText(v, digits != null ? Math.max(2, digits) : 3, auto === 'Wh' ? 'Wh' : 'W'); var sp = t.lastIndexOf(' '); return { num: t.slice(0, sp), unit: t.slice(sp + 1) }; }
+      var dg = digits != null ? digits : 2;
+      /* 0 でないのに丸めると 0 になる値は「0.001 未満」と出す */
+      if (v > 1e-9 && !/[1-9]/.test(Math.abs(v).toFixed(dg))) return { num: fmtFixed(Math.pow(10, -dg), dg), unit: '', lt: true };
+      return { num: fmtFixed(v, dg), unit: '' };
+    }
+
+    /* プリセット：set は { 入力の id: 値 }。つまみの刻みに丸められた値が state に入る */
+    function setAll(set) {
+      var k; for (k in set) { var sl = sliders[k]; if (sl) { sl.r.value = set[k]; sl.sync(); } }
+      refresh();
+    }
+    /* 2×2 などの分類表（実際の表。いまの入力に当てはまるマスに印が付く）。x.quad = {title?, corner?, cols:[…], rows:[…], cells:[[{title, sub?, when?}, …], …], caption?} */
+    function buildQuad(q) {
+      var tb = h('tbody');
+      (q.rows || []).forEach(function (rh, ri) {
+        var tr = h('tr', null, h('th', { scope: 'row' }, rh));
+        (q.cells[ri] || []).forEach(function (cell) {
+          var td = h('td', { 'class': 'lab-quad-c' }, h('b', null, cell.title)); if (cell.sub) td.appendChild(h('span', null, cell.sub));
+          quadCells.push(td); tr.appendChild(td);
+        });
+        tb.appendChild(tr);
+      });
+      var tbl = h('table', { 'class': 'lab-quad-t' }, h('thead', null, h('tr', null, [h('th', { scope: 'col' }, q.corner || '')].concat((q.cols || []).map(function (c) { return h('th', { scope: 'col' }, c); })))), tb);
+      var box = h('div', { 'class': 'lab-quad' });
+      if (q.title) box.appendChild(h('h5', null, q.title));
+      box.appendChild(h('div', { 'class': 'tbl-wrap' }, tbl));
+      if (q.caption) box.appendChild(CN.richEl('p', 'lab-cap', q.caption));
+      return box;
+    }
+
+    function build() {
+      var x = exps[cur]; CN.clear(body);
+      if (x.intro) body.appendChild(CN.richEl('p', 'lab-intro', x.intro));
+      sayBoxes = {}; outEls = {}; sliders = {}; presetBtns = []; presetNote = null; quadCells = [];
+      /* 実験の「プリセット」：複数の入力をまとめて決める（任意）。押すと下のつまみが動く */
+      if (x.presets && x.presets.length) {
+        var pbar = h('div', { 'class': 'lab-preset-bar' }), plabel = x.presetLabel || 'まとめて動かす（押すと、下のつまみが動きます）';
+        pbar.appendChild(h('div', { 'class': 'lab-preset-h' }, plabel));
+        var pgrp = h('div', { 'class': 'lab-presets', role: 'group', 'aria-label': plabel });
+        x.presets.forEach(function (p) { var b = h('button', { type: 'button', 'class': 'btn sm', 'aria-pressed': 'false' }, p.label); b.addEventListener('click', function () { setAll(p.set); }); presetBtns.push(b); pgrp.appendChild(b); });
+        pbar.appendChild(pgrp);
+        presetNote = h('p', { 'class': 'lab-say lab-preset-note', 'aria-live': 'polite' }); pbar.appendChild(presetNote);
+        body.appendChild(pbar);
+      }
+      var top = h('div', { 'class': 'lab-top' }), inputs = h('div', { 'class': 'lab-inputs' }), right = h('div', { 'class': 'lab-right' });
+      top.appendChild(inputs); top.appendChild(right); body.appendChild(top);
+      x.inputs.forEach(function (i) {
+        var id = ctx.id + '-' + cur + '-' + i.id, dec = numSteps(i.step);
+        var wrap = h('div', { 'class': 'lab-in' });
+        var out = h('output', { 'for': id, 'class': 'lab-val' });
+        wrap.appendChild(h('div', { 'class': 'lab-in-h' }, h('label', { 'for': id }, i.label + (i.unit ? '（' + i.unit + '）' : '')), out));
+        var r = h('input', { type: 'range', id: id, min: i.min, max: i.max, step: i.step, value: state[cur][i.id] });
+        function sync() {
+          state[cur][i.id] = parseFloat(r.value); out.textContent = fmtFixed(state[cur][i.id], dec) + (i.unit ? ' ' + i.unit : '');
+          r.setAttribute('aria-valuetext', out.textContent);
+        }
+        function upd() { sync(); refresh(); }
+        sliders[i.id] = { r: r, sync: sync };
+        r.addEventListener('input', upd); wrap.appendChild(r);
+        wrap.appendChild(h('div', { 'class': 'lab-minmax' }, h('span', null, fmtFixed(i.min, dec)), h('span', null, fmtFixed(i.max, dec))));
+        if (i.presets && i.presets.length) {
+          var pw = h('div', { 'class': 'lab-presets', role: 'group', 'aria-label': i.label + 'の目安の値' });
+          i.presets.forEach(function (p) { var b = h('button', { type: 'button', 'class': 'btn sm' }, p.label); b.addEventListener('click', function () { r.value = p.value; upd(); }); pw.appendChild(b); });
+          wrap.appendChild(pw);
+        }
+        var say = h('p', { 'class': 'lab-say', 'aria-live': 'polite' }); wrap.appendChild(say); sayBoxes[i.id] = say;
+        out.textContent = fmtFixed(state[cur][i.id], dec) + (i.unit ? ' ' + i.unit : ''); r.setAttribute('aria-valuetext', out.textContent);
+        inputs.appendChild(wrap);
+      });
+      figBox = h('div', { 'class': 'lab-fig' }); right.appendChild(figBox);
+      resBox = h('div', { 'class': 'lab-results', 'aria-live': 'polite' }); right.appendChild(resBox);
+      if (x.quad) right.appendChild(buildQuad(x.quad));
+      if (x.formula) body.appendChild(CN.richEl('p', 'lab-formula', '式：' + x.formula));
+      readBox = h('div', { 'class': 'lab-read' }); body.appendChild(readBox);
+      if (x.consts && x.consts.length) {
+        constBox = h('div', { 'class': 'lab-consts' }, h('h5', null, 'この実験で使っている決まった数字'));
+        var ul = h('ul'); x.consts.forEach(function (c) { ul.appendChild(CN.richEl('li', '', c.label + '：' + fmtFixed(c.value, c.digits != null ? c.digits : 0) + (c.unit ? ' ' + c.unit : '') + (c.src ? '（' + c.src + '）' : ''))); });
+        constBox.appendChild(ul); body.appendChild(constBox);
+      }
+      tableBox = h('details', { 'class': 'seq-list lab-table' }, h('summary', null, '図の数値（同じ内容の表。読み上げ・印刷用）')); body.appendChild(tableBox);
+      if (x.ch && x.ch.length) body.appendChild(CN.chLinks(x.ch));
+      refresh();
+      watchWidth(figBox, drawFig);
+    }
+
+    function refresh() {
+      var x = exps[cur], c = compiled[cur], e = env(cur); lastEnv = e;
+      CN.clear(resBox);
+      c.results.forEach(function (o) {
+        if (o.sh && !ev(o.sh, e)) return;      // show：式が偽のとき、この結果は出さない（任意）
+        var v = ev(o.f, e), t = o.r.words ? { num: (isFinite(v) && o.r.words[Math.round(v)] != null) ? o.r.words[Math.round(v)] : '—', unit: '' } : show(v, o.r.digits, o.r.auto), box = h('div', { 'class': 'lab-res' + (o.r.big ? ' big' : '') + (o.r.words ? ' word' : '') });
+        box.appendChild(h('div', { 'class': 'lab-res-l' }, o.r.label));
+        box.appendChild(h('div', { 'class': 'lab-res-v' }, h('b', null, t.num), ' ' + (t.unit || o.r.unit || '') + (t.lt ? ' 未満' : '')));
+        if (o.bf) {      // base：変化前などの比較の値（任意）。words があれば言葉で、なければ数で
+          var bv = ev(o.bf, e), bw = o.r.base.words, bt = bw ? ((isFinite(bv) && bw[Math.round(bv)] != null) ? bw[Math.round(bv)] : '—') : (function () { var q = show(bv, o.r.base.digits != null ? o.r.base.digits : o.r.digits, o.r.auto); return q.num + ((q.unit || o.r.unit) ? ' ' + (q.unit || o.r.unit) : ''); })();
+          box.appendChild(h('div', { 'class': 'lab-res-n' }, (o.r.base.label || '元') + '：' + bt));
+        }
+        if (o.r.note) box.appendChild(h('div', { 'class': 'lab-res-n' }, o.r.note));
+        resBox.appendChild(box);
+      });
+      x.inputs.forEach(function (i) {
+        var hit = null; c.says[i.id].forEach(function (z) { if (!hit && (!z.f || ev(z.f, e))) hit = z.r; });
+        sayBoxes[i.id].textContent = hit ? hit.text : (i.hint || '');
+      });
+      if (x.presets && presetBtns.length) {
+        var act = -1; x.presets.forEach(function (p, pi) {
+          var on = true, k; for (k in p.set) { if (Math.abs((state[cur][k] != null ? state[cur][k] : NaN) - p.set[k]) > 1e-9) on = false; }
+          presetBtns[pi].setAttribute('aria-pressed', String(on)); if (on && act < 0) act = pi;
+        });
+        presetNote.textContent = act >= 0 ? (x.presets[act].text || '') : (x.presetHint || '');
+      }
+      if (c.quad.length) c.quad.forEach(function (q) { var on = !!(q.f && ev(q.f, e)), td = quadCells[q.ri * (x.quad.cols || []).length + q.ci]; if (td) { td.className = 'lab-quad-c' + (on ? ' on' : ''); if (on) td.setAttribute('aria-current', 'true'); else td.removeAttribute('aria-current'); } });
+      CN.clear(readBox);
+      var rl = c.reads.filter(function (z) { return !z.f || ev(z.f, e); });
+      if (rl.length) {
+        readBox.appendChild(h('h5', null, '読み取れること'));
+        var ul = h('ul'); rl.forEach(function (z) { ul.appendChild(CN.richEl('li', '', z.r.text)); }); readBox.appendChild(ul);
+      }
+      drawFig();
+    }
+
+    /* ---- 図 ---- */
+    function num(v, e, dflt) { if (v == null) return dflt; if (typeof v === 'number') return v; try { return X.compile(v).run(e); } catch (er) { return dflt; } }
+    function drawFig() {
+      var x = exps[cur], list = x.figs || (x.fig ? [x.fig] : []), e = lastEnv; if (!list.length || !figBox || !e) return;
+      CN.clear(figBox); CN.clear(tableBox); tableBox.appendChild(h('summary', null, '図の数値（同じ内容の表。読み上げ・印刷用）'));
+      var W = measure(figBox, 320);
+      list.forEach(function (f, fi) {
+        var rows = [], svg, many = list.length > 1, nm = many ? x.label + '・' + (f.title || '図 ' + (fi + 1)) : x.label;
+        if (f.type === 'bar') svg = f.signed ? figBarS(f, e, W, rows) : figBar(f, e, W, rows);
+        else if (f.type === 'wave') svg = figWave(f, e, W, rows);
+        else if (f.type === 'curve') svg = figCurve(f, e, W, rows);
+        else svg = figCircuit(f, e, W, rows);
+        if (many && f.title) figBox.appendChild(h('h5', { 'class': 'lab-fig-t' }, f.title));
+        figBox.appendChild(svg);
+        if (f.caption) figBox.appendChild(CN.richEl('p', 'lab-cap', f.caption));
+        var tb = h('tbody');
+        if (rows.tbl) {
+          rows.tbl.body.forEach(function (r) { tb.appendChild(h('tr', null, r.map(function (c, ci) { return ci === 0 ? h('th', { scope: 'row' }, c) : h('td', null, c); }))); });
+          tableBox.appendChild(h('div', { 'class': 'tbl-wrap' }, h('table', { 'class': 'tbl' }, h('caption', null, nm + '：線グラフの数値'), h('thead', null, h('tr', null, rows.tbl.head.map(function (c) { return h('th', { scope: 'col' }, c); }))), tb)));
+        } else {
+          rows.forEach(function (r) { tb.appendChild(h('tr', null, h('th', { scope: 'row' }, r[0]), h('td', null, r[1]))); });
+          tableBox.appendChild(h('div', { 'class': 'tbl-wrap' }, h('table', { 'class': 'tbl' }, h('caption', null, nm + '：図の数値'), h('thead', null, h('tr', null, h('th', { scope: 'col' }, '項目'), h('th', { scope: 'col' }, '値'))), tb)));
+        }
+        svg.setAttribute('aria-label', (f.alt || x.label) + '。' + rows.map(function (r) { return r[0] + ' ' + r[1]; }).join('、'));
+      });
+    }
+    function vt(v, b) { var t = show(v, b.digits, b.auto); return t.num + (t.unit || b.unit ? ' ' + (t.unit || b.unit) : '') + (t.lt ? ' 未満' : ''); }
+
+    function figBar(f, e, W, rows) {
+      var bars = f.bars, vals = bars.map(function (b) { return num(b.expr, e, NaN); }), n = bars.length, rowH = 44, padL = Math.min(150, W * 0.36), padR = 12, Hh = 20 + n * rowH + 10;
+      var mx = f.max != null ? num(f.max, e, NaN) : NaN; if (!isFinite(mx)) mx = Math.max.apply(null, vals.filter(isFinite)) * 1.05 || 1;
+      var svg = s('svg', { 'class': 'lab-svg', viewBox: '0 0 ' + W + ' ' + Hh, width: W, height: Hh, role: 'img' });
+      var pos = function (v) { if (!isFinite(v) || v <= 0) return 0; if (f.log) { var lo = f.logMin != null ? f.logMin : 0.1, k = (Math.log(v / lo) / Math.LN10) / (Math.log(mx / lo) / Math.LN10); return Math.max(0.01, Math.min(1, k)); } return Math.max(0, Math.min(1, v / mx)); };
+      bars.forEach(function (b, i) {
+        var y = 14 + i * rowH, w = (W - padL - padR) * pos(vals[i]);
+        svg.appendChild(s('text', { 'class': 'lab-bl', x: padL - 8, y: y + 14, 'text-anchor': 'end' }, b.label));
+        svg.appendChild(s('rect', { 'class': 'lab-track', x: padL, y: y, width: W - padL - padR, height: 20, rx: 4 }));
+        svg.appendChild(s('rect', { 'class': 'lab-bar c-' + (b.color || COLORS[i % COLORS.length]), x: padL, y: y, width: Math.max(0, w), height: 20, rx: 4 }));
+        svg.appendChild(s('text', { 'class': 'lab-bv', x: padL, y: y + 36 }, vt(vals[i], b)));
+        rows.push([b.label, vt(vals[i], b)]);
+      });
+      if (f.log) svg.appendChild(s('text', { 'class': 'lab-note', x: W - padR, y: Hh - 1, 'text-anchor': 'end' }, '棒の長さは対数（桁の違いを見るため）'));
+      return svg;
+    }
+
+    function figWave(f, e, W, rows) {
+      var Hh = Math.max(236, Math.min(296, W * 0.55 + 16)), mL = 46, mR = 12, mT = 46, mB = 30, pw = W - mL - mR, ph = Hh - mT - mB;
+      var span = num(f.span, e, 0.04), ymax = num(f.ymax, e, 1), svg = s('svg', { 'class': 'lab-svg', viewBox: '0 0 ' + W + ' ' + Hh, width: W, height: Hh, role: 'img' });
+      var X0 = function (t) { return mL + t / span * pw; }, Y0 = function (v) { return mT + ph / 2 - v / ymax * ph / 2; };
+      svg.appendChild(s('rect', { 'class': 'lab-plot', x: mL, y: mT, width: pw, height: ph }));
+      [-1, -0.5, 0, 0.5, 1].forEach(function (k) { svg.appendChild(s('line', { 'class': 'lab-g' + (k === 0 ? ' zero' : ''), x1: mL, y1: Y0(k * ymax), x2: mL + pw, y2: Y0(k * ymax) })); });
+      for (var k = 0; k <= 4; k++) { var t = span * k / 4; svg.appendChild(s('line', { 'class': 'lab-g v', x1: X0(t), y1: mT, x2: X0(t), y2: mT + ph })); svg.appendChild(s('text', { 'class': 'lab-ax', x: X0(t), y: Hh - 10, 'text-anchor': k === 0 ? 'start' : k === 4 ? 'end' : 'middle' }, fmtSig(t * 1000, 3) + (k === 4 ? ' ms' : ''))); }
+      svg.appendChild(s('text', { 'class': 'lab-ax', x: mL - 6, y: Y0(ymax) + 4, 'text-anchor': 'end' }, '+' + fmtSig(ymax, 3)));
+      svg.appendChild(s('text', { 'class': 'lab-ax', x: mL - 6, y: Y0(0) + 4, 'text-anchor': 'end' }, '0'));
+      svg.appendChild(s('text', { 'class': 'lab-ax', x: mL - 6, y: Y0(-ymax) + 4, 'text-anchor': 'end' }, '−' + fmtSig(ymax, 3)));
+      if (f.unit) svg.appendChild(s('text', { 'class': 'lab-ax', x: 4, y: 13 }, '縦軸：' + (f.yLabel || '') + '（' + f.unit + '）'));
+      var N = 240, ws = f.waves.map(function (w) { return { w: w, amp: num(w.amp, e, 0), fq: num(w.freq, e, 50), ph: num(w.phase, e, 0) * Math.PI / 180 }; });
+      var dashes = ['', '7 4', '2 4'];
+      if (f.rms) {
+        var rv = num(f.rms, e, 0);
+        [rv, -rv].forEach(function (v) { svg.appendChild(s('line', { 'class': 'lab-rms', x1: mL, y1: Y0(v), x2: mL + pw, y2: Y0(v) })); });
+        svg.appendChild(s('text', { 'class': 'lab-rms-t halo', x: mL + pw - 4, y: Y0(rv) - 4, 'text-anchor': 'end' }, f.rmsLabel || '実効値'));
+        rows.push([f.rmsLabel || '実効値', fmtSig(rv, 3) + ' ' + (f.unit || '')]);
+      }
+      var sumPts = [];
+      ws.forEach(function (o, wi) {
+        var pts = [];
+        for (var i = 0; i <= N; i++) { var tt = span * i / N, v = o.amp * Math.sin(2 * Math.PI * o.fq * tt + o.ph); pts.push(X0(tt).toFixed(1) + ',' + Y0(v).toFixed(1)); sumPts[i] = (sumPts[i] || 0) + v; }
+        var path = s('polyline', { 'class': 'lab-wave c-' + (o.w.color || COLORS[wi % COLORS.length]), points: pts.join(' '), 'stroke-dasharray': dashes[wi % 3] || null });
+        svg.appendChild(path);
+        rows.push([o.w.label + '（振幅・周波数・位相）', fmtSig(o.amp, 3) + ' ' + (f.unit || '') + '・' + fmtSig(o.fq, 3) + ' Hz・' + fmtSig(o.ph * 180 / Math.PI, 3) + ' 度']);
+      });
+      var maxSum = 0;
+      if (f.sum) {
+        var sp2 = sumPts.map(function (v, i) { maxSum = Math.max(maxSum, Math.abs(v)); return X0(span * i / N).toFixed(1) + ',' + Y0(v).toFixed(1); });
+        svg.appendChild(s('polyline', { 'class': 'lab-wave sum', points: sp2.join(' ') }));
+        rows.push([(f.sum.label || '合計') + '（大きさの最大）', fmtSig(maxSum < 1e-9 * (ymax || 1) ? 0 : maxSum, 3) + ' ' + (f.unit || '')]);
+      }
+      /* 凡例 */
+      var lx = mL;
+      ws.forEach(function (o, wi) {
+        svg.appendChild(s('line', { 'class': 'lab-wave c-' + (o.w.color || COLORS[wi % COLORS.length]), x1: lx, y1: 31, x2: lx + 22, y2: 31, 'stroke-dasharray': dashes[wi % 3] || null }));
+        svg.appendChild(s('text', { 'class': 'lab-lg', x: lx + 26, y: 35 }, o.w.label)); lx += 34 + o.w.label.length * 12;
+      });
+      if (f.sum) { svg.appendChild(s('line', { 'class': 'lab-wave sum', x1: lx, y1: 31, x2: lx + 22, y2: 31 })); svg.appendChild(s('text', { 'class': 'lab-lg', x: lx + 26, y: 35 }, f.sum.label || '合計')); }
+      if (f.periodRow !== false && ws.length === 1) rows.push(['周期', fmtSig(1000 / ws[0].fq, 3) + ' ms']);
+      return svg;
+    }
+
+    /* ---- 正負の棒（fig.type 'bar'、signed:true）：0 の線から左右に伸びる。max は絶対値の上限（数か式。省略するとデータから） ---- */
+    function figBarS(f, e, W, rows) {
+      var bars = f.bars, vals = bars.map(function (b) { return num(b.expr, e, NaN); }), n = bars.length, rowH = 50, padL = 10, padR = 10, Hh = 24 + n * rowH + 8;
+      var mx = f.max != null ? num(f.max, e, NaN) : NaN; if (!isFinite(mx)) mx = Math.max.apply(null, vals.filter(isFinite).map(Math.abs)) * 1.1 || 1;
+      var svg = s('svg', { 'class': 'lab-svg', viewBox: '0 0 ' + W + ' ' + Hh, width: W, height: Hh, role: 'img' });
+      var x0 = padL, x1 = W - padR, zx = (x0 + x1) / 2, half = (x1 - x0) / 2, k = half / mx;
+      svg.appendChild(s('rect', { 'class': 'lab-plot', x: x0, y: 16, width: x1 - x0, height: n * rowH + 4 }));
+      [-1, 1].forEach(function (sg) { svg.appendChild(s('line', { 'class': 'lab-g v', x1: zx + sg * half / 2, y1: 16, x2: zx + sg * half / 2, y2: 16 + n * rowH + 4 })); });
+      svg.appendChild(s('line', { 'class': 'lab-g zero', x1: zx, y1: 12, x2: zx, y2: 16 + n * rowH + 4 }));
+      svg.appendChild(s('text', { 'class': 'lab-ax', x: zx, y: 10, 'text-anchor': 'middle' }, '0'));
+      var ud = f.unit ? '（' + f.unit + '）' : '';
+      svg.appendChild(s('text', { 'class': 'lab-ax', x: x0 + 2, y: 10 }, '← ' + (f.negLabel || '下がる') + ' ' + fmtFixed(mx, f.axisDigits != null ? f.axisDigits : 0)));
+      svg.appendChild(s('text', { 'class': 'lab-ax', x: x1 - 2, y: 10, 'text-anchor': 'end' }, (f.posLabel || '上がる') + ' ' + fmtFixed(mx, f.axisDigits != null ? f.axisDigits : 0) + ' →'));
+      bars.forEach(function (b, i) {
+        var y = 20 + i * rowH, v = vals[i], w = isFinite(v) ? Math.min(half, Math.abs(v) * k) : 0, neg = v < 0, lab = vt(v, b);
+        svg.appendChild(s('text', { 'class': 'lab-bl', x: x0 + 6, y: y + 12 }, b.label));
+        svg.appendChild(s('rect', { 'class': 'lab-bar c-' + (b.color || COLORS[i % COLORS.length]) + (neg ? ' neg' : ''), x: neg ? zx - w : zx, y: y + 18, width: Math.max(0, w), height: 18, rx: 3 }));
+        /* 値は、棒のない側（0 の線の反対側）に出す。棒と重ならない */
+        svg.appendChild(s('text', { 'class': 'lab-bv', x: neg ? zx + 6 : zx - 6, y: y + 31, 'text-anchor': neg ? 'start' : 'end' }, lab));
+        rows.push([b.label, lab]);
+      });
+      return svg;
+    }
+
+    /* ---- 線グラフ（fig.type 'curve'）：x の範囲で式を評価して折れ線を描く。負の値・0 の線・縦の目印つき ---- */
+    function niceStep(range, n) {
+      var raw = range / n, mag = Math.pow(10, Math.floor(Math.log(raw) / Math.LN10 + 1e-12)), r = raw / mag;
+      return (r <= 1 ? 1 : r <= 2 ? 2 : r <= 5 ? 5 : 10) * mag;
+    }
+    function decOf(step) { var m = /e-(\d+)/.exec(String(step)), d = numSteps(step); return m ? parseInt(m[1], 10) : d; }
+    function figCurve(f, e, W, rows) {
+      var xd = f.x, x0 = xd.min, x1 = xd.max, logx = xd.scale === 'log', ser = f.series, dg = f.digits != null ? f.digits : 2;
+      var N = logx ? Math.max(2, Math.min(800, Math.round(xd.n || 160))) : Math.max(2, Math.min(800, Math.round((x1 - x0) / (xd.step || (x1 - x0) / 120))));
+      var xdec = xd.digits != null ? xd.digits : Math.min(4, decOf(xd.step || 1));
+      var fs = ser.map(function (z) { return z.expr != null ? X.compile(z.expr) : null; });
+      var vis = ser.map(function (z) { return !z.when || !!ev(X.compile(z.when), e); });
+      var ev0 = function (k, xv) { var env2 = {}, key; for (key in e) env2[key] = e[key]; env2[xd.id] = xv; return ev(fs[k], env2); };
+      /* data：公表値などの点（{x, y, l?}）を直線でつなぐ系列。expr の代わりに使う（任意） */
+      var pts = ser.map(function (z) { return z.data ? z.data.filter(function (q) { return isFinite(q.x) && isFinite(q.y); }) : null; });
+      var tPos = function (v) { return logx ? Math.log(v / x0) / Math.log(x1 / x0) : (v - x0) / (x1 - x0); };
+      var valAt = function (k, xv) {
+        if (!pts[k]) return ev0(k, xv);
+        var a = pts[k], i2;
+        for (i2 = 0; i2 < a.length; i2++) if (Math.abs(tPos(a[i2].x) - tPos(xv)) < 1e-9) return a[i2].y;
+        for (i2 = 0; i2 + 1 < a.length; i2++) if (xv > a[i2].x && xv < a[i2 + 1].x) return a[i2].y + (a[i2 + 1].y - a[i2].y) * (tPos(xv) - tPos(a[i2].x)) / (tPos(a[i2 + 1].x) - tPos(a[i2].x));
+        return NaN;
+      };
+      var data = ser.map(function () { return []; }), xs = [], i, k;
+      for (i = 0; i <= N; i++) { var xv = logx ? x0 * Math.pow(x1 / x0, i / N) : x0 + (x1 - x0) * i / N; xs.push(xv); for (k = 0; k < ser.length; k++) data[k].push(fs[k] ? ev0(k, xv) : NaN); }
+      /* 縦軸の範囲：ymin・ymax（数か式）。無ければデータから決める */
+      var fin = []; data.forEach(function (a, kk) { if (vis[kk]) a.forEach(function (v) { if (isFinite(v)) fin.push(v); }); }); pts.forEach(function (a, kk) { if (a && vis[kk]) a.forEach(function (q) { fin.push(q.y); }); });
+      var dmin = fin.length ? Math.min.apply(null, fin) : 0, dmax = fin.length ? Math.max.apply(null, fin) : 1;
+      var ymin = f.ymin != null ? num(f.ymin, e, NaN) : NaN, ymax = f.ymax != null ? num(f.ymax, e, NaN) : NaN;
+      if (!isFinite(ymin) || !isFinite(ymax)) {
+        var pad = (dmax - dmin) * 0.08 || Math.abs(dmax) * 0.1 || 1;
+        if (!isFinite(ymin)) ymin = dmin - pad; if (!isFinite(ymax)) ymax = dmax + pad;
+      }
+      if (!(ymax > ymin)) ymax = ymin + 1;
+      var ystep = niceStep(ymax - ymin, 4), ydec = Math.max(0, Math.min(6, decOf(ystep)));
+      /* 凡例（折り返す）：見えている系列と、帯（fills）。上の余白は凡例の行数で決める */
+      var fills = (f.fills || []).filter(function (z) { return !z.when || !!ev(X.compile(z.when), e); });
+      var lgItems = []; ser.forEach(function (z, j) { if (vis[j]) lgItems.push({ k: 'l', j: j, label: z.label }); }); fills.forEach(function (z, j) { if (z.label) lgItems.push({ k: 'f', j: j, label: z.label }); });
+      var lgRows = [[]], lx = 0, LW = W - 12, widths = lgItems.map(function (z) { return 34 + z.label.length * 12; });
+      widths.forEach(function (w, j) { if (lx + w > LW && lgRows[lgRows.length - 1].length) { lgRows.push([]); lx = 0; } lgRows[lgRows.length - 1].push(j); lx += w; });
+      var mL = Math.min(56, 36 + 7 * Math.max(String(Math.round(Math.abs(ymax))).length, String(Math.round(Math.abs(ymin))).length) + (ydec ? 6 * ydec : 0)), mR = 14, mT = 22 + lgRows.length * 18 + (f.yLabel ? 22 : 0), pw = W - mL - mR;
+      var X0 = function (v) { return mL + tPos(v) * pw; };
+      /* 横軸の目盛り：ticks（{v, label}）があればそれを使う。ラベルが重なるときは 2 段にずらす */
+      var ticks = (xd.ticks || []).filter(function (t) { return t.v >= x0 - 1e-9 && t.v <= x1 + 1e-9; }), tickRow = [], needRow2 = false;
+      if (ticks.length) {
+        var lastR = [-1e9, -1e9]; ticks.forEach(function (t, ti) {
+          var wd = 6.7 * String(t.label).length + 4, cx = X0(t.v), lo = cx - wd / 2, hi = cx + wd / 2, r0 = 0;
+          if (lo < lastR[0] + 2) { r0 = 1; if (lo < lastR[1] + 2) r0 = 0; }
+          lastR[r0] = hi; tickRow.push(r0); if (r0) needRow2 = true;
+        });
+      }
+      var mB = 40 + (xd.label ? 14 : 0) + (needRow2 ? 13 : 0);
+      var Hh = Math.max(250, Math.min(320, W * 0.62 + 60)) + lgRows.length * 18, ph = Hh - mT - mB;
+      var svg = s('svg', { 'class': 'lab-svg', viewBox: '0 0 ' + W + ' ' + Hh, width: W, height: Hh, role: 'img' });
+      var Y0 = function (v) { return mT + (ymax - v) / (ymax - ymin) * ph; };
+      var clipId = ctx.id + '-clip-' + cur;
+      svg.appendChild(s('rect', { 'class': 'lab-plot', x: mL, y: mT, width: pw, height: ph }));
+      /* 帯（spans）：横軸の範囲を色で示す（例：逆転している区間）。条件 when が真のときだけ */
+      (f.spans || []).forEach(function (sp) {
+        if (sp.when && !ev(X.compile(sp.when), e)) return;
+        var a1 = num(sp.from, e, NaN), a2 = num(sp.to, e, NaN); if (!isFinite(a1) || !isFinite(a2)) return;
+        var xa = X0(Math.max(x0, Math.min(a1, a2))), xb = X0(Math.min(x1, Math.max(a1, a2)));
+        svg.appendChild(s('rect', { 'class': 'lab-span', x: xa, y: mT, width: Math.max(0, xb - xa), height: ph }));
+        if (sp.label) svg.appendChild(s('text', { 'class': 'lab-span-t', x: (xa + xb) / 2, y: mT + ph - 7, 'text-anchor': 'middle' }, sp.label));
+      });
+      /* 目盛り */
+      var ty;
+      for (ty = Math.ceil(ymin / ystep - 1e-9) * ystep; ty <= ymax + ystep * 1e-9; ty += ystep) {
+        var isZ = Math.abs(ty) < ystep * 1e-6;
+        svg.appendChild(s('line', { 'class': 'lab-g' + (isZ ? ' zero' : ''), x1: mL, y1: Y0(ty), x2: mL + pw, y2: Y0(ty) }));
+        svg.appendChild(s('text', { 'class': 'lab-ax', x: mL - 6, y: Y0(ty) + 4, 'text-anchor': 'end' }, fmtFixed(isZ ? 0 : ty, ydec)));
+      }
+      if (ticks.length) {
+        ticks.forEach(function (t, ti) {
+          svg.appendChild(s('line', { 'class': 'lab-g v', x1: X0(t.v), y1: mT, x2: X0(t.v), y2: mT + ph }));
+          svg.appendChild(s('text', { 'class': 'lab-ax', x: X0(t.v), y: mT + ph + 15 + tickRow[ti] * 13, 'text-anchor': 'middle' }, t.label));
+        });
+      } else {
+        var xstep = niceStep(x1 - x0, W < 420 ? 4 : 6), xd2 = Math.max(0, Math.min(6, decOf(xstep))), tx;
+        for (tx = Math.ceil(x0 / xstep - 1e-9) * xstep; tx <= x1 + xstep * 1e-9; tx += xstep) {
+          svg.appendChild(s('line', { 'class': 'lab-g v', x1: X0(tx), y1: mT, x2: X0(tx), y2: mT + ph }));
+          svg.appendChild(s('text', { 'class': 'lab-ax', x: X0(tx), y: mT + ph + 15, 'text-anchor': tx - x0 < xstep * 0.01 ? 'start' : x1 - tx < xstep * 0.01 ? 'end' : 'middle' }, fmtFixed(tx, xd2)));
+        }
+      }
+      if (xd.label) svg.appendChild(s('text', { 'class': 'lab-ax', x: mL + pw / 2, y: Hh - 8, 'text-anchor': 'middle' }, xd.label + (xd.unit ? '（' + xd.unit + '）' : '')));
+      if (f.yLabel) svg.appendChild(s('text', { 'class': 'lab-ax', x: 4, y: mT - 14 }, '縦軸：' + f.yLabel + (f.unit ? '（' + f.unit + '）' : '')));
+      /* 凡例 */
+      lgRows.forEach(function (r, ri) {
+        var ox = mL;
+        r.forEach(function (li) {
+          var it = lgItems[li];
+          if (it.k === 'l') {
+            var dsh = dashOf(ser[it.j], it.j);
+            svg.appendChild(s('line', { 'class': 'lab-wave c-' + (ser[it.j].color || COLORS[it.j % COLORS.length]) + (ser[it.j].faint ? ' faint' : ''), x1: ox, y1: 14 + ri * 18, x2: ox + 22, y2: 14 + ri * 18, 'stroke-dasharray': dsh }));
+          } else svg.appendChild(s('rect', { 'class': 'lab-fill c-' + (fills[it.j].color || 'core'), x: ox, y: 8 + ri * 18, width: 22, height: 12 }));
+          svg.appendChild(s('text', { 'class': 'lab-lg', x: ox + 26, y: 18 + ri * 18 }, it.label)); ox += widths[li];
+        });
+      });
+      var defs = s('defs', null, s('clipPath', { id: clipId }, s('rect', { x: mL, y: mT, width: pw, height: ph })));
+      svg.insertBefore(defs, svg.firstChild);
+      /* 2 本の系列の間の帯（fills：変化の大きさを色で見せる）。expr の系列どうしだけ */
+      fills.forEach(function (z) {
+        var top = [], bot = [], ia = z.a, ib = z.b;
+        if (!data[ia] || !data[ib] || pts[ia] || pts[ib]) return;
+        for (i = 0; i <= N; i++) { var va = data[ia][i], vb = data[ib][i]; if (isFinite(va) && isFinite(vb)) { top.push(X0(xs[i]).toFixed(1) + ',' + Y0(va).toFixed(1)); bot.unshift(X0(xs[i]).toFixed(1) + ',' + Y0(vb).toFixed(1)); } }
+        if (top.length > 1) svg.appendChild(s('polygon', { 'class': 'lab-fill c-' + (z.color || 'core'), points: top.concat(bot).join(' '), 'clip-path': 'url(#' + clipId + ')' }));
+      });
+      /* 折れ線（値が数でない所では線を切る）。data の系列は点を直線でつなぎ、点に丸を付ける */
+      ser.forEach(function (z, j) {
+        if (!vis[j]) return;
+        var cls = 'lab-wave lab-curve c-' + (z.color || COLORS[j % COLORS.length]) + (z.faint ? ' faint' : '');
+        if (pts[j]) {
+          if (pts[j].length > 1) svg.appendChild(s('polyline', { 'class': cls, points: pts[j].map(function (q) { return X0(q.x).toFixed(1) + ',' + Y0(q.y).toFixed(1); }).join(' '), 'stroke-dasharray': dashOf(z, j), 'clip-path': 'url(#' + clipId + ')' }));
+          pts[j].forEach(function (q) { svg.appendChild(s('circle', { 'class': 'lab-dot c-' + (z.color || COLORS[j % COLORS.length]), cx: X0(q.x), cy: Y0(q.y), r: 3.6 })); });
+          return;
+        }
+        var seg = [], segs = [seg];
+        data[j].forEach(function (v, ii) {
+          if (!isFinite(v)) { if (seg.length) { seg = []; segs.push(seg); } return; }
+          seg.push(X0(xs[ii]).toFixed(1) + ',' + Math.max(mT - 40, Math.min(mT + ph + 40, Y0(v))).toFixed(1));
+        });
+        segs.forEach(function (sg) { if (sg.length > 1) svg.appendChild(s('polyline', { 'class': cls, points: sg.join(' '), 'stroke-dasharray': dashOf(z, j), 'clip-path': 'url(#' + clipId + ')' })); });
+      });
+      /* 縦の目印 */
+      var marks = (f.marks || []).map(function (m) { return { m: m, v: num(m.x, e, NaN) }; }), shown = 0;
+      marks.forEach(function (o) {
+        if (!isFinite(o.v) || o.v < x0 - 1e-9 || o.v > x1 + 1e-9) return;
+        var mx = X0(o.v), lab = o.m.label || '';
+        svg.appendChild(s('line', { 'class': 'lab-mark', x1: mx, y1: mT, x2: mx, y2: mT + ph }));
+        ser.forEach(function (z, j) { if (!vis[j] || z.nodot) return; var yv = valAt(j, o.v); if (isFinite(yv) && yv >= ymin && yv <= ymax) svg.appendChild(s('circle', { 'class': 'lab-dot c-' + (z.color || COLORS[j % COLORS.length]), cx: mx, cy: Y0(yv), r: 4.5 })); });
+        if (lab) svg.appendChild(s('text', { 'class': 'lab-mark-t halo', x: mx + (mx > mL + pw * 0.62 ? -5 : 5), y: mT + 13 + (shown % 2) * 14, 'text-anchor': mx > mL + pw * 0.62 ? 'end' : 'start' }, lab));
+        shown++;
+      });
+      /* 同じ内容の表と、図の名前に入れる要約 */
+      var vser = ser.map(function (z, j) { return j; }).filter(function (j) { return vis[j]; });
+      var cols = [(xd.label || xd.id) + (xd.unit ? '（' + xd.unit + '）' : '')].concat(vser.map(function (j) { return ser[j].label + (f.unit ? '（' + f.unit + '）' : ''); }));
+      var xlab = function (v) {
+        var j2, i3; for (i3 = 0; i3 < ticks.length; i3++) if (Math.abs(tPos(ticks[i3].v) - tPos(v)) < 1e-9) return ticks[i3].label;
+        for (j2 = 0; j2 < vser.length; j2++) if (pts[vser[j2]]) { var q = pts[vser[j2]].filter(function (r) { return Math.abs(tPos(r.x) - tPos(v)) < 1e-9; })[0]; if (q && q.l) return q.l; }
+        return fmtFixed(v, xdec);
+      };
+      var body = [], picked = {}, allData = vser.length && vser.every(function (j) { return pts[j]; });
+      if (allData) {
+        var ux = []; vser.forEach(function (j) { pts[j].forEach(function (q) { if (ux.indexOf(q.x) < 0) ux.push(q.x); }); }); ux.sort(function (p1, p2) { return p1 - p2; });
+        ux.forEach(function (v) { body.push([xlab(v)].concat(vser.map(function (j) { var y = valAt(j, v), ex = pts[j].some(function (q) { return q.x === v; }); return ex && isFinite(y) ? fmtFixed(y, dg) : '—'; }))); });
+      } else if (ticks.length) {
+        ticks.forEach(function (t) { body.push([t.label].concat(vser.map(function (j) { var y = valAt(j, t.v); return isFinite(y) ? fmtFixed(y, dg) : '—'; }))); });
+      } else {
+        var nt = Math.min(N, 12);
+        for (i = 0; i <= nt; i++) { var ix = Math.round(N * i / nt); if (picked[ix]) continue; picked[ix] = 1; body.push([fmtFixed(xs[ix], xdec)].concat(vser.map(function (j) { return fmtFixed(data[j][ix], dg); }))); }
+      }
+      marks.forEach(function (o) {
+        if (!isFinite(o.v)) return;
+        body.push([(o.m.label || '目印') + '（' + xlab(o.v) + '）'].concat(vser.map(function (j) { return fmtFixed(valAt(j, o.v), dg); })));
+        rows.push([(o.m.label || '目印') + '（' + (xd.label || xd.id) + ' ' + xlab(o.v) + '）', vser.map(function (j) { return ser[j].label + ' ' + fmtFixed(valAt(j, o.v), dg); }).join('、')]);
+      });
+      vser.forEach(function (j) {
+        var z = ser[j], a = data[j].filter(isFinite);
+        if (pts[j]) { rows.push([z.label + '（点の値）', pts[j].map(function (q) { return (q.l || fmtFixed(q.x, xdec)) + ' ' + fmtFixed(q.y, dg); }).join('、') + (f.unit ? ' ' + f.unit : '')]); return; }
+        rows.push([z.label + '（範囲の端・最小・最大）', a.length ? fmtFixed(data[j][0], dg) + '・' + fmtFixed(data[j][N], dg) + '・' + fmtFixed(Math.min.apply(null, a), dg) + '・' + fmtFixed(Math.max.apply(null, a), dg) + (f.unit ? ' ' + f.unit : '') : '値なし']);
+      });
+      (f.spans || []).forEach(function (sp) { if (sp.label && !(sp.when && !ev(X.compile(sp.when), e))) rows.push(['帯：' + sp.label, '表示中']); });
+      rows.tbl = { head: cols, body: body };
+      return svg;
+    }
+    function dashOf(z, j) {
+      if (z.dash === false) return null;
+      if (z.dash === true || z.dash === 'dash') return '7 4';
+      if (z.dash === 'dot') return '2 4';
+      if (typeof z.dash === 'string') return z.dash;
+      return [null, '7 4', '2 4'][j % 3];
+    }
+
+    function figCircuit(f, e, W, rows) {
+      var els = f.elements, n = els.length, Hh = 210, x0 = 34, x1 = W - 34, y0 = 70, y1 = 170, I = num(f.current, e, 0), imax = num(f.imax, e, 1), frac = Math.max(0, Math.min(1, I / (imax || 1)));
+      var svg = s('svg', { 'class': 'lab-svg', viewBox: '0 0 ' + W + ' ' + Hh, width: W, height: Hh, role: 'img' });
+      var sw = 2 + 6 * frac, mid = (y0 + y1) / 2, srcEl = els.filter(function (z) { return z.type === 'source'; })[0], resEls = els.filter(function (z) { return z.type !== 'source'; });
+      /* 配線（電源は左の辺、抵抗は上の辺） */
+      var path = 'M' + x0 + ' ' + (mid - 14) + ' V' + y0 + ' H' + x1 + ' V' + y1 + ' H' + x0 + ' V' + (mid + 14);   // 電流の向き（＋極から出て、上の辺を右へ、右の辺を下へ、下の辺を左へ）
+      svg.appendChild(s('path', { 'class': 'lab-wire', d: path, style: 'stroke-width:' + sw.toFixed(1) + 'px' }));
+      var dur = frac > 0.005 ? Math.min(14, 1.6 / Math.max(0.1, frac)) : 0;
+      svg.appendChild(s('path', { 'class': 'lab-flow' + (dur ? '' : ' off'), d: path, style: dur ? 'animation-duration:' + dur.toFixed(2) + 's' : '' }));
+      /* 電源 */
+      svg.appendChild(s('line', { 'class': 'lab-bat l', x1: x0 - 15, y1: mid - 14, x2: x0 + 15, y2: mid - 14 }));
+      svg.appendChild(s('line', { 'class': 'lab-bat s', x1: x0 - 8, y1: mid + 14, x2: x0 + 8, y2: mid + 14 }));
+      svg.appendChild(s('text', { 'class': 'lab-lg', x: x0 + 20, y: mid - 8 }, '＋'));
+      if (srcEl) { var sv = num(srcEl.val, e, NaN); svg.appendChild(s('text', { 'class': 'lab-el', x: x0 + 20, y: mid + 14 }, srcEl.label + ' ' + vt(sv, srcEl))); rows.push([srcEl.label, vt(sv, srcEl)]); }
+      /* 抵抗 */
+      var seg = (x1 - x0) / (resEls.length + 0.0), cx;
+      resEls.forEach(function (r, i) {
+        cx = x0 + seg * (i + 0.5);
+        var zz = 'M' + (cx - 36) + ' ' + y0 + ' h20 l4 -10 l8 20 l8 -20 l8 20 l4 -10 h20';
+        svg.appendChild(s('rect', { 'class': 'lab-gap', x: cx - 36, y: y0 - 14, width: 72, height: 28 }));
+        svg.appendChild(s('path', { 'class': 'lab-res-sym', d: zz }));
+        var rv = num(r.val, e, NaN);
+        svg.appendChild(s('text', { 'class': 'lab-el', x: cx, y: y0 - 22, 'text-anchor': 'middle' }, r.label + ' ' + vt(rv, r)));
+        rows.push([r.label, vt(rv, r)]);
+      });
+      /* 電流の向き（静止した矢じり。動きを止めている人にも向きが分かる） */
+      var ax = (x0 + x1) / 2;
+      svg.appendChild(s('path', { 'class': 'lab-arrow', d: 'M' + (x1 - 10) + ' ' + y0 + ' l-9 -6 v12 z' }));      // 上の辺：右へ
+      svg.appendChild(s('path', { 'class': 'lab-arrow', d: 'M' + x1 + ' ' + (mid + 9) + ' l-6 -9 h12 z' }));      // 右の辺：下へ
+      svg.appendChild(s('path', { 'class': 'lab-arrow', d: 'M' + (ax - 9) + ' ' + y1 + ' l9 -6 v12 z' }));       // 下の辺：左へ
+      svg.appendChild(s('text', { 'class': 'lab-cur', x: (x0 + x1) / 2, y: y1 + 24, 'text-anchor': 'middle' }, (f.currentLabel || '電流') + ' ' + vt(I, { digits: f.currentDigits != null ? f.currentDigits : 2, unit: f.currentUnit || 'A', auto: f.currentAuto })));
+      rows.push([f.currentLabel || '電流', vt(I, { digits: f.currentDigits != null ? f.currentDigits : 2, unit: f.currentUnit || 'A', auto: f.currentAuto })]);
+      rows.push(['線の太さ・流れる点の速さ', '電流の大きさに比例（目安：基準の ' + fmtSig(frac * 100, 2) + '%）']);
+      return svg;
+    }
+
+    build();
+  };
+  CN.searchText.lab = function (d) {
+    var out = [d.title]; d.experiments.forEach(function (x) {
+      out.push(x.label, x.intro, x.formula); x.inputs.forEach(function (i) { out.push(i.label, i.hint); (i.say || []).forEach(function (z) { out.push(z.text); }); });
+      (x.results || []).forEach(function (r) { out.push(r.label); });
+      (x.figs || (x.fig ? [x.fig] : [])).forEach(function (f) { if (f.type === 'curve') { (f.series || []).forEach(function (z) { out.push(z.label); }); (f.marks || []).forEach(function (z) { out.push(z.label); }); } });
+      (x.presets || []).forEach(function (z) { out.push(z.label, z.text); });
+      if (x.quad) (x.quad.cells || []).forEach(function (r) { r.forEach(function (c) { out.push(c.title, c.sub); }); });
+      (x.reads || []).forEach(function (z) { out.push(z.text); });
+    });
+    return out.filter(Boolean).join(' ');
   };
 })();
 
@@ -11601,6 +12880,596 @@ CN.exam([
       c: ['新しい技術なら、必ず新しい装置が必要だと考える', '工程の変化 → 装置の種類 → 輸送・据付の確認点の順にたどり、装置メーカーの仕様書で確認する', '報道の数字を、そのまま搬入計画に使う', '株価の動きから、装置の台数を推測する'], a: 1,
       why: '技術の節目は、工程の変化 → 装置 → 輸送・据付の確認点の順にたどって考えます。新しい種類の装置が要るかは、公開資料では分からないことが多く、仕様書で確認します（第29章）。報道の数字をそのまま使うことや、株価から台数を推測することは、搬入計画の根拠になりません。', ch: 32 }
   ]);
+})();
+
+})();
+</script>
+<script>
+/* data: I1-scale.js */
+(function(){'use strict';
+/* 序章1のデータ。事実確認表：facts/I1-scale.md（確認 2026-11-18）
+   この章の値は、(1) 講座の既存の章で確かめた値（第04・05・08・13・18 章）、(2) 公開資料で新たに確かめた値、(3) そこから計算した目安、(4) 模型の値（仮定）、のどれかです。
+   (4) は、歩留まり、欠陥密度、月産の枚数、1 ロットの枚数（25 枚）、1 か月の日数（30 日）、画面の幅の取り方（倍率 1 倍で 300 mm）。必ず「仮定」と書きます。
+   「N nm 世代」の N は、実際の寸法ではありません（第04章）。この章は、実寸（ピッチ）を公表資料の値で並べます。
+   部品の組み合わせ：layers（長さの階段）・lab（換算・ズームの計算・面積・束ねる・清浄度・重ね合わせ）・xsec（ズームの絵・円の面積）・table（名前と実寸、チップの例）・quiz。
+   lab の「結果」に、桁ごとに小数の桁数を変える行（show 付き）を並べているのは、m から Å まで 11 桁にわたる値を、同じ有効数字（3 桁）で読めるようにするためです（基盤に長さの単位の自動切替がないため）。
+
+演習の照合（序章1）
+| 問・演習 | 正答（要点） | 照らした本文・図（節・データ id） | 本文・図の記述（要点を写す） | 一致 |
+|---|---|---|---|---|
+| cI1-quiz 問1 | 世代の呼び名で、実寸ではない（Intel の「10 nm」はゲートの間隔 54 nm・配線の間隔 36 nm） | 本文「名前と実寸」、cI1-nodes | 表の行：「10 nm」のとき CPP 54・最小メタルピッチ 36・フィンピッチ 34（Intel 2017） | ○ |
+| cI1-quiz 問2 | 1.1 mm | 本文「位置合わせの精度」、cI1-overlay | 1.1 nm × 300 km ÷ 300 mm ＝ 1.1 nm × 10⁶ ＝ 1.1 mm | ○ |
+| cI1-quiz 問3 | 約 39 万個 | 本文「ズームする」、cI1-hair | 直径 70 μm の円の面積 0.003848 mm² × 100.8 MTr/mm² ＝ 約 38.8 万個 | ○ |
+
+定義と式の照合（序章1）
+| 量 | 本文の定義の文 | 式 | 用語集の d | 演習・問の使い方 | 一致 |
+|---|---|---|---|---|---|
+| 1 枚から取れるチップの数（近似） | 円の面積 ÷ チップの面積 − 縁で使えない分の項 | 円の面積 ÷ S − π × 直径 ÷ √(2 S)（S はチップの面積。切りしろ・除外領域は考えない） | この章では登録しない | cI1-bundle | ○ |
+| 歩留まり（模型） | つくったダイのうち良品の割合。模型の 1 つが Y ＝ exp(−D0 × 面積) | 第06章・第13章の定義と同じ（第13章は面積が大きいほど下がると述べる） | 第06章の d | cI1-yield | ○ |
+| 縮尺の換算 | ずれ ＝ 重ね合わせ × 拡大率。拡大率 ＝ 距離 ÷ ウェーハの直径 | ずれ(mm) ＝ ov(nm) × L(km) ÷ 直径(mm) | — | 問2、cI1-overlay | ○ |
+
+検算 髪の毛の断面積（mm²、直径_70_μm）: 0.0038485 = 3.14159265 * (0.035 * 0.035)
+検算 髪の毛の断面に入るトランジスタ（個、100.8_MTr/mm²）: 387924 = 0.0038485 * 100.8 * 1000000
+検算 髪の毛の断面（直径_17_μm、100.8）: 22880 = 3.14159265 * (0.0085 * 0.0085) * 100.8 * 1000000
+検算 髪の毛の断面（直径_181_μm、100.8）: 2593627 = 3.14159265 * (0.0905 * 0.0905) * 100.8 * 1000000
+検算 H100_の平均密度（MTr/mm²）: 98.28 = 80000 / 814
+検算 WSE-3_の平均密度（MTr/mm²）: 86.53 = 4000000 / 46225
+検算 H100_のダイ面積から正方形に直した_1_辺（mm）: 28.53 = 814 ** 0.5
+検算 WSE-3_がウェーハ（300_mm）の面積に占める割合: 0.6539 = 46225 / (3.14159265 * 150 * 150)
+検算 トランジスタ_1_個あたりの面積（nm²、100.8）: 9921 = 1000000000000 / (100.8 * 1000000)
+検算 直径_100_nm_の円の面積（nm²）: 7854 = 3.14159265 * 50 * 50
+検算 トランジスタ_1_個の面積_÷_直径_100_nm_の円の面積: 1.263 = 9921 / 7854
+検算 シリコンの隣り合う原子の間隔（Å）: 2.3517 = 5.431020511 * 1.7320508 / 4
+検算 1_辺_28.5_mm・直径_300_mm_のとり数（個）: 63.64 = 3.14159265 * 150 * 150 / (28.5 * 28.5) - 3.14159265 * 300 / (2 * 28.5 * 28.5) ** 0.5
+検算 1_辺_12_mm・直径_300_mm_のとり数（個）: 435.34 = 3.14159265 * 150 * 150 / (12 * 12) - 3.14159265 * 300 / (2 * 12 * 12) ** 0.5
+検算 良品（63_個_×_歩留まり_70%）: 44.1 = 63 * 70 / 100
+検算 良品のトランジスタ総数（80_B、44.1_個）: 3528000000000 = 44.1 * 80000000000
+検算 世界人口_1_人あたり（個/人、8.2_B）: 430.24 = 3528000000000 / 8200000000
+検算 月産_5.5_万枚の_1_か月（個）: 194040000000000000 = 3528000000000 * 55000
+検算 1_秒あたり（個/秒、30_日）: 74861111111 = 194040000000000000 / (30 * 86400)
+検算 重ね合わせ_1.1_nm_を_300_km_/_300_mm_で拡大（mm）: 1.1 = 1.1 * 300 / 300
+検算 重ね合わせ_1.1_nm_を_400_km_/_300_mm_で拡大（mm）: 1.4667 = 1.1 * 400 / 300
+検算 シリコンの格子定数（0.5431_nm）を_300_km_/_300_mm_で拡大（mm）: 0.5431 = 0.5431 * 300 / 300
+検算 重ね合わせ_1.1_nm_÷_配線の間隔_36_nm（%）: 3.056 = 1.1 / 36 * 100
+検算 ISO_5_と_ISO_7_の上限の比（0.5_μm）: 100 = 352000 / 3520
+検算 ISO_9_と_ISO_5_の上限の比（0.5_μm）: 10000 = 35200000 / 3520
+検算 ISO_5_の上限を_1_リットルに直した個数: 3.52 = 3520 / 1000
+検算 ISO_9_の上限を_1_リットルに直した個数: 35200 = 35200000 / 1000
+検算 ISO_5_で粒子_1_個が入る空気の体積（L）: 0.2841 = 1000 / 3520
+検算 ズーム_300_μm_の幅に入る髪の毛（70_μm）の本数: 4.286 = 300 / 70
+検算 ズーム_30_μm_の幅に入る赤血球（7.7_μm）の個数: 3.896 = 30 / 7.7
+検算 ズーム_3_μm_の幅に入る配線（36_nm）の本数: 83.33 = 3000 / 36
+検算 ズーム_300_nm_の幅に入るゲートの間隔（54_nm）: 5.556 = 300 / 54
+検算 ズーム_30_nm_の幅に入る_EUV_の波長（13.5_nm）: 2.222 = 30 / 13.5
+検算 ズーム_3_nm_の幅に入るシリコンの格子（0.5431_nm）: 5.524 = 3 / 0.5431
+検算 髪の毛と赤血球の面積の比（70_μm_と_7.7_μm）: 82.64 = (70 / 7.7) * (70 / 7.7)
+検算 赤血球と大腸菌（幅_0.49_μm）の断面の面積の比: 246.9 = (7.7 / 0.49) * (7.7 / 0.49)
+検算 ウェーハの直径（300_mm）と_Si_の格子定数（0.5431_nm）の比: 552384460 = 300000000 / 0.5431
+検算 円の段④：ウイルス（直径_100_nm）の円の半径（トランジスタ_1_個の面積の円を_100_とする）: 88.98 = 100 * (7853.98 / 9920.63) ** 0.5
+*/
+
+(function () {
+  /* ---------- 結果の行を作る補助（桁ごとに小数の桁数を変える行。基盤に長さの単位の自動切替がないため） ---------- */
+  var LOG = function (x) { return 'floor(log10(' + x + ') + 0.000000001)'; };
+  /* 固定の単位で、有効数字 3 桁になるように小数の桁数を変えた行。x は calc の id（正の数） */
+  function fixedRows(label, unit, x, note, dmax) {
+    var out = [], d;
+    for (d = 0; d <= (dmax || 12); d++) out.push({ label: label, expr: x, unit: unit, digits: d, show: 'dg_' + x + ' == ' + d, note: note });
+    return out;
+  }
+  function fixedCalc(x, dmax) { return { id: 'dg_' + x, expr: 'clamp(2 - ' + LOG(x) + ', 0, ' + (dmax || 12) + ')' }; }
+  /* 大きさで単位を選ぶ行。steps は大きい単位から [[名前, 大きさ]]。x は calc の id（基本の単位で、正の数）。suffix は単位の後ろの語 */
+  function ladder(label, x, steps, suffix, note, big) {
+    var n = steps.length, ix = '', k, rows = [], i, d, sz = '';
+    for (k = 0; k < n - 1; k++) ix += x + ' >= ' + steps[k][1] + ' ? ' + k + ' : (';
+    ix += (n - 1) + new Array(n).join(')');
+    for (k = 0; k < n - 1; k++) sz += 'i_' + x + ' == ' + k + ' ? ' + steps[k][1] + ' : (';
+    sz += steps[n - 1][1] + new Array(n).join(')');
+    var calc = [{ id: 'i_' + x, expr: ix }, { id: 'v_' + x, expr: x + ' / (' + sz + ')' }, { id: 'd_' + x, expr: 'clamp(2 - ' + LOG('v_' + x) + ', 0, 2)' }];
+    for (i = 0; i < n; i++) for (d = 0; d <= 2; d++) rows.push({ label: label, expr: 'v_' + x, unit: steps[i][0] + (suffix || ''), digits: d, show: 'i_' + x + ' == ' + i + ' && d_' + x + ' == ' + d, note: note, big: big });
+    return { calc: calc, results: rows };
+  }
+  var COUNT = [['京', 1e16], ['兆', 1e12], ['億', 1e8], ['万', 1e4], ['', 1]];
+  var LEN = [['mm', 1e-3], ['μm', 1e-6], ['nm', 1e-9], ['Å', 1e-10]];
+  function cat() { var o = []; for (var i = 0; i < arguments.length; i++) o = o.concat(arguments[i]); return o; }
+
+  /* ================== ① 長さの階段 ================== */
+  var SEMI = 'core', NEAR = 'ext';
+  function row(id, kind, name, sub, dim, role, dims, desc, note, ch) { return { parts: [{ id: id, kind: kind, name: name, sub: sub, role: role, dims: dims, desc: desc, note: note, ch: ch }], dim: dim }; }
+  function step(r, i) { var p = r.parts[0]; p.x = i * 0.1; p.wf = 0.62; return r; }
+  var STAIR = [
+    [0, row('wafer', SEMI, 'ウェーハの直径', '300 mm', '300 mm', '半導体のもの', '直径 300 mm（12 インチ）', 'いまの先端の工場の主流です。直径 150・200・300 mm がある（第05章）。', '寸法は SEMI 規格で決まり、ここでは第05章の値を使っています。', [5])],
+    [0, row('chip', SEMI, 'チップの 1 辺', '約 28.5 mm（大形の例）', '約 28.5 mm', '半導体のもの', 'ダイ面積 814 mm² を正方形に直した 1 辺 ≒ 28.5 mm', 'NVIDIA が公表した H100（GH100）のダイ面積 814 mm²（2022 年 3 月）を、正方形に直して 1 辺を出した値です。実際の形は正方形ではありません。', '大きなチップの例です。スマートフォン向けなどは、もっと小さくなります。', null)],
+    [1, row('wthick', SEMI, 'ウェーハの厚さ', '約 775 μm', '約 775 μm', '半導体のもの', '300 mm ウェーハの厚さの目安 775 μm（0.775 mm）', '第05章の表の値です。販売会社が公開する目安で、SEMI の規定値ではありません。', '髪の毛（約 70 μm）の 10 倍ほどの厚さです。', [5])],
+    [1, row('paper', NEAR, '紙 1 枚の厚さ', '約 90 μm', '約 90 μm', '身近なもの', 'コピー用紙の厚さの目安 約 90 μm（例：坪量 64 g/m² の W-Paper は 87 μm）', '富士フイルムビジネスイノベーションの製品情報は、坪量 64 g/m² のコピー/プリンター用紙の紙厚を 87 μm としています。紙の厚さは製品で違うので、ここでは約 90 μm を目安にしています。', '身近な長さの目安です。ウェーハの厚さの約 9 分の 1 です。', null)],
+    [1, row('hair', NEAR, '髪の毛の太さ', '17〜181 μm（約 70 μm）', '約 70 μm', '身近なもの', '17〜181 μm（Ley の調べ）。学生の電子顕微鏡の測定は 60〜77 μm', '人や部位で大きく違います。この章では、中ほどの値として 70 μm を代表に使います。', '代表値は便宜上のものです。髪の太さの平均値ではありません。', null)],
+    [1, row('rbc', NEAR, '赤血球の直径', '約 7.7 μm', '約 7.7 μm', '身近なもの（生物）', '約 7.7 μm（BioNumbers の掲載値。別の資料は 8 μm）', 'ヒトの赤血球は、円盤のような形です。ここでは直径で書いています。', '細胞の大きさは測り方で変わります。', null)],
+    [1, row('ecoli', NEAR, '大腸菌の長さ', '約 1.8 μm（幅は 0.49 μm）', '約 1.8 μm', '身近なもの（生物）', '長さ 1.78 ± 0.54 μm、幅 0.49 ± 0.03 μm（電子顕微鏡の測定）', '棒のような形の細菌です。幅は次の段（nm）に入ります。', '培養条件や測り方で変わります。', null)],
+    [1, row('i4004', SEMI, '1971 年の回路の線幅', 'Intel 4004：10 μm', '10 μm', '半導体のもの', 'Intel 4004 の回路の線幅 10 μm（＝ 10,000 nm）', 'Intel の解説は、1971 年の 4004 のトランジスタ数を 2,300 個、回路の線幅を 10 μm と書いています。', '当時の線幅です。いまの世代の名前（「3 nm 世代」など）とは別の話です。', null)],
+    [2, row('ecoliw', NEAR, '大腸菌の幅', '約 490 nm', '約 490 nm', '身近なもの（生物）', '0.49 μm ＝ 490 nm', '同じ細菌の幅です。長さ（約 1.8 μm）の 4 分の 1 ほどです。', null, null)],
+    [2, row('virus', NEAR, 'コロナウイルスの粒子', '約 60〜140 nm', '60〜140 nm', '身近なもの（ウイルス）', '粒子の大きさ 60〜140 nm（スパイクを含めて約 100 nm）', '米国 CDC の学術誌 Emerging Infectious Diseases の論文（2021 年）が、電子顕微鏡の観察からまとめた範囲です。', '同じ論文は、標本の処理（ホルマリン固定・パラフィン包埋）で粒子が縮み、100 nm より 75 nm に近く見えることがあると述べています。', null)],
+    [2, row('cpp', SEMI, 'ゲートの間隔', 'Intel「10 nm」：54 nm', '54 nm', '半導体のもの', 'コンタクテッド・ゲート・ピッチ（CPP）54 nm', '隣り合うゲートの中心の間隔です（第04章）。Intel が 2017 年に、同社の「10 nm」の世代の寸法として発表した値です。', '「10 nm」という名前は、この寸法のどれとも一致しません。', [4])],
+    [2, row('mpp', SEMI, '配線の間隔', 'Intel「10 nm」：36 nm', '36 nm', '半導体のもの', '最小メタルピッチ 36 nm', '隣り合う配線の中心の間隔です（第04章）。同じ発表の値です。', null, [4])],
+    [2, row('fin', SEMI, 'フィンの間隔', 'Intel「10 nm」：34 nm', '34 nm', '半導体のもの', 'フィンピッチ 34 nm（フィンの高さは 53 nm）', 'FinFET のフィン（薄い壁のような電流の通り道）の中心の間隔です（第02章）。同じ発表の値です。', 'フィンの幅は、この章では確かめられていないので載せていません。', [2])],
+    [2, row('euv', SEMI, 'EUV 露光の波長', '13.5 nm', '13.5 nm', '半導体のもの', '波長 13.5 nm', '回路を写す光の波長です。ArF の 193 nm より、ずっと短い光です（第08章）。', '波長は、そのまま回路の最小の寸法になるわけではありません（第08章）。', [8])],
+    [2, row('dna', NEAR, 'DNA の二重らせんの幅', '約 2 nm', '約 2 nm', '身近なもの（生物）', '直径 約 2 nm（塩基対の間隔は 0.34 nm）', 'BioNumbers の「Key Numbers」の一覧にある値です。', null, null)],
+    [2, row('gox', SEMI, 'ゲート絶縁膜の厚さ', '65 nm 世代の SiO₂ の例', '1.2 nm', '半導体のもの', '二酸化シリコンのゲート絶縁膜 1.2 nm（原子 5 層分）', 'Intel の 2007 年 1 月の発表が、65 nm の世代の二酸化シリコンのゲート絶縁膜を「1.2 nm、原子 5 層分」と書いています。', 'いまの先端は、別の材料（high-k、第02章）を使います。この値は、その前の世代の例です。', [2])],
+    [3, row('lat', NEAR, 'シリコンの結晶の格子定数', '5.431 Å（0.5431 nm）', '5.431 Å', '半導体の材料', 'a ＝ 0.5431020511 nm（真空中、22.5 ℃）', 'NIST が公表する CODATA 2018 の値です。シリコン結晶の単位格子の 1 辺です。', null, [1])],
+    [3, row('sisi', NEAR, '隣り合うシリコン原子の間隔', '約 2.35 Å', '約 2.35 Å', '半導体の材料', '格子定数 × √3 ÷ 4 ＝ 2.3517 Å（計算）', 'ダイヤモンド構造の結晶で、いちばん近い原子どうしの距離です。格子定数からの計算（目安）です。', '計算値です。測定値ではありません。', [1])]
+  ];
+  CN.add('layers', 'cI1-stair', {
+    title: '長さの階段：m → mm → μm → nm → Å（身近なものと、半導体のもの）',
+    width: 470, initial: 'hair', labels: { 'layers.f.role': '分類', 'layers.f.dims': '値と条件', 'layers.layer': '段' }, ends: ['大きい（m の側）', '小さい（Å の側）'],
+    kinds: { core: '半導体のもの（寸法・波長・厚さ）', ext: '身近なもの・生物・材料' },
+    hint: '行を押すと、値の条件と出典が出ます。1 段下がるごとに、行を右にずらしています（1,000 倍ずつ小さくなる階段）。色だけでなく、「分類」の欄の文字でも区別できます。',
+    layers: STAIR.map(function (a) { var r = a[1]; r.h = 40; return step(r, a[0]); })
+  });
+
+  /* ---------- 名前と実寸の表 ---------- */
+  CN.add('table', 'cI1-nodes', {
+    title: '「◯ nm」という名前と、公表された実際の寸法',
+    caption: '上の 2 行は Intel の 2017 年の発表（Technology and Manufacturing Day、Kaizad Mistry）の値。下の 5 行は IRDS 2021 年版のロードマップ上の値（版の発行時点の見通し。第04章の表と同じ）。名前の数字は、どの寸法とも一致しません。企業や世代を比べて優劣をつける表ではありません',
+    cols: ['名前（呼び方）', 'ゲートの間隔 CPP (nm)', '配線の間隔 MPP (nm)', 'フィンの間隔 (nm)', '論理の密度 (MTr/mm²)', '出典'],
+    rows: [
+      ['Intel「14 nm」', 70, 52, 42, 37.5, 'Intel 2017（10 nm との比較。密度は棒グラフに添えられた数値で、IEEE Spectrum 2017-03-30 の記事の値と一致）'],
+      ['Intel「10 nm」', 54, 36, 34, 100.8, 'Intel 2017（「100 MTr/mm² を超える」。図の数値は 100.8）'],
+      ['IRDS のラベル「7」（2018 年）', 54, 36, '—', '—', 'IRDS 2021 Lithography（G54M36）'],
+      ['IRDS のラベル「5」（2020 年）', 48, 36, '—', '—', 'IRDS 2021（G48M36）'],
+      ['IRDS のラベル「3」（2022 年）', 45, 24, '—', '—', 'IRDS 2021（G45M24）'],
+      ['IRDS のラベル「2.1」（2025 年）', 42, 20, '—', '—', 'IRDS 2021（G42M20）'],
+      ['IRDS のラベル「1.5」（2028 年）', 40, 16, '—', '—', 'IRDS 2021（G40M16）']
+    ],
+    detail: [
+      '名前は 14 でも、ゲートの間隔は 70 nm、配線の間隔は 52 nm。14 nm の寸法はどこにもありません。',
+      '名前は 10 でも、ゲートの間隔は 54 nm、配線の間隔は 36 nm、フィンの間隔は 34 nm。10 nm の寸法はどこにもありません。密度の 100.8 MTr/mm² は、Intel が示した論理回路のトランジスタ密度です。',
+      'ラベルは 7 でも、ゲートの間隔は 54 nm。この行の寸法は、上の Intel「10 nm」と同じ値になっています（ロードマップのラベルと企業の呼び名は、別のものです。等号では結びません）。',
+      'ラベルが 7 から 5 に変わっても、配線の間隔は同じ 36 nm です。',
+      'ラベルが 3 でも、ゲートの間隔は 45 nm です。',
+      '2.1 は、IRDS 2021 年版が使ったラベルです。',
+      '1.5 も同じ。最新版（IRDS 2026 年版）では値が見直されている可能性があります。'
+    ],
+    note: '企業の呼び名どうしを「同じ」「相当」と書く比較は、この講座ではしません（第04章）。寸法（ピッチ）は、その企業が発表した値です。'
+  });
+
+  /* ---------- ① 換算の実験台 ---------- */
+  var CONV_UNITS = [['m', 'xm'], ['mm', 'xmm'], ['μm', 'xum'], ['nm', 'xnm'], ['Å', 'xA']];
+  var convCalc = [{ id: 'Lm', expr: 'v * 10 ^ e' }, { id: 'xm', expr: 'Lm' }, { id: 'xmm', expr: 'Lm * 1000' }, { id: 'xum', expr: 'Lm * 1000000' }, { id: 'xnm', expr: 'Lm * 1000000000' }, { id: 'xA', expr: 'Lm * 10000000000' },
+    { id: 'rh', expr: 'Lm / 0.00007' }, { id: 'Lnm', expr: 'Lm * 1000000000' }];
+  var convRes = [];
+  CONV_UNITS.forEach(function (u) { convCalc.push(fixedCalc(u[1])); convRes = convRes.concat(fixedRows(u[0] === 'm' ? 'メートル（m）' : u[0] === 'mm' ? 'ミリメートル（mm）' : u[0] === 'μm' ? 'マイクロメートル（μm）' : u[0] === 'nm' ? 'ナノメートル（nm）' : 'オングストローム（Å）', u[0], u[1])); });
+  convCalc.push(fixedCalc('rh'));
+  convRes = convRes.concat(fixedRows('髪の毛の太さ（約 70 μm）の何倍か', '倍', 'rh'));
+  function sayE(e, t) { return { when: 'e == ' + e, text: t }; }
+  CN.add('lab', 'cI1-conv', {
+    title: '長さの換算：入れた長さを、m から Å まで同時に表示',
+    disclaimer: '学習用の模型です。身近なものの大きさは、測り方と対象で幅があります（ボタンの値は代表値で、出典は章末の表）。「◯ nm 世代」の名前は、実際の寸法ではありません。',
+    experiments: [{
+      id: 'conv', label: '長さの換算',
+      intro: '長さを「数 × 10 の何乗 m」で入れます。1,000 倍ごとに m → mm → μm → nm と下がり、Å（オングストローム）は nm の 10 分の 1 です。下の目安のボタンを押すと、身近なものや半導体の長さが入ります。',
+      presetLabel: '目安の長さ（押すと、つまみが動きます）',
+      presetHint: 'つまみを自分で動かしても構いません。',
+      presets: [
+        { label: 'ウェーハの直径 300 mm', set: { v: 300, e: -3 }, text: '300 mm ＝ 0.3 m ＝ 3 億 nm。いまの先端の工場の主流の大きさです。' },
+        { label: 'ウェーハの厚さ 775 μm', set: { v: 775, e: -6 }, text: '775 μm ＝ 0.775 mm。販売会社の目安の値です。' },
+        { label: '紙 約 90 μm', set: { v: 90, e: -6 }, text: '一般的なコピー用紙の厚さ（通販会社の説明）。' },
+        { label: '髪の毛 約 70 μm', set: { v: 70, e: -6 }, text: '代表値として 70 μm。実際は 17〜181 μm と幅があります。' },
+        { label: '赤血球 約 7.7 μm', set: { v: 7.7, e: -6 }, text: '髪の毛の約 10 分の 1 です。' },
+        { label: '大腸菌の幅 0.49 μm', set: { v: 490, e: -9 }, text: '490 nm。長さは約 1.8 μm です。' },
+        { label: 'ウイルス 約 100 nm', set: { v: 100, e: -9 }, text: 'コロナウイルスの粒子は 60〜140 nm（スパイクを含めて約 100 nm）。' },
+        { label: 'ゲートの間隔 54 nm', set: { v: 54, e: -9 }, text: 'Intel「10 nm」の発表の値（2017 年）。名前の 10 nm とは違います。' },
+        { label: '配線の間隔 36 nm', set: { v: 36, e: -9 }, text: '同じ発表の最小メタルピッチ。' },
+        { label: 'EUV の波長 13.5 nm', set: { v: 13.5, e: -9 }, text: '露光の光の波長（第08章）。' },
+        { label: 'DNA の幅 約 2 nm', set: { v: 2, e: -9 }, text: '二重らせんの直径。' },
+        { label: 'ゲート絶縁膜 1.2 nm', set: { v: 1.2, e: -9 }, text: '65 nm 世代の二酸化シリコン（Intel、2007 年）。原子 5 層分。' },
+        { label: 'シリコンの格子 5.431 Å', set: { v: 5.431, e: -10 }, text: '0.5431 nm。CODATA 2018 の値。' }
+      ],
+      formula: '長さ ＝ 数 × 10^（指数）m。mm ＝ m × 10³、μm ＝ m × 10⁶、nm ＝ m × 10⁹、Å ＝ m × 10¹⁰',
+      inputs: [
+        { id: 'v', label: '数', unit: '', min: 1, max: 999, step: 0.1, value: 70, hint: '1〜999 の数です。細かい値は、下のボタンで入ります。' },
+        { id: 'e', label: '10 の何乗 m か（指数）', unit: '乗', min: -10, max: 0, step: 1, value: -6, hint: '−3 は mm、−6 は μm、−9 は nm、−10 は Å の位です。',
+          say: [sayE(0, '指数 0：m の位です。'), sayE(-1, '指数 −1：0.1 m ＝ 10 cm の位です。'), sayE(-2, '指数 −2：cm の位です。'), sayE(-3, '指数 −3：mm の位です。'), sayE(-4, '指数 −4：0.1 mm の位です。'), sayE(-5, '指数 −5：10 μm の位です。'), sayE(-6, '指数 −6：μm の位です。'), sayE(-7, '指数 −7：0.1 μm（100 nm）の位です。'), sayE(-8, '指数 −8：10 nm の位です。'), sayE(-9, '指数 −9：nm の位です。'), sayE(-10, '指数 −10：Å の位です。')] }
+      ],
+      calc: convCalc,
+      results: convRes,
+      reads: [
+        { when: 'Lm >= 0.1', text: 'mm より大きい長さです。ウェーハやチップの大きさは、この段（m〜mm）にあります。' },
+        { when: 'Lm < 0.1 && Lm >= 0.000001', text: 'μm の段です。髪の毛・紙・ウェーハの厚さ・細胞はこの段です。' },
+        { when: 'Lm < 0.000001 && Lm >= 0.000000001', text: 'nm の段です。ウイルス・DNA・トランジスタや配線の間隔・EUV の光の波長はこの段です。' },
+        { when: 'Lm < 0.000000001', text: 'Å の段です。原子の間隔（シリコンで約 2.35 Å）の大きさです。' }
+      ],
+      fig: { type: 'bar', log: true, logMin: 0.1, max: 1000000000,
+        bars: [
+          { label: 'いまの長さ', expr: 'Lnm', unit: 'nm', digits: 2, color: 'ran' },
+          { label: 'ウェーハ 300 mm', expr: '300000000', unit: 'nm', digits: 0, color: 'core' },
+          { label: '髪の毛（約）', expr: '70000', unit: 'nm', digits: 0, color: 'ims' },
+          { label: '配線の間隔', expr: '36', unit: 'nm', digits: 0, color: 'core' },
+          { label: 'ゲート絶縁膜', expr: '1.2', unit: 'nm', digits: 1, color: 'core' },
+          { label: 'Si の格子', expr: '0.5431', unit: 'nm', digits: 3, color: 'ims' }
+        ],
+        alt: '長さを nm に直した対数の棒グラフ。いまの長さと、ウェーハの直径、髪の毛、配線の間隔、ゲート絶縁膜、シリコンの格子定数を並べる。' }
+    }]
+  });
+
+  /* ================== ② ズームする ================== */
+  var STAGE = ['ウェーハ全体', 'チップ 1 個', '回路のブロック', 'セルの列', '上の層の配線', '細い配線の断面', 'トランジスタが並ぶ断面', '1 個のトランジスタの断面', '原子の並び'];
+  var zCalc = [{ id: 'mag', expr: '10 ^ z' }, { id: 'wm', expr: '0.3 / mag' }, { id: 'gate', expr: 'wm / 0.000000054' }, { id: 'wire', expr: 'wm / 0.000000036' }, { id: 'latc', expr: 'wm / 0.0000000005431020511' }, { id: 'wnm', expr: 'wm * 1000000000' }];
+  var MAGW = ['1 倍', '10 倍', '100 倍', '1,000 倍', '1 万倍', '10 万倍', '100 万倍', '1,000 万倍', '1 億倍'];
+  var zW = ladder('画面の幅（実物の長さ）', 'wm', LEN, '', '1 倍のとき、画面の幅をウェーハの直径 300 mm とする（この章の取り決め）', true);
+  var zG = ladder('その幅に並ぶ「ゲートの間隔 54 nm」の数', 'gate', COUNT, '個分', 'Intel「10 nm」の発表の値（2017 年）で割った数');
+  var zM = ladder('その幅に並ぶ「配線の間隔 36 nm」の数', 'wire', COUNT, '本分', '同じ発表の最小メタルピッチで割った数');
+  var zL = ladder('その幅に並ぶ「シリコンの格子 0.5431 nm」の数', 'latc', COUNT, '個分', 'CODATA 2018 の格子定数で割った数');
+  var zoomRes = [{ label: '倍率', expr: 'z', words: MAGW }, { label: '画面に見えるもの（模式図の名前）', expr: 'z', words: STAGE, big: true }].concat(zW.results, zG.results, zM.results, zL.results);
+  var zoomReads = [
+    { when: 'z == 0', text: '画面の幅は 300 mm。チップが格子のように並んだウェーハ全体が見えます（チップの数は、大きさで数十個から数千個。後の「数の階段」の節）。' },
+    { when: 'z == 1', text: '幅 30 mm。大きなチップなら 1 個が画面いっぱいです（H100 のダイ面積 814 mm² は 1 辺 約 28.5 mm の正方形に相当）。' },
+    { when: 'z == 2', text: '幅 3 mm。チップの一部が見えます。演算・メモリなど、回路のブロックが見分けられる大きさです。' },
+    { when: 'z == 3', text: '幅 300 μm。髪の毛（約 70 μm）が約 4.3 本並ぶ幅です（300 ÷ 70）。ブロックの中の、セルの列が見えます。' },
+    { when: 'z == 4', text: '幅 30 μm。赤血球（約 7.7 μm）が約 3.9 個並ぶ幅です（30 ÷ 7.7）。上の層の、太い配線が見えます。' },
+    { when: 'z == 5', text: '幅 3 μm。大腸菌（長さ 1.78 μm）が収まる幅です。配線の間隔 36 nm なら約 83 本が並びます（3,000 ÷ 36）。' },
+    { when: 'z == 6', text: '幅 300 nm。ゲートの間隔 54 nm が約 5.6 個、コロナウイルス（約 100 nm）が約 3 個並ぶ幅です。トランジスタの断面が見えます。' },
+    { when: 'z == 7', text: '幅 30 nm。EUV の波長 13.5 nm が約 2.2 個入る幅です（30 ÷ 13.5）。1 個のトランジスタの断面の、ゲート絶縁膜（1.2 nm の例）が幅の 4% ほどに見えます。' },
+    { when: 'z == 8', text: '幅 3 nm。シリコンの格子（0.5431 nm）が約 5.5 個並ぶ幅です（3 ÷ 0.5431）。原子の並びが見えてきます。' }
+  ];
+  CN.add('lab', 'cI1-zoom', {
+    title: 'ズームの計算：倍率を上げると、画面の幅は実物の何 mm・μm・nm か',
+    disclaimer: '学習用の模型です。倍率 1 倍の画面の幅は、ウェーハの直径 300 mm と取り決めています。上の絵（模式図）は実物の形ではありません。「10 nm」などの世代の名前は実際の寸法ではなく、ここでは発表された寸法（ゲートの間隔 54 nm、配線の間隔 36 nm）で割っています。',
+    experiments: [{
+      id: 'zoom', label: '倍率と画面の幅',
+      intro: 'つまみで倍率（10 の何乗倍か）を動かします。画面の幅は、300 mm を倍率で割った値です。下の結果は、その幅に、ゲートの間隔や配線の間隔が何個並ぶかを出します。ボタンは、10 倍ごとの 9 段です。',
+      presetLabel: '倍率（押すと、つまみが動きます）',
+      presetHint: '1 倍から 1 億倍まで、10 倍ごとに 9 段です。',
+      presets: [0, 1, 2, 3, 4, 5, 6, 7, 8].map(function (k) { return { label: ['1 倍', '10 倍', '100 倍', '1,000 倍', '1 万倍', '10 万倍', '100 万倍', '1,000 万倍', '1 億倍'][k], set: { z: k }, text: '倍率 ' + ['1', '10', '100', '1,000', '1 万', '10 万', '100 万', '1,000 万', '1 億'][k] + ' 倍：「' + STAGE[k] + '」の段です。' }; }),
+      formula: '画面の幅 ＝ 300 mm ÷ 倍率。並ぶ数 ＝ 画面の幅 ÷ 1 個の長さ',
+      inputs: [{ id: 'z', label: '倍率（10 の何乗倍か）', unit: '乗', min: 0, max: 8, step: 1, value: 4, hint: '0 が 1 倍、4 が 1 万倍、8 が 1 億倍です。' }],
+      calc: cat(zCalc, zW.calc, zG.calc, zM.calc, zL.calc),
+      results: zoomRes,
+      reads: zoomReads,
+      fig: { type: 'bar', log: true, logMin: 0.1, max: 1000000000,
+        bars: [
+          { label: '画面の幅', expr: 'wnm', unit: 'nm', digits: 0, color: 'ran' },
+          { label: '髪の毛 70 μm', expr: '70000', unit: 'nm', digits: 0, color: 'ims' },
+          { label: '赤血球 7.7 μm', expr: '7700', unit: 'nm', digits: 0, color: 'ims' },
+          { label: 'ウイルス 100 nm', expr: '100', unit: 'nm', digits: 0, color: 'ims' },
+          { label: 'ゲートの間隔', expr: '54', unit: 'nm', digits: 0, color: 'core' },
+          { label: 'Si の格子', expr: '0.5431', unit: 'nm', digits: 3, color: 'core' }
+        ],
+        alt: '画面の幅を nm に直した対数の棒グラフ。髪の毛、赤血球、ウイルス、ゲートの間隔、シリコンの格子と並べる。' }
+    }]
+  });
+
+  /* ---------- 髪の毛の断面に、トランジスタが何個並ぶか ---------- */
+  var hCalc = [{ id: 'A', expr: 'pi * (d / 2 / 1000) ^ 2' }, { id: 'N', expr: 'A * rho * 1000000' }, { id: 'Aum', expr: 'pi * (d / 2) ^ 2' }, { id: 'at', expr: '1000000000000 / (rho * 1000000)' }, { id: 'sd', expr: 'sqrt(at)' }, { id: 'rv', expr: 'at / (pi * 50 * 50)' }];
+  var hN = ladder('髪の毛の断面に入るトランジスタの数', 'N', COUNT, '個', '断面積 × 密度', true);
+  hCalc = hCalc.concat(hN.calc, [fixedCalc('Aum'), fixedCalc('at'), fixedCalc('sd'), fixedCalc('rv')]);
+  var hRes = cat(hN.results, fixedRows('髪の毛の断面の面積', 'μm²', 'Aum', '円の面積 π × (直径 ÷ 2)²'), fixedRows('トランジスタ 1 個あたりの面積', 'nm²', 'at', '1 mm² ÷ 密度（配線なども含めた平均）'),
+    fixedRows('それを正方形にしたときの 1 辺', 'nm', 'sd', '面積の平方根'), fixedRows('1 個あたりの面積は、直径 100 nm の円（ウイルスの大きさの目安）の何倍か', '倍', 'rv', '1 個あたりの面積 ÷ 7,854 nm²'));
+  CN.add('lab', 'cI1-hair', {
+    title: '髪の毛 1 本の断面に、トランジスタは何個並ぶか（面積と密度から計算）',
+    disclaimer: '学習用の模型です。初期値の密度 100.8 は「論理回路のトランジスタ密度」の例で、チップ全体の平均ではありません（H100・WSE-3 のボタンは、公表値から割り算したチップ全体の平均。メモリ・配線・余白で変わります）。髪の太さは人・部位で 17〜181 μm と幅があります。',
+    experiments: [{
+      id: 'hair', label: '髪の毛の断面',
+      intro: '髪の毛の断面を円とみなし、面積に、トランジスタの面積あたりの数（密度）をかけます。式は 個数 ＝ π × (直径 ÷ 2)² × 密度。直径を mm、密度を「百万個/mm²」（MTr/mm²）で入れると、百万倍して個数になります。',
+      presetLabel: '髪の太さと密度の組み合わせ（押すと、つまみが動きます）',
+      presetHint: 'つまみを自分で動かすと、下の結果と図が変わります。',
+      presets: [
+        { label: '70 μm・Intel「10 nm」の論理の密度 100.8', set: { d: 70, rho: 100.8 }, text: 'Intel が 2017 年に「10 nm」の世代で示した論理回路のトランジスタ密度（100.8 MTr/mm²）。' },
+        { label: '70 μm・H100 の平均 98.3', set: { d: 70, rho: 98.3 }, text: '80 B ÷ 814 mm² ＝ 98.3 MTr/mm²。チップ全体の平均です（NVIDIA の公表値から計算）。' },
+        { label: '70 μm・WSE-3 の平均 86.5', set: { d: 70, rho: 86.5 }, text: '4 兆個 ÷ 46,225 mm² ＝ 86.5 MTr/mm²。チップ全体の平均です（Cerebras の公表値から計算）。' },
+        { label: '細い髪 17 μm', set: { d: 17, rho: 100.8 }, text: '17 μm は、Ley が集めた範囲の下の端です。' },
+        { label: '太い髪 181 μm', set: { d: 181, rho: 100.8 }, text: '181 μm は、同じ範囲の上の端です。面積は直径の 2 乗で増えます。' }
+      ],
+      formula: '個数 ＝ π × (直径 ÷ 2)² × 密度。直径 70 μm ＝ 0.07 mm、面積 0.003848 mm²、密度 100.8 MTr/mm² のとき 約 38.8 万個',
+      inputs: [
+        { id: 'd', label: '髪の毛の直径', unit: 'μm', min: 17, max: 181, step: 1, value: 70, hint: 'Ley が集めた範囲 17〜181 μm。60〜77 μm は学生の電子顕微鏡の測定です。' },
+        { id: 'rho', label: 'トランジスタの密度', unit: 'MTr/mm²', min: 10, max: 300, step: 0.1, value: 100.8, hint: '1 MTr ＝ 100 万個。100 MTr/mm² は、1 mm² に 1 億個です。' }
+      ],
+      calc: hCalc,
+      results: hRes,
+      reads: [
+        { when: 'N >= 100000 && N < 10000000', text: '髪の毛 1 本の断面に、数十万〜数百万個のトランジスタが並ぶ大きさです。' },
+        { when: 'N < 100000', text: '細い髪や、密度が低い場合は、数万個です。それでも、肉眼で見える点の中に、数万個の部品が入ります。' },
+        { when: 'N >= 10000000', text: '太い髪と高い密度では、1,000 万個を超えます。' },
+        { when: 'rv > 0.5 && rv < 2', text: '1 個あたりの面積は、直径 100 nm の円（ウイルス 1 個の断面の目安）の 2 倍以内です。ウイルス 1 個の断面と、トランジスタ 1 個が占める面積は、ほぼ同じ桁です。' },
+        { when: 'rv >= 2', text: '1 個あたりの面積は、直径 100 nm の円（ウイルス 1 個の断面の目安）の 2 倍以上です（密度が低い設定）。' },
+        { when: 'rv <= 0.5', text: '1 個あたりの面積は、直径 100 nm の円（ウイルス 1 個の断面の目安）の半分以下です（密度が高い設定）。' }
+      ],
+      fig: { type: 'curve',
+        x: { id: 'D', min: 17, max: 181, step: 1, label: '髪の毛の直径', unit: 'μm', ticks: [{ v: 17, label: '17' }, { v: 60, label: '60' }, { v: 100, label: '100' }, { v: 140, label: '140' }, { v: 181, label: '181' }] },
+        unit: '万個', yLabel: '断面に入る個数', digits: 1, ymin: 0,
+        series: [{ label: 'いまの密度', expr: 'pi * (D / 2 / 1000) ^ 2 * rho * 1000000 / 10000', color: 'core' }],
+        marks: [{ x: 'd', label: 'いまの太さ' }],
+        alt: '髪の毛の直径 17〜181 μm と、断面に入るトランジスタの数（万個）の関係の線グラフ。直径の 2 乗に比例して増える。いまの直径に縦の印がある。' }
+    }]
+  });
+
+  /* ---------- ズームの絵（xsec） ---------- */
+  function circ(cx, cy, r, n) { var pts = [], k; n = n || 32; for (k = 0; k < n; k++) { var a = 2 * Math.PI * k / n; pts.push([+(cx + r * Math.cos(a)).toFixed(1), +(cy + r * Math.sin(a)).toFixed(1)]); } return pts; }
+  var dies = [], dieIds = [], gx, gy, P = 26, DS = 22, CX = 300, CY = 150, R = 128, n = 0;
+  for (gy = -5; gy <= 4; gy++) for (gx = -5; gx <= 4; gx++) {
+    var x0 = CX + gx * P + (P - DS) / 2, y0 = CY + gy * P + (P - DS) / 2, ok = true, c;
+    [[x0, y0], [x0 + DS, y0], [x0, y0 + DS], [x0 + DS, y0 + DS]].forEach(function (q) { var dx = q[0] - CX, dy = q[1] - CY; if (Math.sqrt(dx * dx + dy * dy) > R - 5) ok = false; });
+    if (ok) { n++; dies.push({ id: 'd' + n, m: 'sio2', x: +x0.toFixed(1), y: +y0.toFixed(1), w: DS, h: DS }); dieIds.push('d' + n); }
+  }
+  var s0 = ['wf'].concat(dieIds);
+  CN.add('xsec', 'cI1-zoomfig', ({
+    legend: 'step', labelMinPx: 9.5,
+    title: 'ズームの絵（模式図）：ウェーハ → チップ → ブロック → 配線 → トランジスタ → 原子',
+    viewBox: [600, 300],
+    materials: {
+      si: { name: 'シリコン（ウェーハ・基板・フィン・原子）', en: 'Silicon', role: '回路をつくる土台の結晶。' },
+      sio2: { name: 'チップ・絶縁の領域', en: 'Die / dielectric', role: 'チップの面、または絶縁膜の領域（模式）。' },
+      metal: { name: 'メモリのブロック／ゲートの電極', en: 'Memory block / gate', role: 'チップ・ブロックの段ではメモリのブロック、トランジスタの段ではゲートの電極（模式）。' },
+      cu: { name: '銅の配線', en: 'Copper', role: '細い配線（模式）。' },
+      al: { name: '入出力・配線の通り道・縦の配線', en: 'I/O / routing', role: 'チップの段では入出力、ブロックの段では配線の通り道、配線の段では縦に走る配線（模式）。' },
+      lowk: { name: '配線の間の絶縁膜', en: 'Low-k', role: '配線どうしを絶縁する膜。' },
+      poly: { name: '演算・制御のブロック', en: 'Logic block', role: '演算や制御をする回路のまとまり（模式）。' },
+      'si-n': { name: '標準セルの列', en: 'Cell row', role: '標準セルが並ぶ列（模式）。' },
+      hk: { name: 'ゲート絶縁膜', en: 'Gate dielectric', role: 'ゲートとシリコンの間の薄い絶縁膜。厚さだけ縮尺どおり（1.2 nm。65 nm 世代の二酸化シリコンの例を借りた目安）。' }
+    },
+    base: [{ id: 'wf', m: 'si', pts: circ(CX, CY, R, 48), label: '' }].concat(dies),
+    steps: [
+      { phase: '1 倍', name: '画面の幅 300 mm：ウェーハ全体', proc: '倍率 1 倍', what: '画面の幅は、ウェーハの直径 **300 mm**。丸いウェーハの上に、四角い**チップ**（ダイ）が格子のように並ぶ。チップの数は、大きさで数十個から数千個（後の「数の階段」の節）。', trap: '絵は模式図です。チップの数・形は実物と違います。', ch: [5] },
+      { phase: '10 倍', name: '画面の幅 30 mm：チップ 1 個', proc: '倍率 10 倍', what: 'チップ 1 個が画面いっぱいになる。大きなチップは 1 辺が 30 mm ほどです（H100 のダイ面積 814 mm² は 1 辺 約 28.5 mm の正方形に相当）。中には、演算やメモリなどのブロックがある。', ch: [3],
+        del: s0, add: [{ id: 'c1', m: 'sio2', x: 130, y: 20, w: 340, h: 260, label: '' }, { id: 'b1', m: 'poly', x: 150, y: 40, w: 150, h: 110, label: '演算' }, { id: 'b2', m: 'poly', x: 310, y: 40, w: 140, h: 110, label: '演算' }, { id: 'b3', m: 'metal', x: 150, y: 160, w: 300, h: 50, label: 'メモリ（キャッシュ）' }, { id: 'b4', m: 'al', x: 150, y: 220, w: 300, h: 40, label: '入出力' }] },
+      { phase: '100 倍', name: '画面の幅 3 mm：回路のブロック', proc: '倍率 100 倍', what: 'チップのごく一部。**回路のブロック**（演算・メモリ・制御など）の境目が見える。ブロックの中は、さらに小さな部品の集まり。', ch: [3],
+        del: ['c1', 'b1', 'b2', 'b3', 'b4'], add: [{ id: 'k0', m: 'sio2', x: 40, y: 20, w: 520, h: 260, label: '' }, { id: 'k1', m: 'metal', x: 60, y: 40, w: 240, h: 100, label: 'メモリのブロック' }, { id: 'k2', m: 'poly', x: 320, y: 40, w: 220, h: 100, label: '演算のブロック' }, { id: 'k3', m: 'al', x: 60, y: 160, w: 480, h: 40, label: '配線の通り道' }, { id: 'k4', m: 'poly', x: 60, y: 220, w: 230, h: 40, label: '制御のブロック' }] },
+      { phase: '1,000 倍', name: '画面の幅 300 μm：セルの列', proc: '倍率 1,000 倍', what: 'ブロックの中に、**標準セル**（論理ゲートなどの部品）が列になって並ぶ。画面の幅 300 μm は、髪の毛（約 70 μm）が約 4.3 本並ぶ幅。', ch: [3],
+        del: ['k0', 'k1', 'k2', 'k3', 'k4'], add: [{ id: 'r1', m: 'si-n', x: 40, y: 30, w: 520, h: 34, label: 'セルの列' }, { id: 'r2', m: 'si-n', x: 40, y: 70, w: 520, h: 34, label: 'セルの列' }, { id: 'r3', m: 'si-n', x: 40, y: 110, w: 520, h: 34, label: 'セルの列' }, { id: 'r4', m: 'si-n', x: 40, y: 150, w: 520, h: 34, label: 'セルの列' }, { id: 'r5', m: 'si-n', x: 40, y: 190, w: 520, h: 34, label: 'セルの列' }, { id: 'r6', m: 'si-n', x: 40, y: 230, w: 520, h: 34, label: 'セルの列' }] },
+      { phase: '1 万倍', name: '画面の幅 30 μm：上の層の配線', proc: '倍率 1 万倍', what: '上の層には、**太い配線**が縦横に走る。画面の幅 30 μm は、赤血球（約 7.7 μm）が約 3.9 個並ぶ幅。', ch: [12],
+        del: ['r1', 'r2', 'r3', 'r4', 'r5', 'r6'], add: [{ id: 'w0', m: 'lowk', x: 40, y: 30, w: 520, h: 240, label: '' }, { id: 'h1', m: 'cu', x: 40, y: 60, w: 520, h: 16, label: '横の配線' }, { id: 'h2', m: 'cu', x: 40, y: 130, w: 520, h: 16, label: '横の配線' }, { id: 'h3', m: 'cu', x: 40, y: 200, w: 520, h: 16, label: '横の配線' }, { id: 'v1', m: 'al', x: 130, y: 30, w: 16, h: 240, label: '縦の配線' }, { id: 'v2', m: 'al', x: 290, y: 30, w: 16, h: 240, label: '' }, { id: 'v3', m: 'al', x: 450, y: 30, w: 16, h: 240, label: '' }] },
+      { phase: '10 万倍', name: '画面の幅 3 μm：細い配線の断面', proc: '倍率 10 万倍', what: '下の層の配線は細く、間隔が約 36 nm（Intel「10 nm」の例）。画面の幅 3 μm には、約 83 本が並ぶ（絵は 5 本だけ描いた）。配線のまわりは、配線の間の絶縁膜（凡例の同じ名前の色）。大腸菌（長さ 1.78 μm）が収まる幅。', ch: [12],
+        del: ['w0', 'h1', 'h2', 'h3', 'v1', 'v2', 'v3'], add: [{ id: 'l0', m: 'lowk', x: 40, y: 40, w: 520, h: 170, label: '' }, { id: 'sb', m: 'si', x: 40, y: 210, w: 520, h: 60, label: 'シリコンの基板' }, { id: 'q1', m: 'cu', x: 110, y: 80, w: 22, h: 90, label: '' }, { id: 'q2', m: 'cu', x: 190, y: 80, w: 22, h: 90, label: '銅の配線' }, { id: 'q3', m: 'cu', x: 270, y: 80, w: 22, h: 90, label: '' }, { id: 'q4', m: 'cu', x: 350, y: 80, w: 22, h: 90, label: '' }, { id: 'q5', m: 'cu', x: 430, y: 80, w: 22, h: 90, label: '' }] },
+      { phase: '100 万倍', name: '画面の幅 300 nm：トランジスタが並ぶ断面', proc: '倍率 100 万倍', what: '基板の表面に、トランジスタが並ぶ。ゲートのまわりは絶縁膜（凡例の「チップ・絶縁の領域」の色）。ゲートの間隔は 54 nm（Intel「10 nm」の例）。画面の幅 300 nm には約 5.6 個分。この絵では、ゲートの間隔だけ縮尺どおり（54 nm は画面の幅 300 nm の 18%）で、ほかの形は模式。', ch: [2, 4],
+        del: ['l0', 'sb', 'q1', 'q2', 'q3', 'q4', 'q5'], add: [{ id: 'g0', m: 'sio2', x: 0, y: 60, w: 600, h: 140, label: '' }, { id: 'fn', m: 'si', x: 0, y: 200, w: 600, h: 70, label: 'シリコン（基板とフィン）' }, { id: 'g1', m: 'metal', x: 58, y: 110, w: 40, h: 90, label: 'ゲート' }, { id: 'g2', m: 'metal', x: 166, y: 110, w: 40, h: 90, label: 'ゲート' }, { id: 'g3', m: 'metal', x: 274, y: 110, w: 40, h: 90, label: 'ゲート' }, { id: 'g4', m: 'metal', x: 382, y: 110, w: 40, h: 90, label: 'ゲート' }, { id: 'g5', m: 'metal', x: 490, y: 110, w: 40, h: 90, label: '' }] },
+      { phase: '1,000 万倍', name: '画面の幅 30 nm：1 個のトランジスタの断面', proc: '倍率 1,000 万倍', what: '1 個のトランジスタの、フィンを横から切った断面。ゲートは、フィンの上と両側を囲む。絶縁膜の厚さは、Intel が公表した 65 nm 世代の二酸化シリコンの値 1.2 nm を、厚さの目安として借りて描いた。この絵では、絶縁膜の厚さだけが縮尺どおり（1.2 nm は画面の幅 30 nm の 4%）。画面の幅は、EUV の波長 13.5 nm の約 2.2 個分。', trap: '65 nm 世代は、フィンを使わない平面のトランジスタでした。フィンを使う世代のゲート絶縁膜は、別の材料（high-k、第02章）で、その厚さはこの章では確かめていません。フィンの幅・高さ・ゲートの形も模式です。', ch: [2],
+        del: ['g0', 'fn', 'g1', 'g2', 'g3', 'g4', 'g5'], add: [{ id: 'f0', m: 'si', x: 0, y: 220, w: 600, h: 50, label: 'シリコンの基板' }, { id: 'f1', m: 'si', x: 230, y: 60, w: 140, h: 160, label: 'フィン' }, { id: 'f2', m: 'hk', x: 206, y: 60, w: 24, h: 160, label: '' }, { id: 'f3', m: 'hk', x: 370, y: 60, w: 24, h: 160, label: '' }, { id: 'f4', m: 'hk', x: 206, y: 36, w: 188, h: 24, label: 'ゲート絶縁膜' }, { id: 'f5', m: 'metal', x: 120, y: 10, w: 360, h: 26, label: 'ゲート' }, { id: 'f6', m: 'metal', x: 182, y: 36, w: 24, h: 184, label: '' }, { id: 'f7', m: 'metal', x: 394, y: 36, w: 24, h: 184, label: '' }] },
+      { phase: '1 億倍', name: '画面の幅 3 nm：原子の並び', proc: '倍率 1 億倍', what: 'シリコンの原子の並びが見える。格子定数は 0.5431 nm（CODATA 2018）、隣り合う原子の間隔は約 2.35 Å（計算）。画面の幅 3 nm には、格子が約 5.5 個並ぶ。', trap: '原子の数・並び方は模式で、結晶の向きによる見え方の違いは描いていません（8 個だけ描いた）。', ch: [1],
+        del: ['f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7'], add: [].concat((function () { var a = [], rr, cc, k = 0; for (rr = 0; rr < 2; rr++) for (cc = 0; cc < 4; cc++) { k++; a.push({ id: 'a' + k, m: 'si', pts: circ(80 + cc * 110 + (rr % 2) * 55, 100 + rr * 90, 40, 20), label: k === 1 ? 'Si 原子' : '' }); } return a; })()) }
+    ]
+  }));
+
+  /* ================== ③ 円（面積）で比べる ================== */
+  var AH = Math.PI * 35 * 35, AR = Math.PI * 3.85 * 3.85, AE = Math.PI * 0.245 * 0.245, AV = Math.PI * 0.05 * 0.05, AT = 1 / 100.8;
+  function rad(a, b) { return +(100 * Math.sqrt(a / b)).toFixed(1); }
+  var CY2 = 130;
+  CN.add('xsec', 'cI1-circles', ({
+    legend: 'step', labelMinPx: 9.5,
+    title: '円の面積で比べる：となりの段との比（面積が比例する円。大きい方の半径を 100 とした比）',
+    viewBox: [600, 260],
+    materials: { 'si-p': { name: '大きい方の円', en: 'Larger', role: '比べる 2 つのうち、面積が大きい方。半径を 100 とする。' }, metal: { name: '小さい方の円', en: 'Smaller', role: '比べる 2 つのうち、面積が小さい方。面積が比例するように半径を決めた。' } },
+    base: [],
+    steps: [
+      { phase: '① 髪の毛と赤血球', name: '髪の毛の断面と、赤血球：面積で約 83 倍', proc: '直径 70 μm と 7.7 μm', what: '髪の毛（直径 70 μm）の断面の面積は 約 3,848 μm²。赤血球（直径 7.7 μm）は 約 46.6 μm²。**直径の比は約 9.1 倍、面積の比は約 83 倍**。面積に比例する円にすると、髪の毛の円の半径を 100 としたとき、赤血球は半径 11 の小さな円になる。', trap: '赤血球は円盤の形で、円は上から見た面積です。', 
+        add: [{ id: 'A1', m: 'si-p', pts: circ(190, CY2, 100, 56), label: '髪の毛の断面 70 μm' }, { id: 'B1', m: 'metal', pts: circ(440, CY2, rad(AR, AH), 24), label: '' }] },
+      { name: '赤血球と、大腸菌の断面：面積で約 247 倍', proc: '直径 7.7 μm と 0.49 μm', what: '赤血球の面積 約 46.6 μm² に対し、大腸菌（幅 0.49 μm）を棒の端から見た断面は 約 0.189 μm²。**面積の比は約 247 倍**。', 
+        del: ['A1', 'B1'], add: [{ id: 'A2', m: 'si-p', pts: circ(190, CY2, 100, 56), label: '赤血球 7.7 μm' }, { id: 'B2', m: 'metal', pts: circ(440, CY2, rad(AE, AR), 24), label: '' }] },
+      { name: '大腸菌の断面と、ウイルス：面積で約 24 倍', proc: '直径 0.49 μm と 100 nm', what: '大腸菌の断面 約 0.189 μm² に対し、直径 100 nm のウイルス（粒子は 60〜140 nm）は 約 0.00785 μm²。**面積の比は約 24 倍**。', 
+        del: ['A2', 'B2'], add: [{ id: 'A3', m: 'si-p', pts: circ(190, CY2, 100, 56), label: '大腸菌の断面 0.49 μm' }, { id: 'B3', m: 'metal', pts: circ(440, CY2, rad(AV, AE), 24), label: 'ウイルス' }] },
+      { name: 'ウイルスと、トランジスタ 1 個の面積：ほぼ同じ', proc: '直径 100 nm の円と 1 個あたりの面積', what: '密度 100.8 MTr/mm²（Intel、2017）なら、トランジスタ 1 個あたりの面積は 1 mm² ÷ 1 億個 ＝ 約 0.0099 μm²（9,921 nm²）。直径 100 nm の円（7,854 nm²）の **約 1.26 倍**（この段だけ、大きい方がトランジスタ）。ウイルス 1 個の断面と、トランジスタ 1 個が占める面積は、ほぼ同じ桁。', trap: '「1 個あたりの面積」は、チップの面積を個数で割った平均です。トランジスタ 1 個の実際の形ではありません。配線やすきまを含みます。', ch: [4],
+        del: ['A3', 'B3'], add: [{ id: 'A4', m: 'si-p', pts: circ(190, CY2, 100, 56), label: 'トランジスタ 1 個の面積' }, { id: 'B4', m: 'metal', pts: circ(440, CY2, rad(AV, AT), 56), label: 'ウイルス 100 nm' }] }
+    ]
+  }));
+
+  var aCalc = [{ id: 'Ah', expr: 'pi * (hd / 2) ^ 2' }, { id: 'Ar', expr: 'pi * 3.85 ^ 2' }, { id: 'Ae', expr: 'pi * 0.245 ^ 2' }, { id: 'Av', expr: 'pi * (vd / 1000 / 2) ^ 2' }, { id: 'At', expr: '1 / rho' },
+    { id: 'r1', expr: 'Ah / Ar' }, { id: 'r2', expr: 'Ar / Ae' }, { id: 'r3', expr: 'Ae / Av' }, { id: 'r4', expr: 'At / Av' }, fixedCalc('r1'), fixedCalc('r2'), fixedCalc('r3'), fixedCalc('r4')];
+  CN.add('lab', 'cI1-area', {
+    title: '面積の階段：髪の毛 → 赤血球 → 大腸菌 → ウイルス → トランジスタ 1 個（対数の棒）',
+    disclaimer: '学習用の模型です。赤血球は直径 7.7 μm の円、大腸菌は幅 0.49 μm の棒の断面、ウイルスは円、トランジスタは「1 mm² ÷ 密度」の平均の面積として計算しています。実物の形ではありません。',
+    experiments: [{
+      id: 'area', label: '面積の比',
+      intro: '髪の毛の太さ、ウイルスの大きさ、トランジスタの密度を動かすと、となり合う段の面積の比が変わります。棒の長さは対数で、1 目盛りは 10 倍です。',
+      formula: '面積 ＝ π × (直径 ÷ 2)²。トランジスタ 1 個あたりの面積 ＝ 1 ÷ 密度（μm²、密度は MTr/mm²）。比 ＝ 大きい方 ÷ 小さい方',
+      inputs: [
+        { id: 'hd', label: '髪の毛の直径', unit: 'μm', min: 17, max: 181, step: 1, value: 70, hint: '17〜181 μm の範囲（Ley）。' },
+        { id: 'vd', label: 'ウイルスの直径', unit: 'nm', min: 60, max: 140, step: 5, value: 100, hint: 'コロナウイルスの粒子は 60〜140 nm（CDC の学術誌、2021 年）。' },
+        { id: 'rho', label: 'トランジスタの密度', unit: 'MTr/mm²', min: 10, max: 300, step: 0.1, value: 100.8, hint: '100.8 は Intel が 2017 年に示した論理回路の密度。' }
+      ],
+      calc: aCalc,
+      results: cat(fixedRows('髪の毛の断面 ÷ 赤血球', '倍', 'r1', '面積の比', 6), fixedRows('赤血球 ÷ 大腸菌の断面', '倍', 'r2', '面積の比', 6), fixedRows('大腸菌の断面 ÷ ウイルス', '倍', 'r3', '面積の比', 6), fixedRows('トランジスタ 1 個の面積 ÷ ウイルスの断面', '倍', 'r4', '1 より大きければ、トランジスタの面積の方が広い', 6)),
+      reads: [
+        { when: 'r4 > 1', text: 'トランジスタ 1 個が占める平均の面積の方が、ウイルス 1 個の断面より広い設定です。' },
+        { when: 'r4 <= 1', text: 'トランジスタ 1 個が占める平均の面積の方が、ウイルス 1 個の断面より狭い設定です。' },
+        { when: 'r4 > 0.5 && r4 < 2', text: 'ウイルス 1 個の断面と、トランジスタ 1 個の面積が、2 倍以内で同じ桁です。' }
+      ],
+      fig: { type: 'bar', log: true, logMin: 0.001, max: 10000,
+        bars: [
+          { label: '髪の毛の断面', expr: 'Ah', unit: 'μm²', digits: 0, color: 'ims' },
+          { label: '赤血球', expr: 'Ar', unit: 'μm²', digits: 1, color: 'ims' },
+          { label: '大腸菌', expr: 'Ae', unit: 'μm²', digits: 3, color: 'ims' },
+          { label: 'ウイルス', expr: 'Av', unit: 'μm²', digits: 4, color: 'ims' },
+          { label: 'トランジスタ', expr: 'At', unit: 'μm²', digits: 4, color: 'core' }
+        ],
+        alt: '面積（μm²）の対数の棒グラフ。髪の毛の断面、赤血球、大腸菌の断面、ウイルス、トランジスタ 1 個あたりの面積を並べる。' }
+    }]
+  });
+
+  /* ================== ④ 数の階段と束ねる ================== */
+  CN.add('table', 'cI1-chips', {
+    title: 'チップ 1 個のトランジスタの数：公表値の例',
+    caption: '各社が公表した値。トランジスタの数・面積は、発表の時点の公表値で、製品の優劣を示す表ではありません。平均の密度は、公表値から割り算した値（チップ全体の平均で、論理回路だけの密度ではありません）',
+    cols: ['製品', '発表', 'トランジスタの数', 'ダイの面積 (mm²)', '平均の密度 (MTr/mm²)', '出典・条件'],
+    rows: [
+      ['Intel 4004（マイクロプロセッサ）', '1971 年', '2,300 個', '—', '—', 'Intel（会社の歴史のページ）。回路の線幅 10 μm。ダイの面積は確かめていない'],
+      ['NVIDIA H100（GH100 チップ）', '2022-03-22', '800 億個', 814, 98.3, 'NVIDIA の技術ブログ。TSMC 4N の製造。1 つのダイの値'],
+      ['Apple M2 Ultra', '2023-06-05', '1,340 億個', '—', '—', 'Apple のニュースリリース。2 つの M2 Max のダイを UltraFusion でつないだもの（2 つのダイの合計）。第 2 世代の 5 nm プロセス（Apple の呼び方）。M1 Ultra より 200 億個多い。ダイの面積は発表に書かれていない'],
+      ['Cerebras WSE-3', '2024-03-13', '4 兆個', 46225, 86.5, 'Cerebras の発表（4 兆個、TSMC の 5 nm）と製品ページ・IEEE Spectrum（46,225 mm²）。ウェーハ 1 枚をほぼ 1 つのチップにした製品。ウェーハ（300 mm）の面積 70,686 mm² の約 65%']
+    ],
+    detail: [
+      '1971 年の 4004 が 2,300 個。いまの H100 の 800 億個は、その約 3,480 万倍（8 × 10¹⁰ ÷ 2,300）です。',
+      'H100 のダイ面積 814 mm² は、1 辺 約 28.5 mm の正方形に相当（検算の行）。80 B ÷ 814 mm² ＝ 98.3 MTr/mm²。',
+      'M2 Ultra の数は、Apple が公表した値です。2 つのダイの合計で、1 つのダイの数ではありません。',
+      'WSE-3 は、300 mm ウェーハの面積の約 65% を 1 つのチップに使う設計です。ここでは、1 枚から 1 個しか取れません。'
+    ],
+    note: '数字は、製品の発表時点の公表値です。後の発表で値が変わる可能性があります。'
+  });
+
+  var bCalc = [{ id: 'S', expr: 'side * side' }, { id: 'raw', expr: 'pi * (dia / 2) ^ 2 / S - pi * dia / sqrt(2 * S)' }, { id: 'n', expr: 'max(floor(raw), 1)' }, { id: 'good', expr: 'n * yld / 100' }, { id: 'T', expr: 'S * rho * 1000000' },
+    { id: 'Tw', expr: 'good * T' }, { id: 'Tlot', expr: 'Tw * lot' }, { id: 'Tmo', expr: 'Tw * wpm * 10000' }, { id: 'Tsec', expr: 'Tmo / (days * 86400)' }, { id: 'pp', expr: 'Tw / pop' }, { id: 'pps', expr: 'Tsec / pop' },
+    { id: 'eG', expr: 'log10(4)' }, { id: 'eC', expr: 'log10(T)' }, { id: 'eW', expr: 'log10(Tw)' }, { id: 'eL', expr: 'log10(Tlot)' }, { id: 'eM', expr: 'log10(Tmo)' }, ];
+  var bT = ladder('チップ 1 個のトランジスタの数', 'T', COUNT, '個', '面積 × 密度', true), bW = ladder('ウェーハ 1 枚の良品に入るトランジスタの数', 'Tw', COUNT, '個', '良品 × チップ 1 個の数'),
+    bL = ladder('1 ロットの良品に入るトランジスタの数', 'Tlot', COUNT, '個', '1 ロット ＝ 25 枚（仮定）'), bM = ladder('1 か月に、良品に入るトランジスタの数', 'Tmo', COUNT, '個', '月産の枚数（仮定）× ウェーハ 1 枚の数'),
+    bS = ladder('1 秒あたり', 'Tsec', COUNT, '個/秒', '1 か月 ＝ 30 日（仮定）で割った数'), bP = ladder('世界人口 1 人あたり（ウェーハ 1 枚の分）', 'pp', COUNT, '個/人', '÷ 82 億人（国連、2024 年）'), bQ = ladder('1 秒あたり・世界人口 1 人あたり', 'pps', COUNT, '個/人/秒', '1 秒あたりの数 ÷ 82 億人');
+  var bRes = cat([{ label: 'チップの面積', expr: 'S', unit: 'mm²', digits: 1 }], bT.results, [{ label: 'ウェーハ 1 枚から取れるチップ（近似）', expr: 'n', unit: '個', digits: 0, big: true, note: '円の面積 ÷ 面積 − π × 直径 ÷ √(2 × 面積)。切りしろ・縁の除外領域は考えない' }, { label: '良品（期待値）', expr: 'good', unit: '個', digits: 1, note: '取れる数 × 歩留まり（仮定）' }],
+    bW.results, bP.results, bL.results, bM.results, bS.results, bQ.results);
+  CN.add('lab', 'cI1-bundle', {
+    title: 'トランジスタを束ねる：チップ → ウェーハ → ロット → 工場の 1 か月',
+    disclaimer: '学習用の模型です。歩留まり・月産の枚数・1 ロットの枚数・1 か月の日数は仮定で、特定の工場や製品の実績ではありません。「全部が同じチップ」という仮定の計算です。',
+    experiments: [{
+      id: 'bundle', label: 'ウェーハ 1 枚から',
+      intro: 'チップの大きさ・ウェーハの直径・歩留まり・密度・月産を動かすと、ウェーハ 1 枚から取れるチップの数、良品の数、トランジスタの総数が変わります。ボタンは、公表値の例（H100 級）と、架空の小さなチップです。',
+      presetLabel: '例（押すと、つまみがまとめて動きます）',
+      presetHint: 'ボタンの歩留まり 70% と月産 5.5 万枚は、仮定の値です。',
+      presets: [
+        { label: 'H100 級（ダイ 約 814 mm²、約 800 億個）', set: { side: 28.5, dia: 300, yld: 70, rho: 98.3, wpm: 5.5 }, text: '1 辺 28.5 mm、密度 98.3 MTr/mm² で 約 800 億個（公表値 80 B との差は 1% 未満で、1 辺と密度の丸めによる）。歩留まり 70%・月産 5.5 万枚は仮定です。' },
+        { label: '小さなチップ（架空：1 辺 5 mm）', set: { side: 5, dia: 300, yld: 70, rho: 100.8, wpm: 5.5 }, text: '1 辺 5 mm の架空のチップです。1 枚から約 2,700 個取れます。' },
+        { label: '200 mm ウェーハ（架空：1 辺 10 mm）', set: { side: 10, dia: 200, yld: 70, rho: 100.8, wpm: 5.5 }, text: '200 mm ウェーハ。ウェーハの直径が小さいと、取れる数が減ります。' }
+      ],
+      formula: '取れる数 ＝ π × (直径 ÷ 2)² ÷ S − π × 直径 ÷ √(2 S)（S はチップの面積）。良品 ＝ 取れる数 × 歩留まり。トランジスタの総数 ＝ 良品 × S × 密度',
+      consts: [{ id: 'pop', value: 8200000000, label: '世界人口（国連 World Population Prospects 2024、2024 年）' }, { id: 'lot', value: 25, label: '1 ロットの枚数（仮定。25 枚）' }, { id: 'days', value: 30, label: '1 か月の日数（仮定。30 日）' }],
+      inputs: [
+        { id: 'side', label: 'チップの 1 辺（正方形と仮定）', unit: 'mm', min: 2, max: 36, step: 0.5, value: 12, hint: 'スマートフォン向けから大形の GPU まで、数 mm〜30 mm 弱です。' },
+        { id: 'dia', label: 'ウェーハの直径', unit: 'mm', min: 150, max: 300, step: 50, value: 300, hint: '150・200・300 mm（第05章）。' },
+        { id: 'yld', label: '歩留まり（仮定）', unit: '%', min: 5, max: 100, step: 1, value: 70, hint: '良品の割合。実際の値は工程と製品で違い、多くは公表されません。' },
+        { id: 'rho', label: 'トランジスタの密度', unit: 'MTr/mm²', min: 10, max: 300, step: 0.1, value: 100.8, hint: '100.8 は Intel（2017）の論理回路の密度。チップ全体の平均はこれより低いのが普通です。' },
+        { id: 'wpm', label: '工場の月産（仮定）', unit: '万枚/月', min: 0.5, max: 20, step: 0.5, value: 5.5, hint: '例：経済産業省が公表した JASM（熊本）の認定計画の生産能力 5.5 万枚/月（12 インチ換算、計画の値、2022 年 6 月認定）。実績ではありません。' }
+      ],
+      calc: cat(bCalc, bT.calc, bW.calc, bL.calc, bM.calc, bS.calc, bP.calc, bQ.calc),
+      results: bRes,
+      reads: [
+        { when: 'side >= 25', text: '大きなチップでは、1 枚から取れる数が少なく、縁に近い部分は使えません（式の第 2 項）。歩留まりも、面積が大きいほど下がりやすくなります（第13章）。' },
+        { when: 'side < 25 && side >= 8', text: '中くらいのチップです。ウェーハの面積に比べてチップが小さいほど、縁で使えない割合は小さくなります。' },
+        { when: 'side < 8', text: '小さなチップでは、1 枚から数千個取れます。歩留まりも、面積が小さいほど上がりやすいと言われます（第13章）。' },
+        { when: 'yld < 40', text: '歩留まりが低いと、取れたチップのうち良品が少なくなり、総数が下がります。' }
+      ],
+      fig: { type: 'bar', max: 20,
+        bars: [
+          { label: 'トランジスタ 1 個', expr: '0', unit: '桁', digits: 1, color: 'core' },
+          { label: 'ゲート（NAND）', expr: 'eG', unit: '桁', digits: 1, color: 'core' },
+          { label: 'チップ 1 個', expr: 'eC', unit: '桁', digits: 1, color: 'core' },
+          { label: 'ウェーハ 1 枚', expr: 'eW', unit: '桁', digits: 1, color: 'ran' },
+          { label: '1 ロット', expr: 'eL', unit: '桁', digits: 1, color: 'ran' },
+          { label: '工場 1 か月', expr: 'eM', unit: '桁', digits: 1, color: 'ims' }
+        ],
+        alt: 'トランジスタの数を 10 の何乗かで表した棒グラフ。トランジスタ 1 個、論理ゲート、チップ、ウェーハ、ロット、工場の 1 か月の順に長くなる。1 目盛りが 10 倍。' }
+    }, {
+      id: 'yield', label: '歩留まりをモデルで',
+      intro: '前の実験は、歩留まりを自分で入れました。ここでは、教科書にある簡単なモデル（ポアソン分布）で、チップの面積と欠陥の密度から歩留まりを出します。欠陥の密度は仮定の値です。',
+      presets: [{ label: '欠陥 0.1 個/cm²・1 辺 12 mm', set: { side: 12, D0: 0.1 }, text: 'ウェーハの直径は 300 mm。歩留まり 約 87% です（模型の値）。' }, { label: '欠陥 0.1 個/cm²・1 辺 28.5 mm', set: { side: 28.5, D0: 0.1 }, text: '面積が約 5.6 倍になると、歩留まりは 87% から 44% まで下がります（同じ欠陥密度で。模型の値）。' }],
+      presetLabel: '例（押すと、つまみが動きます）', presetHint: '欠陥の密度は仮定です。',
+      formula: '歩留まり Y ＝ exp(−D0 × 面積)（面積は cm²）。良品 ＝ 取れる数 × Y。ウェーハの直径は 300 mm',
+      consts: [{ id: 'dia', value: 300, label: 'ウェーハの直径（mm）' }],
+      inputs: [
+        { id: 'side', label: 'チップの 1 辺（正方形と仮定）', unit: 'mm', min: 2, max: 36, step: 0.5, value: 12, hint: '大きいほど、欠陥が入る確率が上がります。' },
+        { id: 'D0', label: '欠陥の密度（仮定）', unit: '個/cm²', min: 0.02, max: 1, step: 0.01, value: 0.2, hint: '1 cm² あたりに、致命的になる欠陥が平均で何個あるか。実際の値は公表されません。' }
+      ],
+      calc: [{ id: 'S', expr: 'side * side' }, { id: 'Acm', expr: 'S / 100' }, { id: 'Y', expr: 'exp(0 - D0 * Acm)' }, { id: 'raw', expr: 'pi * (dia / 2) ^ 2 / S - pi * dia / sqrt(2 * S)' }, { id: 'n', expr: 'max(floor(raw), 1)' }, { id: 'good', expr: 'n * Y' }],
+      results: [
+        { label: 'チップの面積', expr: 'Acm', unit: 'cm²', digits: 2 },
+        { label: '歩留まり（モデル）', expr: 'Y * 100', unit: '%', digits: 1, big: true, note: 'exp(−D0 × 面積)' },
+        { label: '1 枚から取れるチップ', expr: 'n', unit: '個', digits: 0 },
+        { label: '良品（期待値）', expr: 'good', unit: '個', digits: 1, note: '取れる数 × 歩留まり' }
+      ],
+      reads: [
+        { when: 'Y < 0.5', text: '歩留まりが 50% を下回ります。大きなチップは、同じ欠陥の密度でも、良品の割合が大きく下がります。' },
+        { when: 'Y >= 0.5', text: '歩留まりは 50% 以上です。チップを小さくするか、欠陥の密度を下げると、さらに上がります。' }
+      ],
+      figs: [
+        { type: 'curve', title: '歩留まり（％）と、チップの 1 辺', x: { id: 'X', min: 2, max: 36, step: 0.5, label: 'チップの 1 辺', unit: 'mm', ticks: [{ v: 2, label: '2' }, { v: 10, label: '10' }, { v: 20, label: '20' }, { v: 30, label: '30' }, { v: 36, label: '36' }] }, unit: '%', yLabel: '歩留まり', digits: 1, ymin: 0, ymax: 100,
+          series: [{ label: 'いまの欠陥密度', expr: 'exp(0 - D0 * X * X / 100) * 100', color: 'core' }], marks: [{ x: 'side', label: 'いまの大きさ' }],
+          alt: 'チップの 1 辺と歩留まり（%）の線グラフ。大きくなるほど下がる。いまの大きさに縦の印がある。' },
+        { type: 'curve', title: 'ウェーハ 1 枚の良品の数（期待値）と、チップの 1 辺', x: { id: 'X', min: 4, max: 36, step: 0.5, label: 'チップの 1 辺', unit: 'mm', ticks: [{ v: 4, label: '4' }, { v: 10, label: '10' }, { v: 20, label: '20' }, { v: 30, label: '30' }, { v: 36, label: '36' }] }, unit: '個', yLabel: '良品の数', digits: 0, ymin: 0,
+          series: [{ label: 'いまの欠陥密度', expr: 'max(floor(pi * (dia / 2) ^ 2 / (X * X) - pi * dia / sqrt(2 * X * X)), 0) * exp(0 - D0 * X * X / 100)', color: 'ran' }], marks: [{ x: 'side', label: 'いまの大きさ' }],
+          alt: 'チップの 1 辺と、ウェーハ 1 枚の良品の期待値の線グラフ。小さいチップほど多く、大きくなると急に減る。いまの大きさに縦の印がある。' }
+      ]
+    }]
+  });
+
+  /* ================== ⑤ 清浄さと精度 ================== */
+  var ISO05 = 'N == 3 ? 35 : (N == 4 ? 352 : (N == 5 ? 3520 : (N == 6 ? 35200 : (N == 7 ? 352000 : (N == 8 ? 3520000 : 35200000)))))';
+  var cCalc = [{ id: 'c05', expr: ISO05 }, { id: 'perL', expr: 'c05 / 1000' }, { id: 'vol', expr: '1000 / c05' }, { id: 'r9', expr: '35200000 / c05' }, { id: 'c01', expr: '10 ^ N' }, fixedCalc('perL', 4)];
+  var cVol = ladder('粒子が 1 個入る空気の体積', 'vol', [['L', 1], ['mL', 0.001], ['μL', 0.000001]], '', '1,000 L ÷ 個数。1 m³ ＝ 1,000 L');
+  CN.add('lab', 'cI1-clean', {
+    title: 'クリーンルームの清浄さ：ISO クラスごとの粒子の数の上限（1 m³ あたり、0.5 μm 以上）',
+    disclaimer: '学習用の模型です。値は ISO 14644-1:2015 の表 1 の上限（第18章の表と同じ）です。実際の部屋の粒子数は上限より少なく、状態（竣工時・非稼働時・運転時）で変わります。規格の本文は有料のため、この講座では参照していません。',
+    experiments: [{
+      id: 'clean', label: 'ISO クラスの粒子',
+      intro: 'ISO クラス（3〜9）を動かすと、空気 1 m³ に許される 0.5 μm 以上の粒子の数の上限が変わります。番号が 1 つ小さいと、上限はおよそ 10 分の 1 です。1 リットル（牛乳パック 1 本）あたりと、粒子が 1 個入る空気の体積にも直します。',
+      presetLabel: 'クラス（押すと、つまみが動きます）', presetHint: '3〜9 のどれでも動かせます。',
+      presets: [{ label: 'ISO 3', set: { N: 3 }, text: '0.5 μm 以上の粒子は 35 個/m³ まで。表で 0.5 μm の欄に値がある、最もきれいなクラスです。' }, { label: 'ISO 5', set: { N: 5 }, text: '3,520 個/m³ まで。ウェーハやチップをつくる環境で、ISO 3〜5 がよく指定されると述べる記事があります（第18章）。' }, { label: 'ISO 7', set: { N: 7 }, text: '352,000 個/m³ まで。' }, { label: 'ISO 9', set: { N: 9 }, text: '35,200,000 個/m³ まで。表 1 で最も緩いクラスです。' }],
+      formula: '上限 Cn ＝ 10^N × (0.1 ÷ 粒径[μm])^2.08 を有効数字 3 桁に丸めた値（第18章）。表の値は、ISO 3：35、4：352、5：3,520、6：35,200、7：352,000、8：3,520,000、9：35,200,000（0.5 μm 以上、個/m³）',
+      inputs: [{ id: 'N', label: 'ISO クラス', unit: '', min: 3, max: 9, step: 1, value: 6, hint: '番号が小さいほどきれいです。ISO 1・2 は 0.5 μm の欄に値がないので、3〜9 だけにしています。' }],
+      calc: cat(cCalc, cVol.calc),
+      results: cat([{ label: '0.5 μm 以上の粒子の上限', expr: 'c05', unit: '個/m³', digits: 0, big: true }, { label: '0.1 μm 以上の上限', expr: 'c01', unit: '個/m³', digits: 0, show: 'N <= 6', note: 'ISO 6 まで表に値がある' }],
+        fixedRows('1 リットルあたりに直した上限', '個/L', 'perL', '÷ 1,000', 4), cVol.results,
+        [{ label: '表で最も緩い ISO 9 の上限の、何分の 1 か', expr: 'r9', unit: '分の 1', digits: 0 }]),
+      quad: { title: '場所ごとの ISO クラスの目安（出典に書かれた範囲。いまのクラスに当てはまる行に ● が付く）', corner: '場所', cols: ['ISO クラスの目安（出典）'],
+        rows: ['半導体のウェーハ・チップをつくる環境', '手術室（運転中の実測）'],
+        cells: [[{ title: 'ISO 3〜5 がよく指定される', sub: 'ASHRAE Journal 2021（第18章）', when: 'N >= 3 && N <= 5' }], [{ title: 'ISO 7〜9（フィンランドの調査）', sub: 'VTT Technology 168、2014 年', when: 'N >= 7 && N <= 9' }]],
+        caption: '手術室は、フィンランドの手術室を運転中に調べた結果で、国・病院で違います。規格が各場所のクラスを定めているわけではありません。' },
+      reads: [
+        { when: 'N <= 4', text: '1 リットルあたり 0.4 個以下です。粒子 1 個を見つけるのに、数 L〜数十 L の空気が要る清浄さです。' },
+        { when: 'N == 5', text: '1 リットルあたり約 3.5 個までです。粒子 1 個ぶんの空気は、約 0.28 L（コップ 1 杯ほど）です。' },
+        { when: 'N > 5 && N < 9', text: '1 リットルに、数十〜数千個までの粒子が許されます。' },
+        { when: 'N == 9', text: '1 リットルに、約 35,000 個までの粒子が許されます。ISO 5 の 1 万倍です。' }
+      ],
+      fig: { type: 'bar', log: true, logMin: 10, max: 100000000,
+        bars: [
+          { label: 'いまのクラス', expr: 'c05', unit: '個/m³', digits: 0, color: 'ran' },
+          { label: 'ISO 3', expr: '35', unit: '個/m³', digits: 0, color: 'core' },
+          { label: 'ISO 5', expr: '3520', unit: '個/m³', digits: 0, color: 'core' },
+          { label: 'ISO 7', expr: '352000', unit: '個/m³', digits: 0, color: 'ims' },
+          { label: 'ISO 9', expr: '35200000', unit: '個/m³', digits: 0, color: 'ims' }
+        ],
+        alt: '0.5 μm 以上の粒子の上限（個/m³）の対数の棒グラフ。いまのクラスと、ISO 3・5・7・9 を並べる。' }
+    }]
+  });
+
+  var oCalc = [{ id: 'k', expr: 'L * 1000000 / dia' }, { id: 'sh', expr: 'ov * L / dia' }, { id: 'lt', expr: '0.5431020511 * L / dia' }, { id: 'mp', expr: '36 * L / dia' }, { id: 'fr', expr: 'ov / 36 * 100' }, fixedCalc('sh'), fixedCalc('lt'), fixedCalc('mp')];
+  var oK = ladder('拡大の倍率', 'k', [['億', 1e8], ['万', 1e4], ['', 1]], '倍', 'ウェーハの直径 ÷ 距離（距離を mm に直して割る）');
+  CN.add('lab', 'cI1-overlay', {
+    title: '位置合わせの精度を、距離に引き伸ばして感じる',
+    disclaimer: '学習用の模型です。重ね合わせの精度は、装置メーカーの公表値（仕様または目標）を使い、縮尺の換算だけをします。実際の製造の精度は、工程・装置・測り方で違います。',
+    experiments: [{
+      id: 'ov', label: '縮尺の換算',
+      intro: 'ウェーハの直径 300 mm が、ある距離（km）になるように、全体を引き伸ばします。そのとき、重ね合わせのずれ（nm）は何 mm になるか、を計算します。ずれ(mm) ＝ ずれ(nm) × 距離(km) ÷ 直径(mm) です（距離 300 km・直径 300 mm なら、1 nm は 1 mm）。',
+      presetLabel: '重ね合わせの値の例（押すと、つまみが動きます）', presetHint: 'つまみを自分で動かしても構いません。',
+      presets: [
+        { label: 'NXE:3600D の仕様 1.1 nm', set: { ov: 1.1 }, text: 'ASML の 2023 年の発表資料：NXE:3600D の matched machine overlay の仕様は 1.1 nm。' },
+        { label: 'NXE:3800E の目標 0.9 nm 以下', set: { ov: 0.9 }, text: '同じ資料：NXE:3800E の matched machine overlay の目標は 0.9 nm 以下（2023 年 6 月の状況）。' },
+        { label: '「2 nm より良い」の境目 2 nm', set: { ov: 2 }, text: 'ASML の 2021 年の解説は、最先端の装置の重ね合わせが 2 nm より良いと述べています（第08章）。' }
+      ],
+      formula: 'ずれ(mm) ＝ 重ね合わせ(nm) × 距離(km) ÷ ウェーハの直径(mm)。拡大の倍率 ＝ 距離 ÷ 直径',
+      inputs: [
+        { id: 'ov', label: '重ね合わせの精度（ずれ）', unit: 'nm', min: 0.5, max: 5, step: 0.1, value: 1.1, hint: 'ASML の資料の matched machine overlay は 0.9〜1.1 nm、製品のウェーハ上の値（on-product overlay）は 1.7 nm（NXE:3600D）。条件で値が違います。' },
+        { id: 'L', label: 'ウェーハの直径を、何 km に引き伸ばすか', unit: 'km', min: 10, max: 2000, step: 10, value: 300, hint: '300 km なら、300 mm が 300 km（100 万倍）です。' },
+        { id: 'dia', label: 'ウェーハの直径', unit: 'mm', min: 150, max: 300, step: 50, value: 300, hint: '150・200・300 mm（第05章）。' }
+      ],
+      calc: cat(oCalc, oK.calc),
+      results: cat(oK.results, fixedRows('重ね合わせのずれ（拡大後）', 'mm', 'sh', 'ずれ ＝ ov × 距離 ÷ 直径', 6), fixedRows('シリコンの格子定数 0.5431 nm（拡大後）', 'mm', 'lt', 'CODATA 2018 の値を同じ倍率で拡大', 6), fixedRows('配線の間隔 36 nm（拡大後）', 'mm', 'mp', 'Intel「10 nm」の最小メタルピッチを拡大', 6), [{ label: 'ずれは、配線の間隔（36 nm）の何 %', expr: 'fr', unit: '%', digits: 1 }]),
+      reads: [
+        { when: 'sh >= 1', text: 'ずれは 1 mm 以上です。拡大した図では、目で見えるほどの大きさです。' },
+        { when: 'sh < 1', text: 'ずれは 1 mm 未満です。' },
+        { when: 'ov <= 1.1', text: '1 nm 前後の精度は、シリコンの格子 2 個ぶん（約 1.09 nm）に近い大きさです。' }
+      ],
+      fig: { type: 'bar',
+        bars: [
+          { label: 'ずれ', expr: 'sh', unit: 'mm', digits: 2, color: 'ran' },
+          { label: 'Si の格子', expr: 'lt', unit: 'mm', digits: 2, color: 'ims' },
+          { label: '配線の間隔', expr: 'mp', unit: 'mm', digits: 1, color: 'core' }
+        ],
+        alt: '拡大後の長さ（mm）の棒グラフ。重ね合わせのずれ、シリコンの格子定数、配線の間隔を並べる。' }
+    }]
+  });
+
+  /* ================== 確認問題 ================== */
+  CN.add('quiz', 'cI1-quiz', { items: [
+    { q: 'Intel が 2017 年に「10 nm」の世代として発表した値には、ゲートの間隔 54 nm・配線の間隔 36 nm・フィンの間隔 34 nm があります。「10 nm」という名前について、正しい説明はどれですか。', c: ['世代の呼び名で、トランジスタや配線の実際の寸法を表す数字ではない', '配線の幅がちょうど 10 nm であることを表す', 'ゲートの間隔が 10 nm であることを表す', 'ウェーハの厚さが 10 nm であることを表す'], a: 0,
+      why: '正答は、世代の呼び名で、実際の寸法を表す数字ではない、です。表の寸法（54・36・34 nm）のどれも 10 nm ではありません。IRDS も、世代のラベルは最小のハーフピッチと同じではないと明記しています（第04章）。', ch: ['I1'] },
+    { q: '重ね合わせのずれ 1.1 nm を、ウェーハの直径 300 mm が 300 km になるように全体を引き伸ばして考えると、ずれは何 mm に当たりますか。', c: ['0.11 mm', '1.1 mm', '11 mm', '110 mm'], a: 1,
+      why: '正答は 1.1 mm です。300 km ÷ 300 mm ＝ 300,000,000 mm ÷ 300 mm ＝ 100 万倍です。1.1 nm × 100 万 ＝ 1.1 mm（1 nm ＝ 0.000001 mm）。ずれ(mm) ＝ ずれ(nm) × 距離(km) ÷ 直径(mm) でも同じです。', ch: ['I1'] },
+    { q: '髪の毛（直径 70 μm）の断面を円とみなし、トランジスタの密度を 100 MTr/mm²（1 mm² に 1 億個）とします。断面に入るトランジスタの数は、およそいくつですか。', c: ['約 390 個', '約 3 万 9,000 個', '約 39 万個', '約 3,900 万個'], a: 2,
+      why: '正答は約 39 万個です。直径 70 μm ＝ 0.07 mm。面積 ＝ π × (0.035 mm)² ＝ 約 0.00385 mm²。0.00385 × 1 億個 ＝ 約 38.5 万個です（密度 100.8 なら約 38.8 万個）。半径を 0.35 mm と 1 桁取り違えると、面積が 100 倍になり、約 3,900 万個になります。ほかの選択肢も、桁を取り違えた値です。', ch: ['I1'] }
+  ]});
 })();
 
 })();
