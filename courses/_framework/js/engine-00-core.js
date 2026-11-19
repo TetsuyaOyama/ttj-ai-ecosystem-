@@ -211,5 +211,11 @@
     });
     return out;
   };
+  /* 1 行に収まらない文字列を、末尾に「…」を付けて収める（CN.wrap と同じ幅の数え方） */
+  CN.ellipsis = function (str, maxPx, fs) {
+    var fsz = fs || 12, w = 0, i, ch, cw, t = String(str), lim = maxPx - 0.56 * fsz * 2;
+    for (i = 0; i < t.length; i++) { ch = t.charAt(i); cw = (ch.charCodeAt(0) < 256 ? 0.56 : 1) * fsz; if (w + cw > lim) break; w += cw; }
+    return i >= t.length ? t : t.slice(0, i).replace(/\s+$/, '') + '…';
+  };
   CN.shuffleSeed = function (n) { var a = []; for (var i = 0; i < n; i++) a.push(i); return a; };
 })();

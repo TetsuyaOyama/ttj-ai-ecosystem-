@@ -1,0 +1,207 @@
+<!--
+num: I2
+part: 0
+title: GPU 1 枚から世界最速の計算機、そして未来へ：計算能力の大きさをつかむ
+track: 基礎
+time: 45
+-->
+<section class="learn">
+  <h3>この章で分かること</h3>
+  <ol>
+    <li><b>FLOPS（1 秒あたりの計算の回数）と FLOP（計算した回数の合計）</b>の違いを、序章1 の kW と kWh になぞらえて説明でき、FLOPS が<b>何を数えていて、何を数えていないか</b>を言える。</li>
+    <li>kilo から zetta までの<b>1,000 倍ずつの階段</b>に、歴史上の計算機と現在の機械を置き、<b>測り方（HPL の実測 Rmax、理論上の最大 Rpeak、精度、sparsity）が違う値は単純に比べられない</b>ことを、表で確かめられる。</li>
+    <li>GPU の枚数から、<b>合計の計算能力・電力・ラックの本数・「富岳の何倍ぶん」</b>を見積もり、公表された計算基盤の<b>稼働と計画</b>を分けて読める。</li>
+    <li>TOP500 首位の伸びが<b>時期で違う</b>ことを数字で言い、「もし、この伸びが続いたら」の計算が<b>外挿であって予測ではない</b>こと、電力などの制約が効くことを説明できる。</li>
+  </ol>
+  <p class="prereq"><b>前提</b>：<a href="#chI1">序章1</a>の kW と kWh、PUE の考え方（読んでいなくても、本文で説明します）。掛け算と割り算ができれば足ります。</p>
+</section>
+
+<div class="callout note"><span class="ttl">この章の読み方</span>
+  <p>序章1 は、サーバーの<b>電力</b>の大きさを、家庭から発電所の 1 軸まで比べました。この章は、その対になる、<b>計算の量</b>の大きさの比較です。過去（初期の計算機）、現在（TOP500 の首位、AI 向けの計算基盤）、そして<b>公表されている計画と、「もし、この伸びが続いたら」の計算</b>までを、図と動かせる部品で比べます。</p>
+  <p>数字は 3 種類に分けて書きます。<b>公表資料の値</b>（出典・時点・条件つき）、そこから計算した<b>目安</b>、そして<b>模型の値</b>（つまみの仮定）です。<b>稼働している機械の値</b>と、<b>目標・計画の値</b>は、必ず分けて書きます。</p>
+  <p>TOP500 は、2026 年 11 月 19 日に確認した時点で、<b>2026 年 11 月の一覧（第 68 回、SC26 で 2026 年 11 月 16 日に発表）</b>が最新です。首位から 10 位は、<b>6 月の一覧（第 67 回）から変わっていません</b>（TOP500 のトップページ）。11 月の一覧のページで、上位 10 の Rmax・Rpeak・電力が 6 月と同じ値であることを確かめました。本文では、値が最初に載った<b>6 月の一覧（第 67 回）</b>の時点で「2026 年 6 月」と書きます（11 月の一覧でも同じ値です）。</p></div>
+
+<h3>計算能力の物差し：「瞬間」と「こなした量」</h3>
+<p>計算機の「速さ」を数字で言うとき、よく使われるのが <b>FLOPS</b>（フロップス、Floating-point Operations Per Second）です。<b>1 秒あたりに、浮動小数点演算を何回できるか</b>という数です。浮動小数点演算は、小数点の位置が動く形の数（たとえば 1.5 × 10<sup>3</sup>）の足し算やかけ算の 1 回です。科学技術計算と、AI の学習・推論の中心は、この演算です。</p>
+<p>FLOPS は<b>瞬間の能力</b>で、計算を<b>全部で何回したか</b>（量）は <b>FLOP</b> と書きます。式は<b>計算量（FLOP）＝ 能力（FLOPS）× 時間（秒）</b>で、序章1 の「電力量（kWh）＝ 電力（kW）× 時間（h）」と同じ形です。AI の学習に使った計算量は、この「量」の言い方で書かれます（たとえば GPT-3 の学習は約 3×10<sup>23</sup> FLOP と、Epoch AI は推定しています）。</p>
+<div data-widget="compare" data-src="cI2-pair"></div>
+<p>FLOPS が<b>数えていないもの</b>も、先に確かめておきます。FLOPS は、メモリや通信の速さ、整数の演算、命令の数、そして「実際の仕事の速さ」を数えていません。同じ「◯◯ FLOPS」でも、<b>精度</b>（FP64〔倍精度〕、FP32〔単精度〕、FP16〔半精度〕、FP8、FP4 など）と、<b>実測か、理論上の最大か</b>で、値の意味が違います。この章は、この違いを何度も確かめます。</p>
+<div data-widget="lab" data-src="cI2-quantity"></div>
+<p>確かめる点は 3 つです。1 つ目は、<b>能力を上げるか、動かす日数を延ばすと、量が増える</b>こと（実線が右上がり）。2 つ目は、能力が 1 桁大きいと、<b>同じ量に届くまでの日数が 10 分の 1</b> になること。3 つ目は、この計算が「止まらず最大の能力が出続ける」という<b>単純な仮定</b>であることです。</p>
+
+<h3>単位の階段：kilo から zetta まで、1,000 倍ずつ</h3>
+<p>FLOPS も、電力と同じく<b>1,000 倍ごと</b>に名前が変わります。kilo（10<sup>3</sup>）、mega（10<sup>6</sup>）、giga（10<sup>9</sup>）、tera（10<sup>12</sup>）、peta（10<sup>15</sup>）、exa（10<sup>18</sup>）、zetta（10<sup>21</sup>）です。この章の図は、性能を「10 の x 乗 FLOPS の x」（<b>桁</b>）で書き、12 が tera、15 が peta、18 が exa、21 が zetta です。</p>
+<p>次の図は、段ごとに、歴史上の計算機と、いまの機械を置いたものです。<b>同じ段に置いても、測り方が違う値</b>があります。色（と、部位の説明の文字）で、HPL の実測・公表の仕様値・精度や単位が違う値・目標を分けています。部位を押すと、条件が出ます。</p>
+<div data-widget="layers" data-src="cI2-stairs"></div>
+<p>置いた値のうち、<b>確かめられなかったもの</b>は、置いていません。スマートフォンのチップの FLOPS は、メーカーの公表値を確認できなかったので、物差しには入れていません（Apple の 2023 年の発表文は、A17 Pro の Neural Engine について「最大 2 倍速い」と書くだけで、1 秒あたりの回数は書いていません）。いちばん下の段は、1964 年の計算機の「毎秒 300 万命令」のように、<b>FLOPS とは別の単位</b>の例です。</p>
+
+<h4>測り方が違うと、値が違う：表で確かめる</h4>
+<div class="tbl-wrap"><table class="tbl">
+  <caption>同じ「FLOPS」でも、値が違う理由（公表値。時点・条件つき）</caption>
+  <thead><tr><th scope="col">対象</th><th scope="col">値（公表の表記）</th><th scope="col">何の測り方か</th><th scope="col">比べるときの注意</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">TOP500 首位 LineShine（2026 年 6 月）</th><td>Rmax 2,198.40 PFLOPS／Rpeak 2,735.82 PFLOPS</td><td>Rmax は HPL（行列計算のベンチマーク）の<b>実測値</b>、Rpeak は<b>理論上の最大</b>。どちらも FP64（倍精度）</td><td>Rmax ÷ Rpeak は約 80%（計算）。同じ一覧でも、El Capitan は 64%、Aurora は 51%</td></tr>
+    <tr><th scope="row">NVIDIA H100 SXM（GPU 1 枚）</th><td>FP64 34、FP64 Tensor Core 67、FP32 67、TF32 989*、FP16 1,979*、FP8 3,958* TFLOPS</td><td>公表の<b>仕様値</b>。「*」は <b>with sparsity</b>（疎行列の条件つき）</td><td>FP8* は FP64 の約 116 倍。「dense（密）の値」は、このページには載っていない</td></tr>
+    <tr><th scope="row">NVIDIA GB200 NVL72（1 ラック、GPU 72 枚）</th><td>FP64 2,880 TFLOPS、FP8/FP6 720*、NVFP4 1,440*｜720 PFLOPS</td><td>公表の仕様値。ページは「sparse｜dense」と書き、<b>dense は sparse の半分</b>と説明している</td><td>1 ラックの FP4*（sparse）は、TOP500 首位の Rmax（FP64 の実測）の約 0.65 倍に見える。精度が違う</td></tr>
+    <tr><th scope="row">産総研の ABCI 3.0（H200 6,128 枚）</th><td>FP64 のピーク 415 PFLOPS／FP16（半精度）のピーク 6.22 EFLOPS</td><td>システム全体の<b>理論上の最大</b>（論文の表）</td><td>同じ機械で、精度が違うと約 15 倍（6,220 ÷ 415）違う</td></tr>
+    <tr><th scope="row">NVIDIA と米国エネルギー省の計画（Solstice と Equinox）</th><td>2 つで「2,200 exaflops of AI performance」</td><td>AI 向けの性能。<b>精度の記載がない</b>（発表文）</td><td>精度が書かれていない値は、TOP500 の Rmax とは比べられない。計画の値で、稼働の値ではない</td></tr>
+    <tr><th scope="row">個人向けの PC の GPU（GeForce RTX 4090）</th><td>シェーダーの性能 83 TFLOPS</td><td>NVIDIA の製品ページの公表値。<b>精度の記載がない</b>（報道は FP32 の約 82.6 TFLOPS と伝える）</td><td>HPL の FP64 ではない。精度の書かれていない値なので、桁の目安にとどまる</td></tr>
+  </tbody></table></div>
+<p>表のとおり、<b>「精度」「実測か理論上の最大か」「sparsity の有無」「何を数えた単位か」</b>のどれかが違うと、値は単純には比べられません。TOP500 の順位は、<b>FP64 の HPL の実測（Rmax）</b>で決まります。AI 向けの低精度の値は、順位の基準ではありません。次の図で、同じ GPU・同じラックの値を、精度ごとに並べてください。</p>
+<div data-widget="lab" data-src="cI2-measure"></div>
+<p>確かめる点は 3 つです。1 つ目は、同じ GPU の公表値でも、<b>FP8*（AI 向け、sparsity あり）は FP64 の約 116 倍</b>に見えること。2 つ目は、ラックの本数を増やすと、<b>FP4*（sparse）の合計が El Capitan の Rmax を超えて見えても、FP64 の合計はまだ遠い</b>こと。3 つ目は、これが「El Capitan を超えた」という意味ではなく、測り方が違う値を並べただけだということです。</p>
+
+<h3>円の面積で比べる：身近な機械から首位まで</h3>
+<p>桁がいくつも違う量は、円の<b>面積</b>で見ると、差を感じやすくなります。次の図は、半径ではなく<b>面積が値に比例</b>するように描いています。比べているのは、<b>FP64 の値</b>だけです。ただし、LineShine と富岳は HPL の実測（青）、ほかは公表の仕様値か、その掛け算（黄）で、実測と理論上の最大の違いは残ります。</p>
+<figure class="fig">
+<svg class="lab-svg" viewBox="0 0 360 520" role="img" aria-label="円の面積で比べた計算能力。面積が値に比例する。上の図は、LineShine（TOP500 首位、HPL 実測 2.198 EFLOPS）の円と、富岳（HPL 実測 442 PFLOPS）の円で、富岳の円の面積は LineShine の約 0.2 倍。GB200 NVL72 の 1 ラック（FP64 2.88 PFLOPS、仕様値）、DGX H100 1 台（GPU 8 枚、FP64 の合計 272 TFLOPS、計算）、H100 SXM 1 枚（FP64 34 TFLOPS、仕様値）は、この縮尺では点にもならない。下の図は、その 3 つの半径を 20 倍に拡大したもの。">
+  <text class="lab-lg" x="8" y="18">上：同じ縮尺（面積が値に比例）</text>
+  <circle class="lab-bar c-ran" cx="104" cy="126" r="96"/>
+  <circle class="lab-bar c-ran" cx="282" cy="140" r="43.05"/>
+  <text class="lab-lg" x="104" y="240" text-anchor="middle">LineShine</text>
+  <text class="lab-note" x="104" y="254" text-anchor="middle">2.198 EFLOPS（HPL 実測）</text>
+  <text class="lab-lg" x="282" y="240" text-anchor="middle">富岳</text>
+  <text class="lab-note" x="282" y="254" text-anchor="middle">442 PFLOPS（HPL 実測）</text>
+  <text class="lab-note" x="8" y="278">この縮尺の半径は、ラック 1 本が 3.5、サーバー 1 台が 1.1、</text>
+  <text class="lab-note" x="8" y="292">GPU 1 枚が 0.4 で、点にもならない（下で拡大）。</text>
+  <line class="lab-g" x1="8" y1="304" x2="352" y2="304"/>
+  <text class="lab-lg" x="8" y="326">下：その 3 つの半径を 20 倍に拡大</text>
+  <circle class="lab-bar c-core" cx="84" cy="404" r="69.49"/>
+  <circle class="lab-bar c-core" cx="200" cy="404" r="21.36"/>
+  <circle class="lab-bar c-core" cx="306" cy="404" r="7.55"/>
+  <text class="lab-lg" x="84" y="484" text-anchor="middle">GB200 NVL72</text>
+  <text class="lab-note" x="84" y="498" text-anchor="middle">1 ラック</text>
+  <text class="lab-note" x="84" y="512" text-anchor="middle">2.88 PFLOPS</text>
+  <text class="lab-lg" x="200" y="484" text-anchor="middle">DGX H100</text>
+  <text class="lab-note" x="200" y="498" text-anchor="middle">1 台（GPU 8 枚）</text>
+  <text class="lab-note" x="200" y="512" text-anchor="middle">272 TFLOPS（計算）</text>
+  <text class="lab-lg" x="306" y="484" text-anchor="middle">H100 SXM</text>
+  <text class="lab-note" x="306" y="498" text-anchor="middle">GPU 1 枚</text>
+  <text class="lab-note" x="306" y="512" text-anchor="middle">34 TFLOPS</text>
+</svg>
+<figcaption>円の面積が FP64 の値に比例。上は同じ縮尺で、LineShine（2.198 EFLOPS）と富岳（442 PFLOPS）。富岳の円の面積は LineShine の約 0.2 倍です。ラック 1 本・サーバー 1 台・GPU 1 枚は、この縮尺では点にもならないので、下に半径を 20 倍にして並べました（面積では 400 倍）。DGX H100 の 272 TFLOPS は、H100 の FP64（34 TFLOPS）× 8 枚の計算で、公表値そのものではありません。</figcaption>
+</figure>
+<p>次の部品は、選んだ性能を、<b>H100 の何枚ぶん</b>、<b>GB200 NVL72 の何本ぶん</b>、<b>富岳の何倍</b>かに換算します。「スマートフォン何台ぶん」は、FLOPS の公表値を確認できなかったので、換算の基準に入れていません。</p>
+<div data-widget="lab" data-src="cI2-conv"></div>
+<p>確かめる点は 3 つです。1 つ目は、<b>TOP500 首位の Rmax が、富岳の約 5 倍</b>であること。2 つ目は、同じ首位の性能が、H100 の FP64 の<b>約 6 万 5 千枚ぶん</b>に当たること（単純な割り算で、実際の機械の構成とは別です）。3 つ目は、最後の行（RTX 4090）が<b>精度の書かれていない値</b>（FP64 ではない）で、桁の感覚をつかむ目安にとどまることです。</p>
+
+<h3>束ねる：GPU の枚数を増やすと、何と釣り合うか</h3>
+<p>GPU を<b>束ねる</b>と、合計の計算能力、必要な電力、ラックの本数が決まります。序章1 の「束ねる」と同じ形です。<b>施設の電力 ＝ 枚数 × 1 枚あたりの電力 × PUE</b> で、序章1 の ① と式も値も同じです（GPU サーバー 1 台 10.2 kW は、GPU 8 枚なので 1 枚あたり 1.275 kW）。計算能力は、<b>理論ピーク ＝ 枚数 × 1 枚の FP64 の公表値</b>で、HPL の実測の見込みは、理論ピークに<b>効率</b>（Rmax ÷ Rpeak）をかけて表します。</p>
+<p>1 枚あたりの値は、次の 2 つの公表値から作ります。H100 世代は、DGX H100（最大入力 10.2 kW、GPU 8 枚）と、H100 SXM の FP64（34 TFLOPS）。Blackwell 世代は、GB200 NVL72（ラックの電力 約 120 kW、GPU 72 枚）と、そのページの FP64（ラック全体 2,880 TFLOPS）です。</p>
+<div class="tbl-wrap"><table class="tbl">
+  <caption>公表された大規模な計算基盤の例（稼働と計画を分けて読む。時点つき）</caption>
+  <thead><tr><th scope="col">名前（運営者）</th><th scope="col">加速器の数</th><th scope="col">性能・電力（公表の表記）</th><th scope="col">状態と時点</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">ABCI 3.0（産業技術総合研究所、日本）</th><td>NVIDIA H200 が 6,128 枚（計算ノード 766）</td><td>FP64 のピーク 415 PFLOPS、FP16 のピーク 6.22 EFLOPS。電気設備の容量 6 MW、冷却の容量 5.2 MW</td><td><b>稼働</b>。2024 年 11 月から段階的に運用、2025 年 1 月に本格運用の予定（2024 年 11 月の論文）。いまの状況は確認していない</td></tr>
+    <tr><th scope="row">El Capitan（ローレンス・リバモア国立研究所、米国）</th><td>AMD MI300A が 1 ノードに 4 個、全体で約 4.5 万個（LLNL の資料。ページにより 44,544 個・46,080 個と値が違う）</td><td>Rmax 1,809 PFLOPS、電力 29,685 kW（TOP500 2026 年 6 月）</td><td><b>稼働</b>。2024 年 11 月に首位、2026 年 6 月・11 月は 2 位</td></tr>
+    <tr><th scope="row">xAI の Colossus（米国）</th><td>最大 20 万個の AI チップ</td><td>約 300 MW</td><td><b>稼働</b>。Epoch AI の<b>推定</b>（2025 年 3 月時点）で、事業者の公表値ではない</td></tr>
+    <tr><th scope="row">Solstice（米国エネルギー省・アルゴンヌ国立研究所、NVIDIA、Oracle）</th><td>NVIDIA Blackwell が 10 万枚</td><td>性能・電力・時期は、アルゴンヌの発表に記載なし</td><td><b>計画</b>（2025 年 10 月 28 日の発表）。稼働の発表は確認していない</td></tr>
+    <tr><th scope="row">Equinox（同上）</th><td>NVIDIA Blackwell が 1 万枚</td><td>2 つで「2,200 exaflops of AI performance」（精度の記載なし）</td><td><b>計画</b>。「2026 年前半に提供される見込み」（2025 年 10 月 28 日の NVIDIA の発表。エネルギー省・アルゴンヌの発表は「2026 年に」）。その後の状況は確認していない</td></tr>
+  </tbody></table></div>
+<div data-widget="lab" data-src="cI2-bundle"></div>
+<p>確かめる点は 5 つです。</p>
+<ol>
+  <li>「序章1 の『GPU サーバー 1 万台』」のボタンで、施設の電力が<b>約 139 MW</b>になり、序章1 の ① と一致すること（1 台 10.2 kW の GPU サーバー 1 万台 ＝ H100 が 8 万枚）。</li>
+  <li>Blackwell 世代で 10 万枚（Solstice の計画の枚数）にすると、HPL 型の見込みが<b>TOP500 首位の Rmax を超える</b>が、施設の電力は<b>約 227 MW</b>で、発電所の 1 軸（165 MW）を超えること。これは<b>仮定を掛けた計算</b>で、Solstice の公表された性能・電力ではありません。</li>
+  <li>効率のつまみを動かすと、<b>同じ枚数でも HPL 型の見込みが 1.6 倍ほど変わる</b>こと（51% と 82%）。TOP500 の上位の Rmax ÷ Rpeak は、実際にそのくらいばらつきます。</li>
+  <li>下の「FP8 の合計」が、<b>同じ枚数の FP64 の数十倍から百倍あまり</b>になること（H100 の目安で約 58 倍、Blackwell の目安で 125 倍）。測り方が違うので、「首位を何倍も超える」とは言えません。</li>
+  <li>図の縦の目印は、ABCI 3.0（稼働）と Solstice（計画）の<b>枚数の位置</b>だけで、その機械の性能の線ではないこと。</li>
+</ol>
+<p>PUE は、序章1 と同じく、<b>施設全体の電力 ÷ IT 機器の電力</b>です（定義と調査値は<a href="#ch17">第17章</a>）。1 枚あたりの電力は、GPU のほかに CPU・メモリ・ネットワーク・ファンも含む<b>システム全体の最大入力を枚数で割った値</b>で、いつもの電力ではありません。冷却との関係は<a href="#ch15">第15章</a>・<a href="#ch16">第16章</a>、AI 向けのラックの設計は<a href="#ch11">第11章</a>、GPU サーバーは<a href="#ch08">第08章</a>です。</p>
+
+<h3>未来の規模感：過去の伸び、公表された計画、「もし」の計算</h3>
+<h4>(a) 過去の伸び：TOP500 首位の性能は、時期で伸びの速さが違う</h4>
+<p>TOP500 の首位の Rmax は、1993 年 6 月の 59.7 GFLOPS（CM-5）から、2026 年 6 月の 2.198 EFLOPS（LineShine）まで、約 3,700 万倍になりました（計算）。33 年で、倍加（2 倍）にかかる年数は平均約 1.3 年（約 16 か月）で、「約 13 年で 1,000 倍」の速さです。ただし<b>平均の中身は一様ではありません</b>。次の部品で、期間を選んで確かめてください。</p>
+<div data-widget="lab" data-src="cI2-history"></div>
+<p>確かめる点は 3 つです。1 つ目は、<b>2008 年から 2013 年は倍加が約 1.0 年</b>（約 10 年で 1,000 倍の速さ）と、速い伸びだったこと。2 つ目は、<b>2013 年からの平均は約 2.2 年</b>、<b>2022 年 6 月の Frontier（1.102 EFLOPS）から 2026 年 6 月の LineShine（2.198 EFLOPS）までの約 4 年は、約 2 倍で、倍加は約 4 年</b>と、近年は遅いこと。3 つ目は、期間の選び方で、「約 N 年で 1,000 倍」の N が、ボタンの期間だけでも<b>約 10 年から 40 年まで</b>変わることです（すべて計算。もっと短い期間を選ぶと、幅はさらに広がります）。</p>
+<p>伸びの鈍りについて、公表されている指摘は次のとおりです。TOP500 の編集者の Michael Feldman は 2017 年に、一覧全体の合計の伸びが、2013 年ごろから過去の伸びを下回っていると書きました（原因は特定されていない、とも書いています）。2026 年 11 月の一覧は、<b>新しく載ったシステムが 27 と、過去最少</b>で、首位から 10 位は 6 月から変わりませんでした（TOP500 のトップページ）。一覧全体の合計は 2026 年 6 月に 18.73 EFLOPS（TOP500 の 6 月のハイライト）で、報道によれば 11 月の合計はそれより増えており、全体は伸び続けています。<b>首位の伸びが遅い期間があることと、全体が伸びていることは、両立</b>します。</p>
+<p><b>AI 向けの計算基盤</b>は、別の物差しで測られます。Epoch AI は、2019 年から 2025 年の 500 以上の AI 向けスーパーコンピューターのデータから、<b>16 ビット精度の性能が約 9 か月で 2 倍</b>（年 2.5 倍。チップの数が年 1.6 倍、1 チップの性能が年 1.6 倍）、<b>電力は約 1 年で 2 倍</b>（年 2.0 倍）と分析しています（2025 年 4 月）。最大は、2025 年 3 月時点で xAI の Colossus（最大 20 万個、約 300 MW、推定）です。<b>この伸びは、16 ビット精度の AI 向けの性能で、TOP500 の FP64 の HPL とは測り方が違います</b>。また、Epoch AI は、訓練に使う計算量（FLOP）が 2010 年から 2024 年 5 月まで年 4〜5 倍で伸びたと分析し、電力の供給などが制約になりうると書いています。</p>
+
+<h4>(b) 公表されている計画：目標であって、稼働ではない</h4>
+<div class="tbl-wrap"><table class="tbl">
+  <caption>公表されている次の世代の計画の例（確認日 2026 年 11 月 19 日。すべて「目標」「計画」で、稼働している値ではない）</caption>
+  <thead><tr><th scope="col">計画（発表した主体）</th><th scope="col">公表された目標・内容</th><th scope="col">時期</th><th scope="col">読むときの注意</th></tr></thead>
+  <tbody>
+    <tr><th scope="row">FugakuNEXT（理化学研究所、日本）</th><td>「AI 向けのハードウェア性能が FP8（sparse）で 600 EFLOPS を超える」ことを目標とし、<b>ゼタ級</b>（zetta-scale）を掲げる。富岳に対し、ハードウェア性能で 5 倍超、アプリケーション性能で最大 100 倍を目標とする。電力は「富岳の開発時と同じ約 40 MW の制約の中」を目標とする。CPU は富士通、GPU は NVIDIA が設計</td><td>「2030 年ごろの運用を目指す」。基本設計は 2025 年度内に完了の予定、2026 年度から詳細設計（2025 年 8 月 22 日の発表）</td><td><b>目標</b>。研究センター（R-CCS）のページは「AI（FP8）でゼタ級」と書く。数値で示された 600 EFLOPS は 6×10<sup>20</sup> で、数の上では exa の段。どちらも AI 向けの測り方の値で、HPL の FP64 とは別。研究所のページは、2026 年 5 月 29 日付けの基本設計の技術報告書を載せているが、内容は確認していない</td></tr>
+    <tr><th scope="row">Solstice・Equinox（米国エネルギー省ほか）</th><td>Blackwell 10 万枚（Solstice）と 1 万枚（Equinox）。2 つで 2,200 exaflops の AI 性能（精度の記載なし）</td><td>Equinox は 2026 年前半の見込み。Solstice の時期は記載なし（2025 年 10 月 28 日）</td><td><b>計画</b>。精度が書かれていない値は、他と比べられない</td></tr>
+    <tr><th scope="row">AI ギガファクトリー（EuroHPC 共同事業体、欧州連合）</th><td>最大 7 か所の AI ギガファクトリーの設立のための調達。民間の投資が合計 200 億ユーロを超える見込み。各施設は「非常に多数の最新の AI プロセッサ」を備える（数は記載なし）</td><td>応募の締切は 2026 年 11 月 12 日（確認日には締切を過ぎ、選定の前）。選定は 2027 年の初め。選定から 18 か月以内に運用開始の見込み（2026 年 7 月 30 日）</td><td><b>調達（公募）の段階</b>。チップの数・電力は発表文に記載なし</td></tr>
+    <tr><th scope="row">OpenAI の AI インフラの容量目標（米国）</th><td>2025 年 1 月に「2029 年までに米国で 10 GW の AI インフラを確保する」と発表。2026 年 4 月 29 日に、その目標をすでに超え、直近 90 日だけで 3 GW 超が加わったと発表</td><td>2026 年 4 月 29 日の発表</td><td>「確保」が、契約か稼働かは、発表文に定義がない。<b>容量（GW）で、計算能力（FLOPS）ではない</b>。序章1 の Stargate の項も参照</td></tr>
+  </tbody></table></div>
+<p>これらの計画の<b>優劣は比べません</b>。目標の値は、精度・単位・条件がそれぞれ違い、稼働している機械の値でもないからです。Epoch AI は、現在の傾向が続くとして、<b>2030 年 6 月の最大の AI 向けスーパーコンピューターが約 200 万チップ、約 9 GW になる</b>という外挿を出しています（推定。計画ではありません）。</p>
+
+<h4>(c) もし、この伸びが続いたら：外挿の装置（予測ではありません）</h4>
+<p>起点を、いまの TOP500 首位の Rmax（2.198 EFLOPS、電力 42.2 MW）とし、<b>倍加にかかる年数</b>と<b>効率の年あたりの改善</b>を動かすと、5 年後・10 年後・20 年後の性能、富岳の何倍か、必要な電力の目安、発電所の 1 軸の何本ぶんかが出ます。効率は Green500 の 1 位の値から、<b>2020 年 11 月の 26.2 から 2026 年 6 月の 73.3 GFLOPS/W で年約 20%、2022 年 6 月の 62.7 から 2026 年 6 月で年約 4%、直近 1 年は年 0.75%</b> と計算できます（小さな機械が 1 位になる一覧の値で、首位の巨大な機械の効率とは別です）。</p>
+<div data-widget="lab" data-src="cI2-future"></div>
+<p>確かめる点は 4 つです。1 つ目は、倍加の年数が<b>期間の選び方で 1.0 年から 4.1 年まで</b>（ボタンの期間の場合）違い、20 年後の結果が<b>桁違い</b>になること。2 つ目は、同じ伸びでも、<b>効率の改善が小さいと、必要な電力が性能とほぼ同じ速さで増える</b>こと。3 つ目は、電力の目安が、発電所の 1 軸や、日本の最大需要電力を<b>超える設定</b>があること。その場合は、「成り立たない可能性が高い外挿」という読み方になります。4 つ目は、どの結果も<b>予測ではない</b>ことです。</p>
+<p><b>制約が効くと、伸びは続きません。</b>電力の供給は、序章1 と<a href="../power/#chI3">発電講義 序章3</a>で規模を確かめられます（国際エネルギー機関〔IEA〕は 2025 年に、世界のデータセンターの電力が 2024 年に約 415 TWh〔世界の電力の約 1.5%〕で、基準シナリオでは 2030 年に約 945 TWh になると推計し、不確かさが大きいと書いています）。半導体の製造と微細化の限界は<a href="../semi/#chI1">半導体講義 序章1</a>、冷却は<a href="#ch15">第15章</a>・<a href="#ch16">第16章</a>、立地と電力の確保は<a href="#ch27">第27章</a>、費用は<a href="#ch29">第29章</a>で扱います。この装置は、それらを入れていません。</p>
+<p>「<b>ムーアの法則</b>」にも触れておきます。ゴードン・ムーアは 1965 年に、集積回路の部品の数が毎年ほぼ 2 倍になってきたと述べ、1975 年に 2 年へ改めました（Britannica、Nature）。これは<b>チップあたりの部品数の経験則</b>で、スーパーコンピューターの FLOPS の経験則ではありません。2016 年に Nature は、半導体業界がムーアの法則を軸にした計画をやめる、と報じています。現在の状況について、この章では確かめた資料がないので、<b>法則が今も続くかどうかは書きません</b>。</p>
+
+<h4>(d) 規模感の言い換え：検算できる比喩だけ</h4>
+<p>大きな数を比喩で言い換えるとき、<b>前提と出典を書けて、検算できるもの</b>だけを使います。「地球上の砂粒の数」のような比喩は、前提を確かめられなかったので使いません。人間の脳との比較は、<b>推定の幅が非常に大きく、定義も一致していない</b>ので、行いません（Open Philanthropy の Joseph Carlsmith の 2020 年の報告は、脳の仕事を同じ水準でこなすのに 10<sup>13</sup>〜10<sup>17</sup> FLOP/s が妥当と見るが、脳と同等の FLOP/s を示すものではなく、神経科学にも合意はない、と書いています）。</p>
+<p>使うのは、<b>人類全体の手計算</b>です。世界の人口を約 80 億人（国連の推計。2022 年 11 月 15 日に 80 億人に達すると推計）とし、全員が休まず、1 秒に 1 回、加減乗除をすると仮定します。</p>
+<div data-widget="lab" data-src="cI2-words"></div>
+<p>確かめる点は 2 つです。1 つ目は、<b>1 EFLOPS の計算機の 1 秒ぶんを、全員が 1 秒に 1 回ずつ手計算すると、約 4 年</b>（10<sup>18</sup> ÷ 80 億 ÷ 31,557,600 秒 ＝ 約 3.96 年）かかること。2 つ目は、前提（人口と 1 人の速さ）を変えると、答えが比例して変わる、単純な計算だということです。</p>
+
+<div class="callout warn"><span class="ttl">この章の装置の限界：外挿の性質を確かめる教材です</span>
+  <p>この章の計算は、<b>規模の感覚をつかむための模型</b>です。「もし、この伸びが続いたら」は、過去の傾向を延ばした<b>外挿</b>で、<b>予測ではありません</b>。実際の計算基盤の性能と電力は、構成・ネットワーク・冷却・稼働率・契約で大きく変わり、<b>計画の規模と実際の稼働の規模は違います</b>。</p>
+  <p>特定の会社・製品・国の優劣を評価するものでも、投資の判断に使えるものでもありません。表の値は、<b>その会社や機関の公開値の例</b>で、優劣を示しません。</p>
+  <p>電気設備や冷却設備の作業の手順は、この章では扱いません。実際の作業は、有資格者が、設備の保安規程と現場の手順に従って行ってください。</p></div>
+
+<h3>まとめと、本編への道しるべ</h3>
+<ul>
+  <li><b>FLOPS は瞬間の能力、FLOP は量</b>です。<b>量 ＝ 能力 × 時間</b>で、序章1 の kW と kWh と同じ関係です。</li>
+  <li>単位は 1,000 倍ごとの階段（kilo から zetta）です。<b>精度（FP64〜FP4）・実測か理論上の最大か・sparsity の有無・何を数えた単位か</b>が違う値は、単純に比べられません。TOP500 は FP64 の HPL の実測（Rmax）です。</li>
+  <li>GPU を束ねたときの<b>施設の電力は、枚数 × 1 枚あたりの電力 × PUE</b>（序章1 と同じ式）。TOP500 首位は、H100 の FP64 に換算して約 6 万 5 千枚ぶん、富岳の約 5 倍です。<b>稼働している機械と、目標・計画</b>は分けて読みます。</li>
+  <li>TOP500 首位の伸びは、倍加が<b>約 1 年（2008〜2013 年）から約 4 年（直近）まで</b>時期で違います。「もし、この伸びが続いたら」は<b>外挿で、予測ではありません</b>。電力・半導体・冷却・費用の制約が効きます。</li>
+  <li>比喩（人類の手計算）は、<b>前提と出典を書けて、検算できるもの</b>だけを使います。</li>
+</ul>
+<p>次に読む所です。電力と熱の規模は<a href="#chI1">序章1</a>、発電側からの同じ比較は<a href="../power/#chI3">発電講義 序章3</a>、トランジスタの小ささと数の多さは<a href="../semi/#chI1">半導体講義 序章1</a>です。本編では、GPU サーバーが<a href="#ch08">第08章</a>、ラック単位の設計と AI 向けのクラスタが<a href="#ch11">第11章</a>、PUE と熱の捨て方が<a href="#ch17">第17章</a>、立地と電力が<a href="#ch27">第27章</a>、費用が<a href="#ch29">第29章</a>です。</p>
+
+<div class="callout warn"><span class="ttl">つまずきやすい点</span>
+  <p><b>「◯◯ EFLOPS」だけでは比べられません</b>。精度（FP64 か FP8 か）、実測か理論上の最大か、sparsity の有無を、必ず確かめてください。TOP500 の順位は FP64 の HPL の実測です。</p>
+  <p><b>計画の値は、稼働している値ではありません</b>。「目標」「計画」「推定」と書かれた値は、そのまま「いまの性能」として使わないでください。</p>
+  <p><b>外挿の結果は、予測ではありません</b>。期間の選び方で、倍加の年数が約 1 年から約 4 年以上まで変わります。</p></div>
+
+<section class="quiz-sec"><h3>確認問題</h3>
+  <div data-widget="quiz" data-src="cI2-quiz"></div>
+</section>
+
+<section class="refs"><h3>参照資料</h3>
+  <div class="tbl-wrap"><table class="tbl">
+    <caption>この章で使った資料（確認日：2026 年 11 月 19 日）</caption>
+    <thead><tr><th>種類</th><th>資料名</th><th>発行者</th><th>版・時点</th><th>この章での使い方</th></tr></thead>
+    <tbody>
+      <tr><td>公的な一覧</td><th scope="row">TOP500 トップページ「TOP500 Leadership Holds Steady as New System Turnover Falls to a Historic Low」（2026 年 11 月 19 日に確認）</th><td>TOP500</td><td>2026 年 11 月（第 68 回、SC26）</td><td>11 月の一覧が最新であること、首位から 10 位が 6 月から変わらないこと、新システム 27 が過去最少。</td></tr>
+      <tr><td>公的な一覧</td><th scope="row"><a href="https://top500.org/lists/top500/2026/11/">TOP500 List November 2026</a></th><td>TOP500</td><td>2026 年 11 月（第 68 回）</td><td>上位 10 の Rmax・Rpeak・電力が 6 月と同じ値であること（LineShine 2,198.40／2,735.82 PFLOPS・42,220 kW、El Capitan 1,809 PFLOPS、富岳 442.01 PFLOPS ほか）。</td></tr>
+      <tr><td>公的な一覧</td><th scope="row"><a href="https://top500.org/lists/2026/06">TOP500 List June 2026</a></th><td>TOP500</td><td>2026 年 6 月（第 67 回）</td><td>上位 10 の Rmax・Rpeak・電力（LineShine、El Capitan、Frontier、Aurora、JUPITER Booster、富岳ほか）。LineShine が CPU だけの構成であること。</td></tr>
+      <tr><td>公的な一覧</td><th scope="row"><a href="https://top500.org/lists/top500/2026/06/highs">Highlights - June 2026</a></th><td>TOP500</td><td>2026 年 6 月</td><td>一覧の合計 18.73 EFLOPS、Green500 の 1 位 73.28 GFLOPS/W、El Capitan の 60.94 GFLOPS/W。</td></tr>
+      <tr><td>公的な一覧</td><th scope="row"><a href="https://www.top500.org/25years/">Celebrating 25 years of TOP500</a></th><td>TOP500</td><td>2018 年ごろ（ページに日付なし）</td><td>1993〜2018 年の首位の値（CM-5、ASCI Red、Earth Simulator、Roadrunner、K computer、Tianhe-2、Summit ほか）。</td></tr>
+      <tr><td>公的な一覧</td><th scope="row"><a href="https://top500.org/lists/2020/06">TOP500 List June 2020</a>・<a href="https://top500.org/lists/top500/2020/11/highs">Highlights - November 2020</a>・<a href="https://www.top500.org/lists/top500/2022/06/highs">Highlights - June 2022</a>・<a href="https://top500.org/lists/top500/2025/06/highs">Highlights - June 2025</a></th><td>TOP500</td><td>2020 年 6 月・11 月、2022 年 6 月、2025 年 6 月</td><td>富岳 415.53 と 442.01 PFLOPS、Frontier 1.102 EFLOPS、El Capitan 1.742 EFLOPS、Green500 の 1 位の値（26.195、62.684、72.733 GFLOPS/W）。</td></tr>
+      <tr><td>報道</td><th scope="row"><a href="https://www.networkworld.com/article/4249297/chinas-lineshine-remains-worlds-fastest-supercomputer.html">China's LineShine remains world's fastest supercomputer</a></th><td>Network World</td><td>2026 年 11 月</td><td>11 月の一覧の合計が 6 月から増えたこと（一次資料で確かめられなかったので、数値は使わない）。</td></tr>
+      <tr><td>報道</td><th scope="row"><a href="https://www.nextplatform.com/hpc/2026/11/16/supercomputer-installs-take-a-dive-in-the-second-half-of-2026/5310221">Supercomputer Installs Take A Dive In The Second Half Of 2026</a></th><td>The Next Platform</td><td>2026 年 11 月 16 日</td><td>新システム 27 が過去最少（68 回の一覧で）。TOP500 のトップページと同じ値。</td></tr>
+      <tr><td>公的な一覧</td><th scope="row"><a href="https://top500.org/news/top500-meanderings-sluggish-performance-growth-may-portend-slowing-hpc-market/">TOP500 Meanderings: Sluggish Performance Growth May Portend Slowing HPC Market</a></th><td>TOP500（Michael Feldman）</td><td>2017 年 7 月 3 日</td><td>一覧全体の合計の伸びが、2013 年ごろから過去の伸びを下回っているという指摘。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.nvidia.com/en-us/data-center/h100.html">NVIDIA H100 GPU</a></th><td>NVIDIA（米国）</td><td>確認 2026 年 11 月（日付なし）</td><td>H100 SXM の FP64 34、FP64 Tensor Core 67、FP32 67、TF32* 989、FP16* 1,979、FP8* 3,958 TFLOPS（* は with sparsity）。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.nvidia.com/en-us/data-center/gb200-nvl72/">NVIDIA GB200 NVL72</a></th><td>NVIDIA（米国）</td><td>確認 2026 年 11 月（日付なし）</td><td>1 ラックの FP64 2,880 TFLOPS、FP8/FP6 720 PFLOPS（sparse）、NVFP4 1,440｜720 PFLOPS。dense は sparse の半分という脚注。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://docs.nvidia.com/dgx/dgxh100-user-guide/introduction-to-dgxh100.html">Introduction to NVIDIA DGX H100/H200 Systems</a>・<a href="https://docs.nvidia.com/dgx/dgxgb200-user-guide/hardware.html">DGX GB200 User Guide「Hardware」</a></th><td>NVIDIA（米国）</td><td>2026 年 10 月・9 月のページの更新（序章1 と同じ）</td><td>DGX H100 の最大入力 10.2 kW（GPU 8 枚）、GB200 NVL72 のラックの電力 約 120 kW（GPU 72 枚）。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://hpc.llnl.gov/node/1269">El Capitan | HPC @ LLNL</a>・<a href="https://software.llnl.gov/benchmarks/91_reference_systems/reference_systems.html">Reference Systems</a></th><td>ローレンス・リバモア国立研究所</td><td>確認 2026 年 11 月（日付なし）</td><td>1 ノードに MI300A が 4 個。全体の個数はページにより 46,080 個（11,520 ノード）と 44,544 個で、値が違う。</td></tr>
+      <tr><td>論文</td><th scope="row"><a href="https://arxiv.org/html/2411.09134v1">ABCI 3.0: Evolution of the leading AI infrastructure in Japan</a></th><td>産業技術総合研究所ほか（arXiv）</td><td>2024 年 11 月</td><td>H200 6,128 枚、FP64 ピーク 415 PFLOPS、FP16 ピーク 6.22 EFLOPS、電気設備の容量 6 MW、冷却 5.2 MW、運用の時期。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.riken.jp/en/news_pubs/news/2025/20250822_1/index.html">FugakuNEXT の発表（RIKEN）</a>・<a href="https://www.r-ccs.riken.jp/en/fugaku-next/">FugakuNEXT（R-CCS）</a></th><td>理化学研究所</td><td>2025 年 8 月 22 日（ページの確認 2026 年 11 月）</td><td>FP8（sparse）で 600 EFLOPS 超、ゼタ級（R-CCS のページは「AI〔FP8〕で」と書く）、2030 年ごろの運用、約 40 MW の制約、設計の予定。いずれも目標。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://alcf.anl.gov/news/argonne-expands-nation-s-ai-infrastructure-powerful-new-supercomputers-and-public-private">Argonne expands nation's AI infrastructure…</a></th><td>アルゴンヌ国立研究所（ALCF）</td><td>2025 年 10 月</td><td>Solstice（Blackwell 10 万枚）、Equinox（1 万枚、2026 年に提供の見込み）。計画。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://nvidianews.nvidia.com/news/nvidia-oracle-us-department-of-energy-ai-supercomputer-scientific-discovery">NVIDIA and Oracle to Build US Department of Energy's Largest AI Supercomputer</a></th><td>NVIDIA（米国）</td><td>2025 年 10 月 28 日</td><td>2 つで 2,200 exaflops の AI 性能（精度の記載なし）、Equinox は 2026 年前半の見込み。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.eurohpc-ju.europa.eu/eurohpc-joint-undertaking-launches-ai-gigafactories-call-2026-07-30_en">EuroHPC Joint Undertaking launches AI Gigafactories call</a></th><td>EuroHPC 共同事業体（欧州連合）</td><td>2026 年 7 月 30 日</td><td>最大 7 か所、応募締切 2026 年 11 月 12 日、選定は 2027 年の初め、運用は選定から 18 か月以内の見込み。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://openai.com/index/building-the-compute-infrastructure-for-the-intelligence-age/">Building the compute infrastructure for the Intelligence Age</a></th><td>OpenAI（米国）</td><td>2026 年 4 月 29 日</td><td>米国で 10 GW を確保する目標をすでに超えた、という発表。「確保」の定義は記載なし。</td></tr>
+      <tr><td>研究機関</td><th scope="row"><a href="https://epoch.ai/blog/trends-in-ai-supercomputers">Trends in AI Supercomputers</a></th><td>Epoch AI</td><td>2025 年 4 月</td><td>AI 向けスーパーコンピューターの性能が約 9 か月で 2 倍（16 ビット精度）、電力が約 1 年で 2 倍、Colossus（最大 20 万チップ、約 300 MW、推定）、2030 年の外挿。</td></tr>
+      <tr><td>研究機関</td><th scope="row"><a href="https://epoch.ai/blog/training-compute-of-frontier-ai-models-grows-by-4-5x-per-year">Training Compute of Frontier AI Models Grows by 4-5x per Year</a></th><td>Epoch AI</td><td>2024 年 5 月までのデータ</td><td>訓練の計算量が年 4〜5 倍、GPT-3 の約 3×10<sup>23</sup> FLOP（推定）、制約として電力の供給などを挙げていること。</td></tr>
+      <tr><td>公的機関</td><th scope="row"><a href="https://iea.org/reports/energy-and-ai/energy-demand-from-ai">Energy and AI（Energy demand from AI）</a></th><td>国際エネルギー機関（IEA）</td><td>2025 年（ページに日付なし）</td><td>データセンターの電力 約 415 TWh（2024 年、約 1.5%）、基準シナリオで約 945 TWh（2030 年）、不確かさが大きいこと。</td></tr>
+      <tr><td>博物館</td><th scope="row"><a href="https://www.computerhistory.org/revolution/artifact/7/16">Cray-1A</a>・<a href="https://www.computerhistory.org/revolution/story/33">CDC 6600's Five Year Reign</a></th><td>コンピュータ歴史博物館（CHM）</td><td>日付の記載なし</td><td>Cray-1A の 160 MFLOPS（1976 年）、CDC 6600 の毎秒 300 万命令（1964 年）。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.nvidia.com/en-us/geforce/graphics-cards/40-series/rtx-4090.html">GeForce RTX 4090</a></th><td>NVIDIA（米国）</td><td>確認 2026 年 11 月（日付なし）</td><td>シェーダーの性能 83 TFLOPS（精度の記載なし）、CUDA コア 16,384。</td></tr>
+      <tr><td>報道</td><th scope="row"><a href="https://www.tomshardware.com/news/nvidia-reveals-secrets-of-ada-lovelace-gpus">Nvidia Reveals Ada Lovelace GPU Secrets</a></th><td>Tom's Hardware</td><td>2022 年</td><td>RTX 4090 の FP32 の理論上の最大 約 82.6 TFLOPS（補足。一次ではなく、報道の値）。</td></tr>
+      <tr><td>企業の資料</td><th scope="row"><a href="https://www.apple.com/newsroom/2023/09/apple-unveils-iphone-15-pro-and-iphone-15-pro-max/">Apple unveils iPhone 15 Pro and iPhone 15 Pro Max</a></th><td>Apple（米国）</td><td>2023 年 9 月 12 日</td><td>A17 Pro の Neural Engine は「最大 2 倍速い」とだけ書き、1 秒あたりの回数・FLOPS を書いていないこと（スマートフォンを物差しに置かない理由）。</td></tr>
+      <tr><td>研究</td><th scope="row"><a href="https://www.openphilanthropy.org/research/how-much-computational-power-does-it-take-to-match-the-human-brain/">How Much Computational Power Does It Take to Match the Human Brain?</a></th><td>Open Philanthropy（Joseph Carlsmith）</td><td>2020 年</td><td>人間の脳との比較を行わない理由として、推定の幅（10<sup>13</sup>〜10<sup>17</sup> FLOP/s）と、定義が一致しないこと。</td></tr>
+      <tr><td>当局・公的機関</td><th scope="row"><a href="https://www.unfpa.org/press/world-set-reach-8-billion-people-15-november-2022">World set to reach 8 billion people on 15 November 2022</a></th><td>国連人口基金（国連経済社会局の推計）</td><td>2022 年 7 月 11 日</td><td>世界の人口 約 80 億人（2022 年 11 月 15 日に 80 億人に達すると推計）。</td></tr>
+      <tr><td>解説・報道</td><th scope="row"><a href="https://www.nature.com/news/the-chips-are-down-for-moore-s-law-1.19338">The chips are down for Moore's law</a>・<a href="https://www.britannica.com/technology/Moores-law">Moore's law</a></th><td>Nature、Britannica</td><td>2016 年 2 月 9 日（Nature）</td><td>ムーアの法則（1965 年は毎年 2 倍、1975 年に 2 年）と、半導体業界の方針の報道。現在の状況は確かめていない。</td></tr>
+      <tr><td>他の章</td><th scope="row"><a href="#chI1">序章1</a>、第08・11・15・17・27 章の事実確認表</th><td>この講座</td><td>2026 年 11 月 14〜18 日</td><td>電力の式・PUE・DGX の電力・発電所の 1 軸 165 MW、日本の最大需要電力 158,815 千 kW（発電講義 序章3 と同じ）。</td></tr>
+      <tr><td>架空・模型</td><th scope="row">つまみの仮定（動かし続ける日数、枚数、効率、PUE、1 ラックの枚数、倍加の年数、効率の改善、人口と 1 人の速さ）</th><td>この講座</td><td>—</td><td>理解のための仮定（模型の値）。実際の値ではありません。</td></tr>
+    </tbody>
+  </table></div>
+</section>

@@ -34,7 +34,7 @@ if (has('--answers')) { const all = (n, q, i) => { console.log(`答 ${n} 問${i}
 // 5 リンク: トップページでない。相互参照は spec §9.2-5 の 3 か所だけ
 for (const m of html.matchAll(/href="(https?:\/\/[^"]+)"/g)) { const u = new URL(m[1]); say(u.pathname.replace(/\/(index\.html?)?$/, '') !== '', `リンク ${m[1]}`); }
 // 許される相互参照（章 → 相手の講座とハッシュ）。それ以外の ../ のリンクは NG
-const XREF = { '08': ['semi/#ch15'], '26': ['semi/#ch19', 'semi/#ch20'], '30': ['semi/#ch30'], 'I1': ['power/#chI3'] };
+const XREF = { '08': ['semi/#ch15'], '26': ['semi/#ch19', 'semi/#ch20'], '30': ['semi/#ch30'], 'I1': ['power/#chI3'], 'I2': ['power/#chI3', 'semi/#chI1'] };
 const KEY = PRO ? IDS : String(NN).padStart(2, '0'), allowed = XREF[KEY] || [];
 for (const m of html.matchAll(/href="\.\.\/([a-z-]+\/#ch[A-Z]?\d+)"/g)) say(allowed.includes(m[1]), `相互参照 ../${m[1]}（この章で許されるのは ${allowed.length ? allowed.map(x => '../' + x).join('、') : 'なし'}）`);
 for (const x of allowed) say(html.includes(`href="../${x}"`), `許可された相互参照 ../${x} が本文にある`);

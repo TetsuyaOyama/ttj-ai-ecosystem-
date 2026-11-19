@@ -242,11 +242,12 @@
         if (o.gap) return;
         var lab = p.label || p.name, g = s('g', { 'class': 'ly-part kind-' + CN.kind(p.kind || ly.kind), tabindex: 0, role: 'button', 'aria-pressed': 'false', 'aria-label': (ly.parts && ly.name ? ly.name + '、' : '') + p.name + (p.sub ? '（' + p.sub + '）' : '') + ' の説明', 'data-id': o.id });
         g.appendChild(s('rect', { x: px.toFixed(1), y: ry, width: Math.max(8, pw - 2).toFixed(1), height: rh, rx: 6 }));
-        var fs = 15, lines = CN.wrap(lab, pw - 10, fs), sub = p.sub ? CN.wrap(p.sub, pw - 10, 10.5).slice(0, 1) : [];
+        var fs = 15, lines = CN.wrap(lab, pw - 10, fs), sub = [], subFs = null;
+        if (p.sub) { sub = CN.wrap(p.sub, pw - 10, 10.5); if (sub.length > 1) { var sf; sub = null; for (sf = 10; sf >= 9 && !sub; sf -= 0.5) { var try1 = CN.wrap(p.sub, pw - 16, sf); if (try1.length === 1) { sub = try1; subFs = sf; } } if (!sub) { sub = [CN.ellipsis(p.sub, pw - 16, 10)]; subFs = 10; } } }
         if (lines.length * (fs + 2) + (sub.length ? 13 : 0) > rh - 6) { fs = 12.5; lines = CN.wrap(lab, pw - 8, fs); }
         var tot2 = lines.length * (fs + 2) + (sub.length ? 13 : 0), ty = ry + rh / 2 - tot2 / 2 + fs;
         lines.forEach(function (t, k) { g.appendChild(s('text', { 'class': 'l1', x: (px + (pw - 2) / 2).toFixed(1), y: (ty + k * (fs + 2)).toFixed(1), style: 'font-size:' + fs + 'px' }, t)); });
-        sub.forEach(function (t) { g.appendChild(s('text', { 'class': 'l2', x: (px + (pw - 2) / 2).toFixed(1), y: (ty + lines.length * (fs + 2) - 1).toFixed(1) }, t)); });
+        sub.forEach(function (t) { var at = { 'class': 'l2', x: (px + (pw - 2) / 2).toFixed(1), y: (ty + lines.length * (fs + 2) - 1).toFixed(1) }; if (subFs) at.style = 'font-size:' + subFs + 'px'; g.appendChild(s('text', at, t)); });
         o.cx = px + pw / 2; o.cy = ry + rh / 2; o.el = g;
         g.addEventListener('click', function () { pick(o.k); });
         g.addEventListener('keydown', function (e) {

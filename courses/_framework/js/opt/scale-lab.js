@@ -358,8 +358,9 @@
       return e;
     }
     function ev(f, e) { try { return f.run(e); } catch (er) { return NaN; } }
-    function show(v, digits, auto) {
+    function show(v, digits, auto, group) {
       if (!isFinite(v)) return { num: '—', unit: '' };
+      if (group === false && !auto) { var dg0 = digits != null ? digits : 2; return { num: fmtFixed(v, dg0).replace(/,/g, ''), unit: '' }; }
       if (auto) { var t = auto === '円' ? ladderText(v, digits != null ? Math.max(2, digits) : 3, YEN_LADDER) : auto === 'ドル' ? ladderText(v, digits != null ? Math.max(2, digits) : 3, USD_LADDER) : powText(v, digits != null ? Math.max(2, digits) : 3, auto === 'Wh' ? 'Wh' : 'W'); var sp = t.lastIndexOf(' '); return { num: t.slice(0, sp), unit: t.slice(sp + 1) }; }
       var dg = digits != null ? digits : 2;
       /* 0 でないのに丸めると 0 になる値は「0.001 未満」と出す */
@@ -451,11 +452,11 @@
       CN.clear(resBox);
       c.results.forEach(function (o) {
         if (o.sh && !ev(o.sh, e)) return;      // show：式が偽のとき、この結果は出さない（任意）
-        var v = ev(o.f, e), t = o.r.words ? { num: (isFinite(v) && o.r.words[Math.round(v)] != null) ? o.r.words[Math.round(v)] : '—', unit: '' } : show(v, o.r.digits, o.r.auto), box = h('div', { 'class': 'lab-res' + (o.r.big ? ' big' : '') + (o.r.words ? ' word' : '') });
+        var v = ev(o.f, e), t = o.r.words ? { num: (isFinite(v) && o.r.words[Math.round(v)] != null) ? o.r.words[Math.round(v)] : '—', unit: '' } : show(v, o.r.digits, o.r.auto, o.r.group), box = h('div', { 'class': 'lab-res' + (o.r.big ? ' big' : '') + (o.r.words ? ' word' : '') });
         box.appendChild(h('div', { 'class': 'lab-res-l' }, o.r.label));
         box.appendChild(h('div', { 'class': 'lab-res-v' }, h('b', null, t.num), ' ' + (t.unit || o.r.unit || '') + (t.lt ? ' 未満' : '')));
         if (o.bf) {      // base：変化前などの比較の値（任意）。words があれば言葉で、なければ数で
-          var bv = ev(o.bf, e), bw = o.r.base.words, bt = bw ? ((isFinite(bv) && bw[Math.round(bv)] != null) ? bw[Math.round(bv)] : '—') : (function () { var q = show(bv, o.r.base.digits != null ? o.r.base.digits : o.r.digits, o.r.auto); return q.num + ((q.unit || o.r.unit) ? ' ' + (q.unit || o.r.unit) : ''); })();
+          var bv = ev(o.bf, e), bw = o.r.base.words, bt = bw ? ((isFinite(bv) && bw[Math.round(bv)] != null) ? bw[Math.round(bv)] : '—') : (function () { var q = show(bv, o.r.base.digits != null ? o.r.base.digits : o.r.digits, o.r.auto, o.r.base.group != null ? o.r.base.group : o.r.group); return q.num + ((q.unit || o.r.unit) ? ' ' + (q.unit || o.r.unit) : ''); })();
           box.appendChild(h('div', { 'class': 'lab-res-n' }, (o.r.base.label || '元') + '：' + bt));
         }
         if (o.r.note) box.appendChild(h('div', { 'class': 'lab-res-n' }, o.r.note));
@@ -646,7 +647,7 @@
           lastR[r0] = hi; tickRow.push(r0); if (r0) needRow2 = true;
         });
       }
-      var mB = 40 + (xd.label ? 14 : 0) + (needRow2 ? 13 : 0);
+      var mB = 42 + (xd.label ? 14 : 0) + (needRow2 ? 13 : 0);
       var Hh = Math.max(250, Math.min(320, W * 0.62 + 60)) + lgRows.length * 18, ph = Hh - mT - mB;
       var svg = s('svg', { 'class': 'lab-svg', viewBox: '0 0 ' + W + ' ' + Hh, width: W, height: Hh, role: 'img' });
       var Y0 = function (v) { return mT + (ymax - v) / (ymax - ymin) * ph; };
@@ -665,18 +666,18 @@
       for (ty = Math.ceil(ymin / ystep - 1e-9) * ystep; ty <= ymax + ystep * 1e-9; ty += ystep) {
         var isZ = Math.abs(ty) < ystep * 1e-6;
         svg.appendChild(s('line', { 'class': 'lab-g' + (isZ ? ' zero' : ''), x1: mL, y1: Y0(ty), x2: mL + pw, y2: Y0(ty) }));
-        svg.appendChild(s('text', { 'class': 'lab-ax', x: mL - 6, y: Y0(ty) + 4, 'text-anchor': 'end' }, fmtFixed(isZ ? 0 : ty, ydec)));
+        svg.appendChild(s('text', { 'class': 'lab-ax', x: mL - 6, y: Y0(ty) + 4 - (Math.abs(ty - ymin) < ystep * 0.02 ? 3 : 0), 'text-anchor': 'end' }, fmtFixed(isZ ? 0 : ty, ydec)));
       }
       if (ticks.length) {
         ticks.forEach(function (t, ti) {
           svg.appendChild(s('line', { 'class': 'lab-g v', x1: X0(t.v), y1: mT, x2: X0(t.v), y2: mT + ph }));
-          svg.appendChild(s('text', { 'class': 'lab-ax', x: X0(t.v), y: mT + ph + 15 + tickRow[ti] * 13, 'text-anchor': 'middle' }, t.label));
+          svg.appendChild(s('text', { 'class': 'lab-ax', x: X0(t.v), y: mT + ph + 17 + tickRow[ti] * 13, 'text-anchor': 'middle' }, t.label));
         });
       } else {
         var xstep = niceStep(x1 - x0, W < 420 ? 4 : 6), xd2 = Math.max(0, Math.min(6, decOf(xstep))), tx;
         for (tx = Math.ceil(x0 / xstep - 1e-9) * xstep; tx <= x1 + xstep * 1e-9; tx += xstep) {
           svg.appendChild(s('line', { 'class': 'lab-g v', x1: X0(tx), y1: mT, x2: X0(tx), y2: mT + ph }));
-          svg.appendChild(s('text', { 'class': 'lab-ax', x: X0(tx), y: mT + ph + 15, 'text-anchor': tx - x0 < xstep * 0.01 ? 'start' : x1 - tx < xstep * 0.01 ? 'end' : 'middle' }, fmtFixed(tx, xd2)));
+          svg.appendChild(s('text', { 'class': 'lab-ax', x: X0(tx), y: mT + ph + 17, 'text-anchor': tx - x0 < xstep * 0.01 ? 'start' : x1 - tx < xstep * 0.01 ? 'end' : 'middle' }, fmtFixed(tx, xd2)));
         }
       }
       if (xd.label) svg.appendChild(s('text', { 'class': 'lab-ax', x: mL + pw / 2, y: Hh - 8, 'text-anchor': 'middle' }, xd.label + (xd.unit ? '（' + xd.unit + '）' : '')));
