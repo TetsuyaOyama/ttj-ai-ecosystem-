@@ -1,6 +1,6 @@
 # Cloudflare Pages 導入手順
 
-GitHub Pages（現行の ttj.tokyo）に加えて、Cloudflare Pages へも公開するための手順です。
+GitHub Pages（現行の公開サイト）に加えて、Cloudflare Pages へも公開するための手順です。
 
 ## 1. プロジェクトを作る
 
@@ -42,7 +42,7 @@ GitHub Actions から配信する場合は、Git連携ではなく Direct Upload
 
 ## 5. GitHub Pages との併用方針
 
-- 当面は両方で公開する。ttj.tokyo のDNSは今のまま GitHub Pages を向けておく。
+- 当面は両方で公開する。公開サイトのDNSは今のまま GitHub Pages を向けておく。
 - まず `*.pages.dev` で表示・リンク・フォームなどを検証する。
 - 問題がなければ、DNSの切り替えは任意で行う（急がない）。切り替えるときは TTL を短くしてから実施し、戻せるよう元の設定を控えておく。
 - 同じ内容を二重に更新しないよう、正は GitHub のリポジトリ1つにする。

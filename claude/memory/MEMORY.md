@@ -18,7 +18,7 @@
 
 ## プロジェクト別メモ
 
-- （例）ttj.tokyo：GitHub Pages で公開中。Cloudflare Pages は併用。
+- （例）自サイト：GitHub Pages で公開中。Cloudflare Pages は併用。
 
 ## ハマりどころ・注意点
 

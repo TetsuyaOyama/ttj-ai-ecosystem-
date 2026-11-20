@@ -15,7 +15,7 @@ description: 作ったサイトやページを GitHub Pages（git push）また�
 4. **人の最終確認**：公開する内容と先を要約して見せ、OK をもらう。
 5. **公開**：
 
-   - **GitHub Pages**（ttj.tokyo 現行）：
+   - **GitHub Pages**（現行の公開サイト）：
      ```bash
      git add <files> && git commit -m "<日本語の要約>" && git push origin main
      ```

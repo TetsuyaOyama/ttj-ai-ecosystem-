@@ -10,7 +10,7 @@
 | 部品の置き場所 | `/home/claude/courses/semi/parts/`（`chapters/` `data/` `js/` `css/` `shell.html`。構成はコアネットワーク講義と同じ） |
 | ビルド | `/home/claude/scripts/semi/build.py`（`/home/claude/scripts/core-net/build.py` を複製して講座の設定だけ変える。`--demo` `--check` も同じ） |
 | 型の元 | コアネットワーク講義（`/home/claude/core-net/`）。章の型・部品・命名規則・ビルド検査はそのまま引き継ぐ |
-| 共通ルール | `/home/claude/ttj-ai-ecosystem/docs/showcase-brief.md`（外部ライブラリ・CDN・画像なし、紺×金、375px で崩れない、キーボード操作、`prefers-reduced-motion`、フッターは `© TTJ — TED TRADING JAPAN G.K.` と「ポートフォリオへ戻る」、作者は「TTJ」のみで個人名は載せない） |
+| 共通ルール | `/home/claude/ttj-ai-ecosystem/docs/showcase-brief.md`（外部ライブラリ・CDN・画像なし、紺×金、375px で崩れない、キーボード操作、`prefers-reduced-motion`、フッターは `© TTJ` と「ポートフォリオへ戻る」、作者は「TTJ」のみで個人名は載せない） |
 | 共通ルールの例外（この講座だけ） | showcase-brief の「内容は 3GPP・GSMA と一般知識だけ」「実在の事業者名は書かない」は、この講座では次の「内容の決まり」に置き換える |
 
 ### 内容の決まり（全章共通・変えない）

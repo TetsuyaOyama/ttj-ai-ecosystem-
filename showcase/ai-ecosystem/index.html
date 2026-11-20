@@ -376,7 +376,7 @@ footer.site p { margin: 0; }
 
 <footer class="site">
   <div class="wrap">
-    <p>© TTJ — TED TRADING JAPAN G.K.</p>
+    <p>© TTJ</p>
     <p><a href="../index.html">ポートフォリオへ戻る</a></p>
     <p class="analytics-note" data-analytics-note hidden></p>
   </div>
@@ -540,7 +540,7 @@ footer.site p { margin: 0; }
       role: "追加した公開先。wrangler の手動デプロイか、GitHub Actions による push 時の自動デプロイ。",
       paths: ["deploy/github-actions/deploy-cloudflare-pages.yml", "deploy/cloudflare/README.md"],
       points: ["push（main）で cloudflare/wrangler-action@v3 が pages deploy を実行", "secrets：CLOUDFLARE_API_TOKEN・CLOUDFLARE_ACCOUNT_ID", "独自ドメインの追加手順は README に記載"] },
-    { id: "p-gh", col: 8, t1: "GitHub Pages", t2: "ttj.tokyo（現行）", cls: "out", colName: "⑨ 公開",
+    { id: "p-gh", col: 8, t1: "GitHub Pages", t2: "自サイト（現行）", cls: "out", colName: "⑨ 公開",
       role: "現行の公開先。git push で更新される（作品は /showcase/ で表示）。",
       paths: ["各サイトのリポジトリ（git push origin main）", "docs/showcase-brief.md"],
       points: ["git push は ask 権限。--force は禁止", "公開後は URL を開いて表示・リンク・スマホ幅を確認", "当面は Cloudflare Pages と併用"] },

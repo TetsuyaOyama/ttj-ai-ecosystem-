@@ -1,6 +1,6 @@
 ---
 name: ttj-design
-description: TTJ の紺×金デザインで HTML/CSS のページや部品を作る・直すときに使う（ttj.tokyo、LP、教材、資料ページなど）。
+description: TTJ の紺×金デザインで HTML/CSS のページや部品を作る・直すときに使う（自サイト、LP、教材、資料ページなど）。
 ---
 
 # ttj-design：紺×金 TTJ デザイン

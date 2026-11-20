@@ -14,7 +14,7 @@
 | ⑧ 担当・チェック | サブエージェント150 | 5体：scout(haiku)・checker(haiku)・builder(sonnet)・reviewer(opus)・architect(opus/fable) | claude/agents/ |
 | ⑨ 道具・API | Codex CLI・agy CLI・各種API | Codex CLI、xAI API、Claude API、wrangler | — |
 | ⑩ 出口 | MP4・画像・PPTX・ページ… | HTML・SVG・Markdown・X下書き | — |
-| ⑪ 公開 | Vercel・Cloudflare独自ドメイン | GitHub Pages（ttj.tokyo）＋ Cloudflare Pages | deploy/ |
+| ⑪ 公開 | Vercel・Cloudflare独自ドメイン | GitHub Pages ＋ Cloudflare Pages | deploy/ |
 | 下段 | ナレッジ（記憶メモ・Obsidian・Drive・デザインシステム・GitHub） | 記憶メモ・TTJデザインシステム・GitHub | claude/memory/, design-system/ |
 | 下段 | Grok Bot | Grok Bot（下書き専用・定期実行） | bots/grok-bot/ |
 | 下段 | クロ（Discord Bot） | クロ（コードのみ。Discord作成後に稼働） | bots/kuro-discord-bot/ |

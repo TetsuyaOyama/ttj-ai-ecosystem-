@@ -826,7 +826,7 @@ def build(cdir, demo=False, check_only=False, publish=None, out_arg=None):
         '{{ENGINE}}': '\n'.join(eng), '{{DATA}}': '\n'.join(dscripts), '{{BOOT}}': boot,
     }
     out = re.sub(r'\{\{[A-Z_]+\}\}', lambda m: rep.get(m.group(0), m.group(0)), shell)
-    # アクセス解析の受け口（公開設定の "analytics" で指定したときだけ。ttj.tokyo 用など別の出力には入らない）
+    # アクセス解析の受け口（公開設定の "analytics" で指定したときだけ。自サイト用など別の出力には入らない）
     if pub and pub.get('analytics'):
         asrc = str(pub['analytics'])
         if not re.fullmatch(r'(\.\./|\./)*[A-Za-z0-9_./-]+\.js', asrc) or '//' in asrc or ':' in asrc:

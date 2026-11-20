@@ -155,7 +155,13 @@ section { padding: var(--ttj-space-7) 0 0; }
 .profile { display: grid; gap: var(--ttj-space-5); grid-template-columns: 1fr; }
 .profile-main { background: var(--ttj-bg-subtle); border: 1px solid var(--ttj-border); border-left: 3px solid var(--ttj-gold-500); border-radius: var(--ttj-radius-md); padding: var(--ttj-space-5); }
 .profile-main h3 { font-size: var(--ttj-text-lg); }
-.profile-main .org { margin: var(--ttj-space-1) 0 var(--ttj-space-3); color: var(--ttj-text-muted); font-size: var(--ttj-text-sm); }
+.profile-main h3 { margin-bottom: var(--ttj-space-2); }
+.profile-main .memo { margin-top: var(--ttj-space-4); padding-top: var(--ttj-space-3); border-top: 1px dashed var(--ttj-border); }
+.profile-main .memo-tag { font-family: var(--ttj-font-mono); font-size: 0.75rem; letter-spacing: 0.22em; color: var(--ttj-accent-strong); }
+.profile-main .memo h4 { margin: 0 0 var(--ttj-space-2); font-size: var(--ttj-text-base); }
+.profile-main .memo p { font-size: var(--ttj-text-sm); color: var(--ttj-text-muted); }
+.profile-main .memo p + p { margin-top: var(--ttj-space-2); }
+.profile-main .memo strong { color: var(--ttj-text); }
 .profile-main p { margin: 0; }
 .fields { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--ttj-space-3); }
 .fields li { background: var(--ttj-bg); border: 1px solid var(--ttj-border); border-radius: var(--ttj-radius-md); padding: var(--ttj-space-4); box-shadow: var(--ttj-shadow-sm); }
@@ -921,52 +927,20 @@ footer a:hover { color: var(--ttj-gold-200); }
     </div>
   </section>
 
-  <section id="field-other" aria-labelledby="h-field-other">
-    <div class="wrap">
-      <div class="sec-head"><span class="en">Other</span><h2 id="h-field-other">その他</h2></div>
-      <div class="cards">
-
-        <article class="card">
-          <div class="thumb">
-            <svg viewBox="0 0 320 160" role="img" aria-label="恒星のまわりを粒子が軌道を描いて回る様子を、金の線と点で抽象的に描いた図">
-              <rect width="320" height="160" fill="#0B1F3A"/>
-              <g fill="none" stroke="#C9A227" stroke-width="1">
-                <ellipse cx="160" cy="80" rx="46" ry="16" opacity="0.8" transform="rotate(-18 160 80)"/>
-                <ellipse cx="160" cy="80" rx="88" ry="32" opacity="0.55" transform="rotate(-18 160 80)"/>
-                <ellipse cx="160" cy="80" rx="132" ry="50" opacity="0.35" transform="rotate(-18 160 80)"/>
-                <ellipse cx="160" cy="80" rx="70" ry="60" opacity="0.25" transform="rotate(32 160 80)"/>
-              </g>
-              <circle cx="160" cy="80" r="14" fill="#C9A227" opacity="0.18"/>
-              <circle cx="160" cy="80" r="8" fill="#EEDDA0"/>
-              <g fill="#C9A227">
-                <circle cx="203" cy="68" r="2.5"/><circle cx="96" cy="100" r="2.5"/>
-                <circle cx="262" cy="52" r="3"/><circle cx="58" cy="108" r="2"/>
-                <circle cx="214" cy="118" r="2"/><circle cx="118" cy="38" r="2"/>
-              </g>
-              <g fill="#EEDDA0"><circle cx="150" cy="63" r="1.8"/><circle cx="300" cy="40" r="1.5"/><circle cx="24" cy="120" r="1.5"/></g>
-            </svg>
-          </div>
-          <div class="card-body">
-            <p class="field">サイト</p>
-            <h3>TTJ 公式サイト</h3>
-            <p class="desc">AI の未来レポート、触れる展示、備蓄ガイドなどを収めた TTJ のサイト。恒星スウォームの冒頭演出つき</p>
-            <ul class="tags" aria-label="技術タグ"><li>WebGL</li><li>Canvas</li><li>単一 HTML</li><li>デザインシステム</li></ul>
-            <a class="btn" href="https://ttj.tokyo/" target="_blank" rel="noopener noreferrer" aria-label="TTJ 公式サイトを新しいタブで開く">サイトを開く ↗</a>
-          </div>
-        </article>
-
-      </div>
-    </div>
-  </section>
-
   <section aria-labelledby="h-profile">
     <div class="wrap">
       <div class="sec-head"><span class="en">Profile</span><h2 id="h-profile">プロフィール</h2></div>
       <div class="profile">
         <div class="profile-main">
           <h3>TTJ</h3>
-          <p class="org">TED TRADING JAPAN G.K.</p>
           <p>作者のこれまでの経験を活かしつつ、AI・開発環境、通信、半導体、計算サーバー、自作PC、発電、金融を、学べる形にまとめた学習用作品です。仕組みを図とアニメーションで分かりやすく見せること、そして AI エージェントを使って、迷わず使える開発環境をつくることに取り組んでいます。</p>
+          <aside class="memo" aria-label="作者メモ">
+            <p class="memo-tag">AUTHOR'S NOTE</p>
+            <h4>作者メモ</h4>
+            <p>2000年代初頭のインターンシップを起点に、総合電機メーカー、新聞社の編集局、半導体と半導体製造装置、デリバティブ取引所、商社のグローバルビジネス、発電所向けガスタービン（コンバインドサイクル）のプロジェクト、ITのネットワークと通信業界に携わってきた。</p>
+            <p>分野は異なるが、方法は一貫している。現場に入り、結果から方策を更新する。<strong>実地の強化学習</strong>である。</p>
+            <p>その学習は、AIが産業へ波及するこの時代を見据えて続けてきた。講座の並びは、その足跡と重なる。</p>
+          </aside>
         </div>
         <ul class="fields" aria-label="分野">
           <li><strong>AI・開発環境</strong><span>Claude Code を軸にした環境づくりと、AI 学習ロードマップ</span></li>
@@ -1018,10 +992,9 @@ footer a:hover { color: var(--ttj-gold-200); }
 
 <footer>
   <div class="wrap">
-    <p>© TTJ — TED TRADING JAPAN G.K.</p>
+    <p>© TTJ</p>
     <span class="foot-links">
       <a href="https://github.com/TetsuyaOyama/ttj-ai-ecosystem-" rel="noopener">GitHub: ttj-ai-ecosystem</a>
-      <a href="https://ttj.tokyo/" target="_blank" rel="noopener noreferrer">TTJ 公式サイト: ttj.tokyo ↗</a>
     </span>
     <p class="analytics-note" data-analytics-note hidden></p>
     <p class="view-counter" data-view-counter hidden></p>

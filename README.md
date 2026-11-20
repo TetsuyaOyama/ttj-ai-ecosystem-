@@ -182,14 +182,6 @@ PC が何の部品でできていて、部品どうしがどんな規格でつ�
 
 この講座の元データ（章の HTML・図のデータ・検証記録）は `courses/ird/` にあり、金利と国債の講座と同じ基盤（`courses/_framework/`）で 1 枚の HTML に組み立てます（`courses/_framework/build.py` の `--publish courses/ird-publish.json` で公開範囲と出力先を指定）。検証の記録は `courses/ird/REVIEW-W*.md` と `REVIEW-ADD-16.md` です。付録の生成の道具と自己点検・正答の一覧の道具は `courses/ird/tools/` にあります。
 
-### その他
-
-#### TTJ 公式サイト
-
-AI の未来レポート、触れる展示、備蓄ガイドなどを収めた TTJ のサイトです。冒頭には恒星のまわりを粒子が回る演出があります。
-
-[サイトを開く](https://ttj.tokyo/)
-
 ## このリポジトリの見どころ
 
 - [claude/settings.json](claude/settings.json) — `sudo`・force push・`.env` 読み取りを拒否し、`git push` や `rm` は確認に回す権限ルール。
@@ -205,11 +197,17 @@ AI の未来レポート、触れる展示、備蓄ガイドなどを収めた T
 
 ## 作者
 
-TTJ（TED TRADING JAPAN G.K.）
+TTJ
 
 作者のこれまでの経験を活かしつつ、AI・開発環境、通信、半導体、計算サーバー、発電、金融を、学べる形にまとめた学習用作品です。
 
-TTJ 公式サイト：https://ttj.tokyo/
+**作者メモ**
+
+> 2000年代初頭のインターンシップを起点に、総合電機メーカー、新聞社の編集局、半導体と半導体製造装置、デリバティブ取引所、商社のグローバルビジネス、発電所向けガスタービン（コンバインドサイクル）のプロジェクト、ITのネットワークと通信業界に携わってきた。
+>
+> 分野は異なるが、方法は一貫している。現場に入り、結果から方策を更新する。**実地の強化学習**である。
+>
+> その学習は、AIが産業へ波及するこの時代を見据えて続けてきた。講座の並びは、その足跡と重なる。
 
 ## セットアップ
 
@@ -232,7 +230,7 @@ Claude Code（司令塔 = ~/.claude/）
   ↓
 成果物：HTML・SVG・Markdown・X下書き
   ↓ 公開前チェック（checker → codex-review）
-公開：GitHub Pages(ttj.tokyo) ＋ Cloudflare Pages
+公開：GitHub Pages ＋ Cloudflare Pages
 ```
 
 ### 2. 導入手順（Windows）
@@ -285,7 +283,7 @@ Codex CLI は OpenAI の公式手順に従って導入してください。入�
 
 ### 6. 各リポジトリへの適用
 
-- **CLAUDE.md**：`templates/project-CLAUDE.md` を ttj.tokyo などのリポジトリ直下に `CLAUDE.md` としてコピーし、内容をそのサイト用に書き換える。
+- **CLAUDE.md**：`templates/project-CLAUDE.md` を 公開サイトのリポジトリ直下に `CLAUDE.md` としてコピーし、内容をそのサイト用に書き換える。
 - **Cloudflare**：`deploy/github-actions/deploy-cloudflare-pages.yml` をサイトのリポジトリの `.github/workflows/` にコピーし、Secrets（`CLOUDFLARE_API_TOKEN`、`CLOUDFLARE_ACCOUNT_ID`）と Variables（`CF_PAGES_PROJECT`）を登録する。詳細は [deploy/cloudflare/README.md](deploy/cloudflare/README.md)。
 - **Bot**：[bots/grok-bot/README.md](bots/grok-bot/README.md)、[bots/kuro-discord-bot/README.md](bots/kuro-discord-bot/README.md) を参照。
 

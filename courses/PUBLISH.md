@@ -26,5 +26,5 @@
 ## 基調の統一（濃いグレー）とアクセス解析の受け口（2026-11-15）
 
 - 半導体・計算サーバー・自作PC の `course.json` にも、発電講義と同じ `theme`（背景 #151515、面 #1F1F1E、本文 #F4F2EC、補助 #B0AEA5、本文は明朝系の端末内フォント、行間 2.0）を入れた。差し色（`accent`）は各講座のまま。`faint` だけ #A8A69D（サイドバーの現在の章の淡い面の上でも 4.5:1 を保つため）。基盤は、`theme` を使う講座の断面図の「空気・空間」（材料 `void`）を、背景より暗い色に自動で合わせ、`accent` の文字色を `raise` の面の上でも検査する。
-- 公開設定に `"analytics": "../analytics.js"` を入れると（5 講座とも入れてある）、出力の末尾に `<script defer src="../analytics.js"></script>` と、フッターの注記の置き場所（`<p class="analytics-note" data-analytics-note hidden>`）が入る。`showcase/analytics.js` の識別子が空のあいだは何もしない。ttj.tokyo 用など、このキーのない出力には入らない。有効にする手順は `docs/analytics.md`。
+- 公開設定に `"analytics": "../analytics.js"` を入れると（5 講座とも入れてある）、出力の末尾に `<script defer src="../analytics.js"></script>` と、フッターの注記の置き場所（`<p class="analytics-note" data-analytics-note hidden>`）が入る。`showcase/analytics.js` の識別子が空のあいだは何もしない。自サイト用など、このキーのない出力には入らない。有効にする手順は `docs/analytics.md`。
 - **例外の明記**: 各ページは単一ファイルで外部リソースなし、が基本だった。`analytics.js`（同じ場所から配信される 1 本）だけが例外。`test.py` は、公開設定の `"analytics"` と同じ値の `<script src>` だけを許可し、`analytics.js` を配信できるよう、その分だけ親ディレクトリまで検査用サーバーの公開範囲を広げる。

@@ -1,8 +1,8 @@
 # TTJ AIエコシステム 設計書（v1）
 
-ユーザー：TTJ の運営者（GitHub: ttj-tokyo）。Windows + WSL2(Ubuntu) で Claude Code（ターミナル版）を使う。
+ユーザー：TTJ の運営者。Windows + WSL2(Ubuntu) で Claude Code（ターミナル版）を使う。
 契約済み外部AI：OpenAI（Codex CLI / API）、xAI（Grok API）。Discord は未所持（クロBotはコードだけ用意し、使うときにBotを作る）。
-公開先：GitHub Pages（ttj.tokyo 現行）＋ Cloudflare Pages を追加。
+公開先：GitHub Pages（現行）＋ Cloudflare Pages を追加。
 全ファイル・全コメント・README は日本語。コードの識別子は英語。
 
 ## 1. リポジトリ構成（このリポジトリ = ttj-ai-ecosystem）
@@ -25,7 +25,7 @@ ttj-ai-ecosystem/
     tokens.css                  # 紺×金 TTJ デザイントークン
     components.html             # 見本ページ（ボタン・カード・見出し・表・コード）
     README.md
-  templates/project-CLAUDE.md   # 各リポジトリ（ttj.tokyo 等）に置く CLAUDE.md の雛形
+  templates/project-CLAUDE.md   # 各リポジトリ（公開サイト等）に置く CLAUDE.md の雛形
   bots/
     grok-bot/                   # 定期実行：X投稿下書き＋AIニュース要約（xAI API）
     kuro-discord-bot/           # クロ：/ask /summary /memo（Claude API, discord.py）
