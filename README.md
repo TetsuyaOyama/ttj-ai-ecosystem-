@@ -46,6 +46,14 @@ AI エージェント × 通信 × 半導体 × 計算サーバー × 発電 × 
 
 この講座の元データは `courses/claude-api/` にあり、これまでの講座と同じ基盤（`courses/_framework/`）で 1 枚の HTML に組み立てます（`--publish courses/claude-api-publish.json` で公開範囲と出力先を指定）。検証の記録は `courses/claude-api/REVIEW.md` です。
 
+#### 証明する機械 ― AI と数学の 28 か月
+
+2024 年の数学オリンピック銀メダルから、2026 年 11 月のリーマン予想の証明主張までをたどるスライド（全 13 枚）です。粒子の群れが、スライドごとの題材の形に組み替わります。各スライドに確かさの札（公式採点、機械検証ずみ、主張・精査中など）を付け、出典は最後のスライドにまとめました。2026 年 11 月 26 日時点の公開情報にもとづきます。外部ライブラリは使わず、1 枚の HTML です。
+
+[スライドを開く](https://tetsuyaoyama.github.io/ttj-ai-ecosystem-/showcase/proof-machine/)
+
+![証明する機械の画面](docs/images/proof-machine.png)
+
 #### AI エコシステム図
 
 このリポジトリの Claude Code 構成（入口・ハーネス・振り分け・公開）をインタラクティブに図解します。
