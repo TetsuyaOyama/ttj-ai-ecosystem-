@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>証明する機械 | AI と数学の 28 か月</title>
+<meta name="description" content="2024年の数学オリンピック銀メダルから2026年11月のリーマン予想の証明主張まで、AI と数学の28か月を粒子の演出でたどるスライド。">
+<meta name="robots" content="index,follow">
+<style>
+/* One committed dark world: a night blackboard. A full-window particle field
+   morphs into the mathematical object of each slide; text sits on a scrim. */
+:root{
+  --ink:#0a0d13;        /* board */
+  --paper:#ece8df;      /* chalk white */
+  --dim:#9aa3b2;        /* secondary text */
+  --brass:#d9b25f;      /* officially graded / medal */
+  --chalk:#8fc7d9;      /* machine-verified */
+  --ember:#e7785f;      /* claim, still under scrutiny */
+  --line:rgba(236,232,223,.16);
+  --display:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP","Noto Serif CJK JP",serif;
+  --body:"Noto Sans JP","Hiragino Sans","Yu Gothic UI",system-ui,sans-serif;
+  --accent:var(--paper);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;overflow:hidden;background:var(--ink);color:var(--paper);font:400 16px/1.75 var(--body);-webkit-text-size-adjust:100%}
+#stage{position:fixed;inset:0;width:100%;height:100%;display:block}
+#deck{position:fixed;inset:0;display:flex;flex-direction:column;justify-content:flex-end;
+  background:linear-gradient(to top,rgba(10,13,19,.94) 0,rgba(10,13,19,.86) 34%,rgba(10,13,19,0) 66%)}
+.top{position:absolute;top:0;left:0;right:0;display:flex;align-items:center;gap:12px;padding:14px 16px}
+.bar{flex:1;display:flex;gap:4px}
+.bar i{flex:1;height:3px;background:var(--line);border-radius:2px}
+.bar i.on{background:var(--accent)}
+.count{font:500 13px/1 var(--body);color:var(--dim);font-variant-numeric:tabular-nums;white-space:nowrap}
+button{font:500 13px/1 var(--body);color:var(--paper);background:rgba(236,232,223,.08);border:1px solid var(--line);border-radius:999px;padding:9px 14px;cursor:pointer}
+button:hover{background:rgba(236,232,223,.16)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.slide{padding:0 20px 26px;max-width:40rem;max-height:66%;overflow-y:auto;animation:rise .5s ease both}
+.slide[hidden]{display:none}
+@keyframes rise{from{opacity:.01;transform:translateY(10px)}to{opacity:1;transform:none}}
+.kicker{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;font:500 13px/1.4 var(--body);color:var(--dim);letter-spacing:.06em;font-variant-numeric:tabular-nums}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;border:1px solid currentColor;font-size:12px;letter-spacing:.02em;color:var(--accent)}
+.chip::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+h1,h2{font-family:var(--display);font-weight:700;margin:.35em 0 .2em;line-height:1.25;text-wrap:balance}
+h1{font-size:clamp(2.5rem,11vw,4.6rem);letter-spacing:.04em}
+h2{font-size:clamp(1.7rem,7vw,2.6rem)}
+.sub{font:500 clamp(1.05rem,4.4vw,1.4rem)/1.5 var(--display);color:var(--accent);margin:0 0 .7em}
+.big{display:flex;align-items:baseline;flex-wrap:wrap;gap:0 10px;margin:.1em 0 .45em;color:var(--accent)}
+.big b{font:700 clamp(3.2rem,16vw,5.6rem)/1 var(--display);font-variant-numeric:tabular-nums}
+.big span{font:500 1.05rem/1.4 var(--body);color:var(--paper)}
+p{margin:0 0 .6em;max-width:34em}
+ul{margin:0;padding:0;list-style:none;display:grid;gap:.55em;max-width:34em}
+li{padding-left:1em;border-left:2px solid var(--line);font-size:.97rem;line-height:1.7}
+li strong{color:var(--accent);font-weight:700}
+.hint{margin-top:1em;font-size:.85rem;color:var(--dim)}
+.src{display:grid;gap:.35em;font-size:.86rem;line-height:1.55}
+.src li{border-left-color:transparent;padding-left:0}
+a{color:var(--chalk);text-underline-offset:3px}
+.note{font-size:.84rem;color:var(--dim)}
+#index{position:fixed;inset:0;background:rgba(10,13,19,.96);padding:64px 20px 24px;overflow-y:auto}
+#index[hidden]{display:none}
+#index ol{margin:0 auto;padding:0;list-style:none;max-width:36rem;display:grid;gap:8px}
+#index li{border:0;padding:0}
+#index li button{width:100%;text-align:left;border-radius:10px;padding:13px 14px;font-size:15px;line-height:1.4;display:flex;gap:14px}
+#index li button span{color:var(--dim);font-variant-numeric:tabular-nums;min-width:5.5em}
+#index li button[aria-current=true]{border-color:var(--brass)}
+#close{position:fixed;top:14px;right:16px}
+@media (min-width:860px){
+  #deck{justify-content:center;background:linear-gradient(to right,rgba(10,13,19,.92) 0,rgba(10,13,19,.78) 38%,rgba(10,13,19,0) 62%)}
+  .slide{padding:0 0 0 clamp(32px,6vw,96px);max-width:min(46%,38rem);max-height:80%}
+  .top{padding:20px clamp(32px,6vw,96px)}
+  body{font-size:17px}
+}
+@media (prefers-reduced-motion:reduce){.slide{animation:none}}
+</style>
+</head>
+<body>
+<canvas id="stage" aria-hidden="true"></canvas>
+<main id="deck" aria-live="polite">
+  <div class="top">
+    <div class="bar" id="bar" aria-hidden="true"></div>
+    <span class="count" id="count"></span>
+    <button id="open" type="button">一覧</button>
+  </div>
+</main>
+<nav id="index" hidden aria-label="スライド一覧">
+  <button id="close" type="button">閉じる</button>
+  <ol id="list"></ol>
+  <p style="max-width:36rem;margin:20px auto 0"><a href="../">ポートフォリオへ戻る</a></p>
+</nav>
+<script>
+"use strict";
+/* ---------- content ---------- */
+const C={paper:"#ece8df",brass:"#d9b25f",chalk:"#8fc7d9",ember:"#e7785f",silver:"#c3ccd8"};
+const S=[
+ {shape:"cloud",color:C.paper,when:"2024.07 → 2026.11",title:"証明する機械",h1:true,
+  sub:"AI が数学を変えた 28 か月",
+  p:"数学オリンピックの銀メダルから、リーマン予想の証明主張まで。確定したことと、まだ精査中のことを分けてたどります。",
+  hint:"画面の右側をタップ、または → キーで進みます"},
+ {shape:"tri",color:C.silver,when:"2024.07",tag:"IMO 2024",chip:"公式採点",title:"銀メダル相当",
+  big:["28","/ 42 点"],
+  li:["Google DeepMind の <strong>AlphaProof</strong> と <strong>AlphaGeometry 2</strong> が、6 問中 4 問を解いた。",
+      "問題は人が形式言語に訳して与え、計算には 2〜3 日かかった。"]},
+ {shape:"gold",color:C.brass,when:"2025.07",tag:"IMO 2025",chip:"公式採点（Google）",title:"金メダル相当",
+  big:["35","/ 42 点"],
+  li:["<strong>Gemini Deep Think</strong> が 6 問中 5 問を満点。自然言語のまま、制限時間 4.5 時間の中で解いた。",
+      "OpenAI の実験モデルも同じ 35 点（自社発表）。",
+      "最難関の第 6 問は、どちらも解けなかった。"]},
+ {shape:"matrix",color:C.chalk,when:"2025.05 – 11",tag:"AlphaEvolve",chip:"論文公開",title:"解くだけでなく、見つける",
+  big:["48","回の乗算"],
+  li:["4×4 の複素行列の積を <strong>48 回の乗算</strong>で計算する手順を発見。1969 年のシュトラッセン法をこの設定で更新した。",
+      "11 次元の接吻数の下界を 593 に引き上げた。",
+      "テレンス・タオらと 67 問で検証。多くで既知の最良値を再発見し、いくつかで改善した。"]},
+ {shape:"unit",color:C.chalk,when:"2026.01 – 05",tag:"エルデシュ問題",chip:"専門家が確認",title:"未解決問題が崩れ始める",
+  big:["1946","年の予想を反証"],
+  li:["1 月、問題 #728 を GPT-5.2 Pro と証明検査 AI の Aristotle が解決。先行文献のない<strong>初の自律解決</strong>と認められた。",
+      "5 月 20 日、OpenAI の非公開モデルが<strong>単位距離予想</strong>の反例を構成。ガワーズら 9 人の数学者が論文にコメントを寄せた。",
+      "失敗もある。#333 は「AI が解いた」と発表された後、1977 年に解決済みと判明した。"]},
+ {shape:"full",color:C.brass,when:"2026.07",tag:"IMO 2026 上海",chip:"報道ベース",title:"満点",
+  big:["42","/ 42 点"],
+  li:["報道によると、<strong>公式採点で満点</strong>の AI が 2 つ出た（Huawei の Celia、小紅書の dots-note-3.0）。",
+      "人間の満点は 666 人中 7 人。",
+      "自社発表の満点はほかに 4 件。重みを公開した Nvidia の Nemotron 3 Ultra も 30 点で、金メダルの 29 点を超えた。"]},
+ {shape:"pack",color:C.chalk,when:"2026.02 – 09",tag:"形式化",chip:"機械検証ずみ",title:"証明を機械が書き下す",
+  big:["1300 万","行の Lean"],
+  li:["2〜3 月、Math Inc. が 8 次元と 24 次元の<strong>球充填</strong>の証明を Lean で形式化した。",
+      "7 月、Claude が<strong>ヤコビアン予想</strong>（1939 年）の反例を見つけたと報じられた。Lean で検査済み。",
+      "9 月 4 日、Anthropic が<strong>フェルマーの最終定理</strong>の証明を 11 日で形式化したと発表した。"]},
+ {shape:"vortex",color:C.ember,when:"2026.09.08",tag:"ナビエ–ストークス",chip:"主張・精査中",title:"ミレニアム問題に届く",
+  big:["88","時間"],
+  li:["OpenAI が発表。約 1 万のエージェントが、滑らかな外力のもとで 3 次元の流れが<strong>有限時間で爆発する</strong>ことを証明したという。Lean での形式化にさらに 17 時間。",
+      "示したのは外力つきの版。外力なしの版は残っている。",
+      "Lean の記述が論文の証明と食い違う箇所を指摘する論文も出た。クレイ数学研究所は「どうやら」決着と述べ、審査は急がない方針。"]},
+ {shape:"zeta",color:C.ember,when:"2026.11.20",tag:"リーマン予想",chip:"機械検証ずみ・理解はこれから",title:"167 年目の主張",
+  big:["1700 万","行の証明"],
+  li:["Anthropic の数学者 Levent Alpöge が、<strong>Claude を使って証明を得た</strong>と発表した。",
+      "翌 21 日、Lean と Mathlib のコミュニティが、命題と証明の両方を正しいと認める共同声明を出したと報じられている。",
+      "ただし本人を含め、なぜ成り立つのかを理解した人はまだいない。消化には数年かかるかもしれない。"]},
+ {shape:"stair",color:C.chalk,when:"リーマン予想の先 ①",chip:"確定すれば",title:"素数の数え方に保証書が付く",
+  big:["550","個以内"],
+  li:["100 万までの素数は 78,498 個。近似式の答えは約 78,628 個で、ずれは約 130 個だった。",
+      "証明が確定すれば、ずれの上限が<strong>ほぼこれ以上縮められない形</strong>で保証される。100 万なら必ず約 550 個以内。どんなに大きな数でも同じ形で効く。",
+      "たとえるなら、天気予報に「外れても必ずこの幅まで」という保証書が付く。上の図は、階段が本物の素数の個数、なめらかな線が近似、外側の 2 本が保証の幅。"]},
+ {shape:"bridge",color:C.brass,when:"リーマン予想の先 ②",chip:"見通し",title:"何の役に立つのか",
+  li:["<strong>仮定が外れる</strong>　「リーマン予想が正しければ」と断って証明された定理が数多くある。仮の足場で架けた橋に、本物の橋脚が入る。",
+      "<strong>計算の保証</strong>　素数かどうかを判定するミラー法などは、一般化した予想を仮定して速さが保証されていた。その但し書きが取れる。",
+      "<strong>暗号は破れない</strong>　RSA の安全性は巨大な数の素因数分解の難しさにあり、証明はその近道にならない。銀行の暗号やパスワードを変える必要はない。",
+      "<strong>本命は道具</strong>　1700 万行の中の新しい考え方が、ほかの難問にも使えるか。ここはまだ誰にも分かっていない。"]},
+ {shape:"knot",color:C.paper,when:"これから",title:"正しさ、理解、人間",
+  li:["<strong>正しさ</strong>　2026 年夏、Lean 本体に健全性のバグが複数見つかった（すべて修正済み）。形式化した命題が元の問題と同じかどうかは、人が確かめる必要がある。",
+      "<strong>理解</strong>　機械検査を通った証明は結果を保証するが、理由は説明しない。",
+      "<strong>人間</strong>　AI を使わない研究を掲げる Association for Human Mathematics に、1,000 人を超える会員が集まった。"]},
+ {shape:"plane",color:C.silver,when:"2026.11.26 時点",title:"出典",
+  src:[["IMO 2024・2025（Google DeepMind）","https://deepmind.google/discover/blog/advanced-version-of-gemini-with-deep-think-officially-achieves-gold-medal-standard-at-the-international-mathematical-olympiad/"],
+       ["AlphaEvolve（Google DeepMind）","https://deepmind.google/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/"],
+       ["67 問の検証論文（arXiv 2511.02864）","https://arxiv.org/abs/2511.02864"],
+       ["エルデシュ問題と AI（Quanta Magazine）","https://www.quantamagazine.org/why-the-legendary-erdos-problems-are-falling-to-ai-20260803/"],
+       ["問題 #728 の解説（arXiv 2601.07421）","https://arxiv.org/abs/2601.07421"],
+       ["単位距離予想の反証（OpenAI）","https://openai.com/index/model-disproves-discrete-geometry-conjecture/"],
+       ["IMO 2026 の AI 成績（Digital Applied）","https://www.digitalapplied.com/blog/imo-2026-perfect-scores-ai-benchmark-saturation"],
+       ["ヤコビアン予想（Fortune）","https://www.fortune.com/2026/07/21/ai-solves-jacobian-conjecture-levant-alpoge-claude-fable-5/"],
+       ["フェルマーの最終定理の形式化（Anthropic）","https://anthropic.com/research/formalizing-fermats-last-theorem"],
+       ["Lean の信頼性と年表（T. Hales、タオのブログ）","https://terrytao.wordpress.com/2026/10/09/what-mathematicians-should-know-about-the-lean-theorem-proverquestions-of-reliability-and-ai/"],
+       ["ナビエ–ストークスの経緯（arXiv 2609.35719）","https://arxiv.org/abs/2609.35719"],
+       ["Lean 訳の食い違いの指摘（arXiv 2610.08144）","https://arxiv.org/abs/2610.08144"],
+       ["リーマン予想の証明主張（Smithsonian）","https://www.smithsonianmag.com/innovation/ai-cracked-the-riemann-hypothesis-the-most-famous-unsolved-math-problem-the-proof-is-17-million-lines-long-180989939/"],
+       ["検証の経緯（Wikipedia: Alpöge's proof of the Riemann hypothesis）","https://en.wikipedia.org/wiki/Alp%C3%B6ge's_proof_of_the_Riemann_hypothesis"],
+       ["証明は実世界に何をもたらすか（日経サイエンス）","https://nk-science.nikkei.com/atcl/nsc/00058/112200038/"],
+       ["数学界への影響（Phys.org）","https://phys.org/news/2026-11-ai-host-big-math-problems.html"]],
+  back:true,
+  note:"ミレニアム問題の 2 件は、懸賞の審査が終わっていません。IMO 2026 の AI 成績は報道にもとづきます。"}
+];
+
+/* ---------- DOM ---------- */
+const deck=document.getElementById("deck"),bar=document.getElementById("bar"),count=document.getElementById("count"),
+      index=document.getElementById("index"),list=document.getElementById("list");
+const el=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
+const slides=S.map((s,i)=>{
+  const a=el("article","slide");a.hidden=true;a.style.setProperty("--accent",s.color);
+  const k=el("div","kicker");k.append(el("span","",s.when));
+  if(s.tag)k.append(el("span","",s.tag));
+  if(s.chip)k.append(el("span","chip",s.chip));
+  a.append(k,el(s.h1?"h1":"h2","",s.title));
+  if(s.sub)a.append(el("p","sub",s.sub));
+  if(s.big){const b=el("div","big");b.append(el("b","",s.big[0]),el("span","",s.big[1]));a.append(b)}
+  if(s.p)a.append(el("p","",s.p));
+  if(s.li){const u=el("ul");s.li.forEach(t=>u.append(el("li","",t)));a.append(u)}
+  if(s.src){const u=el("ul","src");s.src.forEach(([t,h])=>{const l=el("li"),x=el("a","",t);x.href=h;x.target="_blank";x.rel="noopener";l.append(x);u.append(l)});a.append(u)}
+  if(s.note)a.append(el("p","note",s.note));
+  if(s.hint)a.append(el("p","hint",s.hint));
+  if(s.back)a.append(el("p","note",'<a href="../">ポートフォリオへ戻る</a>'));
+  deck.append(a);bar.append(el("i"));
+  const l=el("li"),b=el("button","",`<span>${s.when}</span>${s.title}`);b.type="button";
+  b.addEventListener("click",()=>{index.hidden=true;go(i)});l.append(b);list.append(l);
+  return a;
+});
+
+/* ---------- shapes: each returns N points in a unit-radius space ---------- */
+const R=Math.random,PI=Math.PI,TAU=PI*2;
+const onSphere=(r)=>{const u=R()*2-1,t=R()*TAU,s=Math.sqrt(1-u*u);return[r*s*Math.cos(t),r*u,r*s*Math.sin(t)]};
+const seg=(a,b)=>{const t=R();return[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,(R()-.5)*.03]};
+const ZEROS=[14.135,21.022,25.011,30.425,32.935,37.586,40.919,43.327,48.005,49.774]; // first zeros of zeta on the critical line
+const ICO=(()=>{const g=(1+Math.sqrt(5))/2,v=[];for(const a of[-1,1])for(const b of[-g,g]){v.push([0,a,b],[a,b,0],[b,0,a])}
+  return v.map(p=>{const l=Math.hypot(...p);return p.map(x=>x/l)})})();
+const FCC=(()=>{const a=.42,o=[];for(let i=-3;i<=3;i++)for(let j=-3;j<=3;j++)for(let k=-3;k<=3;k++){
+  if((i+j+k)&1)continue;const p=[i*a/2,j*a/2,k*a/2];if(Math.hypot(...p)<.82)o.push(p)}return o})();
+const LAT=(()=>{const d=.27,o=[];for(let i=-5;i<=5;i++)for(let j=-5;j<=5;j++){const x=(i+j/2)*d,y=j*d*.866;if(Math.hypot(x,y)<.98)o.push([x,y])}return o})();
+const PRIMES=(()=>{const p=[];for(let n=2;n<=200;n++){let ok=true;for(let d=2;d*d<=n;d++)if(n%d===0){ok=false;break}if(ok)p.push(n)}return p})();
+const LI=(()=>{const a=new Float32Array(202);let s=0;for(let x=2;x<=201;x++){a[x]=1.045+s;s+=(1/Math.log(x)+1/Math.log(x+1))/2}return a})(); // logarithmic integral
+const SHAPES={
+  stair:()=>{const X=x=>(x-2)/198*2-1,Y=c=>c/46*1.6-.8,r=R(),z=(R()-.5)*.03;
+    if(r<.14){const k=(R()*PRIMES.length)|0;return[X(PRIMES[k]),Y(k+R()),z]}
+    const x=2+R()*198,f=Math.floor(x),li=LI[f]+(LI[f+1]-LI[f])*(x-f);
+    if(r<.55){let c=0;while(c<PRIMES.length&&PRIMES[c]<=x)c++;return[X(x),Y(c),z]}
+    if(r<.8)return[X(x),Y(li),z];
+    return[X(x),Y(li+(R()<.5?1:-1)*Math.sqrt(x)*Math.log(x)/(8*PI)),z]},
+  bridge:()=>{const r=R(),z=R()<.5?-.2:.2,arch=x=>-.62+.72*(1-(x/.96)*(x/.96));
+    if(r<.28)return[R()*2.2-1.1,.12,z+(R()-.5)*.02];
+    if(r<.52){const x=R()*1.92-.96;return[x,arch(x),z]}
+    if(r<.78){const x=(((R()*11)|0)-5)*.19,a=arch(x);return[x,a+R()*(.12-a),z]}
+    const x=R()*2.4-1.2,w=R()*1.2-.6;return[x,-.74+.02*Math.sin(x*9+w*7),w]},
+  cloud:()=>onSphere(Math.cbrt(R())*1.05),
+  tri:()=>{const A=[-.92,-.62],B=[.92,-.62],Cc=[.28,.86],r=R();
+    if(r<.42){const e=[[A,B],[B,Cc],[Cc,A]][(R()*3)|0];return seg(e[0],e[1])}
+    if(r<.80){ // circumcircle
+      const d=2*(A[0]*(B[1]-Cc[1])+B[0]*(Cc[1]-A[1])+Cc[0]*(A[1]-B[1])),q=p=>p[0]*p[0]+p[1]*p[1];
+      const ox=(q(A)*(B[1]-Cc[1])+q(B)*(Cc[1]-A[1])+q(Cc)*(A[1]-B[1]))/d,oy=(q(A)*(Cc[0]-B[0])+q(B)*(A[0]-Cc[0])+q(Cc)*(B[0]-A[0]))/d;
+      const rad=Math.hypot(A[0]-ox,A[1]-oy),t=R()*TAU;return[ox+rad*Math.cos(t),oy+rad*Math.sin(t),(R()-.5)*.03]}
+    const m=[[A,[(B[0]+Cc[0])/2,(B[1]+Cc[1])/2]],[B,[(A[0]+Cc[0])/2,(A[1]+Cc[1])/2]],[Cc,[(A[0]+B[0])/2,(A[1]+B[1])/2]]][(R()*3)|0];
+    return seg(m[0],m[1])},
+  gold:()=>{const r=R();if(r<.2){const t=R()*TAU;return[Math.cos(t),Math.sin(t),(R()-.5)*.05]}
+    const k=(R()*6)|0,a=k/6*TAU+PI/2,cx=.6*Math.cos(a),cy=.6*Math.sin(a);
+    if(k===5){const t=R()*TAU;return[cx+.2*Math.cos(t),cy+.2*Math.sin(t),0]}   // problem 6: left open
+    const p=onSphere(.2*Math.cbrt(R()));return[cx+p[0],cy+p[1],p[2]]},
+  matrix:()=>{const i=(R()*4)|0,j=(R()*4)|0,l=(R()*3)|0,s=.17,e=(R()*4)|0,t=(R()*2-1)*s;
+    const x=(i-1.5)*.46,y=(j-1.5)*.46;const o=e===0?[t,s]:e===1?[t,-s]:e===2?[s,t]:[-s,t];
+    return[x+o[0],y+o[1],(l-1)*.5]},
+  unit:()=>{const p=LAT[(R()*LAT.length)|0];if(R()<.3){const q=onSphere(.035);return[p[0]+q[0],p[1]+q[1],q[2]]}
+    const a=((R()*6)|0)/6*TAU,t=R()*.27;return[p[0]+Math.cos(a)*t,p[1]+Math.sin(a)*t,(R()-.5)*.02]},
+  full:()=>{const i=(R()*6)|0,j=(R()*7)|0,p=onSphere(.085*Math.cbrt(R()));
+    return[(i-2.5)*.3+p[0],(j-3)*.27+p[1],p[2]]},
+  pack:()=>{const c=FCC[(R()*FCC.length)|0],p=onSphere(.148);return[c[0]+p[0],c[1]+p[1],c[2]+p[2]]},
+  vortex:()=>{const t=Math.pow(R(),.8),y=.95-1.9*t,rad=.98*Math.pow(1-t,2.2)+.012,a=t*13*PI+((R()*3)|0)/3*TAU+(R()-.5)*.25;
+    return[rad*Math.cos(a),y,rad*Math.sin(a)]},
+  zeta:()=>{const T0=10,T1=52,Y=t=>(t-T0)/(T1-T0)*2-1,r=R();
+    if(r<.2){const z=ZEROS[(R()*ZEROS.length)|0],p=onSphere(.05*Math.cbrt(R()));return[p[0],Y(z)+p[1],p[2]]}
+    if(r<.42)return[(R()-.5)*.012,R()*2-1,(R()-.5)*.012];
+    const t=T0+R()*(T1-T0);let lo=T0,hi=ZEROS[0];for(let k=0;k<ZEROS.length;k++){if(t>=ZEROS[k]){lo=ZEROS[k];hi=ZEROS[k+1]||T1}}
+    const rad=.5*Math.abs(Math.sin(PI*(t-lo)/(hi-lo)))*(lo===T0?(t-T0)/(hi-T0):1),a=t*1.9;
+    return[rad*Math.cos(a),Y(t),rad*Math.sin(a)]},
+  knot:()=>{const t=R()*TAU,r=.62+.26*Math.cos(3*t),p=onSphere(.05);
+    return[r*Math.cos(2*t)+p[0],r*Math.sin(2*t)+p[1],.3*Math.sin(3*t)+p[2]]},
+  plane:()=>{const x=R()*2.4-1.2,z=R()*2.4-1.2,g=R()<.5;const gx=g?Math.round(x/.2)*.2:x,gz=g?z:Math.round(z/.2)*.2;
+    return[gx,-.2+.08*Math.sin(gx*3)*Math.cos(gz*3),gz]}
+};
+
+/* ---------- engine ---------- */
+const cv=document.getElementById("stage"),g=cv.getContext("2d");
+const still=matchMedia("(prefers-reduced-motion:reduce)").matches;
+let W=0,H=0,D=1,N=0,P,V,T,K,cur=-1,rgb=[236,232,223],rgbT=rgb,spin=0,yaw=0,dim=1,dimT=1;
+const FLAT=new Set(["tri","gold","unit","full","stair"]); // drawn in a plane: face the viewer and sway instead of spinning
+const hex=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+function size(){
+  D=Math.min(devicePixelRatio||1,2);W=cv.clientWidth;H=cv.clientHeight;cv.width=W*D;cv.height=H*D;
+  const n=Math.max(2200,Math.min(5600,Math.round(W*H/190)));
+  if(n!==N){N=n;P=new Float32Array(N*3);V=new Float32Array(N*3);T=new Float32Array(N*3);K=new Float32Array(N);
+    for(let i=0;i<N;i++){const p=onSphere(1.6*Math.cbrt(R()));P.set(p,i*3);K[i]=.5+R()}
+    if(cur>=0)aim(S[cur].shape,true)}
+}
+function aim(name,snap){const f=SHAPES[name];for(let i=0;i<N;i++){const p=f();T[i*3]=p[0];T[i*3+1]=p[1];T[i*3+2]=p[2]}
+  if(snap||still)P.set(T)}
+function frame(){
+  g.setTransform(D,0,0,D,0,0);g.globalCompositeOperation="source-over";g.globalAlpha=1;g.fillStyle="#0a0d13";g.fillRect(0,0,W,H);
+  const wide=W>=860,cx=wide?W*.69:W*.5,cy=wide?H*.5:H*.29,sc=Math.min(wide?W*.27:W*.42,wide?H*.4:H*.25);
+  if(!still){spin+=.0032;
+    if(FLAT.has(S[cur].shape))yaw+=(Math.round(yaw/TAU)*TAU+.42*Math.sin(spin*1.5)-yaw)*.05;else yaw+=.0032}
+  const ca=Math.cos(yaw),sa=Math.sin(yaw),tilt=.32+.08*Math.sin(spin*.7),ct=Math.cos(tilt),st=Math.sin(tilt);
+  for(let c=0;c<3;c++)rgb[c]+=(rgbT[c]-rgb[c])*.06;dim+=(dimT-dim)*.06;
+  g.globalCompositeOperation="lighter";g.fillStyle=`rgb(${rgb[0]|0},${rgb[1]|0},${rgb[2]|0})`;
+  for(let i=0;i<N;i++){const j=i*3;
+    if(!still){for(let c=0;c<3;c++){V[j+c]=V[j+c]*.86+(T[j+c]-P[j+c])*.011*K[i];P[j+c]+=V[j+c]}}
+    const x=P[j]*ca+P[j+2]*sa,z0=P[j+2]*ca-P[j]*sa,y=P[j+1]*ct-z0*st,z=P[j+1]*st+z0*ct,f=2.6/(2.6+z);
+    const s=(i%9===0?2.3:1.35)*f;
+    g.globalAlpha=Math.max(.08,Math.min(.95,(.62-z*.34)*dim));
+    g.fillRect(cx+x*sc*f-s/2,cy-y*sc*f-s/2,s,s);
+  }
+  requestAnimationFrame(frame);
+}
+function go(i){
+  i=Math.max(0,Math.min(S.length-1,i));if(i===cur)return;
+  if(cur>=0)slides[cur].hidden=true;cur=i;const s=S[i];slides[i].hidden=false;slides[i].scrollTop=0;
+  rgbT=hex(s.color);dimT=s.src?.45:1;aim(s.shape);
+  deck.style.setProperty("--accent",s.color);
+  [...bar.children].forEach((b,k)=>b.classList.toggle("on",k<=i));
+  count.textContent=String(i+1).padStart(2,"0")+" / "+String(S.length).padStart(2,"0");
+  [...list.querySelectorAll("button")].forEach((b,k)=>b.setAttribute("aria-current",k===i));
+}
+
+/* ---------- controls: tap, swipe, keys ---------- */
+let swiped=false,tx=0,ty=0;
+deck.addEventListener("touchstart",e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY;swiped=false},{passive:true});
+deck.addEventListener("touchend",e=>{const t=e.changedTouches[0],dx=t.clientX-tx,dy=t.clientY-ty;
+  if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5){swiped=true;go(cur+(dx<0?1:-1))}
+  else if(Math.abs(dy)>12)swiped=true},{passive:true});
+deck.addEventListener("click",e=>{if(swiped){swiped=false;return}
+  if(e.target.closest("a,button"))return;if(String(getSelection()))return;
+  go(cur+(e.clientX<innerWidth*.3?-1:1))});
+document.getElementById("open").addEventListener("click",()=>{index.hidden=false;document.getElementById("close").focus()});
+document.getElementById("close").addEventListener("click",()=>{index.hidden=true});
+addEventListener("keydown",e=>{
+  if(e.key==="Escape"){index.hidden=true;return}
+  if(!index.hidden)return;
+  if(["ArrowRight","ArrowDown","PageDown"," ","Enter"].includes(e.key)){if(e.target.closest&&e.target.closest("a,button"))return;e.preventDefault();go(cur+1)}
+  else if(["ArrowLeft","ArrowUp","PageUp"].includes(e.key)){e.preventDefault();go(cur-1)}
+  else if(e.key==="Home")go(0);else if(e.key==="End")go(S.length-1);
+});
+addEventListener("resize",size);
+size();go(0);P.set(T);requestAnimationFrame(frame);
+</script>
+<script defer src="../analytics.js"></script>
+</body>
+</html>
